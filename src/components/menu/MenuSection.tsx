@@ -129,18 +129,18 @@ function CategoryHeading({ id }: { id: CategoryId }) {
   );
 }
 
-function ObjectItem({ p, big = false, compact = false }: { p: Product; big?: boolean; compact?: boolean }) {
+/** Menu row: round photo on the left, name, price, description and actions beside it. */
+function ObjectItem({ p }: { p: Product }) {
   const ui = useUi();
   const quick = useQuickAdd();
   return (
-    <article className="group relative flex flex-col py-8 md:px-8 md:py-10" aria-labelledby={`p-${p.id}`}>
+    <article className="group flex gap-4 border-b border-ink/15 py-5 sm:gap-5 md:py-6" aria-labelledby={`p-${p.id}`}>
       <button
         type="button"
         onClick={() => ui.openProduct({ productId: p.id })}
         aria-label={`Ver detalhes de ${p.name}`}
-        className="relative -mx-2 block cursor-pointer rounded-3xl outline-offset-4"
+        className="relative h-24 w-24 shrink-0 cursor-pointer overflow-hidden rounded-full bg-cream-deep outline-offset-4 sm:h-28 sm:w-28"
       >
-        <span aria-hidden="true" className="absolute inset-x-[16%] bottom-[14%] h-[9%] rounded-[50%] bg-ink/25 blur-xl transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-x-90" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={p.image}
@@ -149,48 +149,50 @@ function ObjectItem({ p, big = false, compact = false }: { p: Product; big?: boo
           height={900}
           loading="lazy"
           decoding="async"
-          className={`relative mx-auto aspect-square w-full object-contain transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:-translate-y-3 group-hover:-rotate-2 ${big ? 'max-w-[460px]' : 'max-w-[380px]'}`}
+          className="h-full w-full scale-[1.12] object-contain transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.22]"
         />
       </button>
-      <div className="mt-2 flex items-start justify-between gap-4">
-        <h4 id={`p-${p.id}`} className={`display ${compact ? 'text-[2.35rem] xl:text-[2rem]' : 'text-[2.35rem] md:text-[2.6rem]'}`}>
-          {p.name}
-        </h4>
-        <Price cents={p.price} className="shrink-0 pt-1 text-brand" />
-      </div>
-      {p.description && <p className="mt-3 max-w-[46ch] text-[1rem] leading-relaxed text-ink-soft">{p.description}</p>}
-      <div className="mt-auto flex items-center gap-2 pt-6">
-        <button
-          type="button"
-          onClick={() => quick(p)}
-          className="cond inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full bg-ink pr-6 pl-4 text-base font-bold tracking-[0.08em] text-on-dark uppercase transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.97]"
-        >
-          <PlusIcon size={18} />
-          Adicionar
-          <span className="sr-only"> {p.name}</span>
-        </button>
-        {p.layers && (
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-start justify-between gap-3">
+          <h4 id={`p-${p.id}`} className="display text-[1.65rem] leading-[0.95] sm:text-[1.85rem]">
+            {p.name}
+          </h4>
+          <Price cents={p.price} size="sm" className="shrink-0 pt-0.5 text-brand sm:text-[1.45rem]" />
+        </div>
+        {p.description && <p className="mt-1.5 max-w-[46ch] text-[0.95rem] leading-snug text-ink-soft">{p.description}</p>}
+        <div className="mt-auto flex flex-wrap items-center gap-1 pt-3">
           <button
             type="button"
-            onClick={() => ui.openProduct({ productId: p.id })}
-            className="cond min-h-12 cursor-pointer rounded-full px-4 text-base font-bold tracking-[0.08em] text-ink uppercase underline decoration-2 underline-offset-4 transition-colors hover:text-brand"
+            onClick={() => quick(p)}
+            className="cond inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full bg-ink pr-4 pl-3 text-sm font-bold tracking-[0.08em] text-on-dark uppercase transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.97]"
           >
-            Personalizar
+            <PlusIcon size={16} />
+            Adicionar
+            <span className="sr-only"> {p.name}</span>
           </button>
-        )}
+          {p.layers && (
+            <button
+              type="button"
+              onClick={() => ui.openProduct({ productId: p.id })}
+              className="cond min-h-11 cursor-pointer rounded-full px-3 text-sm font-bold tracking-[0.08em] text-ink uppercase underline decoration-2 underline-offset-4 transition-colors hover:text-brand"
+            >
+              Personalizar
+            </button>
+          )}
+        </div>
       </div>
     </article>
   );
 }
 
-const ruled = 'grid divide-y divide-ink/15 border-y-2 border-ink md:divide-y-0 md:[&>*]:border-ink/15 md:[&>*:not(:nth-child(3n+1))]:border-l';
+const rows = 'grid border-t-2 border-ink lg:grid-cols-2 lg:gap-x-12';
 
 function Burgers() {
   const items = productsByCategory('burgers');
   return (
     <div id="cat-burgers" className="scroll-mt-40">
       <CategoryHeading id="burgers" />
-      <div className={`${ruled} md:grid-cols-2 lg:grid-cols-3 md:[&>*:nth-child(n+4)]:border-t lg:[&>*:nth-child(n+4)]:border-t md:max-lg:[&>*]:border-l-0 md:max-lg:[&>*:nth-child(2n)]:border-l md:max-lg:[&>*:nth-child(n+3)]:border-t`}>
+      <div className={rows}>
         {items.map((p) => (
           <ObjectItem key={p.id} p={p} />
         ))}
@@ -204,9 +206,9 @@ function Sides() {
   return (
     <div id="cat-entradas" className="scroll-mt-40">
       <CategoryHeading id="entradas" />
-      <div className="grid divide-y divide-ink/15 border-y-2 border-ink md:grid-cols-2 md:divide-y-0 md:[&>*:nth-child(2n)]:border-l md:[&>*:nth-child(n+3)]:border-t md:[&>*]:border-ink/15 xl:grid-cols-4 xl:[&>*:nth-child(n+3)]:border-t-0 xl:[&>*:not(:first-child)]:border-l">
+      <div className={rows}>
         {items.map((p) => (
-          <ObjectItem key={p.id} p={p} compact />
+          <ObjectItem key={p.id} p={p} />
         ))}
       </div>
     </div>
@@ -307,9 +309,9 @@ function Desserts() {
   return (
     <div id="cat-sobremesas" className="scroll-mt-40">
       <CategoryHeading id="sobremesas" />
-      <div className="grid divide-y divide-ink/15 border-y-2 border-ink md:grid-cols-2 md:divide-y-0 md:[&>*:nth-child(2)]:border-l md:[&>*]:border-ink/15">
+      <div className={rows}>
         {items.map((p) => (
-          <ObjectItem key={p.id} p={p} big />
+          <ObjectItem key={p.id} p={p} />
         ))}
       </div>
     </div>
