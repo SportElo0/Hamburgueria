@@ -31,6 +31,21 @@ npm run typecheck && npm run lint
 5. **Fullscreen navigation** (`src/components/nav/NavOverlay.tsx`): native `<dialog>`, so Escape, focus
    trapping and focus return are built in.
 
+## Deploy on Cloudflare
+
+The site is a static export (`next build` writes `out/`), so it needs no server.
+
+**Workers (recommended)**: Workers & Pages → Create → Import a repository, then:
+- Production branch: `claude/downtown-burger-site` (or the branch you merge into)
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy` (reads `wrangler.jsonc`, which serves `./out`)
+
+**Pages**: Framework preset "Next.js (Static HTML Export)", build command `npm run build`, output directory `out`.
+
+Under *Variables* (build time) set `NEXT_PUBLIC_WHATSAPP_NUMBER` (digits only, e.g. `5511999999999`) and
+`NEXT_PUBLIC_SITE_URL` (your final URL, used for the Open Graph image). They are baked in at build, so
+redeploy after changing them. Local check of the production output: `npm run preview`.
+
 ## Editing content
 
 - **Menu, prices, add-ons, options:** `src/content/menu.ts`. Prices are integer centavos (`4490` = R$ 44,90).
