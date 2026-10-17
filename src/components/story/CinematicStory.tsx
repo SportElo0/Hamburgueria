@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { HERO_PRODUCT_ID, SIGNATURE_IDS, productById } from '@/content/menu';
+import photos from '@/content/photos.json';
 import renders from '@/content/renders.json';
 import { useCart, useUi } from '../Providers';
 import { BurgerStack, explodeOffset, layersOf } from '../burger/BurgerStack';
@@ -18,6 +19,18 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const HERO = HERO_PRODUCT_ID;
 const N = layersOf(HERO).length;
+
+// The menu photo is the protagonist; the 3D layers only take over for the exploded view.
+// Place the photo so its burger covers the same box as the assembled layers.
+const PHOTO = photos.items[HERO as keyof typeof photos.items];
+const PHOTO_FIT = (() => {
+  const ls = layersOf(HERO);
+  const x0 = Math.min(...ls.map((l) => l.box.x));
+  const y0 = Math.min(...ls.map((l) => l.box.y));
+  const w = Math.max(...ls.map((l) => l.box.x + l.box.w)) - x0;
+  const k = w / PHOTO.box.w;
+  return { left: `${x0 - PHOTO.box.x * k}%`, top: `${y0 - PHOTO.box.y * k}%`, width: `${100 * k}%` };
+})();
 const SLOT = SIGNATURE_IDS.indexOf(HERO as (typeof SIGNATURE_IDS)[number]);
 
 // Timeline beats (arbitrary units; total length maps onto the pinned scroll distance).
@@ -75,6 +88,8 @@ export function CinematicStory() {
           const copy = (i: number) => q(`[data-copy="${i}"]`);
           const lineup = q('[data-lineup]');
           const rig = q('.rig');
+          const stack = q('.rig .bs');
+          const photo = q('.rig-photo');
 
           const lineupPos = desktop && !grid
             ? SIGNATURE_IDS.map((_, i) => ({ x: `${(i - 1.5) * 23.5}vw`, y: '4vh' }))
@@ -118,10 +133,6 @@ export function CinematicStory() {
           const heroCap = q('[data-lineup-hero]');
 
           const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' } });
-          const split = (at: number, base: number, gap = desktop ? 6 : 5) => {
-            tl.to(layers, { yPercent: (i) => explodeOffset(i, N, gap), duration: 0.5, ease: 'power2.out', stagger: { each: 0.012, from: 'end' } }, at);
-            tl.to(layers, { yPercent: (i) => explodeOffset(i, N, base), duration: 0.5, ease: 'power2.inOut' }, at + 0.5);
-          };
           const swapCopy = (from: number, to: number, at: number) => {
             // The intro h1 only fades (no visibility:hidden) so the page keeps its heading for assistive tech.
             const out = copy(from);
@@ -139,17 +150,14 @@ export function CinematicStory() {
           tl.addLabel('s1', 0);
           // Red → orange: flavour
           wipe(1, T.t1);
-          split(T.t1, 0);
           tl.to(rig, { ...C[1], duration: 1 }, T.t1);
           swapCopy(0, 1, T.t1);
-          // Orange → green: layers breathe apart a little
+          // Orange → green
           wipe(2, T.t2);
-          split(T.t2, desktop ? 2.4 : 2);
           tl.to(rig, { ...C[2], duration: 1 }, T.t2);
           swapCopy(1, 2, T.t2);
           // Green → plum: the burger takes its place in the signature lineup
           wipe(3, T.t3);
-          split(T.t3, 0);
           tl.to(rig, { ...C[3], duration: 1, ease: 'power3.inOut' }, T.t3);
           swapCopy(2, 3, T.t3);
           tl.to(lineup, { autoAlpha: 1, yPercent: 0, duration: 0.55, ease: 'power3.out', stagger: 0.08 }, T.t3 + 0.5);
@@ -161,6 +169,9 @@ export function CinematicStory() {
           tl.to(rig, { ...C[4], duration: 1, ease: 'power3.inOut' }, T.t4);
           swapCopy(3, 4, T.t4);
           const gap = desktop ? 9 : short ? 7.6 : 8.4;
+          // Photo hands over to the illustrated layers just as they start to separate…
+          tl.to(stack, { autoAlpha: 1, duration: 0.2, ease: 'none' }, T.explode - 0.05);
+          tl.to(photo, { autoAlpha: 0, duration: 0.3, ease: 'none' }, T.explode + 0.05);
           tl.to(layers, { yPercent: (i) => explodeOffset(i, N, gap), duration: 0.9, ease: 'power3.inOut', stagger: { each: 0.03, from: 'end' } }, T.explode);
           tl.to(q('.rig-shadow'), { scaleX: 0.7, autoAlpha: 0.35, duration: 0.9 }, T.explode);
           tl.to(labels, { autoAlpha: 1, duration: 0.35, stagger: { each: 0.05, from: 'end' } }, T.explode + 0.45);
@@ -168,6 +179,9 @@ export function CinematicStory() {
           tl.to(labels, { autoAlpha: 0, duration: 0.25 }, T.rejoin);
           tl.to(layers, { yPercent: 0, duration: 0.55, ease: 'power3.inOut', stagger: { each: 0.02, from: 'start' } }, T.rejoin + 0.05);
           tl.to(q('.rig-shadow'), { scaleX: 1, autoAlpha: 1, duration: 0.55 }, T.rejoin + 0.05);
+          // …and takes the stage back once they have closed up.
+          tl.to(photo, { autoAlpha: 1, duration: 0.3, ease: 'none' }, T.rejoin + 0.45);
+          tl.to(stack, { autoAlpha: 0, duration: 0.2, ease: 'none' }, T.rejoin + 0.7);
           tl.to({}, { duration: T.end - (T.rejoin + 0.6) });
 
           const doneFlag = (on: boolean) => document.documentElement.toggleAttribute('data-story-done', on);
@@ -292,7 +306,7 @@ export function CinematicStory() {
               aria-label={`${p.name}, ${p.description}`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={later ? p.image : undefined} alt="" width={900} height={900} className="aspect-square w-full transition-transform duration-500 group-hover:-translate-y-[4%] group-hover:-rotate-3" />
+              <img src={later ? p.image : undefined} alt="" width={900} height={900} className="aspect-square w-full origin-[50%_56%] scale-[0.85] transition-transform duration-500 group-hover:-translate-y-[4%] group-hover:-rotate-3" />
               <LineupCaption name={p.name} cents={p.price} />
             </button>
           );
@@ -309,7 +323,9 @@ export function CinematicStory() {
         <div className="rig absolute top-[50svh] left-1/2 z-10 -mt-[calc(var(--frame)/2)] -ml-[calc(var(--frame)/2)] w-[var(--frame)]" style={{ ['--label-out' as string]: 'clamp(0px, 8vw, 150px)' }}>
           <div className="bob" style={{ ['--dur' as string]: '6.5s', ['--bob' as string]: '-12px', ['--r0' as string]: '-0.6deg', ['--r1' as string]: '0.8deg' }}>
             <div aria-hidden="true" className="rig-shadow absolute inset-x-[16%] top-[72%] h-[16%] bg-[radial-gradient(closest-side,rgb(0_0_0/0.42),rgb(0_0_0/0.18)_55%,transparent)]" />
-            <BurgerStack id={HERO} labels priority animated={false} />
+            <BurgerStack id={HERO} labels animated={false} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={PHOTO.src} alt={hero.imageAlt} width={PHOTO.size} height={PHOTO.size} fetchPriority="high" className="rig-photo absolute z-20 max-w-none select-none" style={PHOTO_FIT} draggable={false} />
           </div>
           <div data-lineup-caption className="pointer-events-none">
             <SceneFourHeroCaption />
@@ -369,7 +385,7 @@ export function CinematicStory() {
               dar fome.
             </h2>
             <p className="mt-5 hidden max-w-[34ch] text-[1.2rem] leading-relaxed font-bold text-on-dark md:block">
-              Blend bovino de 180 g, queijo prato derretendo sobre a carne, bacon e pão brioche. Do jeito que está no cardápio.
+              Dois blends bovinos de 130 g, queijo prato derretendo sobre a carne, bacon e pão brioche. Do jeito que está no cardápio.
             </p>
           </div>
 

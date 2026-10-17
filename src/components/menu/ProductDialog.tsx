@@ -130,7 +130,7 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
               {inside ? 'Montar burger' : 'Ver por dentro'}
             </button>
           )}
-          <p className="cond absolute right-4 bottom-4 text-[0.7rem] font-semibold tracking-[0.12em] uppercase opacity-75">Imagem ilustrativa</p>
+          <p className="cond absolute right-4 bottom-4 text-[0.7rem] font-semibold tracking-[0.12em] uppercase opacity-75">{inside ? 'Ilustração das camadas' : 'Foto do cardápio'}</p>
         </div>
       </div>
 

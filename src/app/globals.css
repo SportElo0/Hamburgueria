@@ -390,3 +390,9 @@ body,
     translate: 0 24px;
   }
 }
+
+/* Story rig: the menu photo leads; the illustrated layers stay hidden until the exploded view. */
+.rig .bs {
+  visibility: hidden;
+  opacity: 0;
+}

@@ -1,6 +1,8 @@
 // Downtown Burger menu, transcribed from the restaurant's printed menu.
 // Prices are integer centavos (BRL). Edit prices, names and descriptions here; the UI reads only this file.
-// Images are illustrative 3D renders (tools/studio), never official product photography.
+// Product images are cut from a photo of the printed menu (tools/photos). The 3D renders
+// (tools/studio) remain only for the layer-by-layer "por dentro" view of each burger.
+import photos from './photos.json';
 import renders from './renders.json';
 
 export type CategoryId = 'burgers' | 'entradas' | 'adicionais' | 'bebidas' | 'long-necks' | 'sobremesas';
@@ -73,13 +75,19 @@ const extrasGroup: OptionGroup = {
   choices: addons,
 };
 
-const burger = (id: keyof typeof renders.burgers) => ({
-  image: renders.burgers[id].card,
+const photo = (id: keyof typeof photos.items) => photos.items[id].src;
+
+const burger = (id: keyof typeof renders.burgers & keyof typeof photos.items) => ({
+  image: photo(id),
   layers: id,
   options: [extrasGroup],
 });
 
-const prop = (id: keyof typeof renders.props) => renders.props[id].src;
+/** Shared art the printed menu uses for a whole section (one glass for drinks, one bottle for long necks). */
+export const SECTION_ART = {
+  bebidas: { src: photo('refrigerante'), alt: 'Ilustração do cardápio: copo de refrigerante com gelo.' },
+  'long-necks': { src: photo('long-neck'), alt: 'Ilustração do cardápio: garrafa long neck.' },
+} as const;
 
 export const products: Product[] = [
   // ── Burgers ──
@@ -89,7 +97,7 @@ export const products: Product[] = [
     name: 'Downtown Classic',
     description: 'Pão brioche, blend bovino 180 g, queijo prato e maionese da casa.',
     price: 3990,
-    imageAlt: 'Ilustração 3D do Downtown Classic: pão brioche, blend bovino, queijo prato e maionese.',
+    imageAlt: 'Downtown Classic, foto do cardápio.',
     ...burger('downtown-classic'),
   },
   {
@@ -99,7 +107,7 @@ export const products: Product[] = [
     description:
       'Pão brioche, blend bovino 180 g, queijo prato, bacon, alface americana, tomate, cebola roxa e maionese da casa.',
     price: 4490,
-    imageAlt: 'Ilustração 3D do The Bacon Street com bacon, alface, tomate e cebola roxa.',
+    imageAlt: 'The Bacon Street, foto do cardápio.',
     ...burger('the-bacon-street'),
   },
   {
@@ -108,7 +116,7 @@ export const products: Product[] = [
     name: 'Australian Cheddar',
     description: 'Pão australiano, blend bovino 180 g, queijo cheddar, bacon, cebola caramelizada e maionese da casa.',
     price: 5890,
-    imageAlt: 'Ilustração 3D do Australian Cheddar no pão australiano com cheddar e cebola caramelizada.',
+    imageAlt: 'Australian Cheddar, foto do cardápio.',
     ...burger('australian-cheddar'),
   },
   {
@@ -118,7 +126,7 @@ export const products: Product[] = [
     description:
       'Pão australiano, blend bovino 180 g, queijo cheddar, bacon, rúcula, tomate, cebola roxa e maionese da casa.',
     price: 5890,
-    imageAlt: 'Ilustração 3D do Kill Bill no pão australiano com cheddar, bacon e rúcula.',
+    imageAlt: 'Kill Bill, foto do cardápio.',
     ...burger('kill-bill'),
   },
   {
@@ -127,7 +135,7 @@ export const products: Product[] = [
     name: 'Golden Chicken',
     description: 'Pão brioche, sobrecoxa desossada empanada, queijo prato e coleslaw com maionese da casa.',
     price: 4990,
-    imageAlt: 'Ilustração 3D do Golden Chicken com frango empanado e coleslaw.',
+    imageAlt: 'Golden Chicken, foto do cardápio.',
     ...burger('golden-chicken'),
   },
   {
@@ -137,7 +145,7 @@ export const products: Product[] = [
     description:
       'Pão brioche, dois blends bovinos de 130 g cada, queijo prato, bacon, alface americana, tomate, cebola roxa e maionese da casa.',
     price: 6990,
-    imageAlt: 'Ilustração 3D do Holyfield com dois blends bovinos.',
+    imageAlt: 'Holyfield, foto do cardápio.',
     ...burger('holyfield'),
   },
   {
@@ -147,7 +155,7 @@ export const products: Product[] = [
     description:
       'Pão brioche, burger à base de plantas, queijo prato, alface americana, tomate, cebola roxa e maionese da casa.',
     price: 5990,
-    imageAlt: 'Ilustração 3D do Green Burger com burger à base de plantas.',
+    imageAlt: 'Green Burger, foto do cardápio.',
     ...burger('green-burger'),
   },
   {
@@ -156,8 +164,8 @@ export const products: Product[] = [
     name: 'Little Downtown',
     description: 'Pão brioche, blend bovino 100 g e queijo prato. Acompanha batata frita e suco de uva ou laranja.',
     price: 3990,
-    image: prop('little-downtown-laranja'),
-    imageAlt: 'Ilustração 3D do Little Downtown com batata frita e suco.',
+    image: photo('little-downtown'),
+    imageAlt: 'Little Downtown, foto do cardápio.',
     layers: 'little-downtown',
     includes: ['Batata frita', 'Suco de uva ou laranja'],
     options: [
@@ -169,8 +177,8 @@ export const products: Product[] = [
         included: true,
         hint: 'Escolha 1 · sem custo',
         choices: [
-          { id: 'laranja', label: 'Laranja', priceDelta: 0, image: prop('little-downtown-laranja') },
-          { id: 'uva', label: 'Uva', priceDelta: 0, image: prop('little-downtown-uva') },
+          { id: 'laranja', label: 'Laranja', priceDelta: 0 },
+          { id: 'uva', label: 'Uva', priceDelta: 0 },
         ],
       },
       extrasGroup,
@@ -184,8 +192,8 @@ export const products: Product[] = [
     name: 'Bacon Cheddar Fries',
     description: 'Batata frita palito fininha (300 g), cheddar e bacon.',
     price: 3490,
-    image: prop('bacon-cheddar-fries'),
-    imageAlt: 'Ilustração 3D de batata frita fininha com cheddar e bacon na cestinha.',
+    image: photo('bacon-cheddar-fries'),
+    imageAlt: 'Bacon Cheddar Fries na cestinha, foto do cardápio.',
   },
   {
     id: 'croc-canoa',
@@ -193,8 +201,8 @@ export const products: Product[] = [
     name: 'Croc Canoa',
     description: 'Batata frita canoa (300 g), cream cheese, bacon e cebolinha.',
     price: 3990,
-    image: prop('croc-canoa'),
-    imageAlt: 'Ilustração 3D de batata canoa com cream cheese, bacon e cebolinha.',
+    image: photo('croc-canoa'),
+    imageAlt: 'Croc Canoa com cream cheese, bacon e cebolinha, foto do cardápio.',
   },
   {
     id: 'downtown-nuggets',
@@ -202,8 +210,8 @@ export const products: Product[] = [
     name: 'Downtown Nuggets',
     description: '5 unidades de nuggets, acompanhadas de molho da casa.',
     price: 2490,
-    image: prop('downtown-nuggets'),
-    imageAlt: 'Ilustração 3D de cinco nuggets com molho da casa.',
+    image: photo('downtown-nuggets'),
+    imageAlt: 'Downtown Nuggets com molho da casa, foto do cardápio.',
   },
   {
     id: 'classic-fries',
@@ -211,28 +219,28 @@ export const products: Product[] = [
     name: 'Classic Fries',
     description: 'Batata frita palito (300 g), acompanhada de molho da casa.',
     price: 2390,
-    image: prop('classic-fries'),
-    imageAlt: 'Ilustração 3D de batata frita palito na cestinha com molho.',
+    image: photo('classic-fries'),
+    imageAlt: 'Classic Fries na cestinha, foto do cardápio.',
   },
 
   // ── Bebidas ──
-  { id: 'agua', category: 'bebidas', name: 'Água', price: 600, image: prop('drink-agua'), imageAlt: 'Copo de água.' },
-  { id: 'agua-com-gas', category: 'bebidas', name: 'Água com gás', price: 1000, image: prop('drink-agua-gas'), imageAlt: 'Copo de água com gás.' },
-  { id: 'coca-ks', category: 'bebidas', name: 'Coca KS', price: 1200, image: prop('drink-cola'), imageAlt: 'Copo de refrigerante de cola.' },
-  { id: 'coca-ks-zero', category: 'bebidas', name: 'Coca KS Zero', price: 1200, image: prop('drink-cola'), imageAlt: 'Copo de refrigerante de cola.' },
-  { id: 'agua-tonica', category: 'bebidas', name: 'Água tônica', price: 1000, image: prop('drink-tonica'), imageAlt: 'Copo de água tônica.' },
-  { id: 'tubaina', category: 'bebidas', name: 'Tubaína', price: 1200, image: prop('drink-tubaina'), imageAlt: 'Copo de tubaína.' },
-  { id: 'schweppes', category: 'bebidas', name: 'Schweppes', price: 1200, image: prop('drink-citrus'), imageAlt: 'Copo de refrigerante gaseificado.' },
-  { id: 'guarana', category: 'bebidas', name: 'Guaraná', price: 1000, image: prop('drink-guarana'), imageAlt: 'Copo de guaraná.' },
+  { id: 'agua', category: 'bebidas', name: 'Água', price: 600, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
+  { id: 'agua-com-gas', category: 'bebidas', name: 'Água com gás', price: 1000, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
+  { id: 'coca-ks', category: 'bebidas', name: 'Coca KS', price: 1200, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
+  { id: 'coca-ks-zero', category: 'bebidas', name: 'Coca KS Zero', price: 1200, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
+  { id: 'agua-tonica', category: 'bebidas', name: 'Água tônica', price: 1000, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
+  { id: 'tubaina', category: 'bebidas', name: 'Tubaína', price: 1200, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
+  { id: 'schweppes', category: 'bebidas', name: 'Schweppes', price: 1200, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
+  { id: 'guarana', category: 'bebidas', name: 'Guaraná', price: 1000, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
   {
     id: 'suco-laranja',
     category: 'bebidas',
     name: 'Suco natural One de laranja',
     price: 1200,
-    image: prop('drink-laranja'),
-    imageAlt: 'Copo de suco de laranja.',
+    image: SECTION_ART.bebidas.src,
+    imageAlt: SECTION_ART.bebidas.alt,
   },
-  { id: 'pink-lemonade', category: 'bebidas', name: 'Pink Lemonade', price: 1500, image: prop('drink-pink-lemonade'), imageAlt: 'Copo de pink lemonade.' },
+  { id: 'pink-lemonade', category: 'bebidas', name: 'Pink Lemonade', price: 1500, image: SECTION_ART.bebidas.src, imageAlt: SECTION_ART.bebidas.alt },
 
   // ── Long necks ──
   ...(
@@ -251,8 +259,8 @@ export const products: Product[] = [
       category: 'long-necks',
       name,
       price,
-      image: prop('longneck'),
-      imageAlt: 'Garrafa long neck genérica, sem rótulo.',
+      image: SECTION_ART['long-necks'].src,
+      imageAlt: SECTION_ART['long-necks'].alt,
       alcoholic: true,
     }),
   ),
@@ -263,8 +271,8 @@ export const products: Product[] = [
     category: 'sobremesas',
     name: 'Brownie de chocolate com sorvete de creme',
     price: 3490,
-    image: prop('brownie'),
-    imageAlt: 'Ilustração 3D de brownie de chocolate com bola de sorvete de creme.',
+    image: photo('brownie'),
+    imageAlt: 'Brownie de chocolate com sorvete de creme e calda, foto do cardápio.',
   },
   {
     id: 'milkshake',
@@ -272,8 +280,8 @@ export const products: Product[] = [
     name: 'Milkshake',
     description: 'Morango ou Nutella ou baunilha.',
     price: 3490,
-    image: prop('milkshake-morango'),
-    imageAlt: 'Ilustração 3D de milkshake com chantilly e canudo.',
+    image: photo('milkshake'),
+    imageAlt: 'Milkshake com chantilly e canudo, foto do cardápio.',
     options: [
       {
         id: 'sabor',
@@ -282,9 +290,9 @@ export const products: Product[] = [
         required: true,
         hint: 'Escolha 1',
         choices: [
-          { id: 'morango', label: 'Morango', priceDelta: 0, image: prop('milkshake-morango') },
-          { id: 'nutella', label: 'Nutella', priceDelta: 0, image: prop('milkshake-nutella') },
-          { id: 'baunilha', label: 'Baunilha', priceDelta: 0, image: prop('milkshake-baunilha') },
+          { id: 'morango', label: 'Morango', priceDelta: 0 },
+          { id: 'nutella', label: 'Nutella', priceDelta: 0 },
+          { id: 'baunilha', label: 'Baunilha', priceDelta: 0 },
         ],
       },
     ],
@@ -295,6 +303,6 @@ export const productById = new Map(products.map((p) => [p.id, p]));
 
 export const productsByCategory = (id: CategoryId) => products.filter((p) => p.category === id);
 
-/** The burger that plays the lead in the cinematic story. */
-export const HERO_PRODUCT_ID = 'the-bacon-street';
-export const SIGNATURE_IDS = ['downtown-classic', 'the-bacon-street', 'australian-cheddar', 'kill-bill'] as const;
+/** The burger that plays the lead in the cinematic story: the large burger printed on the menu. */
+export const HERO_PRODUCT_ID = 'holyfield';
+export const SIGNATURE_IDS = ['downtown-classic', 'holyfield', 'australian-cheddar', 'kill-bill'] as const;

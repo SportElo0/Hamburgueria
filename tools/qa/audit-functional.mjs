@@ -72,10 +72,10 @@ async function run(label, viewport, mobile) {
   await page.waitForTimeout(600);
 
   // ── Hero quick add ──
-  await tryStep('hero: + adiciona The Bacon Street', async () => {
+  await tryStep('hero: + adiciona Holyfield', async () => {
     await page.locator('[data-copy="0"] button').first().click();
     await page.waitForTimeout(400);
-    check(A(), 'hero: + adiciona The Bacon Street', (await headerCount()) === 1, `contador=${await headerCount()}`);
+    check(A(), 'hero: + adiciona Holyfield', (await headerCount()) === 1, `contador=${await headerCount()}`);
   });
 
   // ── Holyfield with two add-ons, qty 2 ──
@@ -113,7 +113,7 @@ async function run(label, viewport, mobile) {
     await sheet.locator('label', { hasText: 'Uva' }).click();
     await page.waitForTimeout(300);
     const img = await sheet.locator('img').first().getAttribute('src');
-    check(A(), 'Little Downtown: imagem muda para uva', /uva/.test(img || ''), img);
+    check(A(), 'Little Downtown: foto do cardápio', /\/photos\/little-downtown/.test(img || ''), img);
     const t = await submitText();
     check(A(), 'Little Downtown: suco não é cobrado', parseBRL(t) === PHOTO['Little Downtown'], t);
     await page.screenshot({ path: `${out}/${label}-sheet-little-downtown.png` });
@@ -133,7 +133,7 @@ async function run(label, viewport, mobile) {
     check(A(), 'Milkshake: exige sabor', /sabor/i.test(err), `erro="${err}"`);
     await sheet.locator('label', { hasText: 'Nutella' }).click();
     await page.waitForTimeout(300);
-    check(A(), 'Milkshake: imagem muda para Nutella', /nutella/.test((await sheet.locator('img').first().getAttribute('src')) || ''));
+    check(A(), 'Milkshake: foto do cardápio', /\/photos\/milkshake/.test((await sheet.locator('img').first().getAttribute('src')) || ''));
     check(A(), 'Milkshake: preço', parseBRL(await submitText()) === PHOTO.Milkshake, await submitText());
     await page.screenshot({ path: `${out}/${label}-sheet-milkshake.png` });
     await sheet.locator('button[type=submit]').click();
@@ -173,7 +173,7 @@ async function run(label, viewport, mobile) {
 
   // ── Cart ──
   const expected =
-    PHOTO['The Bacon Street'] +
+    PHOTO.Holyfield + // hero quick add
     (PHOTO.Holyfield + PHOTO['add:Blend de carne 160 g'] + PHOTO['add:Cheddar cremoso']) * 2 +
     PHOTO['Little Downtown'] + PHOTO.Milkshake + quick.reduce((s, n) => s + PHOTO[n], 0) +
     PHOTO['Downtown Classic'] + PHOTO['add:Cheddar cremoso'];
@@ -194,10 +194,10 @@ async function run(label, viewport, mobile) {
     check(A(), 'Sacola: diminuir quantidade recalcula', (await cartTotal()) === expected + PHOTO['Classic Fries'], brl(await cartTotal()));
     const minusDisabled = await line('Água tônica').getByRole('button', { name: 'Diminuir quantidade', exact: true }).isDisabled();
     check(A(), 'Sacola: "−" desativado em quantidade 1 (remoção pelo botão Remover)', minusDisabled);
-    await line('The Bacon Street').getByRole('button', { name: 'Remover' }).click();
+    await line('Holyfield').getByRole('button', { name: 'Remover' }).click(); // the plain hero line, added first
     await page.waitForTimeout(400);
     const afterRemove = await cartTotal();
-    check(A(), 'Sacola: remover item', afterRemove === expected + PHOTO['Classic Fries'] - PHOTO['The Bacon Street'], brl(afterRemove));
+    check(A(), 'Sacola: remover item', afterRemove === expected + PHOTO['Classic Fries'] - PHOTO.Holyfield, brl(afterRemove));
     const undo = page.getByRole('button', { name: 'Desfazer' });
     const undoUsable = await undo.click({ timeout: 3000 }).then(() => true).catch(() => false);
     check(A(), 'Sacola: botão Desfazer acessível com a sacola aberta', undoUsable);

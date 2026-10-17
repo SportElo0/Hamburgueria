@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { addons, categories, productsByCategory, type CategoryId, type Product } from '@/content/menu';
+import { SECTION_ART, addons, categories, productsByCategory, type CategoryId, type Product } from '@/content/menu';
 import { formatBRL } from '@/lib/money';
 import { useCart, useUi } from '../Providers';
 import { Star } from '../brand/Brand';
@@ -81,7 +81,7 @@ export function MenuSection() {
           </h2>
           <div className="max-w-sm pb-3 md:text-right">
             <p className="cond text-xl font-bold tracking-[0.08em] text-brand uppercase">Burguer artesanal feito com qualidade.</p>
-            <p className="mt-2 text-sm text-ink-mute">Preços em reais. Imagens meramente ilustrativas, geradas digitalmente a partir das descrições do cardápio.</p>
+            <p className="mt-2 text-sm text-ink-mute">Preços em reais. Fotos tiradas do cardápio impresso; imagens ilustrativas.</p>
           </div>
         </div>
         <div className="double-rule mt-6 text-ink" />
@@ -248,11 +248,7 @@ function BoardRow({ p }: { p: Product }) {
   const quick = useQuickAdd();
   return (
     <li className="border-b border-ink/12">
-      <div className="flex min-h-20 items-center gap-4 py-2">
-        <span className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-cream-deep/70">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={p.image} alt="" width={64} height={64} loading="lazy" className={`h-full w-full object-contain ${p.category === 'long-necks' ? 'scale-[1.5]' : 'scale-[2.2] translate-y-[4%]'}`} />
-        </span>
+      <div className="flex min-h-16 items-center gap-4 py-2">
         <div className="flex min-w-0 flex-1 items-baseline gap-3">
           <span className="cond text-[1.2rem] leading-tight font-bold tracking-[0.04em] uppercase">{p.name}</span>
           <span className="leader hidden sm:block" aria-hidden="true" />
@@ -271,27 +267,35 @@ function BoardRow({ p }: { p: Product }) {
   );
 }
 
+/** Drinks share one illustration per section, the way the printed menu does. */
+function DrinkBoard({ id, crop }: { id: 'bebidas' | 'long-necks'; crop: string }) {
+  const art = SECTION_ART[id];
+  return (
+    <div className="flex items-start gap-4 sm:gap-6">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={art.src} alt={art.alt} width={700} height={700} loading="lazy" className={`sticky top-[calc(var(--header-h)+84px)] mt-4 w-16 shrink-0 object-cover drop-shadow-[0_16px_14px_rgb(0_0_0/0.22)] sm:w-24 ${crop}`} />
+      <ul className="min-w-0 flex-1 border-t-2 border-ink">
+        {productsByCategory(id).map((p) => (
+          <BoardRow key={p.id} p={p} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function Drinks() {
   return (
     <div className="grid gap-x-16 lg:grid-cols-2">
       <div id="cat-bebidas" className="scroll-mt-40">
         <CategoryHeading id="bebidas" />
-        <ul className="border-t-2 border-ink">
-          {productsByCategory('bebidas').map((p) => (
-            <BoardRow key={p.id} p={p} />
-          ))}
-        </ul>
+        <DrinkBoard id="bebidas" crop="aspect-[2/5]" />
       </div>
       <div id="cat-long-necks" className="scroll-mt-40">
         <CategoryHeading id="long-necks" />
-        <ul className="border-t-2 border-ink">
-          {productsByCategory('long-necks').map((p) => (
-            <BoardRow key={p.id} p={p} />
-          ))}
-        </ul>
+        <DrinkBoard id="long-necks" crop="aspect-[1/4]" />
         <p className="mt-5 flex items-start gap-3 text-sm text-ink-soft">
           <span className="cond mt-0.5 shrink-0 rounded-md border-2 border-ink px-1.5 text-xs font-bold">18+</span>
-          Venda proibida para menores de 18 anos. Se beber, não dirija. Imagem genérica: a garrafa servida é a da marca escolhida.
+          Venda proibida para menores de 18 anos. Se beber, não dirija. Ilustração do cardápio: a garrafa servida é a da marca escolhida.
         </p>
       </div>
     </div>

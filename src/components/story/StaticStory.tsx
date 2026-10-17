@@ -1,7 +1,7 @@
 'use client';
 
 import { HERO_PRODUCT_ID, SIGNATURE_IDS, productById } from '@/content/menu';
-import renders from '@/content/renders.json';
+import photos from '@/content/photos.json';
 import { useUi } from '../Providers';
 import { BurgerStack } from '../burger/BurgerStack';
 import { Price } from '../ui/primitives';
@@ -11,7 +11,7 @@ import { scrollToHash } from '../nav/NavOverlay';
 export function StaticStory() {
   const ui = useUi();
   const hero = productById.get(HERO_PRODUCT_ID)!;
-  const heroImg = renders.burgers[HERO_PRODUCT_ID as keyof typeof renders.burgers].hero;
+  const heroImg = photos.items.holyfield.src;
   const cta = 'cond inline-flex min-h-14 items-center justify-center rounded-full bg-mustard px-8 text-lg font-bold tracking-[0.1em] text-ink uppercase';
   return (
     <section id="inicio-estatico" data-tone="dark" aria-label="Downtown Burger" className="story-static surface-dark text-on-dark">
@@ -31,7 +31,7 @@ export function StaticStory() {
       </div>
       <div className="bg-scene-orange px-5 py-20 text-center">
         <h2 className="display text-[clamp(3.4rem,9vw,8rem)]">Feito pra dar fome.</h2>
-        <p className="mx-auto mt-4 max-w-[46ch] text-lg text-on-dark-mute">Blend bovino de 180 g, queijo prato derretendo sobre a carne, bacon e pão brioche.</p>
+        <p className="mx-auto mt-4 max-w-[46ch] text-lg text-on-dark-mute">Dois blends bovinos de 130 g, queijo prato derretendo sobre a carne, bacon e pão brioche.</p>
       </div>
       <div className="bg-scene-green px-5 py-20 text-center">
         <h2 className="display text-[clamp(3.4rem,9vw,8rem)]">Qualidade em cada camada.</h2>
@@ -59,6 +59,7 @@ export function StaticStory() {
         <div className="mx-auto mt-16 mb-16 w-[min(80vw,520px)]">
           <BurgerStack id={HERO_PRODUCT_ID} explode={1} gap={9} labels size="auto" />
         </div>
+        <p className="cond -mt-8 mb-10 text-xs font-semibold tracking-[0.14em] text-on-dark-mute uppercase">Ilustração das camadas</p>
         <a href="#cardapio" onClick={(e) => (e.preventDefault(), scrollToHash('#cardapio'))} className={cta}>
           Monte seu pedido
         </a>

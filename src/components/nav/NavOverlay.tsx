@@ -1,6 +1,6 @@
 'use client';
 
-import renders from '@/content/renders.json';
+import photos from '@/content/photos.json';
 import { restaurant } from '@/content/restaurant';
 import { useCart, useUi } from '../Providers';
 import { Badge, Star } from '../brand/Brand';
@@ -52,7 +52,7 @@ export function NavOverlay() {
     <dialog ref={ref} aria-label="Menu principal" className="nav-overlay surface-dark fixed inset-0 m-0 h-dvh w-screen overflow-hidden bg-scene-red p-0 text-on-dark">
       <div aria-hidden="true" className="nav-bg absolute inset-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={renders.burgers['the-bacon-street'].hero} alt="" className="absolute top-1/2 left-1/2 w-[260vmax] max-w-none -translate-x-1/2 -translate-y-[42%] blur-[18px] saturate-[1.15]" />
+        <img src={photos.items.holyfield.src} alt="" className="absolute top-1/2 left-1/2 w-[260vmax] max-w-none -translate-x-1/2 -translate-y-[42%] blur-[18px] saturate-[1.15]" />
         <div className="absolute inset-0 bg-[linear-gradient(100deg,rgb(60_6_8/0.92)_0%,rgb(90_10_14/0.78)_48%,rgb(60_6_8/0.55)_100%)]" />
       </div>
 
