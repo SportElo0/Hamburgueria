@@ -1,0 +1,1683 @@
+{
+  "generatedAt": "2026-10-17T06:12:30.827Z",
+  "note": "Illustrative procedural 3D renders (tools/studio). Not official product photography.",
+  "burgers": {
+    "downtown-classic": {
+      "card": "/renders/burgers/downtown-classic/card.webp",
+      "hero": "/renders/burgers/downtown-classic/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão brioche (base)",
+          "src": "/renders/burgers/downtown-classic/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/downtown-classic/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.688,
+            "y": 52.875,
+            "w": 64.75,
+            "h": 27.187
+          },
+          "anchor": {
+            "left": {
+              "x": 21.479,
+              "y": 64.737
+            },
+            "right": {
+              "x": 78.521,
+              "y": 64.737
+            },
+            "center": {
+              "x": 50,
+              "y": 64.737
+            }
+          }
+        },
+        {
+          "key": "patty",
+          "label": "Blend bovino 180 g",
+          "src": "/renders/burgers/downtown-classic/01-patty.webp",
+          "srcSm": "/renders/burgers/downtown-classic/01-patty.sm.webp",
+          "box": {
+            "x": 18.25,
+            "y": 46.125,
+            "w": 62.687,
+            "h": 26.875
+          },
+          "anchor": {
+            "left": {
+              "x": 22.136,
+              "y": 57.861
+            },
+            "right": {
+              "x": 77.864,
+              "y": 57.861
+            },
+            "center": {
+              "x": 50,
+              "y": 57.861
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo prato",
+          "src": "/renders/burgers/downtown-classic/02-cheese.webp",
+          "srcSm": "/renders/burgers/downtown-classic/02-cheese.sm.webp",
+          "box": {
+            "x": 14.188,
+            "y": 45.25,
+            "w": 70.563,
+            "h": 28.938
+          },
+          "anchor": {
+            "left": {
+              "x": 19.452,
+              "y": 52.643
+            },
+            "right": {
+              "x": 80.548,
+              "y": 52.643
+            },
+            "center": {
+              "x": 50,
+              "y": 52.643
+            }
+          }
+        },
+        {
+          "key": "mayo",
+          "label": "Maionese da casa",
+          "src": "/renders/burgers/downtown-classic/03-mayo.webp",
+          "srcSm": "/renders/burgers/downtown-classic/03-mayo.sm.webp",
+          "box": {
+            "x": 21.75,
+            "y": 45.875,
+            "w": 54.875,
+            "h": 19.063
+          },
+          "anchor": {
+            "left": {
+              "x": 25.666,
+              "y": 52.287
+            },
+            "right": {
+              "x": 74.334,
+              "y": 52.287
+            },
+            "center": {
+              "x": 50,
+              "y": 52.287
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão brioche",
+          "src": "/renders/burgers/downtown-classic/04-bun-top.webp",
+          "srcSm": "/renders/burgers/downtown-classic/04-bun-top.sm.webp",
+          "box": {
+            "x": 16.5,
+            "y": 30.688,
+            "w": 67.063,
+            "h": 31.625
+          },
+          "anchor": {
+            "left": {
+              "x": 20.022,
+              "y": 42.746
+            },
+            "right": {
+              "x": 79.978,
+              "y": 42.746
+            },
+            "center": {
+              "x": 50,
+              "y": 42.746
+            }
+          }
+        }
+      ]
+    },
+    "the-bacon-street": {
+      "card": "/renders/burgers/the-bacon-street/card.webp",
+      "hero": "/renders/burgers/the-bacon-street/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão brioche (base)",
+          "src": "/renders/burgers/the-bacon-street/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.813,
+            "y": 56.938,
+            "w": 64.5,
+            "h": 27.938
+          },
+          "anchor": {
+            "left": {
+              "x": 21.6,
+              "y": 69.148
+            },
+            "right": {
+              "x": 78.4,
+              "y": 69.148
+            },
+            "center": {
+              "x": 50,
+              "y": 69.148
+            }
+          }
+        },
+        {
+          "key": "lettuce",
+          "label": "Alface americana",
+          "src": "/renders/burgers/the-bacon-street/01-lettuce.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/01-lettuce.sm.webp",
+          "box": {
+            "x": 13.063,
+            "y": 54.688,
+            "w": 72.875,
+            "h": 28.625
+          },
+          "anchor": {
+            "left": {
+              "x": 17.842,
+              "y": 64.651
+            },
+            "right": {
+              "x": 82.158,
+              "y": 64.651
+            },
+            "center": {
+              "x": 50,
+              "y": 64.651
+            }
+          }
+        },
+        {
+          "key": "patty",
+          "label": "Blend bovino 180 g",
+          "src": "/renders/burgers/the-bacon-street/02-patty.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/02-patty.sm.webp",
+          "box": {
+            "x": 18.375,
+            "y": 48.438,
+            "w": 62.438,
+            "h": 27.375
+          },
+          "anchor": {
+            "left": {
+              "x": 22.203,
+              "y": 60.406
+            },
+            "right": {
+              "x": 77.797,
+              "y": 60.406
+            },
+            "center": {
+              "x": 50,
+              "y": 60.406
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo prato",
+          "src": "/renders/burgers/the-bacon-street/03-cheese.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/03-cheese.sm.webp",
+          "box": {
+            "x": 14.313,
+            "y": 47.625,
+            "w": 70.313,
+            "h": 29.375
+          },
+          "anchor": {
+            "left": {
+              "x": 19.526,
+              "y": 55.214
+            },
+            "right": {
+              "x": 80.474,
+              "y": 55.214
+            },
+            "center": {
+              "x": 50,
+              "y": 55.214
+            }
+          }
+        },
+        {
+          "key": "bacon",
+          "label": "Bacon",
+          "src": "/renders/burgers/the-bacon-street/04-bacon.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/04-bacon.sm.webp",
+          "box": {
+            "x": 15.438,
+            "y": 43.75,
+            "w": 68.125,
+            "h": 21.938
+          },
+          "anchor": {
+            "left": {
+              "x": 22.85,
+              "y": 52.791
+            },
+            "right": {
+              "x": 77.15,
+              "y": 52.791
+            },
+            "center": {
+              "x": 50,
+              "y": 52.791
+            }
+          }
+        },
+        {
+          "key": "tomato",
+          "label": "Tomate",
+          "src": "/renders/burgers/the-bacon-street/05-tomato.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/05-tomato.sm.webp",
+          "box": {
+            "x": 17.75,
+            "y": 41.75,
+            "w": 65.063,
+            "h": 17.625
+          },
+          "anchor": {
+            "left": {
+              "x": 21.642,
+              "y": 49.94
+            },
+            "right": {
+              "x": 78.358,
+              "y": 49.94
+            },
+            "center": {
+              "x": 50,
+              "y": 49.94
+            }
+          }
+        },
+        {
+          "key": "onion",
+          "label": "Cebola roxa",
+          "src": "/renders/burgers/the-bacon-street/06-onion.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/06-onion.sm.webp",
+          "box": {
+            "x": 22.188,
+            "y": 41.313,
+            "w": 57.563,
+            "h": 17.25
+          },
+          "anchor": {
+            "left": {
+              "x": 21.604,
+              "y": 48.509
+            },
+            "right": {
+              "x": 78.396,
+              "y": 48.509
+            },
+            "center": {
+              "x": 50,
+              "y": 48.509
+            }
+          }
+        },
+        {
+          "key": "mayo",
+          "label": "Maionese da casa",
+          "src": "/renders/burgers/the-bacon-street/07-mayo.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/07-mayo.sm.webp",
+          "box": {
+            "x": 21.688,
+            "y": 41.688,
+            "w": 55.063,
+            "h": 18.313
+          },
+          "anchor": {
+            "left": {
+              "x": 25.561,
+              "y": 47.732
+            },
+            "right": {
+              "x": 74.439,
+              "y": 47.732
+            },
+            "center": {
+              "x": 50,
+              "y": 47.732
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão brioche",
+          "src": "/renders/burgers/the-bacon-street/08-bun-top.webp",
+          "srcSm": "/renders/burgers/the-bacon-street/08-bun-top.sm.webp",
+          "box": {
+            "x": 16.313,
+            "y": 26.25,
+            "w": 67.375,
+            "h": 31.063
+          },
+          "anchor": {
+            "left": {
+              "x": 19.891,
+              "y": 38.108
+            },
+            "right": {
+              "x": 80.109,
+              "y": 38.108
+            },
+            "center": {
+              "x": 50,
+              "y": 38.108
+            }
+          }
+        }
+      ]
+    },
+    "australian-cheddar": {
+      "card": "/renders/burgers/australian-cheddar/card.webp",
+      "hero": "/renders/burgers/australian-cheddar/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão australiano (base)",
+          "src": "/renders/burgers/australian-cheddar/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/australian-cheddar/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.813,
+            "y": 55.563,
+            "w": 64.563,
+            "h": 27.688
+          },
+          "anchor": {
+            "left": {
+              "x": 21.559,
+              "y": 67.653
+            },
+            "right": {
+              "x": 78.441,
+              "y": 67.653
+            },
+            "center": {
+              "x": 50,
+              "y": 67.653
+            }
+          }
+        },
+        {
+          "key": "patty",
+          "label": "Blend bovino 180 g",
+          "src": "/renders/burgers/australian-cheddar/01-patty.webp",
+          "srcSm": "/renders/burgers/australian-cheddar/01-patty.sm.webp",
+          "box": {
+            "x": 18.438,
+            "y": 49.063,
+            "w": 62.938,
+            "h": 27.125
+          },
+          "anchor": {
+            "left": {
+              "x": 22.214,
+              "y": 60.815
+            },
+            "right": {
+              "x": 77.786,
+              "y": 60.815
+            },
+            "center": {
+              "x": 50,
+              "y": 60.815
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo cheddar",
+          "src": "/renders/burgers/australian-cheddar/02-cheese.webp",
+          "srcSm": "/renders/burgers/australian-cheddar/02-cheese.sm.webp",
+          "box": {
+            "x": 14.313,
+            "y": 48,
+            "w": 70.313,
+            "h": 29.438
+          },
+          "anchor": {
+            "left": {
+              "x": 19.538,
+              "y": 55.627
+            },
+            "right": {
+              "x": 80.462,
+              "y": 55.627
+            },
+            "center": {
+              "x": 50,
+              "y": 55.627
+            }
+          }
+        },
+        {
+          "key": "caramelized",
+          "label": "Cebola caramelizada",
+          "src": "/renders/burgers/australian-cheddar/03-caramelized.webp",
+          "srcSm": "/renders/burgers/australian-cheddar/03-caramelized.sm.webp",
+          "box": {
+            "x": 12.063,
+            "y": 46.188,
+            "w": 69.188,
+            "h": 21.563
+          },
+          "anchor": {
+            "left": {
+              "x": 21.771,
+              "y": 54.742
+            },
+            "right": {
+              "x": 78.229,
+              "y": 54.742
+            },
+            "center": {
+              "x": 50,
+              "y": 54.742
+            }
+          }
+        },
+        {
+          "key": "bacon",
+          "label": "Bacon",
+          "src": "/renders/burgers/australian-cheddar/04-bacon.webp",
+          "srcSm": "/renders/burgers/australian-cheddar/04-bacon.sm.webp",
+          "box": {
+            "x": 15.375,
+            "y": 42.313,
+            "w": 68.25,
+            "h": 21.688
+          },
+          "anchor": {
+            "left": {
+              "x": 22.81,
+              "y": 51.249
+            },
+            "right": {
+              "x": 77.19,
+              "y": 51.249
+            },
+            "center": {
+              "x": 50,
+              "y": 51.249
+            }
+          }
+        },
+        {
+          "key": "mayo",
+          "label": "Maionese da casa",
+          "src": "/renders/burgers/australian-cheddar/05-mayo.webp",
+          "srcSm": "/renders/burgers/australian-cheddar/05-mayo.sm.webp",
+          "box": {
+            "x": 21.688,
+            "y": 43.125,
+            "w": 55,
+            "h": 18.563
+          },
+          "anchor": {
+            "left": {
+              "x": 25.597,
+              "y": 49.285
+            },
+            "right": {
+              "x": 74.403,
+              "y": 49.285
+            },
+            "center": {
+              "x": 50,
+              "y": 49.285
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão australiano",
+          "src": "/renders/burgers/australian-cheddar/06-bun-top.webp",
+          "srcSm": "/renders/burgers/australian-cheddar/06-bun-top.sm.webp",
+          "box": {
+            "x": 16.313,
+            "y": 27.813,
+            "w": 67.188,
+            "h": 31.188
+          },
+          "anchor": {
+            "left": {
+              "x": 19.936,
+              "y": 39.689
+            },
+            "right": {
+              "x": 80.064,
+              "y": 39.689
+            },
+            "center": {
+              "x": 50,
+              "y": 39.689
+            }
+          }
+        }
+      ]
+    },
+    "kill-bill": {
+      "card": "/renders/burgers/kill-bill/card.webp",
+      "hero": "/renders/burgers/kill-bill/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão australiano (base)",
+          "src": "/renders/burgers/kill-bill/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/kill-bill/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.813,
+            "y": 57,
+            "w": 64.5,
+            "h": 27.938
+          },
+          "anchor": {
+            "left": {
+              "x": 21.601,
+              "y": 69.205
+            },
+            "right": {
+              "x": 78.399,
+              "y": 69.205
+            },
+            "center": {
+              "x": 50,
+              "y": 69.205
+            }
+          }
+        },
+        {
+          "key": "patty",
+          "label": "Blend bovino 180 g",
+          "src": "/renders/burgers/kill-bill/01-patty.webp",
+          "srcSm": "/renders/burgers/kill-bill/01-patty.sm.webp",
+          "box": {
+            "x": 18.188,
+            "y": 50.438,
+            "w": 63,
+            "h": 27.688
+          },
+          "anchor": {
+            "left": {
+              "x": 22.256,
+              "y": 62.387
+            },
+            "right": {
+              "x": 77.744,
+              "y": 62.387
+            },
+            "center": {
+              "x": 50,
+              "y": 62.387
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo cheddar",
+          "src": "/renders/burgers/kill-bill/02-cheese.webp",
+          "srcSm": "/renders/burgers/kill-bill/02-cheese.sm.webp",
+          "box": {
+            "x": 14.375,
+            "y": 49.438,
+            "w": 70.188,
+            "h": 29.75
+          },
+          "anchor": {
+            "left": {
+              "x": 19.584,
+              "y": 57.215
+            },
+            "right": {
+              "x": 80.416,
+              "y": 57.215
+            },
+            "center": {
+              "x": 50,
+              "y": 57.215
+            }
+          }
+        },
+        {
+          "key": "bacon",
+          "label": "Bacon",
+          "src": "/renders/burgers/kill-bill/03-bacon.webp",
+          "srcSm": "/renders/burgers/kill-bill/03-bacon.sm.webp",
+          "box": {
+            "x": 15.5,
+            "y": 45.563,
+            "w": 68,
+            "h": 22.375
+          },
+          "anchor": {
+            "left": {
+              "x": 22.901,
+              "y": 54.801
+            },
+            "right": {
+              "x": 77.099,
+              "y": 54.801
+            },
+            "center": {
+              "x": 50,
+              "y": 54.801
+            }
+          }
+        },
+        {
+          "key": "arugula",
+          "label": "Rúcula",
+          "src": "/renders/burgers/kill-bill/04-arugula.webp",
+          "srcSm": "/renders/burgers/kill-bill/04-arugula.sm.webp",
+          "box": {
+            "x": 8.813,
+            "y": 41.313,
+            "w": 86.125,
+            "h": 24.938
+          },
+          "anchor": {
+            "left": {
+              "x": 13.771,
+              "y": 51.961
+            },
+            "right": {
+              "x": 86.229,
+              "y": 51.961
+            },
+            "center": {
+              "x": 50,
+              "y": 51.961
+            }
+          }
+        },
+        {
+          "key": "tomato",
+          "label": "Tomate",
+          "src": "/renders/burgers/kill-bill/05-tomato.webp",
+          "srcSm": "/renders/burgers/kill-bill/05-tomato.sm.webp",
+          "box": {
+            "x": 17.75,
+            "y": 41.688,
+            "w": 65.063,
+            "h": 17.625
+          },
+          "anchor": {
+            "left": {
+              "x": 21.64,
+              "y": 49.881
+            },
+            "right": {
+              "x": 78.36,
+              "y": 49.881
+            },
+            "center": {
+              "x": 50,
+              "y": 49.881
+            }
+          }
+        },
+        {
+          "key": "onion",
+          "label": "Cebola roxa",
+          "src": "/renders/burgers/kill-bill/06-onion.webp",
+          "srcSm": "/renders/burgers/kill-bill/06-onion.sm.webp",
+          "box": {
+            "x": 22.188,
+            "y": 41.25,
+            "w": 57.563,
+            "h": 17.25
+          },
+          "anchor": {
+            "left": {
+              "x": 21.602,
+              "y": 48.45
+            },
+            "right": {
+              "x": 78.398,
+              "y": 48.45
+            },
+            "center": {
+              "x": 50,
+              "y": 48.45
+            }
+          }
+        },
+        {
+          "key": "mayo",
+          "label": "Maionese da casa",
+          "src": "/renders/burgers/kill-bill/07-mayo.webp",
+          "srcSm": "/renders/burgers/kill-bill/07-mayo.sm.webp",
+          "box": {
+            "x": 21.625,
+            "y": 41.625,
+            "w": 55.125,
+            "h": 18.313
+          },
+          "anchor": {
+            "left": {
+              "x": 25.56,
+              "y": 47.673
+            },
+            "right": {
+              "x": 74.44,
+              "y": 47.673
+            },
+            "center": {
+              "x": 50,
+              "y": 47.673
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão australiano",
+          "src": "/renders/burgers/kill-bill/08-bun-top.webp",
+          "srcSm": "/renders/burgers/kill-bill/08-bun-top.sm.webp",
+          "box": {
+            "x": 16.313,
+            "y": 26.25,
+            "w": 67.375,
+            "h": 30.875
+          },
+          "anchor": {
+            "left": {
+              "x": 19.889,
+              "y": 38.047
+            },
+            "right": {
+              "x": 80.111,
+              "y": 38.047
+            },
+            "center": {
+              "x": 50,
+              "y": 38.047
+            }
+          }
+        }
+      ]
+    },
+    "golden-chicken": {
+      "card": "/renders/burgers/golden-chicken/card.webp",
+      "hero": "/renders/burgers/golden-chicken/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão brioche (base)",
+          "src": "/renders/burgers/golden-chicken/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/golden-chicken/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.75,
+            "y": 55.063,
+            "w": 64.625,
+            "h": 27.563
+          },
+          "anchor": {
+            "left": {
+              "x": 21.543,
+              "y": 67.077
+            },
+            "right": {
+              "x": 78.457,
+              "y": 67.077
+            },
+            "center": {
+              "x": 50,
+              "y": 67.077
+            }
+          }
+        },
+        {
+          "key": "chicken",
+          "label": "Sobrecoxa empanada",
+          "src": "/renders/burgers/golden-chicken/01-chicken.webp",
+          "srcSm": "/renders/burgers/golden-chicken/01-chicken.sm.webp",
+          "box": {
+            "x": 14.625,
+            "y": 47.375,
+            "w": 72.063,
+            "h": 27.938
+          },
+          "anchor": {
+            "left": {
+              "x": 19.929,
+              "y": 59.413
+            },
+            "right": {
+              "x": 80.071,
+              "y": 59.413
+            },
+            "center": {
+              "x": 50,
+              "y": 59.413
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo prato",
+          "src": "/renders/burgers/golden-chicken/02-cheese.webp",
+          "srcSm": "/renders/burgers/golden-chicken/02-cheese.sm.webp",
+          "box": {
+            "x": 13.438,
+            "y": 45.75,
+            "w": 72,
+            "h": 27.563
+          },
+          "anchor": {
+            "left": {
+              "x": 17.784,
+              "y": 53.62
+            },
+            "right": {
+              "x": 82.216,
+              "y": 53.62
+            },
+            "center": {
+              "x": 50,
+              "y": 53.62
+            }
+          }
+        },
+        {
+          "key": "coleslaw",
+          "label": "Coleslaw com maionese da casa",
+          "src": "/renders/burgers/golden-chicken/03-coleslaw.webp",
+          "srcSm": "/renders/burgers/golden-chicken/03-coleslaw.sm.webp",
+          "box": {
+            "x": 17.5,
+            "y": 43.438,
+            "w": 66.063,
+            "h": 23
+          },
+          "anchor": {
+            "left": {
+              "x": 24.519,
+              "y": 51.635
+            },
+            "right": {
+              "x": 75.481,
+              "y": 51.635
+            },
+            "center": {
+              "x": 50,
+              "y": 51.635
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão brioche",
+          "src": "/renders/burgers/golden-chicken/04-bun-top.webp",
+          "srcSm": "/renders/burgers/golden-chicken/04-bun-top.sm.webp",
+          "box": {
+            "x": 16.375,
+            "y": 28.125,
+            "w": 67.313,
+            "h": 31.563
+          },
+          "anchor": {
+            "left": {
+              "x": 19.953,
+              "y": 40.295
+            },
+            "right": {
+              "x": 80.047,
+              "y": 40.295
+            },
+            "center": {
+              "x": 50,
+              "y": 40.295
+            }
+          }
+        }
+      ]
+    },
+    "holyfield": {
+      "card": "/renders/burgers/holyfield/card.webp",
+      "hero": "/renders/burgers/holyfield/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão brioche (base)",
+          "src": "/renders/burgers/holyfield/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/holyfield/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.875,
+            "y": 59,
+            "w": 64.375,
+            "h": 28.25
+          },
+          "anchor": {
+            "left": {
+              "x": 21.66,
+              "y": 71.353
+            },
+            "right": {
+              "x": 78.34,
+              "y": 71.353
+            },
+            "center": {
+              "x": 50,
+              "y": 71.353
+            }
+          }
+        },
+        {
+          "key": "lettuce",
+          "label": "Alface americana",
+          "src": "/renders/burgers/holyfield/01-lettuce.webp",
+          "srcSm": "/renders/burgers/holyfield/01-lettuce.sm.webp",
+          "box": {
+            "x": 13.125,
+            "y": 56.688,
+            "w": 72.75,
+            "h": 29.063
+          },
+          "anchor": {
+            "left": {
+              "x": 17.91,
+              "y": 66.875
+            },
+            "right": {
+              "x": 82.09,
+              "y": 66.875
+            },
+            "center": {
+              "x": 50,
+              "y": 66.875
+            }
+          }
+        },
+        {
+          "key": "patty-35",
+          "label": "Blend bovino 130 g",
+          "src": "/renders/burgers/holyfield/02-patty-35.webp",
+          "srcSm": "/renders/burgers/holyfield/02-patty-35.sm.webp",
+          "box": {
+            "x": 19.375,
+            "y": 52,
+            "w": 61.563,
+            "h": 25.438
+          },
+          "anchor": {
+            "left": {
+              "x": 23.393,
+              "y": 63.027
+            },
+            "right": {
+              "x": 76.607,
+              "y": 63.027
+            },
+            "center": {
+              "x": 50,
+              "y": 63.027
+            }
+          }
+        },
+        {
+          "key": "patty-36",
+          "label": "Blend bovino 130 g",
+          "src": "/renders/burgers/holyfield/03-patty-36.webp",
+          "srcSm": "/renders/burgers/holyfield/03-patty-36.sm.webp",
+          "box": {
+            "x": 19.313,
+            "y": 46.563,
+            "w": 61.938,
+            "h": 24.313
+          },
+          "anchor": {
+            "left": {
+              "x": 23.244,
+              "y": 57.185
+            },
+            "right": {
+              "x": 76.756,
+              "y": 57.185
+            },
+            "center": {
+              "x": 50,
+              "y": 57.185
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo prato",
+          "src": "/renders/burgers/holyfield/04-cheese.webp",
+          "srcSm": "/renders/burgers/holyfield/04-cheese.sm.webp",
+          "box": {
+            "x": 14.75,
+            "y": 45.813,
+            "w": 69.5,
+            "h": 30.062
+          },
+          "anchor": {
+            "left": {
+              "x": 20.591,
+              "y": 52.939
+            },
+            "right": {
+              "x": 79.409,
+              "y": 52.939
+            },
+            "center": {
+              "x": 50,
+              "y": 52.939
+            }
+          }
+        },
+        {
+          "key": "bacon",
+          "label": "Bacon",
+          "src": "/renders/burgers/holyfield/05-bacon.webp",
+          "srcSm": "/renders/burgers/holyfield/05-bacon.sm.webp",
+          "box": {
+            "x": 15.375,
+            "y": 41.688,
+            "w": 68.25,
+            "h": 21.5
+          },
+          "anchor": {
+            "left": {
+              "x": 22.791,
+              "y": 50.506
+            },
+            "right": {
+              "x": 77.209,
+              "y": 50.506
+            },
+            "center": {
+              "x": 50,
+              "y": 50.506
+            }
+          }
+        },
+        {
+          "key": "tomato",
+          "label": "Tomate",
+          "src": "/renders/burgers/holyfield/06-tomato.webp",
+          "srcSm": "/renders/burgers/holyfield/06-tomato.sm.webp",
+          "box": {
+            "x": 17.625,
+            "y": 39.625,
+            "w": 65.25,
+            "h": 17.25
+          },
+          "anchor": {
+            "left": {
+              "x": 21.58,
+              "y": 47.643
+            },
+            "right": {
+              "x": 78.42,
+              "y": 47.643
+            },
+            "center": {
+              "x": 50,
+              "y": 47.643
+            }
+          }
+        },
+        {
+          "key": "onion",
+          "label": "Cebola roxa",
+          "src": "/renders/burgers/holyfield/07-onion.webp",
+          "srcSm": "/renders/burgers/holyfield/07-onion.sm.webp",
+          "box": {
+            "x": 22.125,
+            "y": 39.188,
+            "w": 57.688,
+            "h": 16.875
+          },
+          "anchor": {
+            "left": {
+              "x": 21.542,
+              "y": 46.205
+            },
+            "right": {
+              "x": 78.458,
+              "y": 46.205
+            },
+            "center": {
+              "x": 50,
+              "y": 46.205
+            }
+          }
+        },
+        {
+          "key": "mayo",
+          "label": "Maionese da casa",
+          "src": "/renders/burgers/holyfield/08-mayo.webp",
+          "srcSm": "/renders/burgers/holyfield/08-mayo.sm.webp",
+          "box": {
+            "x": 21.625,
+            "y": 39.563,
+            "w": 55.188,
+            "h": 17.938
+          },
+          "anchor": {
+            "left": {
+              "x": 25.508,
+              "y": 45.425
+            },
+            "right": {
+              "x": 74.492,
+              "y": 45.425
+            },
+            "center": {
+              "x": 50,
+              "y": 45.425
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão brioche",
+          "src": "/renders/burgers/holyfield/09-bun-top.webp",
+          "srcSm": "/renders/burgers/holyfield/09-bun-top.sm.webp",
+          "box": {
+            "x": 16.188,
+            "y": 23.875,
+            "w": 67.625,
+            "h": 30.875
+          },
+          "anchor": {
+            "left": {
+              "x": 19.825,
+              "y": 35.759
+            },
+            "right": {
+              "x": 80.175,
+              "y": 35.759
+            },
+            "center": {
+              "x": 50,
+              "y": 35.759
+            }
+          }
+        }
+      ]
+    },
+    "green-burger": {
+      "card": "/renders/burgers/green-burger/card.webp",
+      "hero": "/renders/burgers/green-burger/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão brioche (base)",
+          "src": "/renders/burgers/green-burger/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/green-burger/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.75,
+            "y": 55.125,
+            "w": 64.625,
+            "h": 27.625
+          },
+          "anchor": {
+            "left": {
+              "x": 21.546,
+              "y": 67.192
+            },
+            "right": {
+              "x": 78.454,
+              "y": 67.192
+            },
+            "center": {
+              "x": 50,
+              "y": 67.192
+            }
+          }
+        },
+        {
+          "key": "lettuce",
+          "label": "Alface americana",
+          "src": "/renders/burgers/green-burger/01-lettuce.webp",
+          "srcSm": "/renders/burgers/green-burger/01-lettuce.sm.webp",
+          "box": {
+            "x": 13,
+            "y": 52.875,
+            "w": 73,
+            "h": 28.25
+          },
+          "anchor": {
+            "left": {
+              "x": 17.781,
+              "y": 62.678
+            },
+            "right": {
+              "x": 82.219,
+              "y": 62.678
+            },
+            "center": {
+              "x": 50,
+              "y": 62.678
+            }
+          }
+        },
+        {
+          "key": "patty",
+          "label": "Burger à base de plantas",
+          "src": "/renders/burgers/green-burger/02-patty.webp",
+          "srcSm": "/renders/burgers/green-burger/02-patty.sm.webp",
+          "box": {
+            "x": 18.25,
+            "y": 46.688,
+            "w": 63.125,
+            "h": 26.563
+          },
+          "anchor": {
+            "left": {
+              "x": 22.15,
+              "y": 58.418
+            },
+            "right": {
+              "x": 77.85,
+              "y": 58.418
+            },
+            "center": {
+              "x": 50,
+              "y": 58.418
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo prato",
+          "src": "/renders/burgers/green-burger/03-cheese.webp",
+          "srcSm": "/renders/burgers/green-burger/03-cheese.sm.webp",
+          "box": {
+            "x": 14.25,
+            "y": 45.75,
+            "w": 70.438,
+            "h": 29.063
+          },
+          "anchor": {
+            "left": {
+              "x": 19.468,
+              "y": 53.206
+            },
+            "right": {
+              "x": 80.532,
+              "y": 53.206
+            },
+            "center": {
+              "x": 50,
+              "y": 53.206
+            }
+          }
+        },
+        {
+          "key": "tomato",
+          "label": "Tomate",
+          "src": "/renders/burgers/green-burger/04-tomato.webp",
+          "srcSm": "/renders/burgers/green-burger/04-tomato.sm.webp",
+          "box": {
+            "x": 17.75,
+            "y": 43.625,
+            "w": 65,
+            "h": 17.938
+          },
+          "anchor": {
+            "left": {
+              "x": 21.696,
+              "y": 51.961
+            },
+            "right": {
+              "x": 78.304,
+              "y": 51.961
+            },
+            "center": {
+              "x": 50,
+              "y": 51.961
+            }
+          }
+        },
+        {
+          "key": "onion",
+          "label": "Cebola roxa",
+          "src": "/renders/burgers/green-burger/05-onion.webp",
+          "srcSm": "/renders/burgers/green-burger/05-onion.sm.webp",
+          "box": {
+            "x": 22.25,
+            "y": 43.188,
+            "w": 57.438,
+            "h": 17.625
+          },
+          "anchor": {
+            "left": {
+              "x": 21.658,
+              "y": 50.536
+            },
+            "right": {
+              "x": 78.342,
+              "y": 50.536
+            },
+            "center": {
+              "x": 50,
+              "y": 50.536
+            }
+          }
+        },
+        {
+          "key": "mayo",
+          "label": "Maionese da casa",
+          "src": "/renders/burgers/green-burger/06-mayo.webp",
+          "srcSm": "/renders/burgers/green-burger/06-mayo.sm.webp",
+          "box": {
+            "x": 21.688,
+            "y": 43.563,
+            "w": 55,
+            "h": 18.625
+          },
+          "anchor": {
+            "left": {
+              "x": 25.608,
+              "y": 49.762
+            },
+            "right": {
+              "x": 74.392,
+              "y": 49.762
+            },
+            "center": {
+              "x": 50,
+              "y": 49.762
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão brioche",
+          "src": "/renders/burgers/green-burger/07-bun-top.webp",
+          "srcSm": "/renders/burgers/green-burger/07-bun-top.sm.webp",
+          "box": {
+            "x": 16.375,
+            "y": 28.313,
+            "w": 67.125,
+            "h": 31.188
+          },
+          "anchor": {
+            "left": {
+              "x": 19.949,
+              "y": 40.174
+            },
+            "right": {
+              "x": 80.051,
+              "y": 40.174
+            },
+            "center": {
+              "x": 50,
+              "y": 40.174
+            }
+          }
+        }
+      ]
+    },
+    "little-downtown": {
+      "card": "/renders/burgers/little-downtown/card.webp",
+      "hero": "/renders/burgers/little-downtown/hero.webp",
+      "layers": [
+        {
+          "key": "bun-bottom",
+          "label": "Pão brioche (base)",
+          "src": "/renders/burgers/little-downtown/00-bun-bottom.webp",
+          "srcSm": "/renders/burgers/little-downtown/00-bun-bottom.sm.webp",
+          "box": {
+            "x": 17.688,
+            "y": 51.75,
+            "w": 64.813,
+            "h": 26.937
+          },
+          "anchor": {
+            "left": {
+              "x": 21.445,
+              "y": 63.491
+            },
+            "right": {
+              "x": 78.555,
+              "y": 63.491
+            },
+            "center": {
+              "x": 50,
+              "y": 63.491
+            }
+          }
+        },
+        {
+          "key": "patty",
+          "label": "Blend bovino 100 g",
+          "src": "/renders/burgers/little-downtown/01-patty.webp",
+          "srcSm": "/renders/burgers/little-downtown/01-patty.sm.webp",
+          "box": {
+            "x": 22,
+            "y": 47.75,
+            "w": 55.75,
+            "h": 21.688
+          },
+          "anchor": {
+            "left": {
+              "x": 25.782,
+              "y": 57.332
+            },
+            "right": {
+              "x": 74.218,
+              "y": 57.332
+            },
+            "center": {
+              "x": 50,
+              "y": 57.332
+            }
+          }
+        },
+        {
+          "key": "cheese",
+          "label": "Queijo prato",
+          "src": "/renders/burgers/little-downtown/02-cheese.webp",
+          "srcSm": "/renders/burgers/little-downtown/02-cheese.sm.webp",
+          "box": {
+            "x": 15.812,
+            "y": 46.938,
+            "w": 67.438,
+            "h": 32.5
+          },
+          "anchor": {
+            "left": {
+              "x": 22.866,
+              "y": 53.442
+            },
+            "right": {
+              "x": 77.134,
+              "y": 53.442
+            },
+            "center": {
+              "x": 50,
+              "y": 53.442
+            }
+          }
+        },
+        {
+          "key": "bun-top",
+          "label": "Pão brioche",
+          "src": "/renders/burgers/little-downtown/03-bun-top.webp",
+          "srcSm": "/renders/burgers/little-downtown/03-bun-top.sm.webp",
+          "box": {
+            "x": 16.5,
+            "y": 31.938,
+            "w": 66.938,
+            "h": 31.813
+          },
+          "anchor": {
+            "left": {
+              "x": 20.058,
+              "y": 44.042
+            },
+            "right": {
+              "x": 79.942,
+              "y": 44.042
+            },
+            "center": {
+              "x": 50,
+              "y": 44.042
+            }
+          }
+        }
+      ]
+    }
+  },
+  "props": {
+    "classic-fries": {
+      "src": "/renders/props/classic-fries.webp",
+      "w": 800,
+      "h": 800
+    },
+    "bacon-cheddar-fries": {
+      "src": "/renders/props/bacon-cheddar-fries.webp",
+      "w": 800,
+      "h": 800
+    },
+    "croc-canoa": {
+      "src": "/renders/props/croc-canoa.webp",
+      "w": 800,
+      "h": 800
+    },
+    "downtown-nuggets": {
+      "src": "/renders/props/downtown-nuggets.webp",
+      "w": 800,
+      "h": 800
+    },
+    "brownie": {
+      "src": "/renders/props/brownie.webp",
+      "w": 800,
+      "h": 800
+    },
+    "milkshake-morango": {
+      "src": "/renders/props/milkshake-morango.webp",
+      "w": 800,
+      "h": 800
+    },
+    "milkshake-nutella": {
+      "src": "/renders/props/milkshake-nutella.webp",
+      "w": 800,
+      "h": 800
+    },
+    "milkshake-baunilha": {
+      "src": "/renders/props/milkshake-baunilha.webp",
+      "w": 800,
+      "h": 800
+    },
+    "little-downtown-laranja": {
+      "src": "/renders/props/little-downtown-laranja.webp",
+      "w": 800,
+      "h": 800
+    },
+    "little-downtown-uva": {
+      "src": "/renders/props/little-downtown-uva.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-agua": {
+      "src": "/renders/props/drink-agua.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-agua-gas": {
+      "src": "/renders/props/drink-agua-gas.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-cola": {
+      "src": "/renders/props/drink-cola.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-tonica": {
+      "src": "/renders/props/drink-tonica.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-tubaina": {
+      "src": "/renders/props/drink-tubaina.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-citrus": {
+      "src": "/renders/props/drink-citrus.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-guarana": {
+      "src": "/renders/props/drink-guarana.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-laranja": {
+      "src": "/renders/props/drink-laranja.webp",
+      "w": 800,
+      "h": 800
+    },
+    "drink-pink-lemonade": {
+      "src": "/renders/props/drink-pink-lemonade.webp",
+      "w": 800,
+      "h": 800
+    },
+    "longneck": {
+      "src": "/renders/props/longneck.webp",
+      "w": 800,
+      "h": 800
+    },
+    "float-fry-a": {
+      "src": "/renders/props/float-fry-a.webp",
+      "w": 84,
+      "h": 119
+    },
+    "float-fry-b": {
+      "src": "/renders/props/float-fry-b.webp",
+      "w": 133,
+      "h": 36
+    },
+    "float-tomato": {
+      "src": "/renders/props/float-tomato.webp",
+      "w": 226,
+      "h": 210
+    },
+    "float-onion": {
+      "src": "/renders/props/float-onion.webp",
+      "w": 150,
+      "h": 118
+    },
+    "float-lettuce": {
+      "src": "/renders/props/float-lettuce.webp",
+      "w": 225,
+      "h": 240
+    },
+    "float-arugula": {
+      "src": "/renders/props/float-arugula.webp",
+      "w": 227,
+      "h": 274
+    },
+    "float-bacon": {
+      "src": "/renders/props/float-bacon.webp",
+      "w": 175,
+      "h": 192
+    },
+    "float-cheese": {
+      "src": "/renders/props/float-cheese.webp",
+      "w": 147,
+      "h": 126
+    },
+    "float-sesame": {
+      "src": "/renders/props/float-sesame.webp",
+      "w": 118,
+      "h": 74
+    }
+  }
+}
