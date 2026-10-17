@@ -270,7 +270,7 @@ export const products: Product[] = [
     id: 'milkshake',
     category: 'sobremesas',
     name: 'Milkshake',
-    description: 'Morango, Nutella ou baunilha.',
+    description: 'Morango ou Nutella ou baunilha.',
     price: 3490,
     image: prop('milkshake-morango'),
     imageAlt: 'Ilustração 3D de milkshake com chantilly e canudo.',

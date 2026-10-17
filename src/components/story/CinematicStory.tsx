@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -36,6 +36,19 @@ export function CinematicStory() {
   const root = useRef<HTMLElement>(null);
   const stRef = useRef<ScrollTrigger | null>(null);
   const [scene, setScene] = useState(0);
+  // Scenes 2–5 art is off-screen at load: fetch it on the first interaction (or once idle)
+  // so the first paint only competes with the hero burger.
+  const [later, setLater] = useState(false);
+  useEffect(() => {
+    const go = () => setLater(true);
+    const events = ['scroll', 'pointerdown', 'keydown', 'touchstart'] as const;
+    events.forEach((e) => window.addEventListener(e, go, { once: true, passive: true }));
+    const t = window.setTimeout(go, 4000);
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, go));
+      window.clearTimeout(t);
+    };
+  }, []);
   const cart = useCart();
   const ui = useUi();
   const hero = productById.get(HERO)!;
@@ -47,9 +60,14 @@ export function CinematicStory() {
         {
           desktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
           mobile: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
+          portrait: '(orientation: portrait)',
+          short: '(max-height: 719px)',
         },
         (ctx) => {
-          const { desktop } = ctx.conditions as { desktop: boolean; mobile: boolean };
+          const { desktop, mobile, portrait, short } = ctx.conditions as Record<'desktop' | 'mobile' | 'portrait' | 'short', boolean>;
+          if (!desktop && !mobile) return;
+          // Tablets held upright are too narrow for a row of four: they get the phone's 2×2 lineup.
+          const grid = desktop && portrait;
           const q = gsap.utils.selector(root);
           const layers = q('.rig .bs-layer');
           const labels = q('.rig .bs-label');
@@ -58,29 +76,38 @@ export function CinematicStory() {
           const lineup = q('[data-lineup]');
           const rig = q('.rig');
 
+          const lineupPos = desktop && !grid
+            ? SIGNATURE_IDS.map((_, i) => ({ x: `${(i - 1.5) * 23.5}vw`, y: '4vh' }))
+            : grid
+              ? [
+                  { x: '-22vw', y: '-6vh' },
+                  { x: '22vw', y: '-6vh' },
+                  { x: '-22vw', y: '19vh' },
+                  { x: '22vw', y: '19vh' },
+                ]
+              : [
+                  { x: '-23vw', y: '-2vh' },
+                  { x: '23vw', y: '-2vh' },
+                  { x: '-23vw', y: '22vh' },
+                  { x: '23vw', y: '22vh' },
+                ];
+
           // Compositions per scene: where the burger sits.
           const C = desktop
             ? [
                 { x: 0, y: '6vh', scale: 1.32, rotation: 0 },
                 { x: '19vw', y: '4vh', scale: 1.24, rotation: -7 },
                 { x: '-19vw', y: '3vh', scale: 1.1, rotation: 6 },
-                { x: `${(SLOT - 1.5) * 23.5}vw`, y: '4vh', scale: 0.56, rotation: 0 },
-                { x: 0, y: '7vh', scale: 0.8, rotation: 0 },
+                { ...lineupPos[SLOT], scale: 0.56, rotation: 0 },
+                grid ? { x: 0, y: '8vh', scale: 1.12, rotation: 0 } : { x: 0, y: '7vh', scale: 0.8, rotation: 0 },
               ]
             : [
                 { x: 0, y: '5vh', scale: 1.48, rotation: 0 },
                 { x: 0, y: '9vh', scale: 1.14, rotation: -6 },
                 { x: 0, y: '9vh', scale: 1.04, rotation: 5 },
-                { x: '23vw', y: '-2vh', scale: 0.5, rotation: 0 },
-                { x: 0, y: '8vh', scale: 0.92, rotation: 0 },
-              ];
-          const lineupPos = desktop
-            ? SIGNATURE_IDS.map((_, i) => ({ x: `${(i - 1.5) * 23.5}vw`, y: '4vh' }))
-            : [
-                { x: '-23vw', y: '-2vh' },
-                { x: '23vw', y: '-2vh' },
-                { x: '-23vw', y: '22vh' },
-                { x: '23vw', y: '22vh' },
+                { ...lineupPos[SLOT], scale: 0.5, rotation: 0 },
+                // Short phones: a smaller exploded stack keeps the subtitle and the CTA clear.
+                short ? { x: 0, y: '9vh', scale: 0.8, rotation: 0 } : { x: 0, y: '8vh', scale: 0.92, rotation: 0 },
               ];
 
           gsap.set(fields.slice(1), { yPercent: 100, autoAlpha: 1 });
@@ -96,7 +123,12 @@ export function CinematicStory() {
             tl.to(layers, { yPercent: (i) => explodeOffset(i, N, base), duration: 0.5, ease: 'power2.inOut' }, at + 0.5);
           };
           const swapCopy = (from: number, to: number, at: number) => {
-            tl.to(copy(from), { autoAlpha: 0, y: -70, duration: 0.45, ease: 'power2.in' }, at);
+            // The intro h1 only fades (no visibility:hidden) so the page keeps its heading for assistive tech.
+            const out = copy(from);
+            const keep = out.filter((el) => el.hasAttribute('data-keep'));
+            const hide = out.filter((el) => !el.hasAttribute('data-keep'));
+            if (keep.length) tl.to(keep, { opacity: 0, y: -70, duration: 0.45, ease: 'power2.in' }, at);
+            tl.to(hide, { autoAlpha: 0, y: -70, duration: 0.45, ease: 'power2.in' }, at);
             tl.fromTo(copy(to), { autoAlpha: 0, y: 80 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' }, at + 0.55);
           };
           const wipe = (i: number, at: number) => {
@@ -128,7 +160,7 @@ export function CinematicStory() {
           tl.to(heroCap, { autoAlpha: 0, duration: 0.25 }, T.t4);
           tl.to(rig, { ...C[4], duration: 1, ease: 'power3.inOut' }, T.t4);
           swapCopy(3, 4, T.t4);
-          const gap = desktop ? 9 : 8.4;
+          const gap = desktop ? 9 : short ? 7.6 : 8.4;
           tl.to(layers, { yPercent: (i) => explodeOffset(i, N, gap), duration: 0.9, ease: 'power3.inOut', stagger: { each: 0.03, from: 'end' } }, T.explode);
           tl.to(q('.rig-shadow'), { scaleX: 0.7, autoAlpha: 0.35, duration: 0.9 }, T.explode);
           tl.to(labels, { autoAlpha: 1, duration: 0.35, stagger: { each: 0.05, from: 'end' } }, T.explode + 0.45);
@@ -169,6 +201,39 @@ export function CinematicStory() {
     { scope: root },
   );
 
+  // The pinned story adds thousands of pixels only after hydration, so the browser's own scroll
+  // restoration (reload, back/forward) and #hash jumps land in the wrong place. Restore by hand
+  // once the pin exists.
+  useEffect(() => {
+    const KEY = 'downtown:scroll-y';
+    const store = (() => {
+      try {
+        return window.sessionStorage;
+      } catch {
+        return null;
+      }
+    })();
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const save = () => {
+      try {
+        store?.setItem(KEY, String(Math.round(window.scrollY)));
+      } catch {}
+    };
+    window.addEventListener('pagehide', save);
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const saved = Number(store?.getItem(KEY) ?? 0);
+    const raf = requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      const target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+      if (target) target.scrollIntoView();
+      else if (nav && nav.type !== 'navigate' && saved > 0) window.scrollTo(0, saved);
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('pagehide', save);
+    };
+  }, []);
+
   const goToScene = (i: number) => {
     const st = stRef.current;
     if (!st) return;
@@ -206,7 +271,7 @@ export function CinematicStory() {
               >
                 <div className="bob" style={{ ['--dur' as string]: `${f.dur}s`, ['--delay' as string]: `${-k * 1.3}s`, ['--r0' as string]: `${f.r}deg`, ['--r1' as string]: `${f.r + 12}deg`, ['--bob' as string]: '-18px' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={renders.props[f.src].src} alt="" loading={i === 0 ? 'eager' : 'lazy'} className={`w-full drop-shadow-[0_18px_18px_rgb(0_0_0/0.28)] ${f.blur ? 'blur-[3px]' : ''}`} />
+                  <img src={i === 0 || later ? renders.props[f.src].src : undefined} alt="" className={`w-full drop-shadow-[0_18px_18px_rgb(0_0_0/0.28)] ${f.blur ? 'blur-[3px]' : ''}`} />
                 </div>
               </div>
             ))}
@@ -227,14 +292,14 @@ export function CinematicStory() {
               aria-label={`${p.name}, ${p.description}`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.image} alt="" loading="lazy" className="aspect-square w-full transition-transform duration-500 group-hover:-translate-y-[4%] group-hover:-rotate-3" />
+              <img src={later ? p.image : undefined} alt="" width={900} height={900} className="aspect-square w-full transition-transform duration-500 group-hover:-translate-y-[4%] group-hover:-rotate-3" />
               <LineupCaption name={p.name} cents={p.price} />
             </button>
           );
         })}
 
         {/* Intro headline sits behind the burger */}
-        <div data-copy="0" className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+3vh)] z-[5] px-5 text-center md:top-[calc(var(--header-h)+1vh)]">
+        <div data-copy="0" data-keep className="pointer-events-none absolute inset-x-0 top-[calc(var(--header-h)+3vh)] z-[5] px-5 text-center md:top-[calc(var(--header-h)+1vh)]">
           <h1 className="display text-[clamp(3.6rem,15vw,6rem)] leading-[0.84] text-on-dark md:text-[clamp(5.4rem,9vw,10.5rem)]">
             Isso é <span className="whitespace-nowrap">Downtown.</span>
           </h1>
@@ -343,7 +408,7 @@ export function CinematicStory() {
           {/* 5 — Inside */}
           <div data-copy="4" className="invisible absolute inset-0 flex flex-col items-center px-5 pt-[calc(var(--header-h)+2vh)] pb-[max(24px,env(safe-area-inset-bottom))] text-center">
             <h2 className="display text-[clamp(3.2rem,13vw,5.5rem)] md:text-[clamp(4.4rem,7vw,8.4rem)]">Por dentro do sabor.</h2>
-            <p className="cond mt-2 text-lg font-semibold tracking-[0.12em] text-on-dark-mute uppercase">{hero.name}, camada por camada.</p>
+            <p className="cond mt-2 text-base font-semibold tracking-[0.08em] text-on-dark-mute uppercase sm:text-lg sm:tracking-[0.12em]">{hero.name}, camada por camada.</p>
             <div className="mt-auto flex flex-wrap justify-center gap-3">
               <a
                 href="#cardapio"
@@ -361,7 +426,7 @@ export function CinematicStory() {
 
         {/* Scene dots */}
         <nav aria-label="Cenas" className="absolute top-1/2 left-3 z-30 hidden -translate-y-1/2 md:left-6 md:block">
-          <ol className="flex flex-col gap-1">
+          <ol className="flex flex-col">
             {SCENES.map((s, i) => (
               <li key={s.id}>
                 <button
@@ -369,7 +434,7 @@ export function CinematicStory() {
                   onClick={() => goToScene(i)}
                   aria-label={`Cena ${i + 1}: ${s.title}`}
                   aria-current={scene === i ? 'step' : undefined}
-                  className="group flex h-8 w-8 cursor-pointer items-center justify-center"
+                  className="group flex h-11 w-11 cursor-pointer items-center justify-center"
                 >
                   <span className={`block rounded-full transition-all duration-300 ${scene === i ? 'h-3 w-3 bg-mustard' : 'h-2 w-2 bg-on-dark/45 group-hover:bg-on-dark'}`} />
                 </button>

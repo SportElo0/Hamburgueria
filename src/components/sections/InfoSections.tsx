@@ -158,10 +158,12 @@ export function LocationSection() {
           </h2>
           <dl className="mt-12 border-t-2 border-ink">
             {rows.map((row) => (
-              <div key={row.label} className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-1 border-b border-ink/15 py-6 sm:grid-cols-[auto_9rem_1fr]">
-                <span className="mt-0.5 text-brand">{row.icon}</span>
-                <dt className="cond text-lg font-bold tracking-[0.1em] uppercase">{row.label}</dt>
-                <dd className="col-start-2 text-[1.05rem] sm:col-start-3">{row.value}</dd>
+              <div key={row.label} className="grid gap-x-5 gap-y-1 border-b border-ink/15 py-6 sm:grid-cols-[calc(22px+1.25rem+9rem)_1fr]">
+                <dt className="cond flex items-start gap-5 text-lg font-bold tracking-[0.1em] uppercase">
+                  <span aria-hidden="true" className="mt-0.5 text-brand">{row.icon}</span>
+                  {row.label}
+                </dt>
+                <dd className="pl-[calc(22px+1.25rem)] text-[1.05rem] sm:pl-0">{row.value}</dd>
               </div>
             ))}
           </dl>

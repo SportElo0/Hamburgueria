@@ -35,12 +35,12 @@ export function Toaster() {
                 toastState.action?.run();
                 dismissToast();
               }}
-              className="cond ml-1 min-h-10 cursor-pointer rounded-full bg-on-dark px-4 text-sm font-bold tracking-wide text-ink uppercase transition-colors hover:bg-mustard"
+              className="cond ml-1 min-h-11 shrink-0 cursor-pointer rounded-full bg-on-dark px-4 text-sm font-bold tracking-wide text-ink uppercase transition-colors hover:bg-mustard"
             >
               {toastState.action.label}
             </button>
           )}
-          <button type="button" onClick={dismissToast} aria-label="Fechar aviso" className="grid h-10 w-10 cursor-pointer place-items-center rounded-full hover:bg-white/10">
+          <button type="button" onClick={dismissToast} aria-label="Fechar aviso" className="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full hover:bg-white/10">
             <CloseIcon size={16} />
           </button>
         </div>

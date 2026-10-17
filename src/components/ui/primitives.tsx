@@ -8,7 +8,8 @@ export function Price({ cents, className = '', size = 'md' }: { cents: number; c
   const { currency, whole, fraction } = priceParts(cents);
   const scale = { sm: 'text-xl', md: 'text-[1.7rem]', lg: 'text-[2.3rem]', xl: 'text-[3.2rem]' }[size];
   return (
-    <span className={`display tabular inline-flex items-start leading-none ${scale} ${className}`} aria-label={`${currency} ${whole},${fraction}`}>
+    <span className={`display tabular inline-flex items-start leading-none ${scale} ${className}`}>
+      <span className="sr-only">{`${currency} ${whole},${fraction}`}</span>
       <span aria-hidden="true" className="cond mt-[0.12em] mr-[0.12em] text-[0.42em] font-bold tracking-wide">
         {currency}
       </span>
@@ -41,7 +42,7 @@ export function Stepper({
     tone === 'light'
       ? 'text-ink hover:bg-ink/8 active:bg-ink/14 disabled:text-ink/30'
       : 'text-on-dark hover:bg-white/10 active:bg-white/20 disabled:text-on-dark/30';
-  const dim = size === 'sm' ? 'h-10 w-10' : 'h-12 w-12';
+  const dim = size === 'sm' ? 'h-11 w-11' : 'h-12 w-12';
   return (
     <div
       role="group"

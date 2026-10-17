@@ -26,11 +26,15 @@ export function MenuSection() {
   const [active, setActive] = useState<CategoryId>('burgers');
   const navRef = useRef<HTMLElement>(null);
   const [pickerFor, setPickerFor] = useState<string | null>(null);
+  // While a chip-triggered scroll is in flight the observer would flag whichever section passes
+  // first (Bebidas and Long Necks share a row on wide screens), so it waits until the jump lands.
+  const lockUntil = useRef(0);
 
   useEffect(() => {
     const els = categories.map((c) => document.getElementById(`cat-${c.id}`)).filter(Boolean) as HTMLElement[];
     const io = new IntersectionObserver(
       (entries) => {
+        if (performance.now() < lockUntil.current) return;
         const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         if (visible[0]) setActive(visible[0].target.id.replace('cat-', '') as CategoryId);
       },
@@ -40,15 +44,29 @@ export function MenuSection() {
     return () => io.disconnect();
   }, []);
 
+  // Keep the active chip centred by scrolling the chip rail only. scrollIntoView would also
+  // scroll the window (it walks every scrollable ancestor), yanking the page on load and
+  // cancelling in-flight smooth scrolls from the header links.
+  const centred = useRef(false);
   useEffect(() => {
-    const btn = navRef.current?.querySelector<HTMLElement>(`[data-cat="${active}"]`);
-    btn?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    const nav = navRef.current;
+    const btn = nav?.querySelector<HTMLElement>(`[data-cat="${active}"]`);
+    if (!nav || !btn) return;
+    if (!centred.current) {
+      centred.current = true;
+      if (active === 'burgers') return;
+    }
+    if (nav.scrollWidth <= nav.clientWidth) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    nav.scrollTo({ left: btn.offsetLeft - nav.clientWidth / 2 + btn.offsetWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
   }, [active]);
 
-  const jump = (id: CategoryId) => {
+  const jump = (id: CategoryId, at: number) => {
     const el = document.getElementById(`cat-${id}`);
     if (!el) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setActive(id);
+    lockUntil.current = at + 1200;
     el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   };
 
@@ -70,14 +88,14 @@ export function MenuSection() {
       </div>
 
       <div className="sticky top-[var(--header-h)] z-30 mt-6 border-b border-ink/10 bg-cream/92 backdrop-blur-md">
-        <nav ref={navRef} aria-label="Categorias do cardápio" className="mx-auto flex max-w-[1360px] gap-1 overflow-x-auto px-3 py-2.5 [scrollbar-width:none] md:gap-2 md:px-8">
+        <nav ref={navRef} aria-label="Categorias do cardápio" className="relative mx-auto flex max-w-[1360px] gap-1 overflow-x-auto px-3 py-2.5 [scrollbar-width:none] md:gap-2 md:px-8">
           {categories.map((c) => (
             <button
               key={c.id}
               type="button"
               data-cat={c.id}
               aria-current={active === c.id ? 'true' : undefined}
-              onClick={() => jump(c.id)}
+              onClick={(e) => jump(c.id, e.timeStamp)}
               className="cond min-h-11 shrink-0 cursor-pointer rounded-full px-4 text-[1.05rem] font-bold tracking-[0.08em] whitespace-nowrap uppercase transition-colors hover:bg-ink/8 aria-[current=true]:bg-ink aria-[current=true]:text-on-dark md:px-5"
             >
               {c.label}
@@ -208,11 +226,11 @@ function Addons({ onPick }: { onPick: (id: string) => void }) {
                   type="button"
                   onClick={() => onPick(a.id)}
                   className="group flex min-h-16 w-full cursor-pointer items-baseline gap-3 py-3 text-left"
-                  aria-label={`${a.label}, mais ${formatBRL(a.priceDelta)}. Escolher burger para adicionar`}
-                >
+>
                   <span className="cond text-[1.25rem] leading-tight font-bold tracking-[0.04em] uppercase transition-colors group-hover:text-brand">{a.label}</span>
                   <span className="leader hidden sm:block" aria-hidden="true" />
                   <span className="cond tabular ml-auto shrink-0 sm:ml-0 text-[1.25rem] font-bold whitespace-nowrap text-brand">{formatBRL(a.priceDelta)}</span>
+                  <span className="sr-only">. Escolher burger para adicionar</span>
                   <span aria-hidden="true" className="ml-1 grid h-9 w-9 shrink-0 translate-y-1.5 place-items-center self-start rounded-full border-2 border-ink/20 transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-on-dark">
                     <PlusIcon size={16} />
                   </span>
@@ -255,7 +273,7 @@ function BoardRow({ p }: { p: Product }) {
 
 function Drinks() {
   return (
-    <div className="grid gap-x-16 md:grid-cols-2">
+    <div className="grid gap-x-16 lg:grid-cols-2">
       <div id="cat-bebidas" className="scroll-mt-40">
         <CategoryHeading id="bebidas" />
         <ul className="border-t-2 border-ink">

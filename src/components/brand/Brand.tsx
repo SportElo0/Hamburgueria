@@ -34,7 +34,7 @@ function Skyline() {
 export function Badge({ className = '', title = 'Downtown Burger' }: { className?: string; title?: string }) {
   if (OFFICIAL_LOGO) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={OFFICIAL_LOGO} alt={title} className={className} />;
+    return <img src={OFFICIAL_LOGO} alt={title} aria-hidden={title ? undefined : true} className={className} />;
   }
   const r = 150;
   const a = (25 * Math.PI) / 180;
@@ -42,7 +42,7 @@ export function Badge({ className = '', title = 'Downtown Burger' }: { className
   const x1 = 200 + r * Math.cos(a);
   const y = 200 + r * Math.sin(a);
   return (
-    <svg viewBox="0 0 400 400" role="img" aria-label={title} className={className}>
+    <svg viewBox="0 0 400 400" {...(title ? { role: 'img', 'aria-label': title } : { 'aria-hidden': true })} className={className}>
       <defs>
         <path id="badge-arc" d={`M${x0} ${y} A${r} ${r} 0 0 0 ${x1} ${y}`} />
       </defs>

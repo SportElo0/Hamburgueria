@@ -51,9 +51,10 @@ export const FLOATERS: Floater[][] = [
     { src: 'float-onion', x: '4%', y: '82%', w: 'clamp(70px, 8vw, 140px)', r: 30, dur: 8, m: 'hide' },
   ],
   [
-    { src: 'float-lettuce', x: '4%', y: '18%', w: 'clamp(80px, 10vw, 170px)', r: -14, dur: 7.4, m: { x: '2%', y: '36%' } },
-    { src: 'float-arugula', x: '86%', y: '14%', w: 'clamp(60px, 7vw, 120px)', r: 24, dur: 6.2, m: { x: '86%', y: '32%' } },
+    // On phones the exploded labels fill both sides, so these move to the corners by the CTA.
+    { src: 'float-lettuce', x: '4%', y: '18%', w: 'clamp(80px, 10vw, 170px)', r: -14, dur: 7.4, m: 'hide' },
+    { src: 'float-arugula', x: '86%', y: '14%', w: 'clamp(60px, 7vw, 120px)', r: 24, dur: 6.2, m: { x: '84%', y: '86%' } },
     { src: 'float-arugula', x: '8%', y: '76%', w: 'clamp(70px, 8vw, 130px)', r: -30, dur: 7, blur: true, m: { x: '6%', y: '84%' } },
-    { src: 'float-lettuce', x: '84%', y: '74%', w: 'clamp(70px, 9vw, 150px)', r: 18, dur: 8, m: 'hide' },
+    { src: 'float-lettuce', x: '86%', y: '82%', w: 'clamp(70px, 9vw, 150px)', r: 18, dur: 8, m: 'hide' },
   ],
 ];

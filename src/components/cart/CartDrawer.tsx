@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { isOrderingLive, restaurant } from '@/content/restaurant';
 import { resolveSelections, unitPrice } from '@/lib/cart';
 import { formatBRL } from '@/lib/money';
@@ -35,6 +35,15 @@ function CartBody({ onClose }: { onClose: () => void }) {
   const [adultError, setAdultError] = useState(false);
   const [preview, setPreview] = useState(false);
   const [copied, setCopied] = useState(false);
+  // Undo lives inside the drawer: the global toast renders under the modal's top layer.
+  const [removed, setRemoved] = useState<{ name: string; restore: () => void } | null>(null);
+  const undoRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!removed) return;
+    undoRef.current?.focus();
+    const t = window.setTimeout(() => setRemoved(null), 8000);
+    return () => window.clearTimeout(t);
+  }, [removed]);
 
   const hasAlcohol = cart.lines.some((l) => cart.lookup(l.productId)?.alcoholic);
   const message = useMemo(() => buildOrderMessage(cart.lines, cart.lookup, { customerName: name, note }), [cart.lines, cart.lookup, name, note]);
@@ -84,6 +93,23 @@ function CartBody({ onClose }: { onClose: () => void }) {
           <CloseIcon size={22} />
         </button>
       </header>
+
+      {removed && (
+        <div role="status" className="flex items-center gap-3 border-b border-ink/12 bg-cream-deep/70 px-5 py-2 md:px-8">
+          <p className="min-w-0 flex-1 text-[0.95rem] font-medium">{removed.name} removido da sacola.</p>
+          <button
+            ref={undoRef}
+            type="button"
+            onClick={() => {
+              removed.restore();
+              setRemoved(null);
+            }}
+            className="cond min-h-11 shrink-0 cursor-pointer rounded-full bg-ink px-5 text-sm font-bold tracking-wide text-on-dark uppercase transition-colors hover:bg-brand"
+          >
+            Desfazer
+          </button>
+        </div>
+      )}
 
       {cart.lines.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-8 text-center">
@@ -135,7 +161,7 @@ function CartBody({ onClose }: { onClose: () => void }) {
                           <button
                             type="button"
                             onClick={() => ui.openProduct({ productId: p.id, lineId: line.lineId })}
-                            className="cond inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-bold tracking-wide uppercase transition-colors hover:bg-ink/8"
+                            className="cond inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-bold tracking-wide uppercase transition-colors hover:bg-ink/8"
                           >
                             <EditIcon size={16} /> Editar
                           </button>
@@ -144,9 +170,9 @@ function CartBody({ onClose }: { onClose: () => void }) {
                           type="button"
                           onClick={() => {
                             cart.remove(line.lineId);
-                            ui.toast(`${p.name} removido`, { label: 'Desfazer', run: () => cart.add(p.id, line.quantity, line.selections, line.notes) });
+                            setRemoved({ name: p.name, restore: () => cart.add(p.id, line.quantity, line.selections, line.notes) });
                           }}
-                          className="cond ml-auto inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-bold tracking-wide text-brand uppercase transition-colors hover:bg-brand/8"
+                          className="cond ml-auto inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm font-bold tracking-wide text-brand uppercase transition-colors hover:bg-brand/8"
                         >
                           <TrashIcon size={16} /> Remover
                         </button>
@@ -216,7 +242,7 @@ function CartBody({ onClose }: { onClose: () => void }) {
 
           <footer className="border-t-2 border-ink bg-paper px-5 pt-4 pb-[calc(env(safe-area-inset-bottom)+18px)] md:px-8 md:pb-8">
             <dl className="space-y-1">
-              <div className="flex items-baseline justify-between text-ink-soft">
+              <div className="flex items-baseline justify-between text-ink-soft [@media(max-height:760px)]:hidden">
                 <dt>Subtotal</dt>
                 <dd className="cond tabular text-lg font-semibold">{formatBRL(cart.total)}</dd>
               </div>
@@ -228,7 +254,7 @@ function CartBody({ onClose }: { onClose: () => void }) {
             <p className="mt-1 text-xs text-ink-mute">Taxa de entrega e forma de pagamento são combinadas com o restaurante.</p>
 
             {!live && (
-              <p className="mt-3 rounded-xl bg-mustard/30 px-3 py-2 text-sm text-ink">
+              <p className="mt-3 rounded-xl bg-mustard/30 px-3 py-2 text-sm text-ink [@media(max-height:760px)]:mt-2 [@media(max-height:760px)]:py-1.5 [@media(max-height:760px)]:text-xs">
                 <strong className="font-bold">Modo demonstração.</strong> O WhatsApp oficial ainda não foi configurado, então nenhum pedido é enviado. Você pode gerar e copiar a mensagem.
               </p>
             )}

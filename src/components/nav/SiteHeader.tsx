@@ -58,7 +58,7 @@ export function SiteHeader() {
             e.preventDefault();
             scrollToHash('#inicio');
           }}
-          aria-label="Downtown Burger, voltar ao início"
+          aria-label="Downtown Burger: voltar ao início"
           className="rounded-full"
         >
           <Wordmark />
@@ -77,7 +77,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => ui.setCartOpen(true)}
-            aria-label={cart.count ? `Abrir sacola, ${cart.count} ${cart.count === 1 ? 'item' : 'itens'}, ${formatBRL(cart.total)}` : 'Abrir sacola, vazia'}
+            aria-label={cart.count ? `${cart.count} ${cart.count === 1 ? 'item' : 'itens'} na sacola, ${formatBRL(cart.total)}. Abrir sacola` : '0 itens. Abrir sacola, vazia'}
             className={`relative inline-flex h-12 cursor-pointer items-center gap-2 rounded-full border-2 px-3.5 transition-colors ${dark ? 'border-on-dark/40 hover:border-on-dark' : 'border-ink/20 hover:border-ink'}`}
           >
             <BagIcon size={22} />
@@ -108,7 +108,7 @@ export function MobileCartBar() {
   const ui = useUi();
   if (!cart.ready || cart.count === 0) return null;
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] md:hidden">
+    <div className="mobile-cart-bar pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(env(safe-area-inset-bottom)+12px)] md:hidden">
       <button
         type="button"
         onClick={() => ui.setCartOpen(true)}

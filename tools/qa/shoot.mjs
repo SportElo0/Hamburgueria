@@ -56,7 +56,7 @@ async function run(name, viewport, mobile) {
   });
   await page.waitForTimeout(600);
   await page.screenshot({ path: `${out}/${name}-toast.png` });
-  await page.evaluate(() => document.querySelector('header button[aria-label^="Abrir sacola"]')?.click());
+  await page.evaluate(() => document.querySelector('header button[aria-label*="Abrir sacola"]')?.click());
   await page.waitForTimeout(800);
   await page.screenshot({ path: `${out}/${name}-cart.png` });
   await page.getByRole('button', { name: 'Gerar mensagem do pedido' }).click();

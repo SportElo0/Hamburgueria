@@ -35,5 +35,10 @@
     "typescript": "^5",
     "vitest": "^5.0.5",
     "wrangler": "^4.151.1"
+  },
+  "overrides": {
+    "@next/eslint-plugin-next": {
+      "fast-glob": "npm:tinyglobby@^0.2.17"
+    }
   }
 }

@@ -196,7 +196,7 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
                     const checked = selections[group.id]?.includes(choice.id) ?? false;
                     return (
                       <li key={choice.id} className="border-b border-ink/10">
-                        <label className="group flex min-h-14 cursor-pointer items-center gap-4 py-2">
+                        <label className="group relative flex min-h-14 cursor-pointer items-center gap-4 py-2">
                           <input
                             type={group.type === 'single' ? 'radio' : 'checkbox'}
                             name={`${formId}-${group.id}`}
@@ -248,8 +248,9 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
           <Stepper value={qty} onChange={setQty} label="Quantidade" />
           <button
             type="submit"
-            aria-disabled={missing.length > 0}
-            className="cond group inline-flex min-h-14 flex-1 cursor-pointer items-center justify-between gap-2 rounded-full bg-ink px-5 text-base font-bold tracking-[0.06em] whitespace-nowrap text-on-dark uppercase sm:gap-3 sm:px-6 sm:text-lg transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.98] aria-disabled:bg-ink/55"
+            data-incomplete={missing.length > 0 || undefined}
+            aria-describedby={missing.length > 0 ? `${formId}-pending` : undefined}
+            className="cond group inline-flex min-h-14 flex-1 cursor-pointer items-center justify-between gap-2 rounded-full bg-ink px-5 text-base font-bold tracking-[0.06em] whitespace-nowrap text-on-dark uppercase sm:gap-3 sm:px-6 sm:text-lg transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.98] data-incomplete:bg-ink/55"
           >
             <span className="inline-flex items-center gap-2">
               <Star size={12} className="text-mustard" />
@@ -257,6 +258,11 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
             </span>
             <span className="tabular">{formatBRL(unit * qty)}</span>
           </button>
+          {missing.length > 0 && (
+            <span id={`${formId}-pending`} className="sr-only">
+              Falta escolher: {missing.map((m) => m.label).join(', ')}.
+            </span>
+          )}
         </div>
       </div>
     </form>

@@ -39,6 +39,8 @@
 
 @media (max-width: 767px) {
   :root {
+    /* Keyboard focus and in-page jumps stop above the floating cart bar. */
+    scroll-padding-bottom: 96px;
     --header-h: 60px;
   }
 }
@@ -147,6 +149,8 @@
     line-height: 0.8;
     white-space: nowrap;
     user-select: none;
+    /* Scrubbed every frame during the story: keep it on its own compositor layer. */
+    will-change: transform;
   }
 
   /* Menu-style dotted leaders between name and price. */
@@ -319,6 +323,10 @@ html {
 .stage {
   --frame: min(88vw, 47svh);
 }
+/* Colour fields wipe in by transform on every scroll frame. */
+.stage [data-field] {
+  will-change: transform;
+}
 @media (min-width: 768px) {
   .stage {
     --frame: min(58svh, 44vw);
@@ -365,4 +373,20 @@ body,
 }
 #cardapio {
   background-color: transparent;
+}
+
+/* Floating cart bar (phones): the story's own CTAs sit where the bar would, so it waits
+   until the story is done. Without motion the story is not pinned and the bar shows at once. */
+.mobile-cart-bar {
+  transition:
+    opacity 0.3s,
+    translate 0.45s var(--ease-out-expo),
+    visibility 0.45s;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-story-done]) .mobile-cart-bar {
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 24px;
+  }
 }
