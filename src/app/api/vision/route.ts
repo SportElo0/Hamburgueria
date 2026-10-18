@@ -2,6 +2,7 @@ import { buildVisionPrompt, defaultChoice, isValidChoice, type VisionChoice } fr
 import { ImageError, maxUploadBytes, normaliseImage } from "@/lib/images";
 import { burstLimit, clientKey, readVisionUsage, recordVisionUse } from "@/lib/rate-limit";
 import { json, sameOrigin } from "@/lib/request-guard";
+import { storageConfigured } from "@/lib/storage";
 import { ProviderError, visionAvailability, visionProvider } from "@/lib/vision/provider";
 
 export const runtime = "nodejs";
@@ -20,9 +21,10 @@ export async function GET() {
   const client = await clientKey();
   const usage = await readVisionUsage(client).catch(() => null);
   const maxMb = Math.round(maxUploadBytes() / 1024 / 1024);
-  if (!avail.available) return json({ available: false, reason: avail.reason, message: reasonText[avail.reason], maxMb });
-  if (usage?.budgetExhausted) return json({ available: false, reason: "budget", message: reasonText.budget, maxMb });
-  return json({ available: true, remaining: usage?.remaining ?? 0, perClient: usage?.perClient ?? 0, maxMb });
+  const leadsEnabled = storageConfigured();
+  if (!avail.available) return json({ available: false, reason: avail.reason, message: reasonText[avail.reason], maxMb, leadsEnabled });
+  if (usage?.budgetExhausted) return json({ available: false, reason: "budget", message: reasonText.budget, maxMb, leadsEnabled });
+  return json({ available: true, remaining: usage?.remaining ?? 0, perClient: usage?.perClient ?? 0, maxMb, leadsEnabled });
 }
 
 /**

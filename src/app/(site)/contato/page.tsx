@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { WhatsApp } from "@/components/icons";
 import { LeadForm } from "@/components/lead-form";
+import { STORAGE_PENDING_NOTE, storageConfigured } from "@/lib/storage";
 import { getServices, getSettings, getVehicle } from "@/lib/repo";
 import { siteUrl } from "@/lib/site-url";
 import { interestMessage, restorationMessage, vehicleLabel, whatsappUrl } from "@/lib/whatsapp";
@@ -86,6 +87,7 @@ export default async function ContatoPage({ searchParams }: { searchParams: Prom
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
             <LeadForm
+              unavailableNote={storageConfigured() ? undefined : STORAGE_PENDING_NOTE}
               key={journey}
               journey={journey}
               vehicle={vehicle ? { slug: vehicle.slug, label: vehicleLabel(vehicle) } : undefined}

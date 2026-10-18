@@ -3,7 +3,7 @@ import { createLead, getVehicle } from "@/lib/repo";
 import { ImageError, dataUrlToBuffer, normaliseImage } from "@/lib/images";
 import { burstLimit, clientKey } from "@/lib/rate-limit";
 import { json, sameOrigin } from "@/lib/request-guard";
-import { storage } from "@/lib/storage";
+import { STORAGE_PENDING_NOTE, storage, storageConfigured } from "@/lib/storage";
 import { fieldErrors, leadSchema } from "@/lib/validation";
 import { vehicleLabel } from "@/lib/whatsapp";
 
@@ -16,6 +16,7 @@ export const runtime = "nodejs";
  */
 export async function POST(req: Request) {
   if (!sameOrigin(req)) return json({ error: "Origem não autorizada." }, 403);
+  if (!storageConfigured()) return json({ error: STORAGE_PENDING_NOTE, reason: "storage" }, 503);
   const client = await clientKey();
   if (!burstLimit(`lead:${client}`, 5, 10 * 60_000)) {
     return json({ error: "Muitas solicitações em sequência. Tente novamente em alguns minutos." }, 429);

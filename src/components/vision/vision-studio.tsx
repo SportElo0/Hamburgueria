@@ -20,8 +20,8 @@ import { LeadForm } from "../lead-form";
 
 type Status =
   | { loading: true }
-  | { loading: false; available: true; remaining: number; perClient: number; maxMb: number }
-  | { loading: false; available: false; message: string; maxMb: number };
+  | { loading: false; available: true; remaining: number; perClient: number; maxMb: number; leadsEnabled: boolean }
+  | { loading: false; available: false; message: string; maxMb: number; leadsEnabled: boolean };
 
 type Phase = "upload" | "imagine" | "generating" | "result";
 
@@ -83,9 +83,14 @@ export function VisionStudio({ initial }: { initial: Partial<VisionChoice> }) {
     try {
       const r = await fetch("/api/vision", { cache: "no-store" });
       const d = await r.json();
-      setStatus(d.available ? { loading: false, available: true, remaining: d.remaining, perClient: d.perClient, maxMb: d.maxMb } : { loading: false, available: false, message: d.message, maxMb: d.maxMb });
+      const leadsEnabled = d.leadsEnabled !== false;
+      setStatus(
+        d.available
+          ? { loading: false, available: true, remaining: d.remaining, perClient: d.perClient, maxMb: d.maxMb, leadsEnabled }
+          : { loading: false, available: false, message: d.message, maxMb: d.maxMb, leadsEnabled },
+      );
     } catch {
-      setStatus({ loading: false, available: false, message: "Não foi possível verificar o serviço de IA agora.", maxMb: 8 });
+      setStatus({ loading: false, available: false, message: "Não foi possível verificar o serviço de IA agora.", maxMb: 8, leadsEnabled: false });
     }
   }, []);
 
@@ -196,7 +201,11 @@ export function VisionStudio({ initial }: { initial: Partial<VisionChoice> }) {
           <p className="text-[0.9375rem]">
             <span className="font-medium">Geração indisponível no momento.</span> <span className="text-silver">{status.message}</span>
           </p>
-          <p className="caption text-mist">Você ainda pode enviar a foto e as preferências para uma avaliação.</p>
+          <p className="caption text-mist">
+            {status.leadsEnabled
+              ? "Você ainda pode enviar a foto e as preferências para uma avaliação."
+              : "Explore a interface à vontade: nenhuma imagem é gerada nem enviada nesta versão."}
+          </p>
         </div>
       )}
 
@@ -360,6 +369,7 @@ export function VisionStudio({ initial }: { initial: Partial<VisionChoice> }) {
                 Envie seus dados para a Mercantil analisar o projeto. O pedido segue com as preferências escolhidas.
               </p>
               <LeadForm
+                unavailableNote={!status.loading && !status.leadsEnabled ? "Versão de demonstração: o envio de solicitações será ativado quando o armazenamento do site for configurado." : undefined}
                 journey="vision"
                 hasImages
                 extra={() => ({ visionBrief: summary.slice(0, 600), ...leadImages })}

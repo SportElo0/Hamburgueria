@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, WhatsApp } from "@/components/icons";
 import { LeadForm } from "@/components/lead-form";
+import { STORAGE_PENDING_NOTE, storageConfigured } from "@/lib/storage";
 import { VehicleGallery } from "@/components/vehicle-gallery";
 import { CommercialStatus, SwatchChip, WorkTrack } from "@/components/vehicle-bits";
 import { getSettings, getVehicle, getVehicles } from "@/lib/repo";
@@ -166,6 +167,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ slug: 
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
             <LeadForm
+              unavailableNote={storageConfigured() ? undefined : STORAGE_PENDING_NOTE}
               journey="compra"
               vehicle={{ slug: vehicle.slug, label: vehicleLabel(vehicle) }}
               whatsappHref={wa}

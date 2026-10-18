@@ -18,6 +18,8 @@ export interface LeadFormProps {
   submitLabel?: string;
   tone?: "dark" | "paper";
   onSent?: () => void;
+  /** When set, submissions are not active yet (e.g. storage not configured): say so and disable submit. */
+  unavailableNote?: string;
 }
 
 /**
@@ -36,6 +38,7 @@ export function LeadForm({
   submitLabel = "Enviar solicitação",
   tone = "dark",
   onSent,
+  unavailableNote,
 }: LeadFormProps) {
   const uid = useId();
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -130,6 +133,12 @@ export function LeadForm({
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-6">
+      {unavailableNote && (
+        <p role="note" className={`rounded-[3px] border px-4 py-3 text-[0.9375rem] ${tone === "paper" ? "border-[var(--line-light)]" : "border-[var(--line-dark)] bg-graphite"}`}>
+          {unavailableNote}
+          {whatsappHref ? " Enquanto isso, use o WhatsApp." : ""}
+        </p>
+      )}
       {formError && (
         <div ref={summaryRef} tabIndex={-1} role="alert" className="rounded-[3px] border border-[#e0868f]/50 bg-[#e0868f]/10 p-4 text-[0.9375rem]">
           <p className="font-medium">{formError}</p>
@@ -237,7 +246,7 @@ export function LeadForm({
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button type="submit" className="btn btn-primary" disabled={state === "sending"} aria-busy={state === "sending"}>
+        <button type="submit" className="btn btn-primary" disabled={state === "sending" || !!unavailableNote} aria-busy={state === "sending"}>
           {state === "sending" ? "Enviando…" : submitLabel} {state !== "sending" && <ArrowRight className="arrow" />}
         </button>
         {whatsappHref && (
