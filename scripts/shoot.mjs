@@ -25,7 +25,16 @@ for (const vp of vps.filter((v) => !only || only.includes(v.n))) {
     await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(600);
   }
   await page.screenshot({ path: `${outdir}/${name}-${vp.n}.png`, fullPage: full });
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  const overflow = await page.evaluate(() => {
+    const vw = document.documentElement.clientWidth;
+    const wide = [...document.querySelectorAll("body *")].filter((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.right <= vw + 1) return false;
+      for (let p = el.parentElement; p; p = p.parentElement) if (getComputedStyle(p).overflowX !== "visible") return false;
+      return true;
+    });
+    return wide.length ? `${Math.round(Math.max(...wide.map((e) => e.getBoundingClientRect().right)) - vw)}px (${wide[0].tagName}.${String(wide[0].className).slice(0, 40)})` : 0;
+  });
   console.log(vp.n, "hOverflow:", overflow, errors.length ? "ERRORS: " + [...new Set(errors)].map((e) => e.slice(0, 240)).join(" | ") : "");
   await ctx.close();
 }

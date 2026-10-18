@@ -98,27 +98,37 @@ export function VehiclePlate({
   return <AwaitingPlate vehicle={vehicle} className={className} />;
 }
 
+/** Relative luminance (WCAG) of a #rrggbb colour. */
+function luminance(hex: string): number {
+  const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+}
+
+/**
+ * A car still awaiting photography is shown as its own paint chip — the colour field of a period
+ * paint chart, printed with its name — never as an invented image.
+ */
 export function AwaitingPlate({ vehicle, className = "" }: { vehicle: Vehicle; className?: string }) {
+  const light = luminance(vehicle.color.hex) > 0.35;
+  const ink = light ? "text-ink" : "text-ivory";
   return (
     <figure
-      className={`plate-awaiting @container relative flex flex-col justify-between overflow-hidden ${className}`}
-      style={{ "--paint": vehicle.color.hex } as React.CSSProperties}
-      aria-label={`${vehicle.model} ${vehicle.chassis}: fotografias em produção`}
+      className={`@container relative flex flex-col justify-between overflow-hidden ${ink} ${className}`}
+      style={{
+        background: `linear-gradient(158deg, rgb(255 255 255 / ${light ? 0.35 : 0.13}) 0%, rgb(255 255 255 / 0) 42%, rgb(0 0 0 / ${light ? 0.12 : 0.35}) 100%), ${vehicle.color.hex}`,
+      }}
+      aria-label={`${vehicle.model} ${vehicle.chassis} na cor ${vehicle.color.name.toLowerCase()}: fotografias reais em produção`}
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 text-center font-display leading-none text-ivory/[0.07] select-none"
-        style={{ fontSize: "clamp(5rem, 22cqw, 16rem)" }}
+        className={`pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 text-center font-display leading-none select-none ${light ? "text-ink/[0.07]" : "text-ivory/[0.08]"}`}
+        style={{ fontSize: "clamp(4rem, 26cqw, 16rem)" }}
       >
         {vehicle.chassis}
       </span>
-      <div className="relative flex items-start justify-between p-4">
-        <span className="h-10 w-14 rounded-[2px] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.14)]" style={{ background: vehicle.color.hex }} />
-        <span className="caption text-mist">{vehicle.color.name}</span>
-      </div>
-      <figcaption className="relative p-4">
-        <span className="font-display text-[1.75rem] leading-none text-ivory">{vehicle.model}</span>
-        <span className="caption mt-2 block text-mist">Fotografias reais em produção</span>
+      <span className="relative p-4 font-display text-[1.375rem] leading-none">{vehicle.color.name}</span>
+      <figcaption className={`caption relative p-4 ${light ? "text-ink" : "text-ivory/80"}`}>
+        <span className="prov" data-kind="concept">Amostra de cor · fotografias reais em produção</span>
       </figcaption>
     </figure>
   );

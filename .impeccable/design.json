@@ -1,0 +1,505 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T05:28:46.316Z",
+  "title": "Design System: MERCANTIL",
+  "extensions": {
+    "colorMeta": {
+      "night": {
+        "role": "neutral",
+        "displayName": "Night Plate",
+        "canonical": "oklch(14.4% 0.003 247.1)",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232425",
+          "#3f4041",
+          "#5c5e5f",
+          "#7f8082",
+          "#a3a5a6",
+          "#c9cbcc",
+          "#edeff0"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "oklch(21.3% 0.007 258.4)",
+        "tonalRamp": [
+          "#090b0e",
+          "#222427",
+          "#3e4043",
+          "#5b5e61",
+          "#7e8084",
+          "#a2a5a9",
+          "#c8cbcf",
+          "#eceff3"
+        ]
+      },
+      "navy": {
+        "role": "secondary",
+        "displayName": "Coupé Navy",
+        "canonical": "oklch(21.6% 0.031 256.9)",
+        "tonalRamp": [
+          "#040b18",
+          "#1a2533",
+          "#354150",
+          "#525f70",
+          "#748193",
+          "#98a6b9",
+          "#beccdf",
+          "#e1f0ff"
+        ]
+      },
+      "navy-deep": {
+        "role": "secondary",
+        "displayName": "Deep Navy",
+        "canonical": "oklch(18.0% 0.023 257.3)",
+        "tonalRamp": [
+          "#050b15",
+          "#1d242f",
+          "#38404c",
+          "#555e6b",
+          "#78818e",
+          "#9ca5b4",
+          "#c1cbda",
+          "#e5efff"
+        ]
+      },
+      "ivory": {
+        "role": "neutral",
+        "displayName": "Ivory",
+        "canonical": "oklch(91.2% 0.018 81.3)",
+        "tonalRamp": [
+          "#0f0a04",
+          "#28231a",
+          "#453f35",
+          "#635d52",
+          "#867f74",
+          "#aaa498",
+          "#d0cabe",
+          "#f5eee1"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Brochure Paper",
+        "canonical": "oklch(92.7% 0.016 82.8)",
+        "tonalRamp": [
+          "#0e0b04",
+          "#28231b",
+          "#443f36",
+          "#625d54",
+          "#858076",
+          "#aaa49a",
+          "#d0cabf",
+          "#f4eee3"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Print Ink",
+        "canonical": "oklch(19.6% 0.006 271.1)",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#232427",
+          "#3e4043",
+          "#5c5d61",
+          "#7f8084",
+          "#a3a4a9",
+          "#c9cacf",
+          "#edeef3"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "oklch(39.6% 0.011 78.2)",
+        "tonalRamp": [
+          "#0e0b06",
+          "#27231e",
+          "#433f39",
+          "#615d57",
+          "#847f79",
+          "#a8a49d",
+          "#cfcac3",
+          "#f3eee6"
+        ]
+      },
+      "silver": {
+        "role": "neutral",
+        "displayName": "Chrome Silver",
+        "canonical": "oklch(75.5% 0.012 252.1)",
+        "tonalRamp": [
+          "#080c10",
+          "#20242a",
+          "#3b4046",
+          "#595e64",
+          "#7b8187",
+          "#9fa5ac",
+          "#c5cbd2",
+          "#e9eff7"
+        ]
+      },
+      "mist": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "oklch(63.4% 0.014 255.5)",
+        "tonalRamp": [
+          "#070b11",
+          "#20242b",
+          "#3b4047",
+          "#595e66",
+          "#7b8189",
+          "#9fa5ad",
+          "#c5cbd4",
+          "#e8eff8"
+        ]
+      },
+      "wine": {
+        "role": "primary",
+        "displayName": "Interior Wine",
+        "canonical": "oklch(35.0% 0.062 11.7)",
+        "tonalRamp": [
+          "#1f0005",
+          "#3c151c",
+          "#5c3137",
+          "#7d4f54",
+          "#a27176",
+          "#c8959a",
+          "#f0bbc0",
+          "#ffdee4"
+        ]
+      },
+      "wine-hi": {
+        "role": "primary",
+        "displayName": "Lit Wine",
+        "canonical": "oklch(41.1% 0.072 10.8)",
+        "tonalRamp": [
+          "#210005",
+          "#40111b",
+          "#602e36",
+          "#814c54",
+          "#a76e76",
+          "#cd929a",
+          "#f6b8bf",
+          "#ffdbe3"
+        ]
+      },
+      "wine-soft": {
+        "role": "primary",
+        "displayName": "Faded Wine",
+        "canonical": "oklch(74.7% 0.048 9.9)",
+        "tonalRamp": [
+          "#1b0207",
+          "#37191f",
+          "#56353a",
+          "#765357",
+          "#9a757a",
+          "#c0999e",
+          "#e8bec3",
+          "#ffe2e7"
+        ]
+      },
+      "error-soft": {
+        "role": "error",
+        "displayName": "Error (on night)",
+        "canonical": "oklch(79.0% 0.093 12.7)",
+        "tonalRamp": [
+          "#260002",
+          "#460717",
+          "#682732",
+          "#8a464f",
+          "#b06871",
+          "#d88c94",
+          "#ffb2ba",
+          "#ffd5dd"
+        ]
+      },
+      "error-ink": {
+        "role": "error",
+        "displayName": "Error (on paper)",
+        "canonical": "oklch(43.3% 0.136 18.0)",
+        "tonalRamp": [
+          "#2d0000",
+          "#4f000c",
+          "#721b27",
+          "#953c43",
+          "#bd6065",
+          "#e68488",
+          "#ffaaad",
+          "#ffced0"
+        ]
+      },
+      "error-line": {
+        "role": "error",
+        "displayName": "Error Line",
+        "tonalRamp": [
+          "#260002",
+          "#460717",
+          "#682732",
+          "#8a464f",
+          "#b06871",
+          "#d88c94",
+          "#ffb2ba",
+          "#ffd5dd"
+        ]
+      },
+      "line-dark": {
+        "role": "neutral",
+        "displayName": "Hairline Dark",
+        "canonical": "rgb(232 225 213 / 0.14)"
+      },
+      "line-light": {
+        "role": "neutral",
+        "displayName": "Hairline Light",
+        "canonical": "rgb(20 21 24 / 0.16)"
+      }
+    },
+    "typographyMeta": {
+      "wordmark-hero": {
+        "displayName": "Wordmark hero",
+        "purpose": "MERCANTIL in the home hero only, behind the car roof matte."
+      },
+      "display-page": {
+        "displayName": "Display page",
+        "purpose": "Page titles and the Discover opener."
+      },
+      "headline-statement": {
+        "displayName": "Statement",
+        "purpose": "Single-sentence statements."
+      },
+      "headline-section": {
+        "displayName": "Section",
+        "purpose": "Section and chapter titles."
+      },
+      "title-sub": {
+        "displayName": "Sub",
+        "purpose": "Sub-sections, Vision panel titles."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Intros at 34 to 38ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Buttons, status readouts, nav links."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Provenance, meta, legends, spec rows."
+      }
+    },
+    "shadows": [
+      {
+        "name": "swatch-bevel",
+        "value": "inset 0 0 0 1px rgb(255 255 255 / 0.12), inset 0 -6px 10px rgb(0 0 0 / 0.18)",
+        "purpose": "Painted-card curvature on sample chip swatches."
+      },
+      {
+        "name": "swatch-edge",
+        "value": "inset 0 0 0 1px rgb(255 255 255 / 0.14)",
+        "purpose": "Flat paint rectangles in list rows and awaiting plates."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default for transitions, reveals and the hero sequence."
+      },
+      {
+        "name": "ease-in-out-quart",
+        "value": "cubic-bezier(0.76, 0, 0.24, 1)",
+        "purpose": "Vision sweep loop only."
+      },
+      {
+        "name": "reveal",
+        "value": "y 24px to 0, opacity 0.001 to 1, 0.9s, once",
+        "purpose": "Single shared entrance."
+      },
+      {
+        "name": "control-state",
+        "value": "0.2s to 0.25s",
+        "purpose": "Button, chip and field state changes."
+      },
+      {
+        "name": "underline-draw",
+        "value": "0.45s",
+        "purpose": "Hairline link underline."
+      },
+      {
+        "name": "vision-sweep",
+        "value": "2.8s infinite",
+        "purpose": "Processing light band; not rendered under reduced motion."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all animation and transition durations 0.01ms; Motion reducedMotion=user",
+        "purpose": "Global reduced-motion guard."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "26rem"
+      },
+      {
+        "name": "sm",
+        "value": "40rem"
+      },
+      {
+        "name": "md",
+        "value": "48rem"
+      },
+      {
+        "name": "lg",
+        "value": "64rem"
+      },
+      {
+        "name": "wide",
+        "value": "min-width 64rem, or min-width 48rem and landscape"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single wine action per view.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Explorar acervo <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"square\" class=\"ds-arrow\"><path d=\"M4 12h15M14 6.5 19.5 12 14 17.5\"/></svg></button>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;gap:.75rem;min-height:3rem;padding:.8rem 1.5rem;border-radius:999px;font-family:var(--font-sans);font-size:.9375rem;font-weight:500;letter-spacing:.01em;line-height:1;border:1px solid transparent;cursor:pointer;transition:background-color .25s var(--ease-out-expo),border-color .25s var(--ease-out-expo),transform .2s var(--ease-out-expo)}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #e8e1d5;outline-offset:3px}.ds-arrow{transition:transform .35s var(--ease-out-expo)}.ds-btn:hover .ds-arrow{transform:translateX(4px)}.ds-btn-primary{background:var(--color-wine);color:var(--color-ivory)}.ds-btn-primary:hover{background:var(--color-wine-hi)}"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Every secondary action on night.",
+      "html": "<div style=\"background:#090a0b;padding:24px\"><button class=\"ds-btn ds-btn-quiet\">Restaurar meu carro</button></div>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;gap:.75rem;min-height:3rem;padding:.8rem 1.5rem;border-radius:999px;font-family:var(--font-sans);font-size:.9375rem;font-weight:500;letter-spacing:.01em;line-height:1;border:1px solid transparent;cursor:pointer;transition:background-color .25s var(--ease-out-expo),border-color .25s var(--ease-out-expo),transform .2s var(--ease-out-expo)}.ds-btn:active{transform:scale(.97)}.ds-btn:focus-visible{outline:2px solid #e8e1d5;outline-offset:3px}.ds-arrow{transition:transform .35s var(--ease-out-expo)}.ds-btn:hover .ds-arrow{transform:translateX(4px)}.ds-btn-quiet{background:transparent;color:var(--color-ivory);border-color:rgb(232 225 213 / .32)}.ds-btn-quiet:hover{border-color:var(--color-ivory);background:rgb(232 225 213 / .06)}"
+    },
+    {
+      "name": "Sample Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Paint-chart control: filters, presets, quick positions.",
+      "html": "<div style=\"background:#090a0b;padding:24px;display:flex;gap:8px\"><button class=\"ds-chip\" aria-pressed=\"true\"><span class=\"ds-swatch\" style=\"background:#101a28\"></span>Azul-marinho</button><button class=\"ds-chip\" aria-pressed=\"false\"><span class=\"ds-swatch\" style=\"background:#562c32\"></span>Vinho</button></div>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-chip{display:inline-flex;align-items:center;gap:.6rem;min-height:2.75rem;padding:.35rem .9rem .35rem .4rem;border:1px solid var(--line-dark);border-radius:3px;background:transparent;color:var(--color-ivory);font-family:var(--font-sans);font-size:.875rem;line-height:1.2;cursor:pointer;transition:border-color .2s var(--ease-out-expo),background-color .2s var(--ease-out-expo)}.ds-chip:hover{border-color:rgb(232 225 213 / .4)}.ds-chip[aria-pressed=true]{border-color:var(--color-ivory);background:rgb(232 225 213 / .07)}.ds-chip:focus-visible{outline:2px solid #e8e1d5;outline-offset:3px}.ds-swatch{width:2rem;height:1.75rem;border-radius:2px;flex:none;box-shadow:inset 0 0 0 1px rgb(255 255 255 / .12),inset 0 -6px 10px rgb(0 0 0 / .18)}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Text field on night.",
+      "html": "<div style=\"background:#090a0b;padding:24px;color:#e8e1d5\"><label class=\"ds-label\">Nome</label><input class=\"ds-field\" placeholder=\"Seu nome\"></div>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-label{display:block;font-family:var(--font-sans);font-size:.875rem;font-weight:500;margin-bottom:.45rem}.ds-field{width:100%;min-height:3rem;padding:.75rem .9rem;border-radius:4px;background:rgb(232 225 213 / .04);border:1px solid rgb(232 225 213 / .22);color:inherit;font-family:var(--font-sans);font-size:1rem;transition:border-color .2s var(--ease-out-expo),background-color .2s var(--ease-out-expo)}.ds-field::placeholder{color:var(--color-mist)}.ds-field:hover{border-color:rgb(232 225 213 / .4)}.ds-field:focus{outline:none;border-color:var(--color-ivory);background:rgb(232 225 213 / .07)}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "Fixed night bar with Bodoni wordmark and hairline-underline links.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-mark\">MERCANTIL</a><ul><li><a class=\"ds-link\" aria-current=\"page\">Acervo</a></li><li><a class=\"ds-link\">Restauração</a></li><li><a class=\"ds-link\">Vision</a></li></ul></nav>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-nav{display:flex;align-items:center;justify-content:space-between;height:4.25rem;padding:0 24px;background:rgb(9 10 11 / .86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-dark)}.ds-nav ul{display:flex;gap:2.25rem;list-style:none;margin:0;padding:0}.ds-mark{font-family:var(--font-display);font-size:1.375rem;letter-spacing:.14em;color:var(--color-ivory)}.ds-link{font-family:var(--font-sans);font-size:.9375rem;color:rgb(232 225 213 / .8);text-decoration:none;padding-bottom:2px;background:linear-gradient(currentColor,currentColor) 0 100% / 0 1px no-repeat;transition:background-size .45s var(--ease-out-expo),color .2s}.ds-link:hover,.ds-link:focus-visible,.ds-link[aria-current=page]{background-size:100% 1px;color:var(--color-ivory)}"
+    },
+    {
+      "name": "Provenance Caption",
+      "kind": "custom",
+      "refersTo": "caption-tag",
+      "description": "Filled square = real photograph; hollow square = illustration or simulation.",
+      "html": "<div style=\"background:#17191c;padding:24px;display:flex;gap:12px\"><span class=\"ds-tag\"><span class=\"ds-prov\" data-kind=\"real\">Fotografia real</span></span><span class=\"ds-tag\"><span class=\"ds-prov\" data-kind=\"concept\">Ilustração conceitual · não é fotografia</span></span></div>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-tag{background:rgb(9 10 11 / .7);backdrop-filter:blur(4px);border-radius:2px;padding:.25rem .5rem;color:var(--color-silver);font-family:var(--font-sans);font-size:.8125rem;line-height:1.45;letter-spacing:.01em}.ds-prov{display:inline-flex;align-items:baseline;gap:.55em}.ds-prov::before{content:\"\";flex:none;width:.55em;height:.55em;transform:translateY(-.05em);background:currentColor;border:1px solid currentColor}.ds-prov[data-kind=concept]::before{background:transparent}"
+    },
+    {
+      "name": "Work Track",
+      "kind": "custom",
+      "description": "Stage label over six 3px segments; separate from commercial status.",
+      "html": "<div class=\"ds-track\"><p>Em restauração</p><ol><li class=\"on\"></li><li class=\"on\"></li><li class=\"on\"></li><li></li><li></li><li></li></ol><p class=\"ds-status\">Disponível</p><p class=\"ds-cap\">Valor sob consulta</p></div>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-track{background:#090a0b;color:var(--color-ivory);padding:24px;font-family:var(--font-sans)}.ds-track p{margin:0;font-size:.9375rem;font-weight:500}.ds-track ol{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;list-style:none;margin:12px 0 20px;padding:0}.ds-track li{height:3px;background:rgb(232 225 213 / .15)}.ds-track li.on{background:var(--color-ivory)}.ds-track .ds-cap{font-size:.8125rem;font-weight:400;color:var(--color-silver);margin-top:4px;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Paper Section",
+      "kind": "card",
+      "description": "The ivory brochure surface with ink text and quiet controls.",
+      "html": "<section class=\"ds-paper\"><h2>Como trabalhamos</h2><p>Cada carro é documentado etapa por etapa.</p><button class=\"ds-pbtn\">Solicitar avaliação</button></section>",
+      "css": ":host{--color-night:#090a0b;--color-ivory:#e8e1d5;--color-paper:#ece6db;--color-ink:#141518;--color-silver:#aab0b7;--color-mist:#858b93;--color-wine:#562c32;--color-wine-hi:#6c3941;--line-dark:rgb(232 225 213 / 0.14);--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--font-display:\"Bodoni Moda\",\"Bodoni 72\",Didot,Georgia,serif;--font-sans:Archivo,ui-sans-serif,system-ui,sans-serif}.ds-paper{background:var(--color-paper);color:var(--color-ink);padding:48px 32px}.ds-paper h2{font-family:var(--font-display);font-weight:400;font-size:2.5rem;line-height:1.02;letter-spacing:-.02em;margin:0}.ds-paper p{font-family:var(--font-sans);color:#4a4640;font-size:1.0625rem;line-height:1.6}.ds-pbtn{min-height:3rem;padding:.8rem 1.5rem;border-radius:999px;border:1px solid rgb(20 21 24 / .35);background:transparent;color:var(--color-ink);font-family:var(--font-sans);font-size:.9375rem;font-weight:500;cursor:pointer;transition:border-color .25s var(--ease-out-expo),background-color .25s var(--ease-out-expo)}.ds-pbtn:hover{border-color:var(--color-ink);background:rgb(20 21 24 / .04)}.ds-pbtn:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Night Prospekt",
+    "overview": "MERCANTIL reads like a period factory brochure (a German Prospekt) opened at night. Photographs sit on near-black night plates. Text and specifications sit on warm ivory paper pages. These two surfaces take turns down every page, the way a brochure spread puts a plate opposite a page of copy. The control unit is the paint-chart sample chip: a small rectangle of colour with its name printed beside it. It handles collection filters, Vision presets and the stage markers. Bodoni Moda sets the brochure voice at a large scale. Archivo carries every caption, spec and control. Silver hairlines do all the dividing.\n\nDensity is low and the pace is editorial. The car is always the protagonist, and the interface pulls back to hairlines, small captions and one wine action per view. The site is honest about what its images are. Every image carries a provenance caption marked with a filled square (real photograph) or a hollow square (illustration or AI simulation). Cars without photographs get a plate that says so instead of a stand-in image. Work stage and commercial status are always shown as two separate readouts.\n\nRejected: the dealership card grid, the gold-on-black luxury hero, and gold accents in general.",
+    "keyCharacteristics": [
+      "Two surfaces only: night (photography) and paper (text and specification), with navy as the chapter variant of night.",
+      "Wine is the only action tint. Everything else is ivory, silver, mist or ink.",
+      "The sample chip (swatch plus printed name) is the single control and identity unit.",
+      "Bodoni Moda at brochure scale with optical sizing. Archivo for all UI.",
+      "Provenance caption on every image. Trajectory bars instead of badges.",
+      "No shadows for structure. Depth comes from tone, hairlines and masks."
+    ],
+    "rules": [
+      {
+        "name": "The One Tint Rule",
+        "section": "colors",
+        "body": "Wine marks action. Only the primary button is filled with wine, and wine-soft appears only for interactive or current-state emphasis. Neutrals carry everything else. If wine shows up on something that cannot be pressed, it is drift."
+      },
+      {
+        "name": "The Two Surfaces Rule",
+        "section": "colors",
+        "body": "A section is either a night plate or a paper page (on-paper), and every control has a variant for each. Paper flips text to ink, hairlines to line-light, focus to ink and selection to ink-on-paper. Don't invent a third surface tone. Navy counts as night."
+      },
+      {
+        "name": "The No Gold Rule",
+        "section": "colors",
+        "body": "No gold, brass or metallic accents anywhere. The only chrome in the system is the silver text colour."
+      },
+      {
+        "name": "The Italic Epigraph Rule",
+        "section": "typography",
+        "body": "Bodoni italic is kept for epigraph lines: the hero line \"Clássicos com história.\", the footer \"A história continua.\", car nicknames in quotes, and spec values still \"a confirmar\". Never use it for UI."
+      },
+      {
+        "name": "The Sentence Case Rule",
+        "section": "typography",
+        "body": "No uppercase tracking, no small-caps labels and no kicker above headings. The only tracked text is the MERCANTIL wordmark (0.14em in nav and admin, 0.02em in the footer)."
+      },
+      {
+        "name": "The Operator Voice Rule",
+        "section": "typography",
+        "body": "In admin, page headings switch to Archivo 500 (1.75rem titles, 1.125rem section heads) with normal tracking. Bodoni stays only on the wordmark. The panel is a tool, not a brochure."
+      },
+      {
+        "name": "The Out of Darkness Rule",
+        "section": "elevation",
+        "body": "Photographs fade into the night through gradient vignettes and masks (hero plate fades: 18 to 22% from the top, 14 to 16% from the bottom, 12 to 22% from the sides). They do not float on drop shadows."
+      },
+      {
+        "name": "The Inset Only Rule",
+        "section": "elevation",
+        "body": "The only shadows are inset ones on paint swatches. Never put a drop shadow on a card, button or panel."
+      }
+    ],
+    "dos": [
+      "Do caption every image with the provenance square: filled for real photographs, hollow for illustrations and simulations.",
+      "Do use one wine primary capsule per view and make every other action a quiet capsule or a hairline link.",
+      "Do build controls as sample chips (swatch plus printed name, 3px corners, hairline border, ivory border when selected).",
+      "Do alternate night plates for photography with paper pages for text and specification, and give every control its paper variant.",
+      "Do show work stage as a 3px segmented track and commercial status as a separate readout, with \"Valor sob consulta\" when no price is authorised.",
+      "Do use the awaiting plate for cars without photography. Never borrow another car's image.",
+      "Do keep touch targets at 44px or more (buttons 48px, chips 44px, icon toggles 44px).",
+      "Do route all motion through the out-expo curve and keep the reduced-motion paths intact."
+    ],
+    "donts": [
+      "Don't use gold, brass or metallic accents, or a gold-on-black luxury hero.",
+      "Don't lay out the collection as a uniform dealership card grid with badges.",
+      "Don't add uppercase tracked eyebrows or kickers above headings.",
+      "Don't put drop shadows on cards, buttons or panels. Only paint swatches get inset bevels.",
+      "Don't fill a non-interactive element with wine.",
+      "Don't merge work stage and commercial status into one badge, or infer one from the other.",
+      "Don't show an AI concept without the hollow-square caption, or present a pre-made image as a Vision result.",
+      "Don't use Bodoni for admin headings or UI labels, or Archivo for brochure headlines."
+    ]
+  }
+}

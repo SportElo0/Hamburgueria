@@ -16,7 +16,6 @@ const bodoni = Bodoni_Moda({
 const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-archivo",
-  axes: ["wdth"],
   display: "swap",
 });
 

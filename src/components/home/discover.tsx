@@ -91,12 +91,12 @@ function InteriorPan() {
   return (
     <figure className="absolute inset-0 flex items-center overflow-hidden bg-night">
       <motion.div
-        className="relative h-[70%] w-[125%]"
-        initial={{ x: "0%" }}
-        animate={reduce ? { x: "-10%" } : { x: "-20%" }}
-        transition={{ duration: reduce ? 0 : 14, ease: "linear" }}
+        className="relative mx-auto aspect-[670/250] w-full max-w-[770px]"
+        initial={{ scale: 1 }}
+        animate={{ scale: reduce ? 1 : 1.04 }}
+        transition={{ duration: reduce ? 0 : 12, ease: "linear" }}
       >
-        <Image src="/media/charuto/real-interior.webp" alt="Interior vermelho e volante do W111 vistos pelo para-brisa" fill sizes="(min-width: 64rem) 65vw, 125vw" className="object-cover" />
+        <Image src="/media/charuto/real-interior.webp" alt="Interior vermelho e volante do W111 vistos pelo para-brisa" fill sizes="770px" className="object-cover" />
       </motion.div>
       <figcaption className="caption absolute bottom-4 left-4 text-silver">
         <span className="prov" data-kind="real">Fotografia real · interior vermelho, através do para-brisa</span>

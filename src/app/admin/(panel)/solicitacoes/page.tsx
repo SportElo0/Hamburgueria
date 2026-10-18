@@ -13,7 +13,7 @@ export default async function AdminLeads({ searchParams }: { searchParams: Promi
       <h1 className="font-sans text-[1.75rem] font-medium tracking-normal">Solicitações</h1>
       <nav aria-label="Filtrar" className="mt-6 flex flex-wrap gap-2">
         {[["", "Todas"], ["compra", "Compra"], ["restauracao", "Restauração"], ["vision", "Vision"]].map(([k, l]) => (
-          <Link key={k} href={k ? `/admin/solicitacoes?filtro=${k}` : "/admin/solicitacoes"} className="chip !min-h-10 !px-3.5" aria-current={(filtro ?? "") === k ? "page" : undefined} aria-pressed={(filtro ?? "") === k}>
+          <Link key={k} href={k ? `/admin/solicitacoes?filtro=${k}` : "/admin/solicitacoes"} className="chip !px-3.5" aria-current={(filtro ?? "") === k ? "page" : undefined}>
             {l}
           </Link>
         ))}

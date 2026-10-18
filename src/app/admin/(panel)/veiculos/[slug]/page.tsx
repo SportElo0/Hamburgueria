@@ -122,12 +122,12 @@ export default async function EditVehicle({ params }: { params: Promise<{ slug: 
                   <input type="hidden" name="slug" value={v.slug} />
                   <input type="hidden" name="src" value={p.src} />
                   <input type="hidden" name="op" value="meta" />
-                  <input name="alt" defaultValue={p.alt} aria-label="Texto alternativo" className="field !min-h-10 !py-2 text-[0.875rem]" />
-                  <select name="kind" defaultValue={p.kind} aria-label="Tipo" className="field !min-h-10 !py-2 text-[0.875rem]">
+                  <input name="alt" defaultValue={p.alt} aria-label="Texto alternativo" className="field !py-2 text-[0.875rem]" />
+                  <select name="kind" defaultValue={p.kind} aria-label="Tipo" className="field !py-2 text-[0.875rem]">
                     <option value="real">Fotografia real</option>
                     <option value="concept">Ilustração / IA</option>
                   </select>
-                  <input name="caption" defaultValue={p.caption} aria-label="Legenda" className="field !min-h-10 !py-2 text-[0.875rem] sm:col-span-2" />
+                  <input name="caption" defaultValue={p.caption} aria-label="Legenda" className="field !py-2 text-[0.875rem] sm:col-span-2" />
                   <button type="submit" className="link-line caption justify-self-start text-silver">Salvar legenda</button>
                 </form>
                 <div className="mt-3 flex gap-4">

@@ -38,7 +38,6 @@
   --line-dark: rgb(232 225 213 / 0.14);
   --line-light: rgb(20 21 24 / 0.16);
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
-  --module: clamp(4.5rem, 8vw, 7.5rem);
   --nav-h: 4.25rem;
   color-scheme: dark;
 }
@@ -89,7 +88,6 @@
 
 @layer components {
   .wrap { width: 100%; max-width: 92rem; margin-inline: auto; padding-inline: var(--gutter); }
-  .measure { max-width: 34rem; }
   .tabular { font-variant-numeric: tabular-nums lining-nums; }
 
   /* Paper page: ivory brochure surface */
@@ -152,7 +150,7 @@
     touch-action: manipulation; text-align: left;
   }
   .chip:hover { border-color: rgb(232 225 213 / 0.4); }
-  .chip[aria-pressed="true"], .chip[aria-checked="true"], .chip:has(input:checked) {
+  .chip[aria-pressed="true"], .chip[aria-checked="true"], .chip[aria-current="page"], .chip:has(input:checked) {
     border-color: var(--color-ivory); background: rgb(232 225 213 / 0.07);
   }
   .on-paper .chip { border-color: var(--line-light); }
@@ -270,13 +268,6 @@
   @keyframes vision-sweep {
     from { background-position: 130% 0; }
     to { background-position: -30% 0; }
-  }
-}
-
-@layer utilities {
-  .grain::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   }
 }
 

@@ -42,7 +42,7 @@ export function VisionTeaser() {
         <div className="lg:col-span-6 lg:col-start-7">
           <div className="grid gap-8 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] sm:items-start">
             {/* Two-tone proposal card, like a period colour chart entry */}
-            <figure className="relative aspect-[3/4] overflow-hidden rounded-[2px] shadow-[0_30px_60px_-30px_rgb(0_0_0/0.8)]">
+            <figure className="relative aspect-[3/4] overflow-hidden rounded-[2px] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.1)]">
               <motion.div
                 className="absolute inset-x-0 top-0 h-[34%]"
                 animate={{ backgroundColor: r.hex }}

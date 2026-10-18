@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { Comparator } from "@/components/comparator";
 import Link from "next/link";
 import { ArrowRight } from "@/components/icons";
 import { Reveal } from "@/components/reveal";
@@ -66,7 +66,7 @@ export default async function RestauracaoPage() {
           <ol className="mt-14 grid gap-10 md:grid-cols-3">
             {steps.map((s, i) => (
               <li key={s.title} className="border-t border-[var(--line-light)] pt-6">
-                <span className="font-display text-[3.5rem] leading-none text-wine">{["I", "II", "III"][i]}</span>
+                <span className="font-display text-[3.5rem] leading-none text-ink-soft">{["I", "II", "III"][i]}</span>
                 <h3 className="h-sub mt-4">{s.title}</h3>
                 <p className="text-soft mt-3">{s.body}</p>
               </li>
@@ -88,16 +88,12 @@ export default async function RestauracaoPage() {
             </Link>
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
-            <figure className="relative grid aspect-[4/3] grid-cols-2 overflow-hidden border border-[var(--line-dark)]">
-              <div className="relative">
-                <Image src="/media/charuto/real-grille.webp" alt="Grade do W111 no estado atual" fill sizes="(min-width: 64rem) 25vw, 50vw" className="object-cover opacity-80" />
-                <span className="caption absolute top-3 left-3 rounded-sm bg-night/75 px-2 py-1">Antes · fotografia real</span>
-              </div>
-              <div className="plate-awaiting relative grid place-items-center border-l border-[var(--line-dark)] p-6 text-center">
-                <p className="caption text-silver">Depois · aguardando a conclusão do projeto</p>
-              </div>
-              <figcaption className="sr-only">Comparação do W111 disponível quando o projeto for concluído.</figcaption>
-            </figure>
+            <Comparator
+              before={{ src: "/media/charuto/real-grille.webp", alt: "Grade do W111 no estado atual, fotografia real" }}
+              beforeLabel="Antes · fotografia real"
+              afterLabel="Depois"
+              pendingAfter="Depois · aguardando a conclusão do projeto do W111"
+            />
           </div>
         </div>
       </section>

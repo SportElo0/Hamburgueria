@@ -58,22 +58,25 @@ export default async function VehiclePage({ params }: { params: Promise<{ slug: 
         </nav>
 
         <header className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-8">
-            <p className="text-[0.9375rem] text-silver">{vehicle.maker}</p>
-            <h1 className="h-page mt-2">
+          <div className="min-w-0 lg:col-span-8">
+            <h1 className="h-page">
+              <span className="sr-only">{vehicle.maker} </span>
               {vehicle.model} <span className="text-silver">{vehicle.chassis}</span>
             </h1>
-            {vehicle.nickname && <p className="mt-4 font-display text-[1.75rem] italic text-silver">“{vehicle.nickname}”</p>}
+            <p className="mt-4 text-[0.9375rem] text-silver">
+              {vehicle.maker}
+              {vehicle.nickname && <span className="ml-3 font-display text-[1.5rem] italic">“{vehicle.nickname}”</span>}
+            </p>
           </div>
           <p className="lede text-silver lg:col-span-4">{vehicle.summary}</p>
         </header>
 
         <div className="mt-14 grid gap-14 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-8">
+          <div className="min-w-0 lg:col-span-8">
             <VehicleGallery vehicle={vehicle} />
           </div>
 
-          <aside className="lg:col-span-4" aria-label="Situação do carro">
+          <aside className="min-w-0 lg:col-span-4" aria-label="Situação do carro">
             <div className="space-y-8 lg:sticky lg:top-[calc(var(--nav-h)+2rem)]">
               <WorkTrack vehicle={vehicle} />
               <div className="border-t border-[var(--line-dark)] pt-6">

@@ -213,7 +213,7 @@ export function VisionStudio({ initial }: { initial: Partial<VisionChoice> }) {
 
       <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
         {/* Stage */}
-        <div ref={stageRef} className="scroll-mt-28 lg:col-span-7">
+        <div ref={stageRef} className="min-w-0 scroll-mt-[calc(var(--nav-h)+1rem)] lg:col-span-7">
           <div className="lg:sticky lg:top-[calc(var(--nav-h)+1.5rem)]">
             {!photo ? (
               <div
@@ -247,9 +247,9 @@ export function VisionStudio({ initial }: { initial: Partial<VisionChoice> }) {
                   before={{ src: photo.url, alt: "Foto original enviada" }}
                   after={{ src: concept, alt: `Simulação conceitual: ${summary}` }}
                   beforeLabel="Original"
-                  afterLabel="Conceito"
+                  afterLabel="Conceito · IA"
                   aspect={`${photo.w} / ${photo.h}`}
-                  maxHeight="calc(100svh - var(--nav-h) - 9rem)"
+                  maxHeight="calc(100svh - var(--nav-h) - 13rem)"
                 />
                 <p className="caption mt-4 text-silver">
                   <span className="prov" data-kind="concept">
@@ -332,6 +332,9 @@ export function VisionStudio({ initial }: { initial: Partial<VisionChoice> }) {
               <div>
                 <h2 className="h-sub font-display">O próximo capítulo, em conceito.</h2>
                 <p className="mt-3 text-silver">{summary.charAt(0).toUpperCase() + summary.slice(1)}.</p>
+                <p className="caption mt-3 text-mist">
+                  <span className="prov" data-kind="concept">Simulação gerada por IA, não é fotografia de trabalho executado.</span>
+                </p>
               </div>
               <div className="flex flex-col gap-3">
                 <button type="button" className="btn btn-primary" onClick={() => setWantsEvaluation(true)}>

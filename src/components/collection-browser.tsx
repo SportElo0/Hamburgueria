@@ -8,20 +8,24 @@ import type { Vehicle } from "@/content/types";
 import { ArrowRight } from "./icons";
 import { VehiclePlate } from "./vehicle-bits";
 
-type Filter = { decade: number | "all"; body: string | "all" };
+type Filter = { decade: number | "all"; body: string | "all"; color: string | "all" };
 
 /** Module spans give the collection a brochure rhythm instead of a uniform dealer grid. */
 const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-4", "lg:col-span-4", "lg:col-span-4", "lg:col-span-5", "lg:col-span-7"];
-const aspects = ["aspect-[4/3]", "aspect-[4/5]", "aspect-[4/5]", "aspect-[4/5]", "aspect-[4/5]", "aspect-[4/5]", "aspect-[4/3]"];
+const aspects = ["aspect-[4/3]", "aspect-[16/10] sm:aspect-[4/5]", "aspect-[16/10] sm:aspect-[4/5]", "aspect-[16/10] sm:aspect-[4/5]", "aspect-[16/10] sm:aspect-[4/5]", "aspect-[16/10] sm:aspect-[4/5]", "aspect-[4/3]"];
 
 export function CollectionBrowser({ vehicles }: { vehicles: Vehicle[] }) {
-  const [filter, setFilter] = useState<Filter>({ decade: "all", body: "all" });
+  const [filter, setFilter] = useState<Filter>({ decade: "all", body: "all", color: "all" });
   const [view, setView] = useState<"colecao" | "indice">("colecao");
 
   const decades = useMemo(() => [...new Set(vehicles.map((v) => v.decade))].sort(), [vehicles]);
   const bodies = useMemo(() => [...new Set(vehicles.map((v) => v.body))], [vehicles]);
+  const colors = useMemo(() => [...new Map(vehicles.map((v) => [v.color.name, v.color])).values()], [vehicles]);
   const shown = vehicles.filter(
-    (v) => (filter.decade === "all" || v.decade === filter.decade) && (filter.body === "all" || v.body === filter.body),
+    (v) =>
+      (filter.decade === "all" || v.decade === filter.decade) &&
+      (filter.body === "all" || v.body === filter.body) &&
+      (filter.color === "all" || v.color.name === filter.color),
   );
 
   return (
@@ -44,6 +48,22 @@ export function CollectionBrowser({ vehicles }: { vehicles: Vehicle[] }) {
               <FilterChip key={b} on={filter.body === b} onClick={() => setFilter((f) => ({ ...f, body: b }))}>{b}</FilterChip>
             ))}
           </fieldset>
+          <fieldset className="flex flex-wrap items-center gap-2">
+            <legend className="caption mr-2 float-left py-3 text-mist">Cor</legend>
+            <FilterChip on={filter.color === "all"} onClick={() => setFilter((f) => ({ ...f, color: "all" }))}>Todas</FilterChip>
+            {colors.map((c) => (
+              <button
+                key={c.name}
+                type="button"
+                className="chip"
+                aria-pressed={filter.color === c.name}
+                onClick={() => setFilter((f) => ({ ...f, color: c.name }))}
+              >
+                <span aria-hidden className="chip-swatch" style={{ background: c.hex }} />
+                {c.name}
+              </button>
+            ))}
+          </fieldset>
         </div>
         <div className="flex items-center gap-2" role="group" aria-label="Modo de visualização">
           <FilterChip on={view === "colecao"} onClick={() => setView("colecao")}>Coleção</FilterChip>
@@ -58,7 +78,7 @@ export function CollectionBrowser({ vehicles }: { vehicles: Vehicle[] }) {
       {shown.length === 0 && (
         <div className="py-24 text-center">
           <p className="font-display text-[2rem]">Nenhum carro com estes filtros.</p>
-          <button type="button" className="btn btn-quiet mt-6" onClick={() => setFilter({ decade: "all", body: "all" })}>
+          <button type="button" className="btn btn-quiet mt-6" onClick={() => setFilter({ decade: "all", body: "all", color: "all" })}>
             Limpar filtros
           </button>
         </div>
@@ -138,7 +158,7 @@ export function CollectionBrowser({ vehicles }: { vehicles: Vehicle[] }) {
 
 function FilterChip({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <button type="button" className="chip !min-h-10 !px-3.5" aria-pressed={on} onClick={onClick}>
+    <button type="button" className="chip !px-3.5" aria-pressed={on} onClick={onClick}>
       {children}
     </button>
   );

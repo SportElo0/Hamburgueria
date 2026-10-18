@@ -146,7 +146,7 @@ components:
 
 **Creative North Star: "The Night Prospekt"**
 
-MERCANTIL reads like a period factory brochure (a German *Prospekt*) opened at night. Photographs sit on near-black **night plates**. Text and specifications sit on warm ivory **paper pages**. These two surfaces take turns down every page, the way a brochure spread puts a plate opposite a page of copy. The control unit is the paint-chart sample chip: a small rectangle of colour with its name printed beside it. It handles collection filters, Vision presets and the stage markers. Bodoni Moda sets the brochure voice at a large scale. Archivo carries every caption, spec and control. Silver hairlines do all the dividing.
+MERCANTIL reads like a period factory brochure (a German *Prospekt*) opened at night. Photographs sit on near-black **night plates**. Text and specifications sit on warm ivory **paper pages**. These two surfaces take turns down every page, the way a brochure spread puts a plate opposite a page of copy. The control unit is the paint-chart sample chip: a small rectangle of colour with its name printed beside it. It handles collection filters (including a colour filter of swatches) and Vision presets; stage progress is a six-segment track beside it. Bodoni Moda sets the brochure voice at a large scale. Archivo carries every caption, spec and control. Silver hairlines do all the dividing.
 
 Density is low and the pace is editorial. The car is always the protagonist, and the interface pulls back to hairlines, small captions and one wine action per view. The site is honest about what its images are. Every image carries a provenance caption marked with a filled square (real photograph) or a hollow square (illustration or AI simulation). Cars without photographs get a plate that says so instead of a stand-in image. Work stage and commercial status are always shown as two separate readouts.
 
@@ -197,7 +197,7 @@ The palette is a night-and-paper pairing tied to the W111 Charuto: navy body, li
 ## Typography
 
 **Display Font:** Bodoni Moda (with Bodoni 72, Didot, Georgia), loaded with the `opsz` axis, roman and italic.
-**Body Font:** Archivo (with ui-sans-serif, system-ui), loaded with the `wdth` axis.
+**Body Font:** Archivo (with ui-sans-serif, system-ui), loaded as the default variable weight range.
 
 **Character:** A high-contrast Didone at brochure scale paired with a sober grotesque. It reads like a period printed spec sheet, where the serif sells the car and the sans tells you its facts.
 
@@ -262,7 +262,7 @@ Restrained capsules: one confident wine button and quiet outlined companions.
 The control unit of the system, shaped like a paint-chart card.
 - **Style:** 1px hairline border, 3px corners, at least 2.75rem tall. A leading swatch (2rem × 1.75rem, 2px corners, bevel) and a printed name in 0.875rem.
 - **State:** hover raises the border to 40% ivory. Selected (`aria-pressed`, `aria-checked` or a checked input inside) gets a full ivory border and a 7% ivory wash. On paper the selected border is ink with a 5% ink wash.
-- **Variants:** filters (decade, body style), view toggles, comparator quick positions (text-only chips), Vision paint, roof and interior presets.
+- **Variants:** filters (decade, body style, and colour with swatches of each car's paint), view toggles, comparator quick positions (text-only chips), Vision paint, roof and interior presets.
 
 ### Inputs / Fields
 - **Style:** 3rem minimum height, 4px corners, a 4% ivory fill and a 1px border at 22% ivory. Placeholders are mist. Labels are Archivo 500 at 0.875rem above the field.
@@ -281,10 +281,10 @@ A caption-size label led by a square: **filled** for a real photograph, **hollow
 Two separate readouts, never merged. **Work Track** shows the stage label (label weight) above a 6-segment row of 3px bars: ivory up to the current stage, 15% ivory after it (ink on paper). If the stage is unknown, every bar stays dim and a caption explains why. **Commercial Status** shows a status label above a tabular caption that reads "Valor sob consulta" unless a price has been authorised.
 
 ### Awaiting Plate (signature)
-Stands in for a car without photography: a graphite-to-night gradient with a glow of the car's paint colour from below. The chassis code is set huge in Bodoni at 7% ivory. A paint rectangle and colour name sit at top, and the model name and "Fotografias reais em produção" sit at the bottom.
+Stands in for a car without photography as its own paint chip: the whole field is the car's paint colour (`vehicle.color.hex`) under a soft diagonal sheen, like an entry on a period paint chart. Text switches to ink on light paints (luminance > 0.35) and ivory on dark ones. The chassis code is set huge in Bodoni at 7–8% of the text colour, the colour name sits top-left in Bodoni, and a hollow-square provenance caption reads "Amostra de cor · fotografias reais em produção". The model name lives outside the plate, in the surrounding caption. The Comparator's pending-after side keeps the dark `plate-awaiting` field.
 
 ### Comparator (signature)
-One component for every state comparison: before/after and original/concept in Vision. The two images are clipped at the split. The divider is a 1px ivory line with a 44px round handle (night at 70% opacity, blur). Caption tags label each side. A native range input handles dragging and the keyboard. A row of three text chips (Antes, Metade, Depois) gives a single-tap alternative.
+One component for every state comparison: before/after and original/concept in Vision. The two images are clipped at the split. The divider is a 1px ivory line with a 44px round handle (night at 70% opacity, blur). Caption tags label each side. A native range input handles dragging and the keyboard. A row of three text chips (Antes, Metade, Depois) gives a single-tap alternative. With no after-image (`pendingAfter`), the after side shows a dark awaiting field with the note, and the control and handle are removed: an honest empty state, never a simulated result.
 
 ### Vision Studio
 Steps run along a 4-segment 3px bar with numbered captions. The upload area is a dashed hairline frame. While generating, the photo dims (55% brightness) and a light band sweeps across it like a scanner over a print (2.8s in-out-quart loop, removed under reduced motion), with a status line in Bodoni and a 2px progress line. When generation is unavailable, the studio says so in a graphite status panel. It never shows a ready-made result.
