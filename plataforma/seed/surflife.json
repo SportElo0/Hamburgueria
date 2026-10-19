@@ -1,0 +1,172 @@
+{
+ "slug": "surflife",
+ "name": "Surflife",
+ "segment": "loja",
+ "siteUrl": "https://surflife-juquehy.pages.dev",
+ "contact": {
+  "whatsapp": "5512996062804",
+  "instagram": "",
+  "email": "",
+  "phone": ""
+ },
+ "units": [
+  {
+   "id": "juquehy",
+   "name": "Juquehy",
+   "address": "Juquehy, São Sebastião, SP",
+   "mapsUrl": "",
+   "whatsapp": "",
+   "hours": []
+  }
+ ],
+ "notice": {
+  "active": false,
+  "text": ""
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "shapes",
+    "name": "Pranchas (shapes)",
+    "description": "Encontre sua onda.",
+    "items": [
+     {
+      "id": "shortboard",
+      "name": "Shortboard",
+      "description": "Outline compacto, bico afilado e uma história ligada às manobras. Uma família de shapes com muitas possibilidades — o desenho muda a experiência.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://surflife-juquehy.pages.dev/assets/board-shortboard.webp",
+      "imageAlt": "Shape ilustrativo de uma shortboard amarela",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "agilidade",
+       "expressão",
+       "manobras"
+      ],
+      "options": []
+     },
+     {
+      "id": "fish",
+      "name": "Fish",
+      "description": "Mais largura, linhas generosas e a clássica rabeta dividida. O universo das fish mistura fluidez e personalidade, com variações que merecem uma boa conversa.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://surflife-juquehy.pages.dev/assets/board-fish.webp",
+      "imageAlt": "Shape ilustrativo de uma prancha fish",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "fluidez",
+       "personalidade",
+       "linhas livres"
+      ],
+      "options": []
+     },
+     {
+      "id": "funboard",
+      "name": "Funboard",
+      "description": "Um encontro entre diferentes proporções e possibilidades. A funboard explora outlines mais cheios, e cada combinação de volume e desenho conta uma história.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://surflife-juquehy.pages.dev/assets/board-funboard.webp",
+      "imageAlt": "Shape ilustrativo de uma funboard",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "diversão",
+       "versatilidade",
+       "descoberta"
+      ],
+      "options": []
+     },
+     {
+      "id": "longboard",
+      "name": "Longboard",
+      "description": "Comprimento, bico arredondado e uma relação própria com a onda. Do clássico ao contemporâneo, o longboard abre espaço para ritmo, caminhada e estilo.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://surflife-juquehy.pages.dev/assets/board-longboard.webp",
+      "imageAlt": "Shape ilustrativo de uma longboard",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "ritmo",
+       "estilo",
+       "linhas clássicas"
+      ],
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "aluguel",
+    "name": "Aluguel",
+    "description": "Prancha por diária.",
+    "items": [
+     {
+      "id": "aluguel-diaria",
+      "name": "Aluguel de prancha por diária",
+      "description": "Consulte opções, valores e disponibilidade pelo WhatsApp.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "",
+      "imageAlt": "",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     }
+    ]
+   }
+  ]
+ },
+ "extra": {
+  "shapes": [
+   {
+    "name": "SHORTBOARD",
+    "kicker": "LINHAS RÁPIDAS. NOVOS CAMINHOS.",
+    "feelings": [
+     "AGILIDADE",
+     "EXPRESSÃO",
+     "MANOBRAS"
+    ]
+   },
+   {
+    "name": "FISH",
+    "kicker": "OUTRO DESENHO. A MESMA VONTADE DE MAR.",
+    "feelings": [
+     "FLUIDEZ",
+     "PERSONALIDADE",
+     "LINHAS LIVRES"
+    ]
+   },
+   {
+    "name": "FUNBOARD",
+    "kicker": "O PRAZER ESTÁ NO CAMINHO.",
+    "feelings": [
+     "DIVERSÃO",
+     "VERSATILIDADE",
+     "DESCOBERTA"
+    ]
+   },
+   {
+    "name": "LONGBOARD",
+    "kicker": "MAIS LINHA. MAIS TEMPO PARA SENTIR.",
+    "feelings": [
+     "RITMO",
+     "ESTILO",
+     "LINHAS CLÁSSICAS"
+    ]
+   }
+  ]
+ },
+ "account": {
+  "plan": "parceiro",
+  "changeLimit": null,
+  "partnerUntil": "",
+  "monthlyFee": null,
+  "notes": "Parceiro: 2 mudanças grátis por mês. Endereço completo e horários a confirmar."
+ }
+}

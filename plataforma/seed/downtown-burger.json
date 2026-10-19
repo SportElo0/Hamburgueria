@@ -1,0 +1,920 @@
+{
+ "slug": "downtown-burger",
+ "name": "Downtown Burger",
+ "segment": "restaurante",
+ "siteUrl": "https://downtown-burger-gilt.vercel.app",
+ "contact": {
+  "whatsapp": "",
+  "instagram": "",
+  "email": "",
+  "phone": ""
+ },
+ "units": [],
+ "notice": {
+  "active": false,
+  "text": ""
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "burgers",
+    "name": "Burgers",
+    "description": "Blend bovino na chapa, pão macio e o que mais você pedir.",
+    "items": [
+     {
+      "id": "downtown-classic",
+      "name": "Downtown Classic",
+      "description": "Pão brioche, blend bovino 180 g, queijo prato e maionese da casa.",
+      "price": 3990,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/downtown-classic.webp",
+      "imageAlt": "Downtown Classic, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "the-bacon-street",
+      "name": "The Bacon Street",
+      "description": "Pão brioche, blend bovino 180 g, queijo prato, bacon, alface americana, tomate, cebola roxa e maionese da casa.",
+      "price": 4490,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/the-bacon-street.webp",
+      "imageAlt": "The Bacon Street, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "australian-cheddar",
+      "name": "Australian Cheddar",
+      "description": "Pão australiano, blend bovino 180 g, queijo cheddar, bacon, cebola caramelizada e maionese da casa.",
+      "price": 5890,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/australian-cheddar.webp",
+      "imageAlt": "Australian Cheddar, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "kill-bill",
+      "name": "Kill Bill",
+      "description": "Pão australiano, blend bovino 180 g, queijo cheddar, bacon, rúcula, tomate, cebola roxa e maionese da casa.",
+      "price": 5890,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/kill-bill.webp",
+      "imageAlt": "Kill Bill, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "golden-chicken",
+      "name": "Golden Chicken",
+      "description": "Pão brioche, sobrecoxa desossada empanada, queijo prato e coleslaw com maionese da casa.",
+      "price": 4990,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/golden-chicken.webp",
+      "imageAlt": "Golden Chicken, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "holyfield",
+      "name": "Holyfield",
+      "description": "Pão brioche, dois blends bovinos de 130 g cada, queijo prato, bacon, alface americana, tomate, cebola roxa e maionese da casa.",
+      "price": 6990,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/holyfield.webp",
+      "imageAlt": "Holyfield, foto do cardápio.",
+      "available": true,
+      "featured": true,
+      "tags": [],
+      "options": [
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "green-burger",
+      "name": "Green Burger",
+      "description": "Pão brioche, burger à base de plantas, queijo prato, alface americana, tomate, cebola roxa e maionese da casa.",
+      "price": 5990,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/green-burger.webp",
+      "imageAlt": "Green Burger, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "little-downtown",
+      "name": "Little Downtown",
+      "description": "Pão brioche, blend bovino 100 g e queijo prato. Acompanha batata frita e suco de uva ou laranja.",
+      "price": 3990,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/little-downtown.webp",
+      "imageAlt": "Little Downtown, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "suco",
+        "name": "Suco incluso",
+        "type": "single",
+        "required": true,
+        "choices": [
+         {
+          "id": "laranja",
+          "label": "Laranja",
+          "priceDelta": 0
+         },
+         {
+          "id": "uva",
+          "label": "Uva",
+          "priceDelta": 0
+         }
+        ]
+       },
+       {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "type": "multiple",
+        "required": false,
+        "choices": [
+         {
+          "id": "cheddar-cremoso",
+          "label": "Cheddar cremoso",
+          "priceDelta": 500
+         },
+         {
+          "id": "cream-cheese",
+          "label": "Cream cheese",
+          "priceDelta": 500
+         },
+         {
+          "id": "queijo-prato",
+          "label": "Queijo prato",
+          "priceDelta": 500
+         },
+         {
+          "id": "maionese-artesanal",
+          "label": "Maionese artesanal",
+          "priceDelta": 500
+         },
+         {
+          "id": "salada",
+          "label": "Salada (alface, tomate e cebola)",
+          "priceDelta": 500
+         },
+         {
+          "id": "blend-160",
+          "label": "Blend de carne 160 g",
+          "priceDelta": 2500
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "entradas",
+    "name": "Entradas",
+    "description": "Pra dividir. Ou não.",
+    "items": [
+     {
+      "id": "bacon-cheddar-fries",
+      "name": "Bacon Cheddar Fries",
+      "description": "Batata frita palito fininha (300 g), cheddar e bacon.",
+      "price": 3490,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/bacon-cheddar-fries.webp",
+      "imageAlt": "Bacon Cheddar Fries na cestinha, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "croc-canoa",
+      "name": "Croc Canoa",
+      "description": "Batata frita canoa (300 g), cream cheese, bacon e cebolinha.",
+      "price": 3990,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/croc-canoa.webp",
+      "imageAlt": "Croc Canoa com cream cheese, bacon e cebolinha, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "downtown-nuggets",
+      "name": "Downtown Nuggets",
+      "description": "5 unidades de nuggets, acompanhadas de molho da casa.",
+      "price": 2490,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/downtown-nuggets.webp",
+      "imageAlt": "Downtown Nuggets com molho da casa, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "classic-fries",
+      "name": "Classic Fries",
+      "description": "Batata frita palito (300 g), acompanhada de molho da casa.",
+      "price": 2390,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/classic-fries.webp",
+      "imageAlt": "Classic Fries na cestinha, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "adicionais",
+    "name": "Adicionais",
+    "description": "Turbine qualquer burger na hora de personalizar.",
+    "items": [
+     {
+      "id": "cheddar-cremoso",
+      "name": "Cheddar cremoso",
+      "description": "Adicional para qualquer burger.",
+      "price": 500,
+      "priceLabel": "",
+      "image": "",
+      "imageAlt": "",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "cream-cheese",
+      "name": "Cream cheese",
+      "description": "Adicional para qualquer burger.",
+      "price": 500,
+      "priceLabel": "",
+      "image": "",
+      "imageAlt": "",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "queijo-prato",
+      "name": "Queijo prato",
+      "description": "Adicional para qualquer burger.",
+      "price": 500,
+      "priceLabel": "",
+      "image": "",
+      "imageAlt": "",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "maionese-artesanal",
+      "name": "Maionese artesanal",
+      "description": "Adicional para qualquer burger.",
+      "price": 500,
+      "priceLabel": "",
+      "image": "",
+      "imageAlt": "",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "salada",
+      "name": "Salada (alface, tomate e cebola)",
+      "description": "Adicional para qualquer burger.",
+      "price": 500,
+      "priceLabel": "",
+      "image": "",
+      "imageAlt": "",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "blend-160",
+      "name": "Blend de carne 160 g",
+      "description": "Adicional para qualquer burger.",
+      "price": 2500,
+      "priceLabel": "",
+      "image": "",
+      "imageAlt": "",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "bebidas",
+    "name": "Bebidas",
+    "description": "Geladas.",
+    "items": [
+     {
+      "id": "agua",
+      "name": "Água",
+      "description": "",
+      "price": 600,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "agua-com-gas",
+      "name": "Água com gás",
+      "description": "",
+      "price": 1000,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "coca-ks",
+      "name": "Coca KS",
+      "description": "",
+      "price": 1200,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "coca-ks-zero",
+      "name": "Coca KS Zero",
+      "description": "",
+      "price": 1200,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "agua-tonica",
+      "name": "Água tônica",
+      "description": "",
+      "price": 1000,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "tubaina",
+      "name": "Tubaína",
+      "description": "",
+      "price": 1200,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "schweppes",
+      "name": "Schweppes",
+      "description": "",
+      "price": 1200,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "guarana",
+      "name": "Guaraná",
+      "description": "",
+      "price": 1000,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "suco-laranja",
+      "name": "Suco natural One de laranja",
+      "description": "",
+      "price": 1200,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "pink-lemonade",
+      "name": "Pink Lemonade",
+      "description": "",
+      "price": 1500,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/refrigerante.webp",
+      "imageAlt": "Ilustração do cardápio: copo de refrigerante com gelo.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "long-necks",
+    "name": "Long Necks",
+    "description": "Venda proibida para menores de 18 anos.",
+    "items": [
+     {
+      "id": "heineken",
+      "name": "Heineken",
+      "description": "",
+      "price": 1500,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/long-neck.webp",
+      "imageAlt": "Ilustração do cardápio: garrafa long neck.",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "alcoólico"
+      ],
+      "options": []
+     },
+     {
+      "id": "praya",
+      "name": "Praya",
+      "description": "",
+      "price": 1500,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/long-neck.webp",
+      "imageAlt": "Ilustração do cardápio: garrafa long neck.",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "alcoólico"
+      ],
+      "options": []
+     },
+     {
+      "id": "praya-classica",
+      "name": "Praya Clássica",
+      "description": "",
+      "price": 1500,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/long-neck.webp",
+      "imageAlt": "Ilustração do cardápio: garrafa long neck.",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "alcoólico"
+      ],
+      "options": []
+     },
+     {
+      "id": "amstel-ultra",
+      "name": "Amstel Ultra",
+      "description": "",
+      "price": 1500,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/long-neck.webp",
+      "imageAlt": "Ilustração do cardápio: garrafa long neck.",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "alcoólico"
+      ],
+      "options": []
+     },
+     {
+      "id": "lagunitas-ipa",
+      "name": "Lagunitas IPA",
+      "description": "",
+      "price": 1800,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/long-neck.webp",
+      "imageAlt": "Ilustração do cardápio: garrafa long neck.",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "alcoólico"
+      ],
+      "options": []
+     },
+     {
+      "id": "blue-moon",
+      "name": "Blue Moon",
+      "description": "",
+      "price": 1800,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/long-neck.webp",
+      "imageAlt": "Ilustração do cardápio: garrafa long neck.",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "alcoólico"
+      ],
+      "options": []
+     },
+     {
+      "id": "eisenbahn",
+      "name": "Eisenbahn",
+      "description": "",
+      "price": 1300,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/long-neck.webp",
+      "imageAlt": "Ilustração do cardápio: garrafa long neck.",
+      "available": true,
+      "featured": false,
+      "tags": [
+       "alcoólico"
+      ],
+      "options": []
+     }
+    ]
+   },
+   {
+    "id": "sobremesas",
+    "name": "Sobremesas",
+    "description": "Pra fechar com chave de ouro.",
+    "items": [
+     {
+      "id": "brownie",
+      "name": "Brownie de chocolate com sorvete de creme",
+      "description": "",
+      "price": 3490,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/brownie.webp",
+      "imageAlt": "Brownie de chocolate com sorvete de creme e calda, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": []
+     },
+     {
+      "id": "milkshake",
+      "name": "Milkshake",
+      "description": "Morango ou Nutella ou baunilha.",
+      "price": 3490,
+      "priceLabel": "",
+      "image": "https://downtown-burger-gilt.vercel.app/photos/milkshake.webp",
+      "imageAlt": "Milkshake com chantilly e canudo, foto do cardápio.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "sabor",
+        "name": "Sabor",
+        "type": "single",
+        "required": true,
+        "choices": [
+         {
+          "id": "morango",
+          "label": "Morango",
+          "priceDelta": 0
+         },
+         {
+          "id": "nutella",
+          "label": "Nutella",
+          "priceDelta": 0
+         },
+         {
+          "id": "baunilha",
+          "label": "Baunilha",
+          "priceDelta": 0
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "extra": {},
+ "account": {
+  "plan": "parceiro",
+  "changeLimit": null,
+  "partnerUntil": "",
+  "monthlyFee": null,
+  "notes": "Site vendido por R$ 597 sem mensalidade, com configuração do Google. WhatsApp, endereço, horários e Instagram ainda não informados."
+ }
+}

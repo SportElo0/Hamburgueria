@@ -1,0 +1,230 @@
+{
+ "slug": "semvo",
+ "name": "SemvØ Clothing",
+ "segment": "loja",
+ "siteUrl": "https://semvo-juquehy.pages.dev",
+ "contact": {
+  "whatsapp": "5511940298057",
+  "instagram": "",
+  "email": "",
+  "phone": ""
+ },
+ "units": [
+  {
+   "id": "juquehy",
+   "name": "Juquehy",
+   "address": "Farias Boulevard, R. Benedito Izidoro de Morães, 222, Juquehy, São Sebastião, SP",
+   "mapsUrl": "",
+   "whatsapp": "5511940298057",
+   "hours": []
+  },
+  {
+   "id": "maresias",
+   "name": "Maresias",
+   "address": "Av. Dr. Francisco Loup, 1116A, Maresias, São Sebastião, SP",
+   "mapsUrl": "",
+   "whatsapp": "5511994432348",
+   "hours": []
+  }
+ ],
+ "notice": {
+  "active": false,
+  "text": ""
+ },
+ "catalog": {
+  "categories": [
+   {
+    "id": "reveillon",
+    "name": "Seleção Réveillon",
+    "description": "Linho e leveza para celebrar. Reserva pelo WhatsApp para retirar na loja.",
+    "items": [
+     {
+      "id": "linen-short",
+      "name": "Camisa de manga curta",
+      "description": "Camisa de linho natural de manga curta.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://semvo-juquehy.pages.dev/assets/linen-short.webp",
+      "imageAlt": "Camisa de linho natural de manga curta.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "tamanho",
+        "name": "Tamanho",
+        "type": "single",
+        "required": true,
+        "choices": [
+         {
+          "id": "p",
+          "label": "P",
+          "priceDelta": 0
+         },
+         {
+          "id": "m",
+          "label": "M",
+          "priceDelta": 0
+         },
+         {
+          "id": "g",
+          "label": "G",
+          "priceDelta": 0
+         },
+         {
+          "id": "gg",
+          "label": "GG",
+          "priceDelta": 0
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "linen-long",
+      "name": "Camisa de manga longa",
+      "description": "Camisa de linho clara de manga longa.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://semvo-juquehy.pages.dev/assets/linen-long.webp",
+      "imageAlt": "Camisa de linho clara de manga longa.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "tamanho",
+        "name": "Tamanho",
+        "type": "single",
+        "required": true,
+        "choices": [
+         {
+          "id": "p",
+          "label": "P",
+          "priceDelta": 0
+         },
+         {
+          "id": "m",
+          "label": "M",
+          "priceDelta": 0
+         },
+         {
+          "id": "g",
+          "label": "G",
+          "priceDelta": 0
+         },
+         {
+          "id": "gg",
+          "label": "GG",
+          "priceDelta": 0
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "linen-shorts",
+      "name": "Shorts de linho",
+      "description": "Shorts de linho em tom oliva.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://semvo-juquehy.pages.dev/assets/linen-shorts.webp",
+      "imageAlt": "Shorts de linho em tom oliva.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "tamanho",
+        "name": "Tamanho",
+        "type": "single",
+        "required": true,
+        "choices": [
+         {
+          "id": "p",
+          "label": "P",
+          "priceDelta": 0
+         },
+         {
+          "id": "m",
+          "label": "M",
+          "priceDelta": 0
+         },
+         {
+          "id": "g",
+          "label": "G",
+          "priceDelta": 0
+         },
+         {
+          "id": "gg",
+          "label": "GG",
+          "priceDelta": 0
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "linen-pants",
+      "name": "Calça branca de linho",
+      "description": "Calça branca de linho.",
+      "price": null,
+      "priceLabel": "Consulte",
+      "image": "https://semvo-juquehy.pages.dev/assets/linen-pants.webp",
+      "imageAlt": "Calça branca de linho.",
+      "available": true,
+      "featured": false,
+      "tags": [],
+      "options": [
+       {
+        "id": "tamanho",
+        "name": "Tamanho",
+        "type": "single",
+        "required": true,
+        "choices": [
+         {
+          "id": "p",
+          "label": "P",
+          "priceDelta": 0
+         },
+         {
+          "id": "m",
+          "label": "M",
+          "priceDelta": 0
+         },
+         {
+          "id": "g",
+          "label": "G",
+          "priceDelta": 0
+         },
+         {
+          "id": "gg",
+          "label": "GG",
+          "priceDelta": 0
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "extra": {
+  "offers": {
+   "look": {
+    "enabled": true,
+    "percent": 10,
+    "code": "VIRADA10",
+    "combinable": false
+   }
+  }
+ },
+ "account": {
+  "plan": "parceiro",
+  "changeLimit": null,
+  "partnerUntil": "",
+  "monthlyFee": null,
+  "notes": "Parceiro: 2 mudanças grátis por mês. Preços não aparecem no site (peças ilustrativas, consulta pelo WhatsApp)."
+ }
+}

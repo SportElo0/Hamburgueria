@@ -1,0 +1,30 @@
+import { NextResponse, type NextRequest } from 'next/server';
+import { getPublished } from '@/lib/stores';
+import { toPublic } from '@/lib/schema';
+import { isSlug } from '@/lib/slug';
+
+// Public, read-only: the catalogue a store's site renders. Never includes the internal account data.
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  if (!isSlug(slug)) return NextResponse.json({ error: 'not_found' }, { status: 404, headers: CORS });
+  const record = await getPublished(slug);
+  if (!record) return NextResponse.json({ error: 'not_found' }, { status: 404, headers: { ...CORS, 'Cache-Control': 'public, s-maxage=30' } });
+  const mediaBase = `${request.nextUrl.origin}/api/midia`;
+  return NextResponse.json(toPublic(record.store, record.publishedAt, mediaBase), {
+    headers: {
+      ...CORS,
+      // Edge caches for 30 s; a fresh publish shows up within that window, and stale copies keep sites up if storage blips.
+      'Cache-Control': 'public, max-age=0, s-maxage=30, stale-while-revalidate=86400',
+    },
+  });
+}
+
+export function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS });
+}
