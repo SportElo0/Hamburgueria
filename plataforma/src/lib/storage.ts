@@ -2,7 +2,7 @@ import 'server-only';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { del, get, list, put } from '@vercel/blob';
+import { BlobNotFoundError, BlobPreconditionFailedError, del, get, head, list, put } from '@vercel/blob';
 
 /**
  * Tiny document store. Production: a private Vercel Blob store (BLOB_READ_WRITE_TOKEN).
@@ -34,10 +34,19 @@ export interface Storage {
 
 class BlobStorage implements Storage {
   async readJSON<T>(key: string): Promise<Doc<T> | null> {
+    // The download's HTTP etag is not the one `ifMatch` compares against; the API's is.
+    // Read it first: if the blob changes before the body arrives, the next write conflicts instead of losing data.
+    let etag: string;
+    try {
+      etag = (await head(key)).etag;
+    } catch (err) {
+      if (err instanceof BlobNotFoundError) return null;
+      throw err;
+    }
     const res = await get(key, { access: 'private', useCache: false });
     if (!res || !res.stream) return null;
     const text = await new Response(res.stream).text();
-    return { data: JSON.parse(text) as T, etag: res.blob.etag };
+    return { data: JSON.parse(text) as T, etag };
   }
 
   async writeJSON<T>(key: string, data: T, ifMatch?: string | null): Promise<string> {
@@ -53,7 +62,9 @@ class BlobStorage implements Storage {
       });
       return out.etag;
     } catch (err) {
-      if (ifMatch !== undefined && /precondition|etag|412|exist/i.test(String((err as Error)?.message))) throw new ConflictError();
+      if (ifMatch !== undefined && (err instanceof BlobPreconditionFailedError || /precondition|etag|412|exist/i.test(String((err as Error)?.message)))) {
+        throw new ConflictError();
+      }
       throw err;
     }
   }
