@@ -1,11 +1,16 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=block');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&family=Barlow+Condensed:wght@600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,600..900,0..100,0..1&family=Nunito:wght@500;600;700;800;900&family=Yellowtail&display=block');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1080px;height:1350px;overflow:hidden}
-body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:antialiased}
+body{position:relative;font-family:Nunito,sans-serif;-webkit-font-smoothing:antialiased}
 .abs{position:absolute}
-.display{font-family:'Big Shoulders';font-variation-settings:'opsz' 72;font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:.005em}
-.cond{font-family:'Barlow Condensed';text-transform:uppercase}
+/* Ad typography: soft heavy serif (Fields-like) + rounded sans (Proxima Soft-like) + retro script (Espiritu Script-like). */
+.display{font-family:Fraunces;font-variation-settings:'opsz' 144,'SOFT' 100,'WONK' 0;font-weight:900;line-height:.9;letter-spacing:-.02em}
+.cond{font-family:Nunito;font-weight:800;text-transform:uppercase}
+.script{font-family:Yellowtail;font-weight:400;line-height:1}
+/* The badge lockup keeps the Downtown logo lettering. */
+.logo-display{font-family:'Big Shoulders';font-variation-settings:'opsz' 72;font-weight:900;text-transform:uppercase;line-height:.86}
+.logo-cond{font-family:'Barlow Condensed';text-transform:uppercase}
 .grain::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 </style></head>
@@ -15,7 +20,7 @@ body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:anti
   <svg class="abs" width="1080" height="1350" viewBox="0 0 1080 1350" style="filter:blur(7px);opacity:0.6">
     <g fill="#1a0800" stroke="#1a0800" transform="translate(840 150) rotate(-32) scale(-0.86 0.86)"><path d="M-74 -760 L74 -760 L86 -140 C140 -110 148 -10 120 60 C70 84 -70 84 -120 60 C-148 -10 -140 -110 -86 -140 Z"/><path d="M-96 -60 L-151.2505658436214 35.44558470507545" stroke-width="46" stroke-linecap="round"/><path d="M-151.2505658436214 35.44558470507545 L-169.65816186556927 114.39498456790123" stroke-width="38" stroke-linecap="round"/><path d="M-169.65816186556927 114.39498456790123 L-149.2900377229081 158.31763545953362" stroke-width="30" stroke-linecap="round"/><path d="M-162.89807418948087 164.62805093907423 L-126.57254199656195 207.3065667391956 L-135.68200125633533 152.007219979993 Z"/><path d="M-78 40 L-110.71409465020577 165.16415466392317" stroke-width="40" stroke-linecap="round"/><path d="M-110.71409465020577 165.16415466392317 L-105.23897462277091 269.255529835391" stroke-width="33" stroke-linecap="round"/><path d="M-105.23897462277091 269.255529835391 L-97.3585048010974 333.5053412208505" stroke-width="26" stroke-linecap="round"/><path d="M-110.26180908877024 335.0879777741134 L-90.7844760413899 387.10368210810685 L-84.45520051342456 331.92270466758754 Z"/><path d="M-26 56 L-33.862808641975306 214.9753172153635" stroke-width="42" stroke-linecap="round"/><path d="M-33.862808641975306 214.9753172153635 L-43.61608367626886 321.7642232510288" stroke-width="34" stroke-linecap="round"/><path d="M-43.61608367626886 321.7642232510288 L-16.001045953360766 379.2300840192044" stroke-width="27" stroke-linecap="round"/><path d="M-28.169010222780347 385.0773607817776 L7.388061096931988 427.90194109688275 L-3.8330816839411845 373.3828072566312 Z"/><path d="M30 54 L35.96995884773663 197.5457390260631" stroke-width="40" stroke-linecap="round"/><path d="M35.96995884773663 197.5457390260631 L41.87717764060356 312.58773148148146" stroke-width="33" stroke-linecap="round"/><path d="M41.87717764060356 312.58773148148146 L39.44900548696845 366.158530521262" stroke-width="26" stroke-linecap="round"/><path d="M26.462339089289056 365.5698915186595 L37.00388963000434 420.10314478854565 L52.435671884647846 366.74716952386444 Z"/><path d="M80 36 L103.45087448559671 155.54208676268863" stroke-width="36" stroke-linecap="round"/><path d="M103.45087448559671 155.54208676268863 L115.90747599451304 242.39272119341564" stroke-width="30" stroke-linecap="round"/><path d="M115.90747599451304 242.39272119341564 L103.65831618655693 278.95734739369" stroke-width="24" stroke-linecap="round"/><path d="M92.27981959331018 275.14554791346126 L86.50521852552764 330.16058206330035 L115.03681277980368 282.7691468739187 Z"/></g></svg>
   <div class="abs" style="left:52px;top:52px"><svg width="130" height="130" viewBox="0 0 400 400" style="color:#1d1712">
-  <defs><path id="arc46pwuy" d="M64.05383194450252 263.3927392611049 A150 150 0 0 0 335.9461680554975 263.3927392611049"/></defs>
+  <defs><path id="arca1d6xm" d="M64.05383194450252 263.3927392611049 A150 150 0 0 0 335.9461680554975 263.3927392611049"/></defs>
   <circle cx="200" cy="200" r="190" fill="none" stroke="currentColor" stroke-width="7"/>
   <circle cx="200" cy="200" r="176" fill="none" stroke="currentColor" stroke-width="2.5"/>
   <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
@@ -32,12 +37,13 @@ body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:anti
     <text x="200" y="314" text-anchor="middle" font-size="54" font-weight="800" letter-spacing="6">BURGER</text>
   </g>
   <text fill="currentColor" font-size="19" font-weight="700" letter-spacing="3" style="font-family:'Barlow Condensed'">
-    <textPath href="#arc46pwuy" startOffset="50%" text-anchor="middle">BURGERS • STEAKS • FRIES • SHAKES</textPath></text>
+    <textPath href="#arca1d6xm" startOffset="50%" text-anchor="middle">BURGERS • STEAKS • FRIES • SHAKES</textPath></text>
 </svg></div>
   
   <div class="abs" style="left:245.59999999999997px;top:971.6px;width:588.8000000000001px;height:83.2px;border-radius:50%;background:radial-gradient(closest-side,rgb(0 0 0/.55),rgb(0 0 0/.25) 60%,transparent);filter:blur(6px)"></div>
   
   <img class="abs" src="file:///home/user/Hamburgueria/marketing/halloween-2026/assets/holyfield.webp" style="left:167.90697674418607px;top:317.90697674418607px;width:744.1860465116279px;transform:rotate(0deg);">
-  <p class="abs" style="left:0;right:0;top:1080px;text-align:center;color:#1d1712;font-family:Barlow;font-weight:500;font-size:58px;letter-spacing:.005em">nem os fantasmas resistem</p>
-  <p class="abs" style="left:0;right:0;top:1162px;text-align:center;color:#1d1712;font-family:Barlow;font-weight:500;font-size:38px">#HalloweenDowntown</p>
+  <p class="abs display" style="left:0;right:0;top:1050px;text-align:center;color:#1d1712;font-size:72px">Nem os fantasmas</p>
+  <p class="abs script" style="left:0;right:0;top:1118px;text-align:center;color:#fff6e6;font-size:76px;text-shadow:0 3px 12px rgb(80 20 0/.25)">resistem</p>
+  <p class="abs" style="left:0;right:0;top:1232px;text-align:center;color:#1d1712;font-weight:800;font-size:30px">#HalloweenDowntown</p>
 </body></html>

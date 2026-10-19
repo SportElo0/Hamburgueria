@@ -91,13 +91,18 @@ function burger({ cx, bottom, width, shadow = true, rot = 0, stick = false, extr
 }
 
 const base = `
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=block');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&family=Barlow+Condensed:wght@600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,600..900,0..100,0..1&family=Nunito:wght@500;600;700;800;900&family=Yellowtail&display=block');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:${W}px;height:${H}px;overflow:hidden}
-body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:antialiased}
+body{position:relative;font-family:Nunito,sans-serif;-webkit-font-smoothing:antialiased}
 .abs{position:absolute}
-.display{font-family:'Big Shoulders';font-variation-settings:'opsz' 72;font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:.005em}
-.cond{font-family:'Barlow Condensed';text-transform:uppercase}
+/* Ad typography: soft heavy serif (Fields-like) + rounded sans (Proxima Soft-like) + retro script (Espiritu Script-like). */
+.display{font-family:Fraunces;font-variation-settings:'opsz' 144,'SOFT' 100,'WONK' 0;font-weight:900;line-height:.9;letter-spacing:-.02em}
+.cond{font-family:Nunito;font-weight:800;text-transform:uppercase}
+.script{font-family:Yellowtail;font-weight:400;line-height:1}
+/* The badge lockup keeps the Downtown logo lettering. */
+.logo-display{font-family:'Big Shoulders';font-variation-settings:'opsz' 72;font-weight:900;text-transform:uppercase;line-height:.86}
+.logo-cond{font-family:'Barlow Condensed';text-transform:uppercase}
 .grain::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 `;
@@ -106,8 +111,8 @@ const lockup = (color = C.onDark, size = 92) => `
   <div style="display:flex;align-items:center;gap:16px;color:${color}">
     ${badge(size, color)}
     <div style="display:flex;flex-direction:column;line-height:.85">
-      <span class="display" style="font-size:${size * 0.5}px">Downtown</span>
-      <span class="cond" style="font-weight:700;font-size:${size * 0.2}px;letter-spacing:.42em">Burger</span>
+      <span class="logo-display" style="font-size:${size * 0.5}px">Downtown</span>
+      <span class="logo-cond" style="font-weight:700;font-size:${size * 0.2}px;letter-spacing:.42em">Burger</span>
     </div>
   </div>`;
 
@@ -121,11 +126,11 @@ posts['01-gostosura-ou-travessura'] = `
   <div class="abs" style="left:0;right:0;bottom:0;height:430px;background:linear-gradient(90deg,rgb(0 0 0/.12),transparent 40%);clip-path:polygon(0 18%,100% 0,100% 100%,0 100%)"></div>
   ${shadowHand({ x: 240, y: 110, rot: 24, scale: 0.78, blur: 8, opacity: 0.5, seed: 3 })}
   ${shadowHand({ x: 960, y: 420, rot: 64, scale: 0.8, blur: 11, opacity: 0.42, seed: 7, flip: true })}
-  <h1 class="abs" style="left:0;right:0;top:300px;text-align:center;color:#fff8ec;font-family:'Barlow';font-weight:600;font-size:66px;letter-spacing:-.01em;text-shadow:0 4px 18px rgb(80 20 0/.35)">Gostosura ou travessura?</h1>
+  <h1 class="abs display" style="left:0;right:0;top:220px;text-align:center;color:#fff8ec;font-size:128px;text-shadow:0 4px 18px rgb(80 20 0/.3)">Gostosura<p class="script" style="font-size:84px;letter-spacing:0;margin-top:-6px">ou travessura?</p></h1>
   ${burger({ cx: 540, bottom: 1080, width: 560, stick: true })}
   <div class="abs" style="left:0;right:0;bottom:64px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 64px">
     ${lockup(C.ink, 84)}
-    <div class="cond" style="text-align:right;color:${C.ink};font-weight:700;letter-spacing:.12em;font-size:26px;line-height:1.15">Holyfield<br><span style="font-family:'Big Shoulders';font-weight:900;font-size:54px;letter-spacing:0">R$ 69,90</span></div>
+    <div class="cond" style="text-align:right;color:${C.ink};font-weight:700;letter-spacing:.12em;font-size:26px;line-height:1.15">Holyfield<br><span class="display" style="font-size:56px;letter-spacing:-.01em;text-transform:none">R$ 69,90</span></div>
   </div>
 </body>`;
 
@@ -154,7 +159,7 @@ posts['02-nesse-halloween'] = `
 <body style="background:radial-gradient(ellipse at 50% 40%,#2a3448 0%,#141a26 55%,#07090e 100%)">
   <div class="abs" style="inset:0;background:radial-gradient(ellipse 60% 30% at 30% 30%,rgb(170 185 210/.18),transparent),radial-gradient(ellipse 50% 25% at 75% 55%,rgb(170 185 210/.14),transparent);filter:blur(20px)"></div>
   <div class="abs" style="left:56px;top:56px">${badge(120, C.onDark)}</div>
-  <h1 class="abs display" style="right:64px;top:92px;text-align:right;color:#fff;font-size:118px;line-height:.82;text-shadow:0 6px 24px rgb(0 0 0/.5)">Nesse<br>Halloween…</h1>
+  <h1 class="abs" style="right:64px;top:84px;text-align:right;color:#fff;text-shadow:0 6px 24px rgb(0 0 0/.5)"><span class="script" style="display:block;font-size:84px;margin-right:8px">Nesse</span><span class="display" style="display:block;font-size:122px;margin-top:-6px">Halloween…</span></h1>
   ${ghost(40, 330, 1.02, false, 1)}
   ${ghost(600, 300, 1.08, true, 2)}
   <div class="abs" style="left:0;right:0;top:1000px;height:170px;background:linear-gradient(180deg,#5a3a22,#3a2414 60%,#24160c);box-shadow:0 -10px 30px rgb(0 0 0/.5)"></div>
@@ -162,8 +167,8 @@ posts['02-nesse-halloween'] = `
   <img class="abs" src="${A('classic-fries.webp')}" style="left:660px;top:742px;width:330px;filter:drop-shadow(0 18px 18px rgb(0 0 0/.5))">
   ${burger({ cx: 470, bottom: 1030, width: 460 })}
   <div class="abs" style="left:0;right:0;top:1170px;bottom:0;background:#07090e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:0 70px;text-align:center">
-    <p class="cond" style="color:#fff;font-weight:800;font-size:36px;letter-spacing:.08em">Um sabor de outro mundo espera por você…</p>
-    <p class="cond" style="color:#c9cfdb;font-weight:600;font-size:17px;letter-spacing:.06em;line-height:1.35">Holyfield: pão brioche, dois blends bovinos de 130 g cada, queijo prato, bacon, alface americana, tomate,<br>cebola roxa e maionese da casa. Imagem ilustrativa.</p>
+    <p class="display" style="color:#fff;font-size:44px;letter-spacing:-.01em">Um sabor de outro mundo espera por você…</p>
+    <p style="color:#c9cfdb;font-weight:600;font-size:18px;line-height:1.35">Holyfield: pão brioche, dois blends bovinos de 130 g cada, queijo prato, bacon, alface americana, tomate,<br>cebola roxa e maionese da casa. Imagem ilustrativa.</p>
   </div>
 </body>`;
 
@@ -174,8 +179,9 @@ posts['03-nem-os-fantasmas-resistem'] = `
   ${shadowHand({ x: 840, y: 150, rot: -32, scale: 0.86, blur: 7, opacity: 0.6, seed: 5, flip: true })}
   <div class="abs" style="left:52px;top:52px">${badge(130, C.ink)}</div>
   ${burger({ cx: 540, bottom: 1010, width: 640 })}
-  <p class="abs" style="left:0;right:0;top:1080px;text-align:center;color:${C.ink};font-family:Barlow;font-weight:500;font-size:58px;letter-spacing:.005em">nem os fantasmas resistem</p>
-  <p class="abs" style="left:0;right:0;top:1162px;text-align:center;color:${C.ink};font-family:Barlow;font-weight:500;font-size:38px">#HalloweenDowntown</p>
+  <p class="abs display" style="left:0;right:0;top:1050px;text-align:center;color:${C.ink};font-size:72px">Nem os fantasmas</p>
+  <p class="abs script" style="left:0;right:0;top:1118px;text-align:center;color:#fff6e6;font-size:76px;text-shadow:0 3px 12px rgb(80 20 0/.25)">resistem</p>
+  <p class="abs" style="left:0;right:0;top:1232px;text-align:center;color:${C.ink};font-weight:800;font-size:30px">#HalloweenDowntown</p>
 </body>`;
 
 // 4 · "Você é bom em matemática?" → emoji equation over a blurred burger
@@ -183,14 +189,14 @@ posts['04-matematica'] = `
 <body style="background:#6b4a1c">
   <img class="abs" src="${A('holyfield.webp')}" style="left:-540px;top:-260px;width:2200px;filter:blur(38px) saturate(1.1) brightness(.78)">
   <div class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 55%,rgb(0 0 0/0),rgb(40 20 0/.45))"></div>
-  <h1 class="abs display" style="left:0;right:0;top:170px;text-align:center;color:#fff;font-family:Barlow;font-weight:800;font-size:76px;line-height:1.02;text-transform:uppercase;letter-spacing:-.005em;text-shadow:0 4px 20px rgb(0 0 0/.35)">Você é bom em<br>matemática?</h1>
-  <div class="abs" style="left:0;right:0;top:540px;height:420px;display:flex;align-items:center;justify-content:center;gap:26px;color:#fff;font-family:Barlow;font-weight:600;font-size:96px">
+  <h1 class="abs" style="left:0;right:0;top:150px;text-align:center;color:#fff;text-shadow:0 4px 20px rgb(0 0 0/.35)"><span class="script" style="display:block;font-size:76px">Você é bom em</span><span class="display" style="display:block;font-size:112px;margin-top:-2px">matemática?</span></h1>
+  <div class="abs" style="left:0;right:0;top:540px;height:420px;display:flex;align-items:center;justify-content:center;gap:26px;color:#fff;font-family:Nunito;font-weight:900;font-size:96px">
     <span style="font-size:150px;line-height:1">😞</span><span>+</span><span style="width:420px"></span><span>=</span><span style="font-size:150px;line-height:1">😁</span>
   </div>
   ${burger({ cx: 540, bottom: 930, width: 400, stick: true, shadow: false, extra: 'filter:drop-shadow(0 26px 24px rgb(0 0 0/.45))' })}
   <div class="abs" style="left:0;right:0;bottom:64px;display:flex;flex-direction:column;align-items:center;gap:14px">
     ${badge(110, '#fff')}
-    <p class="cond" style="color:#fff;font-weight:600;font-size:24px;letter-spacing:.2em">Holyfield · Downtown Burger</p>
+    <p class="cond" style="color:#fff;font-size:22px;letter-spacing:.18em">Holyfield · Downtown Burger</p>
   </div>
 </body>`;
 
@@ -202,9 +208,9 @@ posts['05-penso-logo-peco'] = `
   <div class="abs" style="right:52px;top:48px">${badge(132, C.mustard)}</div>
   ${burger({ cx: 930, bottom: 1240, width: 370, shadow: false, rot: -4, extra: 'filter:drop-shadow(0 26px 22px rgb(0 0 0/.65))' })}
   <div class="abs" style="left:64px;bottom:96px;color:${C.mustard}">
-    <p class="display" style="font-size:150px;line-height:.86">“Penso,<br>logo</p>
-    <p class="display" style="font-size:150px;line-height:.86"><span style="position:relative;display:inline-block">peço!”
-      <svg style="position:absolute;left:-26px;top:-20px;width:calc(100% + 52px);height:calc(100% + 26px);overflow:visible" viewBox="0 0 100 40" preserveAspectRatio="none"><ellipse cx="50" cy="20" rx="49" ry="19" fill="none" stroke="${C.mustard}" vector-effect="non-scaling-stroke" stroke-width="4" transform="rotate(-3 50 20)"/></svg>
+    <p class="display" style="font-size:138px;line-height:.88">“Penso,</p><p class="script" style="font-size:104px;margin:-6px 0 4px 8px">logo</p>
+    <p class="display" style="font-size:138px;line-height:.88"><span style="position:relative;display:inline-block">peço!”
+      <svg style="position:absolute;left:-14px;top:-8px;width:calc(100% + 40px);height:calc(100% + 22px);overflow:visible" viewBox="0 0 100 40" preserveAspectRatio="none"><ellipse cx="50" cy="20" rx="49" ry="19" fill="none" stroke="${C.mustard}" vector-effect="non-scaling-stroke" stroke-width="4" transform="rotate(-3 50 20)"/></svg>
     </span></p>
   </div>
 </body>`;
@@ -212,8 +218,8 @@ posts['05-penso-logo-peco'] = `
 // 6 · "SEXTOU!" quiz
 const opt = (k, t, on = false) => `
   <div style="display:flex;align-items:center;width:520px;height:66px;border-radius:40px;background:${on ? C.brand : '#fff'};overflow:hidden">
-    <span class="cond" style="display:grid;place-items:center;width:84px;height:100%;background:${C.brand};color:#fff;font-weight:800;font-size:30px;border-right:${on ? '2px solid rgb(255 255 255/.35)' : 'none'}">${k}</span>
-    <span style="padding-left:26px;font-family:Barlow;font-weight:600;font-size:32px;color:${on ? '#fff' : C.ink}">${t}</span>
+    <span class="cond" style="display:grid;place-items:center;width:84px;height:100%;background:${C.brand};color:#fff;font-weight:900;font-size:30px;border-right:${on ? '2px solid rgb(255 255 255/.35)' : 'none'}">${k}</span>
+    <span style="padding-left:26px;font-weight:800;font-size:31px;color:${on ? '#fff' : C.ink}">${t}</span>
   </div>`;
 posts['06-sextou'] = `
 <body style="background:#121012">
@@ -225,14 +231,14 @@ posts['06-sextou'] = `
   </div>
   <div class="abs" style="left:0;right:0;top:70px;display:flex;justify-content:center;gap:10px">${star(30, C.brand)}${star(30, C.brand)}${star(30, C.brand)}</div>
   <div class="abs" style="left:0;right:0;top:140px;display:flex;flex-direction:column;align-items:center">
-    <span class="display" style="color:#fff;font-size:250px;line-height:.8">Sex</span>
-    <span class="display" style="color:${C.brand};font-size:250px;line-height:.8;margin-top:4px">Tou!</span>
+    <span class="display" style="color:#fff;font-size:230px;line-height:.82">Sex</span>
+    <span class="display" style="color:${C.brand};font-size:230px;line-height:.82;margin-top:6px">tou!</span>
   </div>
-  <p class="abs" style="left:0;right:0;top:700px;text-align:center;color:#fff;font-family:Barlow;font-weight:500;font-size:34px;line-height:1.25">O que não pode faltar na sua<br>sexta-feira perfeita?</p>
+  <p class="abs" style="left:0;right:0;top:696px;text-align:center;color:#fff;font-weight:700;font-size:34px;line-height:1.25">O que não pode faltar na sua<br>sexta-feira perfeita?</p>
   <div class="abs" style="left:0;right:0;top:820px;display:flex;flex-direction:column;align-items:center;gap:16px">
     ${opt('A', 'Burger artesanal')}${opt('B', 'Os amigos')}${opt('C', 'Batata frita')}${opt('D', 'Tudo junto', true)}
   </div>
-  <p class="abs cond" style="left:0;right:0;top:1150px;text-align:center;color:#fff;font-weight:700;font-size:24px;letter-spacing:.14em"><span style="color:${C.brand}">Marca o amigo</span> que completa essa lista.</p>
+  <p class="abs cond" style="left:0;right:0;top:1150px;text-align:center;color:#fff;font-size:23px;letter-spacing:.12em"><span style="color:${C.brand}">Marca o amigo</span> que completa essa lista.</p>
   <div class="abs" style="left:0;right:0;bottom:44px;display:flex;justify-content:center">${lockup('#fff', 72)}</div>
 </body>`;
 
@@ -242,10 +248,10 @@ posts['07-temporada-do-terror'] = `
   <div class="abs" style="left:0;right:0;bottom:0;height:520px;background:linear-gradient(180deg,rgb(244 183 64/0),rgb(244 183 64/.85) 40%,#f2b13a)"></div>
   ${shadowHand({ x: 230, y: 90, rot: 20, scale: 0.9, blur: 8, opacity: 0.55, seed: 21 })}
   ${shadowHand({ x: 870, y: 120, rot: -22, scale: 0.88, blur: 9, opacity: 0.5, seed: 13, flip: true })}
-  ${burger({ cx: 540, bottom: 1040, width: 720 })}
-  <div class="abs cond" style="right:70px;top:560px;color:${C.brand};font-weight:800;font-size:28px;letter-spacing:.12em;line-height:1.05;text-align:left">Holyfield<br><span style="font-family:'Big Shoulders';font-size:44px;letter-spacing:0">R$ 69,90</span></div>
-  <p class="abs cond" style="left:0;right:0;top:1112px;text-align:center;color:${C.brand};font-weight:800;font-size:44px;letter-spacing:.1em">Que comece a temporada do terror</p>
-  <div class="abs" style="left:0;right:0;bottom:46px;display:flex;justify-content:center">${lockup(C.brand, 80)}</div>
+  ${burger({ cx: 540, bottom: 990, width: 660 })}
+  <div class="abs cond" style="right:48px;top:470px;color:${C.brand};font-weight:800;font-size:28px;letter-spacing:.12em;line-height:1.05;text-align:left">Holyfield<br><span class="display" style="font-size:46px;letter-spacing:-.01em;text-transform:none">R$ 69,90</span></div>
+  <p class="abs" style="left:0;right:0;top:1030px;text-align:center;color:${C.brand}"><span class="script" style="display:block;font-size:66px">Que comece a</span><span class="display" style="display:block;font-size:76px;margin-top:-4px">temporada do terror</span></p>
+  <div class="abs" style="left:0;right:0;bottom:46px;display:flex;justify-content:center">${lockup(C.brand, 70)}</div>
 </body>`;
 
 // ── Render ─────────────────────────────────────────────────────────────────

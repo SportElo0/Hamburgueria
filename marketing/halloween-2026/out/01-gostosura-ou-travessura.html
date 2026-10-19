@@ -1,11 +1,16 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&display=block');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700..900&family=Barlow+Condensed:wght@600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,600..900,0..100,0..1&family=Nunito:wght@500;600;700;800;900&family=Yellowtail&display=block');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:1080px;height:1350px;overflow:hidden}
-body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:antialiased}
+body{position:relative;font-family:Nunito,sans-serif;-webkit-font-smoothing:antialiased}
 .abs{position:absolute}
-.display{font-family:'Big Shoulders';font-variation-settings:'opsz' 72;font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:.005em}
-.cond{font-family:'Barlow Condensed';text-transform:uppercase}
+/* Ad typography: soft heavy serif (Fields-like) + rounded sans (Proxima Soft-like) + retro script (Espiritu Script-like). */
+.display{font-family:Fraunces;font-variation-settings:'opsz' 144,'SOFT' 100,'WONK' 0;font-weight:900;line-height:.9;letter-spacing:-.02em}
+.cond{font-family:Nunito;font-weight:800;text-transform:uppercase}
+.script{font-family:Yellowtail;font-weight:400;line-height:1}
+/* The badge lockup keeps the Downtown logo lettering. */
+.logo-display{font-family:'Big Shoulders';font-variation-settings:'opsz' 72;font-weight:900;text-transform:uppercase;line-height:.86}
+.logo-cond{font-family:'Barlow Condensed';text-transform:uppercase}
 .grain::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.08;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 </style></head>
@@ -16,7 +21,7 @@ body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:anti
     <g fill="#1a0800" stroke="#1a0800" transform="translate(240 110) rotate(24) scale(0.78 0.78)"><path d="M-74 -760 L74 -760 L86 -140 C140 -110 148 -10 120 60 C70 84 -70 84 -120 60 C-148 -10 -140 -110 -86 -140 Z"/><path d="M-96 -60 L-152.36694101508917 26.04011488340192" stroke-width="46" stroke-linecap="round"/><path d="M-152.36694101508917 26.04011488340192 L-163.9329732510288 108.37428840877915" stroke-width="38" stroke-linecap="round"/><path d="M-163.9329732510288 108.37428840877915 L-147.78501371742112 156.54591049382717" stroke-width="30" stroke-linecap="round"/><path d="M-162.00720465427682 161.31343447967342 L-130.62192736837457 207.7457978665077 L-133.56282278056543 151.7783865079809 Z"/><path d="M-78 40 L-97.52800068587106 169.02411694101508" stroke-width="40" stroke-linecap="round"/><path d="M-97.52800068587106 169.02411694101508 L-113.7298353909465 269.7595250342936" stroke-width="33" stroke-linecap="round"/><path d="M-113.7298353909465 269.7595250342936 L-85.69915980795611 333.07312242798355" stroke-width="26" stroke-linecap="round"/><path d="M-97.58627203880233 338.33587482680167 L-63.83849599748076 382.45035784842173 L-73.81204757710988 327.8103700291654 Z"/><path d="M-26 56 L-35.92980109739369 211.87848936899863" stroke-width="42" stroke-linecap="round"/><path d="M-35.92980109739369 211.87848936899863 L-35.21188271604938 313.23735425240056" stroke-width="34" stroke-linecap="round"/><path d="M-35.21188271604938 313.23735425240056 L-14.409602194787379 383.24848251028806" stroke-width="27" stroke-linecap="round"/><path d="M-27.35044058124234 387.0935705269209 L0.970749871744184 435.0118360561079 L-1.4687638083324206 379.4033944936552 Z"/><path d="M30 54 L45.0943244170096 195.26989883401922" stroke-width="40" stroke-linecap="round"/><path d="M45.0943244170096 195.26989883401922 L42.28755144032922 307.4744427297668" stroke-width="33" stroke-linecap="round"/><path d="M42.28755144032922 307.4744427297668 L38.75032578875172 363.7386574074074" stroke-width="26" stroke-linecap="round"/><path d="M25.775940491012264 362.9229821375835 L35.36213620640631 417.63225787494054 L51.72471108649117 364.5543326772313 Z"/><path d="M80 36 L108.21104252400549 147.8650120027435" stroke-width="36" stroke-linecap="round"/><path d="M108.21104252400549 147.8650120027435 L111.43513374485596 239.13745713305897" stroke-width="30" stroke-linecap="round"/><path d="M111.43513374485596 239.13745713305897 L94.44729080932785 287.2103137860082" stroke-width="24" stroke-linecap="round"/><path d="M83.13295532722853 283.21208760449866 L76.45527299253499 338.12482345545516 L105.76162629142718 291.20853996751777 Z"/></g></svg>
   <svg class="abs" width="1080" height="1350" viewBox="0 0 1080 1350" style="filter:blur(11px);opacity:0.42">
     <g fill="#1a0800" stroke="#1a0800" transform="translate(960 420) rotate(64) scale(-0.8 0.8)"><path d="M-74 -760 L74 -760 L86 -140 C140 -110 148 -10 120 60 C70 84 -70 84 -120 60 C-148 -10 -140 -110 -86 -140 Z"/><path d="M-96 -60 L-150.13419067215364 30.85105452674897" stroke-width="46" stroke-linecap="round"/><path d="M-150.13419067215364 30.85105452674897 L-175.38335048010973 106.41568072702331" stroke-width="38" stroke-linecap="round"/><path d="M-175.38335048010973 106.41568072702331 L-150.79506172839507 160.08936042524005" stroke-width="30" stroke-linecap="round"/><path d="M-164.43220287471388 166.33663033739992 L-128.30489004461947 209.1830685519878 L-137.15792058207626 153.84209051308017 Z"/><path d="M-78 40 L-109.90018861454047 175.3041923868313" stroke-width="40" stroke-linecap="round"/><path d="M-109.90018861454047 175.3041923868313 L-110.74811385459533 268.7515346364883" stroke-width="33" stroke-linecap="round"/><path d="M-110.74811385459533 268.7515346364883 L-95.01784979423869 333.9375600137174" stroke-width="26" stroke-linecap="round"/><path d="M-107.65510834630687 336.98710035419157 L-82.35052837996137 386.4307878453853 L-82.3805912421705 330.88801967324326 Z"/><path d="M-26 56 L-31.795816186556927 204.0721450617284" stroke-width="42" stroke-linecap="round"/><path d="M-31.795816186556927 204.0721450617284 L-38.02028463648834 316.2910922496571" stroke-width="34" stroke-linecap="round"/><path d="M-38.02028463648834 316.2910922496571 L-17.592489711934157 375.2116855281207" stroke-width="27" stroke-linecap="round"/><path d="M-30.34764511533008 379.6339033693424 L0.0963816529527719 426.2323071417044 L-4.837334308538233 370.789467686899 Z"/><path d="M30 54 L40.845593278463646 199.821579218107" stroke-width="40" stroke-linecap="round"/><path d="M40.845593278463646 199.821579218107 L41.466803840877915 303.7010202331962" stroke-width="33" stroke-linecap="round"/><path d="M41.466803840877915 303.7010202331962 L40.14768518518518 368.5784036351166" stroke-width="26" stroke-linecap="round"/><path d="M27.150371517887336 368.3141359036915 L39.04995768541933 422.5672450223538 L53.14499885248303 368.8426713665417 Z"/><path d="M80 36 L98.69070644718792 149.21916152263375" stroke-width="36" stroke-linecap="round"/><path d="M98.69070644718792 149.21916152263375 L120.3798182441701 231.64798525377228" stroke-width="30" stroke-linecap="round"/><path d="M120.3798182441701 231.64798525377228 L98.86934156378601 284.70438100137176" stroke-width="24" stroke-linecap="round"/><path d="M87.74855259902897 280.1957168088045 L78.5803526972334 334.74793134277843 L109.99013052854305 289.213045193939 Z"/></g></svg>
-  <h1 class="abs" style="left:0;right:0;top:300px;text-align:center;color:#fff8ec;font-family:'Barlow';font-weight:600;font-size:66px;letter-spacing:-.01em;text-shadow:0 4px 18px rgb(80 20 0/.35)">Gostosura ou travessura?</h1>
+  <h1 class="abs display" style="left:0;right:0;top:220px;text-align:center;color:#fff8ec;font-size:128px;text-shadow:0 4px 18px rgb(80 20 0/.3)">Gostosura<p class="script" style="font-size:84px;letter-spacing:0;margin-top:-6px">ou travessura?</p></h1>
   
   <div class="abs" style="left:282.4px;top:1046.4px;width:515.2px;height:72.8px;border-radius:50%;background:radial-gradient(closest-side,rgb(0 0 0/.55),rgb(0 0 0/.25) 60%,transparent);filter:blur(6px)"></div>
   <div class="abs" style="left:557.4px;top:531.2px;width:10px;height:235.2px;border-radius:5px;background:linear-gradient(90deg,#b98b52,#e2c08c 45%,#9c7240);transform:rotate(6deg);box-shadow:2px 0 4px rgb(0 0 0/.25)"></div>
@@ -25,7 +30,7 @@ body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:anti
     
   <div style="display:flex;align-items:center;gap:16px;color:#1d1712">
     <svg width="84" height="84" viewBox="0 0 400 400" style="color:#1d1712">
-  <defs><path id="arcgzu4sa" d="M64.05383194450252 263.3927392611049 A150 150 0 0 0 335.9461680554975 263.3927392611049"/></defs>
+  <defs><path id="arcc1s5bc" d="M64.05383194450252 263.3927392611049 A150 150 0 0 0 335.9461680554975 263.3927392611049"/></defs>
   <circle cx="200" cy="200" r="190" fill="none" stroke="currentColor" stroke-width="7"/>
   <circle cx="200" cy="200" r="176" fill="none" stroke="currentColor" stroke-width="2.5"/>
   <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
@@ -42,13 +47,13 @@ body{position:relative;font-family:Barlow,sans-serif;-webkit-font-smoothing:anti
     <text x="200" y="314" text-anchor="middle" font-size="54" font-weight="800" letter-spacing="6">BURGER</text>
   </g>
   <text fill="currentColor" font-size="19" font-weight="700" letter-spacing="3" style="font-family:'Barlow Condensed'">
-    <textPath href="#arcgzu4sa" startOffset="50%" text-anchor="middle">BURGERS • STEAKS • FRIES • SHAKES</textPath></text>
+    <textPath href="#arcc1s5bc" startOffset="50%" text-anchor="middle">BURGERS • STEAKS • FRIES • SHAKES</textPath></text>
 </svg>
     <div style="display:flex;flex-direction:column;line-height:.85">
-      <span class="display" style="font-size:42px">Downtown</span>
-      <span class="cond" style="font-weight:700;font-size:16.8px;letter-spacing:.42em">Burger</span>
+      <span class="logo-display" style="font-size:42px">Downtown</span>
+      <span class="logo-cond" style="font-weight:700;font-size:16.8px;letter-spacing:.42em">Burger</span>
     </div>
   </div>
-    <div class="cond" style="text-align:right;color:#1d1712;font-weight:700;letter-spacing:.12em;font-size:26px;line-height:1.15">Holyfield<br><span style="font-family:'Big Shoulders';font-weight:900;font-size:54px;letter-spacing:0">R$ 69,90</span></div>
+    <div class="cond" style="text-align:right;color:#1d1712;font-weight:700;letter-spacing:.12em;font-size:26px;line-height:1.15">Holyfield<br><span class="display" style="font-size:56px;letter-spacing:-.01em;text-transform:none">R$ 69,90</span></div>
   </div>
 </body></html>
