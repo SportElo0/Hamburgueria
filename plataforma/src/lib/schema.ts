@@ -97,6 +97,8 @@ export const storeSchema = z.object({
     changeLimit: z.number().int().min(0).max(100).nullable(),
     partnerUntil: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).or(z.literal('')),
     monthlyFee: z.number().int().min(0).nullable(),
+    /** Centavos charged per change beyond the monthly allowance. `null` = combine case by case. */
+    extraPrice: z.number().int().min(0).max(1_000_000).nullable(),
     notes: text(2000),
   }),
 });
@@ -153,7 +155,7 @@ export function emptyStore(slug: string, name: string, segment: Store['segment']
     notice: { active: false, text: '' },
     catalog: { categories: [] },
     extra: {},
-    account: { plan: 'parceiro', changeLimit: null, partnerUntil: '', monthlyFee: null, notes: '' },
+    account: { plan: 'parceiro', changeLimit: null, partnerUntil: '', monthlyFee: null, extraPrice: null, notes: '' },
   };
 }
 
@@ -177,6 +179,18 @@ export function changeLimit(store: Store): number {
   return store.account.changeLimit ?? PLAN_CHANGE_LIMIT[store.account.plan];
 }
 
+const PARTNER_WARNING_DAYS = 15;
+
+export type PartnerStatus = 'sem-prazo' | 'em-dia' | 'vencendo' | 'vencido';
+
+/** How close a free partnership (or any dated contract) is to needing a paid plan. `today` as `YYYY-MM-DD`. */
+export function partnerStatus(store: Store, today = new Date().toISOString().slice(0, 10)): PartnerStatus {
+  if (!store.account.partnerUntil) return 'sem-prazo';
+  if (store.account.partnerUntil < today) return 'vencido';
+  const days = (Date.parse(store.account.partnerUntil) - Date.parse(today)) / 86_400_000;
+  return days <= PARTNER_WARNING_DAYS ? 'vencendo' : 'em-dia';
+}
+
 /** What public sites receive: everything except the internal account data. */
 export function toPublic(store: Store, publishedAt: string | null, mediaBase: string) {
   const media = (src: string) => (!src || /^https?:\/\//.test(src) ? src : `${mediaBase}/${src.replace(/^midia\//, '')}`);
@@ -198,3 +212,81 @@ export function toPublic(store: Store, publishedAt: string | null, mediaBase: st
   };
 }
 export type PublicStore = ReturnType<typeof toPublic>;
+
+export const PEDIDO_CANAIS = ['WhatsApp', 'Telefone', 'E-mail', 'Presencial'] as const;
+
+/** A client request logged before it's done, so it isn't tracked only in someone's head. */
+export const pedidoEntrySchema = z.object({
+  id,
+  texto: text(500).min(1),
+  canal: z.enum(PEDIDO_CANAIS),
+  criadoEm: z.string(),
+  criadoPor: text(120),
+  status: z.enum(['pendente', 'feito', 'descartado']),
+  resolvidoEm: z.string().nullable(),
+  resolvidoPor: text(120),
+});
+export type PedidoEntry = z.infer<typeof pedidoEntrySchema>;
+export type PedidoStatus = PedidoEntry['status'];
+
+/** Whether the monthly fee for a given `YYYY-MM` was settled. One doc per store per month. */
+export const paymentSchema = z.object({
+  month: z.string().regex(/^\d{4}-\d{2}$/),
+  paid: z.boolean(),
+  paidAt: z.string().nullable(),
+  paidBy: text(120),
+  note: text(300),
+});
+export type Payment = z.infer<typeof paymentSchema>;
+
+export function emptyPayment(month: string): Payment {
+  return { month, paid: false, paidAt: null, paidBy: '', note: '' };
+}
+
+export const REFERRAL_STATUSES = ['novo', 'contatado', 'proposta', 'fechado', 'perdido'] as const;
+export type ReferralStatus = (typeof REFERRAL_STATUSES)[number];
+
+export const REFERRAL_STATUS_LABEL: Record<ReferralStatus, string> = {
+  novo: 'Novo',
+  contatado: 'Contatado',
+  proposta: 'Proposta enviada',
+  fechado: 'Fechado',
+  perdido: 'Perdido',
+};
+
+/** A lead from the "indique e ganhe" referral program, tracked from tip to paid commission. */
+export const referralSchema = z.object({
+  id,
+  nome: text(120).min(1),
+  segmento: z.enum(SEGMENTS),
+  contato: text(120),
+  indicadoPor: text(120).min(1),
+  status: z.enum(REFERRAL_STATUSES),
+  /** Set once the lead becomes a real store, linking the two records. */
+  storeSlug: z.string().max(60).nullable(),
+  /** Centavos owed to whoever referred, once the deal closes. */
+  comissao: z.number().int().min(0).max(1_000_000).nullable(),
+  comissaoPaga: z.boolean(),
+  notas: text(1000),
+  criadoEm: z.string(),
+  atualizadoEm: z.string(),
+});
+export type Referral = z.infer<typeof referralSchema>;
+
+export function emptyReferral(input: { nome: string; segmento: Store['segment']; indicadoPor: string }): Referral {
+  const now = new Date().toISOString();
+  return {
+    id: newId(),
+    nome: input.nome,
+    segmento: input.segmento,
+    contato: '',
+    indicadoPor: input.indicadoPor,
+    status: 'novo',
+    storeSlug: null,
+    comissao: null,
+    comissaoPaga: false,
+    notas: '',
+    criadoEm: now,
+    atualizadoEm: now,
+  };
+}

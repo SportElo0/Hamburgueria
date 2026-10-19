@@ -8,9 +8,14 @@ export default async function PainelLayout({ children }: { children: React.React
     <div className="min-h-dvh">
       <header className="sticky top-0 z-20 border-b border-line bg-paper/90 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
-          <Link href="/painel" className="text-[15px] font-bold">
-            Painel das lojas
-          </Link>
+          <div className="flex items-center gap-5">
+            <Link href="/painel" className="text-[15px] font-bold">
+              Painel das lojas
+            </Link>
+            <Link href="/painel/indicacoes" className="text-sm text-ink-mute hover:text-ink">
+              Indicações
+            </Link>
+          </div>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden text-ink-mute sm:inline">{user.name || user.email}</span>
             <form action={logout}>
