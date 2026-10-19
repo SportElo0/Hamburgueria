@@ -39,6 +39,9 @@
   ul.checks li { font-size: 30px; line-height: 1.4; padding-left: 52px; position: relative; color: var(--text); }
   ul.checks li span { color: var(--muted); }
   ul.checks li::before { content: ''; position: absolute; left: 0; top: 7px; width: 30px; height: 30px; border-radius: 50%; background: var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/18px no-repeat; }
+  a { color: inherit; text-decoration: none; }
+  a.site { display: block; }
+  .ver { font-size: 22px; font-weight: 600; color: var(--blue-soft); margin-top: 10px; display: inline-block; }
   table { border-collapse: collapse; width: 100%; }
   td { white-space: nowrap; }
   .tabular { font-variant-numeric: tabular-nums; }
@@ -54,9 +57,9 @@
 <!-- 1. Capa -->
 <section class="slide" style="justify-content:center">
   <div style="position:absolute;right:-60px;top:110px;display:flex;gap:36px;transform:rotate(-6deg)">
-    <img class="phone" src="img/downtown-m.jpg" style="width:330px;height:715px">
-    <img class="phone" src="img/gara-m.jpg" style="width:330px;height:715px;margin-top:120px">
-    <img class="phone" src="img/surflife-m.jpg" style="width:330px;height:715px;margin-top:40px">
+    <a class="site" href="https://downtown-burger-gilt.vercel.app/"><img class="phone" src="img/downtown-m.jpg" style="width:330px;height:715px"></a>
+    <a class="site" href="https://gara-pizza-juquehy.pages.dev/"><img class="phone" src="img/gara-m.jpg" style="width:330px;height:715px;margin-top:120px"></a>
+    <a class="site" href="https://surflife-juquehy.pages.dev/"><img class="phone" src="img/surflife-m.jpg" style="width:330px;height:715px;margin-top:40px"></a>
   </div>
   <div style="position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 42%,rgba(7,10,16,.55) 62%,transparent 85%)"></div>
   <div style="display:flex;align-items:center;gap:40px;margin-bottom:96px">
@@ -152,8 +155,8 @@
       </ul>
     </div>
     <div style="display:flex;gap:40px;justify-content:center">
-      <img class="phone" src="img/downtown-m.jpg" style="width:350px;height:740px">
-      <img class="phone" src="img/semvo-m.jpg" style="width:350px;height:740px;margin-top:50px">
+      <a class="site" href="https://downtown-burger-gilt.vercel.app/"><img class="phone" src="img/downtown-m.jpg" style="width:350px;height:740px"></a>
+      <a class="site" href="https://semvo-juquehy.pages.dev/"><img class="phone" src="img/semvo-m.jpg" style="width:350px;height:740px;margin-top:50px"></a>
     </div>
   </div>
   <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>05</div></div>
@@ -168,8 +171,8 @@
     </div>
     <p style="font-size:26px;color:var(--muted);max-width:620px;text-align:right;line-height:1.5">Cardápio completo, montagem de pedido e animação do burger da casa camada por camada. Mais 7 posts de Halloween.</p>
   </div>
-  <img class="shot" src="img/downtown-d.jpg" style="width:100%;height:540px;margin-top:44px">
-  <div style="font-size:24px;color:var(--blue-soft);margin-top:24px;font-weight:600">downtown-burger-gilt.vercel.app</div>
+  <a class="site" href="https://downtown-burger-gilt.vercel.app/"><img class="shot" src="img/downtown-d.jpg" style="width:100%;height:540px;margin-top:44px"></a>
+  <a href="https://downtown-burger-gilt.vercel.app/" style="font-size:24px;color:var(--blue-soft);margin-top:24px;font-weight:600;display:inline-block">Ver site ↗ downtown-burger-gilt.vercel.app</a>
   <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>06</div></div>
 </section>
 
@@ -179,19 +182,22 @@
   <h2>Restaurantes, lojas e serviços.</h2>
   <div class="grid3" style="gap:36px">
     <div>
-      <img class="shot" src="img/gara-d.jpg" style="width:100%;height:440px">
+      <a class="site" href="https://gara-pizza-juquehy.pages.dev/"><img class="shot" src="img/gara-d.jpg" style="width:100%;height:440px"></a>
       <h3 style="margin-top:28px">Gara Pizza Bar</h3>
       <p style="font-size:24px;color:var(--muted);margin-top:8px">Pizzaria · cardápio com 56 itens</p>
+      <a class="ver" href="https://gara-pizza-juquehy.pages.dev/">Ver site ↗</a>
     </div>
     <div>
-      <img class="shot" src="img/semvo-d.jpg" style="width:100%;height:440px">
+      <a class="site" href="https://semvo-juquehy.pages.dev/"><img class="shot" src="img/semvo-d.jpg" style="width:100%;height:440px"></a>
       <h3 style="margin-top:28px">SemvØ Clothing</h3>
       <p style="font-size:24px;color:var(--muted);margin-top:8px">Moda · reserva de peças por tamanho</p>
+      <a class="ver" href="https://semvo-juquehy.pages.dev/">Ver site ↗</a>
     </div>
     <div>
-      <img class="shot" src="img/surflife-d.jpg" style="width:100%;height:440px">
+      <a class="site" href="https://surflife-juquehy.pages.dev/"><img class="shot" src="img/surflife-d.jpg" style="width:100%;height:440px"></a>
       <h3 style="margin-top:28px">Surflife</h3>
       <p style="font-size:24px;color:var(--muted);margin-top:8px">Surf shop · pranchas e aluguel</p>
+      <a class="ver" href="https://surflife-juquehy.pages.dev/">Ver site ↗</a>
     </div>
   </div>
   <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>07</div></div>
