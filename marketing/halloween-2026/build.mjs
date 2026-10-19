@@ -191,7 +191,7 @@ posts['04-matematica'] = `
   <div class="abs" style="inset:0;background:radial-gradient(ellipse at 50% 55%,rgb(0 0 0/0),rgb(40 20 0/.45))"></div>
   <h1 class="abs" style="left:0;right:0;top:150px;text-align:center;color:#fff;text-shadow:0 4px 20px rgb(0 0 0/.35)"><span class="script" style="display:block;font-size:76px">Você é bom em</span><span class="display" style="display:block;font-size:112px;margin-top:-2px">matemática?</span></h1>
   <div class="abs" style="left:0;right:0;top:540px;height:420px;display:flex;align-items:center;justify-content:center;gap:26px;color:#fff;font-family:Nunito;font-weight:900;font-size:96px">
-    <span style="font-size:150px;line-height:1">😞</span><span>+</span><span style="width:420px"></span><span>=</span><span style="font-size:150px;line-height:1">😁</span>
+    <span style="font-size:150px;line-height:1;font-family:'Noto Color Emoji'">☹️</span><span>+</span><span style="width:420px"></span><span>=</span><span style="font-size:150px;line-height:1;font-family:'Noto Color Emoji'">😁</span>
   </div>
   ${burger({ cx: 540, bottom: 930, width: 400, stick: true, shadow: false, extra: 'filter:drop-shadow(0 26px 24px rgb(0 0 0/.45))' })}
   <div class="abs" style="left:0;right:0;bottom:64px;display:flex;flex-direction:column;align-items:center;gap:14px">
