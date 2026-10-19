@@ -29,5 +29,3 @@ export const restaurant: RestaurantInfo = {
   instagram: null,
   cnpj: null,
 };
-
-export const isOrderingLive = () => Boolean(restaurant.whatsappNumber);

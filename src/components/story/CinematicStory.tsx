@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { HERO_PRODUCT_ID, SIGNATURE_IDS, productById } from '@/content/menu';
+import { HERO_PRODUCT_ID, SIGNATURE_IDS } from '@/content/menu';
+import { useCatalog } from '@/content/live';
 import photos from '@/content/photos.json';
 import renders from '@/content/renders.json';
 import { useCart, useUi } from '../Providers';
@@ -64,7 +65,8 @@ export function CinematicStory() {
   }, []);
   const cart = useCart();
   const ui = useUi();
-  const hero = productById.get(HERO)!;
+  const catalog = useCatalog();
+  const hero = catalog.byId.get(HERO)!;
 
   useGSAP(
     () => {
@@ -257,6 +259,7 @@ export function CinematicStory() {
   };
 
   const addHero = () => {
+    if (catalog.soldOut.has(HERO)) return ui.openProduct({ productId: HERO });
     cart.add(HERO, 1, {});
     ui.toast(`${hero.name} na sacola`, { label: 'Ver sacola', run: () => ui.setCartOpen(true) });
   };
@@ -295,7 +298,7 @@ export function CinematicStory() {
         {/* Signature lineup (scene 4): the real neighbours of the hero burger */}
         {SIGNATURE_IDS.map((id) => {
           if (id === HERO) return <div key={id} data-lineup className="hidden" />;
-          const p = productById.get(id)!;
+          const p = catalog.byId.get(id)!;
           return (
             <button
               key={id}
@@ -482,7 +485,7 @@ function LineupCaption({ name, cents }: { name: string; cents: number }) {
 
 /** Caption that sits under the hero when it joins the lineup; fades with the lineup. */
 function SceneFourHeroCaption() {
-  const p = productById.get(HERO)!;
+  const p = useCatalog().byId.get(HERO)!;
   return (
     <span data-lineup-hero className="invisible absolute inset-x-0 top-[80%] flex origin-top flex-col items-center gap-1" style={{ scale: 'calc(1 / var(--lu))' }}>
       <span className="display text-center text-[1.45rem] md:text-[clamp(1.9rem,2.6vw,2.8rem)] md:whitespace-nowrap">{p.name}</span>

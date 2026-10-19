@@ -1,6 +1,7 @@
 'use client';
 
-import { HERO_PRODUCT_ID, SIGNATURE_IDS, productById } from '@/content/menu';
+import { HERO_PRODUCT_ID, SIGNATURE_IDS } from '@/content/menu';
+import { useCatalog } from '@/content/live';
 import photos from '@/content/photos.json';
 import { useUi } from '../Providers';
 import { BurgerStack } from '../burger/BurgerStack';
@@ -10,7 +11,8 @@ import { scrollToHash } from '../nav/NavOverlay';
 /** Reduced-motion version of the story: the same five scenes as still frames in normal flow. */
 export function StaticStory() {
   const ui = useUi();
-  const hero = productById.get(HERO_PRODUCT_ID)!;
+  const catalog = useCatalog();
+  const hero = catalog.byId.get(HERO_PRODUCT_ID)!;
   const heroImg = photos.items.holyfield.src;
   const cta = 'cond inline-flex min-h-14 items-center justify-center rounded-full bg-mustard px-8 text-lg font-bold tracking-[0.1em] text-ink uppercase';
   return (
@@ -40,7 +42,7 @@ export function StaticStory() {
         <h2 className="display text-[clamp(3.4rem,9vw,8rem)]">Escolha seu favorito.</h2>
         <ul className="mx-auto mt-10 grid max-w-6xl grid-cols-2 gap-6 md:grid-cols-4">
           {SIGNATURE_IDS.map((id) => {
-            const p = productById.get(id)!;
+            const p = catalog.byId.get(id)!;
             return (
               <li key={id}>
                 <button type="button" onClick={() => ui.openProduct({ productId: id })} className="w-full cursor-pointer">

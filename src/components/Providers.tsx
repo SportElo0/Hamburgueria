@@ -1,7 +1,8 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState, useSyncExternalStore } from 'react';
-import { productById, type Product } from '@/content/menu';
+import type { Product } from '@/content/menu';
+import { loadLiveCatalog, staticCatalog, useCatalog } from '@/content/live';
 import { cartReducer, cartTotals, sanitize, type CartLine, type Selections } from '@/lib/cart';
 import { CartDrawer } from './cart/CartDrawer';
 import { ProductDialog } from './menu/ProductDialog';
@@ -10,7 +11,8 @@ import { Toaster } from './ui/Toaster';
 
 const STORAGE_KEY = 'downtown-cart-v1';
 const noopSubscribe = () => () => {};
-const lookup = (id: string) => productById.get(id);
+// Saved carts are checked against the static menu; live prices apply as soon as they arrive.
+const staticLookup = (id: string) => staticCatalog.byId.get(id);
 
 interface CartApi {
   lines: CartLine[];
@@ -68,7 +70,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) dispatch({ type: 'hydrate', state: sanitize(JSON.parse(raw), lookup) });
+      if (raw) dispatch({ type: 'hydrate', state: sanitize(JSON.parse(raw), staticLookup) });
     } catch {
       /* storage unavailable or corrupt: start empty */
     }
@@ -87,7 +89,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
     }
   }, [state]);
 
-  const totals = useMemo(() => cartTotals(state.lines, lookup), [state.lines]);
+  useEffect(() => loadLiveCatalog(), []);
+  const catalog = useCatalog();
+  // Sold-out items drop out of totals and the order message.
+  const lookup = useCallback((id: string) => (catalog.soldOut.has(id) ? undefined : catalog.byId.get(id)), [catalog]);
+  const totals = useMemo(() => cartTotals(state.lines, lookup), [state.lines, lookup]);
 
   const cart = useMemo<CartApi>(
     () => ({
@@ -102,7 +108,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       remove: (lineId) => dispatch({ type: 'remove', lineId }),
       clear: () => dispatch({ type: 'clear' }),
     }),
-    [state.lines, totals, ready],
+    [state.lines, totals, ready, lookup],
   );
 
   const [product, setProduct] = useState<ProductRequest | null>(null);

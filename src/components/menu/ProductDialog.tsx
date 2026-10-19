@@ -1,7 +1,8 @@
 'use client';
 
 import { useId, useMemo, useRef, useState } from 'react';
-import { productById, type CategoryId, type OptionGroup, type Product } from '@/content/menu';
+import type { CategoryId, OptionGroup, Product } from '@/content/menu';
+import { useCatalog } from '@/content/live';
 import { defaultSelections, missingRequired, unitPrice, type Selections } from '@/lib/cart';
 import { formatBRL } from '@/lib/money';
 import { useCart, useUi, type ProductRequest } from '../Providers';
@@ -25,7 +26,8 @@ export function ProductDialog() {
   const [last, setLast] = useState<ProductRequest | null>(null);
   if (req && req !== last) setLast(req);
   const active = req ?? last;
-  const product = active ? productById.get(active.productId) : undefined;
+  const catalog = useCatalog();
+  const product = active ? catalog.byId.get(active.productId) : undefined;
 
   return (
     <dialog
@@ -42,6 +44,7 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
   const cart = useCart();
   const ui = useUi();
   const editing = request.lineId ? cart.lines.find((l) => l.lineId === request.lineId) : undefined;
+  const soldOut = useCatalog().soldOut.has(product.id);
 
   const [selections, setSelections] = useState<Selections>(() => {
     if (editing) return structuredClone(editing.selections);
@@ -76,6 +79,7 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (soldOut) return;
     if (missing.length) {
       setShowErrors(true);
       groupRefs.current[missing[0].id]?.querySelector('input')?.focus();
@@ -248,13 +252,14 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
           <Stepper value={qty} onChange={setQty} label="Quantidade" />
           <button
             type="submit"
+            disabled={soldOut}
             data-incomplete={missing.length > 0 || undefined}
             aria-describedby={missing.length > 0 ? `${formId}-pending` : undefined}
-            className="cond group inline-flex min-h-14 flex-1 cursor-pointer items-center justify-between gap-2 rounded-full bg-ink px-5 text-base font-bold tracking-[0.06em] whitespace-nowrap text-on-dark uppercase sm:gap-3 sm:px-6 sm:text-lg transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.98] data-incomplete:bg-ink/55"
+            className="cond group inline-flex min-h-14 flex-1 cursor-pointer items-center justify-between gap-2 rounded-full bg-ink px-5 text-base font-bold tracking-[0.06em] whitespace-nowrap text-on-dark uppercase sm:gap-3 sm:px-6 sm:text-lg transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.98] data-incomplete:bg-ink/55 disabled:cursor-not-allowed disabled:bg-ink/40"
           >
             <span className="inline-flex items-center gap-2">
               <Star size={12} className="text-mustard" />
-              {editing ? 'Atualizar' : 'Adicionar'}
+              {soldOut ? 'Esgotado' : editing ? 'Atualizar' : 'Adicionar'}
             </span>
             <span className="tabular">{formatBRL(unit * qty)}</span>
           </button>

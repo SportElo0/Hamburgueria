@@ -1,6 +1,7 @@
 import { MenuSection } from '@/components/menu/MenuSection';
 import { MobileCartBar, SiteHeader } from '@/components/nav/SiteHeader';
-import { LocationSection, SiteFooter, StorySection } from '@/components/sections/InfoSections';
+import { SiteFooter, StorySection } from '@/components/sections/InfoSections';
+import { LocationSection } from '@/components/sections/LocationSection';
 import { CinematicStory } from '@/components/story/CinematicStory';
 import { StaticStory } from '@/components/story/StaticStory';
 import { products } from '@/content/menu';

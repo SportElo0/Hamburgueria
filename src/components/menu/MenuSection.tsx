@@ -1,12 +1,29 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { SECTION_ART, addons, categories, productsByCategory, type CategoryId, type Product } from '@/content/menu';
+import { SECTION_ART, categories, type CategoryId, type Product } from '@/content/menu';
+import { useCatalog } from '@/content/live';
 import { formatBRL } from '@/lib/money';
 import { useCart, useUi } from '../Providers';
 import { Star } from '../brand/Brand';
 import { PlusIcon } from '../ui/Icons';
 import { Price, useNativeDialog } from '../ui/primitives';
+
+function useCategory(id: CategoryId) {
+  return useCatalog().products.filter((p) => p.category === id);
+}
+
+function useSoldOut(p: Product) {
+  return useCatalog().soldOut.has(p.id);
+}
+
+function SoldOut() {
+  return (
+    <span className="cond inline-flex min-h-11 shrink-0 items-center rounded-full border-2 border-dashed border-ink/35 px-3 text-sm font-bold tracking-[0.08em] text-ink-mute uppercase">
+      Esgotado
+    </span>
+  );
+}
 
 function needsSheet(p: Product) {
   return Boolean(p.options?.length);
@@ -85,6 +102,7 @@ export function MenuSection() {
           </div>
         </div>
         <div className="double-rule mt-6 text-ink" />
+        <Notice />
       </div>
 
       <div className="sticky top-[var(--header-h)] z-30 mt-6 border-b border-ink/10 bg-cream/92 backdrop-blur-md">
@@ -116,6 +134,18 @@ export function MenuSection() {
   );
 }
 
+/** Short notice set in the store panel (holiday hours, item out, etc.). */
+function Notice() {
+  const { notice } = useCatalog();
+  if (!notice) return null;
+  return (
+    <p role="status" className="mt-6 flex items-start gap-3 rounded-2xl border-2 border-ink bg-mustard/40 px-5 py-4 text-[1.05rem] font-semibold">
+      <Star size={16} className="mt-1 shrink-0 text-brand" />
+      {notice}
+    </p>
+  );
+}
+
 function CategoryHeading({ id }: { id: CategoryId }) {
   const c = categories.find((x) => x.id === id)!;
   return (
@@ -133,6 +163,7 @@ function CategoryHeading({ id }: { id: CategoryId }) {
 function ObjectItem({ p }: { p: Product }) {
   const ui = useUi();
   const quick = useQuickAdd();
+  const soldOut = useSoldOut(p);
   return (
     <article className="group flex gap-4 border-b border-ink/15 py-5 sm:gap-5 md:py-6" aria-labelledby={`p-${p.id}`}>
       <button
@@ -161,16 +192,20 @@ function ObjectItem({ p }: { p: Product }) {
         </div>
         {p.description && <p className="mt-1.5 max-w-[46ch] text-[0.95rem] leading-snug text-ink-soft">{p.description}</p>}
         <div className="mt-auto flex flex-wrap items-center gap-1 pt-3">
-          <button
-            type="button"
-            onClick={() => quick(p)}
-            className="cond inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full bg-ink pr-4 pl-3 text-sm font-bold tracking-[0.08em] text-on-dark uppercase transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.97]"
-          >
-            <PlusIcon size={16} />
-            Adicionar
-            <span className="sr-only"> {p.name}</span>
-          </button>
-          {p.layers && (
+          {soldOut ? (
+            <SoldOut />
+          ) : (
+            <button
+              type="button"
+              onClick={() => quick(p)}
+              className="cond inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full bg-ink pr-4 pl-3 text-sm font-bold tracking-[0.08em] text-on-dark uppercase transition-[background-color,transform] duration-200 hover:bg-brand active:scale-[0.97]"
+            >
+              <PlusIcon size={16} />
+              Adicionar
+              <span className="sr-only"> {p.name}</span>
+            </button>
+          )}
+          {p.layers && !soldOut && (
             <button
               type="button"
               onClick={() => ui.openProduct({ productId: p.id })}
@@ -188,7 +223,7 @@ function ObjectItem({ p }: { p: Product }) {
 const rows = 'grid border-t-2 border-ink lg:grid-cols-2 lg:gap-x-12';
 
 function Burgers() {
-  const items = productsByCategory('burgers');
+  const items = useCategory('burgers');
   return (
     <div id="cat-burgers" className="scroll-mt-40">
       <CategoryHeading id="burgers" />
@@ -202,7 +237,7 @@ function Burgers() {
 }
 
 function Sides() {
-  const items = productsByCategory('entradas');
+  const items = useCategory('entradas');
   return (
     <div id="cat-entradas" className="scroll-mt-40">
       <CategoryHeading id="entradas" />
@@ -216,6 +251,7 @@ function Sides() {
 }
 
 function Addons({ onPick }: { onPick: (id: string) => void }) {
+  const { addons } = useCatalog();
   return (
     <div id="cat-adicionais" className="scroll-mt-40">
       <CategoryHeading id="adicionais" />
@@ -248,6 +284,7 @@ function Addons({ onPick }: { onPick: (id: string) => void }) {
 
 function BoardRow({ p }: { p: Product }) {
   const quick = useQuickAdd();
+  const soldOut = useSoldOut(p);
   return (
     <li className="border-b border-ink/12">
       <div className="flex min-h-16 items-center gap-4 py-2">
@@ -256,14 +293,18 @@ function BoardRow({ p }: { p: Product }) {
           <span className="leader hidden sm:block" aria-hidden="true" />
           <span className="cond tabular ml-auto shrink-0 text-[1.2rem] font-bold whitespace-nowrap text-brand sm:ml-0">{formatBRL(p.price)}</span>
         </div>
-        <button
-          type="button"
-          onClick={() => quick(p)}
-          aria-label={`Adicionar ${p.name}`}
-          className="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full bg-ink text-on-dark transition-[background-color,transform] duration-200 hover:bg-brand active:scale-90"
-        >
-          <PlusIcon size={18} />
-        </button>
+        {soldOut ? (
+          <SoldOut />
+        ) : (
+          <button
+            type="button"
+            onClick={() => quick(p)}
+            aria-label={`Adicionar ${p.name}`}
+            className="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full bg-ink text-on-dark transition-[background-color,transform] duration-200 hover:bg-brand active:scale-90"
+          >
+            <PlusIcon size={18} />
+          </button>
+        )}
       </div>
     </li>
   );
@@ -272,12 +313,13 @@ function BoardRow({ p }: { p: Product }) {
 /** Drinks share one illustration per section, the way the printed menu does. */
 function DrinkBoard({ id, crop }: { id: 'bebidas' | 'long-necks'; crop: string }) {
   const art = SECTION_ART[id];
+  const items = useCategory(id);
   return (
     <div className="flex items-start gap-4 sm:gap-6">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={art.src} alt={art.alt} width={700} height={700} loading="lazy" className={`sticky top-[calc(var(--header-h)+84px)] mt-4 w-16 shrink-0 object-cover drop-shadow-[0_16px_14px_rgb(0_0_0/0.22)] sm:w-24 ${crop}`} />
       <ul className="min-w-0 flex-1 border-t-2 border-ink">
-        {productsByCategory(id).map((p) => (
+        {items.map((p) => (
           <BoardRow key={p.id} p={p} />
         ))}
       </ul>
@@ -305,7 +347,7 @@ function Drinks() {
 }
 
 function Desserts() {
-  const items = productsByCategory('sobremesas');
+  const items = useCategory('sobremesas');
   return (
     <div id="cat-sobremesas" className="scroll-mt-40">
       <CategoryHeading id="sobremesas" />
@@ -320,8 +362,10 @@ function Desserts() {
 
 function BurgerPicker({ addonId, onClose }: { addonId: string | null; onClose: () => void }) {
   const ui = useUi();
+  const catalog = useCatalog();
+  const burgers = useCategory('burgers').filter((p) => !catalog.soldOut.has(p.id));
   const ref = useNativeDialog(Boolean(addonId), onClose);
-  const addon = addons.find((a) => a.id === addonId);
+  const addon = catalog.addons.find((a) => a.id === addonId);
   const [last, setLast] = useState(addon);
   if (addon && addon !== last) setLast(addon);
   const shown = addon ?? last;
@@ -343,7 +387,7 @@ function BurgerPicker({ addonId, onClose }: { addonId: string | null; onClose: (
           )}
         </div>
         <ul className="scroll-cream overflow-y-auto px-3 py-2">
-          {productsByCategory('burgers').map((p) => (
+          {burgers.map((p) => (
             <li key={p.id}>
               <button
                 type="button"

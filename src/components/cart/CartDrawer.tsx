@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { isOrderingLive, restaurant } from '@/content/restaurant';
+import { useCatalog } from '@/content/live';
 import { resolveSelections, unitPrice } from '@/lib/cart';
 import { formatBRL } from '@/lib/money';
 import { buildOrderMessage, whatsappUrl } from '@/lib/order';
@@ -47,7 +47,8 @@ function CartBody({ onClose }: { onClose: () => void }) {
 
   const hasAlcohol = cart.lines.some((l) => cart.lookup(l.productId)?.alcoholic);
   const message = useMemo(() => buildOrderMessage(cart.lines, cart.lookup, { customerName: name, note }), [cart.lines, cart.lookup, name, note]);
-  const live = isOrderingLive();
+  const whatsapp = useCatalog().restaurant.whatsappNumber;
+  const live = Boolean(whatsapp);
 
   const guard = () => {
     if (hasAlcohol && !adult) {
@@ -60,8 +61,8 @@ function CartBody({ onClose }: { onClose: () => void }) {
 
   const send = () => {
     if (!guard()) return;
-    if (live && restaurant.whatsappNumber) {
-      window.open(whatsappUrl(restaurant.whatsappNumber, message), '_blank', 'noopener');
+    if (whatsapp) {
+      window.open(whatsappUrl(whatsapp, message), '_blank', 'noopener');
     } else {
       setPreview(true);
     }
