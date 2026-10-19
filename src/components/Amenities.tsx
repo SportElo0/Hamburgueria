@@ -7,7 +7,7 @@ export function Amenities() {
     <section className="mx-auto max-w-6xl px-6 py-24 sm:px-10 sm:py-32">
       <div className="grid gap-14 lg:grid-cols-2 lg:items-center lg:gap-20">
         <Reveal className="relative order-2 aspect-[4/5] overflow-hidden rounded-sm lg:order-1">
-          <Image src="/images/quarto-verde.jpg" alt="Quarto da Pousada Villa Verano com varanda e vista para o jardim" fill sizes="(min-width: 1024px) 40vw, 90vw" className="object-cover" />
+          <Image src="/images/hero-fachada.jpg" alt="Fachada da Pousada Villa Verano ao entardecer" fill sizes="(min-width: 1024px) 40vw, 90vw" className="object-cover" />
         </Reveal>
         <Reveal delay={0.1} className="order-1 lg:order-2">
           <p className="eyebrow text-terracotta">Comodidades</p>

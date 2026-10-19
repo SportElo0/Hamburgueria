@@ -13,7 +13,7 @@ export function Rooms() {
         <div className="mt-14 grid gap-6 md:grid-cols-3">
           {ROOM_TYPES.map((room, i) => (
             <Reveal key={room.id} delay={i * 0.08}>
-              <div className="flex h-full flex-col justify-between rounded-sm border border-line bg-paper p-8">
+              <div className="flex h-full flex-col justify-between rounded-sm border border-line bg-paper p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-terracotta/40 hover:shadow-xl hover:shadow-terracotta/5">
                 <div>
                   <span className="font-display text-sm text-ink-mute">{String(i + 1).padStart(2, "0")}</span>
                   <h3 className="font-display mt-3 text-2xl leading-snug text-ink">{room.name}</h3>
