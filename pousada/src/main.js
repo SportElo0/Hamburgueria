@@ -33,17 +33,15 @@ setupRooms();
 setupLightbox();
 
 /* ---------------------------------------------------------------------------
- * Story: four scenes of a day. Each next scene waits in an arched window in the
- * middle of the screen; scrolling grows the window until it fills the screen and
- * the camera has passed through it, then the following scene's window appears.
+ * Story: four scenes of a day, pinned while the visitor scrolls. Each next photo
+ * rises from the bottom and covers the last one, like turning a page, while the
+ * previous photo drifts up and the copy hands over.
  * ------------------------------------------------------------------------- */
 function setupStory() {
   const story = document.querySelector('[data-story]');
   const stage = story.querySelector('.story-stage');
   const scenes = [...story.querySelectorAll('.scene')].map((el) => ({
-    el,
     photo: el.querySelector('.scene-photo'),
-    frame: el.querySelector('.scene-frame'),
     img: el.querySelector('img'),
   }));
   const titles = [...story.querySelectorAll('[data-title]')];
@@ -51,33 +49,7 @@ function setupStory() {
   const dots = [...story.querySelectorAll('[data-dot]')];
   const counter = story.querySelector('[data-counter]');
   const hint = story.querySelector('[data-hint]');
-  const portal = story.querySelector('[data-portal]');
   const steps = scenes.length - 1;
-  const NAMES = ['a chegada', 'a manhã', 'a tarde', 'a estadia'];
-  const JAMB = 10; // px of lime-washed frame around the window
-
-  const arch = () => {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const mobile = vw < 960;
-    const w = mobile ? Math.min(vw * 0.56, 250) : Math.min(vw * 0.22, 380);
-    const h = mobile ? Math.min(vh * 0.4, w * 1.6) : Math.min(vh * 0.6, w * 1.68);
-    const left = (vw - w) / 2;
-    const top = mobile ? vh * 0.19 : (vh - h) / 2 - vh * 0.03;
-    return { w, h, left, top, right: vw - left - w, bottom: vh - top - h };
-  };
-  const windowClip = (grow = 0) => {
-    const a = arch();
-    const r = a.w / 2 + grow;
-    return `inset(${a.top - grow}px ${a.right - grow}px ${a.bottom}px ${a.left - grow}px round ${r}px ${r}px 0px 0px)`;
-  };
-  const FULL = 'inset(0px 0px 0px 0px round 0px 0px 0px 0px)';
-  const FULL_FRAME = `inset(${-JAMB}px ${-JAMB}px 0px ${-JAMB}px round 0px 0px 0px 0px)`;
-
-  const placePortal = () => {
-    const a = arch();
-    Object.assign(portal.style, { left: `${a.left}px`, top: `${a.top}px`, width: `${a.w}px`, height: `${a.h}px` });
-  };
 
   gsap.set(titles.slice(1), { autoAlpha: 0 });
   gsap.set(lines.slice(1), { autoAlpha: 0 });
@@ -87,28 +59,17 @@ function setupStory() {
     const t = i - 1;
     const cur = scenes[i];
     const prev = scenes[i - 1];
-    // the window grows to the full screen while the photo inside settles from a close-up
-    tl.fromTo(cur.photo, { clipPath: () => windowClip() }, { clipPath: FULL, duration: 1, ease: 'power2.inOut' }, t);
-    tl.fromTo(cur.frame, { clipPath: () => windowClip(JAMB) }, { clipPath: FULL_FRAME, duration: 1, ease: 'power2.inOut' }, t);
-    tl.fromTo(cur.img, { scale: 1.35 }, { scale: 1, duration: 1, ease: 'power2.out' }, t);
-    // the scene we are leaving pushes towards the camera
-    tl.to(prev.img, { scale: 1.18, duration: 1, ease: 'power2.in' }, t);
-    // copy hands over halfway through
+    tl.fromTo(cur.photo, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1, ease: 'power2.inOut' }, t);
+    tl.fromTo(cur.img, { scale: 1.18, yPercent: 6 }, { scale: 1, yPercent: 0, duration: 1, ease: 'power2.out' }, t);
+    tl.to(prev.img, { yPercent: -10, scale: 1.06, duration: 1, ease: 'power2.inOut' }, t);
     tl.to([titles[i - 1], lines[i - 1]], { yPercent: -18, autoAlpha: 0, duration: 0.3, ease: 'power2.in' }, t + 0.05);
     tl.fromTo([titles[i], lines[i]], { yPercent: 18, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.35, ease: 'power3.out' }, t + 0.6);
-    // the following scene's window rises into place once this one has opened
-    if (i < steps) {
-      tl.fromTo(scenes[i + 1].el, { autoAlpha: 0, scale: 0.86, transformOrigin: '50% 75%' }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'power3.out' }, t + 0.7);
-    }
   }
 
   const setActive = (index) => {
     counter.textContent = String(index + 1).padStart(2, '0');
     dots.forEach((d, i) => d.setAttribute('aria-current', String(i === index)));
-    const last = index === steps;
-    portal.hidden = last;
-    portal.setAttribute('aria-label', last ? '' : `Atravessar para ${NAMES[index + 1]}`);
-    hint.textContent = last ? 'Role para conhecer os quartos' : 'Role para atravessar o dia';
+    hint.textContent = index === steps ? 'Role para conhecer os quartos' : 'Role para ver o dia na pousada';
   };
 
   const length = () => window.innerHeight * steps * (window.innerWidth < 960 ? 0.85 : 1.1);
@@ -122,7 +83,6 @@ function setupStory() {
     invalidateOnRefresh: true,
     snap: { snapTo: 1 / steps, inertia: false, duration: { min: 0.25, max: 0.7 }, delay: 0.12, ease: 'power2.inOut' },
     onUpdate: (self) => setActive(Math.round(self.progress * steps)),
-    onRefresh: placePortal,
   });
 
   // the nav gains a backdrop once the story has been passed
@@ -132,14 +92,10 @@ function setupStory() {
     onToggle: (self) => nav.classList.toggle('is-solid', self.isActive),
   });
 
-  const goTo = (index) => {
-    const y = st.start + (st.end - st.start) * (index / steps);
-    window.scrollTo({ top: y, behavior: 'smooth' });
-  };
-  portal.addEventListener('click', () => goTo(Math.min(steps, Math.round(st.progress * steps) + 1)));
-  dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+  dots.forEach((d, i) => d.addEventListener('click', () => {
+    window.scrollTo({ top: st.start + (st.end - st.start) * (i / steps), behavior: 'smooth' });
+  }));
 
-  placePortal();
   setActive(0);
   // photos below the fold finish loading after the first layout; measure again then
   window.addEventListener('load', () => ScrollTrigger.refresh());
