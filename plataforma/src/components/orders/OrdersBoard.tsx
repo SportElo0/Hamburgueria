@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import type { StaffOrder } from '@/app/api/loja/[slug]/pedidos/route';
-import { orderAction, setOpenAction } from '@/app/loja/[slug]/actions';
+import { orderAction, setOpenAction, setSoldOutAction } from '@/app/loja/[slug]/actions';
 import { STATUS_LABEL, brl, type OperatorAction, type OrderStatus } from '@/lib/ordering';
 import type { Operation } from '@/lib/orders';
 
@@ -48,7 +48,21 @@ function useBell() {
   return { armed, arm, ring };
 }
 
-export function OrdersBoard(props: { slug: string; storeName: string; enabled: boolean; userName: string; team: boolean; logout: () => Promise<void> }) {
+export interface MenuForStaff {
+  id: string;
+  name: string;
+  items: { id: string; name: string }[];
+}
+
+export function OrdersBoard(props: {
+  slug: string;
+  storeName: string;
+  enabled: boolean;
+  userName: string;
+  team: boolean;
+  menu: MenuForStaff[];
+  logout: () => Promise<void>;
+}) {
   const [orders, setOrders] = useState<StaffOrder[] | null>(null);
   const [operation, setOperation] = useState<Operation | null>(null);
   const [error, setError] = useState('');
@@ -110,6 +124,17 @@ export function OrdersBoard(props: { slug: string; storeName: string; enabled: b
       await load();
     });
 
+  const [menuOpen, setMenuOpen] = useState(false);
+  const toggleSoldOut = (itemId: string, out: boolean) => {
+    // Flip the switch now; the transition below would hold the update until the server answers.
+    setOperation((op) => (op ? { ...op, soldOut: out ? [...op.soldOut, itemId] : op.soldOut.filter((x) => x !== itemId) } : op));
+    startTransition(async () => {
+      const res = await setSoldOutAction(props.slug, itemId, out);
+      if (!res.ok) setError(res.error ?? 'Não foi possível atualizar.');
+      await load();
+    });
+  };
+
   const toggleOpen = () =>
     startTransition(async () => {
       bell.arm();
@@ -146,6 +171,12 @@ export function OrdersBoard(props: { slug: string; storeName: string; enabled: b
             <button type="button" onClick={bell.arm} className={`btn min-h-11 border ${bell.armed ? 'border-line bg-white text-ink-mute' : 'border-warn bg-warn text-white'}`}>
               {bell.armed ? 'Som ligado' : 'Ativar som dos pedidos'}
             </button>
+            <button type="button" onClick={() => setMenuOpen(true)} className="btn-ghost min-h-11">
+              Esgotados{operation?.soldOut.length ? ` (${operation.soldOut.length})` : ''}
+            </button>
+            <a href={`/loja/${props.slug}/relatorio`} className="btn-ghost min-h-11">
+              Relatório
+            </a>
             {props.team && (
               <a href={`/painel/lojas/${props.slug}?aba=online`} className="btn-ghost min-h-11">
                 Configurar
@@ -202,7 +233,7 @@ export function OrdersBoard(props: { slug: string; storeName: string; enabled: b
                 ) : byColumn(c.id).length === 0 ? (
                   <p className="rounded-xl border border-dashed border-line p-4 text-sm text-ink-mute">{c.id === 'novos' ? 'Nenhum pedido esperando. Os novos tocam um alerta.' : 'Nada aqui.'}</p>
                 ) : (
-                  byColumn(c.id).map((o) => <OrderCard key={o.id} order={o} onAction={act} onPrint={() => setPrinting(o)} />)
+                  byColumn(c.id).map((o) => <OrderCard key={o.id} order={o} storeName={props.storeName} onAction={act} onPrint={() => setPrinting(o)} />)
                 )}
               </div>
             </section>
@@ -212,6 +243,7 @@ export function OrdersBoard(props: { slug: string; storeName: string; enabled: b
       </div>
 
       {printing && <Ticket order={printing} storeName={props.storeName} />}
+      {menuOpen && <SoldOutSheet menu={props.menu} soldOut={operation?.soldOut ?? []} onToggle={toggleSoldOut} onClose={() => setMenuOpen(false)} />}
     </div>
   );
 }
@@ -233,7 +265,65 @@ function PaymentBadge({ o }: { o: StaffOrder }) {
   return <span className="chip bg-accent-soft text-accent">Dinheiro{changeFor ? ` · troco p/ ${brl(changeFor)}` : ' · sem troco'}</span>;
 }
 
-function OrderCard({ order: o, onAction, onPrint }: { order: StaffOrder; onAction: (o: StaffOrder, a: OperatorAction, reason?: string) => void; onPrint: () => void }) {
+/** Quick sold-out switches for service; the site hides the item within seconds, no publish needed. */
+function SoldOutSheet({ menu, soldOut, onToggle, onClose }: { menu: MenuForStaff[]; soldOut: string[]; onToggle: (id: string, out: boolean) => void; onClose: () => void }) {
+  return (
+    <div role="dialog" aria-modal="true" aria-labelledby="esgotados-title" className="fixed inset-0 z-40 flex justify-end bg-ink/40 print:hidden" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="flex h-full w-full max-w-md flex-col bg-paper shadow-2xl">
+        <div className="flex items-center justify-between border-b border-line px-5 py-4">
+          <div>
+            <h2 id="esgotados-title" className="text-lg font-bold">
+              Esgotados
+            </h2>
+            <p className="text-sm text-ink-mute">Marcou, sai do site na hora. Desmarque quando voltar.</p>
+          </div>
+          <button type="button" className="btn-ghost" onClick={onClose}>
+            Fechar
+          </button>
+        </div>
+        <div className="flex-1 space-y-5 overflow-y-auto px-5 py-4">
+          {menu.map((c) => (
+            <section key={c.id}>
+              <h3 className="text-xs font-bold tracking-wide text-ink-mute uppercase">{c.name}</h3>
+              <ul className="mt-2 divide-y divide-line rounded-lg border border-line bg-white">
+                {c.items.map((i) => {
+                  const out = soldOut.includes(i.id);
+                  return (
+                    <li key={i.id}>
+                      <label className="flex min-h-12 cursor-pointer items-center justify-between gap-3 px-3">
+                        <span className={`text-[15px] ${out ? 'text-ink-mute line-through' : ''}`}>{i.name}</span>
+                        <span className="flex items-center gap-2 text-sm font-semibold">
+                          {out ? <span className="text-bad">Esgotado</span> : <span className="text-ok">Disponível</span>}
+                          <input type="checkbox" className="h-5 w-5 accent-bad" checked={out} onChange={(e) => onToggle(i.id, e.target.checked)} aria-label={`${i.name} esgotado`} />
+                        </span>
+                      </label>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Pre-written WhatsApp message for the order's current step. */
+function notifyText(o: StaffOrder, storeName: string) {
+  const first = o.customer.name.split(' ')[0];
+  const by = {
+    preparo: `seu pedido #${o.number} foi aceito e já está sendo preparado. 🔥`,
+    saiu: `seu pedido #${o.number} saiu para entrega! 🛵`,
+    pronto: `seu pedido #${o.number} está pronto para retirar no balcão. ✅`,
+    concluido: `obrigado pelo pedido #${o.number}! Bom apetite. 🍔`,
+    recusado: `infelizmente não conseguimos fazer o pedido #${o.number}${o.reason ? ` (${o.reason})` : ''}.${o.payment.status === 'devolvido' || o.payment.status === 'devolver' ? ' O valor do Pix será devolvido.' : ''}`,
+  } as Partial<Record<OrderStatus, string>>;
+  const body = by[o.status];
+  return body ? `Olá, ${first}! Aqui é do ${storeName}: ${body}` : null;
+}
+
+function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrder; storeName: string; onAction: (o: StaffOrder, a: OperatorAction, reason?: string) => void; onPrint: () => void }) {
   const [refusing, setRefusing] = useState(false);
   const [reason, setReason] = useState('');
   const highlight = o.status === 'novo';
@@ -289,6 +379,12 @@ function OrderCard({ order: o, onAction, onPrint }: { order: StaffOrder; onActio
         </ul>
         {o.note && <p className="rounded-lg bg-accent-soft px-3 py-2 font-semibold text-accent">Obs. do pedido: {o.note}</p>}
         <dl className="space-y-0.5">
+          {o.discount > 0 && (
+            <div className="flex justify-between text-ok">
+              <dt>Cupom {o.coupon}</dt>
+              <dd className="tabular-nums">− {brl(o.discount)}</dd>
+            </div>
+          )}
           {o.mode === 'entrega' && (
             <div className="flex justify-between text-ink-mute">
               <dt>Entrega</dt>
@@ -301,6 +397,16 @@ function OrderCard({ order: o, onAction, onPrint }: { order: StaffOrder; onActio
           </div>
         </dl>
         {o.status === 'recusado' && o.reason && <p className="text-bad">Motivo: {o.reason}</p>}
+        {notifyText(o, storeName) && (
+          <a
+            href={`https://wa.me/55${o.customer.phone}?text=${encodeURIComponent(notifyText(o, storeName)!)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn min-h-10 w-full border border-ok/40 bg-ok/5 text-ok hover:bg-ok hover:text-white print:hidden"
+          >
+            Avisar o cliente no WhatsApp
+          </a>
+        )}
         {o.payment.status === 'devolver' && (
           <p className="rounded-lg bg-bad px-3 py-2 font-semibold text-white">A devolução automática do Pix falhou. Devolva o valor pelo app do Mercado Pago.</p>
         )}
@@ -399,6 +505,7 @@ function Ticket({ order: o, storeName }: { order: StaffOrder; storeName: string 
       ))}
       {o.note && <p>OBS DO PEDIDO: {o.note}</p>}
       <hr />
+      {o.discount > 0 && <p>Cupom {o.coupon}: - {brl(o.discount)}</p>}
       {o.mode === 'entrega' && <p>Entrega: {o.feePending ? 'a combinar' : brl(o.deliveryFee)}</p>}
       <p style={{ fontSize: '16px', fontWeight: 800 }}>TOTAL: {brl(o.total)}</p>
       <p>

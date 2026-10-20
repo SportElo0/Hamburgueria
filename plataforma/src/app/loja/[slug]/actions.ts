@@ -1,7 +1,7 @@
 'use server';
 
 import { requireStoreAccess } from '@/lib/auth';
-import { ActionError, applyAction, setOpen } from '@/lib/orders';
+import { ActionError, applyAction, setOpen, setSoldOut } from '@/lib/orders';
 import { OPERATOR_ACTIONS, type OperatorAction } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
 
@@ -27,5 +27,12 @@ export async function setOpenAction(slug: string, open: boolean): Promise<OrderA
   if (!isSlug(slug)) return { ok: false, error: 'Loja inválida.' };
   const user = await requireStoreAccess(slug);
   await setOpen(slug, open, user.name || user.email);
+  return { ok: true };
+}
+
+export async function setSoldOutAction(slug: string, itemId: string, soldOut: boolean): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !/^[\w-]{1,40}$/.test(itemId)) return { ok: false, error: 'Item inválido.' };
+  const user = await requireStoreAccess(slug);
+  await setSoldOut(slug, itemId, soldOut, user.name || user.email);
   return { ok: true };
 }

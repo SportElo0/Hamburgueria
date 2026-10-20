@@ -102,7 +102,8 @@ function subscribe(fn: () => void) {
 export function loadLiveCatalog(url = CATALOG_URL) {
   if (started || !url) return;
   started = true;
-  fetch(url, { signal: AbortSignal.timeout(6000) })
+  // no-cache: revalidate instead of serving a stale copy, so panel changes show on the next load.
+  fetch(url, { cache: 'no-cache', signal: AbortSignal.timeout(6000) })
     .then((r) => (r.ok ? r.json() : null))
     .then((data) => {
       const next = mergeLive(data);

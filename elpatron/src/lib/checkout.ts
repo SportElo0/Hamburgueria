@@ -13,6 +13,7 @@ export interface CheckoutInput {
   payment: PaymentMethod;
   changeFor: number | null;
   note: string;
+  coupon: string;
 }
 
 export type OrderStatus = 'aguardando-pix' | 'novo' | 'preparo' | 'saiu' | 'pronto' | 'concluido' | 'recusado' | 'expirado';
@@ -38,6 +39,8 @@ export interface TrackedOrder {
   subtotal: number;
   deliveryFee: number;
   feePending: boolean;
+  discount: number;
+  coupon: string;
   total: number;
   note: string;
   reason: string;
@@ -68,6 +71,7 @@ export async function placeOrder(input: CheckoutInput): Promise<{ id: string; to
     payment: input.payment,
     changeFor: input.changeFor,
     note: input.note,
+    coupon: input.coupon,
   };
   const placed = await call<{ id: string; token: string; order: TrackedOrder }>(ORDERS_URL, {
     method: 'POST',
@@ -89,6 +93,15 @@ export function simulatePix(id: string, token: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: 'simular-pix', token }),
+  });
+}
+
+/** Checks a coupon against the items' subtotal; the panel applies it again when the order is placed. */
+export function previewCoupon(code: string, subtotal: number) {
+  return call<{ code: string; discount: number; label: string }>(`${ORDERS_URL}/cupom`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code, subtotal }),
   });
 }
 

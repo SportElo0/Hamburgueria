@@ -11,6 +11,7 @@ import {
   orderInputSchema,
   orderingOf,
   priceOrder,
+  withSoldOut,
   publicOrder,
   type OperatorAction,
   type Order,
@@ -36,19 +37,40 @@ export { OrderError };
 
 export interface Operation {
   open: boolean;
+  /** Item ids sold out right now (set from the store's screen, no publish). */
+  soldOut: string[];
   updatedAt: string | null;
   updatedBy: string;
 }
 
 export async function getOperation(slug: string): Promise<Operation> {
-  const doc = await storage().readJSON<Operation>(opKey(slug));
-  return doc?.data ?? { open: false, updatedAt: null, updatedBy: '' };
+  const doc = await storage().readJSON<Partial<Operation>>(opKey(slug));
+  return { open: false, soldOut: [], updatedAt: null, updatedBy: '', ...(doc?.data ?? {}) };
 }
 
-export async function setOpen(slug: string, open: boolean, by: string): Promise<Operation> {
-  const op: Operation = { open, updatedAt: new Date().toISOString(), updatedBy: by };
-  await storage().writeJSON(opKey(slug), op);
-  return op;
+async function updateOperation(slug: string, by: string, fn: (op: Operation) => Partial<Operation>): Promise<Operation> {
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const doc = await storage().readJSON<Partial<Operation>>(opKey(slug));
+    const current: Operation = { open: false, soldOut: [], updatedAt: null, updatedBy: '', ...(doc?.data ?? {}) };
+    const next: Operation = { ...current, ...fn(current), updatedAt: new Date().toISOString(), updatedBy: by };
+    try {
+      await storage().writeJSON(opKey(slug), next, doc ? doc.etag : null);
+      return next;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 3) throw err;
+    }
+  }
+  throw new ConflictError();
+}
+
+export function setOpen(slug: string, open: boolean, by: string): Promise<Operation> {
+  return updateOperation(slug, by, () => ({ open }));
+}
+
+export function setSoldOut(slug: string, itemId: string, soldOut: boolean, by: string): Promise<Operation> {
+  return updateOperation(slug, by, (op) => ({
+    soldOut: soldOut ? [...new Set([...op.soldOut, itemId])].slice(-300) : op.soldOut.filter((x) => x !== itemId),
+  }));
 }
 
 function random(chars: number) {
@@ -128,10 +150,11 @@ export interface Placed {
 export async function placeOrder(slug: string, raw: unknown, origin: string, now = new Date()): Promise<Placed> {
   const record = await getPublished(slug);
   if (!record) throw new OrderError('Loja não encontrada.');
-  const store = record.store;
+  const operation = await getOperation(slug);
+  const store = withSoldOut(record.store, operation.soldOut);
   const ordering = orderingOf(store);
   if (!ordering.enabled) throw new OrderError('Esta loja não está recebendo pedidos pelo site.');
-  if (!(await getOperation(slug)).open) throw new OrderError('A loja está fechada agora. Tente de novo no horário de funcionamento.');
+  if (!operation.open) throw new OrderError('A loja está fechada agora. Tente de novo no horário de funcionamento.');
 
   const parsed = orderInputSchema.safeParse(raw);
   if (!parsed.success) throw new OrderError(messageOf(parsed.error));
@@ -189,6 +212,8 @@ export async function placeOrder(slug: string, raw: unknown, origin: string, now
     subtotal: priced.subtotal,
     deliveryFee: priced.deliveryFee,
     feePending: priced.feePending,
+    discount: priced.discount,
+    coupon: priced.coupon,
     total: priced.total,
     note: input.note,
     reason: '',
@@ -212,6 +237,12 @@ export async function listOrders(slug: string, now = new Date()): Promise<Order[
   return [...open, ...(t?.data ?? [])]
     .map((o) => ({ ...o, status: effectiveStatus(o, stamp) }))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+/** The last `count` days of orders, oldest first, for the sales report. */
+export async function ordersForDays(slug: string, count: number, now = new Date()) {
+  const days = Array.from({ length: count }, (_, i) => dayOf(new Date(now.getTime() - (count - 1 - i) * 86_400_000)));
+  return Promise.all(days.map(async (day) => ({ day, orders: (await readDay(slug, day))?.data ?? [] })));
 }
 
 /** Marks a Pix order paid once the provider (never the browser) has confirmed it. */

@@ -21,6 +21,24 @@ export type DeliveryArea = z.infer<typeof deliveryAreaSchema>;
 
 export const PIX_MODES = ['demo', 'mercadopago'] as const;
 
+export const couponSchema = z.object({
+  /** What the customer types; stored upper-case. */
+  code: z
+    .string()
+    .trim()
+    .transform((v) => v.toUpperCase())
+    .pipe(z.string().regex(/^[A-Z0-9]{3,20}$/, 'Cupom: 3 a 20 letras ou números, sem espaço.')),
+  type: z.enum(['percent', 'fixed']),
+  /** Percent (1–100) or centavos. */
+  value: z.number().int().min(1).max(1_000_000),
+  /** Centavos on the items' subtotal. */
+  minOrder: z.number().int().min(0).max(1_000_000),
+  active: z.boolean(),
+  /** Last day it works (YYYY-MM-DD, São Paulo), or '' for no end. */
+  until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).or(z.literal('')),
+});
+export type Coupon = z.infer<typeof couponSchema>;
+
 export const orderingSchema = z.object({
   /** Orders go to the panel instead of WhatsApp. */
   enabled: z.boolean(),
@@ -37,6 +55,7 @@ export const orderingSchema = z.object({
   cash: z.boolean(),
   /** `demo` makes a practice Pix that the tracking page can mark as paid; nothing is charged. */
   pixMode: z.enum(PIX_MODES),
+  coupons: z.array(couponSchema).max(50).default([]),
 });
 export type Ordering = z.infer<typeof orderingSchema>;
 
@@ -51,6 +70,7 @@ export const DEFAULT_ORDERING: Ordering = {
   card: true,
   cash: true,
   pixMode: 'demo',
+  coupons: [],
 };
 
 /** Stores saved before online ordering existed have no settings yet. */
@@ -70,6 +90,8 @@ export function publicOrdering(o: Ordering, open: boolean) {
     eta: o.eta,
     payments: { pix: o.pix, card: o.card, cash: o.cash },
     pixDemo: o.pixMode === 'demo',
+    /** Only whether a coupon field is worth showing; the codes stay on the server. */
+    coupons: o.coupons.some((c) => c.active),
   };
 }
 
@@ -112,6 +134,7 @@ export const orderInputSchema = z.object({
   /** Cash: the note the customer will pay with, so the driver brings change. */
   changeFor: z.number().int().min(0).max(1_000_000).nullable().default(null),
   note: text(200).default(''),
+  coupon: text(20).default(''),
   /** Honeypot: people never see it, bots fill it. */
   website: z.string().max(0).optional(),
 });
@@ -179,6 +202,9 @@ export interface Order {
   deliveryFee: number;
   /** No neighbourhood list: the store confirms the fee by phone. */
   feePending: boolean;
+  /** Centavos off the items, from a coupon. */
+  discount: number;
+  coupon: string;
   total: number;
   note: string;
   reason: string;
@@ -205,8 +231,23 @@ export interface Priced {
   subtotal: number;
   deliveryFee: number;
   feePending: boolean;
+  discount: number;
+  coupon: string;
   total: number;
   areaName: string;
+}
+
+const TZ = 'America/Sao_Paulo';
+export const todaySP = (d = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+
+/** The discount a coupon gives on this subtotal. Throws OrderError when it does not apply. */
+export function applyCoupon(o: Ordering, code: string, subtotal: number, today = todaySP()): { code: string; discount: number } {
+  const wanted = code.trim().toUpperCase();
+  const c = o.coupons.find((x) => x.code === wanted);
+  if (!c || !c.active || (c.until && c.until < today)) throw new OrderError('Cupom inválido ou vencido.');
+  if (subtotal < c.minOrder) throw new OrderError(`Esse cupom vale para pedidos a partir de ${brl(c.minOrder)}.`);
+  const discount = c.type === 'percent' ? Math.round((subtotal * Math.min(c.value, 100)) / 100) : Math.min(c.value, subtotal);
+  return { code: c.code, discount };
 }
 
 /** Prices a parsed order against the published catalogue and the store's ordering rules. Throws OrderError with a message for the customer. */
@@ -258,14 +299,15 @@ export function priceOrder(store: Store, input: ParsedOrderInput): Priced {
     throw new OrderError('Esta loja só está fazendo entregas agora.');
   }
 
-  const total = subtotal + deliveryFee;
+  const { code: coupon, discount } = input.coupon ? applyCoupon(o, input.coupon, subtotal) : { code: '', discount: 0 };
+  const total = subtotal - discount + deliveryFee;
   const allowed = { pix: o.pix, cartao: o.card, dinheiro: o.cash }[input.payment];
   if (!allowed) throw new OrderError('Essa forma de pagamento não está disponível nesta loja.');
   if (input.payment === 'pix' && feePending) throw new OrderError('Para pagar por Pix, a taxa de entrega precisa estar definida. Escolha pagar na entrega.');
   if (input.payment === 'dinheiro' && input.changeFor !== null && input.changeFor < total) {
     throw new OrderError('O valor para troco precisa ser maior que o total do pedido.');
   }
-  return { lines, subtotal, deliveryFee, feePending, total, areaName };
+  return { lines, subtotal, deliveryFee, feePending, discount, coupon, total, areaName };
 }
 
 export function brl(cents: number) {
@@ -326,9 +368,118 @@ export function publicOrder(order: Order, now = Date.now()) {
     subtotal: order.subtotal,
     deliveryFee: order.deliveryFee,
     feePending: order.feePending,
+    discount: order.discount ?? 0,
+    coupon: order.coupon ?? '',
     total: order.total,
     note: order.note,
     reason: status === 'recusado' ? order.reason : '',
   };
 }
 export type PublicOrder = ReturnType<typeof publicOrder>;
+
+/** Items the store marked sold out during service (no publish needed) apply on top of the published catalogue. */
+export function withSoldOut<T extends Store>(store: T, soldOut: readonly string[]): T {
+  if (!soldOut.length) return store;
+  const out = new Set(soldOut);
+  return {
+    ...store,
+    catalog: {
+      categories: store.catalog.categories.map((c) => ({ ...c, items: c.items.map((i) => (out.has(i.id) ? { ...i, available: false } : i)) })),
+    },
+  };
+}
+
+/** Accepted by the store: these count as sales. */
+export const SOLD_STATUSES: OrderStatus[] = ['preparo', 'saiu', 'pronto', 'concluido'];
+
+interface Tally {
+  orders: number;
+  revenue: number;
+}
+const tally = (): Tally => ({ orders: 0, revenue: 0 });
+
+export interface SalesReport {
+  days: (Tally & { day: string })[];
+  orders: number;
+  revenue: number;
+  average: number;
+  discounts: number;
+  deliveryFees: number;
+  byPayment: Record<PaymentMethod, Tally>;
+  byMode: Record<Order['mode'], Tally>;
+  /** Orders per hour of the day (São Paulo), 0–23. */
+  byHour: number[];
+  topItems: { name: string; quantity: number; revenue: number }[];
+  coupons: { code: string; orders: number; discount: number }[];
+  customers: number;
+  returning: number;
+  refused: number;
+  /** Pix never paid. */
+  abandoned: number;
+}
+
+const hourSP = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour: '2-digit', hourCycle: 'h23' });
+
+/** Sales over the given days (oldest first), from each day's order document. */
+export function salesReport(days: { day: string; orders: Order[] }[], now = Date.now()): SalesReport {
+  const r: SalesReport = {
+    days: [],
+    orders: 0,
+    revenue: 0,
+    average: 0,
+    discounts: 0,
+    deliveryFees: 0,
+    byPayment: { pix: tally(), cartao: tally(), dinheiro: tally() },
+    byMode: { entrega: tally(), retirada: tally() },
+    byHour: Array.from({ length: 24 }, () => 0),
+    topItems: [],
+    coupons: [],
+    customers: 0,
+    returning: 0,
+    refused: 0,
+    abandoned: 0,
+  };
+  const items = new Map<string, { name: string; quantity: number; revenue: number }>();
+  const coupons = new Map<string, { code: string; orders: number; discount: number }>();
+  const phones = new Map<string, number>();
+  for (const { day, orders } of days) {
+    const d = { day, ...tally() };
+    for (const o of orders) {
+      const status = effectiveStatus(o, now);
+      if (status === 'recusado') r.refused++;
+      if (status === 'expirado') r.abandoned++;
+      if (!SOLD_STATUSES.includes(status)) continue;
+      d.orders++;
+      d.revenue += o.total;
+      r.discounts += o.discount ?? 0;
+      r.deliveryFees += o.deliveryFee;
+      r.byPayment[o.payment.method].orders++;
+      r.byPayment[o.payment.method].revenue += o.total;
+      r.byMode[o.mode].orders++;
+      r.byMode[o.mode].revenue += o.total;
+      r.byHour[Number(hourSP.format(new Date(o.createdAt))) % 24]++;
+      phones.set(o.customer.phone, (phones.get(o.customer.phone) ?? 0) + 1);
+      for (const l of o.lines) {
+        const it = items.get(l.productId) ?? { name: l.name, quantity: 0, revenue: 0 };
+        it.quantity += l.quantity;
+        it.revenue += l.total;
+        items.set(l.productId, it);
+      }
+      if (o.coupon) {
+        const c = coupons.get(o.coupon) ?? { code: o.coupon, orders: 0, discount: 0 };
+        c.orders++;
+        c.discount += o.discount ?? 0;
+        coupons.set(o.coupon, c);
+      }
+    }
+    r.days.push(d);
+    r.orders += d.orders;
+    r.revenue += d.revenue;
+  }
+  r.average = r.orders ? Math.round(r.revenue / r.orders) : 0;
+  r.topItems = [...items.values()].sort((a, b) => b.quantity - a.quantity || b.revenue - a.revenue).slice(0, 10);
+  r.coupons = [...coupons.values()].sort((a, b) => b.orders - a.orders);
+  r.customers = phones.size;
+  r.returning = [...phones.values()].filter((n) => n > 1).length;
+  return r;
+}

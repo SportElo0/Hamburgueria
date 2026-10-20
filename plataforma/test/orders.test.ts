@@ -5,8 +5,8 @@ import fs from 'node:fs';
 import { storage, useFileStorage } from '@/lib/storage';
 import { seedStores } from '@/lib/seeds';
 import { storeSchema, toPublic, type Store, type StoreRecord } from '@/lib/schema';
-import { DEFAULT_ORDERING, nextStatus, orderInputSchema, priceOrder, type OrderInput } from '@/lib/ordering';
-import { ActionError, OrderError, applyAction, getOrder, listOrders, placeOrder, setOpen, simulateDemoPayment, trackOrder } from '@/lib/orders';
+import { DEFAULT_ORDERING, applyCoupon, nextStatus, orderInputSchema, orderingSchema, priceOrder, publicOrdering, salesReport, type OrderInput } from '@/lib/ordering';
+import { ActionError, OrderError, applyAction, getOperation, getOrder, listOrders, ordersForDays, placeOrder, setOpen, setSoldOut, simulateDemoPayment, trackOrder } from '@/lib/orders';
 import { authenticateOperator, removeOperator, upsertOperator } from '@/lib/operators';
 
 const SLUG = 'el-patron-burger';
@@ -206,5 +206,77 @@ describe('acesso da loja', () => {
     await expect(upsertOperator('outra-loja', { email: 'caixa@elpatron.com', name: '' }, 'equipe')).rejects.toThrow(/outra loja/);
     await removeOperator(SLUG, 'caixa@elpatron.com');
     expect(await authenticateOperator('caixa@elpatron.com', pass2)).toBeNull();
+  });
+});
+
+describe('cupom, esgotado e relatório', () => {
+  const coupons = [
+    { code: 'PATRON10', type: 'percent' as const, value: 10, minOrder: 5000, active: true, until: '' },
+    { code: 'MENOS5', type: 'fixed' as const, value: 500, minOrder: 0, active: true, until: '2020-01-01' },
+    { code: 'PAUSADO', type: 'fixed' as const, value: 500, minOrder: 0, active: false, until: '' },
+  ];
+
+  it('normaliza o código e valida o cupom', () => {
+    const o = orderingSchema.parse({ ...DEFAULT_ORDERING, coupons: [{ ...coupons[0], code: ' patron10 ' }] });
+    expect(o.coupons[0].code).toBe('PATRON10');
+    expect(() => orderingSchema.parse({ ...DEFAULT_ORDERING, coupons: [{ ...coupons[0], code: 'com espaço' }] })).toThrow();
+    const ord = orderingSchema.parse({ ...DEFAULT_ORDERING, coupons });
+    expect(applyCoupon(ord, 'patron10', 12000, '2026-10-20')).toEqual({ code: 'PATRON10', discount: 1200 });
+    expect(() => applyCoupon(ord, 'PATRON10', 4000, '2026-10-20')).toThrow(/a partir de/);
+    expect(() => applyCoupon(ord, 'MENOS5', 4000, '2026-10-20')).toThrow(/vencido/);
+    expect(() => applyCoupon(ord, 'PAUSADO', 4000, '2026-10-20')).toThrow(/vencido/);
+    expect(() => applyCoupon(ord, 'NADA', 4000, '2026-10-20')).toThrow(/vencido/);
+    // The public catalogue only says whether a coupon exists, never the codes.
+    expect(publicOrdering(ord, true).coupons).toBe(true);
+    expect(JSON.stringify(publicOrdering(ord, true))).not.toContain('PATRON10');
+  });
+
+  it('o pedido sai com o desconto calculado no servidor', async () => {
+    await publishStore(elPatron({ coupons }));
+    await setOpen(SLUG, true, 'teste');
+    const { order } = await placeOrder(SLUG, base({ coupon: 'patron10' }), ORIGIN);
+    const subtotal = 5498 + 6598;
+    expect(order.discount).toBe(Math.round(subtotal * 0.1));
+    expect(order.coupon).toBe('PATRON10');
+    expect(order.total).toBe(subtotal - order.discount);
+    await expect(placeOrder(SLUG, base({ coupon: 'NADA' }), ORIGIN)).rejects.toThrow(/Cupom/);
+  });
+
+  it('esgotado com um toque some do site e trava o pedido, sem publicar de novo', async () => {
+    await publishStore(elPatron());
+    await setOpen(SLUG, true, 'teste');
+    await setSoldOut(SLUG, 'el-patron', true, 'caixa');
+    expect((await getOperation(SLUG)).soldOut).toEqual(['el-patron']);
+    await expect(placeOrder(SLUG, base(), ORIGIN)).rejects.toThrow(/esgotado/);
+    await setSoldOut(SLUG, 'el-patron', false, 'caixa');
+    expect((await getOperation(SLUG)).open).toBe(true);
+    await expect(placeOrder(SLUG, base(), ORIGIN)).resolves.toBeTruthy();
+  });
+
+  it('relatório soma só os pedidos aceitos', async () => {
+    await publishStore(elPatron({ coupons }));
+    await setOpen(SLUG, true, 'teste');
+    const a = await placeOrder(SLUG, base({ coupon: 'PATRON10' }), ORIGIN);
+    const b = await placeOrder(SLUG, base({ payment: 'dinheiro' }), ORIGIN);
+    const c = await placeOrder(SLUG, base({ customer: { name: 'Bia', phone: '11977776666' } }), ORIGIN);
+    await placeOrder(SLUG, base(), ORIGIN); // still waiting: not a sale yet
+    await applyAction(SLUG, a.order.id, 'aceitar', 'caixa');
+    await applyAction(SLUG, b.order.id, 'aceitar', 'caixa');
+    await applyAction(SLUG, c.order.id, 'recusar', 'caixa', 'acabou o pão');
+    const days = await ordersForDays(SLUG, 7);
+    expect(days).toHaveLength(7);
+    const r = salesReport(days);
+    expect(r.orders).toBe(2);
+    expect(r.revenue).toBe(a.order.total + b.order.total);
+    expect(r.average).toBe(Math.round((a.order.total + b.order.total) / 2));
+    expect(r.refused).toBe(1);
+    expect(r.byPayment.cartao.orders).toBe(1);
+    expect(r.byPayment.dinheiro.orders).toBe(1);
+    expect(r.byMode.retirada.orders).toBe(2);
+    expect(r.topItems[0]).toMatchObject({ name: 'Batata frita completa', quantity: 4 });
+    expect(r.coupons).toEqual([{ code: 'PATRON10', orders: 1, discount: a.order.discount }]);
+    expect(r.customers).toBe(1);
+    expect(r.returning).toBe(1);
+    expect(r.byHour.reduce((x, y) => x + y, 0)).toBe(2);
   });
 });

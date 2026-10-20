@@ -4,7 +4,7 @@ import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { OnlineOrdering } from '@/content/live';
 import { formatBRL } from '@/lib/money';
-import { CheckoutError, placeOrder, trackingPath, type PaymentMethod } from '@/lib/checkout';
+import { CheckoutError, placeOrder, previewCoupon, trackingPath, type PaymentMethod } from '@/lib/checkout';
 import { useCart } from '../Providers';
 import { ArrowRightIcon } from '../ui/Icons';
 
@@ -43,11 +43,16 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
   const [note, setNote] = useState('');
   const [error, setError] = useState('');
   const [sending, setSending] = useState(false);
+  const [couponText, setCouponText] = useState('');
+  const [coupon, setCoupon] = useState<{ code: string; discount: number } | null>(null);
+  const [couponMsg, setCouponMsg] = useState('');
+  const [checking, setChecking] = useState(false);
 
   const area = ordering.areas.find((a) => a.id === areaId);
   const feePending = mode === 'entrega' && ordering.areas.length === 0;
   const fee = mode === 'entrega' ? (area?.fee ?? 0) : 0;
-  const total = cart.total + fee;
+  const discount = coupon?.discount ?? 0;
+  const total = cart.total - discount + fee;
   const pixAllowed = ordering.payments.pix && !feePending;
   const methods = (
     [
@@ -57,6 +62,22 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
     ] as const
   ).filter(([, , on]) => on);
   const belowMin = cart.total < ordering.minOrder;
+
+  const applyCoupon = async () => {
+    const code = couponText.trim();
+    if (!code) return;
+    setChecking(true);
+    setCouponMsg('');
+    try {
+      const res = await previewCoupon(code, cart.total);
+      setCoupon({ code: res.code, discount: res.discount });
+    } catch (err) {
+      setCoupon(null);
+      setCouponMsg(err instanceof CheckoutError ? err.message : 'Não foi possível validar o cupom.');
+    } finally {
+      setChecking(false);
+    }
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,6 +101,7 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
         payment,
         changeFor,
         note: note.trim(),
+        coupon: coupon?.code ?? '',
       });
       cart.clear();
       onPlaced();
@@ -193,6 +215,64 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
           )}
         </fieldset>
 
+        {ordering.coupons && (
+          <div>
+            <label htmlFor={`${uid}-coupon`} className={labelCls}>
+              Cupom de desconto <span className="font-medium text-ink-mute normal-case">(opcional)</span>
+            </label>
+            {coupon ? (
+              <div className="mt-2 flex min-h-13 items-center justify-between gap-3 rounded-2xl border-2 border-brand px-4">
+                <span className="cond text-base font-bold tracking-[0.04em] uppercase">
+                  {coupon.code} <span className="text-mustard">− {formatBRL(coupon.discount)}</span>
+                </span>
+                <button
+                  type="button"
+                  className="text-sm text-ink-soft underline underline-offset-4 hover:text-mustard"
+                  onClick={() => {
+                    setCoupon(null);
+                    setCouponText('');
+                  }}
+                >
+                  Remover
+                </button>
+              </div>
+            ) : (
+              <div className="mt-2 flex gap-2">
+                <input
+                  id={`${uid}-coupon`}
+                  className={`${input.replace('mt-2 ', '')} uppercase`}
+                  value={couponText}
+                  onChange={(e) => setCouponText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      void applyCoupon();
+                    }
+                  }}
+                  maxLength={20}
+                  autoComplete="off"
+                  autoCapitalize="characters"
+                  aria-invalid={couponMsg ? true : undefined}
+                  aria-describedby={couponMsg ? `${uid}-coupon-msg` : undefined}
+                />
+                <button
+                  type="button"
+                  onClick={applyCoupon}
+                  disabled={checking || !couponText.trim()}
+                  className="cond min-h-13 shrink-0 cursor-pointer rounded-2xl border-2 border-ink/30 px-5 text-base font-bold tracking-[0.06em] uppercase hover:border-ink disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {checking ? '…' : 'Aplicar'}
+                </button>
+              </div>
+            )}
+            {couponMsg && (
+              <p id={`${uid}-coupon-msg`} className="mt-2 text-sm font-semibold text-brand">
+                {couponMsg}
+              </p>
+            )}
+          </div>
+        )}
+
         <div>
           <label htmlFor={`${uid}-note`} className={labelCls}>
             Observações do pedido <span className="font-medium text-ink-mute normal-case">(opcional)</span>
@@ -214,6 +294,12 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
             <dt>Subtotal</dt>
             <dd className="cond tabular text-lg font-semibold">{formatBRL(cart.total)}</dd>
           </div>
+          {discount > 0 && (
+            <div className="flex items-baseline justify-between">
+              <dt>Cupom {coupon?.code}</dt>
+              <dd className="cond tabular text-lg font-semibold text-mustard">− {formatBRL(discount)}</dd>
+            </div>
+          )}
           {mode === 'entrega' && (
             <div className="flex items-baseline justify-between">
               <dt>Entrega</dt>

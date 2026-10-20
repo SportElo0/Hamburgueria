@@ -18,6 +18,8 @@ export interface OnlineOrdering {
   eta: string;
   payments: { pix: boolean; card: boolean; cash: boolean };
   pixDemo: boolean;
+  /** The store has at least one active coupon, so checkout shows the field. */
+  coupons: boolean;
 }
 
 export interface Catalog {
@@ -58,6 +60,7 @@ function parseOrdering(v: unknown): OnlineOrdering | null {
     eta: str(o.eta),
     payments: { pix: pay.pix === true, card: pay.card === true, cash: pay.cash === true },
     pixDemo: o.pixDemo !== false,
+    coupons: o.coupons === true,
   };
 }
 
@@ -137,7 +140,9 @@ function subscribe(fn: () => void) {
 export function loadLiveCatalog(url = CATALOG_URL) {
   if (started || !url) return;
   started = true;
-  fetch(url, { signal: AbortSignal.timeout(6000) })
+  // no-cache: the browser revalidates instead of serving a stale copy (stale-while-revalidate), so a
+  // "sold out" or "closed" switched on the panel shows on the next page load. The CDN still caches.
+  fetch(url, { cache: 'no-cache', signal: AbortSignal.timeout(6000) })
     .then((r) => (r.ok ? r.json() : null))
     .then((data) => {
       const next = mergeLive(data);

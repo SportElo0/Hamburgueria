@@ -190,6 +190,12 @@ export function OrderTracking() {
                 ))}
               </ul>
               <dl className="mt-3 space-y-1 border-t border-brand/25 pt-3 text-ink-soft">
+                {order.discount > 0 && (
+                  <div className="flex justify-between">
+                    <dt>Cupom {order.coupon}</dt>
+                    <dd className="cond tabular text-mustard">− {formatBRL(order.discount)}</dd>
+                  </div>
+                )}
                 {order.mode === 'entrega' && (
                   <div className="flex justify-between">
                     <dt>Entrega</dt>

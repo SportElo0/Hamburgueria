@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { newId, type Store } from '@/lib/schema';
-import { brl, orderingOf } from '@/lib/ordering';
+import { brl, orderingOf, todaySP, type Coupon } from '@/lib/ordering';
 import type { OperatorSummary } from '@/lib/operators';
 import { createOperatorAction, removeOperatorAction, saveMercadoPagoTokenAction } from '@/app/painel/actions';
 import { setOpenAction } from '@/app/loja/[slug]/actions';
@@ -50,6 +50,112 @@ function Money(props: { id: string; label: string; cents: number; onChange: (c: 
       </div>
       {props.help && <p className="mt-1 text-xs text-ink-mute">{props.help}</p>}
     </div>
+  );
+}
+
+const couponLabel = (c: Coupon) => (c.type === 'percent' ? `${c.value}% de desconto` : `${brl(c.value)} de desconto`);
+
+/** Discount codes the customer types at checkout; the server prices them, the site only previews. */
+function Coupons({ coupons, onChange }: { coupons: Coupon[]; onChange: (c: Coupon[]) => void }) {
+  const [code, setCode] = useState('');
+  const [type, setType] = useState<Coupon['type']>('percent');
+  const [value, setValue] = useState('');
+  const [min, setMin] = useState('');
+  const [until, setUntil] = useState('');
+  const [error, setError] = useState('');
+  const today = todaySP();
+  const patch = (i: number, p: Partial<Coupon>) => onChange(coupons.map((c, j) => (j === i ? { ...c, ...p } : c)));
+  return (
+    <section className="card space-y-4 p-5">
+      <h2 className="text-lg font-bold">Cupons de desconto</h2>
+      <p className="text-sm text-ink-mute">O cliente digita o código na finalização. O desconto vale sobre os itens (não sobre a entrega).</p>
+      <ul className="divide-y divide-line rounded-lg border border-line">
+        {coupons.length === 0 && <li className="px-3 py-2.5 text-sm text-ink-mute">Nenhum cupom ainda.</li>}
+        {coupons.map((c, i) => {
+          const expired = c.until !== '' && c.until < today;
+          return (
+            <li key={c.code} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2">
+              <span>
+                <span className="font-mono text-sm font-bold">{c.code}</span>
+                <span className="ml-2 text-sm">{couponLabel(c)}</span>
+                <span className="block text-xs text-ink-mute">
+                  {c.minOrder ? `pedido mínimo ${brl(c.minOrder)}` : 'sem pedido mínimo'}
+                  {c.until && ` · ${expired ? 'venceu' : 'até'} ${c.until.split('-').reverse().join('/')}`}
+                </span>
+              </span>
+              <span className="flex items-center gap-3 text-sm">
+                <label className="flex cursor-pointer items-center gap-1.5">
+                  <input type="checkbox" className="h-4 w-4 accent-ink" checked={c.active} onChange={(e) => patch(i, { active: e.target.checked })} />
+                  Ativo
+                </label>
+                <button type="button" className="text-bad underline" onClick={() => onChange(coupons.filter((_, j) => j !== i))}>
+                  Remover
+                </button>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <form
+        className="grid grid-cols-2 items-end gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const clean = code.trim().toUpperCase();
+          const n = type === 'percent' ? Math.round(Number(value.replace(',', '.'))) : toCents(value);
+          if (!/^[A-Z0-9]{3,20}$/.test(clean)) return setError('Código: 3 a 20 letras ou números, sem espaço.');
+          if (coupons.some((c) => c.code === clean)) return setError('Esse código já existe.');
+          if (!(n >= 1) || (type === 'percent' && n > 100)) return setError(type === 'percent' ? 'Desconto entre 1% e 100%.' : 'Informe o valor do desconto.');
+          onChange([...coupons, { code: clean, type, value: n, minOrder: toCents(min), active: true, until }]);
+          setCode('');
+          setValue('');
+          setMin('');
+          setUntil('');
+          setError('');
+        }}
+      >
+        <div className="col-span-2">
+          <label htmlFor="cupom-codigo" className="label">
+            Código
+          </label>
+          <input id="cupom-codigo" className="field font-mono uppercase" value={code} onChange={(e) => setCode(e.target.value)} placeholder="PATRON10" maxLength={20} />
+        </div>
+        <div>
+          <label htmlFor="cupom-tipo" className="label">
+            Tipo
+          </label>
+          <select id="cupom-tipo" className="field" value={type} onChange={(e) => setType(e.target.value as Coupon['type'])}>
+            <option value="percent">%</option>
+            <option value="fixed">R$</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="cupom-valor" className="label">
+            {type === 'percent' ? 'Desconto %' : 'Desconto R$'}
+          </label>
+          <input id="cupom-valor" inputMode="decimal" className="field" value={value} onChange={(e) => setValue(e.target.value)} placeholder={type === 'percent' ? '10' : '5,00'} />
+        </div>
+        <div>
+          <label htmlFor="cupom-min" className="label">
+            Mínimo R$
+          </label>
+          <input id="cupom-min" inputMode="decimal" className="field" value={min} onChange={(e) => setMin(e.target.value)} placeholder="0,00" />
+        </div>
+        <div>
+          <label htmlFor="cupom-ate" className="label">
+            Vale até
+          </label>
+          <input id="cupom-ate" type="date" className="field" value={until} min={today} onChange={(e) => setUntil(e.target.value)} />
+        </div>
+        <button type="submit" className="btn-ghost col-span-2">
+          Criar cupom
+        </button>
+      </form>
+      {error && (
+        <p role="alert" className="text-sm font-semibold text-bad">
+          {error}
+        </p>
+      )}
+    </section>
   );
 }
 
@@ -181,6 +287,8 @@ export function OnlineOrdersPanel(props: {
           </button>
         </form>
       </section>
+
+      <Coupons coupons={o.coupons} onChange={(c) => set('coupons', c)} />
 
       <section className="card space-y-4 p-5">
         <h2 className="text-lg font-bold">Pagamento</h2>
