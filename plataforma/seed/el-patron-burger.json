@@ -1,0 +1,1352 @@
+{
+  "slug": "el-patron-burger",
+  "name": "El Patron Burger",
+  "segment": "restaurante",
+  "siteUrl": "https://el-patron-burger.vercel.app",
+  "contact": {
+    "whatsapp": "5511937014347",
+    "instagram": "",
+    "email": "",
+    "phone": ""
+  },
+  "units": [],
+  "notice": {
+    "active": false,
+    "text": ""
+  },
+  "catalog": {
+    "categories": [
+      {
+        "id": "chefoes",
+        "name": "Os Chefões da Casa",
+        "description": "Os pesos-pesados do cardápio.",
+        "items": [
+          {
+            "id": "el-patron",
+            "name": "El Patron",
+            "description": "Pão com gergelim, 2 suculentos e enormes hambúrgueres de 180 g cada de carne bovina, recheados com cheddar, queijo mussarela, longas tiras de bacon e molho barbecue.",
+            "price": 4799,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/el-patron.webp",
+            "imageAlt": "El Patron, foto do cardápio.",
+            "available": true,
+            "featured": true,
+            "tags": [
+              "destaque"
+            ],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "al-capone",
+            "name": "Al Capone",
+            "description": "Pão australiano, hambúrguer de 180 g, queijo mussarela, muito bacon, cebola roxa e maionese temperada.",
+            "price": 3299,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/al-capone.webp",
+            "imageAlt": "Al Capone, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [
+              "destaque"
+            ],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "ochoa",
+            "name": "Ochoa",
+            "description": "Pão australiano, hambúrguer de 180 g empanado e recheado com cheddar, cebola roxa refogada no molho inglês, molho rose e bacon triturado.",
+            "price": 2999,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/ochoa.webp",
+            "imageAlt": "Ochoa, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [
+              "destaque"
+            ],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "el-chapo",
+            "name": "El Chapo",
+            "description": "Pão com gergelim, hambúrguer de 180 g recheado com cheddar cremoso, vinagrete muito picante, acompanha molho de maionese verde e bacon.",
+            "price": 3199,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/el-chapo.webp",
+            "imageAlt": "El Chapo, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [
+              "picante"
+            ],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "abadia",
+            "name": "Abadia",
+            "description": "Pão australiano, filé de frango empanado, alface, tomate, presunto e queijo empanado e delicioso molho de hortelã.",
+            "price": 3199,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/abadia.webp",
+            "imageAlt": "Abadia, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "especiais",
+        "name": "Burgers Especiais",
+        "description": "Smash e hambúrgueres de 120 g.",
+        "items": [
+          {
+            "id": "dimas",
+            "name": "Dimas",
+            "description": "Pão com gergelim, 2 suculentos hambúrgueres smash de 120 g cada de carne bovina, queijo cheddar, cebola roxa, tomate e alface.",
+            "price": 3099,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/dimas.webp",
+            "imageAlt": "Dimas, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "velasquez",
+            "name": "Velásquez",
+            "description": "Pão com gergelim, 3 hambúrgueres de 120 g, suculentas fatias de bacon, alface, tomate, queijo mussarela e maionese.",
+            "price": 3899,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/velasquez.webp",
+            "imageAlt": "Velásquez, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "nomura",
+            "name": "Nomura",
+            "description": "Pão de brioche, hambúrguer de 120 g, pernil suculento e desfiado ao molho da casa e fatias de cheddar.",
+            "price": 2999,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/nomura.webp",
+            "imageAlt": "Nomura, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lucchese",
+            "name": "Lucchese",
+            "description": "Pão com gergelim, 2 hambúrgueres smash de 120 g cada, fatias de pepperoni, cheddar em fatias e molho billy jack.",
+            "price": 3399,
+            "priceLabel": "",
+            "image": "https://el-patron-burger.vercel.app/photos/lucchese.webp",
+            "imageAlt": "Lucchese, foto do cardápio.",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "classicos",
+        "name": "Clássicos",
+        "description": "No pão de brioche, sem rodeio.",
+        "items": [
+          {
+            "id": "gacha",
+            "name": "Gacha",
+            "description": "Pão de brioche, hambúrguer de 120 g, alface, tomate, queijo mussarela e maionese.",
+            "price": 1999,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "blanco",
+            "name": "Blanco",
+            "description": "Pão de brioche, filé de frango, fatias de bacon, alface, tomate, queijo mussarela e maionese.",
+            "price": 1999,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "figueroa",
+            "name": "Figueroa",
+            "description": "Pão de brioche, hambúrguer de 120 g, fatias de bacon, alface, tomate, queijo mussarela e maionese.",
+            "price": 2399,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "guzman",
+            "name": "Gúzman",
+            "description": "Pão de brioche, hambúrguer de 120 g, queijo mussarela e maionese.",
+            "price": 1799,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "adicionais",
+                "name": "Adicionais",
+                "type": "multiple",
+                "required": false,
+                "choices": [
+                  {
+                    "id": "molho-verde",
+                    "label": "Molho verde",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-mostarda",
+                    "label": "Molho mostarda temperada",
+                    "priceDelta": 299
+                  },
+                  {
+                    "id": "molho-rose-bacon",
+                    "label": "Molho rose com bacon",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "cheddar-cremoso",
+                    "label": "Cheddar cremoso",
+                    "priceDelta": 399
+                  },
+                  {
+                    "id": "queijo",
+                    "label": "Queijo",
+                    "priceDelta": 499
+                  },
+                  {
+                    "id": "bacon",
+                    "label": "Bacon",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-120",
+                    "label": "Hambúrguer 120 g",
+                    "priceDelta": 699
+                  },
+                  {
+                    "id": "hamburguer-180",
+                    "label": "Hambúrguer 180 g",
+                    "priceDelta": 999
+                  },
+                  {
+                    "id": "hamburguer-180-recheado",
+                    "label": "Hambúrguer 180 g recheado com cheddar",
+                    "priceDelta": 1299
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "porcoes",
+        "name": "Porções",
+        "description": "Pra dividir com a família.",
+        "items": [
+          {
+            "id": "batata-completa",
+            "name": "Batata frita completa",
+            "description": "Cheddar, bacon, mostarda, ketchup, maionese e queijo derretido.",
+            "price": 1999,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "tamanho",
+                "name": "Tamanho",
+                "type": "single",
+                "required": true,
+                "choices": [
+                  {
+                    "id": "pequena",
+                    "label": "Pequena",
+                    "priceDelta": 0
+                  },
+                  {
+                    "id": "grande",
+                    "label": "Grande",
+                    "priceDelta": 1300
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "batata-simples",
+            "name": "Batata frita simples",
+            "description": "Mostarda, ketchup e maionese.",
+            "price": 1599,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "tamanho",
+                "name": "Tamanho",
+                "type": "single",
+                "required": true,
+                "choices": [
+                  {
+                    "id": "pequena",
+                    "label": "Pequena",
+                    "priceDelta": 0
+                  },
+                  {
+                    "id": "grande",
+                    "label": "Grande",
+                    "priceDelta": 500
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "rustica-completa",
+            "name": "Batata rústica completa",
+            "description": "Cheddar, bacon, mostarda, ketchup, maionese e queijo derretido.",
+            "price": 1999,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "tamanho",
+                "name": "Tamanho",
+                "type": "single",
+                "required": true,
+                "choices": [
+                  {
+                    "id": "pequena",
+                    "label": "Pequena",
+                    "priceDelta": 0
+                  },
+                  {
+                    "id": "grande",
+                    "label": "Grande",
+                    "priceDelta": 1400
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "rustica-simples",
+            "name": "Batata rústica simples",
+            "description": "Mostarda, ketchup e maionese.",
+            "price": 1599,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "tamanho",
+                "name": "Tamanho",
+                "type": "single",
+                "required": true,
+                "choices": [
+                  {
+                    "id": "pequena",
+                    "label": "Pequena",
+                    "priceDelta": 0
+                  },
+                  {
+                    "id": "grande",
+                    "label": "Grande",
+                    "priceDelta": 600
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "chicken",
+            "name": "Chicken 500 g",
+            "description": "Porções crocantes de chicken.",
+            "price": 3999,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "onion-rings",
+            "name": "Onion rings",
+            "description": "Cebolas empanadas e crocantes.",
+            "price": 2599,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": [
+              {
+                "id": "tamanho",
+                "name": "Tamanho",
+                "type": "single",
+                "required": true,
+                "choices": [
+                  {
+                    "id": "pequena",
+                    "label": "Pequena",
+                    "priceDelta": 0
+                  },
+                  {
+                    "id": "grande",
+                    "label": "Grande",
+                    "priceDelta": 700
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "adicionais",
+        "name": "Adicionais",
+        "description": "Turbine qualquer burger na hora de pedir.",
+        "items": [
+          {
+            "id": "molho-verde",
+            "name": "Molho verde",
+            "description": "Adicional para qualquer burger.",
+            "price": 299,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "molho-mostarda",
+            "name": "Molho mostarda temperada",
+            "description": "Adicional para qualquer burger.",
+            "price": 299,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "molho-rose-bacon",
+            "name": "Molho rose com bacon",
+            "description": "Adicional para qualquer burger.",
+            "price": 399,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "cheddar-cremoso",
+            "name": "Cheddar cremoso",
+            "description": "Adicional para qualquer burger.",
+            "price": 399,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "queijo",
+            "name": "Queijo",
+            "description": "Adicional para qualquer burger.",
+            "price": 499,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "bacon",
+            "name": "Bacon",
+            "description": "Adicional para qualquer burger.",
+            "price": 699,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "hamburguer-120",
+            "name": "Hambúrguer 120 g",
+            "description": "Adicional para qualquer burger.",
+            "price": 699,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "hamburguer-180",
+            "name": "Hambúrguer 180 g",
+            "description": "Adicional para qualquer burger.",
+            "price": 999,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "hamburguer-180-recheado",
+            "name": "Hambúrguer 180 g recheado com cheddar",
+            "description": "Adicional para qualquer burger.",
+            "price": 1299,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          }
+        ]
+      },
+      {
+        "id": "bebidas",
+        "name": "Bebidas",
+        "description": "Pra acompanhar.",
+        "items": [
+          {
+            "id": "refri-lata",
+            "name": "Refrigerante lata",
+            "description": "",
+            "price": 699,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "refri-600",
+            "name": "Refrigerante 600 ml",
+            "description": "",
+            "price": 999,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "coca-2l",
+            "name": "Coca-Cola 2 L",
+            "description": "",
+            "price": 1799,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "refri-2l",
+            "name": "Demais refrigerantes 2 L",
+            "description": "",
+            "price": 1599,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "suco-polpa",
+            "name": "Suco de polpa",
+            "description": "",
+            "price": 799,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "agua",
+            "name": "Água 500 ml",
+            "description": "",
+            "price": 499,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          }
+        ]
+      },
+      {
+        "id": "sobremesas",
+        "name": "Sobremesas",
+        "description": "Pra fechar o pedido.",
+        "items": [
+          {
+            "id": "sorvete-palito",
+            "name": "Sorvete de palito",
+            "description": "",
+            "price": 400,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          },
+          {
+            "id": "sorvete-massa",
+            "name": "Sorvete de massa",
+            "description": "",
+            "price": 800,
+            "priceLabel": "",
+            "image": "",
+            "imageAlt": "",
+            "available": true,
+            "featured": false,
+            "tags": [],
+            "options": []
+          }
+        ]
+      }
+    ]
+  },
+  "extra": {},
+  "account": {
+    "plan": "parceiro",
+    "changeLimit": null,
+    "partnerUntil": "",
+    "monthlyFee": null,
+    "extraPrice": null,
+    "notes": "Osasco. Venda fechada por parceiro; registrar condições comerciais. WhatsApp do perfil Business. Endereço, horários (só terça 18h–23h59 visível), Instagram e entrega/retirada a confirmar. Porções: o preço aqui é o da pequena; a grande soma a diferença do cardápio."
+  }
+}

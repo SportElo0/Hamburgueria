@@ -1,0 +1,407 @@
+@import "tailwindcss";
+
+@theme {
+  /* Black-and-gold of the printed menu. Names keep the base's semantics:
+     cream = page ground, ink = text and solid controls, on-dark = text on solid gold/ink fills. */
+  --color-cream: #0c0a08;
+  --color-cream-deep: #1a1510;
+  --color-paper: #13100c;
+  --color-ink: #f2e7cf;
+  --color-ink-soft: #d3c5a6;
+  --color-ink-mute: #a8987a;
+  --color-brand: #d9ae58;
+  --color-brand-deep: #b98d3a;
+  --color-mustard: #e9c56f;
+  --color-mustard-deep: #c99a3c;
+  --color-gold-dim: #6e5527;
+  --color-on-dark: #0c0a08;
+  --color-on-dark-mute: #3a2f20;
+
+  --font-display: var(--font-cinzel), Georgia, serif;
+  --font-sans: var(--font-barlow), system-ui, sans-serif;
+  --font-cond: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ease-in-quart: cubic-bezier(0.5, 0, 0.75, 0);
+
+  --breakpoint-xs: 380px;
+}
+
+:root {
+  --ring: var(--color-mustard);
+  --header-h: 72px;
+  color-scheme: dark;
+  scroll-padding-top: calc(var(--header-h) + 56px);
+}
+
+@media (max-width: 767px) {
+  :root {
+    /* Keyboard focus and in-page jumps stop above the floating cart bar. */
+    scroll-padding-bottom: 96px;
+    --header-h: 60px;
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-cream);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scrollbar-color: var(--color-gold-dim) var(--color-cream);
+    scrollbar-width: thin;
+  }
+
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    caret-color: var(--color-brand);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-mustard);
+    color: var(--color-on-dark);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1.5px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* Native dialogs: animate in with @starting-style, keep them interruptible. */
+  dialog {
+    color: inherit;
+    max-width: none;
+    max-height: none;
+  }
+  dialog::backdrop {
+    background: rgb(0 0 0 / 0.7);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease-out-expo), overlay 0.35s allow-discrete, display 0.35s allow-discrete;
+  }
+  dialog[open]::backdrop {
+    opacity: 1;
+  }
+  @starting-style {
+    dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+}
+
+@layer components {
+  .surface-dark {
+    --ring: var(--color-mustard);
+    color-scheme: dark;
+  }
+
+  /* Scrollbars carry the palette too. */
+  .scroll-cream {
+    scrollbar-color: var(--color-ink-mute) transparent;
+    scrollbar-width: thin;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+  }
+
+  /* Foil gold for the big headings, as on the menu's title plates. */
+  .gold-foil {
+    background: linear-gradient(176deg, #f7e2a6 8%, #d9ae58 42%, #9c7330 70%, #e7c375 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* Room above the caps so the clipped gradient still paints accents (Ã, Õ, Á). */
+    padding-top: 0.16em;
+    margin-top: -0.16em;
+  }
+
+  /* Framed price, as printed on the menu. */
+  .price-box {
+    border: 1.5px solid currentColor;
+    padding: 0.18em 0.5em 0.12em;
+    line-height: 1;
+  }
+
+  .cond {
+    font-family: var(--font-cond);
+  }
+
+  .ghost-word {
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-brand) 22%, transparent);
+    line-height: 0.8;
+    white-space: nowrap;
+    user-select: none;
+    /* Scrubbed every frame during the story: keep it on its own compositor layer. */
+    will-change: transform;
+  }
+
+  /* Menu-style dotted leaders between name and price. */
+  .leader {
+    flex: 1;
+    min-width: 1.5rem;
+    border-bottom: 2px dotted color-mix(in oklab, var(--color-ink) 35%, transparent);
+    transform: translateY(-0.3em);
+  }
+
+  /* Double rule borrowed from the paper menu's frame. */
+  .double-rule {
+    height: 6px;
+    border-top: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+  }
+
+  .skip-link {
+    position: fixed;
+    left: 16px;
+    top: 12px;
+    z-index: 100;
+    transform: translateY(-160%);
+    transition: transform 0.2s var(--ease-out-expo);
+  }
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(var(--r0, 0deg));
+  }
+  50% {
+    transform: translate3d(0, var(--bob, -14px), 0) rotate(var(--r1, 4deg));
+  }
+}
+.bob {
+  animation: bob var(--dur, 6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ── Dialog motion ─────────────────────────────────────────── */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+html {
+  scrollbar-gutter: stable;
+}
+
+.product-dialog,
+.cart-drawer {
+  transition: transform 0.5s var(--ease-out-expo), opacity 0.35s var(--ease-out-expo), overlay 0.5s allow-discrete, display 0.5s allow-discrete;
+}
+.product-dialog[open],
+.cart-drawer[open] {
+  transform: none;
+  opacity: 1;
+}
+@starting-style {
+  .product-dialog[open],
+  .cart-drawer[open] {
+    transform: translateY(12%);
+    opacity: 0;
+  }
+}
+.product-dialog[data-state="closing"],
+.cart-drawer[data-state="closing"] {
+  transform: translateY(14%);
+  opacity: 0;
+  transition-duration: 0.26s;
+  transition-timing-function: var(--ease-in-quart);
+}
+@media (min-width: 768px) {
+  @starting-style {
+    .product-dialog[open] {
+      transform: translateY(24px) scale(0.98);
+    }
+    .cart-drawer[open] {
+      transform: translateX(16%);
+      opacity: 0;
+    }
+  }
+  .product-dialog[data-state="closing"] {
+    transform: translateY(16px) scale(0.98);
+  }
+  .cart-drawer[data-state="closing"] {
+    transform: translateX(14%);
+  }
+}
+
+.nav-overlay {
+  clip-path: circle(150% at calc(100% - 52px) 36px);
+  transition: clip-path 0.75s var(--ease-out-expo), overlay 0.75s allow-discrete, display 0.75s allow-discrete;
+}
+.nav-overlay::backdrop {
+  display: none;
+}
+@starting-style {
+  .nav-overlay[open] {
+    clip-path: circle(0% at calc(100% - 52px) 36px);
+  }
+}
+.nav-overlay[data-state="closing"] {
+  clip-path: circle(0% at calc(100% - 52px) 36px);
+  transition-duration: 0.38s;
+  transition-timing-function: var(--ease-in-quart);
+}
+.nav-overlay .nav-link {
+  display: inline-flex;
+  transition: transform 0.8s var(--ease-out-expo), opacity 0.6s var(--ease-out-expo), color 0.2s;
+  transition-delay: calc(var(--i) * 60ms + 160ms), calc(var(--i) * 60ms + 160ms), 0s;
+}
+@starting-style {
+  .nav-overlay[open] .nav-link {
+    transform: translateY(105%);
+    opacity: 0;
+  }
+}
+.nav-overlay .nav-bg img {
+  transition: transform 1.6s var(--ease-out-expo);
+}
+@starting-style {
+  .nav-overlay[open] .nav-bg img {
+    transform: translate(-50%, -38%) scale(1.12);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(24px) scale(0.96);
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  40% {
+    transform: scale(1.5);
+    color: var(--color-mustard);
+  }
+}
+
+@keyframes nudge {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(5px);
+  }
+}
+
+/* Fine gold grain on the black surfaces, like the printed menu's board. */
+body,
+#localizacao,
+.product-dialog,
+.cart-drawer {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .8 0 0 0 0 .5 0 0 0 .045 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+#cardapio {
+  background-color: transparent;
+}
+
+/* Floating cart bar (phones): the hero's own CTAs sit where the bar would, so it waits
+   until the hero has scrolled away. */
+.mobile-cart-bar {
+  transition:
+    opacity 0.3s,
+    translate 0.45s var(--ease-out-expo),
+    visibility 0.45s;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-story-done]) .mobile-cart-bar {
+    visibility: hidden;
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+/* ── Os Chefões: stacked by default (no motion, no JS); a sideways pinned track once GSAP pins it. */
+.chefoes-track {
+  display: flex;
+  flex-direction: column;
+}
+.chefoes-panel {
+  padding-block: 3.5rem;
+}
+.chefoes[data-pinned] .chefoes-stage {
+  display: flex;
+  flex-direction: column;
+  height: 100lvh;
+}
+.chefoes[data-pinned] .chefoes-track {
+  flex-direction: row;
+  width: max-content;
+  height: calc(100svh - var(--chefoes-head, 150px));
+  will-change: transform;
+}
+.chefoes[data-pinned] .chefoes-panel {
+  width: 100vw;
+  height: 100%;
+  padding-block: 0 1.5rem;
+}
+.chefoes[data-pinned] .chefoes-dots {
+  display: flex;
+}
+.chefoes {
+  --chefoes-head: calc(var(--header-h) + 112px);
+}
+@media (max-width: 767px) {
+  .chefoes {
+    --chefoes-head: calc(var(--header-h) + 84px);
+  }
+  /* The floating cart bar sits over the bottom of each dossier. */
+  .chefoes[data-pinned] .chefoes-panel {
+    padding-bottom: 5.5rem;
+  }
+}

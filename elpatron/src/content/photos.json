@@ -1,0 +1,46 @@
+{
+ "note": "Cut from the restaurant's own menu (tools/photos/src), upscaled and background removed.",
+ "items": {
+  "el-patron": {
+   "src": "/photos/el-patron.webp",
+   "sm": "/photos/el-patron.sm.webp"
+  },
+  "al-capone": {
+   "src": "/photos/al-capone.webp",
+   "sm": "/photos/al-capone.sm.webp"
+  },
+  "ochoa": {
+   "src": "/photos/ochoa.webp",
+   "sm": "/photos/ochoa.sm.webp"
+  },
+  "el-chapo": {
+   "src": "/photos/el-chapo.webp",
+   "sm": "/photos/el-chapo.sm.webp"
+  },
+  "abadia": {
+   "src": "/photos/abadia.webp",
+   "sm": "/photos/abadia.sm.webp"
+  },
+  "dimas": {
+   "src": "/photos/dimas.webp",
+   "sm": "/photos/dimas.sm.webp"
+  },
+  "velasquez": {
+   "src": "/photos/velasquez.webp",
+   "sm": "/photos/velasquez.sm.webp"
+  },
+  "nomura": {
+   "src": "/photos/nomura.webp",
+   "sm": "/photos/nomura.sm.webp"
+  },
+  "lucchese": {
+   "src": "/photos/lucchese.webp",
+   "sm": "/photos/lucchese.sm.webp"
+  }
+ },
+ "logo": {
+  "src": "/photos/logo.webp",
+  "w": 1181,
+  "h": 538
+ }
+}

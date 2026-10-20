@@ -53,8 +53,8 @@ describe('prazo de parceria', () => {
 
 describe('lojas importadas', () => {
   const seeds = seedStores();
-  it('as 4 lojas são válidas', () => {
-    expect(seeds.map((s) => s.slug)).toEqual(['downtown-burger', 'gara-pizza', 'semvo', 'surflife']);
+  it('as lojas importadas são válidas', () => {
+    expect(seeds.map((s) => s.slug)).toEqual(['downtown-burger', 'gara-pizza', 'semvo', 'surflife', 'el-patron-burger']);
     for (const s of seeds) expect(storeSchema.safeParse(s).success).toBe(true);
   });
   it('ids de itens não se repetem dentro da loja', () => {
