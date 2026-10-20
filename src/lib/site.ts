@@ -28,6 +28,7 @@ export interface RoomType {
   capacity: string;
   bed: string;
   highlights: string[];
+  photo: string;
 }
 
 export const ROOM_TYPES: RoomType[] = [
@@ -37,6 +38,7 @@ export const ROOM_TYPES: RoomType[] = [
     capacity: "Até 2 pessoas",
     bed: "1 cama king size",
     highlights: ["Vista para o jardim", "Varanda térrea", "Ar-condicionado", "Frigobar"],
+    photo: "/images/quarto-verde-graded.jpg",
   },
   {
     id: "tres-pessoas-deluxe",
@@ -44,6 +46,7 @@ export const ROOM_TYPES: RoomType[] = [
     capacity: "Até 3 pessoas",
     bed: "1 cama king size + cama extra",
     highlights: ["Ar-condicionado", "TV de tela plana", "Frigobar"],
+    photo: "/images/quarto-amarelo-graded.jpg",
   },
   {
     id: "quatro-pessoas",
@@ -51,16 +54,19 @@ export const ROOM_TYPES: RoomType[] = [
     capacity: "Até 4 pessoas",
     bed: "1 cama de casal + camas extras",
     highlights: ["Vista para o jardim", "Ar-condicionado", "Ideal para família"],
+    photo: "/images/piscina-graded.jpg",
   },
 ];
 
-export const AMENITIES = [
-  "Piscina ao ar livre",
-  "Jardim e terraço",
-  "Café da manhã no terraço",
-  "Wi-Fi gratuito",
-  "Estacionamento privativo gratuito",
-  "Aceita pets",
-  "Ar-condicionado em todos os quartos",
-  "A 5 minutos do Centro Histórico",
-] as const;
+export type AmenityIcon = "pool" | "garden" | "breakfast" | "wifi" | "parking" | "pet" | "ac" | "pin";
+
+export const AMENITIES: { label: string; icon: AmenityIcon }[] = [
+  { label: "Piscina ao ar livre", icon: "pool" },
+  { label: "Jardim e terraço", icon: "garden" },
+  { label: "Café da manhã no terraço", icon: "breakfast" },
+  { label: "Wi-Fi gratuito", icon: "wifi" },
+  { label: "Estacionamento privativo gratuito", icon: "parking" },
+  { label: "Aceita pets", icon: "pet" },
+  { label: "Ar-condicionado em todos os quartos", icon: "ac" },
+  { label: "A 5 minutos do Centro Histórico", icon: "pin" },
+];

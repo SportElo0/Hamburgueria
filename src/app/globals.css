@@ -1,31 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #faf6ef;
-  --paper-deep: #f1e9da;
-  --ink: #2b2420;
-  --ink-soft: #5c5047;
-  --ink-mute: #8a7c70;
-  --line: #e4d9c6;
-  --terracotta: #c1692f;
-  --terracotta-deep: #9c4f22;
-  --teal: #2f7f7a;
-  --teal-deep: #1f5c58;
-  --cream: #efe4cf;
+  --ink: #0a0908;
+  --ink-raised: #15120f;
+  --paper: #f5f2ec;
+  --paper-mute: #c9c2b6;
+  --line: #2a2520;
+  --accent: #f6b429;
+  --accent-deep: #d99412;
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-paper-deep: var(--paper-deep);
   --color-ink: var(--ink);
-  --color-ink-soft: var(--ink-soft);
-  --color-ink-mute: var(--ink-mute);
+  --color-ink-raised: var(--ink-raised);
+  --color-paper: var(--paper);
+  --color-paper-mute: var(--paper-mute);
   --color-line: var(--line);
-  --color-terracotta: var(--terracotta);
-  --color-terracotta-deep: var(--terracotta-deep);
-  --color-teal: var(--teal);
-  --color-teal-deep: var(--teal-deep);
-  --color-cream: var(--cream);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
 }
@@ -35,13 +27,13 @@ html {
 }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 h1, h2, h3, h4, .font-display {
-  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
 }
 
 .btn-cta {
@@ -49,16 +41,16 @@ h1, h2, h3, h4, .font-display {
   align-items: center;
   gap: 0.5rem;
   border-radius: 999px;
-  background: var(--terracotta);
-  color: var(--paper);
+  background: var(--accent);
+  color: var(--ink);
   padding: 0.9rem 1.75rem;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.01em;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 .btn-cta:hover {
-  background: var(--terracotta-deep);
+  background: var(--accent-deep);
   transform: translateY(-1px);
 }
 
@@ -76,21 +68,23 @@ h1, h2, h3, h4, .font-display {
 
 .eyebrow {
   font-size: 0.78rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* Hero: the facade opens like a light at dusk, from a point near the door outward. */
-.hero-reveal {
-  --reveal: 0%;
-  -webkit-mask-image: radial-gradient(ellipse 65% 60% at 52% 58%, #000 calc(var(--reveal) - 35%), transparent var(--reveal));
-  mask-image: radial-gradient(ellipse 65% 60% at 52% 58%, #000 calc(var(--reveal) - 35%), transparent var(--reveal));
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
-.hero-letter-clip {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  padding-bottom: 0.05em;
-  margin-bottom: -0.05em;
+
+/* Portal: the sharp scene is clipped to the door's opening; the layer behind it is blurred/dark. */
+.portal-opening {
+  clip-path: var(--opening-clip, inset(0 0 0 0));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

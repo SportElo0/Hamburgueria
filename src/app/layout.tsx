@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
+import { MobileWhatsappBar } from "@/components/MobileWhatsappBar";
 
-const fraunces = Fraunces({
+const display = Space_Grotesk({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: "variable",
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700"],
 });
 
-const inter = Inter({
+const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -23,8 +23,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${fraunces.variable} ${inter.variable} h-full antialiased`}>
-      <body className="min-h-full bg-paper text-ink">{children}</body>
+    <html lang="pt-BR" className={`${display.variable} ${sans.variable} h-full antialiased`}>
+      <body className="min-h-full bg-ink text-paper">
+        {children}
+        <MobileWhatsappBar />
+      </body>
     </html>
   );
 }
