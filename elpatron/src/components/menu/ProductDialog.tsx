@@ -6,8 +6,9 @@ import { useCatalog } from '@/content/live';
 import { defaultSelections, missingRequired, unitPrice, type Selections } from '@/lib/cart';
 import { formatBRL } from '@/lib/money';
 import { useCart, useUi, type ProductRequest } from '../Providers';
+import { BurgerStack } from '../burger/BurgerStack';
 import { Chilli, Logo, Star } from '../brand/Brand';
-import { CloseIcon, CheckIcon } from '../ui/Icons';
+import { CheckIcon, CloseIcon, LayersIcon } from '../ui/Icons';
 import { Price, Stepper, useNativeDialog } from '../ui/primitives';
 
 export function ProductDialog() {
@@ -45,6 +46,7 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
   const [qty, setQty] = useState(editing?.quantity ?? 1);
   const [notes, setNotes] = useState(editing?.notes ?? '');
   const [showErrors, setShowErrors] = useState(false);
+  const [inside, setInside] = useState(false);
   const formId = useId();
   const groupRefs = useRef<Record<string, HTMLFieldSetElement | null>>({});
 
@@ -86,6 +88,7 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
   };
 
   const variant = product.options?.some((g) => g.variant);
+  const hasLayers = Boolean(product.layers);
   const section = categories.find((c) => c.id === product.category)!;
 
   return (
@@ -107,14 +110,36 @@ function ProductForm({ product, request }: { product: Product; request: ProductR
         <p className="cond absolute top-4 left-5 z-10 text-xs font-bold tracking-[0.24em] text-brand uppercase md:top-6 md:left-7">{section.title}</p>
         <div className={`relative flex items-center justify-center md:h-full ${image ? 'h-[34dvh]' : 'h-[22dvh]'}`}>
           {image ? (
-            <div className="relative w-[min(78vw,40dvh)] md:w-[86%]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image} alt={product.imageAlt ?? ''} className="aspect-square w-full object-contain drop-shadow-[0_30px_40px_rgb(0_0_0/0.7)]" />
+            <div
+              className={`relative w-[min(78vw,40dvh)] transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] md:w-[86%] ${inside ? 'scale-[0.72]' : ''}`}
+              style={{ ['--label-out' as string]: '0px' }}
+            >
+              {hasLayers && inside ? (
+                <BurgerStack id={product.layers!} explode={1} gap={10} labels size="sm" tone="dark" />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={image} alt={product.imageAlt ?? ''} className="aspect-square w-full object-contain drop-shadow-[0_30px_40px_rgb(0_0_0/0.7)]" />
+              )}
             </div>
           ) : (
             <Logo alt="" className="relative h-auto w-[min(56vw,300px)] opacity-90" />
           )}
-          {image && <p className="cond absolute right-4 bottom-4 text-[0.7rem] font-semibold tracking-[0.12em] text-ink-mute uppercase">Foto do cardápio</p>}
+          {hasLayers && (
+            <button
+              type="button"
+              aria-pressed={inside}
+              onClick={() => setInside((v) => !v)}
+              className="cond absolute bottom-4 left-4 z-10 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full bg-black/50 px-4 text-sm font-bold tracking-[0.08em] text-ink uppercase backdrop-blur-sm transition-colors hover:bg-black/70 aria-pressed:bg-mustard aria-pressed:text-on-dark"
+            >
+              <LayersIcon size={18} />
+              {inside ? 'Montar burger' : 'Ver por dentro'}
+            </button>
+          )}
+          {image && (
+            <p className="cond absolute right-4 bottom-4 text-[0.7rem] font-semibold tracking-[0.12em] text-ink-mute uppercase">
+              {inside || product.category === 'classicos' ? 'Ilustração das camadas' : 'Foto do cardápio'}
+            </p>
+          )}
         </div>
       </div>
 

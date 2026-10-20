@@ -1,8 +1,10 @@
 // El Patron menu ("Cardápio El Burger Del Mal"), transcribed from the restaurant's own menu pages.
 // Prices are integer centavos (BRL). Edit prices, names and descriptions here; the UI reads only this file.
-// Burger photos are cut from those same pages (tools/photos). Items the menu prints without a photo
-// (clássicos, porções, bebidas, sobremesas) have none here either.
+// Burger photos are cut from those same pages (tools/photos). The 3D renders (tools/studio) drive the
+// layer-by-layer "por dentro" view, and stand in as illustrations for the clássicos, which the menu
+// prints without a photo.
 import photos from './photos.json';
+import renders from './renders.json';
 
 export type CategoryId = 'chefoes' | 'especiais' | 'classicos' | 'porcoes' | 'adicionais' | 'bebidas' | 'sobremesas';
 
@@ -37,6 +39,8 @@ export interface Product {
   /** Menu photo, when the printed menu has one. */
   image?: string;
   imageAlt?: string;
+  /** Layered render id when an exploded view exists. */
+  layers?: string;
   /** Marks printed beside the name on the menu: ★ or the chilli. */
   mark?: 'star' | 'spicy';
   options?: OptionGroup[];
@@ -87,11 +91,24 @@ const extrasGroup: OptionGroup = {
 
 const photo = (id: keyof typeof photos.items) => photos.items[id].src;
 
-const burger = (id: keyof typeof photos.items, name: string) => ({
+type RenderId = keyof typeof renders.burgers;
+
+const burger = (id: keyof typeof photos.items & RenderId, name: string) => ({
   id,
   name,
   image: photo(id),
   imageAlt: `${name}, foto do cardápio.`,
+  layers: id,
+  options: [extrasGroup],
+});
+
+/** Clássicos: no photo on the menu, so the 3D illustration of the same stack stands in. */
+const classic = (id: RenderId, name: string) => ({
+  id,
+  name,
+  image: renders.burgers[id].card,
+  imageAlt: `${name}, ilustração das camadas.`,
+  layers: id,
   options: [extrasGroup],
 });
 
@@ -179,36 +196,28 @@ export const products: Product[] = [
 
   // ── Clássicos ──
   {
-    id: 'gacha',
+    ...classic('gacha', 'Gacha'),
     category: 'classicos',
-    name: 'Gacha',
     description: 'Pão de brioche, hambúrguer de 120 g, alface, tomate, queijo mussarela e maionese.',
     price: 1999,
-    options: [extrasGroup],
   },
   {
-    id: 'blanco',
+    ...classic('blanco', 'Blanco'),
     category: 'classicos',
-    name: 'Blanco',
     description: 'Pão de brioche, filé de frango, fatias de bacon, alface, tomate, queijo mussarela e maionese.',
     price: 1999,
-    options: [extrasGroup],
   },
   {
-    id: 'figueroa',
+    ...classic('figueroa', 'Figueroa'),
     category: 'classicos',
-    name: 'Figueroa',
     description: 'Pão de brioche, hambúrguer de 120 g, fatias de bacon, alface, tomate, queijo mussarela e maionese.',
     price: 2399,
-    options: [extrasGroup],
   },
   {
-    id: 'guzman',
+    ...classic('guzman', 'Gúzman'),
     category: 'classicos',
-    name: 'Gúzman',
     description: 'Pão de brioche, hambúrguer de 120 g, queijo mussarela e maionese.',
     price: 1799,
-    options: [extrasGroup],
   },
 
   // ── Porções ──
@@ -275,5 +284,5 @@ export const isBurger = (p: Product) => BURGER_CATEGORIES.includes(p.category);
 
 /** The burger that leads the story: the house's namesake. */
 export const HERO_PRODUCT_ID = 'el-patron';
-/** The chefões, in menu order. */
-export const SIGNATURE_IDS = ['el-patron', 'al-capone', 'ochoa', 'el-chapo', 'abadia'] as const;
+/** The lineup in the story: the starred chefões and El Chapo, with the hero in the second slot. */
+export const SIGNATURE_IDS = ['al-capone', 'el-patron', 'ochoa', 'el-chapo'] as const;

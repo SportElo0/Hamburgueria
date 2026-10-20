@@ -2,8 +2,8 @@ import { MenuSection } from '@/components/menu/MenuSection';
 import { MobileCartBar, SiteHeader } from '@/components/nav/SiteHeader';
 import { SiteFooter, StorySection } from '@/components/sections/InfoSections';
 import { LocationSection } from '@/components/sections/LocationSection';
-import { Chefoes } from '@/components/story/Chefoes';
-import { Hero } from '@/components/story/Hero';
+import { CinematicStory } from '@/components/story/CinematicStory';
+import { StaticStory } from '@/components/story/StaticStory';
 import { products } from '@/content/menu';
 import { restaurant } from '@/content/restaurant';
 
@@ -36,8 +36,8 @@ export default function Home() {
       <JsonLd />
       <SiteHeader />
       <main>
-        <Hero />
-        <Chefoes />
+        <CinematicStory />
+        <StaticStory />
         <MenuSection />
         <StorySection />
         <LocationSection />

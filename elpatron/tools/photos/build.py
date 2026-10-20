@@ -7,6 +7,7 @@ alpha comes from luminance instead of matting.
 
   pip install rembg onnxruntime opencv-python-headless pillow numpy
   python3 elpatron/tools/photos/build.py <RealESRGAN_x4.onnx>
+  python3 elpatron/tools/photos/build.py --manifest-only   # rewrite photos.json from the saved WebPs
 """
 import json
 import sys
@@ -91,10 +92,27 @@ def save(img, name, sizes):
         im.save(OUT / f'{name}{label}.webp', quality=86, method=6)
 
 
+def entry(key):
+    """Manifest entry; `box` is the burger's opaque bounds in % of the square, used to line the photo up with the 3D layers."""
+    im = Image.open(OUT / f'{key}.webp')
+    x0, y0, x1, y1 = im.getchannel('A').point(lambda a: 255 if a > 24 else 0).getbbox()
+    pct = lambda v: round(v / im.width * 100, 3)
+    return {'src': f'/photos/{key}.webp', 'srcSm': f'/photos/{key}.sm.webp', 'size': im.width,
+            'box': {'x': pct(x0), 'y': pct(y0), 'w': pct(x1 - x0), 'h': pct(y1 - y0)}}
+
+
 def main():
+    manifest = {'note': "Cut from the restaurant's own menu (tools/photos/src), upscaled and background removed.", 'items': {}}
+    if sys.argv[1] == '--manifest-only':
+        for items in BURGERS.values():
+            for key in items:
+                manifest['items'][key] = entry(key)
+        logo = Image.open(OUT / 'logo.webp')
+        manifest['logo'] = {'src': '/photos/logo.webp', 'w': logo.width, 'h': logo.height}
+        (HERE.parents[1] / 'src' / 'content' / 'photos.json').write_text(json.dumps(manifest, indent=1) + '\n')
+        return
     sr = ort.InferenceSession(sys.argv[1], providers=['CPUExecutionProvider'])
     seg = new_session('isnet-general-use')
-    manifest = {'note': "Cut from the restaurant's own menu (tools/photos/src), upscaled and background removed.", 'items': {}}
     for file, items in BURGERS.items():
         sheet = np.asarray(Image.open(SRC / file).convert('RGB'))
         for key, (x0, y0, x1, y1) in items.items():
@@ -102,7 +120,7 @@ def main():
             cut = main_object(remove(up, session=seg))
             sq = place(cut, 1200)
             save(sq, key, (('', 1200), ('.sm', 480)))
-            manifest['items'][key] = {'src': f'/photos/{key}.webp', 'sm': f'/photos/{key}.sm.webp'}
+            manifest['items'][key] = entry(key)
             print(key, up.size)
 
     file, (x0, y0, x1, y1) = LOGO

@@ -9,7 +9,7 @@ import { useNativeDialog } from '../ui/primitives';
 
 export const NAV_LINKS = [
   { href: '#inicio', label: 'Início' },
-  { href: '#chefoes', label: 'Os Chefões' },
+  { href: '#cat-chefoes', label: 'Os Chefões' },
   { href: '#cardapio', label: 'Cardápio' },
   { href: '#como-pedir', label: 'Como pedir' },
   { href: '#localizacao', label: 'Contato' },

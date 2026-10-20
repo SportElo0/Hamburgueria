@@ -3,39 +3,102 @@
  "items": {
   "el-patron": {
    "src": "/photos/el-patron.webp",
-   "sm": "/photos/el-patron.sm.webp"
+   "srcSm": "/photos/el-patron.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 3.667,
+    "y": 11.5,
+    "w": 92.667,
+    "h": 76.917
+   }
   },
   "al-capone": {
    "src": "/photos/al-capone.webp",
-   "sm": "/photos/al-capone.sm.webp"
+   "srcSm": "/photos/al-capone.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 3.667,
+    "y": 15.417,
+    "w": 92.583,
+    "h": 69.083
+   }
   },
   "ochoa": {
    "src": "/photos/ochoa.webp",
-   "sm": "/photos/ochoa.sm.webp"
+   "srcSm": "/photos/ochoa.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 5.083,
+    "y": 18.417,
+    "w": 90.833,
+    "h": 63.083
+   }
   },
   "el-chapo": {
    "src": "/photos/el-chapo.webp",
-   "sm": "/photos/el-chapo.sm.webp"
+   "srcSm": "/photos/el-chapo.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 3.667,
+    "y": 10.0,
+    "w": 92.583,
+    "h": 79.917
+   }
   },
   "abadia": {
    "src": "/photos/abadia.webp",
-   "sm": "/photos/abadia.sm.webp"
+   "srcSm": "/photos/abadia.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 5.417,
+    "y": 19.25,
+    "w": 90.833,
+    "h": 61.583
+   }
   },
   "dimas": {
    "src": "/photos/dimas.webp",
-   "sm": "/photos/dimas.sm.webp"
+   "srcSm": "/photos/dimas.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 3.667,
+    "y": 16.417,
+    "w": 92.583,
+    "h": 67.083
+   }
   },
   "velasquez": {
    "src": "/photos/velasquez.webp",
-   "sm": "/photos/velasquez.sm.webp"
+   "srcSm": "/photos/velasquez.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 3.667,
+    "y": 12.333,
+    "w": 92.583,
+    "h": 75.333
+   }
   },
   "nomura": {
    "src": "/photos/nomura.webp",
-   "sm": "/photos/nomura.sm.webp"
+   "srcSm": "/photos/nomura.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 3.75,
+    "y": 16.167,
+    "w": 92.583,
+    "h": 67.667
+   }
   },
   "lucchese": {
    "src": "/photos/lucchese.webp",
-   "sm": "/photos/lucchese.sm.webp"
+   "srcSm": "/photos/lucchese.sm.webp",
+   "size": 1200,
+   "box": {
+    "x": 3.667,
+    "y": 17.167,
+    "w": 92.583,
+    "h": 65.667
+   }
   }
  },
  "logo": {

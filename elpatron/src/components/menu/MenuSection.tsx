@@ -126,7 +126,7 @@ export function MenuSection() {
       <div className="mx-auto max-w-[1360px] px-5 md:px-10">
         <Showcase id="chefoes" />
         <Showcase id="especiais" />
-        <TextList id="classicos" />
+        <Showcase id="classicos" />
         <TextList id="porcoes" />
         <Addons onPick={setPickerFor} />
         <Boards />
@@ -196,39 +196,50 @@ function AddButton({ p, compact = false }: { p: Product; compact?: boolean }) {
   );
 }
 
-/** Photo card for the burgers the menu prints with a picture: compact row on phones, card from sm up. */
+/** Menu row: round photo on the left, name, price, description and actions beside it (as on the Downtown site). */
 function PhotoItem({ p }: { p: Product }) {
   const ui = useUi();
   const soldOut = useSoldOut(p);
   return (
-    <article className="group flex gap-4 border-b border-brand/20 py-5 sm:flex-col sm:gap-0 sm:border sm:border-brand/25 sm:bg-paper sm:p-0" aria-labelledby={`p-${p.id}`}>
+    <article className="group flex gap-4 border-b border-brand/20 py-5 sm:gap-5 md:py-6" aria-labelledby={`p-${p.id}`}>
       <button
         type="button"
         onClick={() => ui.openProduct({ productId: p.id })}
         aria-label={`Ver detalhes de ${p.name}`}
-        className="relative h-32 w-32 shrink-0 cursor-pointer overflow-hidden outline-offset-4 sm:aspect-[5/4] sm:h-auto sm:w-full sm:bg-[radial-gradient(ellipse_at_50%_62%,rgb(217_174_88/0.18),transparent_66%)]"
+        className="relative h-24 w-24 shrink-0 cursor-pointer overflow-hidden rounded-full bg-cream-deep outline-offset-4 ring-1 ring-brand/30 sm:h-28 sm:w-28"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={p.image}
           alt={p.imageAlt ?? ''}
-          width={1200}
-          height={1200}
+          width={900}
+          height={900}
           loading="lazy"
           decoding="async"
-          className="h-full w-full scale-[1.08] object-contain transition-transform duration-700 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.16] sm:scale-100 sm:group-hover:scale-[1.06]"
+          className="h-full w-full scale-[1.12] object-contain transition-transform duration-500 [transition-timing-function:var(--ease-out-expo)] group-hover:scale-[1.22]"
         />
       </button>
-      <div className="flex min-w-0 flex-1 flex-col sm:px-6 sm:pt-1 sm:pb-6">
+      <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">
-          <h4 id={`p-${p.id}`} className="display flex items-center gap-2 text-[1.45rem] leading-[1.05] text-mustard sm:text-[1.7rem]">
+          <h4 id={`p-${p.id}`} className="display flex items-center gap-2 text-[1.45rem] leading-[1.05] text-mustard sm:text-[1.65rem]">
             {p.name}
             <Mark p={p} />
           </h4>
-          <Price cents={p.price} size="sm" className="price-box shrink-0 text-ink sm:text-[1.3rem]" />
+          <Price cents={p.price} size="sm" className="shrink-0 pt-0.5 text-ink sm:text-[1.4rem]" />
         </div>
-        {p.description && <p className="mt-2 max-w-[48ch] text-[0.95rem] leading-snug text-ink-soft">{p.description}</p>}
-        <div className="mt-auto flex flex-wrap items-center gap-1 pt-4">{soldOut ? <SoldOut /> : <AddButton p={p} />}</div>
+        {p.description && <p className="mt-1.5 max-w-[46ch] text-[0.95rem] leading-snug text-ink-soft">{p.description}</p>}
+        <div className="mt-auto flex flex-wrap items-center gap-1 pt-3">
+          {soldOut ? <SoldOut /> : <AddButton p={p} />}
+          {p.layers && !soldOut && (
+            <button
+              type="button"
+              onClick={() => ui.openProduct({ productId: p.id })}
+              className="cond min-h-11 cursor-pointer rounded-full px-3 text-sm font-bold tracking-[0.08em] text-ink uppercase underline decoration-2 underline-offset-4 transition-colors hover:text-mustard"
+            >
+              Personalizar
+            </button>
+          )}
+        </div>
       </div>
     </article>
   );
@@ -239,7 +250,7 @@ function Showcase({ id }: { id: CategoryId }) {
   return (
     <div id={`cat-${id}`} className="scroll-mt-40">
       <CategoryHeading id={id} />
-      <div className="grid border-t border-brand/40 sm:grid-cols-2 sm:gap-5 sm:border-t-0 xl:grid-cols-3">
+      <div className="grid border-t border-brand/40 lg:grid-cols-2 lg:gap-x-12">
         {items.map((p) => (
           <PhotoItem key={p.id} p={p} />
         ))}

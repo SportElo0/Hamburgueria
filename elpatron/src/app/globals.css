@@ -14,6 +14,12 @@
   --color-mustard: #e9c56f;
   --color-mustard-deep: #c99a3c;
   --color-gold-dim: #6e5527;
+  /* Story fields: the Downtown sequence in El Patron's darker register. */
+  --color-scene-red: #120d09;
+  --color-scene-orange: #6e1414;
+  --color-scene-green: #1d3b28;
+  --color-scene-plum: #3a1230;
+  --color-scene-teal: #0f3433;
   --color-on-dark: #0c0a08;
   --color-on-dark-mute: #3a2f20;
 
@@ -321,6 +327,44 @@ html {
   }
 }
 
+/* Story: cinematic by default, static flow for reduced motion. */
+.story-static {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-cinematic {
+    display: none;
+  }
+  .story-static {
+    display: block;
+  }
+}
+
+/* ── Story stage ───────────────────────────────────────────── */
+.stage {
+  --frame: min(88vw, 47svh);
+  --lu: 0.5;
+}
+/* Colour fields wipe in by transform on every scroll frame. */
+.stage [data-field] {
+  will-change: transform;
+}
+@media (min-width: 768px) {
+  .stage {
+    --frame: min(58svh, 44vw);
+    --lu: 0.56;
+  }
+}
+.rig .bs-label {
+  visibility: hidden;
+  opacity: 0;
+}
+/* Story rig: the menu photo leads; the illustrated layers stay hidden until the exploded view. */
+.rig .bs {
+  visibility: hidden;
+  opacity: 0;
+}
+
 @keyframes pop {
   40% {
     transform: scale(1.5);
@@ -350,8 +394,8 @@ body,
   background-color: transparent;
 }
 
-/* Floating cart bar (phones): the hero's own CTAs sit where the bar would, so it waits
-   until the hero has scrolled away. */
+/* Floating cart bar (phones): the story's own CTAs sit where the bar would, so it waits
+   until the story is done. Without motion the story is not pinned and the bar shows at once. */
 .mobile-cart-bar {
   transition:
     opacity 0.3s,
@@ -363,45 +407,5 @@ body,
     visibility: hidden;
     opacity: 0;
     translate: 0 24px;
-  }
-}
-
-/* ── Os Chefões: stacked by default (no motion, no JS); a sideways pinned track once GSAP pins it. */
-.chefoes-track {
-  display: flex;
-  flex-direction: column;
-}
-.chefoes-panel {
-  padding-block: 3.5rem;
-}
-.chefoes[data-pinned] .chefoes-stage {
-  display: flex;
-  flex-direction: column;
-  height: 100lvh;
-}
-.chefoes[data-pinned] .chefoes-track {
-  flex-direction: row;
-  width: max-content;
-  height: calc(100svh - var(--chefoes-head, 150px));
-  will-change: transform;
-}
-.chefoes[data-pinned] .chefoes-panel {
-  width: 100vw;
-  height: 100%;
-  padding-block: 0 1.5rem;
-}
-.chefoes[data-pinned] .chefoes-dots {
-  display: flex;
-}
-.chefoes {
-  --chefoes-head: calc(var(--header-h) + 112px);
-}
-@media (max-width: 767px) {
-  .chefoes {
-    --chefoes-head: calc(var(--header-h) + 84px);
-  }
-  /* The floating cart bar sits over the bottom of each dossier. */
-  .chefoes[data-pinned] .chefoes-panel {
-    padding-bottom: 5.5rem;
   }
 }

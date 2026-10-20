@@ -64,7 +64,7 @@ export function SiteFooter() {
       title: 'Navegação',
       links: [
         ['#inicio', 'Início'],
-        ['#chefoes', 'Os Chefões'],
+        ['#cat-chefoes', 'Os Chefões'],
         ['#cardapio', 'Cardápio'],
         ['#como-pedir', 'Como pedir'],
         ['#localizacao', 'Contato'],

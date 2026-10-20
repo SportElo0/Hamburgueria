@@ -7,15 +7,13 @@ import { Wordmark } from '../brand/Brand';
 import { BagIcon } from '../ui/Icons';
 import { scrollToHash } from './NavOverlay';
 
-/** Header bar once the page leaves the top; header logo once the hero's own logo has scrolled off. */
+/** Header bar once the page leaves the top. */
 function useScrolled() {
-  const [scrolled, setScrolled] = useState({ bar: false, logo: false });
+  const [scrolled, setScrolled] = useState({ bar: false });
   useEffect(() => {
     const on = () => {
-      const y = window.scrollY;
-      const bar = y > 24;
-      const logo = y > window.innerHeight * 0.4;
-      setScrolled((s) => (s.bar === bar && s.logo === logo ? s : { bar, logo }));
+      const bar = window.scrollY > 24;
+      setScrolled((s) => (s.bar === bar ? s : { bar }));
     };
     on();
     window.addEventListener('scroll', on, { passive: true });
@@ -53,8 +51,7 @@ export function SiteHeader() {
             scrollToHash('#inicio');
           }}
           aria-label="El Patron Burger: voltar ao início"
-          className={`rounded-md transition-opacity duration-500 ${scrolled.logo ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
-          tabIndex={scrolled.logo ? undefined : -1}
+          className="rounded-md"
         >
           <Wordmark />
         </a>
