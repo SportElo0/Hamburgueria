@@ -45,3 +45,6 @@ __pycache__/
 .impeccable/live/
 .impeccable/audit/
 .wrangler/
+
+# Playwright MCP screenshots and traces
+.playwright-mcp/
