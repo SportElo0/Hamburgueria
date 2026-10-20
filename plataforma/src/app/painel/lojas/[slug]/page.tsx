@@ -10,6 +10,7 @@ import { StoreEditor } from '@/components/editor/StoreEditor';
 import { listOperators } from '@/lib/operators';
 import { getSecrets } from '@/lib/pix';
 import { orderingOf } from '@/lib/ordering';
+import { getOperation } from '@/lib/orders';
 
 const PAYMENT_HISTORY_MONTHS = 6;
 
@@ -38,7 +39,7 @@ export default async function LojaPage({
   const current = monthKey();
   const month = mes && /^\d{4}-\d{2}$/.test(mes) ? mes : current;
   const historyMonths = pastMonths(current, PAYMENT_HISTORY_MONTHS);
-  const [changes, currentChanges, months, pedidos, payments, operators, secrets] = await Promise.all([
+  const [changes, currentChanges, months, pedidos, payments, operators, secrets, operation] = await Promise.all([
     getChanges(slug, month),
     getChanges(slug, current),
     listChangeMonths(slug),
@@ -46,6 +47,7 @@ export default async function LojaPage({
     Promise.all(historyMonths.map((m) => getPayment(slug, m))),
     listOperators(slug),
     getSecrets(slug),
+    getOperation(slug),
   ]);
   // Stores saved before online ordering existed get its default settings in the editor.
   const record = { ...draft.data, store: { ...draft.data.store, ordering: orderingOf(draft.data.store) } };
@@ -73,6 +75,7 @@ export default async function LojaPage({
         hasMercadoPago={Boolean(secrets.mercadoPagoToken)}
         ordersUrl={`/loja/${slug}`}
         webhookUrl={`${origin}/api/pagamentos/mercadopago/${slug}`}
+        storeOpen={operation.open}
         initialTab={aba}
       />
     </>

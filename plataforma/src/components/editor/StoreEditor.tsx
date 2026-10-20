@@ -47,6 +47,7 @@ export function StoreEditor(props: {
   hasMercadoPago: boolean;
   ordersUrl: string;
   webhookUrl: string;
+  storeOpen: boolean;
   initialTab?: string;
 }) {
   const [store, setStore] = useState<Store>(props.record.store);
@@ -148,7 +149,7 @@ export function StoreEditor(props: {
         {tab === 'catalogo' && <CatalogEditor store={store} update={update} />}
         {tab === 'info' && <InfoEditor store={store} update={update} />}
         {tab === 'online' && (
-          <OnlineOrdersPanel store={store} update={update} operators={props.operators} hasMercadoPago={props.hasMercadoPago} ordersUrl={props.ordersUrl} webhookUrl={props.webhookUrl} />
+          <OnlineOrdersPanel store={store} update={update} operators={props.operators} hasMercadoPago={props.hasMercadoPago} ordersUrl={props.ordersUrl} webhookUrl={props.webhookUrl} open={props.storeOpen} />
         )}
         {tab === 'pedidos' && <PedidosPanel slug={store.slug} pedidos={props.pedidos} />}
         {tab === 'mudancas' && (

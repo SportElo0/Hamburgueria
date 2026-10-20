@@ -5,6 +5,7 @@ import { newId, type Store } from '@/lib/schema';
 import { brl, orderingOf } from '@/lib/ordering';
 import type { OperatorSummary } from '@/lib/operators';
 import { createOperatorAction, removeOperatorAction, saveMercadoPagoTokenAction } from '@/app/painel/actions';
+import { setOpenAction } from '@/app/loja/[slug]/actions';
 import type { Update } from './StoreEditor';
 
 const toCents = (v: string) => {
@@ -59,6 +60,7 @@ export function OnlineOrdersPanel(props: {
   hasMercadoPago: boolean;
   ordersUrl: string;
   webhookUrl: string;
+  open: boolean;
 }) {
   const o = orderingOf(props.store);
   const set = <K extends keyof typeof o>(key: K, value: (typeof o)[K]) =>
@@ -73,11 +75,40 @@ export function OnlineOrdersPanel(props: {
   const [opEmail, setOpEmail] = useState('');
   const [opName, setOpName] = useState('');
   const [handover, setHandover] = useState<{ email: string; password: string } | null>(null);
+  const [open, setOpen] = useState(props.open);
   const [areaName, setAreaName] = useState('');
   const [areaFee, setAreaFee] = useState('');
 
   return (
     <div className="grid gap-5 lg:grid-cols-2">
+      <section className={`card flex flex-wrap items-center justify-between gap-4 p-5 lg:col-span-2 ${open ? 'border-ok' : 'border-warn'}`}>
+        <div>
+          <h2 className="text-lg font-bold">{open ? 'Loja aberta: o site está aceitando pedidos' : 'Loja fechada: o site não aceita pedidos agora'}</h2>
+          <p className="text-sm text-ink-mute">
+            {o.enabled ? 'A loja abre e fecha aqui ou na tela de pedidos. Vale na hora, sem publicar.' : 'Ligue “Receber pedidos pelo site” e publique antes de abrir.'}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={busy}
+            aria-pressed={open}
+            onClick={() =>
+              start(async () => {
+                const res = await setOpenAction(props.store.slug, !open);
+                if (res.ok) setOpen(!open);
+                else setMsg({ tone: 'bad', text: res.error ?? 'Erro.' });
+              })
+            }
+            className={`btn min-h-12 border px-5 text-base ${open ? 'border-line bg-white text-ink hover:border-bad hover:text-bad' : 'border-ok bg-ok text-white hover:bg-ink'}`}
+          >
+            {open ? 'Fechar a loja' : 'Abrir a loja agora'}
+          </button>
+          <a href={props.ordersUrl} className="btn-ghost min-h-12 px-5 text-base" target="_blank" rel="noreferrer">
+            Tela de pedidos
+          </a>
+        </div>
+      </section>
       {msg && (
         <p role="status" className={`text-sm font-semibold lg:col-span-2 ${msg.tone === 'ok' ? 'text-ok' : 'text-bad'}`}>
           {msg.text}
@@ -101,9 +132,6 @@ export function OnlineOrdersPanel(props: {
           </label>
           <input id="eta" className="field" placeholder="Ex.: 40 a 60 min" value={o.eta} maxLength={40} onChange={(e) => set('eta', e.target.value)} />
         </div>
-        <p className="rounded-lg bg-accent-soft px-3 py-2 text-sm text-accent">
-          Depois de publicar, a loja precisa estar <strong>aberta</strong>: na tela de pedidos, toque em “Loja fechada” para virar “Loja aberta”. Fechada, o site não aceita pedidos.
-        </p>
         <a href={props.ordersUrl} className="btn-primary w-full" target="_blank" rel="noreferrer">
           Abrir a tela de pedidos da loja
         </a>
