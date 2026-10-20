@@ -28,13 +28,13 @@ OUT.mkdir(parents=True, exist_ok=True)
 LONG_SIDE = 3200
 INPUT_CAP = 1200
 
-# file, saturation multipliers per hue band (OpenCV hue 0-180), CLAHE clip, max auto-rotation (deg),
+# file, saturation multipliers per hue band (OpenCV hue 0-180), CLAHE clip (0 = off), max auto-rotation (deg),
 # share of Real-ESRGAN in the upscale, gray-world white balance strength
 PHOTOS = {
     'fachada': ('hero-fachada.jpg', {}, 1.3, 0.0, 0.0, 0.0),  # dusk sky is the subject: no ESRGAN, no white balance
     'piscina': ('piscina.jpg', {(80, 105): 0.86}, 1.15, 1.5, 0.35, 0.0),  # cyan water, smallest source
     'quarto-verde': ('quarto-verde.jpg', {}, 1.3, 2.0, 0.35, 0.4),
-    'quarto-amarelo': ('quarto-amarelo.jpg', {(18, 34): 0.9}, 1.2, 2.0, 0.3, 0.0),  # keep the warm walls
+    'quarto-amarelo': ('quarto-amarelo.jpg', {(18, 34): 0.9}, 0, 2.0, 0.2, 0.0),  # keep the warm walls; local contrast blotches the plaster
 }
 
 
@@ -147,7 +147,8 @@ def main():
         if wb:
             img = white_balance(img, wb)
         img = tame_hues(img, bands)
-        img = tone(img, clip)
+        if clip:
+            img = tone(img, clip)
         img = sharpen(img)
         Image.fromarray(img).save(OUT / f'{name}.jpg', quality=90, optimize=True, progressive=True)
         print(f'{name}: {src.shape[1]}x{src.shape[0]} -> {img.shape[1]}x{img.shape[0]}, levelled {tilt:+.2f} deg')
