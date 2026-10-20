@@ -103,7 +103,7 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
         <section className="card space-y-4 p-5">
           <div>
             <h2 className="text-lg font-bold">Campanha no WhatsApp</h2>
-            <p className="mt-1 text-sm text-ink-mute">Vai só para quem marcou “quero receber promoções” no pedido. Uma a duas por mês, sempre com um motivo real para voltar.</p>
+            <p className="mt-1 text-sm text-ink-mute">Vai só para quem marcou “quero receber promoções” no pedido. No máximo uma por mês, sempre com um motivo real para voltar.</p>
           </div>
           <div className="grid gap-3 md:grid-cols-[16rem_1fr]">
             <div>

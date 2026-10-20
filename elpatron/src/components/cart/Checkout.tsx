@@ -296,7 +296,7 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
           <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-1 h-5 w-5 shrink-0 cursor-pointer accent-[var(--color-brand)]" />
           <span className="text-[0.95rem] leading-snug">
             Quero receber promoções do {restaurant.name} no WhatsApp.
-            <span className="block text-sm text-ink-mute">Até duas mensagens por mês. Para sair, é só responder SAIR.</span>
+            <span className="block text-sm text-ink-mute">No máximo uma mensagem por mês. Para sair, é só responder SAIR.</span>
           </span>
         </label>
       </div>
