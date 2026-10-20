@@ -8,6 +8,7 @@ import type { Update } from './StoreEditor';
 export function AccountEditor({ store, update }: { store: Store; update: Update }) {
   const a = store.account;
   const [fee, setFee] = useState(formatPrice(a.monthlyFee));
+  const [extraPrice, setExtraPrice] = useState(formatPrice(a.extraPrice));
   const expired = a.partnerUntil && a.partnerUntil < new Date().toISOString().slice(0, 10);
   return (
     <div className="grid gap-5 lg:grid-cols-2">
@@ -60,6 +61,24 @@ export function AccountEditor({ store, update }: { store: Store; update: Update 
               }}
             />
           </div>
+        </div>
+        <div>
+          <label htmlFor="valor-extra" className="label">Valor da mudança extra (R$)</label>
+          <input
+            id="valor-extra"
+            inputMode="decimal"
+            className="field"
+            placeholder="Combinar caso a caso"
+            value={extraPrice}
+            onChange={(e) => setExtraPrice(e.target.value)}
+            onBlur={() => {
+              const v = parsePrice(extraPrice);
+              const cents = v === null || Number.isNaN(v) ? null : v;
+              setExtraPrice(formatPrice(cents));
+              update((d) => void (d.account.extraPrice = cents));
+            }}
+          />
+          <p className="mt-1 text-xs text-ink-mute">Usado para sugerir o valor a cobrar quando o mês passa do limite de mudanças.</p>
         </div>
       </section>
       <section className="card space-y-3 p-5">

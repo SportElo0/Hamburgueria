@@ -5,9 +5,21 @@ import { redirect } from 'next/navigation';
 import { ZodError } from 'zod';
 import { requireUser } from '@/lib/auth';
 import { storage } from '@/lib/storage';
-import { newId, storeSchema } from '@/lib/schema';
+import { newId, storeSchema, type PedidoEntry, type Store } from '@/lib/schema';
 import { isSlug } from '@/lib/slug';
-import { ConflictError, createStore, getDraft, logChange, publish, removeChange, saveDraft } from '@/lib/stores';
+import {
+  ConflictError,
+  addPedido,
+  createStore,
+  getDraft,
+  logChange,
+  publish,
+  removeChange,
+  resolvePedido,
+  saveDraft,
+  setPayment,
+} from '@/lib/stores';
+import { createReferral, updateReferral, type ReferralPatch } from '@/lib/referrals';
 import { seedStores } from '@/lib/seeds';
 
 export interface ActionResult {
@@ -117,6 +129,69 @@ export async function uploadImageAction(slug: string, formData: FormData): Promi
   try {
     await storage().writeFile(key, Buffer.from(await file.arrayBuffer()), file.type);
     return { ok: true, key };
+  } catch (err) {
+    return { ok: false, error: message(err) };
+  }
+}
+
+export async function addPedidoAction(slug: string, texto: string, canal: PedidoEntry['canal']): Promise<ActionResult> {
+  const user = await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  if (!texto.trim()) return { ok: false, error: 'Descreva o que foi pedido.' };
+  try {
+    await addPedido(slug, { texto, canal }, user.email);
+    revalidatePath(`/painel/lojas/${slug}`);
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: message(err) };
+  }
+}
+
+export async function resolvePedidoAction(slug: string, id: string, status: 'feito' | 'descartado'): Promise<ActionResult> {
+  const user = await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  try {
+    await resolvePedido(slug, id, status, user.email);
+    revalidatePath(`/painel/lojas/${slug}`);
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: message(err) };
+  }
+}
+
+export async function setPaymentAction(slug: string, month: string, input: { paid: boolean; note: string }): Promise<ActionResult> {
+  const user = await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  if (!/^\d{4}-\d{2}$/.test(month)) return { ok: false, error: 'Mês inválido.' };
+  try {
+    await setPayment(slug, month, input, user.email);
+    revalidatePath('/painel');
+    revalidatePath(`/painel/lojas/${slug}`);
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: message(err) };
+  }
+}
+
+export async function createReferralAction(input: { nome: string; segmento: Store['segment']; indicadoPor: string }): Promise<ActionResult> {
+  await requireUser();
+  if (!input.nome.trim()) return { ok: false, error: 'Informe o nome do negócio indicado.' };
+  if (!input.indicadoPor.trim()) return { ok: false, error: 'Informe quem indicou.' };
+  try {
+    await createReferral(input);
+    revalidatePath('/painel/indicacoes');
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: message(err) };
+  }
+}
+
+export async function updateReferralAction(id: string, patch: ReferralPatch): Promise<ActionResult> {
+  await requireUser();
+  try {
+    await updateReferral(id, patch);
+    revalidatePath('/painel/indicacoes');
+    return { ok: true };
   } catch (err) {
     return { ok: false, error: message(err) };
   }

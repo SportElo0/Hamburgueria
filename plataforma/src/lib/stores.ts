@@ -4,10 +4,16 @@ import { monthKey, nextIsExtra } from './changes';
 import {
   changeEntrySchema,
   changeLimit,
+  emptyPayment,
   emptyStore,
   newId,
+  paymentSchema,
+  pedidoEntrySchema,
   storeSchema,
   type ChangeEntry,
+  type PedidoEntry,
+  type PedidoStatus,
+  type Payment,
   type Store,
   type StoreRecord,
   type StoreSummary,
@@ -23,6 +29,8 @@ import {
 const draftKey = (slug: string) => `lojas/${slug}/rascunho.json`;
 const publishedKey = (slug: string) => `lojas/${slug}/publicado.json`;
 const changesKey = (slug: string, month: string) => `lojas/${slug}/mudancas/${month}.json`;
+const pedidosKey = (slug: string) => `lojas/${slug}/pedidos.json`;
+const paymentKey = (slug: string, month: string) => `lojas/${slug}/pagamentos/${month}.json`;
 
 export { ConflictError };
 
@@ -149,4 +157,70 @@ export async function removeChange(slug: string, month: string, id: string) {
 export async function listChangeMonths(slug: string) {
   const keys = await storage().list(`lojas/${slug}/mudancas/`);
   return keys.map((k) => k.split('/').pop()!.replace('.json', '')).sort().reverse();
+}
+
+/** Requests logged as they come in (usually by WhatsApp), before anyone has published them. */
+export async function listPedidos(slug: string): Promise<PedidoEntry[]> {
+  const doc = await storage().readJSON<PedidoEntry[]>(pedidosKey(slug));
+  return doc?.data ?? [];
+}
+
+export async function addPedido(slug: string, input: { texto: string; canal: PedidoEntry['canal'] }, by: string): Promise<PedidoEntry> {
+  const key = pedidosKey(slug);
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const doc = await storage().readJSON<PedidoEntry[]>(key);
+    const entries = doc?.data ?? [];
+    const entry = pedidoEntrySchema.parse({
+      id: newId(),
+      texto: input.texto,
+      canal: input.canal,
+      criadoEm: new Date().toISOString(),
+      criadoPor: by,
+      status: 'pendente',
+      resolvidoEm: null,
+      resolvidoPor: '',
+    });
+    try {
+      await storage().writeJSON(key, [...entries, entry], doc ? doc.etag : null);
+      return entry;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 3) throw err;
+    }
+  }
+  throw new ConflictError();
+}
+
+export async function resolvePedido(slug: string, id: string, status: Exclude<PedidoStatus, 'pendente'>, by: string): Promise<void> {
+  const key = pedidosKey(slug);
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const doc = await storage().readJSON<PedidoEntry[]>(key);
+    if (!doc) return;
+    const next = doc.data.map((p) => (p.id === id ? { ...p, status, resolvidoEm: new Date().toISOString(), resolvidoPor: by } : p));
+    try {
+      await storage().writeJSON(key, next, doc.etag);
+      return;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 3) throw err;
+    }
+  }
+  throw new ConflictError();
+}
+
+export async function getPayment(slug: string, month: string): Promise<Payment> {
+  const doc = await storage().readJSON<Payment>(paymentKey(slug, month));
+  return doc?.data ?? emptyPayment(month);
+}
+
+export async function setPayment(slug: string, month: string, input: { paid: boolean; note: string }, by: string): Promise<Payment> {
+  const key = paymentKey(slug, month);
+  const current = await storage().readJSON<Payment>(key);
+  const payment = paymentSchema.parse({
+    month,
+    paid: input.paid,
+    paidAt: input.paid ? (current?.data.paid ? current.data.paidAt : new Date().toISOString()) : null,
+    paidBy: input.paid ? by : '',
+    note: input.note,
+  });
+  await storage().writeJSON(key, payment, current ? current.etag : null);
+  return payment;
 }

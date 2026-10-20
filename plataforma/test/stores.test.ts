@@ -3,7 +3,22 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { useFileStorage } from '@/lib/storage';
-import { ConflictError, createStore, getChanges, getDraft, getPublished, listStores, logChange, publish, saveDraft } from '@/lib/stores';
+import {
+  ConflictError,
+  addPedido,
+  createStore,
+  getChanges,
+  getDraft,
+  getPayment,
+  getPublished,
+  listPedidos,
+  listStores,
+  logChange,
+  publish,
+  resolvePedido,
+  saveDraft,
+  setPayment,
+} from '@/lib/stores';
 import { toPublic } from '@/lib/schema';
 
 beforeEach(() => {
@@ -64,5 +79,44 @@ describe('lojas', () => {
     await createStore({ slug: 'gara', name: 'Gara', segment: 'restaurante' }, 'ana');
     await Promise.all([1, 2, 3].map((i) => logChange('gara', { description: `Pedido ${i}`, counted: true, reason: '' }, 'ana')));
     expect(await getChanges('gara')).toHaveLength(3);
+  });
+});
+
+describe('caixa de pedidos', () => {
+  it('registra, lista e resolve', async () => {
+    await createStore({ slug: 'gara', name: 'Gara', segment: 'restaurante' }, 'ana');
+    const p = await addPedido('gara', { texto: 'Trocar o preço da Calabresa', canal: 'WhatsApp' }, 'ana');
+    expect(p.status).toBe('pendente');
+    expect(await listPedidos('gara')).toHaveLength(1);
+    await resolvePedido('gara', p.id, 'feito', 'bia');
+    const [resolved] = await listPedidos('gara');
+    expect(resolved).toMatchObject({ status: 'feito', resolvidoPor: 'bia' });
+    expect(resolved.resolvidoEm).not.toBeNull();
+  });
+
+  it('pedidos simultâneos não se perdem', async () => {
+    await createStore({ slug: 'gara', name: 'Gara', segment: 'restaurante' }, 'ana');
+    await Promise.all([1, 2, 3].map((i) => addPedido('gara', { texto: `Pedido ${i}`, canal: 'WhatsApp' }, 'ana')));
+    expect(await listPedidos('gara')).toHaveLength(3);
+  });
+});
+
+describe('pagamentos', () => {
+  it('começa pendente e marca como pago', async () => {
+    await createStore({ slug: 'gara', name: 'Gara', segment: 'restaurante' }, 'ana');
+    expect(await getPayment('gara', '2026-10')).toMatchObject({ paid: false, paidAt: null });
+    await setPayment('gara', '2026-10', { paid: true, note: 'Pix dia 5' }, 'ana');
+    const paid = await getPayment('gara', '2026-10');
+    expect(paid).toMatchObject({ paid: true, paidBy: 'ana', note: 'Pix dia 5' });
+    expect(paid.paidAt).not.toBeNull();
+  });
+
+  it('não perde a data de pagamento ao só editar a nota', async () => {
+    await createStore({ slug: 'gara', name: 'Gara', segment: 'restaurante' }, 'ana');
+    await setPayment('gara', '2026-10', { paid: true, note: '' }, 'ana');
+    const first = await getPayment('gara', '2026-10');
+    await setPayment('gara', '2026-10', { paid: true, note: 'combinado' }, 'ana');
+    const second = await getPayment('gara', '2026-10');
+    expect(second.paidAt).toBe(first.paidAt);
   });
 });

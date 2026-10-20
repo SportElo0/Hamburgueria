@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { monthKey, nextIsExtra, usage } from '@/lib/changes';
 import { formatPrice, parsePrice, slugify } from '@/lib/slug';
-import { storeSchema, toPublic } from '@/lib/schema';
+import { emptyStore, partnerStatus, storeSchema, toPublic } from '@/lib/schema';
 import type { ChangeEntry } from '@/lib/schema';
 import { seedStores } from '@/lib/seeds';
 
@@ -41,6 +41,14 @@ describe('preços', () => {
 
 describe('slug', () => {
   it('normaliza acentos e Ø', () => expect(slugify('SemvØ Clothing — Juquehy')).toBe('semvo-clothing-juquehy'));
+});
+
+describe('prazo de parceria', () => {
+  const store = (partnerUntil: string) => ({ ...emptyStore('x', 'X', 'loja'), account: { ...emptyStore('x', 'X', 'loja').account, partnerUntil } });
+  it('sem prazo definido', () => expect(partnerStatus(store(''), '2026-10-01')).toBe('sem-prazo'));
+  it('em dia quando falta mais que o aviso', () => expect(partnerStatus(store('2026-12-01'), '2026-10-01')).toBe('em-dia'));
+  it('vencendo dentro da janela de aviso', () => expect(partnerStatus(store('2026-10-10'), '2026-10-01')).toBe('vencendo'));
+  it('vencido depois da data', () => expect(partnerStatus(store('2026-09-30'), '2026-10-01')).toBe('vencido'));
 });
 
 describe('lojas importadas', () => {

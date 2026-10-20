@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
-import type { ChangeEntry, Store, StoreRecord } from '@/lib/schema';
+import type { ChangeEntry, PedidoEntry, Payment, Store, StoreRecord } from '@/lib/schema';
 import type { Usage } from '@/lib/changes';
 import { saveStoreAction } from '@/app/painel/actions';
 import { CatalogEditor } from './CatalogEditor';
@@ -10,13 +10,17 @@ import { AccountEditor } from './AccountEditor';
 import { ChangesPanel } from './ChangesPanel';
 import { ExtraEditor } from './ExtraEditor';
 import { IntegrationPanel } from './IntegrationPanel';
+import { PedidosPanel } from './PedidosPanel';
+import { PagamentosPanel } from './PagamentosPanel';
 import { PublishDialog } from './PublishDialog';
 import { UsageBadge } from '../UsageBadge';
 
 const TABS = [
   ['catalogo', 'Cardápio / catálogo'],
   ['info', 'Informações'],
+  ['pedidos', 'Pedidos'],
   ['mudancas', 'Mudanças'],
+  ['pagamentos', 'Pagamentos'],
   ['conta', 'Conta e plano'],
   ['extra', 'Dados extras'],
   ['integracao', 'Integração'],
@@ -33,6 +37,8 @@ export function StoreEditor(props: {
   months: string[];
   changes: ChangeEntry[];
   currentUsage: Usage;
+  pedidos: PedidoEntry[];
+  paymentHistory: { month: string; payment: Payment }[];
   apiUrl: string;
   initialTab?: string;
 }) {
@@ -114,24 +120,38 @@ export function StoreEditor(props: {
       )}
 
       <nav aria-label="Seções da loja" className="mt-6 flex gap-1 overflow-x-auto border-b border-line">
-        {TABS.map(([id, label]) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => selectTab(id)}
-            aria-current={tab === id ? 'page' : undefined}
-            className="-mb-px shrink-0 cursor-pointer border-b-2 border-transparent px-3 py-2.5 text-sm font-semibold text-ink-mute hover:text-ink aria-[current=page]:border-ink aria-[current=page]:text-ink"
-          >
-            {label}
-          </button>
-        ))}
+        {TABS.map(([id, label]) => {
+          const pendentes = id === 'pedidos' ? props.pedidos.filter((p) => p.status === 'pendente').length : 0;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => selectTab(id)}
+              aria-current={tab === id ? 'page' : undefined}
+              className="-mb-px shrink-0 cursor-pointer border-b-2 border-transparent px-3 py-2.5 text-sm font-semibold text-ink-mute hover:text-ink aria-[current=page]:border-ink aria-[current=page]:text-ink"
+            >
+              {label}
+              {pendentes > 0 && <span className="chip ml-1.5 bg-warn/10 px-1.5 py-0 text-xs text-warn">{pendentes}</span>}
+            </button>
+          );
+        })}
       </nav>
 
       <div className="mt-6">
         {tab === 'catalogo' && <CatalogEditor store={store} update={update} />}
         {tab === 'info' && <InfoEditor store={store} update={update} />}
+        {tab === 'pedidos' && <PedidosPanel slug={store.slug} pedidos={props.pedidos} />}
         {tab === 'mudancas' && (
           <ChangesPanel slug={store.slug} month={props.month} currentMonth={props.currentMonth} months={props.months} changes={props.changes} limit={props.currentUsage.limit} />
+        )}
+        {tab === 'pagamentos' && (
+          <PagamentosPanel
+            slug={store.slug}
+            monthlyFee={store.account.monthlyFee}
+            extraPrice={store.account.extraPrice}
+            currentExtras={props.currentUsage.extras}
+            history={props.paymentHistory}
+          />
         )}
         {tab === 'conta' && <AccountEditor store={store} update={update} />}
         {tab === 'extra' && <ExtraEditor store={store} update={update} />}

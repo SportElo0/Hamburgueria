@@ -167,6 +167,7 @@
   "changeLimit": null,
   "partnerUntil": "",
   "monthlyFee": null,
+  "extraPrice": null,
   "notes": "Parceiro: 2 mudanças grátis por mês. Endereço completo e horários a confirmar."
  }
 }

@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import { requireUser } from '@/lib/auth';
-import { listStores, getChanges, getDraft } from '@/lib/stores';
+import { listStores, getChanges, getDraft, getPayment, listPedidos } from '@/lib/stores';
 import { monthKey, monthLabel, usage } from '@/lib/changes';
-import { changeLimit, PLAN_LABEL } from '@/lib/schema';
+import { changeLimit, partnerStatus, PLAN_LABEL, type PartnerStatus } from '@/lib/schema';
 import { UsageBadge } from '@/components/UsageBadge';
 import { ImportSeeds } from '@/components/ImportSeeds';
 import { seedStores } from '@/lib/seeds';
 
 const SEGMENT_LABEL = { restaurante: 'Restaurante', loja: 'Loja', servico: 'Serviço' } as const;
+const PARTNER_CHIP: Partial<Record<PartnerStatus, { label: string; tone: string }>> = {
+  vencido: { label: 'Parceria vencida', tone: 'bg-bad/10 text-bad' },
+  vencendo: { label: 'Parceria vencendo', tone: 'bg-warn/10 text-warn' },
+};
 
 export default async function PainelPage() {
   await requireUser();
@@ -15,8 +19,16 @@ export default async function PainelPage() {
   const stores = await listStores();
   const rows = await Promise.all(
     stores.map(async (s) => {
-      const [changes, draft] = await Promise.all([getChanges(s.slug, month), getDraft(s.slug)]);
-      return { ...s, usage: usage(changes, draft ? changeLimit(draft.data.store) : 0), pending: Boolean(draft?.data.publishedAt && draft.data.updatedAt > draft.data.publishedAt) };
+      const [changes, draft, pedidos, payment] = await Promise.all([getChanges(s.slug, month), getDraft(s.slug), listPedidos(s.slug), getPayment(s.slug, month)]);
+      return {
+        ...s,
+        usage: usage(changes, draft ? changeLimit(draft.data.store) : 0),
+        pending: Boolean(draft?.data.publishedAt && draft.data.updatedAt > draft.data.publishedAt),
+        partner: draft ? partnerStatus(draft.data.store) : 'sem-prazo',
+        pedidosAbertos: pedidos.filter((p) => p.status === 'pendente').length,
+        monthlyFee: draft?.data.store.account.monthlyFee ?? null,
+        payment,
+      };
     }),
   );
   const extras = rows.reduce((n, r) => n + r.usage.extras, 0);
@@ -57,6 +69,15 @@ export default async function PainelPage() {
                     </p>
                   </div>
                   <UsageBadge usage={r.usage} />
+                </div>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {PARTNER_CHIP[r.partner] && <span className={`chip ${PARTNER_CHIP[r.partner]!.tone}`}>{PARTNER_CHIP[r.partner]!.label}</span>}
+                  {r.pedidosAbertos > 0 && (
+                    <span className="chip bg-warn/10 text-warn">
+                      {r.pedidosAbertos} pedido{r.pedidosAbertos > 1 ? 's' : ''} pendente{r.pedidosAbertos > 1 ? 's' : ''}
+                    </span>
+                  )}
+                  {r.monthlyFee !== null && !r.payment.paid && <span className="chip bg-ink/5 text-ink-soft">Mensalidade pendente</span>}
                 </div>
                 <p className="mt-3 text-xs text-ink-mute">
                   {r.publishedAt ? `Publicado em ${new Date(r.publishedAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}` : 'Ainda não publicado'}
