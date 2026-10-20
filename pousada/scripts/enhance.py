@@ -6,7 +6,11 @@ pull back oversaturated hues, lift shadows with local contrast (CLAHE on lightne
 light unsharp mask. Writes JPEG masters to pousada/assets/photos/ and a before/after sheet.
 
   pip install onnxruntime opencv-python-headless pillow numpy
-  python3 pousada/scripts/enhance.py <source-dir> <RealESRGAN_x4.onnx>
+  python3 pousada/scripts/enhance.py <source-dir> <RealESRGAN_x4.onnx> [cache-dir]
+
+Real-ESRGAN alone paints water, skies and plaster, so its output is blended with a plain
+Lanczos upscale (mix per photo, 0 = Lanczos only). Gray-world white balance is skipped on the
+warm photos: their warm light is the point of them.
 """
 import sys
 from pathlib import Path
@@ -18,17 +22,19 @@ from PIL import Image
 
 SRC = Path(sys.argv[1])
 MODEL = sys.argv[2]
+CACHE = Path(sys.argv[3]) if len(sys.argv) > 3 else None
 OUT = Path(__file__).resolve().parent.parent / 'assets' / 'photos'
 OUT.mkdir(parents=True, exist_ok=True)
 LONG_SIDE = 3200
 INPUT_CAP = 1200
 
-# file, saturation multipliers per hue band (OpenCV hue 0-180), shadow lift, max auto-rotation (deg)
+# file, saturation multipliers per hue band (OpenCV hue 0-180), CLAHE clip, max auto-rotation (deg),
+# share of Real-ESRGAN in the upscale, gray-world white balance strength
 PHOTOS = {
-    'fachada': ('hero-fachada.jpg', {}, 1.6, 0.0),  # sky is the subject; do not level a hand-held dusk shot by guess
-    'piscina': ('piscina.jpg', {(80, 105): 0.72}, 1.2, 1.5),  # cyan water
-    'quarto-verde': ('quarto-verde.jpg', {}, 1.4, 2.0),
-    'quarto-amarelo': ('quarto-amarelo.jpg', {(18, 34): 0.8}, 1.3, 2.0),  # yellow walls
+    'fachada': ('hero-fachada.jpg', {}, 1.3, 0.0, 0.0, 0.0),  # dusk sky is the subject: no ESRGAN, no white balance
+    'piscina': ('piscina.jpg', {(80, 105): 0.86}, 1.15, 1.5, 0.35, 0.0),  # cyan water, smallest source
+    'quarto-verde': ('quarto-verde.jpg', {}, 1.3, 2.0, 0.35, 0.4),
+    'quarto-amarelo': ('quarto-amarelo.jpg', {(18, 34): 0.9}, 1.2, 2.0, 0.3, 0.0),  # keep the warm walls
 }
 
 
@@ -117,18 +123,29 @@ def sharpen(img, amount=0.35, radius=1.2):
 def main():
     sess = ort.InferenceSession(MODEL, providers=['CPUExecutionProvider'])
     pairs = []
-    for name, (file, bands, clip, limit) in PHOTOS.items():
+    for name, (file, bands, clip, limit, mix, wb) in PHOTOS.items():
         src = np.asarray(Image.open(SRC / file).convert('RGB'))
         # x4 from a 1200px input lands near the 3200px target with headroom to supersample down;
         # feeding the full 2000px source would only cost minutes for detail thrown away below.
         k = min(1.0, INPUT_CAP / max(src.shape[:2]))
         small = cv2.resize(src, None, fx=k, fy=k, interpolation=cv2.INTER_AREA) if k < 1 else src
-        up = upscale(sess, small)
-        scale = LONG_SIDE / max(up.shape[:2])
-        img = cv2.resize(up, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA) if scale < 1 else up
+        size = (round(src.shape[1] * LONG_SIDE / max(src.shape[:2])), round(src.shape[0] * LONG_SIDE / max(src.shape[:2])))
+        img = cv2.resize(src, size, interpolation=cv2.INTER_LANCZOS4)
+        if mix:
+            cached = CACHE / f'{name}-x4.png' if CACHE else None
+            if cached and cached.exists():
+                up = np.asarray(Image.open(cached).convert('RGB'))
+            else:
+                up = upscale(sess, small)
+                if cached:
+                    CACHE.mkdir(parents=True, exist_ok=True)
+                    Image.fromarray(up).save(cached)
+            up = cv2.resize(up, size, interpolation=cv2.INTER_AREA)
+            img = cv2.addWeighted(up, mix, img, 1 - mix, 0)
         tilt = vertical_tilt(img, limit)
         img = rotate_crop(img, tilt)
-        img = white_balance(img)
+        if wb:
+            img = white_balance(img, wb)
         img = tame_hues(img, bands)
         img = tone(img, clip)
         img = sharpen(img)
