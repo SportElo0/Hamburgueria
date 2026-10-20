@@ -20,8 +20,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   return NextResponse.json(toPublic(record.store, record.publishedAt, mediaBase, operation.open), {
     headers: {
       ...CORS,
-      // Edge caches for 30 s; a fresh publish shows up within that window, and stale copies keep sites up if storage blips.
-      'Cache-Control': 'public, max-age=0, s-maxage=30, stale-while-revalidate=86400',
+      // Short edge cache: the open/closed switch must reach the site within seconds. Stale copies
+      // still keep sites up if storage blips.
+      'Cache-Control': 'public, max-age=0, s-maxage=5, stale-while-revalidate=30, stale-if-error=86400',
     },
   });
 }

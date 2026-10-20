@@ -101,6 +101,9 @@ export function OnlineOrdersPanel(props: {
           </label>
           <input id="eta" className="field" placeholder="Ex.: 40 a 60 min" value={o.eta} maxLength={40} onChange={(e) => set('eta', e.target.value)} />
         </div>
+        <p className="rounded-lg bg-accent-soft px-3 py-2 text-sm text-accent">
+          Depois de publicar, a loja precisa estar <strong>aberta</strong>: na tela de pedidos, toque em “Loja fechada” para virar “Loja aberta”. Fechada, o site não aceita pedidos.
+        </p>
         <a href={props.ordersUrl} className="btn-primary w-full" target="_blank" rel="noreferrer">
           Abrir a tela de pedidos da loja
         </a>
