@@ -11,6 +11,8 @@ import { ChangesPanel } from './ChangesPanel';
 import { ExtraEditor } from './ExtraEditor';
 import { IntegrationPanel } from './IntegrationPanel';
 import { PedidosPanel } from './PedidosPanel';
+import { OnlineOrdersPanel } from './OnlineOrdersPanel';
+import type { OperatorSummary } from '@/lib/operators';
 import { PagamentosPanel } from './PagamentosPanel';
 import { PublishDialog } from './PublishDialog';
 import { UsageBadge } from '../UsageBadge';
@@ -18,7 +20,8 @@ import { UsageBadge } from '../UsageBadge';
 const TABS = [
   ['catalogo', 'Cardápio / catálogo'],
   ['info', 'Informações'],
-  ['pedidos', 'Pedidos'],
+  ['online', 'Pedidos online'],
+  ['pedidos', 'Pedidos de mudança'],
   ['mudancas', 'Mudanças'],
   ['pagamentos', 'Pagamentos'],
   ['conta', 'Conta e plano'],
@@ -40,6 +43,10 @@ export function StoreEditor(props: {
   pedidos: PedidoEntry[];
   paymentHistory: { month: string; payment: Payment }[];
   apiUrl: string;
+  operators: OperatorSummary[];
+  hasMercadoPago: boolean;
+  ordersUrl: string;
+  webhookUrl: string;
   initialTab?: string;
 }) {
   const [store, setStore] = useState<Store>(props.record.store);
@@ -140,6 +147,9 @@ export function StoreEditor(props: {
       <div className="mt-6">
         {tab === 'catalogo' && <CatalogEditor store={store} update={update} />}
         {tab === 'info' && <InfoEditor store={store} update={update} />}
+        {tab === 'online' && (
+          <OnlineOrdersPanel store={store} update={update} operators={props.operators} hasMercadoPago={props.hasMercadoPago} ordersUrl={props.ordersUrl} webhookUrl={props.webhookUrl} />
+        )}
         {tab === 'pedidos' && <PedidosPanel slug={store.slug} pedidos={props.pedidos} />}
         {tab === 'mudancas' && (
           <ChangesPanel slug={store.slug} month={props.month} currentMonth={props.currentMonth} months={props.months} changes={props.changes} limit={props.currentUsage.limit} />

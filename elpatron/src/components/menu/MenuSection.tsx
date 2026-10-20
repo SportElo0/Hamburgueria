@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { categories, isBurger, type CategoryId, type Product } from '@/content/menu';
 import { useCatalog } from '@/content/live';
 import { formatBRL } from '@/lib/money';
 import { useCart, useUi } from '../Providers';
 import { Chilli, Star } from '../brand/Brand';
-import { PlusIcon } from '../ui/Icons';
+import { ArrowRightIcon, PlusIcon } from '../ui/Icons';
 import { Price, useNativeDialog } from '../ui/primitives';
 
 function useCategory(id: CategoryId) {
@@ -39,52 +39,73 @@ function useQuickAdd() {
   };
 }
 
+const isCategory = (v: string): v is CategoryId => categories.some((c) => c.id === v);
+
+/** Opens a menu tab from anywhere (header links, the story's buttons, the footer). */
+export const MENU_TAB_EVENT = 'menu:tab';
+
 export function MenuSection() {
   const [active, setActive] = useState<CategoryId>('chefoes');
   const navRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const [pickerFor, setPickerFor] = useState<string | null>(null);
-  // While a chip-triggered scroll is in flight the observer would flag whichever section passes
-  // first (Bebidas and Sobremesas share a row on wide screens), so it waits until the jump lands.
-  const lockUntil = useRef(0);
+  // Bumped when opening a tab should also bring the panel's top into view (after it renders).
+  const [scrollTick, setScrollTick] = useState(0);
 
-  useEffect(() => {
-    const els = categories.map((c) => document.getElementById(`cat-${c.id}`)).filter(Boolean) as HTMLElement[];
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (performance.now() < lockUntil.current) return;
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActive(visible[0].target.id.replace('cat-', '') as CategoryId);
-      },
-      { rootMargin: '-30% 0px -60% 0px' },
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+  // One category at a time, like tabs: someone after a burger never scrolls past drinks and desserts.
+  const open = useCallback((id: CategoryId, scroll: boolean) => {
+    setActive(id);
+    if (scroll) setScrollTick((t) => t + 1);
   }, []);
 
-  // Keep the active chip centred by scrolling the chip rail only. scrollIntoView would also
-  // scroll the window (it walks every scrollable ancestor), yanking the page on load and
-  // cancelling in-flight smooth scrolls from the header links.
-  const centred = useRef(false);
+  useEffect(() => {
+    if (!scrollTick) return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    // Only scroll when the panel's top is out of view: switching tabs at the top of the list stays put.
+    const top = panel.getBoundingClientRect().top;
+    const offset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) + (navRef.current?.offsetHeight ?? 0);
+    if (top >= offset - 4 && top < window.innerHeight * 0.6) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: window.scrollY + top - offset - 8, behavior: reduce ? 'auto' : 'smooth' });
+  }, [scrollTick]);
+
+  // #cat-… links (footer, nav, story) select their tab.
+  useEffect(() => {
+    const fromHash = () => {
+      const id = decodeURIComponent(location.hash).replace('#cat-', '');
+      if (location.hash.startsWith('#cat-') && isCategory(id)) open(id, true);
+    };
+    const fromEvent = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail;
+      if (isCategory(id)) open(id, true);
+    };
+    const first = window.setTimeout(fromHash, 0);
+    window.addEventListener('hashchange', fromHash);
+    window.addEventListener(MENU_TAB_EVENT, fromEvent);
+    return () => {
+      window.clearTimeout(first);
+      window.removeEventListener('hashchange', fromHash);
+      window.removeEventListener(MENU_TAB_EVENT, fromEvent);
+    };
+  }, [open]);
+
+  // Keep the active tab centred by scrolling the tab rail only (scrollIntoView would move the page too).
   useEffect(() => {
     const nav = navRef.current;
     const btn = nav?.querySelector<HTMLElement>(`[data-cat="${active}"]`);
-    if (!nav || !btn) return;
-    if (!centred.current) {
-      centred.current = true;
-      if (active === 'chefoes') return;
-    }
-    if (nav.scrollWidth <= nav.clientWidth) return;
+    if (!nav || !btn || nav.scrollWidth <= nav.clientWidth) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     nav.scrollTo({ left: btn.offsetLeft - nav.clientWidth / 2 + btn.offsetWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
   }, [active]);
 
-  const jump = (id: CategoryId, at: number) => {
-    const el = document.getElementById(`cat-${id}`);
-    if (!el) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setActive(id);
-    lockUntil.current = at + 1200;
-    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  const onTabKey = (e: React.KeyboardEvent, i: number) => {
+    const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!step) return;
+    e.preventDefault();
+    const next = categories[(i + step + categories.length) % categories.length];
+    open(next.id, false);
+    navRef.current?.querySelector<HTMLElement>(`[data-cat="${next.id}"]`)?.focus();
   };
 
   return (
@@ -98,7 +119,7 @@ export function MenuSection() {
             </h2>
           </div>
           <div className="max-w-sm pb-3 md:text-right">
-            <p className="text-lg text-ink-soft">Monte o pedido aqui e envie pronto pelo WhatsApp.</p>
+            <p className="text-lg text-ink-soft">Escolha uma categoria e monte a sacola.</p>
             <p className="mt-2 text-sm text-ink-mute">Preços em reais. Fotos do cardápio da casa; imagens ilustrativas.</p>
           </div>
         </div>
@@ -107,15 +128,20 @@ export function MenuSection() {
       </div>
 
       <div className="sticky top-[var(--header-h)] z-30 mt-6 border-b border-brand/20 bg-cream/92 backdrop-blur-md">
-        <nav ref={navRef} aria-label="Categorias do cardápio" className="relative mx-auto flex max-w-[1360px] gap-1 overflow-x-auto px-3 py-2.5 [scrollbar-width:none] md:gap-2 md:px-8">
-          {categories.map((c) => (
+        <nav ref={navRef} aria-label="Categorias do cardápio" role="tablist" className="relative mx-auto flex max-w-[1360px] gap-1 overflow-x-auto px-3 py-2.5 [scrollbar-width:none] md:gap-2 md:px-8">
+          {categories.map((c, i) => (
             <button
               key={c.id}
+              id={`tab-${c.id}`}
               type="button"
+              role="tab"
               data-cat={c.id}
-              aria-current={active === c.id ? 'true' : undefined}
-              onClick={(e) => jump(c.id, e.timeStamp)}
-              className="cond min-h-11 shrink-0 cursor-pointer rounded-full px-4 text-[1.05rem] font-bold tracking-[0.08em] whitespace-nowrap uppercase transition-colors hover:bg-ink/8 aria-[current=true]:bg-mustard aria-[current=true]:text-on-dark md:px-5"
+              aria-selected={active === c.id}
+              aria-controls="menu-panel"
+              tabIndex={active === c.id ? 0 : -1}
+              onClick={() => open(c.id, true)}
+              onKeyDown={(e) => onTabKey(e, i)}
+              className="cond min-h-11 shrink-0 cursor-pointer rounded-full px-4 text-[1.05rem] font-bold tracking-[0.08em] whitespace-nowrap uppercase transition-colors hover:bg-ink/8 aria-selected:bg-mustard aria-selected:text-on-dark md:px-5"
             >
               {c.label}
             </button>
@@ -123,13 +149,17 @@ export function MenuSection() {
         </nav>
       </div>
 
-      <div className="mx-auto max-w-[1360px] px-5 md:px-10">
-        <Showcase id="chefoes" />
-        <Showcase id="especiais" />
-        <Showcase id="classicos" />
-        <TextList id="porcoes" />
-        <Addons onPick={setPickerFor} />
-        <Boards />
+      <div ref={panelRef} id="menu-panel" role="tabpanel" aria-labelledby={`tab-${active}`} className="mx-auto min-h-[60svh] max-w-[1360px] scroll-mt-40 px-5 md:px-10">
+        {active === 'chefoes' || active === 'especiais' || active === 'classicos' ? (
+          <Showcase key={active} id={active} />
+        ) : active === 'porcoes' ? (
+          <TextList id="porcoes" />
+        ) : active === 'adicionais' ? (
+          <Addons onPick={setPickerFor} />
+        ) : (
+          <BoardList key={active} id={active} />
+        )}
+        <NextTab active={active} onOpen={(id) => open(id, true)} />
       </div>
       <BurgerPicker addonId={pickerFor} onClose={() => setPickerFor(null)} />
     </section>
@@ -151,7 +181,7 @@ function Notice() {
 function CategoryHeading({ id }: { id: CategoryId }) {
   const c = categories.find((x) => x.id === id)!;
   return (
-    <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-2 pt-20 pb-6 md:pt-28">
+    <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-2 pt-10 pb-6 md:pt-14">
       <h3 className="display gold-foil flex items-center gap-3 text-[clamp(2.3rem,5.6vw,4.2rem)]">{c.title}</h3>
       <p className="cond pb-1 text-lg font-semibold tracking-[0.06em] text-ink-mute uppercase">{c.blurb}</p>
     </div>
@@ -350,16 +380,6 @@ function BoardRow({ p }: { p: Product }) {
   );
 }
 
-function Boards() {
-  return (
-    <div className="grid gap-x-16 lg:grid-cols-2">
-      {(['bebidas', 'sobremesas'] as const).map((id) => (
-        <BoardList key={id} id={id} />
-      ))}
-    </div>
-  );
-}
-
 function BoardList({ id }: { id: CategoryId }) {
   const items = useCategory(id);
   return (
@@ -432,5 +452,23 @@ function BurgerPicker({ addonId, onClose }: { addonId: string | null; onClose: (
         </div>
       </div>
     </dialog>
+  );
+}
+
+/** At the end of a tab: the next category, so browsing the whole menu is still one tap away. */
+function NextTab({ active, onOpen }: { active: CategoryId; onOpen: (id: CategoryId) => void }) {
+  const i = categories.findIndex((c) => c.id === active);
+  const next = categories[i + 1];
+  if (!next) return null;
+  return (
+    <div className="mt-12 flex justify-center">
+      <button
+        type="button"
+        onClick={() => onOpen(next.id)}
+        className="cond inline-flex min-h-13 cursor-pointer items-center gap-3 rounded-full border-2 border-brand/50 px-7 text-base font-bold tracking-[0.08em] uppercase transition-colors hover:border-mustard hover:text-mustard"
+      >
+        Ver {next.title.toLowerCase().startsWith('os ') ? next.title.slice(3).toLowerCase() : next.title.toLowerCase()} <ArrowRightIcon size={18} />
+      </button>
+    </div>
   );
 }

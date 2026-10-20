@@ -9,8 +9,13 @@ export const SESSION_DAYS = 7;
 export interface Session {
   email: string;
   name: string;
+  /** `loja`: a store's own staff, limited to that store's orders. Older cookies have no role: team. */
+  role?: 'equipe' | 'loja';
+  slug?: string;
   exp: number;
 }
+
+export const isTeam = (s: Pick<Session, 'role'>) => s.role !== 'loja';
 
 const enc = new TextEncoder();
 

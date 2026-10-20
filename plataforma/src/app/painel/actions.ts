@@ -21,6 +21,8 @@ import {
 } from '@/lib/stores';
 import { createReferral, updateReferral, type ReferralPatch } from '@/lib/referrals';
 import { seedStores } from '@/lib/seeds';
+import { setMercadoPagoToken } from '@/lib/pix';
+import { OperatorError, removeOperator, upsertOperator } from '@/lib/operators';
 
 export interface ActionResult {
   ok: boolean;
@@ -214,4 +216,33 @@ export async function importSeedsAction(): Promise<ActionResult & { created?: st
   }
   revalidatePath('/painel');
   return { ok: true, created };
+}
+
+// ───────────── Online ordering: payment token and store logins ─────────────
+
+export async function saveMercadoPagoTokenAction(slug: string, token: string): Promise<ActionResult> {
+  await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  const t = token.trim();
+  if (t && !/^(APP_USR|TEST)-[\w-]{20,200}$/.test(t)) return { ok: false, error: 'Esse não parece um access token do Mercado Pago (começa com APP_USR- ou TEST-).' };
+  await setMercadoPagoToken(slug, t);
+  return { ok: true };
+}
+
+export async function createOperatorAction(slug: string, email: string, name: string): Promise<ActionResult & { password?: string }> {
+  const user = await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  try {
+    const password = await upsertOperator(slug, { email, name }, user.email);
+    return { ok: true, password };
+  } catch (err) {
+    return { ok: false, error: err instanceof OperatorError ? err.message : message(err) };
+  }
+}
+
+export async function removeOperatorAction(slug: string, email: string): Promise<ActionResult> {
+  await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  await removeOperator(slug, email);
+  return { ok: true };
 }

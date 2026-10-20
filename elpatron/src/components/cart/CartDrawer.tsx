@@ -1,6 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import Link from 'next/link';
+import { lastOrder, trackingPath } from '@/lib/checkout';
 import { useCatalog } from '@/content/live';
 import { resolveSelections, unitPrice } from '@/lib/cart';
 import { formatBRL } from '@/lib/money';
@@ -9,6 +11,7 @@ import { useCart, useUi } from '../Providers';
 import { Star } from '../brand/Brand';
 import { ArrowRightIcon, BagIcon, ChatIcon, CheckIcon, CloseIcon, CopyIcon, EditIcon, TrashIcon } from '../ui/Icons';
 import { Stepper, useNativeDialog } from '../ui/primitives';
+import { Checkout } from './Checkout';
 
 export function CartDrawer() {
   const ui = useUi();
@@ -50,8 +53,13 @@ function CartBody({ onClose }: { onClose: () => void }) {
     () => buildOrderMessage(cart.lines, cart.lookup, { customerName: name, note, mode, address }),
     [cart.lines, cart.lookup, name, note, mode, address],
   );
-  const whatsapp = useCatalog().restaurant.whatsappNumber;
+  const catalog = useCatalog();
+  const whatsapp = catalog.restaurant.whatsappNumber;
   const live = Boolean(whatsapp);
+  // With online ordering on in the panel, the order is finished here and sent to the store, not to WhatsApp.
+  const ordering = catalog.ordering;
+  const [step, setStep] = useState<'sacola' | 'finalizar'>('sacola');
+  const checkingOut = Boolean(ordering) && step === 'finalizar' && cart.lines.length > 0;
 
   const guard = () => {
     if (mode === 'entrega' && !address.trim()) {
@@ -90,7 +98,7 @@ function CartBody({ onClose }: { onClose: () => void }) {
     <div className="flex h-full flex-col">
       <header className="flex items-center justify-between gap-4 border-b-[5px] border-double border-ink px-5 pt-5 pb-4 md:px-8 md:pt-8">
         <h2 id="cart-title" className="display flex items-center gap-3 text-[2.6rem]">
-          Sua sacola
+          {checkingOut ? 'Finalizar' : 'Sua sacola'}
           {cart.count > 0 && <span className="cond tabular rounded-full bg-ink px-2.5 py-0.5 text-lg tracking-wide text-on-dark">{cart.count}</span>}
         </h2>
         <button type="button" onClick={onClose} aria-label="Fechar sacola" className="grid h-11 w-11 cursor-pointer place-items-center rounded-full transition-colors hover:bg-ink/8">
@@ -115,13 +123,16 @@ function CartBody({ onClose }: { onClose: () => void }) {
         </div>
       )}
 
-      {cart.lines.length === 0 ? (
+      {checkingOut && ordering ? (
+        <Checkout ordering={ordering} onBack={() => setStep('sacola')} onPlaced={onClose} />
+      ) : cart.lines.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-8 text-center">
           <span className="grid h-20 w-20 place-items-center rounded-full bg-cream-deep text-ink-soft">
             <BagIcon size={34} />
           </span>
           <p className="display text-[2rem]">Nada por aqui ainda</p>
           <p className="max-w-[30ch] text-ink-soft">Escolha um burger, uma porção ou uma bebida e ele aparece aqui.</p>
+          <LastOrderLink onClose={onClose} />
           <button
             type="button"
             onClick={goToMenu}
@@ -193,6 +204,7 @@ function CartBody({ onClose }: { onClose: () => void }) {
               })}
             </ul>
 
+            {!ordering && (
             <div className="mt-6 space-y-5 pb-6">
               <fieldset>
                 <legend className="cond text-sm font-bold tracking-[0.1em] uppercase">Como você quer receber?</legend>
@@ -280,8 +292,32 @@ function CartBody({ onClose }: { onClose: () => void }) {
                 />
               </div>
             </div>
+            )}
+            {ordering && <div className="pb-6" />}
           </div>
 
+          {ordering ? (
+            <footer className="border-t-2 border-ink bg-paper px-5 pt-4 pb-[calc(env(safe-area-inset-bottom)+18px)] md:px-8 md:pb-8">
+              <div className="flex items-baseline justify-between">
+                <span className="display text-[1.7rem]">Subtotal</span>
+                <span className="display tabular text-[2rem]">{formatBRL(cart.total)}</span>
+              </div>
+              <p className="mt-1 text-xs text-ink-mute">Entrega e pagamento na próxima etapa. O pedido vai direto para o El Patron.</p>
+              {!ordering.open && (
+                <p role="status" className="mt-3 rounded-xl bg-brand/15 px-3 py-2 text-sm font-semibold text-ink">
+                  A loja está fechada agora. Você pode montar a sacola e pedir quando abrir.
+                </p>
+              )}
+              <button
+                type="button"
+                disabled={!ordering.open}
+                onClick={() => setStep('finalizar')}
+                className="cond mt-3 inline-flex min-h-15 w-full cursor-pointer items-center justify-center gap-3 rounded-full bg-brand text-xl font-bold tracking-[0.06em] text-on-dark uppercase transition-[background-color,transform] duration-200 hover:bg-brand-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {ordering.open ? 'Continuar' : 'Loja fechada'} {ordering.open && <ArrowRightIcon size={20} />}
+              </button>
+            </footer>
+          ) : (
           <footer className="border-t-2 border-ink bg-paper px-5 pt-4 pb-[calc(env(safe-area-inset-bottom)+18px)] md:px-8 md:pb-8">
             <dl className="space-y-1">
               <div className="flex items-baseline justify-between text-ink-soft [@media(max-height:760px)]:hidden">
@@ -333,8 +369,27 @@ function CartBody({ onClose }: { onClose: () => void }) {
               </button>
             )}
           </footer>
+          )}
         </>
       )}
     </div>
+  );
+}
+
+const noSubscribe = () => () => {};
+
+/** A way back to the order placed on this device in the last day. */
+function LastOrderLink({ onClose }: { onClose: () => void }) {
+  const raw = useSyncExternalStore(
+    noSubscribe,
+    () => JSON.stringify(lastOrder()),
+    () => 'null',
+  );
+  const last = JSON.parse(raw) as ReturnType<typeof lastOrder>;
+  if (!last) return null;
+  return (
+    <Link href={trackingPath(last.id, last.token)} onClick={onClose} className="cond text-base font-bold tracking-[0.08em] text-mustard uppercase underline underline-offset-4">
+      Acompanhar meu último pedido
+    </Link>
   );
 }

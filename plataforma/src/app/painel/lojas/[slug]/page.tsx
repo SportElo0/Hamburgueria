@@ -7,6 +7,9 @@ import { monthKey, usage } from '@/lib/changes';
 import { changeLimit } from '@/lib/schema';
 import { isSlug } from '@/lib/slug';
 import { StoreEditor } from '@/components/editor/StoreEditor';
+import { listOperators } from '@/lib/operators';
+import { getSecrets } from '@/lib/pix';
+import { orderingOf } from '@/lib/ordering';
 
 const PAYMENT_HISTORY_MONTHS = 6;
 
@@ -35,13 +38,17 @@ export default async function LojaPage({
   const current = monthKey();
   const month = mes && /^\d{4}-\d{2}$/.test(mes) ? mes : current;
   const historyMonths = pastMonths(current, PAYMENT_HISTORY_MONTHS);
-  const [changes, currentChanges, months, pedidos, payments] = await Promise.all([
+  const [changes, currentChanges, months, pedidos, payments, operators, secrets] = await Promise.all([
     getChanges(slug, month),
     getChanges(slug, current),
     listChangeMonths(slug),
     listPedidos(slug),
     Promise.all(historyMonths.map((m) => getPayment(slug, m))),
+    listOperators(slug),
+    getSecrets(slug),
   ]);
+  // Stores saved before online ordering existed get its default settings in the editor.
+  const record = { ...draft.data, store: { ...draft.data.store, ordering: orderingOf(draft.data.store) } };
   const paymentHistory = historyMonths.map((m, i) => ({ month: m, payment: payments[i] }));
   const h = await headers();
   const origin = `${h.get('x-forwarded-proto') ?? 'https'}://${h.get('host')}`;
@@ -52,7 +59,7 @@ export default async function LojaPage({
         ← Lojas
       </Link>
       <StoreEditor
-        record={draft.data}
+        record={record}
         etag={draft.etag}
         month={month}
         currentMonth={current}
@@ -62,6 +69,10 @@ export default async function LojaPage({
         pedidos={pedidos}
         paymentHistory={paymentHistory}
         apiUrl={`${origin}/api/public/lojas/${slug}`}
+        operators={operators}
+        hasMercadoPago={Boolean(secrets.mercadoPagoToken)}
+        ordersUrl={`/loja/${slug}`}
+        webhookUrl={`${origin}/api/pagamentos/mercadopago/${slug}`}
         initialTab={aba}
       />
     </>

@@ -8,6 +8,18 @@ import { restaurant as baseRestaurant, type RestaurantInfo } from './restaurant'
 
 export const CATALOG_URL = process.env.NEXT_PUBLIC_CATALOG_URL ?? 'https://painel-lojas-sportelo.vercel.app/api/public/lojas/el-patron-burger';
 
+/** Online ordering as published by the panel. `null`: orders go by WhatsApp. */
+export interface OnlineOrdering {
+  open: boolean;
+  delivery: boolean;
+  pickup: boolean;
+  areas: { id: string; name: string; fee: number }[];
+  minOrder: number;
+  eta: string;
+  payments: { pix: boolean; card: boolean; cash: boolean };
+  pixDemo: boolean;
+}
+
 export interface Catalog {
   products: Product[];
   byId: Map<string, Product>;
@@ -16,15 +28,38 @@ export interface Catalog {
   soldOut: ReadonlySet<string>;
   notice: string | null;
   restaurant: RestaurantInfo;
+  ordering: OnlineOrdering | null;
 }
 
 const ADDON_GROUP = 'adicionais';
 
-function build(products: Product[], addons: OptionChoice[], soldOut: Set<string>, notice: string | null, restaurant: RestaurantInfo): Catalog {
-  return { products, byId: new Map(products.map((p) => [p.id, p])), addons, soldOut, notice, restaurant };
+function build(products: Product[], addons: OptionChoice[], soldOut: Set<string>, notice: string | null, restaurant: RestaurantInfo, ordering: OnlineOrdering | null = null): Catalog {
+  return { products, byId: new Map(products.map((p) => [p.id, p])), addons, soldOut, notice, restaurant, ordering };
 }
 
 export const staticCatalog = build(baseProducts, baseAddons, new Set(), null, baseRestaurant);
+
+/** Where this site's orders go when the panel has online ordering on. */
+export const ORDERS_URL = CATALOG_URL ? `${CATALOG_URL}/pedidos` : '';
+
+function parseOrdering(v: unknown): OnlineOrdering | null {
+  const o = v as Record<string, unknown> | null;
+  if (!o || o.enabled !== true || !ORDERS_URL) return null;
+  const pay = (o.payments ?? {}) as Record<string, unknown>;
+  const areas = Array.isArray(o.areas)
+    ? o.areas.flatMap((a: Loose) => (str(a?.id) && str(a?.name) && cents(a?.fee) !== null ? [{ id: str(a?.id), name: str(a?.name), fee: cents(a?.fee)! }] : []))
+    : [];
+  return {
+    open: o.open === true,
+    delivery: o.delivery !== false,
+    pickup: o.pickup !== false,
+    areas,
+    minOrder: cents(o.minOrder) ?? 0,
+    eta: str(o.eta),
+    payments: { pix: pay.pix === true, card: pay.card === true, cash: pay.cash === true },
+    pixDemo: o.pixDemo !== false,
+  };
+}
 
 type Loose = Record<string, unknown> | undefined;
 const str = (v: unknown) => (typeof v === 'string' ? v.trim() : '');
@@ -86,7 +121,7 @@ export function mergeLive(data: unknown): Catalog | null {
     instagram: str(contact?.instagram).replace(/^@/, '') || baseRestaurant.instagram,
   };
 
-  return build(products, addons, soldOut, str(d.notice) || null, restaurant);
+  return build(products, addons, soldOut, str(d.notice) || null, restaurant, parseOrdering(d.ordering));
 }
 
 let current = staticCatalog;

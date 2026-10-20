@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { getPublished } from '@/lib/stores';
+import { getOperation } from '@/lib/orders';
 import { toPublic } from '@/lib/schema';
 import { isSlug } from '@/lib/slug';
 
@@ -13,10 +14,10 @@ const CORS = {
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) return NextResponse.json({ error: 'not_found' }, { status: 404, headers: CORS });
-  const record = await getPublished(slug);
+  const [record, operation] = await Promise.all([getPublished(slug), getOperation(slug)]);
   if (!record) return NextResponse.json({ error: 'not_found' }, { status: 404, headers: { ...CORS, 'Cache-Control': 'public, s-maxage=30' } });
   const mediaBase = `${request.nextUrl.origin}/api/midia`;
-  return NextResponse.json(toPublic(record.store, record.publishedAt, mediaBase), {
+  return NextResponse.json(toPublic(record.store, record.publishedAt, mediaBase, operation.open), {
     headers: {
       ...CORS,
       // Edge caches for 30 s; a fresh publish shows up within that window, and stale copies keep sites up if storage blips.

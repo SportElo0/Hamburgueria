@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DEFAULT_ORDERING, orderingOf, orderingSchema, publicOrdering } from './ordering';
 
 /** One shape for every client: a restaurant's menu and a shop's catalogue are both "categories of items". */
 
@@ -90,6 +91,8 @@ export const storeSchema = z.object({
   catalog: z.object({ categories: z.array(categorySchema).max(40) }),
   /** Free-form data a bespoke site needs (e.g. board shapes, offers). Edited as JSON. */
   extra: z.record(z.string(), z.unknown()),
+  /** Online ordering settings (orders to the panel instead of WhatsApp). */
+  ordering: orderingSchema.default(DEFAULT_ORDERING),
   /** Internal only: never sent to public sites. */
   account: z.object({
     plan: z.enum(PLANS),
@@ -155,6 +158,7 @@ export function emptyStore(slug: string, name: string, segment: Store['segment']
     notice: { active: false, text: '' },
     catalog: { categories: [] },
     extra: {},
+    ordering: { ...DEFAULT_ORDERING },
     account: { plan: 'parceiro', changeLimit: null, partnerUntil: '', monthlyFee: null, extraPrice: null, notes: '' },
   };
 }
@@ -191,8 +195,8 @@ export function partnerStatus(store: Store, today = new Date().toISOString().sli
   return days <= PARTNER_WARNING_DAYS ? 'vencendo' : 'em-dia';
 }
 
-/** What public sites receive: everything except the internal account data. */
-export function toPublic(store: Store, publishedAt: string | null, mediaBase: string) {
+/** What public sites receive: everything except the internal account data. `open`: the store's live open/closed switch. */
+export function toPublic(store: Store, publishedAt: string | null, mediaBase: string, open = false) {
   const media = (src: string) => (!src || /^https?:\/\//.test(src) ? src : `${mediaBase}/${src.replace(/^midia\//, '')}`);
   return {
     slug: store.slug,
@@ -208,6 +212,7 @@ export function toPublic(store: Store, publishedAt: string | null, mediaBase: st
       })),
     },
     extra: store.extra,
+    ordering: publicOrdering(orderingOf(store), open),
     publishedAt,
   };
 }

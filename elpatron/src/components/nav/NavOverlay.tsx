@@ -22,6 +22,12 @@ export function scrollToHash(hash: string) {
     history.replaceState(null, '', hash);
     return;
   }
+  // Menu categories are tabs: open the tab, the menu brings it into view.
+  if (hash.startsWith('#cat-')) {
+    window.dispatchEvent(new CustomEvent('menu:tab', { detail: hash.slice(5) }));
+    history.replaceState(null, '', hash);
+    return;
+  }
   const el = document.querySelector(hash);
   if (!el) return;
   el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
