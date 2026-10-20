@@ -27,7 +27,8 @@
   h3 { font-size: 34px; font-weight: 700; letter-spacing: -.01em; }
   p.lead { font-size: 31px; line-height: 1.45; color: var(--muted); max-width: 1180px; margin-top: 28px; }
   .gold { color: var(--gold-soft); }
-  .foil { background: linear-gradient(180deg, #f3dc9b 0%, #d9b25c 55%, #a8813a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-top: .12em; margin-top: -.12em; }
+  /* Solid gold: gradient-clipped text breaks in some PDF viewers (iOS shows blocks). */
+  .foil { color: #e2bf6c; }
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: 26px; padding: 44px; }
   .card p { font-size: 24px; line-height: 1.5; color: var(--muted); margin-top: 14px; }
   .num { font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: .12em; }
