@@ -59,7 +59,7 @@ def vertical_tilt(img, limit):
     if lines is None:
         return 0.0
     angles = []
-    for x1, y1, x2, y2 in lines[:, 0]:
+    for x1, y1, x2, y2 in lines.reshape(-1, 4):
         a = np.degrees(np.arctan2(x2 - x1, y2 - y1))
         a = (a + 90) % 180 - 90
         if abs(a) < limit:
