@@ -177,6 +177,9 @@ export function OrdersBoard(props: {
             <a href={`/loja/${props.slug}/relatorio`} className="btn-ghost min-h-11">
               Relatório
             </a>
+            <a href={`/loja/${props.slug}/clientes`} className="btn-ghost min-h-11">
+              Clientes
+            </a>
             {props.team && (
               <a href={`/painel/lojas/${props.slug}?aba=online`} className="btn-ghost min-h-11">
                 Configurar

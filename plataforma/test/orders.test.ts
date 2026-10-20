@@ -8,6 +8,7 @@ import { storeSchema, toPublic, type Store, type StoreRecord } from '@/lib/schem
 import { DEFAULT_ORDERING, applyCoupon, nextStatus, orderInputSchema, orderingSchema, priceOrder, publicOrdering, salesReport, type OrderInput } from '@/lib/ordering';
 import { ActionError, OrderError, applyAction, getOperation, getOrder, listOrders, ordersForDays, placeOrder, setOpen, setSoldOut, simulateDemoPayment, trackOrder } from '@/lib/orders';
 import { authenticateOperator, removeOperator, upsertOperator } from '@/lib/operators';
+import { listCustomers, setOptOut } from '@/lib/customers';
 
 const SLUG = 'el-patron-burger';
 const ORIGIN = 'https://painel.example';
@@ -221,7 +222,7 @@ describe('cupom, esgotado e relatório', () => {
     expect(o.coupons[0].code).toBe('PATRON10');
     expect(() => orderingSchema.parse({ ...DEFAULT_ORDERING, coupons: [{ ...coupons[0], code: 'com espaço' }] })).toThrow();
     const ord = orderingSchema.parse({ ...DEFAULT_ORDERING, coupons });
-    expect(applyCoupon(ord, 'patron10', 12000, '2026-10-20')).toEqual({ code: 'PATRON10', discount: 1200 });
+    expect(applyCoupon(ord, 'patron10', 12000, '2026-10-20')).toEqual({ code: 'PATRON10', discount: 1200, freeDelivery: false });
     expect(() => applyCoupon(ord, 'PATRON10', 4000, '2026-10-20')).toThrow(/a partir de/);
     expect(() => applyCoupon(ord, 'MENOS5', 4000, '2026-10-20')).toThrow(/vencido/);
     expect(() => applyCoupon(ord, 'PAUSADO', 4000, '2026-10-20')).toThrow(/vencido/);
@@ -278,5 +279,49 @@ describe('cupom, esgotado e relatório', () => {
     expect(r.customers).toBe(1);
     expect(r.returning).toBe(1);
     expect(r.byHour.reduce((x, y) => x + y, 0)).toBe(2);
+  });
+});
+
+describe('clube: entrega grátis e clientes', () => {
+  const frete = { code: 'VOLTEI', type: 'frete' as const, value: 0, minOrder: 0, active: true, until: '' };
+  const entrega = (extra: Partial<OrderInput> = {}) => base({ mode: 'entrega', address: { areaId: 'centro', street: 'Rua A, 10', reference: '' }, ...extra });
+
+  it('cupom de entrega grátis zera a taxa e só vale para entrega', async () => {
+    expect(() => orderingSchema.parse({ ...DEFAULT_ORDERING, coupons: [{ ...frete, type: 'fixed' }] })).toThrow();
+    const ord = orderingSchema.parse({ ...DEFAULT_ORDERING, coupons: [frete] });
+    expect(applyCoupon(ord, 'voltei', 3000, '2026-10-20')).toEqual({ code: 'VOLTEI', discount: 0, freeDelivery: true });
+    await publishStore(elPatron({ coupons: [frete], areas: [{ id: 'centro', name: 'Centro', fee: 700 }] }));
+    await setOpen(SLUG, true, 'teste');
+    const { order } = await placeOrder(SLUG, entrega({ coupon: 'VOLTEI' }), ORIGIN);
+    expect(order.deliveryFee).toBe(700);
+    expect(order.discount).toBe(700);
+    expect(order.total).toBe(order.subtotal);
+    await expect(placeOrder(SLUG, base({ coupon: 'VOLTEI' }), ORIGIN)).rejects.toThrow(/só para entrega/);
+  });
+
+  it('lista clientes, respeita o aceite do último pedido e quem pediu para sair', async () => {
+    await publishStore(elPatron());
+    await setOpen(SLUG, true, 'teste');
+    const ana1 = await placeOrder(SLUG, base({ optIn: true }), ORIGIN);
+    const ana2 = await placeOrder(SLUG, base(), ORIGIN); // later order without the tick: consent withdrawn
+    const bia = await placeOrder(SLUG, base({ customer: { name: 'Bia', phone: '11977776666' }, optIn: true }), ORIGIN);
+    const caio = await placeOrder(SLUG, base({ customer: { name: 'Caio', phone: '11955554444' }, optIn: true }), ORIGIN);
+    for (const p of [ana1, ana2, bia]) await applyAction(SLUG, p.order.id, 'aceitar', 'caixa');
+    expect(ana1.order.optIn).toBe(true);
+
+    let list = await listCustomers(SLUG);
+    const by = (phone: string) => list.find((c) => c.phone === phone)!;
+    expect(list).toHaveLength(3);
+    expect(by('11988887777')).toMatchObject({ orders: 2, optIn: false });
+    expect(by('11977776666')).toMatchObject({ orders: 1, optIn: true, spent: bia.order.total });
+    expect(by('11955554444')).toMatchObject({ orders: 0, optIn: true }); // still waiting, but a contact
+
+    await setOptOut(SLUG, '11977776666', true);
+    list = await listCustomers(SLUG);
+    expect(by('11977776666')).toMatchObject({ optIn: false, optedOut: true, ticked: true });
+    await setOptOut(SLUG, '11977776666', false);
+    list = await listCustomers(SLUG);
+    expect(by('11977776666').optIn).toBe(true);
+    expect(caio.order.optIn).toBe(true);
   });
 });

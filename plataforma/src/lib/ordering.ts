@@ -28,15 +28,16 @@ export const couponSchema = z.object({
     .trim()
     .transform((v) => v.toUpperCase())
     .pipe(z.string().regex(/^[A-Z0-9]{3,20}$/, 'Cupom: 3 a 20 letras ou números, sem espaço.')),
-  type: z.enum(['percent', 'fixed']),
-  /** Percent (1–100) or centavos. */
-  value: z.number().int().min(1).max(1_000_000),
+  /** percent / fixed: off the items. frete: the delivery fee is waived (value unused). */
+  type: z.enum(['percent', 'fixed', 'frete']),
+  /** Percent (1–100) or centavos; 0 for frete. */
+  value: z.number().int().min(0).max(1_000_000),
   /** Centavos on the items' subtotal. */
   minOrder: z.number().int().min(0).max(1_000_000),
   active: z.boolean(),
   /** Last day it works (YYYY-MM-DD, São Paulo), or '' for no end. */
   until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).or(z.literal('')),
-});
+}).refine((c) => c.type === 'frete' || c.value >= 1, 'Informe o valor do desconto.');
 export type Coupon = z.infer<typeof couponSchema>;
 
 export const orderingSchema = z.object({
@@ -135,6 +136,8 @@ export const orderInputSchema = z.object({
   changeFor: z.number().int().min(0).max(1_000_000).nullable().default(null),
   note: text(200).default(''),
   coupon: text(20).default(''),
+  /** The customer ticked "receive promotions on WhatsApp" (never pre-ticked). */
+  optIn: z.boolean().default(false),
   /** Honeypot: people never see it, bots fill it. */
   website: z.string().max(0).optional(),
 });
@@ -202,11 +205,13 @@ export interface Order {
   deliveryFee: number;
   /** No neighbourhood list: the store confirms the fee by phone. */
   feePending: boolean;
-  /** Centavos off the items, from a coupon. */
+  /** Centavos off the order from a coupon (the items, or the delivery fee for a free-delivery coupon). */
   discount: number;
   coupon: string;
   total: number;
   note: string;
+  /** Marketing consent given with this order; the latest order decides. Missing on older orders. */
+  optIn?: boolean;
   reason: string;
 }
 
@@ -240,14 +245,26 @@ export interface Priced {
 const TZ = 'America/Sao_Paulo';
 export const todaySP = (d = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 
-/** The discount a coupon gives on this subtotal. Throws OrderError when it does not apply. */
-export function applyCoupon(o: Ordering, code: string, subtotal: number, today = todaySP()): { code: string; discount: number } {
+/** The discount a coupon gives. Throws OrderError when it does not apply. Without `delivery` (a preview), a
+ * free-delivery coupon reports `freeDelivery` and the site works out the fee it waives. */
+export function applyCoupon(
+  o: Ordering,
+  code: string,
+  subtotal: number,
+  today = todaySP(),
+  delivery?: { mode: 'entrega' | 'retirada'; fee: number; feePending: boolean },
+): { code: string; discount: number; freeDelivery: boolean } {
   const wanted = code.trim().toUpperCase();
   const c = o.coupons.find((x) => x.code === wanted);
   if (!c || !c.active || (c.until && c.until < today)) throw new OrderError('Cupom inválido ou vencido.');
   if (subtotal < c.minOrder) throw new OrderError(`Esse cupom vale para pedidos a partir de ${brl(c.minOrder)}.`);
+  if (c.type === 'frete') {
+    if (delivery?.mode === 'retirada') throw new OrderError('Esse cupom é de entrega grátis: vale só para entrega.');
+    if (delivery?.feePending) throw new OrderError('Esse cupom precisa da taxa do bairro definida. Fale com a loja.');
+    return { code: c.code, discount: delivery?.fee ?? 0, freeDelivery: true };
+  }
   const discount = c.type === 'percent' ? Math.round((subtotal * Math.min(c.value, 100)) / 100) : Math.min(c.value, subtotal);
-  return { code: c.code, discount };
+  return { code: c.code, discount, freeDelivery: false };
 }
 
 /** Prices a parsed order against the published catalogue and the store's ordering rules. Throws OrderError with a message for the customer. */
@@ -299,7 +316,9 @@ export function priceOrder(store: Store, input: ParsedOrderInput): Priced {
     throw new OrderError('Esta loja só está fazendo entregas agora.');
   }
 
-  const { code: coupon, discount } = input.coupon ? applyCoupon(o, input.coupon, subtotal) : { code: '', discount: 0 };
+  const { code: coupon, discount } = input.coupon
+    ? applyCoupon(o, input.coupon, subtotal, todaySP(), { mode: input.mode, fee: deliveryFee, feePending })
+    : { code: '', discount: 0 };
   const total = subtotal - discount + deliveryFee;
   const allowed = { pix: o.pix, cartao: o.card, dinheiro: o.cash }[input.payment];
   if (!allowed) throw new OrderError('Essa forma de pagamento não está disponível nesta loja.');

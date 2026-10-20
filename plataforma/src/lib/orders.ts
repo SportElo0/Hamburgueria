@@ -217,6 +217,7 @@ export async function placeOrder(slug: string, raw: unknown, origin: string, now
     total: priced.total,
     note: input.note,
     reason: '',
+    optIn: input.optIn,
   };
   const order = await writeDay(slug, day, (orders) => {
     // A ceiling against floods; far above what one kitchen takes in a day.

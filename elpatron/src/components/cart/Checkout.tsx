@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { OnlineOrdering } from '@/content/live';
+import { useCatalog, type OnlineOrdering } from '@/content/live';
 import { formatBRL } from '@/lib/money';
 import { CheckoutError, placeOrder, previewCoupon, trackingPath, type PaymentMethod } from '@/lib/checkout';
 import { useCart } from '../Providers';
@@ -44,14 +44,17 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
   const [error, setError] = useState('');
   const [sending, setSending] = useState(false);
   const [couponText, setCouponText] = useState('');
-  const [coupon, setCoupon] = useState<{ code: string; discount: number } | null>(null);
+  const [coupon, setCoupon] = useState<{ code: string; discount: number; freeDelivery: boolean } | null>(null);
+  const [optIn, setOptIn] = useState(false);
+  const { restaurant } = useCatalog();
   const [couponMsg, setCouponMsg] = useState('');
   const [checking, setChecking] = useState(false);
 
   const area = ordering.areas.find((a) => a.id === areaId);
   const feePending = mode === 'entrega' && ordering.areas.length === 0;
   const fee = mode === 'entrega' ? (area?.fee ?? 0) : 0;
-  const discount = coupon?.discount ?? 0;
+  // A free-delivery coupon waives the fee of the chosen neighbourhood; the panel applies it again on the order.
+  const discount = coupon ? (coupon.freeDelivery ? (mode === 'entrega' && !feePending ? fee : 0) : coupon.discount) : 0;
   const total = cart.total - discount + fee;
   const pixAllowed = ordering.payments.pix && !feePending;
   const methods = (
@@ -70,7 +73,7 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
     setCouponMsg('');
     try {
       const res = await previewCoupon(code, cart.total);
-      setCoupon({ code: res.code, discount: res.discount });
+      setCoupon({ code: res.code, discount: res.discount, freeDelivery: res.freeDelivery === true });
     } catch (err) {
       setCoupon(null);
       setCouponMsg(err instanceof CheckoutError ? err.message : 'Não foi possível validar o cupom.');
@@ -102,6 +105,7 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
         changeFor,
         note: note.trim(),
         coupon: coupon?.code ?? '',
+        optIn,
       });
       cart.clear();
       onPlaced();
@@ -223,7 +227,7 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
             {coupon ? (
               <div className="mt-2 flex min-h-13 items-center justify-between gap-3 rounded-2xl border-2 border-brand px-4">
                 <span className="cond text-base font-bold tracking-[0.04em] uppercase">
-                  {coupon.code} <span className="text-mustard">− {formatBRL(coupon.discount)}</span>
+                  {coupon.code} <span className="text-mustard">{coupon.freeDelivery ? 'entrega grátis' : `− ${formatBRL(coupon.discount)}`}</span>
                 </span>
                 <button
                   type="button"
@@ -265,6 +269,8 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
                 </button>
               </div>
             )}
+            {coupon?.freeDelivery && mode === 'retirada' && <p className="mt-2 text-sm text-ink-soft">Esse cupom vale só para entrega.</p>}
+            {coupon?.freeDelivery && mode === 'entrega' && feePending && <p className="mt-2 text-sm text-ink-soft">A loja confirma a entrega grátis junto com a taxa.</p>}
             {couponMsg && (
               <p id={`${uid}-coupon-msg`} className="mt-2 text-sm font-semibold text-brand">
                 {couponMsg}
@@ -286,6 +292,13 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
             className="mt-2 w-full resize-none rounded-2xl border-2 border-ink/15 bg-white/5 px-4 py-3 text-base outline-none focus-visible:border-ink"
           />
         </div>
+        <label className="flex cursor-pointer items-start gap-3">
+          <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-1 h-5 w-5 shrink-0 cursor-pointer accent-[var(--color-brand)]" />
+          <span className="text-[0.95rem] leading-snug">
+            Quero receber promoções do {restaurant.name} no WhatsApp.
+            <span className="block text-sm text-ink-mute">Até duas mensagens por mês. Para sair, é só responder SAIR.</span>
+          </span>
+        </label>
       </div>
 
       <footer className="border-t-2 border-ink bg-paper px-5 pt-4 pb-[calc(env(safe-area-inset-bottom)+18px)] md:px-8 md:pb-8">

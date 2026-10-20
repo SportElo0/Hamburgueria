@@ -53,7 +53,7 @@ function Money(props: { id: string; label: string; cents: number; onChange: (c: 
   );
 }
 
-const couponLabel = (c: Coupon) => (c.type === 'percent' ? `${c.value}% de desconto` : `${brl(c.value)} de desconto`);
+const couponLabel = (c: Coupon) => (c.type === 'frete' ? 'entrega grátis' : c.type === 'percent' ? `${c.value}% de desconto` : `${brl(c.value)} de desconto`);
 
 /** Discount codes the customer types at checkout; the server prices them, the site only previews. */
 function Coupons({ coupons, onChange }: { coupons: Coupon[]; onChange: (c: Coupon[]) => void }) {
@@ -101,10 +101,10 @@ function Coupons({ coupons, onChange }: { coupons: Coupon[]; onChange: (c: Coupo
         onSubmit={(e) => {
           e.preventDefault();
           const clean = code.trim().toUpperCase();
-          const n = type === 'percent' ? Math.round(Number(value.replace(',', '.'))) : toCents(value);
+          const n = type === 'frete' ? 0 : type === 'percent' ? Math.round(Number(value.replace(',', '.'))) : toCents(value);
           if (!/^[A-Z0-9]{3,20}$/.test(clean)) return setError('Código: 3 a 20 letras ou números, sem espaço.');
           if (coupons.some((c) => c.code === clean)) return setError('Esse código já existe.');
-          if (!(n >= 1) || (type === 'percent' && n > 100)) return setError(type === 'percent' ? 'Desconto entre 1% e 100%.' : 'Informe o valor do desconto.');
+          if (type !== 'frete' && (!(n >= 1) || (type === 'percent' && n > 100))) return setError(type === 'percent' ? 'Desconto entre 1% e 100%.' : 'Informe o valor do desconto.');
           onChange([...coupons, { code: clean, type, value: n, minOrder: toCents(min), active: true, until }]);
           setCode('');
           setValue('');
@@ -126,14 +126,17 @@ function Coupons({ coupons, onChange }: { coupons: Coupon[]; onChange: (c: Coupo
           <select id="cupom-tipo" className="field" value={type} onChange={(e) => setType(e.target.value as Coupon['type'])}>
             <option value="percent">%</option>
             <option value="fixed">R$</option>
+            <option value="frete">Entrega grátis</option>
           </select>
         </div>
-        <div>
-          <label htmlFor="cupom-valor" className="label">
-            {type === 'percent' ? 'Desconto %' : 'Desconto R$'}
-          </label>
-          <input id="cupom-valor" inputMode="decimal" className="field" value={value} onChange={(e) => setValue(e.target.value)} placeholder={type === 'percent' ? '10' : '5,00'} />
-        </div>
+        {type !== 'frete' && (
+          <div>
+            <label htmlFor="cupom-valor" className="label">
+              {type === 'percent' ? 'Desconto %' : 'Desconto R$'}
+            </label>
+            <input id="cupom-valor" inputMode="decimal" className="field" value={value} onChange={(e) => setValue(e.target.value)} placeholder={type === 'percent' ? '10' : '5,00'} />
+          </div>
+        )}
         <div>
           <label htmlFor="cupom-min" className="label">
             Mínimo R$

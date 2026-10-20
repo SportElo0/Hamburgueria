@@ -4,6 +4,7 @@ import { requireStoreAccess } from '@/lib/auth';
 import { ActionError, applyAction, setOpen, setSoldOut } from '@/lib/orders';
 import { OPERATOR_ACTIONS, type OperatorAction } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
+import { setOptOut } from '@/lib/customers';
 
 export interface OrderActionResult {
   ok: boolean;
@@ -34,5 +35,12 @@ export async function setSoldOutAction(slug: string, itemId: string, soldOut: bo
   if (!isSlug(slug) || !/^[\w-]{1,40}$/.test(itemId)) return { ok: false, error: 'Item inválido.' };
   const user = await requireStoreAccess(slug);
   await setSoldOut(slug, itemId, soldOut, user.name || user.email);
+  return { ok: true };
+}
+
+export async function setOptOutAction(slug: string, phone: string, out: boolean): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !/^\d{10,11}$/.test(phone)) return { ok: false, error: 'Telefone inválido.' };
+  await requireStoreAccess(slug);
+  await setOptOut(slug, phone, out);
   return { ok: true };
 }

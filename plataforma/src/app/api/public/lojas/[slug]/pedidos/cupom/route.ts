@@ -19,8 +19,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const record = isSlug(slug) ? await getPublished(slug) : null;
   if (!record || !code) return NextResponse.json({ error: 'Cupom inválido ou vencido.' }, { status: 422, headers: CORS });
   try {
-    const { code: applied, discount } = applyCoupon(orderingOf(record.store), code, subtotal);
-    return NextResponse.json({ code: applied, discount, label: `${applied}: ${brl(discount)} de desconto` }, { headers: CORS });
+    const { code: applied, discount, freeDelivery } = applyCoupon(orderingOf(record.store), code, subtotal);
+    const label = freeDelivery ? `${applied}: entrega grátis` : `${applied}: ${brl(discount)} de desconto`;
+    return NextResponse.json({ code: applied, discount, freeDelivery, label }, { headers: CORS });
   } catch (err) {
     return NextResponse.json({ error: err instanceof OrderError ? err.message : 'Cupom inválido ou vencido.' }, { status: 422, headers: CORS });
   }

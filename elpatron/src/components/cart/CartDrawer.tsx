@@ -22,7 +22,7 @@ export function CartDrawer() {
     <dialog
       ref={ref}
       aria-labelledby="cart-title"
-      className="cart-drawer m-0 mt-auto h-[92dvh] w-full overflow-hidden rounded-t-[28px] bg-paper p-0 text-ink md:mt-0 md:ml-auto md:h-dvh md:w-[min(520px,100vw)] md:rounded-none md:rounded-l-[28px]"
+      className="cart-drawer m-0 mt-auto h-[92dvh] w-full overflow-clip rounded-t-[28px] bg-paper p-0 text-ink md:mt-0 md:ml-auto md:h-dvh md:w-[min(520px,100vw)] md:rounded-none md:rounded-l-[28px]"
     >
       <CartBody onClose={close} />
     </dialog>
