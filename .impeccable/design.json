@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-21T16:43:12+00:00",
+  "title": "Design System: LM Barbearia",
+  "extensions": {
+    "colorMeta": {
+      "fade-0": {
+        "role": "neutral",
+        "displayName": "Fade #0",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "fade-1": {
+        "role": "neutral",
+        "displayName": "Fade #½",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "fade-2": {
+        "role": "neutral",
+        "displayName": "Fade #1",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "fade-3": {
+        "role": "neutral",
+        "displayName": "Fade #1½ Graphite",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "fade-4": {
+        "role": "neutral",
+        "displayName": "Fade #2",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "fade-5": {
+        "role": "neutral",
+        "displayName": "Fade #3",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#101215",
+          "#141619",
+          "#17191d",
+          "#1d2025",
+          "#252930",
+          "#2a2e35",
+          "#3b4048"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "#2c2b29",
+          "#4a4845",
+          "#6e6b66",
+          "#948f88",
+          "#bab5ad",
+          "#d9d5ce",
+          "#ece9e3",
+          "#f5f2ed"
+        ]
+      },
+      "steel": {
+        "role": "neutral",
+        "displayName": "Steel",
+        "tonalRamp": [
+          "#2b2c2f",
+          "#45474b",
+          "#65676c",
+          "#85888e",
+          "#a6a8ad",
+          "#c3c4c8",
+          "#dedfe1",
+          "#f2f2f3"
+        ]
+      },
+      "steel-dim": {
+        "role": "neutral",
+        "displayName": "Steel Dim",
+        "tonalRamp": [
+          "#2b2c2f",
+          "#45474b",
+          "#65676c",
+          "#85888e",
+          "#a6a8ad",
+          "#c3c4c8",
+          "#dedfe1",
+          "#f2f2f3"
+        ]
+      },
+      "blue": {
+        "role": "primary",
+        "displayName": "Chair Blue",
+        "tonalRamp": [
+          "#16244a",
+          "#22377a",
+          "#2e4fae",
+          "#436bd9",
+          "#5679dd",
+          "#8ea8f0",
+          "#bccbf6",
+          "#e6ecfc"
+        ]
+      },
+      "blue-hover": {
+        "role": "primary",
+        "displayName": "Chair Blue Lifted",
+        "tonalRamp": [
+          "#16244a",
+          "#22377a",
+          "#2e4fae",
+          "#436bd9",
+          "#5679dd",
+          "#8ea8f0",
+          "#bccbf6",
+          "#e6ecfc"
+        ]
+      },
+      "blue-ink": {
+        "role": "primary",
+        "displayName": "Blue Ink",
+        "tonalRamp": [
+          "#16244a",
+          "#22377a",
+          "#2e4fae",
+          "#436bd9",
+          "#5679dd",
+          "#8ea8f0",
+          "#bccbf6",
+          "#e6ecfc"
+        ]
+      },
+      "pole": {
+        "role": "tertiary",
+        "displayName": "Barber Pole Red",
+        "tonalRamp": [
+          "#2e0a0c",
+          "#4f1216",
+          "#7a1c22",
+          "#a3262d",
+          "#c8323a",
+          "#dd5c62",
+          "#ff8a8f",
+          "#ffd3d5"
+        ]
+      },
+      "alert": {
+        "role": "error",
+        "displayName": "Alert",
+        "tonalRamp": [
+          "#2e0a0c",
+          "#4f1216",
+          "#7a1c22",
+          "#a3262d",
+          "#c8323a",
+          "#dd5c62",
+          "#ff8a8f",
+          "#ffd3d5"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headline only, uppercase, line-by-line clip reveal."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Service names, booking step headings, mobile menu items, gallery captions."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs, 34–58ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Buttons, nav, form labels, chips."
+      },
+      "guard": {
+        "displayName": "Guard Tag",
+        "purpose": "Clipper numbers, temporary-content notices, weekday headers."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default easing for reveals, bands, sheets and icon nudges."
+      },
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Button state transitions (180ms)."
+      },
+      {
+        "name": "band-cut",
+        "value": "scaleY 0→1, 720ms ease-out-expo, origin bottom, 70ms stagger",
+        "purpose": "Hero fade bands rising on load."
+      },
+      {
+        "name": "line-up",
+        "value": "clip-path inset(0 0 100% 0)→visible + translateY(0.35em), 820ms, 90ms stagger",
+        "purpose": "Hero headline line reveal."
+      },
+      {
+        "name": "rise",
+        "value": "opacity 0→1 + translateY(14px)→0, 640ms",
+        "purpose": "Panels and paragraphs entering."
+      },
+      {
+        "name": "step-in",
+        "value": "opacity + translateX(18px)→0, 380ms",
+        "purpose": "Booking step change."
+      },
+      {
+        "name": "sheet-in",
+        "value": "clip-path inset(0 0 100% 0)→inset(0), 420ms",
+        "purpose": "Mobile menu sheet."
+      },
+      {
+        "name": "reveal",
+        "value": "data-reveal rise (18px) or cut (clip from below), 700–900ms, armed only by JS",
+        "purpose": "Scroll reveals; content visible by default; static under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ],
+    "surfaces": [
+      {
+        "name": "header-solid",
+        "value": "background rgb(11 12 14 / .92); backdrop-filter blur(12px); border-bottom 1px var(--color-line)",
+        "purpose": "Header once scrolled; mobile bottom bar at .94."
+      }
+    ],
+    "focus": {
+      "value": "outline 2px solid var(--color-blue-ink); outline-offset 3px; border-radius 2px",
+      "purpose": "Global focus-visible ring."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action colour: booking and every path to WhatsApp.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Agendar meu horário <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:3.25rem;padding:0 1.4rem;border-radius:3px;font-family:Manrope,ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.01em;border:1px solid transparent;cursor:pointer;transition:background-color 180ms var(--ease-out-quart),color 180ms var(--ease-out-quart),border-color 180ms var(--ease-out-quart),transform 180ms var(--ease-out-quart);} .ds-btn:active{transform:translateY(1px);} .ds-btn svg{transition:transform 220ms var(--ease-out-expo);} .ds-btn:hover svg{transform:translateX(3px);} .ds-btn:focus-visible{outline:2px solid var(--color-blue-ink);outline-offset:3px;} .ds-btn-primary{background:var(--color-blue);color:#fff;} .ds-btn-primary:hover{background:var(--color-blue-hover);}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action with a hairline stroke on the dark ground.",
+      "html": "<div style=\"background:#0b0c0e;padding:16px\"><button class=\"ds-btn ds-btn-ghost\">Conhecer os cortes <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button></div>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:3.25rem;padding:0 1.4rem;border-radius:3px;font-family:Manrope,ui-sans-serif,system-ui,sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.01em;border:1px solid transparent;cursor:pointer;transition:background-color 180ms var(--ease-out-quart),color 180ms var(--ease-out-quart),border-color 180ms var(--ease-out-quart),transform 180ms var(--ease-out-quart);} .ds-btn:active{transform:translateY(1px);} .ds-btn svg{transition:transform 220ms var(--ease-out-expo);} .ds-btn:hover svg{transform:translateX(3px);} .ds-btn:focus-visible{outline:2px solid var(--color-blue-ink);outline-offset:3px;} .ds-btn-ghost{background:transparent;color:var(--color-paper);border-color:var(--color-line-strong);} .ds-btn-ghost:hover{border-color:var(--color-steel);background:var(--color-fade-3);}"
+    },
+    {
+      "name": "Service Chip",
+      "kind": "chip",
+      "refersTo": "chip-service",
+      "description": "Hero quick-pick that opens booking with the service preselected.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\">Corte</button><button class=\"ds-chip\">Barba</button><button class=\"ds-chip\">Corte + Barba</button></div>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-chips{display:flex;gap:8px;flex-wrap:wrap;background:var(--color-fade-0);padding:16px;} .ds-chip{min-height:2.5rem;padding:0 .875rem;border-radius:3px;border:1px solid var(--color-line-strong);background:rgb(11 12 14/.6);color:var(--color-paper);font:600 .875rem Manrope,ui-sans-serif,sans-serif;cursor:pointer;transition:border-color 150ms,background-color 150ms;} .ds-chip:hover{border-color:var(--color-blue-ink);background:var(--color-fade-3);} .ds-chip:focus-visible{outline:2px solid var(--color-blue-ink);outline-offset:3px;}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Booking name field: fade-0 well, hairline stroke, blue-ink focus.",
+      "html": "<label class=\"ds-field\"><span>Primeiro nome</span><input class=\"ds-input\" placeholder=\"Ex.: João\"></label>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-field{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--color-fade-3);color:var(--color-paper);font:600 .875rem Manrope,ui-sans-serif,sans-serif;} .ds-input{min-height:3.25rem;padding:0 1rem;border-radius:3px;border:1px solid var(--color-line-strong);background:var(--color-fade-0);color:var(--color-paper);font:400 1rem Manrope,ui-sans-serif,sans-serif;caret-color:var(--color-blue-ink);} .ds-input::placeholder{color:var(--color-steel-dim);} .ds-input:focus{outline:none;border-color:var(--color-blue-ink);}"
+    },
+    {
+      "name": "Time Slot",
+      "kind": "chip",
+      "refersTo": "slot",
+      "description": "Tabular time and date cells; blue when chosen.",
+      "html": "<div class=\"ds-slots\"><button class=\"ds-slot\">10:00</button><button class=\"ds-slot\" aria-pressed=\"true\">10:30</button><button class=\"ds-slot\">11:00</button><button class=\"ds-slot\">11:30</button></div>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:16px;background:var(--color-fade-3);} .ds-slot{min-height:3rem;border:0;border-radius:3px;background:var(--color-fade-4);color:var(--color-paper);font:600 .95rem Manrope,ui-sans-serif,sans-serif;font-variant-numeric:tabular-nums;cursor:pointer;transition:background-color 200ms;} .ds-slot:hover{background:var(--color-fade-5);} .ds-slot[aria-pressed=true]{background:var(--color-blue);color:#fff;} .ds-slot:focus-visible{outline:2px solid var(--color-blue-ink);outline-offset:3px;}"
+    },
+    {
+      "name": "Desktop Navigation",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Steel links, paper on hover, a 1px blue-ink underline on the current section.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" aria-current=\"location\">Serviços</a><a href=\"#\">Cortes</a><a href=\"#\">Sobre</a><a href=\"#\">Contato</a></nav>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-nav{display:flex;gap:4px;padding:12px;background:var(--color-fade-0);border-bottom:1px solid var(--color-line);} .ds-nav a{position:relative;padding:8px 14px;color:var(--color-steel);font:600 .92rem Manrope,ui-sans-serif,sans-serif;text-decoration:none;transition:color 150ms;} .ds-nav a:hover,.ds-nav a[aria-current]{color:var(--color-paper);} .ds-nav a::after{content:'';position:absolute;left:14px;right:14px;bottom:-2px;height:1px;background:var(--color-blue-ink);transform:scaleX(0);transform-origin:left;transition:transform 300ms;} .ds-nav a[aria-current]::after{transform:scaleX(1);} .ds-nav a:focus-visible{outline:2px solid var(--color-blue-ink);outline-offset:3px;}"
+    },
+    {
+      "name": "Guard Scale Stepper",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Booking progress: six bars of rising height labelled #0 to #3.",
+      "html": "<ol class=\"ds-steps\"><li class=\"done\"><i style=\"height:10px\"></i><span><b>#0</b>Serviço</span></li><li class=\"done\"><i style=\"height:15px\"></i><span><b>#½</b>Data</span></li><li class=\"on\"><i style=\"height:20px\"></i><span><b>#1</b>Horário</span></li><li><i style=\"height:25px\"></i><span><b>#1½</b>Nome</span></li><li><i style=\"height:30px\"></i><span><b>#2</b>Revisão</span></li><li><i style=\"height:35px\"></i><span><b>#3</b>WhatsApp</span></li></ol>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-steps{display:grid;grid-template-columns:repeat(6,1fr);align-items:end;gap:8px;list-style:none;margin:0;padding:16px;background:var(--color-fade-3);} .ds-steps li{display:flex;flex-direction:column;gap:8px;min-width:0;} .ds-steps i{display:block;border-radius:1px;background:var(--color-fade-5);transition:background-color 500ms;} .ds-steps .done i{background:rgb(142 168 240/.7);} .ds-steps .on i{background:var(--color-blue);} .ds-steps span{font:600 .75rem Manrope,ui-sans-serif,sans-serif;color:var(--color-steel-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .ds-steps .done span{color:rgb(245 242 237/.75);} .ds-steps .on span{color:var(--color-paper);} .ds-steps b{font-family:Archivo,'Arial Narrow',sans-serif;font-stretch:80%;font-weight:600;font-size:.65rem;letter-spacing:.06em;margin-right:4px;}"
+    },
+    {
+      "name": "Fade Bands with Guard Ruler",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Hero signature: opaque-to-translucent fade-0 bands rising over a photo, labelled on a right-hand ruler.",
+      "html": "<div class=\"ds-hero\"><div class=\"ds-bands\"><div style=\"flex:1;background:rgb(11 12 14/.25)\"><em>#2</em></div><div style=\"flex:1;background:rgb(11 12 14/.48)\"><em>#1½</em></div><div style=\"flex:1.15;background:rgb(11 12 14/.68)\"><em>#1</em></div><div style=\"flex:1.3;background:rgb(11 12 14/.84)\"><em>#½</em></div><div class=\"z\" style=\"flex:1.9;background:#0b0c0e\"></div></div><h1 class=\"ds-display\">O estilo<br>começa no<br>detalhe.</h1></div>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-hero{position:relative;height:340px;overflow:hidden;background:var(--color-fade-5);color:var(--color-paper);} .ds-bands{position:absolute;inset:auto 0 0 0;height:72%;display:flex;flex-direction:column;} .ds-bands div{position:relative;border-top:1px solid rgb(245 242 237/.07);transform-origin:bottom;animation:ds-band 720ms var(--ease-out-expo) both;} .ds-bands .z{border-top:0;} .ds-bands em{position:absolute;right:16px;top:0;transform:translateY(-50%);font:normal 600 .75rem Archivo,'Arial Narrow',sans-serif;font-stretch:80%;letter-spacing:.06em;color:var(--color-steel);} .ds-display{position:absolute;left:16px;bottom:16px;margin:0;font-family:Archivo,'Arial Narrow',sans-serif;font-stretch:66%;font-weight:800;text-transform:uppercase;letter-spacing:-.01em;line-height:.98;font-size:3rem;} @keyframes ds-band{from{transform:scaleY(0)}to{transform:scaleY(1)}} @media (prefers-reduced-motion:reduce){.ds-bands div{animation:none}}"
+    },
+    {
+      "name": "Guard Tag",
+      "kind": "chip",
+      "refersTo": "guard-tag",
+      "description": "Small condensed label for clipper numbers and temporary-content notices.",
+      "html": "<div class=\"ds-tags\"><span class=\"ds-guard\">#1½</span><span class=\"ds-guard ds-guard-box\">FOTO TEMPORÁRIA</span></div>",
+      "css": ":host{--color-fade-0:#0b0c0e;--color-fade-1:#101215;--color-fade-2:#141619;--color-fade-3:#17191d;--color-fade-4:#1d2025;--color-fade-5:#252930;--color-line:#2a2e35;--color-line-strong:#3b4048;--color-paper:#f5f2ed;--color-steel:#a6a8ad;--color-steel-dim:#85888e;--color-blue:#436bd9;--color-blue-hover:#5679dd;--color-blue-ink:#8ea8f0;--color-pole:#c8323a;--color-alert:#ff8a8f;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);--ease-out-quart:cubic-bezier(0.25,1,0.5,1);}.ds-tags{display:flex;gap:16px;align-items:center;padding:16px;background:var(--color-fade-0);} .ds-guard{font-family:Archivo,'Arial Narrow',sans-serif;font-stretch:80%;font-weight:600;font-size:.75rem;letter-spacing:.06em;line-height:1;font-variant-numeric:tabular-nums;color:var(--color-steel);} .ds-guard-box{font-size:.62rem;padding:6px 8px;border:1px solid var(--color-line-strong);border-radius:2px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Skin Fade",
+    "overview": "The site is cut the way Leonardo cuts hair. Grounds climb in hard tonal steps from near-black to graphite, and every step carries the number of the clipper guard that would cut it: #0, #½, #1, #1½, #2, #3. The guard scale is the measuring system for everything: the hero bands, the mobile menu, the booking progress, the little five-step mark next to each service. Nothing blends; each step is a clean line.\n\nThe material is dark, matte and blade-precise. Surfaces are flat colour fields separated by 1px hairlines and near-square corners. The voice is a condensed, heavy, uppercase Archivo, like shop signage, set against a calm Manrope body. One blue does all the asking (actions and selection); a barber-pole red appears only as a tiny detail. It reads premium without pretending to be a luxury brand: no gold, no ornament, no glow.\n\nMotion is a cut, not a float. Bands scale up from their bottom edge, headline lines are revealed by a clip from below, panels rise a few pixels. Everything eases out-expo, content is visible without JavaScript, and reduced motion means a static page.",
+    "keyCharacteristics": [
+      "Six-step fade ramp (#0 to #3) as grounds, always in hard steps",
+      "Guard tags (#1½) as the labelling and measuring device",
+      "Condensed, heavy, uppercase display; quiet Manrope body",
+      "Blue reserved for action and selection",
+      "1px hairlines and 1–4px corners",
+      "Clip-path and transform motion on ease-out-expo"
+    ],
+    "rules": [
+      {
+        "name": "The One Blue Rule",
+        "body": "Blue means \"do this\" or \"this is chosen\". It never decorates a heading, a band or a background.",
+        "section": "colors"
+      },
+      {
+        "name": "The Pole Pinch Rule",
+        "body": "Barber-pole red stays a detail of 8px or less. If it is wider than a dot or a line, it is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Hard Step Rule",
+        "body": "Grounds change in hard steps of the fade ramp. Adjacent sections take different steps; bands over a photo are stacked opaque or translucent fade-0 layers with a 1px paper/7% top edge. No smooth gradients.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sign Rule",
+        "body": "Archivo appears only condensed, heavy and uppercase (or as a guard tag). Never set body copy or buttons in it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Times, dates, counters and prices use tabular numerals.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Shadow Rule",
+        "body": "Lift is a lighter fade step or a hairline, never a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do change grounds in hard fade steps and label steps with guard numbers when the scale is shown.",
+      "Do keep blue for actions, selection, focus and progress.",
+      "Do set titles in condensed (wdth 66), 800-weight, uppercase Archivo at 0.98 line height.",
+      "Do use 3px corners for controls and imagery, 1px hairlines for division, and tabular numerals for times and dates.",
+      "Do animate with transform, opacity and clip-path on ease-out-expo, with content visible by default and a static page under reduced motion.",
+      "Do mark placeholder photos and draft copy as temporary with a guard tag."
+    ],
+    "donts": [
+      "Don't use smooth gradients, gold, glows or box shadows.",
+      "Don't let barber-pole red grow past an 8px detail or carry text.",
+      "Don't round controls or surfaces beyond 4px; full circles are for small markers only.",
+      "Don't set Archivo at normal width, light weight or in sentence case for headings.",
+      "Don't box lists into grids of equal cards; services, commitments and FAQ are full-width rows divided by hairlines."
+    ]
+  }
+}

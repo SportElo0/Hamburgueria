@@ -370,7 +370,7 @@ export function Booking() {
                         setName(event.target.value);
                         setError(null);
                       }}
-                      className="min-h-13 rounded-[3px] border border-line-strong bg-fade-0 px-4 text-base text-paper placeholder:text-steel-dim focus:border-blue-ink focus:outline-none aria-invalid:border-pole"
+                      className="min-h-13 rounded-[3px] border border-line-strong bg-fade-0 px-4 text-base text-paper placeholder:text-steel-dim focus:border-blue-ink focus:outline-none aria-invalid:border-alert"
                       placeholder="Ex.: João"
                     />
                   </div>
