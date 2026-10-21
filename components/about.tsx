@@ -52,7 +52,7 @@ export function About() {
           <PhotoSlot
             photo={about.photo}
             sizes="(min-width: 1024px) 352px, 90vw"
-            className="aspect-[404/552] w-full"
+            className="aspect-[404/532] w-full"
           />
         </div>
         <figcaption className="text-[0.8125rem] tracking-[0.12em] text-night-muted uppercase">
