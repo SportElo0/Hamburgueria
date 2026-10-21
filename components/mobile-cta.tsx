@@ -31,7 +31,7 @@ export function MobileCta() {
   return (
     <div
       inert={!visible}
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ground px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-500 ease-[var(--ease-out-expo)] lg:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ground px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-500 ease-[var(--ease-out-expo)] lg:hidden ${
         visible ? "translate-y-0" : "translate-y-full"
       }`}
     >

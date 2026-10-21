@@ -144,7 +144,7 @@ export function Calendar({ now, value, onChange }: Props) {
           <span aria-hidden className="size-1 rounded-full bg-champagne" /> Hoje
         </span>
         <span className="inline-flex items-center gap-2">
-          <span aria-hidden className="text-[#a39c90] line-through">
+          <span aria-hidden className="text-muted line-through">
             12
           </span>{" "}
           Fechado

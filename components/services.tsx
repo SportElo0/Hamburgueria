@@ -74,14 +74,13 @@ export function Services() {
         <div className="lg:col-span-8">
           <ul
             ref={trackRef}
+            data-reveal
             aria-label="Serviços"
             className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:mx-0 lg:scroll-px-0 lg:px-0 [&::-webkit-scrollbar]:hidden"
           >
-            {site.services.map((service, index) => (
+            {site.services.map((service) => (
               <li
                 key={service.id}
-                data-reveal
-                style={{ "--reveal-delay": `${index * 80}ms` } as React.CSSProperties}
                 className="group flex w-[78%] flex-none snap-start flex-col border border-line bg-paper sm:w-[44%] lg:w-[calc((100%-2.5rem)/2.6)]"
               >
                 {service.photo ? (

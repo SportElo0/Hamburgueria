@@ -71,7 +71,7 @@ export function Header() {
 
   return (
     <>
-      <div className="bg-ink text-ground">
+      <aside aria-label="Agendamento pelo WhatsApp" className="bg-ink text-ground">
         <a
           href={greetingLink}
           target="_blank"
@@ -84,7 +84,7 @@ export function Header() {
             <span className="hidden sm:inline"> · {site.whatsapp.display}</span>
           </span>
         </a>
-      </div>
+      </aside>
 
       <header
         ref={headerRef}

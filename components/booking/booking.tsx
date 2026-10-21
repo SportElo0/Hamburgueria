@@ -58,6 +58,7 @@ export function Booking() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const userMoved = useRef(false);
+  const timesRef = useRef<HTMLDivElement>(null);
 
   // "Agora" só existe no navegador (fuso de São Paulo); atualiza a cada minuto.
   useEffect(() => {
@@ -157,6 +158,9 @@ export function Booking() {
       setError("Não foi possível copiar. Selecione o texto da mensagem e copie manualmente.");
     }
   };
+
+  // Erro do nome aparece junto do campo; os demais, na área geral do painel.
+  const nameError = step === SEND && error !== null && error === validateName(name) ? error : null;
 
   const heading = [
     "Qual serviço você quer?",
@@ -297,6 +301,18 @@ export function Booking() {
                           setDate(d);
                           setError(null);
                           if (time && !isSlotValid(d, time, now)) setTime(null);
+                          // Com calendário e horários empilhados, leva o olhar até os horários.
+                          if (window.matchMedia("(max-width: 1279px)").matches) {
+                            const reduce = window.matchMedia(
+                              "(prefers-reduced-motion: reduce)",
+                            ).matches;
+                            requestAnimationFrame(() =>
+                              timesRef.current?.scrollIntoView({
+                                behavior: reduce ? "auto" : "smooth",
+                                block: "start",
+                              }),
+                            );
+                          }
                         }}
                       />
                     ) : (
@@ -309,7 +325,7 @@ export function Booking() {
                     )}
                   </div>
 
-                  <div className="xl:border-l xl:border-line xl:pl-10">
+                  <div ref={timesRef} className="scroll-mt-28 xl:border-l xl:border-line xl:pl-10">
                     <p className="label text-ink">Horário de preferência</p>
                     {date ? (
                       <>
@@ -362,8 +378,8 @@ export function Booking() {
                         enterKeyHint="done"
                         maxLength={site.booking.nameMaxLength}
                         value={name}
-                        aria-invalid={Boolean(error)}
-                        aria-describedby={error ? "booking-error" : undefined}
+                        aria-invalid={Boolean(nameError)}
+                        aria-describedby={nameError ? "booking-name-error" : undefined}
                         onChange={(event) => {
                           setName(event.target.value);
                           setError(null);
@@ -371,6 +387,15 @@ export function Booking() {
                         className="min-h-13 border border-line-strong bg-paper px-4 text-base text-ink placeholder:text-[#8f887d] focus:border-ink focus:outline-none aria-invalid:border-alert"
                         placeholder="Ex.: João"
                       />
+                      {nameError && (
+                        <p
+                          id="booking-name-error"
+                          role="alert"
+                          className="text-[0.95rem] font-semibold text-alert"
+                        >
+                          {nameError}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col gap-2">
                       <div className="flex items-baseline justify-between">
@@ -470,6 +495,7 @@ export function Booking() {
                             event.preventDefault();
                             const problem = validate(invalid);
                             if (invalid !== SEND) go(invalid);
+                            else document.getElementById("booking-name")?.focus();
                             setError(problem);
                             return;
                           }
@@ -530,7 +556,7 @@ export function Booking() {
             aria-live="assertive"
             className="mt-6 min-h-6 text-[0.95rem] font-semibold text-alert"
           >
-            {error}
+            {nameError ? null : error}
           </p>
 
           {step !== SENT && (
