@@ -1,0 +1,289 @@
+@import "tailwindcss";
+
+/*
+ * Escala do degradê — os fundos sobem em degraus duros do preto ao grafite,
+ * como um skin fade. Cada degrau tem o nome do pente da máquina.
+ */
+@theme {
+  --color-fade-0: #0b0c0e; /* #0  — preto profundo */
+  --color-fade-1: #101215; /* #½ */
+  --color-fade-2: #141619; /* #1 */
+  --color-fade-3: #17191d; /* #1½ — grafite */
+  --color-fade-4: #1d2025; /* #2 */
+  --color-fade-5: #252930; /* #3 */
+
+  --color-line: #2a2e35;
+  --color-line-strong: #3b4048;
+
+  --color-paper: #f5f2ed;
+  --color-steel: #a6a8ad;
+  --color-steel-dim: #85888e;
+
+  --color-blue: #436bd9;
+  --color-blue-hover: #5679dd;
+  --color-blue-ink: #8ea8f0;
+  --color-pole: #c8323a;
+  --color-alert: #ff8a8f;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), "Arial Narrow", ui-sans-serif, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --animate-band: band-cut 720ms var(--ease-out-expo) both;
+  --animate-line: line-up 820ms var(--ease-out-expo) both;
+  --animate-rise: rise 640ms var(--ease-out-expo) both;
+  --animate-step: step-in 380ms var(--ease-out-expo) both;
+  --animate-sheet: sheet-in 420ms var(--ease-out-expo) both;
+
+  @keyframes band-cut {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes line-up {
+    from {
+      clip-path: inset(0 0 100% 0);
+      transform: translateY(0.35em);
+    }
+    to {
+      clip-path: inset(0 0 -0.2em 0);
+      transform: translateY(0);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      transform: translateX(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-fade-0);
+    color: var(--color-paper);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-line-strong) var(--color-fade-0);
+    scroll-padding-top: 4.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01" on;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-blue);
+    color: #fff;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--color-blue-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue-ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-fade-0);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border: 2px solid var(--color-fade-0);
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* Voz de letreiro: Archivo comprimida, pesada, em caixa-alta. */
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 66;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 0.98;
+  }
+
+  /* Etiqueta de pente: "#1½". */
+  .guard {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 80;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0 1.4rem;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    transition:
+      background-color 180ms var(--ease-out-quart),
+      color 180ms var(--ease-out-quart),
+      border-color 180ms var(--ease-out-quart),
+      transform 180ms var(--ease-out-quart);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn svg {
+    flex: none;
+    transition: transform 220ms var(--ease-out-expo);
+  }
+  .btn:hover svg.nudge {
+    transform: translateX(3px);
+  }
+  .btn-primary {
+    background: var(--color-blue);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-blue-hover);
+  }
+  .btn-ghost {
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-paper);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-steel);
+    background: var(--color-fade-3);
+  }
+  .btn[aria-disabled="true"],
+  .btn:disabled {
+    background: var(--color-fade-4);
+    color: var(--color-steel-dim);
+    border-color: transparent;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .link-quiet {
+    color: var(--color-paper);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    transition: text-decoration-color 160ms;
+  }
+  .link-quiet:hover {
+    text-decoration-color: var(--color-blue-ink);
+  }
+
+  /* Revelação no scroll: o conteúdo é visível por padrão; só some quando o JS arma o efeito. */
+  .reveal-armed [data-reveal]:not(.is-in) {
+    opacity: 0;
+  }
+  .reveal-armed [data-reveal="rise"]:not(.is-in) {
+    transform: translateY(18px);
+  }
+  /* O recorte fica no conteúdo: o elemento observado continua visível para o IntersectionObserver. */
+  .reveal-armed [data-reveal="cut"]:not(.is-in) {
+    opacity: 1;
+  }
+  .reveal-armed [data-reveal="cut"]:not(.is-in) > * {
+    clip-path: inset(0 0 100% 0);
+  }
+  [data-reveal] {
+    transition:
+      opacity 700ms var(--ease-out-expo),
+      transform 700ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal="cut"] > * {
+    transition: clip-path 900ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-armed [data-reveal]:not(.is-in),
+    .reveal-armed [data-reveal]:not(.is-in) > * {
+      opacity: 1;
+      transform: none;
+      clip-path: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}
