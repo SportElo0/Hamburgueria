@@ -28,7 +28,8 @@
   --color-alert: #b3261e;
 
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-serif: var(--font-caslon), "Libre Caslon Display", Georgia, serif;
+  --font-signature: var(--font-caslon-italic), Georgia, serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -167,10 +168,18 @@
   /* Títulos editoriais em Cormorant Garamond. */
   .serif {
     font-family: var(--font-serif);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.02;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.06;
     font-variant-numeric: lining-nums;
+  }
+
+  /* Itálico de assinatura (nome do Leonardo, citações). */
+  .signature {
+    font-family: var(--font-signature);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.2;
   }
 
   /* Rótulos de interface: caixa-alta espaçada, nunca menor que 13px. */

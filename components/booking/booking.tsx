@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { ArrowLeft, ArrowRight, Check, Copy, Info, RotateCcw } from "lucide-react";
 import { site } from "@/config/site";
 import { onBookingRequest } from "@/lib/booking-store";
@@ -185,7 +184,7 @@ export function Booking() {
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">
             <h2 id="agendar-title" className="serif text-[clamp(2.75rem,8vw,4.25rem)]">
-              Agende seu <em className="text-champagne-deep italic">horário.</em>
+              Agende seu <span className="text-champagne-deep">horário.</span>
             </h2>
             <span aria-hidden className="risca mt-7" />
             <p className="mt-7 max-w-[38ch] text-[1.0625rem] leading-relaxed text-graphite">
@@ -255,26 +254,10 @@ export function Booking() {
                           setServiceId(s.id);
                           setError(null);
                         }}
-                        className={`flex min-h-20 items-center gap-4 border p-2.5 pr-4 text-left transition-colors duration-200 ${
+                        className={`flex min-h-16 items-center gap-4 border px-5 py-4 text-left transition-colors duration-200 ${
                           selected ? "border-ink bg-ground" : "border-line hover:border-ink"
                         }`}
                       >
-                        <span className="relative h-16 w-13 flex-none overflow-hidden bg-ink">
-                          {s.photo?.src ? (
-                            <Image
-                              src={s.photo.src}
-                              alt=""
-                              fill
-                              sizes="52px"
-                              style={{ objectPosition: s.photo.focus ?? "50% 50%" }}
-                              className="object-cover"
-                            />
-                          ) : (
-                            <span className="serif absolute inset-0 grid place-items-center text-lg text-champagne-soft">
-                              LM
-                            </span>
-                          )}
-                        </span>
                         <span className="flex-1 text-[1.02rem] font-semibold">{s.name}</span>
                         <span
                           aria-hidden
@@ -570,14 +553,12 @@ export function Booking() {
                   <ArrowLeft size={16} />
                   Voltar
                 </button>
-              ) : (
-                <span />
-              )}
+              ) : null}
               {step < SEND && (
                 <button
                   type="button"
                   onClick={next}
-                  className="btn btn-solid min-h-12 flex-1 sm:flex-none"
+                  className="btn btn-solid ml-auto min-h-12 flex-1 sm:flex-none"
                 >
                   Continuar
                   <ArrowRight size={16} className="nudge" />

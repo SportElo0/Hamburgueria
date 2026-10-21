@@ -38,7 +38,7 @@ export function About() {
           ))}
         </ul>
 
-        <p className="serif mt-10 text-[1.9rem] text-champagne-soft italic">{site.barber}</p>
+        <p className="signature mt-10 text-[1.75rem] text-champagne-soft">{site.barber}</p>
         {about.draft && (
           <p className="mt-3 text-xs tracking-[0.08em] text-night-muted">
             Texto provisório, aguardando revisão do {site.barberFirstName}.
@@ -63,7 +63,7 @@ export function About() {
       <div className="flex flex-col items-start justify-center gap-7 bg-sand px-5 py-16 sm:px-8 lg:col-span-3 lg:px-10 xl:pr-[max(2.5rem,calc((100vw-88rem)/2+3rem))]">
         <Seal size={96} className="text-champagne" />
         <h3 className="serif text-[2.1rem] leading-[1.05]">
-          Pronto para o <em className="text-champagne-deep italic">próximo corte?</em>
+          Pronto para o <span className="text-champagne-deep">próximo corte?</span>
         </h3>
         <p className="text-[0.95rem] leading-relaxed text-muted">
           Escolha o serviço, o dia e o horário. O {site.barberFirstName} confirma pelo WhatsApp.

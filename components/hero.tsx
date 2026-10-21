@@ -48,7 +48,7 @@ export function Hero() {
                 style={{ animationDelay: `${380 + index * 120}ms` }}
               >
                 {line.text}
-                {line.accent && <em className="text-champagne-deep italic">{line.accent}</em>}
+                {line.accent && <span className="text-champagne-deep">{line.accent}</span>}
               </span>
             ))}
           </h1>

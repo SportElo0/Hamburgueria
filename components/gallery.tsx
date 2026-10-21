@@ -89,7 +89,7 @@ export function Gallery() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
           <div className="lg:col-span-7">
             <h2 id="cortes-title" data-reveal className="serif text-[clamp(2.75rem,8vw,4.25rem)]">
-              Nossos <em className="text-champagne-deep italic">cortes.</em>
+              Nossos cortes.
             </h2>
             <span aria-hidden data-reveal="risca" className="risca mt-7" />
           </div>
@@ -135,7 +135,7 @@ export function Gallery() {
                   imgClassName="transition-transform duration-[1400ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.05]"
                 />
                 <span className="pointer-events-none absolute bottom-3 left-3 hidden translate-y-2 bg-ground px-3 py-2 opacity-0 transition-[opacity,transform] duration-500 ease-[var(--ease-out-expo)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 lg:block">
-                  <span className="serif text-lg italic">{photo.caption}</span>
+                  <span className="serif text-lg">{photo.caption}</span>
                 </span>
               </button>
             </li>
@@ -201,7 +201,7 @@ export function Gallery() {
         </div>
 
         <div className="flex items-center justify-between gap-4 px-5 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:px-8">
-          <p id="lightbox-caption" className="serif text-[1.75rem] italic">
+          <p id="lightbox-caption" className="serif text-[1.75rem]">
             {current.caption}
           </p>
           <div className="flex gap-2 sm:hidden">

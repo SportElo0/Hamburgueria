@@ -1,14 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Libre_Caslon_Display, Libre_Caslon_Text, Manrope } from "next/font/google";
 import { site } from "@/config/site";
 import { barberShopJsonLd, seo } from "@/lib/seo";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+// Libre Caslon: acentos do português bem posicionados (a Cormorant desloca é, ê e ú).
+const caslon = Libre_Caslon_Display({
+  variable: "--font-caslon",
   subsets: ["latin"],
-  weight: ["500", "600"],
-  style: ["normal", "italic"],
+  weight: "400",
+  display: "swap",
+});
+
+// Itálico apenas para a assinatura do Leonardo.
+const caslonItalic = Libre_Caslon_Text({
+  variable: "--font-caslon-italic",
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
   display: "swap",
 });
 
@@ -56,7 +65,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${cormorant.variable} ${manrope.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`${caslon.variable} ${caslonItalic.variable} ${manrope.variable}`}
+    >
       <body className="min-h-dvh bg-ground text-ink">
         <script
           type="application/ld+json"

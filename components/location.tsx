@@ -24,7 +24,7 @@ export function Location() {
             data-reveal
             className="serif text-[clamp(2.75rem,8vw,4.25rem)]"
           >
-            Rua Cotovia, <em className="text-champagne-deep italic">130.</em>
+            Rua Cotovia, 130.
           </h2>
           <span aria-hidden data-reveal="risca" className="risca mt-7" />
           <address className="mt-7 text-[1.0625rem] leading-relaxed text-graphite not-italic">
@@ -119,34 +119,19 @@ export function Location() {
               allowFullScreen
             />
           ) : (
-            <div className="absolute inset-0">
-              {/* Quadras em linhas finas até o mapa ser carregado. */}
-              <div
-                aria-hidden
-                className="absolute inset-0 grid grid-cols-8 grid-rows-6 gap-px bg-line"
-              >
-                {Array.from({ length: 48 }, (_, i) => (
-                  <span key={i} className={i % 7 === 3 || i % 11 === 5 ? "bg-sand" : "bg-paper"} />
-                ))}
-              </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 p-6 text-center">
-                <span className="grid size-14 place-items-center rounded-full bg-ink text-ground">
-                  <MapPin size={22} strokeWidth={1.5} />
-                </span>
-                <p className="serif bg-paper px-3 py-1 text-[1.6rem]">
-                  {site.address.street}, {site.address.neighborhood}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setMapLoaded(true)}
-                  className="btn btn-outline bg-paper"
-                >
-                  Mostrar mapa
-                </button>
-                <p className="bg-paper px-2 text-[0.8125rem] text-muted">
-                  O mapa é carregado do Google Maps.
-                </p>
-              </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-sand p-6 text-center">
+              <span className="grid size-14 place-items-center rounded-full border border-ink text-ink">
+                <MapPin size={22} strokeWidth={1.5} />
+              </span>
+              <p className="serif text-[1.75rem] leading-tight">
+                {site.address.street}
+                <br />
+                {site.address.neighborhood}, {site.address.city}
+              </p>
+              <button type="button" onClick={() => setMapLoaded(true)} className="btn btn-outline">
+                Mostrar mapa
+              </button>
+              <p className="text-[0.8125rem] text-muted">O mapa é carregado do Google Maps.</p>
             </div>
           )}
         </div>

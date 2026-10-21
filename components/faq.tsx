@@ -55,7 +55,7 @@ export function Faq() {
       <div className="mx-auto grid grid-cols-1 max-w-[88rem] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
         <div className="lg:col-span-4">
           <h2 id="faq-title" data-reveal className="serif text-[clamp(2.75rem,8vw,4.25rem)]">
-            Dúvidas <em className="text-champagne-deep italic">frequentes.</em>
+            Dúvidas frequentes.
           </h2>
           <span aria-hidden data-reveal="risca" className="risca mt-7" />
         </div>

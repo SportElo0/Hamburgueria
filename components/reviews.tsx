@@ -54,9 +54,7 @@ export function Reviews() {
           <ul className="grid gap-8 border-t border-line pt-10 sm:grid-cols-2 lg:col-span-12 lg:grid-cols-3">
             {reviews.testimonials.map((t) => (
               <li key={`${t.author}-${t.date}`}>
-                <blockquote className="serif text-[1.4rem] leading-snug italic">
-                  “{t.text}”
-                </blockquote>
+                <blockquote className="signature text-[1.3rem] leading-snug">“{t.text}”</blockquote>
                 <p className="mt-3 text-sm text-muted">
                   {t.author} · {reviews.platform}, {t.date}
                 </p>

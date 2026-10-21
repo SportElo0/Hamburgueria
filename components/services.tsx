@@ -51,7 +51,7 @@ export function Services() {
       <div className="mx-auto grid grid-cols-1 max-w-[88rem] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
         <div className="lg:col-span-4 lg:pt-4">
           <h2 id="servicos-title" data-reveal className="serif text-[clamp(2.75rem,8vw,4.25rem)]">
-            Do corte ao <em className="text-champagne-deep italic">acabamento.</em>
+            Do corte ao acabamento.
           </h2>
           <span aria-hidden data-reveal="risca" className="risca mt-7" />
           <p
@@ -93,7 +93,7 @@ export function Services() {
                 ) : (
                   <div className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-6 bg-ink px-8 text-center text-champagne-soft">
                     <Seal size={112} />
-                    <p className="serif max-w-[14ch] text-[1.6rem] text-ground italic">
+                    <p className="signature max-w-[14ch] text-[1.5rem] text-ground">
                       O detalhe que fecha o visual.
                     </p>
                   </div>
