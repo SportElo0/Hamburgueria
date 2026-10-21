@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: seo.title,
     description: seo.description,
   },
-  robots: { index: true, follow: true },
+  robots: { index: seo.indexable, follow: seo.indexable },
 };
 
 export const viewport: Viewport = {

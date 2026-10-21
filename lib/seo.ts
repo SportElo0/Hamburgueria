@@ -11,6 +11,11 @@ const schemaDays = [
 ] as const;
 
 export const seo = {
+  /**
+   * Só libera o Google depois da aprovação do conteúdo: defina
+   * NEXT_PUBLIC_ALLOW_INDEXING=true na Vercel e faça um novo deploy.
+   */
+  indexable: process.env.NEXT_PUBLIC_ALLOW_INDEXING === "true",
   title: "LM Barbearia | Barbearia no Campanário, Diadema – SP",
   shortTitle: "LM Barbearia",
   description:

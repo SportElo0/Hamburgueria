@@ -12,7 +12,7 @@ const bands = [
   { guard: "#1½", tone: "bg-fade-0/48", size: "flex-[1]" },
   { guard: "#1", tone: "bg-fade-0/68", size: "flex-[1.15]" },
   { guard: "#½", tone: "bg-fade-0/84", size: "flex-[1.3] lg:flex-[1.6]" },
-  { guard: "#0", tone: "bg-fade-0", size: "flex-[5] lg:flex-[1.9]" },
+  { guard: "#0", tone: "bg-fade-0", size: "flex-[6] lg:flex-[1.9]" },
 ];
 
 const headlineLines = ["O estilo", "começa no", "detalhe."];
@@ -49,7 +49,7 @@ export function Hero() {
         {bands.map((band, index) => (
           <div
             key={band.guard}
-            className={`animate-band relative origin-bottom border-t border-paper/[0.07] ${band.tone} ${band.size}`}
+            className={`animate-band relative origin-bottom ${band.guard === "#0" ? "" : "border-t border-paper/[0.07]"} ${band.tone} ${band.size}`}
             style={{ animationDelay: `${(bands.length - 1 - index) * 70}ms` }}
           >
             <span
@@ -94,7 +94,7 @@ export function Hero() {
                 Agendar meu horário
                 <ArrowRight size={18} className="nudge" />
               </BookingTrigger>
-              <a href="#cortes" className="btn btn-ghost w-full sm:w-auto">
+              <a href="#cortes" className="btn btn-ghost w-full bg-fade-0 hover:bg-fade-3 sm:w-auto">
                 Conhecer os cortes
                 <ArrowDown size={18} className="nudge" />
               </a>

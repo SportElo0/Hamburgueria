@@ -23,6 +23,7 @@ Rode `npm run check:config` para ver a lista atualizada. Hoje faltam:
 | Logotipo original | Usando marca tipográfica "LM Barbearia" | `components/brand.tsx` |
 | Avaliações | 5,0 com 16 avaliações, conferido no Google em 21/10/2026. Não atualiza sozinho. | `config/site.ts` → `reviews` |
 | Endereço do site | `https://lm-barbearia.vercel.app` (provisório) | variável `NEXT_PUBLIC_SITE_URL` na Vercel |
+| Indexação no Google | **Desligada** (`noindex`) para a versão com fotos temporárias não aparecer nas buscas | variável `NEXT_PUBLIC_ALLOW_INDEXING=true` na Vercel |
 
 ---
 
@@ -145,6 +146,7 @@ Você consegue confirmar esse horário?
 1. Crie uma conta em [vercel.com](https://vercel.com) e conecte o GitHub.
 2. **Add New → Project**, escolha este repositório. A Vercel detecta o Next.js; não mude os comandos.
 3. Em **Settings → Environment Variables**, crie `NEXT_PUBLIC_SITE_URL` com o endereço final (por exemplo `https://lmbarbearia.com.br`). Ela é usada no sitemap, no Open Graph e nos dados estruturados.
+   Quando fotos, horários e textos estiverem aprovados, crie também `NEXT_PUBLIC_ALLOW_INDEXING` = `true` para liberar o Google (sem ela o site fica com `noindex`).
 4. Clique em **Deploy**. A cada `git push` na branch principal, a Vercel publica de novo.
 
 ### Domínio próprio (depois)

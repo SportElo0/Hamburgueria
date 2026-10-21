@@ -23,6 +23,10 @@ if (noPrice.length)
 if (site.about.draft) pending.push("Texto do 'Sobre' ainda marcado como provisório (about.draft).");
 if (!site.address.geo)
   pending.push("Coordenadas (address.geo) não informadas (opcional, melhora o SEO local).");
+if (process.env.NEXT_PUBLIC_ALLOW_INDEXING !== "true")
+  pending.push(
+    "Indexação no Google desligada: defina NEXT_PUBLIC_ALLOW_INDEXING=true quando o conteúdo estiver aprovado.",
+  );
 if (!process.env.NEXT_PUBLIC_SITE_URL)
   pending.push(`NEXT_PUBLIC_SITE_URL não definida; usando ${site.url}.`);
 
