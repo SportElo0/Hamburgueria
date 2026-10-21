@@ -179,7 +179,7 @@ export function Booking() {
     <section
       id="agendar"
       aria-labelledby="agendar-title"
-      className="relative scroll-mt-16 bg-fade-2 py-20 sm:py-28 lg:scroll-mt-[4.5rem] lg:py-32"
+      className="relative scroll-mt-16 bg-fade-3 py-20 sm:py-28 lg:scroll-mt-[4.5rem] lg:py-32"
     >
       <div className="mx-auto grid max-w-[90rem] gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:px-10">
         <div className="lg:col-span-4">

@@ -12,7 +12,11 @@ type Props = {
   /** Degraus no placeholder; desligue quando o contexto já desenha as faixas. */
   bands?: boolean;
   fit?: "cover" | "contain";
+  /** Desloca os degraus do placeholder (0–3) para variar o tom entre fotos vizinhas. */
+  shade?: number;
 };
+
+const placeholderTones = ["bg-fade-1", "bg-fade-2", "bg-fade-3", "bg-fade-4", "bg-fade-5"];
 
 /**
  * Foto real quando `photo.src` existe; caso contrário, um placeholder em degraus
@@ -26,6 +30,7 @@ export function PhotoSlot({
   label = true,
   bands = true,
   fit = "cover",
+  shade = 0,
 }: Props) {
   if (photo.src) {
     return (
@@ -50,10 +55,14 @@ export function PhotoSlot({
     >
       {bands && (
         <div aria-hidden className="absolute inset-0 flex flex-col">
-          <span className="flex-[3] bg-fade-4" />
-          <span className="flex-[2] bg-fade-3" />
-          <span className="flex-[2] bg-fade-2" />
-          <span className="flex-[2] bg-fade-1" />
+          {[3, 2, 1, 0].map((step, i) => (
+            <span
+              key={step}
+              className={`${i === 0 ? "flex-[3]" : "flex-[2]"} ${
+                placeholderTones[Math.min(step + shade, placeholderTones.length - 1)]
+              }`}
+            />
+          ))}
         </div>
       )}
       <div

@@ -12,7 +12,7 @@ export function Reviews() {
   if (!reviews.show) return null;
 
   return (
-    <section aria-labelledby="avaliacoes-title" className="bg-fade-3 py-16 sm:py-20 lg:py-24">
+    <section aria-labelledby="avaliacoes-title" className="bg-fade-4 py-16 sm:py-20 lg:py-24">
       <div className="mx-auto grid max-w-[90rem] gap-8 px-4 sm:px-6 lg:grid-cols-12 lg:items-center lg:gap-10 lg:px-10">
         <div className="lg:col-span-7">
           <h2

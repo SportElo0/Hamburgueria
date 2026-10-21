@@ -122,9 +122,18 @@ export function Gallery() {
                   photo={photo}
                   sizes={tileSizes[i % tileSizes.length]}
                   label={false}
+                  shade={i % 4}
                   className="absolute! inset-0 transition-transform duration-[900ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"
                 />
-                <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-linear-to-t from-fade-0/85 to-transparent p-3 pt-10 sm:p-4 sm:pt-14">
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col"
+                >
+                  <span className="h-3 bg-fade-0/25 sm:h-4" />
+                  <span className="h-3 bg-fade-0/50 sm:h-4" />
+                  <span className="h-[4.5rem] bg-fade-0/78 sm:h-[5.5rem]" />
+                </span>
+                <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 sm:p-4">
                   <span className="min-w-0">
                     <span className="display line-clamp-2 block text-[1.35rem] sm:text-[1.7rem]">
                       {photo.caption}
@@ -160,7 +169,7 @@ export function Gallery() {
           if (Math.abs(delta) > 50) step(delta < 0 ? 1 : -1);
           touchStart.current = null;
         }}
-        className="m-0 h-dvh max-h-none w-screen max-w-none bg-fade-0/96 p-0 text-paper backdrop:bg-fade-0/80 open:flex open:flex-col"
+        className="m-0 h-dvh max-h-none w-screen max-w-none bg-fade-0 p-0 text-paper backdrop:bg-fade-0/80 open:flex open:flex-col"
       >
         <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <p className="guard tabular text-steel">

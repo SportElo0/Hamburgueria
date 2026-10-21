@@ -5,7 +5,7 @@ export function About() {
   const { about } = site;
 
   return (
-    <section id="sobre" aria-labelledby="sobre-title" className="bg-fade-0 py-20 sm:py-28 lg:py-36">
+    <section id="sobre" aria-labelledby="sobre-title" className="bg-fade-2 py-20 sm:py-28 lg:py-36">
       <div className="mx-auto grid max-w-[90rem] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:px-10">
         <figure data-reveal="cut" className="relative lg:col-span-5">
           <PhotoSlot
@@ -20,11 +20,6 @@ export function About() {
         </figure>
 
         <div className="flex flex-col justify-center lg:col-span-6 lg:col-start-7">
-          {about.draft && (
-            <p className="guard mb-6 self-start rounded-[2px] border border-dashed border-line-strong px-2 py-1.5 text-[0.62rem] text-steel">
-              TEXTO PROVISÓRIO · AGUARDANDO REVISÃO DO {site.barberFirstName.toUpperCase()}
-            </p>
-          )}
           <h2
             id="sobre-title"
             data-reveal="rise"
@@ -38,15 +33,17 @@ export function About() {
                 {paragraph}
               </p>
             ))}
+            {about.draft && (
+              <p className="guard self-start rounded-[2px] border border-dashed border-line-strong px-2 py-1.5 text-[0.62rem] text-steel">
+                TEXTO PROVISÓRIO · AGUARDANDO REVISÃO DO {site.barberFirstName.toUpperCase()}
+              </p>
+            )}
           </div>
 
-          <ul className="mt-10 grid border-t border-line sm:grid-cols-3">
+          <ul className="mt-10 border-t border-line">
             {about.commitments.map((item, index) => (
-              <li
-                key={item}
-                className="flex items-start gap-3 border-b border-line py-5 sm:border-b-0 sm:py-6 sm:pr-5 [&+&]:sm:border-l [&+&]:sm:pl-5"
-              >
-                <span aria-hidden className="mt-1.5 flex flex-none items-end gap-[2px]">
+              <li key={item} className="flex items-center gap-4 border-b border-line py-4">
+                <span aria-hidden className="flex flex-none items-end gap-[2px]">
                   {[0, 1, 2].map((s) => (
                     <span
                       key={s}
@@ -55,7 +52,7 @@ export function About() {
                     />
                   ))}
                 </span>
-                <span className="text-[0.95rem] font-semibold leading-snug">{item}</span>
+                <span className="text-[1rem] font-semibold leading-snug">{item}</span>
               </li>
             ))}
           </ul>

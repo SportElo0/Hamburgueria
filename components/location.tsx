@@ -116,7 +116,7 @@ export function Location() {
                 ))}
               </div>
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 p-6 text-center">
-                <span className="grid size-14 place-items-center rounded-full bg-blue text-white shadow-[0_8px_24px_-6px_rgba(67,107,217,0.6)]">
+                <span className="grid size-14 place-items-center rounded-full bg-blue text-white">
                   <MapPin size={24} />
                 </span>
                 <p className="max-w-[30ch] text-sm leading-relaxed text-paper/90">
