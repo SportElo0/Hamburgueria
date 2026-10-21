@@ -23,8 +23,8 @@ export type Service = {
   price: number | null;
   /** Duração em minutos. `null` = não informada (não aparece no site). */
   durationMinutes: number | null;
-  /** Faixa da escala do degradê destacada na marca visual do card (0 a 4). */
-  mark: number[];
+  /** Foto do card. `null` = card tipográfico (sem foto). */
+  photo: Photo | null;
 };
 
 export type Photo = {
@@ -35,7 +35,103 @@ export type Photo = {
   caption: string;
   width?: number;
   height?: number;
+  /** Ponto de foco do recorte (CSS object-position), ex.: "50% 30%". */
+  focus?: string;
+  /**
+   * PENDENTE quando `true`: a foto veio de captura de tela (Google/Instagram)
+   * e deve ser trocada pelo arquivo original em alta resolução.
+   */
+  fromScreenshot?: boolean;
 };
+
+/**
+ * Fotos reais do trabalho do Leonardo, recortadas das capturas de tela do
+ * perfil da barbearia no Google e do Instagram @lm_barbearia130.
+ * Troque cada arquivo pelo original em alta (mesmo nome) quando possível.
+ */
+export const photos = {
+  lowFadeRisca: {
+    src: "/fotos/low-fade-risca.jpg",
+    alt: "Low fade com risca lateral e topo penteado, visto de perfil",
+    caption: "Low fade com risca",
+    width: 760,
+    height: 892,
+    focus: "55% 35%",
+    fromScreenshot: true,
+  },
+  riscaLateral: {
+    src: "/fotos/risca-lateral.jpg",
+    alt: "Degradê com risca lateral marcada, visto de perfil",
+    caption: "Degradê com risca",
+    width: 760,
+    height: 895,
+    focus: "60% 40%",
+    fromScreenshot: true,
+  },
+  desenhoNuca: {
+    src: "/fotos/desenho-nuca.jpg",
+    alt: "Desenho feito na máquina na nuca, com contorno limpo",
+    caption: "Desenho na nuca",
+    width: 776,
+    height: 1072,
+    focus: "60% 40%",
+    fromScreenshot: true,
+  },
+  riscaLoiro: {
+    src: "/fotos/risca-loiro.jpg",
+    alt: "Cabelo cacheado descolorido com degradê e risca desenhada",
+    caption: "Degradê com desenho",
+    width: 760,
+    height: 895,
+    focus: "40% 30%",
+    fromScreenshot: true,
+  },
+  barba: {
+    src: "/fotos/barba.jpg",
+    alt: "Cliente com barba grisalha alinhada, sentado na cadeira",
+    caption: "Barba alinhada",
+    width: 404,
+    height: 640,
+    focus: "50% 35%",
+    fromScreenshot: true,
+  },
+  leonardo: {
+    src: "/fotos/leonardo-atendendo.jpg",
+    alt: "Leonardo Miguel sorrindo enquanto corta o cabelo de um cliente",
+    caption: "Leonardo atendendo",
+    width: 404,
+    height: 552,
+    focus: "40% 40%",
+    fromScreenshot: true,
+  },
+  cacheado: {
+    src: "/fotos/cacheado.jpg",
+    alt: "Cabelo cacheado com degradê nas laterais, visto de trás",
+    caption: "Cacheado com degradê",
+    width: 404,
+    height: 552,
+    focus: "50% 35%",
+    fromScreenshot: true,
+  },
+  degradeSocial: {
+    src: "/fotos/degrade-social.jpg",
+    alt: "Degradê com topo penteado para trás e barba rente, visto de perfil",
+    caption: "Degradê e topo para trás",
+    width: 404,
+    height: 552,
+    focus: "60% 40%",
+    fromScreenshot: true,
+  },
+  lowFadeInfantil: {
+    src: "/fotos/low-fade-infantil.jpg",
+    alt: "Low fade em cabelo liso infantil, visto de perfil",
+    caption: "Low fade",
+    width: 404,
+    height: 640,
+    focus: "60% 45%",
+    fromScreenshot: true,
+  },
+} satisfies Record<string, Photo>;
 
 export const site = {
   name: "LM Barbearia",
@@ -130,7 +226,7 @@ export const site = {
         "Degradê, social, tesoura ou máquina. Você fala como gosta e o corte é feito com calma, do contorno ao acabamento.",
       price: null,
       durationMinutes: null,
-      mark: [0, 1, 2, 3, 4],
+      photo: photos.riscaLateral,
     },
     {
       id: "barba",
@@ -140,7 +236,7 @@ export const site = {
         "Desenho, alinhamento e acabamento da barba, respeitando o formato do seu rosto.",
       price: null,
       durationMinutes: null,
-      mark: [0, 1],
+      photo: photos.barba,
     },
     {
       id: "corte-barba",
@@ -149,7 +245,7 @@ export const site = {
       description: "Os dois serviços no mesmo horário, para sair com o visual inteiro alinhado.",
       price: null,
       durationMinutes: null,
-      mark: [0, 1, 2, 3, 4],
+      photo: photos.degradeSocial,
     },
     {
       id: "sobrancelha",
@@ -158,7 +254,7 @@ export const site = {
       description: "Limpeza e alinhamento discreto, para completar o corte sem exagero.",
       price: null,
       durationMinutes: null,
-      mark: [4],
+      photo: null,
     },
     {
       id: "navalha",
@@ -168,35 +264,30 @@ export const site = {
         "Contorno e pezinho na navalha para deixar a linha limpa e o degradê mais marcado.",
       price: null,
       durationMinutes: null,
-      mark: [0],
+      photo: photos.desenhoNuca,
     },
   ] as Service[],
 
   /**
-   * Galeria "Nossos cortes".
-   * PENDENTE: fotos reais autorizadas pelo Leonardo. Coloque os arquivos em
-   * /public/fotos e preencha `src`, `width` e `height`. Enquanto `src` for
-   * `null`, aparece um placeholder identificado como temporário.
-   * As legendas abaixo são sugestões baseadas nos estilos do Instagram.
+   * Galeria "Nossos cortes": somente fotos reais do trabalho do Leonardo.
+   * A ordem define o layout (as primeiras ocupam os espaços maiores).
    */
   gallery: [
-    { src: null, alt: "Degradê com risca lateral", caption: "Degradê com risca" },
-    { src: null, alt: "Low fade com topo penteado para trás", caption: "Low fade" },
-    { src: null, alt: "Barba alinhada com acabamento na navalha", caption: "Barba na navalha" },
-    { src: null, alt: "Cabelo cacheado com degradê nas laterais", caption: "Cacheado + degradê" },
-    { src: null, alt: "Desenho freestyle feito na máquina", caption: "Freestyle" },
-    { src: null, alt: "Mid fade com franja texturizada", caption: "Mid fade" },
+    photos.riscaLateral,
+    photos.desenhoNuca,
+    photos.riscaLoiro,
+    photos.cacheado,
+    photos.lowFadeRisca,
+    photos.barba,
+    photos.degradeSocial,
+    photos.lowFadeInfantil,
   ] as Photo[],
 
   hero: {
-    headline: "O estilo começa no detalhe.",
-    subtitle: "Cortes precisos, cuidado em cada detalhe e um atendimento do seu jeito.",
-    /** PENDENTE: melhor foto de corte, de preferência vertical e bem iluminada. */
-    photo: {
-      src: null,
-      alt: "Corte degradê feito na LM Barbearia",
-      caption: "Foto principal",
-    } satisfies Photo,
+    /** Cada item é uma linha; o trecho em `accent` aparece em champanhe. */
+    headline: [{ text: "Seu estilo." }, { text: "Nossa ", accent: "precisão." }],
+    subtitle: "Corte, barba e acabamento na navalha com o Leonardo Miguel, no Campanário.",
+    photo: photos.lowFadeRisca as Photo,
   },
 
   about: {
@@ -212,12 +303,7 @@ export const site = {
       "Conversa antes do corte",
       "Acabamento na navalha",
     ],
-    /** PENDENTE: foto do Leonardo. */
-    photo: {
-      src: null,
-      alt: "Leonardo Miguel, barbeiro da LM Barbearia",
-      caption: "Foto do Leonardo",
-    } satisfies Photo,
+    photo: photos.leonardo as Photo,
   },
 
   /**

@@ -62,9 +62,9 @@ export function Calendar({ now, value, onChange }: Props) {
   ];
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <div className="mb-4 flex items-center justify-between">
-        <p aria-live="polite" className="display text-[1.9rem] first-letter:uppercase">
+        <p aria-live="polite" className="serif text-[1.9rem] first-letter:uppercase">
           {formatMonth(view.y, view.m)}
         </p>
         <div className="flex gap-2">
@@ -73,32 +73,28 @@ export function Calendar({ now, value, onChange }: Props) {
             onClick={() => shift(-1)}
             disabled={!canPrev}
             aria-label="Mês anterior"
-            className="grid size-11 place-items-center rounded-[3px] border border-line-strong text-paper transition-colors hover:bg-fade-4 disabled:border-line disabled:text-steel-dim disabled:hover:bg-transparent"
+            className="grid size-11 place-items-center rounded-full border border-ink text-ink transition-colors hover:bg-ink hover:text-ground disabled:border-line disabled:text-line-strong disabled:hover:bg-transparent"
           >
-            <ChevronLeft size={19} />
+            <ChevronLeft size={18} strokeWidth={1.5} />
           </button>
           <button
             type="button"
             onClick={() => shift(1)}
             disabled={!canNext}
             aria-label="Próximo mês"
-            className="grid size-11 place-items-center rounded-[3px] border border-line-strong text-paper transition-colors hover:bg-fade-4 disabled:border-line disabled:text-steel-dim disabled:hover:bg-transparent"
+            className="grid size-11 place-items-center rounded-full border border-ink text-ink transition-colors hover:bg-ink hover:text-ground disabled:border-line disabled:text-line-strong disabled:hover:bg-transparent"
           >
-            <ChevronRight size={19} />
+            <ChevronRight size={18} strokeWidth={1.5} />
           </button>
         </div>
       </div>
 
-      <div
-        className="grid grid-cols-7 gap-1 sm:gap-1.5"
-        role="group"
-        aria-label="Escolha a data desejada"
-      >
+      <div className="grid grid-cols-7 gap-1" role="group" aria-label="Escolha a data desejada">
         {weekdayHeaders.map((day) => (
           <abbr
             key={day.long}
             title={day.long}
-            className="guard pb-2 text-center text-steel-dim no-underline"
+            className="pb-2 text-center text-[0.8125rem] font-semibold text-muted no-underline"
           >
             {day.short}
           </abbr>
@@ -121,21 +117,21 @@ export function Calendar({ now, value, onChange }: Props) {
               aria-pressed={selected}
               aria-label={label}
               onClick={() => onChange(date)}
-              className={`tabular relative grid aspect-square min-h-11 place-items-center rounded-[3px] text-[0.95rem] font-semibold transition-colors duration-200 ${
+              className={`tabular relative mx-auto grid aspect-square w-full max-w-12 min-h-10 place-items-center rounded-full text-[0.95rem] transition-colors duration-200 ${
                 selected
-                  ? "bg-blue text-white"
+                  ? "bg-ink font-semibold text-ground"
                   : disabled
                     ? status === "closed"
-                      ? "text-steel-dim/60 line-through decoration-steel-dim/60"
-                      : "text-steel-dim/45"
-                    : "bg-fade-3 text-paper hover:bg-fade-5"
+                      ? "text-[#a39c90] line-through decoration-[#a39c90]"
+                      : "text-[#bdb6ab]"
+                    : "font-semibold text-ink hover:bg-sand"
               }`}
             >
               {day}
               {isToday && (
                 <span
                   aria-hidden
-                  className={`absolute bottom-1.5 h-[2px] w-3 ${selected ? "bg-white" : "bg-blue-ink"}`}
+                  className={`absolute bottom-1 size-1 rounded-full ${selected ? "bg-ground" : "bg-champagne"}`}
                 />
               )}
             </button>
@@ -143,12 +139,12 @@ export function Calendar({ now, value, onChange }: Props) {
         })}
       </div>
 
-      <p className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-xs text-steel">
+      <p className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[0.8125rem] text-muted">
         <span className="inline-flex items-center gap-2">
-          <span aria-hidden className="h-[2px] w-3 bg-blue-ink" /> Hoje
+          <span aria-hidden className="size-1 rounded-full bg-champagne" /> Hoje
         </span>
         <span className="inline-flex items-center gap-2">
-          <span aria-hidden className="text-steel-dim line-through">
+          <span aria-hidden className="text-[#a39c90] line-through">
             12
           </span>{" "}
           Fechado

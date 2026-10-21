@@ -8,12 +8,20 @@ const pending: string[] = [];
 
 if (!site.hours.confirmed)
   pending.push("Horários: confirmar com o Leonardo e mudar hours.confirmed para true.");
-if (!site.hero.photo.src) pending.push("Foto principal (hero.photo.src) ainda é placeholder.");
-if (!site.about.photo.src) pending.push("Foto do Leonardo (about.photo.src) ainda é placeholder.");
-const missingGallery = site.gallery.filter((p) => !p.src).length;
-if (missingGallery)
+const allPhotos = [
+  site.hero.photo,
+  site.about.photo,
+  ...site.gallery,
+  ...site.services.flatMap((s) => (s.photo ? [s.photo] : [])),
+];
+const missing = new Set(allPhotos.filter((p) => !p.src).map((p) => p.caption));
+if (missing.size) pending.push(`Fotos sem arquivo: ${[...missing].join(", ")}.`);
+const fromScreenshot = new Set(
+  allPhotos.filter((p) => p.src && p.fromScreenshot).map((p) => p.src),
+);
+if (fromScreenshot.size)
   pending.push(
-    `Galeria: ${missingGallery} de ${site.gallery.length} fotos ainda são placeholders.`,
+    `${fromScreenshot.size} fotos vieram de capturas de tela; trocar pelos originais em alta (mesmo nome em public/fotos): ${[...fromScreenshot].join(", ")}.`,
   );
 const noPrice = site.services.filter((s) => s.price === null).map((s) => s.name);
 if (noPrice.length)

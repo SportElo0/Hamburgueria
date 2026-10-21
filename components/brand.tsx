@@ -1,18 +1,71 @@
-import type { SVGProps } from "react";
+import { useId, type SVGProps } from "react";
 
-/** Marca tipográfica provisória até o arquivo do logotipo original ser enviado. */
-export function Wordmark({ className = "" }: { className?: string }) {
+/**
+ * Monograma tipográfico provisório (serifado, como o "LM" do logotipo real)
+ * até o arquivo original do logotipo ser enviado.
+ */
+export function Wordmark({
+  className = "",
+  tone = "ink",
+}: {
+  className?: string;
+  tone?: "ink" | "light";
+}) {
+  const rule = tone === "ink" ? "bg-champagne" : "bg-champagne-soft";
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <span className="display text-[1.9rem] leading-none tracking-[-0.02em]">LM</span>
-      <span aria-hidden className="h-6 w-px bg-line-strong" />
-      <span className="flex flex-col leading-none">
-        <span className="guard text-[0.7rem] tracking-[0.2em] text-paper">BARBEARIA</span>
-        <span className="mt-1 text-[0.62rem] font-semibold tracking-[0.14em] text-steel uppercase">
-          Leonardo Miguel
-        </span>
+    <span className={`inline-flex flex-col items-center leading-none ${className}`}>
+      <span className="serif text-[2.1rem] leading-[0.85] font-semibold tracking-[-0.02em]">
+        LM
+      </span>
+      <span className="mt-1.5 flex items-center gap-1.5">
+        <span aria-hidden className={`h-px w-3 ${rule}`} />
+        <span className="text-[0.56rem] font-semibold tracking-[0.34em] uppercase">Barbearia</span>
+        <span aria-hidden className={`h-px w-3 ${rule}`} />
       </span>
     </span>
+  );
+}
+
+/** Selo circular que ecoa o logotipo redondo da barbearia. */
+export function Seal({ className = "", size = 132 }: { className?: string; size?: number }) {
+  const id = useId();
+  return (
+    <svg
+      viewBox="0 0 120 120"
+      width={size}
+      height={size}
+      className={className}
+      role="img"
+      aria-label="Selo LM Barbearia, Leonardo Miguel, desde 2024"
+    >
+      <defs>
+        <path id={id} d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
+      </defs>
+      <circle cx="60" cy="60" r="58" fill="none" stroke="currentColor" strokeWidth="0.75" />
+      <circle cx="60" cy="60" r="33" fill="none" stroke="currentColor" strokeWidth="0.5" />
+      <text
+        fill="currentColor"
+        style={{
+          fontFamily: "var(--font-sans)",
+          fontSize: 7.2,
+          letterSpacing: "0.32em",
+          fontWeight: 600,
+        }}
+      >
+        <textPath href={`#${id}`} startOffset="0">
+          BARBEARIA · LEONARDO MIGUEL · DESDE 2024 ·
+        </textPath>
+      </text>
+      <text
+        x="60"
+        y="69"
+        textAnchor="middle"
+        fill="currentColor"
+        style={{ fontFamily: "var(--font-serif)", fontSize: 27, fontWeight: 600 }}
+      >
+        LM
+      </text>
+    </svg>
   );
 }
 
@@ -24,7 +77,7 @@ const base = (size: number) => ({
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 1.8,
+  strokeWidth: 1.5,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
   "aria-hidden": true,

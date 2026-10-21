@@ -42,17 +42,21 @@ The barber is the brand: one professional, Leonardo Miguel, whose skin fades, de
 
 ## Brand Commitments
 
-- Name: LM Barbearia (also "Leonardo Miguel Barbearia"). Logo: circular badge with serif "LM", "BARBEARIA", "LEONARDO MIGUEL", crossed comb, razor and scissors, "DESDE 2024" on the badge.
-- Client-pinned palette: deep black #0B0C0E, graphite #17191D, warm white #F5F2ED, metallic gray #A6A8AD, accent blue #436BD9; minimal barber-pole red and blue details allowed, never overdone.
+- Name: LM Barbearia (also "Leonardo Miguel Barbearia"). Logo: circular badge with serif "LM", "BARBEARIA", "LEONARDO MIGUEL", crossed comb, razor and scissors, "DESDE 2024" on the badge. Original logo file not supplied yet.
+- Visual direction (client-pinned, Oct 2026 redesign; the first dark version was rejected): contemporary premium barbershop, editorial, minimal, sophisticated, light. Reference image: "MANE Barbershop" mockup (aesthetic reference only, never copied literally; its "10% off" offer, "1K+ clients", price list and claims do not belong to LM).
+- Client-pinned palette: background #F9F8F5, white #FFFFFF, black #141414, graphite #343434, champagne #AD936E (details), borders #E9E6E0. One graphite/dark feature section allowed. Avoid all-dark pages, SaaS cards, flashy gradients, heavy rounding, oversized icons, exaggerated motion.
+- Client-pinned type: elegant serif for headlines (Cormorant Garamond suggested) + clean sans for text (Inter or Manrope). No tiny type on mobile.
+- Hero headline chosen by the client: "Seu estilo. Nossa precisão."
 - Premium but authentic: a neighborhood barbershop, not a fictional luxury brand.
 - Voice: Brazilian Portuguese, direct, warm, close ("do seu jeito").
 
 ## Evidence on Hand
 
-- Google Maps capture: 5.0 stars, 16 reviews at the time of capture (not dynamic, must cite Google and the capture context).
-- Instagram capture: 33 posts, flyer listing services and WhatsApp (11) 91339-2818, photos of fades, a beard trim, curly top, freestyle design.
-- No original high-resolution photos supplied yet; no photo of Leonardo. Placeholders must be clearly marked as temporary.
-- No individual testimonials authorized. Do not fabricate testimonials, years of experience, certifications, biography, prices, or results.
+- Google Maps capture: 5.0 stars, 16 reviews at the time of capture (21/10/2026; not dynamic, must cite Google and the capture date).
+- Real photos of Leonardo's work in `public/fotos/`, cropped from screenshots the client supplied of the shop's own Google Business photos (posted by "Leonardo Miguel" / "LM Barbearia") and Instagram posts (@lm_barbearia130). Four are ~760×890 px (low fade with risca, risca lateral, desenho na nuca, risca em cabelo descolorido); five are small Instagram crops upscaled 2× (barba, Leonardo atendendo, cacheado, degradê social, low fade infantil). Originals in high resolution are still pending from the owner.
+- Several photos show children and teenagers; the client confirmed they may be used because the shop already published them.
+- Only one photo shows Leonardo himself (small Instagram crop). No photo of the shop interior in usable resolution.
+- No individual testimonials authorized. Do not fabricate testimonials, client counts, years of experience, certifications, biography, prices, promotions or results.
 
 ## Product Principles
 
@@ -64,4 +68,4 @@ The barber is the brand: one professional, Leonardo Miguel, whose skin fades, de
 
 ## Accessibility & Inclusion
 
-Respect prefers-reduced-motion, keyboard navigation with visible focus, WCAG AA contrast on the dark ground, comfortable touch targets (≥44px).
+Respect prefers-reduced-motion, keyboard navigation with visible focus, WCAG AA contrast (champagne is too light for small text on the off-white ground; use a darker champagne for text), comfortable touch targets (≥44px).

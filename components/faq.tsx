@@ -48,28 +48,34 @@ export function Faq() {
   const items = buildFaq();
 
   return (
-    <section aria-labelledby="faq-title" className="bg-fade-0 py-20 sm:py-28 lg:py-36">
-      <div className="mx-auto grid max-w-[90rem] gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:px-10">
-        <h2
-          id="faq-title"
-          data-reveal="rise"
-          className="display text-[clamp(3rem,11vw,5.5rem)] lg:col-span-4"
-        >
-          Dúvidas
-        </h2>
+    <section
+      aria-labelledby="faq-title"
+      className="border-t border-line bg-paper py-24 sm:py-28 lg:py-36"
+    >
+      <div className="mx-auto grid grid-cols-1 max-w-[88rem] gap-12 px-5 sm:px-8 lg:grid-cols-12 lg:gap-10 lg:px-12">
+        <div className="lg:col-span-4">
+          <h2 id="faq-title" data-reveal className="serif text-[clamp(2.75rem,8vw,4.25rem)]">
+            Dúvidas <em className="text-champagne-deep italic">frequentes.</em>
+          </h2>
+          <span aria-hidden data-reveal="risca" className="risca mt-7" />
+        </div>
         <div className="border-t border-line lg:col-span-8">
           {items.map((item) => (
             <details key={item.q} className="group border-b border-line">
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-[1.08rem] font-semibold transition-colors hover:text-blue-ink [&::-webkit-details-marker]:hidden">
-                {item.q}
+              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-6 text-left [&::-webkit-details-marker]:hidden">
+                <span className="serif text-[1.45rem] leading-snug transition-colors group-hover:text-champagne-deep">
+                  {item.q}
+                </span>
                 <span
                   aria-hidden
-                  className="grid size-9 flex-none place-items-center rounded-[3px] border border-line-strong transition-transform duration-300 group-open:rotate-45"
+                  className="grid size-10 flex-none place-items-center rounded-full border border-line-strong transition-[transform,border-color] duration-500 ease-[var(--ease-out-expo)] group-open:rotate-45 group-open:border-ink"
                 >
-                  <Plus size={17} />
+                  <Plus size={16} strokeWidth={1.5} />
                 </span>
               </summary>
-              <p className="max-w-[62ch] pb-6 text-[1rem] leading-relaxed text-steel">{item.a}</p>
+              <p className="max-w-[62ch] pb-7 text-[1.0625rem] leading-relaxed text-graphite">
+                {item.a}
+              </p>
             </details>
           ))}
         </div>

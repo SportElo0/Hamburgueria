@@ -1,124 +1,110 @@
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { site } from "@/config/site";
+import { formatShortDate } from "@/lib/schedule";
 import { PhotoSlot } from "@/components/photo-slot";
 import { BookingTrigger } from "@/components/booking-trigger";
 
-/**
- * As faixas sobem do pé da página como um degradê: cada degrau é mais opaco
- * que o de cima e leva o número do pente na régua da direita.
- */
-const bands = [
-  { guard: "#2", tone: "bg-fade-0/25", size: "flex-[1]" },
-  { guard: "#1½", tone: "bg-fade-0/48", size: "flex-[1]" },
-  { guard: "#1", tone: "bg-fade-0/68", size: "flex-[1.15]" },
-  { guard: "#½", tone: "bg-fade-0/84", size: "flex-[1.3] lg:flex-[1.6]" },
-  { guard: "#0", tone: "bg-fade-0", size: "flex-[6] lg:flex-[1.9]" },
-];
-
-const headlineLines = ["O estilo", "começa no", "detalhe."];
+const rating = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 
 export function Hero() {
-  const photo = site.hero.photo;
+  const { hero, reviews } = site;
 
   return (
     <section
       id="inicio"
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-fade-2 lg:min-h-[max(44rem,100svh)]"
+      className="relative isolate overflow-hidden bg-ground lg:min-h-[min(46rem,calc(100svh-8.25rem))]"
     >
-      <PhotoSlot
-        photo={photo}
-        sizes="100vw"
-        priority
-        label={false}
-        bands={false}
-        className="absolute! inset-0 -z-20 bg-fade-5!"
-      />
-
-      {!photo.src && (
-        <p className="guard absolute top-20 right-4 z-10 rounded-[2px] border border-line-strong bg-fade-0/70 px-2 py-1.5 text-[0.62rem] text-steel sm:right-6 lg:top-24 lg:right-10">
-          FOTO PRINCIPAL TEMPORÁRIA
-        </p>
-      )}
-
-      {/* Faixas do degradê + régua de pentes */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 -z-10 flex h-[78%] flex-col sm:h-[72%] lg:h-[70%]"
-      >
-        {bands.map((band, index) => (
-          <div
-            key={band.guard}
-            className={`animate-band relative origin-bottom ${band.guard === "#0" ? "" : "border-t border-paper/[0.07]"} ${band.tone} ${band.size}`}
-            style={{ animationDelay: `${(bands.length - 1 - index) * 70}ms` }}
-          >
-            <span
-              className={`absolute top-0 right-0 -translate-y-1/2 items-center gap-2 pr-4 sm:flex sm:pr-6 lg:pr-10 ${
-                band.guard === "#0" ? "hidden" : "flex"
-              }`}
-            >
-              <span className="hidden h-px w-10 bg-steel/50 sm:block" />
-              <span className="guard w-7 text-right text-steel">{band.guard}</span>
-            </span>
-          </div>
-        ))}
+      {/* Foto: no celular vem primeiro; no desktop sangra até a borda direita. */}
+      <div className="animate-unveil relative aspect-[4/5] max-h-[68svh] w-full sm:aspect-[16/11] lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:max-h-none lg:w-[57%]">
+        <PhotoSlot
+          photo={hero.photo}
+          sizes="(min-width: 1024px) 57vw, 100vw"
+          priority
+          className="absolute! inset-0"
+          imgClassName="animate-settle"
+        />
+        {/* Transição da foto para o fundo: para baixo no celular, para a esquerda no desktop. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-ground via-ground/70 to-transparent lg:inset-y-0 lg:right-auto lg:-left-px lg:h-auto lg:w-1/2 lg:bg-linear-to-r lg:via-ground/40"
+        />
       </div>
 
-      <div className="mx-auto mt-auto w-full max-w-[90rem] px-4 pt-32 pb-8 sm:px-6 sm:pb-12 lg:px-10 lg:pb-16">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
-          <h1
-            id="hero-title"
-            className="display pr-10 text-[clamp(3.4rem,15.5vw,6rem)] lg:col-span-7 lg:pr-0"
-          >
-            {headlineLines.map((line, index) => (
+      <div className="relative mx-auto max-w-[88rem] px-5 sm:px-8 lg:px-12">
+        <div className="-mt-20 flex flex-col pb-14 sm:-mt-24 lg:mt-0 lg:min-h-[min(46rem,calc(100svh-8.25rem))] lg:w-[46%] lg:justify-center lg:py-20">
+          <p className="label animate-rise text-champagne-text" style={{ animationDelay: "250ms" }}>
+            {site.address.neighborhood} · {site.address.city}
+          </p>
+
+          <h1 id="hero-title" className="serif mt-5 text-[clamp(3.25rem,13vw,6rem)] leading-[0.98]">
+            {hero.headline.map((line, index) => (
               <span
-                key={line}
-                className="animate-line block"
-                style={{ animationDelay: `${260 + index * 90}ms` }}
+                key={line.text}
+                className="animate-rise block"
+                style={{ animationDelay: `${380 + index * 120}ms` }}
               >
-                {line}
+                {line.text}
+                {line.accent && <em className="text-champagne-deep italic">{line.accent}</em>}
               </span>
             ))}
           </h1>
 
-          <div
-            className="animate-rise flex flex-col gap-6 lg:col-span-5 lg:pb-2"
-            style={{ animationDelay: "520ms" }}
+          <span
+            aria-hidden
+            className="risca animate-risca mt-8"
+            style={{ animationDelay: "800ms" }}
+          />
+
+          <p
+            className="animate-rise mt-7 max-w-[34ch] text-[1.0625rem] leading-relaxed text-graphite sm:text-lg"
+            style={{ animationDelay: "700ms" }}
           >
-            <p className="max-w-[34ch] text-[1.05rem] leading-relaxed text-paper/88 sm:text-lg">
-              {site.hero.subtitle}
-            </p>
+            {hero.subtitle}
+          </p>
 
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <BookingTrigger className="btn btn-primary w-full sm:w-auto">
-                Agendar meu horário
-                <ArrowRight size={18} className="nudge" />
-              </BookingTrigger>
-              <a href="#cortes" className="btn btn-ghost w-full bg-fade-0 hover:bg-fade-3 sm:w-auto">
-                Conhecer os cortes
-                <ArrowDown size={18} className="nudge" />
-              </a>
-            </div>
-
-            <div>
-              <p id="quick-pick" className="mb-2.5 text-sm font-semibold text-steel">
-                Ou comece pelo serviço:
-              </p>
-              <ul aria-labelledby="quick-pick" className="flex flex-wrap gap-2">
-                {site.services.map((service) => (
-                  <li key={service.id}>
-                    <BookingTrigger
-                      serviceId={service.id}
-                      aria-label={`Agendar ${service.name}`}
-                      className="min-h-10 rounded-[3px] border border-line-strong bg-fade-0/60 px-3.5 text-sm font-semibold text-paper transition-colors hover:border-blue-ink hover:bg-fade-3"
-                    >
-                      {service.shortName}
-                    </BookingTrigger>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div
+            className="animate-rise mt-9 flex flex-col gap-3 sm:flex-row"
+            style={{ animationDelay: "820ms" }}
+          >
+            <BookingTrigger className="btn btn-solid w-full sm:w-auto">
+              Agendar horário
+              <ArrowRight size={16} className="nudge" />
+            </BookingTrigger>
+            <a href="#servicos" className="btn btn-outline w-full sm:w-auto">
+              Ver serviços
+            </a>
           </div>
+
+          {reviews.show && (
+            <a
+              href={site.links.googleProfile}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="animate-rise group mt-10 flex items-center gap-4 self-start"
+              style={{ animationDelay: "940ms" }}
+            >
+              <span className="serif text-[2.4rem] leading-none">
+                {rating.format(reviews.rating)}
+              </span>
+              <span className="flex flex-col gap-1.5">
+                <span className="flex gap-0.5 text-champagne" aria-hidden>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star key={i} size={14} className="fill-current" />
+                  ))}
+                </span>
+                <span className="text-sm text-muted">
+                  <span className="link-line text-graphite">
+                    {reviews.count} avaliações no {reviews.platform}
+                  </span>{" "}
+                  · {formatShortDate(reviews.checkedAt)}
+                </span>
+              </span>
+            </a>
+          )}
         </div>
       </div>
     </section>

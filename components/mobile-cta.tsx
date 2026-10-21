@@ -16,13 +16,12 @@ export function MobileCta() {
     if (!hero || !booking) return;
     let heroVisible = true;
     let bookingVisible = false;
-    const update = () => setVisible(!heroVisible && !bookingVisible);
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (entry.target === hero) heroVisible = entry.isIntersecting;
         if (entry.target === booking) bookingVisible = entry.isIntersecting;
       }
-      update();
+      setVisible(!heroVisible && !bookingVisible);
     });
     observer.observe(hero);
     observer.observe(booking);
@@ -32,7 +31,7 @@ export function MobileCta() {
   return (
     <div
       inert={!visible}
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-line bg-fade-0/94 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-md transition-transform duration-500 ease-[var(--ease-out-expo)] lg:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ground px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-500 ease-[var(--ease-out-expo)] lg:hidden ${
         visible ? "translate-y-0" : "translate-y-full"
       }`}
     >
@@ -40,19 +39,19 @@ export function MobileCta() {
         <button
           type="button"
           onClick={() => requestBooking()}
-          className="btn btn-primary min-h-12 flex-1"
+          className="btn btn-solid min-h-12 flex-1"
         >
           Agendar horário
-          <ArrowRight size={18} className="nudge" />
+          <ArrowRight size={16} className="nudge" />
         </button>
         <a
           href={greetingLink}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Falar no WhatsApp"
-          className="btn btn-ghost min-h-12 px-4"
+          className="btn btn-outline min-h-12 px-4"
         >
-          <WhatsAppIcon size={20} />
+          <WhatsAppIcon size={19} />
         </a>
       </div>
     </div>

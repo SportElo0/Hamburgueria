@@ -1,8 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="10" fill="#0B0C0E"/>
-  <rect y="44" width="64" height="5" fill="#17191D"/>
-  <rect y="49" width="64" height="5" fill="#1D2025"/>
-  <rect y="54" width="64" height="10" fill="#252930"/>
-  <text x="32" y="40" text-anchor="middle" font-family="Arial Narrow, Arial, sans-serif" font-weight="800" font-size="30" letter-spacing="-1" fill="#F5F2ED">LM</text>
-  <rect x="14" y="44" width="36" height="2" fill="#436BD9"/>
+  <rect width="64" height="64" fill="#F9F8F5"/>
+  <circle cx="32" cy="32" r="29" fill="none" stroke="#AD936E" stroke-width="1.5"/>
+  <text x="32" y="41" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="26" fill="#141414">LM</text>
 </svg>

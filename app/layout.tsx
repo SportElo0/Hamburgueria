@@ -1,13 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Manrope } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { site } from "@/config/site";
 import { barberShopJsonLd, seo } from "@/lib/seo";
 import "./globals.css";
 
-const archivo = Archivo({
-  variable: "--font-archivo",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
-  axes: ["wdth"],
+  weight: ["500", "600"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -46,8 +47,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0c0e",
-  colorScheme: "dark",
+  themeColor: "#f9f8f5",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -55,8 +56,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${archivo.variable} ${manrope.variable}`}>
-      <body className="min-h-dvh bg-fade-0 text-paper">
+    <html lang="pt-BR" className={`${cormorant.variable} ${manrope.variable}`}>
+      <body className="min-h-dvh bg-ground text-ink">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

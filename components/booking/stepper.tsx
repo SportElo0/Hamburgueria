@@ -1,10 +1,7 @@
 export const steps = [
-  { label: "Serviço", guard: "#0" },
-  { label: "Data", guard: "#½" },
-  { label: "Horário", guard: "#1" },
-  { label: "Nome", guard: "#1½" },
-  { label: "Revisão", guard: "#2" },
-  { label: "WhatsApp", guard: "#3" },
+  { label: "Serviço" },
+  { label: "Data e horário" },
+  { label: "Seu nome e envio" },
 ] as const;
 
 type Props = {
@@ -14,15 +11,15 @@ type Props = {
   onSelect: (step: number) => void;
 };
 
-/** Régua de progresso em degraus: cada etapa sobe um pente. */
+/** Três etapas numeradas com a risca champanhe marcando o progresso. */
 export function Stepper({ current, reached, onSelect }: Props) {
   return (
     <nav aria-label="Etapas do agendamento">
-      <ol className="grid grid-cols-6 items-end gap-1.5 sm:gap-2">
+      <ol className="grid grid-cols-3 gap-3">
         {steps.map((step, index) => {
           const done = index < current;
           const active = index === current;
-          const enabled = index <= reached && index !== current && index < 5;
+          const enabled = index <= reached && !active;
           return (
             <li key={step.label} className="min-w-0">
               <button
@@ -31,32 +28,36 @@ export function Stepper({ current, reached, onSelect }: Props) {
                 onClick={() => onSelect(index)}
                 aria-current={active ? "step" : undefined}
                 aria-label={`Etapa ${index + 1} de ${steps.length}: ${step.label}${done ? " (concluída)" : ""}`}
-                className="group flex min-h-11 w-full flex-col justify-end gap-2 text-left disabled:cursor-default"
+                className="group flex min-h-11 w-full flex-col justify-end gap-2.5 text-left disabled:cursor-default"
               >
-                <span
-                  aria-hidden
-                  style={{ height: `${10 + index * 5}px` }}
-                  className={`block w-full rounded-[1px] transition-colors duration-500 ${
-                    active ? "bg-blue" : done ? "bg-blue-ink/70" : "bg-fade-5"
-                  } ${enabled ? "group-hover:bg-blue-ink" : ""}`}
-                />
-                <span
-                  className={`hidden truncate text-xs font-semibold sm:block ${
-                    active ? "text-paper" : done ? "text-paper/75" : "text-steel-dim"
-                  }`}
-                >
-                  <span className="guard mr-1 hidden text-[0.65rem] sm:inline">{step.guard}</span>
-                  {step.label}
+                <span className="flex items-baseline gap-2">
+                  <span
+                    className={`serif text-xl leading-none ${active || done ? "text-ink" : "text-[#a39c90]"}`}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className={`hidden truncate text-[0.8125rem] font-semibold tracking-[0.1em] uppercase sm:block ${
+                      active ? "text-ink" : done ? "text-graphite" : "text-muted"
+                    } ${enabled ? "group-hover:text-champagne-text" : ""}`}
+                  >
+                    {step.label}
+                  </span>
+                </span>
+                <span aria-hidden className="relative block h-px w-full bg-line">
+                  <span
+                    className={`absolute inset-0 origin-left bg-ink transition-transform duration-700 ease-[var(--ease-out-expo)] ${
+                      active || done ? "scale-x-100" : "scale-x-0"
+                    } ${active ? "bg-champagne!" : ""}`}
+                  />
                 </span>
               </button>
             </li>
           );
         })}
       </ol>
-      <p className="mt-3 text-xs font-semibold text-steel sm:hidden">
-        <span className="guard mr-1.5 text-paper">{steps[current].guard}</span>
-        Etapa {current + 1} de {steps.length} ·{" "}
-        <span className="text-paper">{steps[current].label}</span>
+      <p className="mt-3 text-[0.9rem] font-semibold text-graphite sm:hidden">
+        Etapa {current + 1} de {steps.length} · {steps[Math.min(current, steps.length - 1)].label}
       </p>
     </nav>
   );

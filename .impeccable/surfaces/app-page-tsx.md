@@ -5,28 +5,28 @@ primary_target: "app/page.tsx"
 related_targets: []
 ---
 
-# Surface: home (single-page site) — LM Barbearia
+# Surface: home (single-page site) — LM Barbearia · redesign
 
-Scope: the whole public site at `/` (header, hero, serviços, cortes, sobre, agendamento, avaliações, localização, FAQ, footer). Visitor mode: **Persuade**.
+Scope: the whole public site at `/`. Visitor mode: **Persuade**. Replaces the rejected dark "escala do degradê" world (v1, kept on branch claude/lm-barbearia-website-4gcw05).
 
-Audience/job: neighborhood clients on a phone (often from Instagram or Google Maps) who want to see the cuts, pick a service, and send Leonardo a booking request on WhatsApp. Proof: real cut photos (pending; placeholders now), Google 5,0 / 16 avaliações at capture time. Constraints: no invented prices, durations, bios, testimonials; booking is a request, never a confirmation; hours provisional from Instagram.
+Audience/job: neighborhood clients on a phone, coming from Instagram/Google Maps, who want to see Leonardo's cuts and send a booking request on WhatsApp; Leonardo judges the first impression. Proof: real photos of his cuts (public/fotos), Google 5,0 / 16 avaliações (21/10/2026). Constraints: no invented prices, durations, promotions, client counts, bios; booking is a request confirmed by Leonardo; hours provisional (Instagram).
 
-Build path: code-led (no image generation available). Roll ran degraded (no challengers, no quality-bar boards).
+Build path: code-led (no image generation). Roll ran degraded (no challengers, no quality-bar boards). Direction is brief-pinned by the client's reference image (MANE Barbershop mockup), palette and type.
 
 ## Direction contract
 
-THESIS: The site is cut like a skin fade. Clipper-guard numbers (#0, #½, #1, #1½, #2, #3) are the measuring system, and grounds step in hard tonal bands from deep black to graphite, the way a fade climbs the head. Refuses the category default: black-and-gold "luxury barber" page with a centred headline over three equal service cards.
+THESIS: A light, editorial barbershop page where Leonardo's real photographs carry all the colour (the red-white-blue capes, the hard part lines) on a quiet off-white page, and a single champagne hairline, "a risca", is the one recurring gesture: it draws under the headline and section titles like the part line in the photos. Refuses the dark gamer-barbershop look and the SaaS page of icon cards.
 
-OWN-WORLD: Pinned palette: #0B0C0E base, #17191D graphite, two intermediate steps between them and one above, warm white #F5F2ED ink, metallic #A6A8AD secondary, blue #436BD9 only for actions and selection, a barber-pole red used as a 2px detail at most. Hard-edged stepped bands (never smooth gradients), 1px hairlines, near-square corners (2–4px, blade-precise). Display: Archivo at condensed width, heavy, uppercase. Body/UI: Manrope. Tabular numerals for times and dates. Guard tags are small condensed labels like "#1½".
+OWN-WORLD: Background #F9F8F5, white #FFFFFF panels, ink #141414, graphite #343434, borders #E9E6E0, champagne #AD936E only for rules, stars and icons; darker champagne #8C7350 for the large accent word and #7A6243 for small champagne text. One ink (#141414) feature band (About). Cormorant Garamond 500/600 for headlines (italic for the signature), Manrope for text and small tracked uppercase UI (never below 13px on phones). Square-cornered buttons (black fill / 1px black outline), 1px hairlines, no shadows, no gradients except the photo-to-ground fade in the hero. A typographic LM seal echoes the shop's real circular logo.
 
-STORY: Visitor sees a real cut and a confident line, understands this is Leonardo's chair in Campanário, browses services and cuts, then builds a request (service → date → preferred time → name → review) and opens WhatsApp with the message ready; the site says plainly that Leonardo confirms.
+STORY: The visitor sees a real fade and "Seu estilo. Nossa precisão.", understands this is Leonardo's chair in Campanário, scrolls through photo service cards and an editorial portfolio, meets Leonardo in the dark band, and books in three compact steps (serviço → data e horário → nome e envio) that open WhatsApp with the message ready; the site says plainly Leonardo confirms.
 
-FIRST VIEWPORT: Full-bleed cut photo (placeholder field until supplied). From the bottom, five opaque stepped bands rise over it like a fade; a vertical guard ruler on the right labels each band #0 → #3. "O ESTILO COMEÇA NO DETALHE." sits on the bands, bottom-left, ~56px mobile / up to 6rem desktop. Below it the subtitle, then a working service picker (chips: Corte, Barba, Corte + Barba, Sobrancelha, Navalha) that jumps into the booking flow preselected, plus "Agendar meu horário" (blue, primary) and "Conhecer os cortes" (ghost). Header on top: LM wordmark left, links + "Agendar" right; compact menu on mobile.
+FIRST VIEWPORT: Black top bar ("Agende seu horário pelo WhatsApp · (11) 91339-2818"). Header: LM monogram left, nav centred, black "Agendar" right. Desktop hero: left 5/12 on off-white with a short location line, the two-line serif headline at up to 6rem with "precisão." in champagne, the champagne risca, one-line subtitle, black "Agendar horário" + outline "Ver serviços", and the real Google rating; right 7/12 the low-fade photo bleeding to the viewport edge and full hero height, fading into the ground on its left edge. Mobile: the photo first at full width (4:5) fading into the ground, headline overlapping the fade, buttons full width.
 
-FORM: Guard-scale fade system, candidate 1 of my grounded list (user picked my top candidate over the assigned #3 "porta de aço"). Signature interaction: the bands "cut" upward on load in a 600ms stagger, and the booking progress is a six-step guard scale that fills band by band. Motion grammar: transform/opacity/clip-path, ease-out-expo, content visible by default, reduced-motion = static. seed:1f94b60369935e28
+FORM: Brief-pinned editorial direction (client reference), not from my ordered list; the roll assigned my candidate 5 (the striped barber cape), translated as: the capes inside the real photos are the only saturated colour on the page, no added stripe decoration. Signature interaction: the risca hairline drawing in (scaleX) on load and on scroll; hero photo reveals with a clip from the right and a slow scale-down. Motion: opacity/transform/clip-path, ease-out-expo, content visible without JS, reduced-motion static. seed:952a91984c3bc693
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Unresolved
 
-- Real photos (hero, gallery, Leonardo portrait), logo file, prices, confirmed hours.
+- High-resolution originals for the five small Instagram crops; a usable photo of the shop interior; original logo file; prices; confirmed hours.

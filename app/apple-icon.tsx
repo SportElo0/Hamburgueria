@@ -10,27 +10,28 @@ export default function AppleIcon() {
         width: "100%",
         height: "100%",
         display: "flex",
-        flexDirection: "column",
-        background: "#0b0c0e",
-        color: "#f5f2ed",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#f9f8f5",
       }}
     >
       <div
         style={{
-          flex: 1,
+          width: 150,
+          height: 150,
+          borderRadius: 75,
+          border: "3px solid #ad936e",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: 88,
-          fontWeight: 800,
-          letterSpacing: -4,
+          color: "#141414",
+          fontSize: 70,
+          fontWeight: 700,
+          letterSpacing: -3,
         }}
       >
         LM
       </div>
-      <div style={{ height: 12, background: "#17191d", display: "flex" }} />
-      <div style={{ height: 12, background: "#1d2025", display: "flex" }} />
-      <div style={{ height: 22, background: "#252930", display: "flex" }} />
     </div>,
     size,
   );

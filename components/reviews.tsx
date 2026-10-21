@@ -12,59 +12,52 @@ export function Reviews() {
   if (!reviews.show) return null;
 
   return (
-    <section aria-labelledby="avaliacoes-title" className="bg-fade-4 py-16 sm:py-20 lg:py-24">
-      <div className="mx-auto grid max-w-[90rem] gap-8 px-4 sm:px-6 lg:grid-cols-12 lg:items-center lg:gap-10 lg:px-10">
-        <div className="lg:col-span-7">
-          <h2
-            id="avaliacoes-title"
-            data-reveal="rise"
-            className="display text-[clamp(2.6rem,9vw,4.6rem)]"
-          >
-            Nota {rating.format(reviews.rating)} no {reviews.platform}
-          </h2>
-          <p
-            data-reveal="rise"
-            className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-paper/90"
-          >
-            <span className="flex gap-1 text-paper" aria-hidden>
+    <section aria-labelledby="avaliacoes-title" className="border-y border-line bg-sand">
+      <div className="mx-auto grid grid-cols-1 max-w-[88rem] gap-8 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-12 lg:items-center lg:px-12">
+        <div data-reveal className="flex items-center gap-6 lg:col-span-7">
+          <p className="serif text-[clamp(4rem,12vw,6rem)] leading-none">
+            {rating.format(reviews.rating)}
+          </p>
+          <div>
+            <span className="flex gap-1 text-champagne" aria-hidden>
               {Array.from({ length: 5 }, (_, i) => (
                 <Star
                   key={i}
-                  size={20}
-                  className={i < Math.round(reviews.rating) ? "fill-current" : "text-line-strong"}
+                  size={18}
+                  className={i < Math.round(reviews.rating) ? "fill-current" : ""}
                 />
               ))}
             </span>
-            <span className="font-semibold">
-              {reviews.count} avaliações de clientes no perfil da barbearia
-            </span>
-          </p>
+            <h2 id="avaliacoes-title" className="serif mt-2 text-[1.75rem] leading-tight">
+              Nota no {reviews.platform}, com {reviews.count} avaliações
+            </h2>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-5 lg:col-span-5 lg:items-end lg:text-right">
+        <div className="flex flex-col gap-4 lg:col-span-5 lg:items-end lg:text-right">
           <a
             href={site.links.googleProfile}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-ghost w-full border-paper/40 sm:w-auto"
+            className="btn btn-outline w-full sm:w-auto"
           >
             Ver avaliações no Google
-            <ArrowUpRight size={18} className="nudge" />
+            <ArrowUpRight size={16} className="nudge" />
           </a>
-          <p className="max-w-[44ch] text-xs leading-relaxed text-steel">
-            Dados conferidos no {reviews.platform} em {formatShortDate(reviews.checkedAt)}. A nota e
-            o total de avaliações mudam com o tempo; confira os valores atuais no perfil.
+          <p className="max-w-[44ch] text-[0.8125rem] leading-relaxed text-muted">
+            Dados conferidos em {formatShortDate(reviews.checkedAt)}. A nota e o total mudam com o
+            tempo; os valores atuais estão no perfil.
           </p>
         </div>
 
         {reviews.testimonials.length > 0 && (
-          <ul className="grid gap-4 border-t border-line pt-8 sm:grid-cols-2 lg:col-span-12 lg:grid-cols-3">
+          <ul className="grid gap-8 border-t border-line pt-10 sm:grid-cols-2 lg:col-span-12 lg:grid-cols-3">
             {reviews.testimonials.map((t) => (
               <li key={`${t.author}-${t.date}`}>
-                <blockquote className="text-[1.02rem] leading-relaxed text-paper/90">
+                <blockquote className="serif text-[1.4rem] leading-snug italic">
                   “{t.text}”
                 </blockquote>
-                <p className="mt-3 text-sm font-semibold text-steel">
+                <p className="mt-3 text-sm text-muted">
                   {t.author} · {reviews.platform}, {t.date}
                 </p>
               </li>

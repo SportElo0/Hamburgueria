@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
+import { Facts } from "@/components/facts";
 import { Services } from "@/components/services";
 import { Gallery } from "@/components/gallery";
 import { About } from "@/components/about";
@@ -16,13 +17,14 @@ export default function Home() {
     <>
       <a
         href="#agendar"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-[3px] focus:bg-blue focus:px-4 focus:py-3 focus:font-semibold focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-ink focus:px-4 focus:py-3 focus:font-semibold focus:text-ground"
       >
         Pular para o agendamento
       </a>
       <Header />
       <main>
         <Hero />
+        <Facts />
         <Services />
         <Gallery />
         <About />
