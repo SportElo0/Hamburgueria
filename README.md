@@ -15,9 +15,8 @@ Rode `npm run check:config` para ver a lista atualizada. Hoje faltam:
 | Item | Situação | Onde mudar |
 | --- | --- | --- |
 | Horários | Provisórios, copiados da bio do Instagram (ter–sáb 10h–20h, dom 10h–16h, seg fechado). O Google mostrava "fecha 19:00". | `config/site.ts` → `hours` |
-| Fotos dos cortes (6) | Placeholders marcados como "FOTO TEMPORÁRIA" | `config/site.ts` → `gallery` |
-| Foto principal | Placeholder | `config/site.ts` → `hero.photo` |
-| Foto do Leonardo | Placeholder | `config/site.ts` → `about.photo` |
+| Fotos (9) | Fotos reais do trabalho do Leonardo, **recortadas de capturas de tela** do Google e do Instagram. Quatro estão em resolução boa; cinco são pequenas e ficam um pouco suaves em telas retina. Trocar pelos originais. | `public/fotos/` (mesmo nome) e `config/site.ts` → `photos` |
+| Foto do ambiente | Não há foto do salão em resolução utilizável | — |
 | Texto "Sobre" | Provisório, com etiqueta de revisão | `config/site.ts` → `about` |
 | Preços e durações | Não informados (o site mostra "Valor no WhatsApp") | `config/site.ts` → `services` |
 | Logotipo original | Usando marca tipográfica "LM Barbearia" | `components/brand.tsx` |
@@ -54,19 +53,13 @@ Tudo que muda com frequência está em **`config/site.ts`**. Os componentes só 
 
 ### Trocar fotos
 
-1. Coloque as fotos em `public/fotos/` (JPG ou WebP, de preferência com 1600 px ou mais no lado maior). Use só fotos do próprio Leonardo ou autorizadas por ele.
-2. Em `config/site.ts`, preencha `src` com o caminho a partir de `public`:
+As fotos ficam em `public/fotos/` e são descritas em `config/site.ts` → `photos` (texto alternativo, legenda, tamanho e ponto de foco).
 
-```ts
-gallery: [
-  { src: "/fotos/degrade-risca.jpg", alt: "Degradê com risca lateral", caption: "Degradê com risca" },
-  // ...
-],
-```
+**Trocar uma foto pelo original:** salve o arquivo novo em `public/fotos/` **com o mesmo nome** (ex.: `barba.jpg`), atualize `width`/`height` e mude `fromScreenshot` para `false`. Use JPG com 1600 px ou mais no lado maior. Use só fotos do próprio Leonardo ou autorizadas por ele.
 
-O placeholder some sozinho quando `src` deixa de ser `null`. O Next.js gera versões otimizadas (AVIF/WebP) de cada foto. A primeira foto da galeria aparece maior; coloque a melhor nela. Para a foto principal (`hero.photo`), prefira uma foto vertical e bem iluminada de um corte.
+**Adicionar uma foto:** crie uma entrada em `photos` e inclua-a na lista `gallery`. A ordem define o layout: as duas primeiras ocupam os espaços maiores no desktop. Se o recorte cortar a cabeça, ajuste `focus` (ex.: `"50% 30%"` sobe o enquadramento).
 
-Pode adicionar ou remover itens da galeria; o layout repete o padrão a cada 6 fotos.
+Fotos usadas hoje: `hero.photo` (abertura), `about.photo` (Leonardo), a foto de cada serviço em `services[].photo` (`null` mostra um card tipográfico) e a galeria. O Next.js gera versões otimizadas (AVIF/WebP) automaticamente.
 
 ### Alterar preços
 
@@ -118,7 +111,7 @@ Edite `about.title`, `about.paragraphs` e `about.commitments` e mude `about.draf
 
 ## Como funciona o agendamento
 
-1. Serviço → 2. Data → 3. Horário de preferência → 4. Primeiro nome e observação → 5. Revisão (mostra a mensagem exata) → 6. Botão "Solicitar agendamento pelo WhatsApp".
+1. Serviço → 2. Data e horário de preferência → 3. Primeiro nome, observação, revisão (com a mensagem exata) e botão "Solicitar agendamento pelo WhatsApp".
 
 - Datas passadas, dias fechados e datas fora do período (`booking.daysAhead`) ficam bloqueados.
 - No mesmo dia, horários a menos de 1 hora (`booking.minNoticeMinutes`) não aparecem.
@@ -183,4 +176,9 @@ scripts/check-config.mts lista de pendências
 
 ### Design
 
-A identidade visual é a **escala do degradê**: os fundos sobem em degraus do preto ao grafite, como um skin fade, e os números dos pentes da máquina (#0, #½, #1, #1½, #2, #3) marcam a régua da abertura, o menu e as etapas do agendamento. Cores e fontes estão definidas em `app/globals.css` (Archivo comprimida nos títulos, Manrope no texto). As animações respeitam a opção "reduzir movimento" do aparelho.
+Direção editorial clara, inspirada na referência enviada pelo cliente: fundo off-white `#F9F8F5`, texto `#141414`/`#343434`, detalhes champanhe `#AD936E`, títulos em Cormorant Garamond e textos em Manrope. As fotos reais carregam a cor (as capas listradas, a risca dos cortes); a página repete um único gesto, um filete champanhe que se desenha como a risca do degradê. Os tokens estão em `app/globals.css`; o sistema completo está documentado em `DESIGN.md`. As animações respeitam a opção "reduzir movimento" do aparelho.
+
+### Versões
+
+- `claude/lm-barbearia-redesign`: esta versão (redesign claro).
+- `claude/lm-barbearia-website-4gcw05`: versão 1 (tema escuro), mantida como backup.
