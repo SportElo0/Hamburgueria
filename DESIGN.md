@@ -1,257 +1,245 @@
 ---
 name: LM Barbearia
-description: A one-chair neighborhood barbershop site cut like a skin fade, measured in clipper guards.
+description: Editorial, light barbershop site where Leonardo's real photographs carry the colour and a champagne hairline marks the cut.
 colors:
-  fade-0: "#0b0c0e"
-  fade-1: "#101215"
-  fade-2: "#141619"
-  fade-3: "#17191d"
-  fade-4: "#1d2025"
-  fade-5: "#252930"
-  line: "#2a2e35"
-  line-strong: "#3b4048"
-  paper: "#f5f2ed"
-  steel: "#a6a8ad"
-  steel-dim: "#85888e"
-  blue: "#436bd9"
-  blue-hover: "#5679dd"
-  blue-ink: "#8ea8f0"
-  pole: "#c8323a"
-  alert: "#ff8a8f"
+  ground: "#f9f8f5"
+  paper: "#ffffff"
+  sand: "#f2efe9"
+  ink: "#141414"
+  graphite: "#343434"
+  muted: "#66625b"
+  line: "#e9e6e0"
+  line-strong: "#d6d0c6"
+  champagne: "#ad936e"
+  champagne-deep: "#8c7350"
+  champagne-text: "#76603f"
+  champagne-soft: "#c9b48f"
+  night-2: "#1d1c1a"
+  night-line: "#34322e"
+  night-muted: "#b3ada3"
+  alert: "#b3261e"
 typography:
   display:
-    fontFamily: "Archivo, Arial Narrow, ui-sans-serif, sans-serif"
-    fontSize: "clamp(3.4rem, 15.5vw, 6rem)"
-    fontWeight: 800
+    fontFamily: "Libre Caslon Display, Georgia, serif"
+    fontSize: "clamp(3.25rem, 13vw, 6rem)"
+    fontWeight: 400
     lineHeight: 0.98
-    letterSpacing: "-0.01em"
-    fontVariation: "'wdth' 66"
+    letterSpacing: "-0.015em"
+    fontFeature: "lnum"
   headline:
-    fontFamily: "Archivo, Arial Narrow, ui-sans-serif, sans-serif"
-    fontSize: "clamp(3rem, 11vw, 5.5rem)"
-    fontWeight: 800
-    lineHeight: 0.98
-    letterSpacing: "-0.01em"
-    fontVariation: "'wdth' 66"
+    fontFamily: "Libre Caslon Display, Georgia, serif"
+    fontSize: "clamp(2.75rem, 8vw, 4.25rem)"
+    fontWeight: 400
+    lineHeight: 1.06
+    letterSpacing: "-0.015em"
+    fontFeature: "lnum"
   title:
-    fontFamily: "Archivo, Arial Narrow, ui-sans-serif, sans-serif"
-    fontSize: "clamp(2rem, 7.5vw, 3rem)"
-    fontWeight: 800
-    lineHeight: 0.98
-    letterSpacing: "-0.01em"
-    fontVariation: "'wdth' 66"
+    fontFamily: "Libre Caslon Display, Georgia, serif"
+    fontSize: "1.75rem"
+    fontWeight: 400
+    lineHeight: 1.06
+  signature:
+    fontFamily: "Libre Caslon Text, Georgia, serif"
+    fontSize: "1.75rem"
+    fontWeight: 400
+    lineHeight: 1.2
   body:
     fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.05rem"
+    fontSize: "1.0625rem"
     fontWeight: 400
     lineHeight: 1.625
-    fontFeature: "'ss01' on"
+  body-sm:
+    fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.95rem"
+    fontWeight: 400
+    lineHeight: 1.6
   label:
     fontFamily: "Manrope, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.875rem"
+    fontSize: "0.8125rem"
     fontWeight: 600
-    lineHeight: 1.4
-  guard:
-    fontFamily: "Archivo, Arial Narrow, ui-sans-serif, sans-serif"
-    fontSize: "0.75rem"
-    fontWeight: 600
-    lineHeight: 1
-    letterSpacing: "0.06em"
-    fontFeature: "'tnum' on"
-    fontVariation: "'wdth' 80"
+    lineHeight: 1.2
+    letterSpacing: "0.14em"
 rounded:
-  hair: "1px"
-  tag: "2px"
-  control: "3px"
-  panel: "4px"
+  none: "0px"
+  full: "9999px"
 spacing:
-  gutter-mobile: "16px"
-  gutter-tablet: "24px"
-  gutter-desktop: "40px"
-  section-mobile: "80px"
-  section-tablet: "112px"
-  section-desktop: "144px"
-  container: "90rem"
+  gutter-sm: "20px"
+  gutter-md: "32px"
+  gutter-lg: "48px"
+  section-sm: "96px"
+  section-md: "112px"
+  section-lg: "144px"
+  container: "88rem"
 components:
-  button-primary:
-    backgroundColor: "{colors.blue}"
-    textColor: "#ffffff"
-    rounded: "{rounded.control}"
-    padding: "0 1.4rem"
-    height: "3.25rem"
-  button-primary-hover:
-    backgroundColor: "{colors.blue-hover}"
-  button-ghost:
+  button-solid:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.ground}"
+    typography: "{typography.label}"
+    rounded: "{rounded.none}"
+    padding: "0 25.6px"
+    height: "52px"
+  button-solid-hover:
+    backgroundColor: "{colors.graphite}"
+    textColor: "{colors.ground}"
+  button-outline:
     backgroundColor: "transparent"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.control}"
-    padding: "0 1.4rem"
-    height: "3.25rem"
-  button-ghost-hover:
-    backgroundColor: "{colors.fade-3}"
-  button-disabled:
-    backgroundColor: "{colors.fade-4}"
-    textColor: "{colors.steel-dim}"
-  chip-service:
-    backgroundColor: "{colors.fade-0}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.control}"
-    padding: "0 0.875rem"
-    height: "2.5rem"
-  slot:
-    backgroundColor: "{colors.fade-3}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.control}"
-    height: "3rem"
-  slot-selected:
-    backgroundColor: "{colors.blue}"
-    textColor: "#ffffff"
+    textColor: "{colors.ink}"
+    typography: "{typography.label}"
+    rounded: "{rounded.none}"
+    padding: "0 25.6px"
+    height: "52px"
+  button-outline-hover:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.ground}"
+  button-round:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.full}"
+    size: "48px"
   input:
-    backgroundColor: "{colors.fade-0}"
-    textColor: "{colors.paper}"
-    rounded: "{rounded.control}"
-    padding: "0 1rem"
-    height: "3.25rem"
-  guard-tag:
-    textColor: "{colors.steel}"
-    typography: "{typography.guard}"
-    rounded: "{rounded.tag}"
-    padding: "0.375rem 0.5rem"
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body}"
+    rounded: "{rounded.none}"
+    padding: "0 16px"
+    height: "52px"
+  service-card:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "24px"
 ---
 
 # Design System: LM Barbearia
 
 ## Overview
 
-**Creative North Star: "The Skin Fade"**
+**Creative North Star: "The Part Line"**
 
-The site is cut the way Leonardo cuts hair. Grounds climb in hard tonal steps from near-black to graphite, and every step carries the number of the clipper guard that would cut it: #0, #½, #1, #1½, #2, #3. The guard scale is the measuring system for everything: the hero bands, the mobile menu, the booking progress, the little five-step mark next to each service. Nothing blends; each step is a clean line.
+The page is a quiet, light editorial spread for one barber's chair in Campanário, Diadema. It has no colour of its own beyond warm off-white, ink and a thin champagne. All the saturation comes from Leonardo's real photographs: the red, white and blue striped capes and the dark, hard-edged fades. One gesture repeats: a 1px champagne hairline, *a risca*, drawn under headlines like the hard part line in the cuts. It draws in from the left when it enters the screen.
 
-The material is dark, matte and blade-precise. Surfaces are flat colour fields separated by 1px hairlines and near-square corners. The voice is a condensed, heavy, uppercase Archivo, like shop signage, set against a calm Manrope body. One blue does all the asking (actions and selection); a barber-pole red appears only as a tiny detail. It reads premium without pretending to be a luxury brand: no gold, no ornament, no glow.
-
-Motion is a cut, not a float. Bands scale up from their bottom edge, headline lines are revealed by a clip from below, panels rise a few pixels. Everything eases out-expo, content is visible without JavaScript, and reduced motion means a static page.
+Density is low and deliberate. Sections breathe (96–144px vertical padding), headlines are large and set in a high-contrast display serif, and the UI text is a clean grotesk set in small, tracked capitals. Depth comes from tonal panels (white on off-white, one ink band, a sand panel), never shadows. Photographs are large, square-cornered and edge-to-edge inside their frames. The hero photo bleeds off the right edge of the viewport and dissolves into the ground on its left. The client rejected the earlier all-dark "escala do degradê" version; this world replaces it entirely.
 
 **Key Characteristics:**
-- Six-step fade ramp (#0 to #3) as grounds, always in hard steps
-- Guard tags (#1½) as the labelling and measuring device
-- Condensed, heavy, uppercase display; quiet Manrope body
-- Blue reserved for action and selection
-- 1px hairlines and 1–4px corners
-- Clip-path and transform motion on ease-out-expo
+- Warm off-white ground with white and sand panels; one ink feature band.
+- Real photographs carry all the saturated colour.
+- Champagne only as a hairline, stars, icons and one accent phrase per screen.
+- Libre Caslon Display headlines, Manrope body and tracked-caps labels.
+- Square corners everywhere except round icon controls and calendar days.
+- No shadows, no decorative gradients.
 
 ## Colors
 
-A cool near-black fade ramp, warm white ink, metallic grey secondary text, one action blue and a pinch of barber-pole red.
+A neutral, warm-paper palette with a single metallic accent; the photographs supply every saturated hue.
 
 ### Primary
-- **Chair Blue** (blue): the only action colour. Primary buttons, selected date and time slots, the active booking step, selected service cards (as a 12% tint with a blue border), the location pin and text selection.
-- **Chair Blue Lifted** (blue-hover): hover state of primary buttons.
-- **Blue Ink** (blue-ink): blue as a line or text on dark. Focus rings, caret, active nav underline, completed booking steps (at 70%), link hover, hover border on service chips.
-
-### Tertiary
-- **Barber Pole Red** (pole): a detail colour, used on the footer's 8px address dot. It never fills a surface or carries text.
+- **Champagne Hairline** (`champagne`): the risca under headlines, rating stars, line icons, the active-nav underline and the progress line of the current booking step. Too light for text on the ground.
+- **Deep Champagne** (`champagne-deep`): the one accent phrase in large headlines ("precisão.", "horário.", "próximo corte?"). Large text only.
+- **Champagne Ink** (`champagne-text`): small champagne text on the ground (passes AA).
+- **Soft Champagne** (`champagne-soft`): champagne on the ink band: the hairline, the signature and the seal.
 
 ### Neutral
-- **Fade #0 to #3** (fade-0 to fade-5): the ground ramp. fade-0 is the page and the deepest band; fade-1 and fade-2 are alternating section grounds; fade-3 is the booking ground and the resting fill of slots; fade-4 is the review strip and the disabled button; fade-5 is the brightest step (placeholder tops, hover on slots, unreached booking steps).
-- **Hairline** (line): section and list dividers, header border when solid.
-- **Hairline Strong** (line-strong): control strokes (ghost buttons, chips, inputs, icon buttons), the wordmark divider, scrollbar thumb.
-- **Paper** (paper): primary text and display type. Used at 85–90% opacity for long body copy on dark.
-- **Steel** (steel): secondary text, guard labels, ghost-button hover border.
-- **Steel Dim** (steel-dim): placeholders, weekday labels, disabled text.
-- **Alert** (alert): inline error messages in the booking flow.
+- **Gallery Ground** (`ground`): the page background, headers and the mobile CTA bar.
+- **Paper White** (`paper`): raised panels such as service cards, the booking panel, the FAQ and gallery sections, and inputs.
+- **Sand** (`sand`): secondary panels: the reviews band, the About CTA panel, the map placeholder and photo loading backgrounds.
+- **Ink** (`ink`): headlines, primary text, solid buttons, the top bar and the About band.
+- **Graphite** (`graphite`): body copy and the solid-button hover.
+- **Warm Muted** (`muted`): secondary text, captions and notes (AA on ground and paper).
+- **Hairline** (`line`) and **Strong Hairline** (`line-strong`): dividers, panel borders, input borders and round-button rings.
+- **Night Panel** (`night-2`), **Night Line** (`night-line`), **Night Muted** (`night-muted`): the second column of the ink band, its dividers, and body text on ink.
+- **Alert** (`alert`): booking error messages and invalid-field borders.
 
 ### Named Rules
-**The One Blue Rule.** Blue means "do this" or "this is chosen". It never decorates a heading, a band or a background.
+**The Photos-Carry-Colour Rule.** No section adds a saturated colour. If something needs to stand out, it gets a photograph, scale or ink, never a new hue.
 
-**The Pole Pinch Rule.** Barber-pole red stays a detail of 8px or less. If it is wider than a dot or a line, it is wrong.
-
-**The Hard Step Rule.** Grounds change in hard steps of the fade ramp. Adjacent sections take different steps; bands over a photo are stacked opaque or translucent fade-0 layers with a 1px paper/7% top edge. No smooth gradients.
+**The One Accent Rule.** At most one champagne accent phrase per screen. Every other heading stays ink.
 
 ## Typography
 
-**Display Font:** Archivo, condensed through its width axis (wdth 66), with Arial Narrow fallback
-**Body Font:** Manrope (with ui-sans-serif, system-ui), stylistic set ss01 on
-**Label Font:** Archivo at wdth 80 for guard tags
+**Display Font:** Libre Caslon Display (Georgia fallback)
+**Signature Font:** Libre Caslon Text Italic, used only for Leonardo's name and quotes
+**Body / Label Font:** Manrope
 
-**Character:** Shop-sign display against a friendly, legible grotesk. The display is loud and short; Manrope does the explaining.
+**Character:** A sharp, high-contrast Caslon for editorial headlines, paired with a calm geometric grotesk for everything functional. Caslon was chosen over Cormorant Garamond because its é, ê and ú accents sit correctly in Portuguese.
 
 ### Hierarchy
-- **Display** (800, clamp(3.4rem, 15.5vw, 6rem), 0.98): the hero headline only, uppercase, revealed line by line.
-- **Headline** (800, clamp(2.6rem–3rem, 9–11vw, 4.6rem–5.5rem), 0.98): section titles (Serviços, Cortes, Agendar, FAQ), uppercase.
-- **Title** (800, clamp(2rem, 7.5vw, 3rem), 0.98): service names, booking step headings, the mobile menu items (2.6rem), gallery captions (1.35–1.7rem).
-- **Body** (400, 1rem–1.125rem, 1.625): paragraphs in steel or paper at 85–90%, held to 34–58ch.
-- **Label** (600, 0.875–0.95rem): buttons (700, 0.95rem), nav links, form labels, chip text.
-- **Guard** (600, 0.75rem, 0.06em tracking, tabular, uppercase when it is a word): clipper numbers, placeholder notices, weekday headers, the wordmark's BARBEARIA line.
+- **Display** (400, clamp 3.25–6rem, 0.98): the hero headline only, two lines.
+- **Headline** (400, clamp 2.75–4.25rem, 1.06): section titles.
+- **Title** (400, 1.75–2.75rem): card names, booking step questions, the reviews line and the map label.
+- **Signature** (italic 400, about 1.75rem): "Leonardo Miguel" and testimonial quotes.
+- **Body** (400, 17px, 1.625; max about 46ch): paragraphs and answers.
+- **Body small** (400, 15.2px, 1.6): card descriptions, footer links, summaries and notes.
+- **Label** (600, 13px, 0.14em, uppercase): navigation, buttons and small headings. Never below 13px.
 
 ### Named Rules
-**The Sign Rule.** Archivo appears only condensed, heavy and uppercase (or as a guard tag). Never set body copy or buttons in it.
+**The Lining Numerals Rule.** Serif numerals use lining figures (5,0 / 130), and times and dates use tabular figures.
 
-**The Tabular Rule.** Times, dates, counters and prices use tabular numerals.
+**The Thirteen Floor Rule.** No text on a phone is smaller than 13px.
 
 ## Layout
 
-A single scrolling page in a 90rem container with gutters of 16px, 24px and 40px (mobile, sm, lg). Sections stack on alternating fade steps with vertical padding of 80px, 112px and 144px; the review strip is the one shorter band (64/80/96px). On large screens content sits on a 12-column grid, usually a 7/5 split with the display title on the left and the explaining paragraph bottom-aligned on the right. Lists (services, about commitments, FAQ) are full-width rows divided by hairlines rather than cards. On mobile everything stacks, buttons go full-width, and a fixed bottom bar with the primary action and WhatsApp appears once the hero has left the screen and hides while booking is visible. Touch targets are at least 40px, mostly 44–52px.
+Content sits in an 88rem container with 20px, 32px and 48px side gutters (phone, tablet and desktop) on a 12-column grid at ≥1024px. Every section grid declares a single minmax(0,1fr) column on mobile so carousels and long words cannot widen the page.
+
+- **Hero:** text in the left 46%; the photo is absolutely positioned across the right 57% at full hero height. On phones the photo comes first (4:5), fades into the ground and the headline overlaps the fade.
+- **Services:** title and intro in 4 columns, a horizontal snap carousel in 8 (about 2.6 cards visible on desktop, 78% width on phones) with round previous/next buttons.
+- **Gallery:** an asymmetric 12-column grid with 12.5–14rem rows. A tall band holds two 3-row photos and a split column; a short band holds four photos of 4/3/2/3 columns. Phones alternate full-width photos with pairs.
+- **About:** a three-panel band: ink text (5 columns), a graphite photo frame (4 columns) and a sand CTA (3 columns), stacked on phones.
+
+Section rhythm is 96px, 112px and 144px vertical padding, with more space above headings than below them.
 
 ## Elevation & Depth
 
-Flat. There are no box shadows. Depth comes from the fade ramp: a raised or active thing takes a brighter step (fade-3 to fade-5), and layers over photos are translucent fade-0 bands. The fixed header and mobile bar are the only blurred surfaces: fade-0 at 92–94% with a medium backdrop blur and a hairline edge, so they read as part of the ground.
+The system is flat. Depth comes only from tonal layering: white panels on the off-white ground, sand for secondary panels, and one ink band that inverts the page. The only gradient is the photo-to-ground fade on the hero photo.
 
 ### Named Rules
-**The No-Shadow Rule.** Lift is a lighter fade step or a hairline, never a shadow.
+**The No-Shadow Rule.** Nothing casts a shadow. Separation comes from a lighter or darker panel, or a 1px hairline.
 
 ## Shapes
 
-Near-square everywhere: 3px on controls, slots, photos and panels, 2px on guard tags and focus rings, 1px on fade marks and step bars, 4px on the map panel. Full circles are reserved for small markers (the selection check, the location pin, the pole dot). Edges are 1px hairlines; dashed hairlines mark provisional content. The recurring silhouette is the staircase: bands stacked bottom-up, bars of rising height.
+Corners are square (0px) for buttons, cards, inputs, panels and photographs, as precise as a razor line. Full circles appear only on icon controls (carousel arrows, social links, the FAQ toggle, calendar days and the map pin) and on the LM seal, which echoes the shop's real circular logo. Borders are 1px hairlines throughout.
 
 ## Components
 
 ### Buttons
-Firm, compact, blade-cut.
-- **Shape:** near-square (3px), 52px tall, 1.4rem side padding, 700 weight Manrope at 0.95rem.
-- **Primary:** Chair Blue with white text; hover lifts to Chair Blue Lifted.
-- **Ghost:** transparent with a Hairline Strong 1px stroke and Paper text; hover brightens the stroke to Steel and fills fade-3. Over photos or bands it sits on fade-0.
-- **States:** pressing nudges down 1px; a trailing arrow nudges 3px right on hover; disabled is fade-4 with Steel Dim text. Transitions 180ms ease-out-quart.
-
-### Chips
-- **Style:** service quick-picks in the hero. 40px tall, 3px corners, Hairline Strong stroke over fade-0 at 60%, Paper semibold text.
-- **State:** hover turns the stroke Blue Ink and the fill fade-3. They are actions (jump into booking preselected), not filters.
+- **Shape:** square-cornered (0px), 52px tall, labels in uppercase tracked caps.
+- **Solid:** ink fill with ground text. Hover: graphite. The trailing arrow nudges 4px right.
+- **Outline:** a 1px ink border with ink text. Hover: fills ink and the text turns ground.
+- **On ink:** a light fill, or an outline in night-muted.
+- **Round:** a 48px circle with a 1px ink ring, used for carousel and calendar navigation. Hover: fills ink. Disabled: a hairline ring with a pale icon.
+- **Focus:** a 2px ink outline offset by 3px.
 
 ### Cards / Containers
-- **Corner Style:** 3px.
-- **Background:** booking service options sit on fade-2 with a Hairline Strong stroke; selected becomes a blue border with a 12% blue fill and a filled blue check circle.
-- **Shadow Strategy:** none (see Elevation & Depth).
-- **Internal Padding:** 12–16px.
+- **Service card:** a white panel with a hairline border and square corners. A 4:5 photo zooms to 1.05 on hover over 1.2s. The serif name and muted description follow, and a hairline separates "Valor no WhatsApp" from the "Agendar →" text link. A service with no photo shows an ink card with the LM seal and a signature line.
+- **Booking panel:** a white panel with a hairline border, padded 20–48px.
 
 ### Inputs / Fields
-- **Style:** 52px tall, fade-0 fill, Hairline Strong 1px stroke, 3px corners, 1rem Paper text, Steel Dim placeholder.
-- **Focus:** stroke turns Blue Ink.
-- **Error:** an Alert-coloured message below, announced as an alert.
-
-### Date and Time Slots
-Tabular, semibold, 3px corners, fade-3 at rest, fade-5 on hover, Chair Blue with white text when chosen. Today carries a 2px Blue Ink underbar. Closed days are struck through in Steel Dim.
+- **Style:** a white field with a 1px strong-hairline border, square corners and 52px height. Labels sit above in uppercase tracked caps.
+- **Focus:** the border turns ink.
+- **Error:** the border turns alert, and the message appears directly under the field in alert, linked with aria-describedby.
 
 ### Navigation
-Header is transparent over the hero and turns solid fade-0/92 with blur and a hairline once scrolled. Desktop links are Steel, turning Paper on hover; the current section gets a 1px Blue Ink underline that scales in from the left. On mobile a 44px square menu button opens a full-height sheet (clipped down from the top) whose items are stacked fade bands from #3 to #½, each a Title-size uppercase link with its guard number on the right.
+- **Top bar:** an ink strip with ground tracked caps: "Agende seu horário pelo WhatsApp".
+- **Header:** sticky on the ground, with a hairline border once the page scrolls. The LM monogram sits left, the uppercase tracked links are centred, and the solid "Agendar" button sits right. The active link gets a champagne underline that scales in from the left.
+- **Mobile:** the monogram, a compact "Agendar" button and a menu button. The menu sheet sits below the header and lists the sections as large serif links on hairlines.
 
-### Guard Scale (signature)
-The fade expressed as a measuring device. In the hero, five bands rise from the bottom over the photo with a right-hand ruler (#½ to #2) of steel guard tags and short steel hairlines; they scale in from the bottom in a 70ms stagger. The booking progress is six bars of rising height (10px + 5px per step) labelled #0 to #3: unreached fade-5, done Blue Ink at 70%, current Chair Blue. Each service has a Fade Mark: five 5px bars of rising height with the worked zones lit Steel (Blue Ink on hover).
+### A Risca (Signature Component)
+A 56px by 1px champagne hairline under the hero headline and every section title. It scales in from the left (scaleX, 1.1–1.2s, ease-out-expo) on load or when it enters the viewport, and it is static under reduced motion.
 
-### Photo Slot
-Real photos fill with object-cover inside 3px corners. Until a photo exists the slot is an honest placeholder: stacked fade steps, a 7% paper diagonal hatch, a camera icon with the caption, and a guard tag reading FOTO TEMPORÁRIA. Gallery tiles darken their foot with three translucent fade-0 bands under the caption.
+### Booking Stepper
+Three numbered steps ("01 Serviço · 02 Data e horário · 03 Seu nome e envio"), each above a hairline. Completed steps fill the line in ink, and the current step fills it in champagne. On phones only the numbers show, with "Etapa X de 3 · …" underneath.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** change grounds in hard fade steps and label steps with guard numbers when the scale is shown.
-- **Do** keep blue for actions, selection, focus and progress.
-- **Do** set titles in condensed (wdth 66), 800-weight, uppercase Archivo at 0.98 line height.
-- **Do** use 3px corners for controls and imagery, 1px hairlines for division, and tabular numerals for times and dates.
-- **Do** animate with transform, opacity and clip-path on ease-out-expo, with content visible by default and a static page under reduced motion.
-- **Do** mark placeholder photos and draft copy as temporary with a guard tag.
+- **Do** let a real photograph of Leonardo's work lead every image slot, cropped with an explicit focus point.
+- **Do** draw the champagne risca under a section title instead of adding a label above it.
+- **Do** keep buttons and photo frames square-cornered and borders at 1px.
+- **Do** use the ink band for at most one feature section per page.
+- **Do** respect reduced motion: content is visible without JavaScript and reveals are static.
 
 ### Don't:
-- **Don't** use smooth gradients, gold, glows or box shadows.
-- **Don't** let barber-pole red grow past an 8px detail or carry text.
-- **Don't** round controls or surfaces beyond 4px; full circles are for small markers only.
-- **Don't** set Archivo at normal width, light weight or in sentence case for headings.
-- **Don't** box lists into grids of equal cards; services, commitments and FAQ are full-width rows divided by hairlines.
+- **Don't** add drop shadows, glows or decorative gradients.
+- **Don't** introduce a new saturated colour; the photographs carry colour.
+- **Don't** set a champagne accent word in more than one heading per screen.
+- **Don't** use Cormorant Garamond or any face whose Portuguese accents (é, ê, ú) sit off their letters.
+- **Don't** show placeholder or generic stock imagery as if it were Leonardo's work.
