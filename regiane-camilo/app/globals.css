@@ -1,0 +1,399 @@
+@import "tailwindcss";
+
+/*
+ * Bolos e Doces Regiane Camilo — "o convite".
+ * Creme de confeitaria, campos inteiros de chocolate e rosa suave, cereja
+ * só no destaque. As fotos reais dos bolos são a cor principal da página.
+ */
+@theme {
+  --color-cream: #fff7ef;
+  --color-paper: #ffffff;
+  --color-blush: #f1d2c8;
+  --color-blush-deep: #e8bfb2;
+  --color-rose: #eba1bb;
+  --color-cocoa: #63341f;
+  --color-cocoa-deep: #4b2616;
+  --color-cocoa-line: #7a4a33;
+  --color-cherry: #b73439;
+  --color-ink: #36251f;
+  --color-muted: #76665f;
+  --color-line: #eadfd7;
+  --color-line-strong: #d9c8bc;
+  /* Texto secundário sobre chocolate: rosa claro, nunca cinza. */
+  --color-on-cocoa: #fff7ef;
+  --color-on-cocoa-muted: #e9cfc3;
+
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-castoro), Georgia, serif;
+  --font-script: var(--font-norican), cursive;
+
+  --radius-card: 1.125rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --animate-rise: rise 900ms var(--ease-out-expo) both;
+  --animate-unveil: unveil 1400ms var(--ease-out-expo) both;
+  --animate-settle: settle 2400ms var(--ease-out-expo) both;
+  --animate-step: step-in 520ms var(--ease-out-expo) both;
+  --animate-ink: ink-in 700ms var(--ease-out-expo) both;
+  --animate-sheet: sheet-in 420ms var(--ease-out-expo) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes unveil {
+    from {
+      clip-path: inset(100% 0 0 0 round var(--radius-card));
+    }
+    to {
+      clip-path: inset(0 0 0 0 round var(--radius-card));
+    }
+  }
+  @keyframes settle {
+    from {
+      transform: scale(1.07);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  /* A palavra escrita na lacuna do convite "assenta" como tinta. */
+  @keyframes ink-in {
+    from {
+      opacity: 0;
+      filter: blur(4px);
+      transform: translateY(-3px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-line-strong) var(--color-cream);
+    scroll-padding-top: 6.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-rose);
+    color: var(--color-cocoa-deep);
+  }
+
+  input,
+  textarea {
+    caret-color: var(--color-cherry);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cherry);
+    outline-offset: 3px;
+  }
+
+  a {
+    text-underline-offset: 0.25em;
+    text-decoration-thickness: 1px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-cream);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border: 2px solid var(--color-cream);
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  .serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    line-height: 1.08;
+    font-variant-numeric: lining-nums;
+  }
+  .serif em,
+  em.serif {
+    font-style: italic;
+  }
+
+  /* A assinatura cursiva: só para o nome "Regiane Camilo". */
+  .script {
+    font-family: var(--font-script);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* Versalete espaçado, como o "·BOLOS·" do selo. */
+  .smallcaps {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Pontinho rosa do selo, usado como separador. */
+  .dot {
+    display: inline-block;
+    width: 0.32rem;
+    height: 0.32rem;
+    border-radius: 999px;
+    background: var(--color-rose);
+    flex: none;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    min-height: 3.25rem;
+    padding: 0 1.75rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition:
+      background-color 240ms var(--ease-out-quart),
+      color 240ms var(--ease-out-quart),
+      border-color 240ms var(--ease-out-quart),
+      box-shadow 320ms var(--ease-out-quart),
+      transform 320ms var(--ease-out-expo);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn svg {
+    flex: none;
+    transition: transform 360ms var(--ease-out-expo);
+  }
+  .btn:hover svg.nudge {
+    transform: translateX(4px);
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-cocoa {
+    background: var(--color-cocoa);
+    color: var(--color-cream);
+  }
+  .btn-cocoa:hover {
+    background: var(--color-cocoa-deep);
+    box-shadow: 0 10px 24px -14px rgb(75 38 22 / 0.7);
+  }
+  .btn-outline {
+    border-color: var(--color-cocoa);
+    color: var(--color-cocoa);
+  }
+  .btn-outline:hover {
+    background: var(--color-cocoa);
+    color: var(--color-cream);
+  }
+  .btn-cream {
+    background: var(--color-cream);
+    color: var(--color-cocoa-deep);
+  }
+  .btn-cream:hover {
+    background: var(--color-blush);
+  }
+  .btn-outline-cream {
+    border-color: var(--color-on-cocoa-muted);
+    color: var(--color-cream);
+  }
+  .btn-outline-cream:hover {
+    background: var(--color-cream);
+    border-color: var(--color-cream);
+    color: var(--color-cocoa-deep);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    background: var(--color-line);
+    color: var(--color-muted);
+    border-color: transparent;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* Campos do pedido: papel creme sobre o chocolate. */
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0 1rem;
+    border-radius: 0.875rem;
+    border: 2px solid transparent;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-size: 1rem;
+    transition: border-color 200ms var(--ease-out-quart);
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+  }
+  .field:hover {
+    border-color: var(--color-blush-deep);
+  }
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--color-rose);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-rose);
+  }
+
+  /* Link de texto com sublinhado que recua no hover. */
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 420ms var(--ease-out-expo);
+  }
+  .link-line:hover {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+
+  /* Borda recortada em ondinhas, como o friso de bico pitanga dos bolos. */
+  .scallop-top {
+    --s: 11px;
+    mask:
+      radial-gradient(var(--s) at 50% var(--s), #000 97%, #0000) 50% 0 / calc(var(--s) * 2) calc(var(--s) * 2) repeat-x,
+      linear-gradient(#000 0 0) 0 var(--s) / 100% 100% no-repeat;
+  }
+
+  /* Lacuna do convite: linha pontilhada que recebe a palavra da cliente. */
+  .blank {
+    display: inline;
+    padding: 0 0.15em 0.05em;
+    background-image: radial-gradient(circle, var(--color-line-strong) 1px, transparent 1.4px);
+    background-size: 6px 3px;
+    background-repeat: repeat-x;
+    background-position: 0 100%;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+  .filled {
+    display: inline;
+    padding: 0 0.1em 0.05em;
+    background-image: linear-gradient(var(--color-rose), var(--color-rose));
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    color: var(--color-cocoa);
+    font-style: normal;
+  }
+
+  /* Revelação no scroll: tudo visível por padrão; o JS arma o efeito. */
+  .reveal-armed [data-reveal]:not(.is-in) {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  .reveal-armed [data-reveal="photo"]:not(.is-in) {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-armed [data-reveal="photo"]:not(.is-in) > * {
+    clip-path: inset(100% 0 0 0);
+  }
+  [data-reveal] {
+    transition:
+      opacity 900ms var(--ease-out-expo),
+      transform 900ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal="photo"] > * {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 1200ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-armed [data-reveal]:not(.is-in),
+    .reveal-armed [data-reveal]:not(.is-in) > * {
+      opacity: 1;
+      transform: none;
+      clip-path: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}

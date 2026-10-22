@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     ".claude/**",
     ".impeccable/**",
+    // Outro projeto, com configuração própria.
+    "regiane-camilo/**",
   ]),
 ]);
 
