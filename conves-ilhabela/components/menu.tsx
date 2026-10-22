@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight, Search, X } from "lucide-react";
 import {
   itemsOf,
+  menu,
   menuSettings,
   normalize,
   portionLabels,
@@ -15,7 +16,8 @@ import {
 const categories = visibleCategories();
 
 export function Menu() {
-  const [active, setActive] = useState<CategoryId | null>(null);
+  // Abre numa categoria; "Todos" é escolha explícita. A busca sempre cobre o cardápio inteiro.
+  const [active, setActive] = useState<CategoryId | null>("peixes");
   const [query, setQuery] = useState("");
   const [flash, setFlash] = useState<string | null>(null);
 
@@ -24,7 +26,8 @@ export function Menu() {
     const onHash = () => {
       const hash = window.location.hash;
       if (!hash.startsWith("#prato-")) return;
-      setActive(null);
+      const dish = menu.find((m) => `#prato-${m.id}` === hash);
+      setActive(dish?.category ?? null);
       setQuery("");
       setFlash(hash.slice(7));
       window.requestAnimationFrame(() => {
@@ -39,7 +42,7 @@ export function Menu() {
   const groups = useMemo(
     () =>
       categories
-        .filter((c) => !active || c.id === active)
+        .filter((c) => term || !active || c.id === active)
         .map((c) => ({
           ...c,
           items: itemsOf(c.id).filter(
@@ -80,7 +83,7 @@ export function Menu() {
         </div>
 
         {/* Busca e categorias: ficam presas no topo enquanto a lista rola. */}
-        <div className="sticky top-[4.25rem] z-20 -mx-5 mt-10 border-b border-line bg-sand/95 px-5 pt-3 pb-3 backdrop-blur-[3px] sm:-mx-8 sm:px-8 lg:top-[4.75rem] lg:-mx-12 lg:px-12">
+        <div className="sticky top-[4.25rem] z-20 -mx-5 mt-10 border-b border-line bg-sand px-5 pt-3 pb-3 sm:-mx-8 sm:px-8 lg:top-[4.75rem] lg:-mx-12 lg:px-12">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
             <label className="relative block lg:w-[20rem] lg:flex-none">
               <span className="sr-only">Buscar prato</span>
@@ -119,17 +122,20 @@ export function Menu() {
                   <button
                     key={c.id ?? "todos"}
                     type="button"
-                    aria-pressed={selected}
-                    onClick={() => setActive(c.id)}
+                    aria-pressed={selected && !term}
+                    onClick={() => {
+                      setActive(c.id);
+                      setQuery("");
+                    }}
                     className={`relative min-h-11 flex-none px-3.5 text-[0.9375rem] whitespace-nowrap transition-colors ${
-                      selected ? "font-semibold text-deep" : "text-ink/75 hover:text-deep"
+                      selected && !term ? "font-semibold text-deep" : "text-ink/75 hover:text-deep"
                     }`}
                   >
                     {c.name}
                     <span
                       aria-hidden
                       className={`absolute inset-x-3.5 bottom-1 h-[2px] origin-left bg-champagne transition-transform duration-500 ease-[var(--ease-out-expo)] ${
-                        selected ? "scale-x-100" : "scale-x-0"
+                        selected && !term ? "scale-x-100" : "scale-x-0"
                       }`}
                     />
                   </button>
@@ -140,7 +146,7 @@ export function Menu() {
         </div>
 
         <p aria-live="polite" className="mt-6 text-[0.875rem] text-muted">
-          {term ? `${total} ${total === 1 ? "resultado" : "resultados"} para “${query.trim()}”` : ""}
+          {term ? `${total} ${total === 1 ? "resultado" : "resultados"} para “${query.trim()}” em todo o cardápio` : ""}
         </p>
 
         {groups.length === 0 ? (

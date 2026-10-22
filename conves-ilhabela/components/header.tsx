@@ -21,14 +21,16 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Destaca a seção visível na navegação.
+  // Destaca a seção visível na navegação; seções fora do menu (ex.: reservas) não marcam nada.
   useEffect(() => {
-    const sections = nav
-      .map((item) => document.querySelector<HTMLElement>(item.href))
-      .filter((el): el is HTMLElement => Boolean(el));
+    const sections = document.querySelectorAll<HTMLElement>("main > section[id]");
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) if (entry.isIntersecting) setActive(`#${entry.target.id}`);
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = `#${entry.target.id}`;
+          setActive(nav.some((item) => item.href === id) ? id : "");
+        }
       },
       { rootMargin: "-45% 0px -50% 0px" },
     );
@@ -71,9 +73,7 @@ export function Header() {
       <header
         ref={headerRef}
         className={`sticky top-0 z-50 transition-[background-color,box-shadow] duration-500 ${
-          scrolled || open
-            ? "bg-sand/95 shadow-[0_1px_0_var(--color-line)] backdrop-blur-[3px]"
-            : "bg-sand"
+          scrolled || open ? "bg-sand shadow-[0_1px_0_var(--color-line)]" : "bg-sand"
         }`}
       >
         <div

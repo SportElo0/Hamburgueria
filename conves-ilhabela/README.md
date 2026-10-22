@@ -27,11 +27,11 @@ Stack: Next.js 16 (App Router), TypeScript, Tailwind CSS 4, lucide-react e GSAP 
 Ficam todas em `components/scroll-scenes.tsx`:
 
 1. **Abertura:** a foto panorâmica se aproxima devagar e o texto sobe enquanto a página desce.
-2. **Esteira:** duas linhas de onda se desenham na seção "O Convés", com o casco do logo à frente.
+2. **Esteira:** duas linhas de onda se desenham na seção "O Convés" e de novo antes do rodapé, com o casco do logo à frente.
 3. **Destaques do cardápio:** no desktop, a seção fica presa e os pratos passam na horizontal. No celular,
    o trilho desliza com o dedo.
-4. **A travessia:** a cena fica presa na seção "Experiência". A foto da varanda se abre por uma janela
-   até o gramado e a água, com as legendas trocando.
+4. **A travessia:** a cena fica presa na seção "Experiência". A foto do gramado aparece pela faixa entre o telhado e o deck da varanda, com bordas esfumadas, e se abre
+   até tomar a tela, com as legendas trocando uma de cada vez.
 
 Com **movimento reduzido** (ajuste do sistema) nada disso roda: as duas fotos aparecem lado a lado,
 estáticas, e todo o conteúdo fica visível.

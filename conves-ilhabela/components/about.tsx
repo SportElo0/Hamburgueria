@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { site } from "@/config/site";
 import { Hull } from "@/components/brand";
+import { Wake } from "@/components/wake";
 
 const traits = ["Mesas ao ar livre", "Varanda coberta de madeira", "Vista para o canal", "Espaço para eventos"];
 
@@ -45,32 +46,7 @@ export function About() {
         </div>
       </div>
 
-      {/* A esteira: linha que o barco deixa na água, desenhada pelo scroll. */}
-      <div aria-hidden className="relative mx-auto h-24 max-w-[90rem] px-5 sm:px-8 lg:h-32 lg:px-12">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="h-full w-full text-champagne"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-        >
-          <path
-            data-wake
-            d="M0 70 C 80 40, 140 100, 220 70 S 360 40, 440 70 S 580 100, 660 70 S 800 40, 880 70 S 1020 100, 1100 70 L 1160 70"
-            vectorEffect="non-scaling-stroke"
-          />
-          <path
-            data-wake
-            d="M40 96 C 120 76, 180 112, 260 96 S 400 76, 480 96 S 620 112, 700 96 S 840 80, 920 96"
-            vectorEffect="non-scaling-stroke"
-            className="text-champagne-soft"
-            stroke="currentColor"
-          />
-        </svg>
-        <Hull data-wake-boat size={34} className="absolute top-1/2 right-5 -translate-y-[70%] text-deep sm:right-8 lg:right-12" />
-      </div>
+      <Wake />
     </section>
   );
 }

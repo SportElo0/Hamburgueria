@@ -97,8 +97,8 @@ export const site = {
 export const nav = [
   { href: "#inicio", label: "Início" },
   { href: "#o-conves", label: "O Convés" },
-  { href: "#cardapio", label: "Cardápio" },
   { href: "#experiencia", label: "Experiência" },
+  { href: "#cardapio", label: "Cardápio" },
   { href: "#galeria", label: "Galeria" },
   { href: "#eventos", label: "Eventos" },
   { href: "#contato", label: "Contato" },

@@ -27,11 +27,11 @@ export default function Home() {
       <main>
         <Hero />
         <About />
+        <Travessia />
         <section id="cardapio" aria-labelledby="cardapio-title">
           <Highlights />
           <Menu />
         </section>
-        <Travessia />
         <Gallery />
         <Reservation />
         <Events />

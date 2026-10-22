@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MapPin, Navigation, Phone } from "lucide-react";
 import { fullAddress, site } from "@/config/site";
 import { InstagramIcon } from "@/components/brand";
+import { Wake } from "@/components/wake";
 
 export function Contact() {
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -107,6 +108,8 @@ export function Contact() {
           </div>
         </div>
       </div>
+      {/* A esteira volta no fim da página: o barco segue para o rodapé. */}
+      <Wake className="-mt-6 lg:-mt-10" />
     </section>
   );
 }

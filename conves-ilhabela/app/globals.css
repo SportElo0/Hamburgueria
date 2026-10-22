@@ -295,12 +295,25 @@
     background-position: center;
   }
 
-  /* Travessia com movimento: legendas empilhadas, uma de cada vez. */
-  .is-scene [data-steps] {
-    grid-template-columns: 1fr;
-  }
-  .is-scene [data-travessia-step] {
-    grid-area: 1 / 1;
+  /* Travessia com movimento: a camada de cima aparece por uma faixa de bordas
+     esfumadas (--t e --b, animadas pelo scroll). */
+  .is-scene [data-travessia-over] {
+    --t: 0%;
+    --b: 100%;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent calc(var(--t) - 7%),
+      #000 var(--t),
+      #000 var(--b),
+      transparent calc(var(--b) + 7%)
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent calc(var(--t) - 7%),
+      #000 var(--t),
+      #000 var(--b),
+      transparent calc(var(--b) + 7%)
+    );
   }
 
   /* Revelação no scroll: tudo visível por padrão; o JS arma o efeito. */

@@ -1,8 +1,7 @@
 import { ArrowUpRight, Star } from "lucide-react";
-import { photos, site } from "@/config/site";
+import { site } from "@/config/site";
 import { formatShortDate } from "@/lib/dates";
-import { InstagramIcon } from "@/components/brand";
-import { Photo } from "@/components/photo";
+import { Hull, InstagramIcon } from "@/components/brand";
 
 export function Social() {
   const { rating } = site;
@@ -22,7 +21,9 @@ export function Social() {
             rel="noopener noreferrer"
             className="group mt-8 flex max-w-[34rem] items-center gap-5 border border-line p-3 pr-5 transition-colors hover:border-deep"
           >
-            <Photo photo={photos.gramado} sizes="96px" className="size-24 flex-none" />
+            <span className="grid size-20 flex-none place-items-center bg-deep text-champagne-soft">
+              <Hull size={40} />
+            </span>
             <span className="flex-1">
               <span className="flex items-center gap-2 font-semibold text-deep">
                 <InstagramIcon size={18} />

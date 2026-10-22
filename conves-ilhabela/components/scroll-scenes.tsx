@@ -43,35 +43,32 @@ export function ScrollScenes() {
           }
         }
 
-        // 2. A esteira: as linhas se desenham e o casco segue na frente.
-        const wakes = gsap.utils.toArray<SVGPathElement>("[data-wake]");
-        wakes.forEach((path, i) => {
-          const length = path.getTotalLength();
-          gsap.fromTo(
-            path,
-            { strokeDasharray: length, strokeDashoffset: length },
-            {
-              strokeDashoffset: 0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: path,
-                start: "top 92%",
-                end: `top ${45 - i * 8}%`,
-                scrub: 0.8,
+        // 2. A esteira: as linhas se desenham e o casco segue na frente (cada esteira da página).
+        gsap.utils.toArray<HTMLElement>("[data-wake-group]").forEach((group) => {
+          const paths = group.querySelectorAll<SVGPathElement>("[data-wake]");
+          paths.forEach((path, i) => {
+            const length = path.getTotalLength();
+            gsap.fromTo(
+              path,
+              { strokeDasharray: length, strokeDashoffset: length },
+              {
+                strokeDashoffset: 0,
+                ease: "none",
+                scrollTrigger: { trigger: group, start: "top 92%", end: `top ${45 - i * 8}%`, scrub: 0.8 },
               },
+            );
+          });
+          gsap.fromTo(
+            group.querySelector("[data-wake-boat]"),
+            { xPercent: -260, opacity: 0 },
+            {
+              xPercent: 0,
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: { trigger: group, start: "top 92%", end: "top 45%", scrub: 0.8 },
             },
           );
         });
-        gsap.fromTo(
-          "[data-wake-boat]",
-          { xPercent: -260, opacity: 0 },
-          {
-            xPercent: 0,
-            opacity: 1,
-            ease: "none",
-            scrollTrigger: { trigger: "[data-wake-boat]", start: "top 92%", end: "top 45%", scrub: 0.8 },
-          },
-        );
 
         // 3. A travessia: cena presa, da varanda até a água.
         const section = document.querySelector<HTMLElement>("[data-travessia]");
@@ -79,10 +76,13 @@ export function ScrollScenes() {
         if (section && stage) {
           section.classList.add("is-scene");
           const steps = gsap.utils.toArray<HTMLElement>("[data-travessia-step]");
-          gsap.set("[data-travessia-over]", { clipPath: "inset(34% 36% 30% 36%)" });
-          // Aproxima a varanda pelo lado esquerdo: o tronco e os pilares ficam no quadro.
-          gsap.set("[data-travessia-under]", { scale: 1.45, transformOrigin: "12% 60%" });
-          gsap.set(steps, { autoAlpha: 0, y: 24 });
+          // A faixa começa onde a água aparece na foto da varanda, entre o telhado e o deck.
+          // No desktop a varanda vem aproximada pelo lado esquerdo (tronco e pilares no quadro);
+          // no celular fica no tamanho natural, para a foto não perder nitidez.
+          const band = desktop ? { t: 31, b: 63 } : { t: 40, b: 62 };
+          gsap.set("[data-travessia-over]", { "--t": `${band.t}%`, "--b": `${band.b}%` });
+          if (desktop) gsap.set("[data-travessia-under]", { scale: 1.45, transformOrigin: "12% 60%" });
+          gsap.set(steps, { autoAlpha: 0, y: 20 });
           gsap.set(steps[0], { autoAlpha: 1, y: 0 });
 
           const tl = gsap.timeline({
@@ -96,13 +96,19 @@ export function ScrollScenes() {
               anticipatePin: 1,
             },
           });
-          tl.to("[data-travessia-under]", { scale: 1.6, duration: 1 }, 0)
-            .to("[data-travessia-over]", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut" }, 0.18)
-            .fromTo("[data-travessia-over-img]", { scale: 1.25 }, { scale: 1, duration: 0.7, ease: "power2.out" }, 0.18)
-            .to(steps[0], { autoAlpha: 0, y: -24, duration: 0.12 }, 0.2)
-            .to(steps[1], { autoAlpha: 1, y: 0, duration: 0.12 }, 0.3)
-            .to(steps[1], { autoAlpha: 0, y: -24, duration: 0.12 }, 0.66)
-            .to(steps[2], { autoAlpha: 1, y: 0, duration: 0.12 }, 0.76);
+          tl.to("[data-travessia-under]", { scale: desktop ? 1.58 : 1.06, duration: 1 }, 0)
+            .to("[data-travessia-over]", { "--t": "-10%", "--b": "110%", duration: 0.62, ease: "power2.inOut" }, 0.2)
+            .fromTo(
+              "[data-travessia-over-img]",
+              { scale: desktop ? 1.16 : 1.06 },
+              { scale: 1, duration: 0.62, ease: "power2.out" },
+              0.2,
+            )
+            // Legendas: uma sai por completo antes da próxima entrar.
+            .to(steps[0], { autoAlpha: 0, y: -20, duration: 0.1 }, 0.2)
+            .to(steps[1], { autoAlpha: 1, y: 0, duration: 0.1 }, 0.34)
+            .to(steps[1], { autoAlpha: 0, y: -20, duration: 0.1 }, 0.64)
+            .to(steps[2], { autoAlpha: 1, y: 0, duration: 0.1 }, 0.78);
 
           // Limpa a classe ao desmontar (volta ao layout estático).
           return () => section.classList.remove("is-scene");
@@ -126,8 +132,6 @@ export function ScrollScenes() {
           pin: true,
           scrub: 0.6,
           invalidateOnRefresh: true,
-          // Vem antes da travessia na página: mede primeiro.
-          refreshPriority: 1,
           anticipatePin: 1,
         },
       });

@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, Copy, Pencil, Phone } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Copy, Pencil, Phone, X } from "lucide-react";
 import { site } from "@/config/site";
-import { addDays, todayInShop, type ISODate } from "@/lib/dates";
+import { formatLongDate, todayInShop, type ISODate } from "@/lib/dates";
 import { buildEventMessage, cleanText, contactChannel, validateName, type EventDraft } from "@/lib/reservation";
 import { WhatsAppIcon } from "@/components/brand";
+import { Calendar } from "@/components/reservation/calendar";
 
 const emptyDraft: EventDraft = { name: "", type: site.events.types[0], date: null, guests: "", notes: "" };
 
@@ -92,32 +93,64 @@ export function Events() {
                   />
                   {errorFor("name")}
                 </div>
-                <div>
+                <div className="sm:col-span-2">
                   <label htmlFor="evento-type" className="label mb-3 block text-deep">Tipo de evento</label>
-                  <select id="evento-type" value={draft.type} onChange={(e) => update("type", e.target.value)} className="field">
-                    {site.events.types.map((t) => (
-                      <option key={t}>{t}</option>
-                    ))}
-                  </select>
+                  <div className="relative sm:w-72">
+                    <select
+                      id="evento-type"
+                      value={draft.type}
+                      onChange={(e) => update("type", e.target.value)}
+                      className="field appearance-none pr-11"
+                    >
+                      {site.events.types.map((t) => (
+                        <option key={t}>{t}</option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      size={18}
+                      strokeWidth={1.6}
+                      aria-hidden
+                      className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-deep"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor="evento-date" className="label mb-3 flex items-baseline gap-2 text-deep">
+                <fieldset
+                  className="min-w-0 sm:col-span-2"
+                  aria-describedby={error?.field === "date" ? "evento-date-erro" : undefined}
+                >
+                  <legend className="label mb-3 flex items-baseline gap-2 text-deep">
                     Data pretendida
                     <span className="text-[0.75rem] font-normal tracking-normal text-muted normal-case">opcional</span>
-                  </label>
-                  <input
-                    id="evento-date"
-                    type="date"
-                    value={draft.date ?? ""}
-                    min={today ?? undefined}
-                    max={today ? addDays(today, 730) : undefined}
-                    onChange={(e) => update("date", e.target.value || null)}
-                    aria-invalid={error?.field === "date"}
-                    aria-describedby={error?.field === "date" ? "evento-date-erro" : undefined}
-                    className="field"
-                  />
+                  </legend>
+                  <div className="sm:max-w-sm">
+                    {today ? (
+                      <Calendar
+                        id="evento-date"
+                        today={today}
+                        daysAhead={730}
+                        value={draft.date}
+                        onChange={(date) => update("date", date)}
+                        label="Escolha a data pretendida"
+                      />
+                    ) : (
+                      <p className="text-muted">Carregando o calendário…</p>
+                    )}
+                  </div>
+                  {draft.date && (
+                    <p className="mt-3 flex flex-wrap items-center gap-3 text-[0.9375rem] text-deep">
+                      <span className="first-letter:uppercase">{formatLongDate(draft.date)}</span>
+                      <button
+                        type="button"
+                        onClick={() => update("date", null)}
+                        className="inline-flex min-h-11 items-center gap-1.5 text-[0.875rem] font-semibold text-muted hover:text-deep"
+                      >
+                        <X size={14} />
+                        Sem data definida
+                      </button>
+                    </p>
+                  )}
                   {errorFor("date")}
-                </div>
+                </fieldset>
                 <div className="sm:col-span-2">
                   <label htmlFor="evento-guests" className="label mb-3 flex items-baseline gap-2 text-deep">
                     Convidados (aproximadamente)
