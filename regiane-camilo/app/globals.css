@@ -389,6 +389,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* A palavra do convite aparece já assentada, sem depender do quadro inicial. */
+  .animate-ink {
+    animation: none !important;
+  }
   *,
   *::before,
   *::after {

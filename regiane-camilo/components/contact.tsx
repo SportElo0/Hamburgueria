@@ -50,27 +50,9 @@ export function Contact() {
             </dl>
           </address>
 
-          <p className="mt-5 max-w-[46ch] text-[0.9375rem] leading-relaxed text-muted">
-            Retirada, entrega e prazos são combinados diretamente com a {site.ownerFirstName}.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a href={greetingLink} target="_blank" rel="noopener noreferrer" className="btn btn-cocoa">
-              <WhatsAppIcon size={18} />
-              Chamar no WhatsApp
-            </a>
-            <a href={site.links.directions} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
-              <Navigation size={16} />
-              Como chegar
-            </a>
-            <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
-              <InstagramIcon size={17} />
-              Instagram
-            </a>
-          </div>
         </div>
 
-        <div className="lg:col-span-7 lg:self-start">
+        <div className="lg:col-span-6 lg:col-start-7 lg:self-end">
           {mapLoaded ? (
             <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-blush">
               <iframe
@@ -106,6 +88,24 @@ export function Contact() {
               </button>
             </div>
           )}
+          <p className="mt-6 max-w-[46ch] text-[0.9375rem] leading-relaxed text-muted">
+            Retirada, entrega e prazos são combinados diretamente com a {site.ownerFirstName}.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <a href={greetingLink} target="_blank" rel="noopener noreferrer" className="btn btn-cocoa">
+              <WhatsAppIcon size={18} />
+              Chamar no WhatsApp
+            </a>
+            <a href={site.links.directions} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+              <Navigation size={16} />
+              Como chegar
+            </a>
+            <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+              <InstagramIcon size={17} />
+              Instagram
+            </a>
+          </div>
         </div>
       </div>
     </section>
