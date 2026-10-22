@@ -14,7 +14,7 @@ export function Contact() {
       <div className="mx-auto grid max-w-[90rem] grid-cols-1 gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12 lg:gap-16 lg:px-12 lg:py-28">
         <div className="lg:col-span-5">
           <h2 id="contato-title" data-reveal className="serif text-[clamp(2.25rem,4.4vw,3.6rem)] text-ink">
-            Vamos conversar sobre <em className="text-cherry">o seu bolo</em>?
+            Vamos conversar sobre o seu bolo?
           </h2>
 
           <address className="mt-9 not-italic">
@@ -70,9 +70,9 @@ export function Contact() {
           </div>
         </div>
 
-        <div className="lg:col-span-7">
-          <div className="relative h-full min-h-[22rem] overflow-hidden rounded-[1.75rem] bg-blush">
-            {mapLoaded ? (
+        <div className="lg:col-span-7 lg:self-start">
+          {mapLoaded ? (
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-blush">
               <iframe
                 title={`Mapa: ${fullAddress}`}
                 src={site.links.mapEmbed}
@@ -80,26 +80,32 @@ export function Contact() {
                 referrerPolicy="no-referrer-when-downgrade"
                 className="absolute inset-0 size-full border-0"
               />
-            ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
-                <span aria-hidden className="absolute size-[30rem] rounded-full border border-blush-deep" />
-                <span aria-hidden className="absolute size-[20rem] rounded-full border border-blush-deep" />
-                <span className="relative grid size-14 place-items-center rounded-full bg-cocoa text-cream">
-                  <MapPin size={24} strokeWidth={1.6} aria-hidden />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-5 rounded-[1.75rem] bg-blush p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
+              <div className="flex items-start gap-4">
+                <span className="grid size-12 flex-none place-items-center rounded-full bg-cocoa text-cream">
+                  <MapPin size={22} strokeWidth={1.6} aria-hidden />
                 </span>
-                <p className="serif relative text-[1.6rem] text-ink">
-                  {site.address.street}
-                  <span className="block text-[1.1rem] text-ink/75">{site.address.city} — {site.address.state}</span>
-                </p>
-                <button type="button" onClick={() => setMapLoaded(true)} className="btn btn-outline relative bg-cream">
-                  Mostrar mapa
-                </button>
-                <p className="relative max-w-[34ch] text-[0.8125rem] text-ink/75">
-                  O mapa é do Google e só carrega quando você pedir.
-                </p>
+                <div>
+                  <p className="serif text-[1.45rem] leading-tight text-ink">{site.address.street}</p>
+                  <p className="mt-1 text-[0.9375rem] text-ink/75">
+                    {site.address.city} — {site.address.state}
+                  </p>
+                  <p className="mt-2 max-w-[34ch] text-[0.8125rem] text-ink/75">
+                    O mapa é do Google e só carrega quando você pedir.
+                  </p>
+                </div>
               </div>
-            )}
-          </div>
+              <button
+                type="button"
+                onClick={() => setMapLoaded(true)}
+                className="btn btn-outline flex-none bg-cream"
+              >
+                Mostrar mapa
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -218,7 +218,7 @@ export function Order() {
             data-reveal
             className="serif text-[clamp(2.4rem,4.6vw,3.8rem)] text-cream lg:col-span-6"
           >
-            Personalize <em className="text-rose">seu bolo</em>.
+            Personalize seu bolo.
           </h2>
           <p data-reveal className="max-w-[48ch] text-[1.0625rem] leading-relaxed text-on-cocoa-muted lg:col-span-5 lg:col-start-8">
             Escolha a ocasião, o estilo e a data. O convite vira uma mensagem pronta para a
@@ -231,6 +231,13 @@ export function Order() {
             {step < ENVIADO ? (
               <>
                 <Stepper current={step} reached={reached} onGo={go} />
+
+                {/* No celular, o convite fica à vista enquanto a cliente escolhe. */}
+                {step < ENVIAR && (
+                  <div className="mt-6 lg:hidden">
+                    <Convite draft={draft} compact />
+                  </div>
+                )}
 
                 <div key={step} className="animate-step mt-9">
                   <h3
@@ -521,6 +528,9 @@ export function Order() {
 
                     {step === ENVIAR && (
                       <>
+                        <div className="mb-8 lg:hidden">
+                          <Convite draft={draft} />
+                        </div>
                         <dl className="border-t border-cocoa-line">
                           {[
                             { label: "Ocasião", value: occasionLabel(draft), at: OCASIAO },
@@ -663,9 +673,8 @@ export function Order() {
             )}
           </div>
 
-          <div className={`lg:col-span-5 ${step === ENVIAR ? "hidden lg:block" : ""}`}>
+          <div className="hidden lg:col-span-5 lg:block">
             <div className="lg:sticky lg:top-32">
-              <p className="mb-4 text-[0.875rem] text-on-cocoa-muted lg:hidden">Seu pedido até aqui</p>
               <div className="lg:rotate-[1.2deg]">
                 <Convite draft={draft} />
               </div>

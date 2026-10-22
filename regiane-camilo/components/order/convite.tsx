@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { occasionById, productById, site } from "@/config/site";
 import { formatLongDate } from "@/lib/dates";
+import { Seal } from "@/components/brand";
 import { cleanText, guestsNumber, type OrderDraft } from "@/lib/order";
 
 /**
@@ -32,7 +33,14 @@ function stylePhrase(draft: OrderDraft): { lead: string; value: string | null } 
   return { lead: "inspirado no bolo", value: product ? `“${product.name}”` : null };
 }
 
-export function Convite({ draft, footer }: { draft: OrderDraft; footer?: ReactNode }) {
+type Props = {
+  draft: OrderDraft;
+  /** Versão curta para o celular: só a frase, acima das escolhas de cada etapa. */
+  compact?: boolean;
+  footer?: ReactNode;
+};
+
+export function Convite({ draft, compact = false, footer }: Props) {
   const guests = guestsNumber(draft.guests);
   const theme = cleanText(draft.theme);
   const flavor = cleanText(draft.flavor);
@@ -40,26 +48,40 @@ export function Convite({ draft, footer }: { draft: OrderDraft; footer?: ReactNo
   const name = cleanText(draft.name);
   const style = stylePhrase(draft);
 
+  const sentence = (
+    <>
+      Gostaria de um bolo para <Slot value={occasionPhrase(draft)} placeholder="a ocasião" />,{" "}
+      {style.lead} <Slot value={style.value} placeholder="um estilo" />, para cerca de{" "}
+      <Slot value={guests ? `${guests} ${guests === 1 ? "pessoa" : "pessoas"}` : null} placeholder="quantas pessoas" />, com o tema{" "}
+      <Slot value={theme || null} placeholder="da festa" />, para o dia{" "}
+      <Slot value={draft.date ? formatLongDate(draft.date) : null} placeholder="que você escolher" />.
+    </>
+  );
+
+  if (compact) {
+    return (
+      <article
+        aria-label="Prévia do seu pedido"
+        className="scallop-top rounded-b-2xl bg-cream px-5 pt-7 pb-5 text-ink shadow-[0_20px_40px_-26px_rgb(20_8_4/0.8)]"
+      >
+        <p className="serif text-[1.05rem] leading-[1.7]">{sentence}</p>
+      </article>
+    );
+  }
+
   return (
     <article
       aria-label="Prévia do seu pedido"
-      className="scallop-top relative rounded-b-[var(--radius-card)] bg-cream px-7 pt-10 pb-8 text-ink shadow-[0_30px_60px_-30px_rgb(20_8_4/0.7)] sm:px-10 sm:pt-12 sm:pb-10"
+      className="scallop-top relative rounded-b-[var(--radius-card)] bg-cream px-7 pt-12 pb-8 text-ink shadow-[0_30px_60px_-30px_rgb(20_8_4/0.7)] sm:px-10 sm:pt-14 sm:pb-10"
     >
-      <p className="smallcaps flex items-center justify-center gap-2.5 text-cherry">
-        <span aria-hidden className="dot" />
-        Pedido de orçamento
-        <span aria-hidden className="dot" />
-      </p>
+      {/* Moldura de papel de carta: fio rosa por dentro da borda. */}
+      <span aria-hidden className="pointer-events-none absolute inset-x-3 top-6 bottom-3 rounded-b-xl border border-rose/50" />
+      {/* O selo da Regiane como carimbo do convite. */}
+      <Seal size={76} decorative className="absolute top-3 right-5 size-16 rotate-[8deg] shadow-[0_8px_18px_-10px_rgb(75_38_22/0.6)] sm:right-7 sm:size-[4.75rem]" />
 
-      <div className="serif mt-6 text-[1.3rem] leading-[1.75] sm:text-[1.45rem]">
-        <p>Olá, {site.ownerFirstName}!</p>
-        <p className="mt-2">
-          Gostaria de um bolo para <Slot value={occasionPhrase(draft)} placeholder="a ocasião" />,{" "}
-          {style.lead} <Slot value={style.value} placeholder="um estilo" />, para cerca de{" "}
-          <Slot value={guests ? `${guests} ${guests === 1 ? "pessoa" : "pessoas"}` : null} placeholder="quantas pessoas" />, com o tema{" "}
-          <Slot value={theme || null} placeholder="da festa" />, para o dia{" "}
-          <Slot value={draft.date ? formatLongDate(draft.date) : null} placeholder="que você escolher" />.
-        </p>
+      <div className="serif relative text-[1.3rem] leading-[1.75] sm:text-[1.45rem]">
+        <p className="pr-16 sm:pr-20">Olá, {site.ownerFirstName}!</p>
+        <p className="mt-2">{sentence}</p>
       </div>
 
       <dl className="mt-6 grid gap-x-6 gap-y-3 border-t border-line pt-5 text-[0.9375rem] sm:grid-cols-2">

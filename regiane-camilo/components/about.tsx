@@ -12,9 +12,6 @@ export function About() {
             data-reveal
             className="relative grid aspect-square place-items-center overflow-hidden rounded-[1.75rem] bg-blush"
           >
-            {/* Anéis de friso ao redor do selo, como o topo em espiral dos bolos. */}
-            <span aria-hidden className="absolute size-[86%] rounded-full border border-blush-deep" />
-            <span aria-hidden className="absolute size-[72%] rounded-full border border-blush-deep" />
             <Seal size={300} className="relative w-[58%] shadow-[0_24px_50px_-28px_rgb(75_38_22/0.6)]" />
           </div>
           <figcaption className="mt-4 text-[0.875rem] text-muted">
@@ -24,7 +21,7 @@ export function About() {
 
         <div className="lg:col-span-6 lg:col-start-7">
           <h2 id="sobre-title" data-reveal className="serif max-w-[16ch] text-[clamp(2.25rem,4.4vw,3.6rem)] text-ink">
-            Por trás de cada criação, <em className="text-cherry">uma história</em>.
+            Por trás de cada criação, uma história.
           </h2>
           <div className="mt-8 flex max-w-[58ch] flex-col gap-5 text-[1.0625rem] leading-relaxed text-ink/85">
             {about.paragraphs.map((paragraph) => (

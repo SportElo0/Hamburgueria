@@ -4,7 +4,7 @@ import { InstagramIcon, Wordmark, WhatsAppIcon } from "@/components/brand";
 
 export function Footer() {
   return (
-    <footer className="scallop-top -mt-[11px] bg-cocoa-deep text-cream">
+    <footer className="scallop-top -mt-[11px] bg-cocoa text-cream">
       <div className="mx-auto max-w-[90rem] px-5 pt-20 pb-28 sm:px-8 lg:px-12 lg:pt-24 lg:pb-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">

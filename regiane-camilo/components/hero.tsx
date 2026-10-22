@@ -26,21 +26,41 @@ export function Hero() {
               photo={hero.photo}
               priority
               sizes="(min-width: 1024px) 56vw, 100vw"
-              className="aspect-[1/1] max-h-[70svh] w-full sm:aspect-[5/4] lg:aspect-auto lg:h-[min(82svh,46rem)] lg:max-h-none"
+              className="aspect-[1/1] max-h-[70svh] w-full sm:aspect-[5/4] lg:aspect-auto lg:h-[min(74svh,42rem)] lg:max-h-none"
               imgClassName="animate-settle"
             />
           </div>
 
           {featured && (
-            <figcaption className="animate-rise mt-3 flex items-center justify-between gap-4 [animation-delay:900ms] sm:absolute sm:bottom-6 sm:left-6 sm:mt-0 sm:block sm:max-w-[17rem] sm:rounded-2xl sm:bg-cream/95 sm:px-5 sm:py-4 sm:shadow-[0_18px_40px_-24px_rgb(75_38_22/0.55)] lg:bottom-10 lg:-left-10">
-              <span className="serif block text-[1.2rem] text-cocoa sm:text-[1.35rem]">{featured.name}</span>
-              <span className="mt-1 hidden text-[0.875rem] leading-snug text-muted sm:block">
-                Um dos bolos da {site.ownerFirstName}, publicado no {site.instagram.handle}.
+            <figcaption className="animate-rise mt-4 flex items-start justify-between gap-4 [animation-delay:900ms] lg:justify-end">
+              <span className="flex items-start gap-2.5">
+                {/* Traço à mão apontando para o bolo. */}
+                <svg
+                  aria-hidden
+                  width="34"
+                  height="26"
+                  viewBox="0 0 34 26"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="mt-0.5 flex-none text-rose"
+                >
+                  <path d="M31 22C21 22 9 18 5 5" />
+                  <path d="M1.5 9.5 5 4.5l4.6 3.6" />
+                </svg>
+                <span>
+                  <em className="serif block text-[1.2rem] leading-tight whitespace-nowrap text-cocoa">{featured.name}</em>
+                  <span className="mt-0.5 hidden text-[0.8125rem] text-muted sm:block">
+                    um dos bolos da {site.ownerFirstName}, no {site.instagram.handle}
+                  </span>
+                </span>
               </span>
               <button
                 type="button"
                 onClick={() => requestOrder({ productId: featured.id })}
-                className="inline-flex min-h-11 flex-none items-center gap-2 text-[0.875rem] font-semibold text-cocoa sm:mt-3"
+                className="inline-flex min-h-11 flex-none items-center gap-2 text-[0.875rem] font-semibold text-cocoa lg:ml-6"
               >
                 <span className="link-line">Quero um parecido</span>
                 <ArrowRight size={15} />
@@ -50,7 +70,7 @@ export function Hero() {
         </figure>
 
         <div className="flex flex-col justify-center lg:order-1 lg:py-6">
-          <p className="smallcaps animate-rise flex items-center gap-3 text-cherry">
+          <p className="smallcaps animate-rise flex items-center gap-3 text-cocoa">
             <span aria-hidden className="dot" />
             {hero.label}
           </p>

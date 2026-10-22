@@ -93,7 +93,7 @@ export function Gallery() {
             data-reveal
             className="serif text-[clamp(2.25rem,4.4vw,3.6rem)] text-ink lg:col-span-6"
           >
-            Doces criações, <em className="text-cherry">grandes</em> momentos.
+            Doces criações, grandes momentos.
           </h2>
           <p data-reveal className="max-w-[46ch] text-[1.0625rem] leading-relaxed text-muted lg:col-span-5 lg:col-start-8">
             Trabalhos da Regiane publicados no Instagram. Toque em um bolo para ver os detalhes e
@@ -211,7 +211,7 @@ export function Gallery() {
                 imgClassName="object-contain!"
               />
               {visible.length > 1 && (
-                <div className="absolute inset-x-3 bottom-3 flex justify-between">
+                <div className="absolute inset-x-3 bottom-3 flex items-center justify-between">
                   <button
                     type="button"
                     onClick={() => step(-1)}
@@ -220,6 +220,9 @@ export function Gallery() {
                   >
                     <ChevronLeft size={20} strokeWidth={1.6} />
                   </button>
+                  <span className="tabular rounded-full bg-cocoa-deep/70 px-3 py-1 text-[0.8125rem] text-cream">
+                    {Math.min(index, total - 1) + 1} de {total}
+                  </span>
                   <button
                     type="button"
                     onClick={() => step(1)}
@@ -242,18 +245,10 @@ export function Gallery() {
                 <X size={22} strokeWidth={1.6} />
               </button>
 
-              <p className="smallcaps flex items-center gap-2.5 pr-12 text-cherry">
-                <span aria-hidden className="dot" />
-                {styleName(current.style)}
-                {visible.length > 1 && (
-                  <span className="tabular font-medium tracking-normal text-muted normal-case">
-                    · {Math.min(index, visible.length - 1) + 1} de {visible.length}
-                  </span>
-                )}
-              </p>
-              <h3 id="produto-titulo" className="serif mt-3 text-[clamp(2rem,3.4vw,2.6rem)] text-ink">
+              <h3 id="produto-titulo" className="serif pr-12 text-[clamp(2rem,3.4vw,2.6rem)] text-ink">
                 {current.name}
               </h3>
+              <p className="mt-1 text-[0.9375rem] text-muted">Estilo: {styleName(current.style)}</p>
               <p className="mt-3 text-[1.0625rem] leading-relaxed text-ink/85">
                 {current.description}
               </p>

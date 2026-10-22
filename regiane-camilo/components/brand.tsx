@@ -36,15 +36,18 @@ export function Seal({
   size = 160,
   className = "",
   priority = false,
+  decorative = false,
 }: {
   size?: number;
   className?: string;
   priority?: boolean;
+  /** true quando o selo é só ornamento (ex.: carimbo do convite). */
+  decorative?: boolean;
 }) {
   return (
     <Image
       src="/selo-regiane.png"
-      alt={`Selo da marca ${site.name}`}
+      alt={decorative ? "" : `Selo da marca ${site.name}`}
       width={size}
       height={size}
       priority={priority}
