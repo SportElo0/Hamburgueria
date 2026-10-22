@@ -1,0 +1,503 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T00:35:47.424292+00:00",
+  "title": "Design System: Bolos e Doces Regiane Camilo",
+  "extensions": {
+    "colorMeta": {
+      "cherry": {
+        "role": "tertiary",
+        "displayName": "Cereja",
+        "canonical": "oklch(52.5% 0.167 23.1)",
+        "tonalRamp": [
+          "#200001",
+          "#440c0f",
+          "#6c2425",
+          "#953d3d",
+          "#bc5c5a",
+          "#d9837f",
+          "#fbb2ad",
+          "#ffded9"
+        ]
+      },
+      "cocoa": {
+        "role": "primary",
+        "displayName": "Chocolate do Selo",
+        "canonical": "oklch(38.1% 0.075 44.0)",
+        "tonalRamp": [
+          "#200000",
+          "#401400",
+          "#60311c",
+          "#814f3a",
+          "#a36f58",
+          "#c79078",
+          "#f2b8a0",
+          "#ffe1ca"
+        ]
+      },
+      "cocoa-deep": {
+        "role": "primary",
+        "displayName": "Chocolate Amargo",
+        "canonical": "oklch(31.5% 0.062 43.4)",
+        "tonalRamp": [
+          "#1e0100",
+          "#3c1808",
+          "#5b3424",
+          "#7b5241",
+          "#9d7260",
+          "#c09380",
+          "#ebbba8",
+          "#ffe2ce"
+        ]
+      },
+      "cocoa-line": {
+        "role": "primary",
+        "displayName": "Fio de Chocolate",
+        "canonical": "oklch(45.9% 0.074 46.0)",
+        "tonalRamp": [
+          "#200000",
+          "#401500",
+          "#5f321b",
+          "#805039",
+          "#a36f57",
+          "#c69077",
+          "#f1b99f",
+          "#ffe1c9"
+        ]
+      },
+      "rose": {
+        "role": "secondary",
+        "displayName": "Rosa Confeitaria",
+        "canonical": "oklch(78.8% 0.093 356.7)",
+        "tonalRamp": [
+          "#1e000c",
+          "#410c25",
+          "#652741",
+          "#86465f",
+          "#a9657e",
+          "#cd869f",
+          "#f6b0c8",
+          "#ffdcef"
+        ]
+      },
+      "blush": {
+        "role": "secondary",
+        "displayName": "Rosa Suave",
+        "canonical": "oklch(88.7% 0.038 38.7)",
+        "tonalRamp": [
+          "#180502",
+          "#341d16",
+          "#513931",
+          "#71574e",
+          "#92766d",
+          "#b4978e",
+          "#dec0b6",
+          "#ffe7dc"
+        ]
+      },
+      "blush-deep": {
+        "role": "secondary",
+        "displayName": "Rosa Suave Fundo",
+        "canonical": "oklch(83.7% 0.051 38.3)",
+        "tonalRamp": [
+          "#1c0300",
+          "#381a11",
+          "#57362c",
+          "#775449",
+          "#987367",
+          "#bb9488",
+          "#e6bdb0",
+          "#ffe4d6"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Creme de Confeitaria",
+        "canonical": "oklch(98.0% 0.014 67.7)",
+        "tonalRamp": [
+          "#0f0a06",
+          "#29231d",
+          "#453e38",
+          "#635c56",
+          "#837c75",
+          "#a49d96",
+          "#cdc6be",
+          "#f5ede5"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c7c7c7",
+          "#eeeeee"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta Quente",
+        "canonical": "oklch(28.3% 0.028 40.3)",
+        "tonalRamp": [
+          "#150704",
+          "#301f1a",
+          "#4d3b34",
+          "#6c5952",
+          "#8d7871",
+          "#af9991",
+          "#d8c2ba",
+          "#ffe9e0"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Texto Secundário",
+        "canonical": "oklch(52.3% 0.023 45.1)",
+        "tonalRamp": [
+          "#130804",
+          "#2e211b",
+          "#4b3c36",
+          "#695a53",
+          "#8a7972",
+          "#ac9a93",
+          "#d5c3bb",
+          "#fdeae2"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Fio Fino",
+        "canonical": "oklch(91.0% 0.016 58.6)",
+        "tonalRamp": [
+          "#100905",
+          "#2a221c",
+          "#473e37",
+          "#655c55",
+          "#857b74",
+          "#a69c95",
+          "#d0c5bd",
+          "#f7ece4"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Fio Marcado",
+        "canonical": "oklch(84.3% 0.025 57.6)",
+        "tonalRamp": [
+          "#130803",
+          "#2e2118",
+          "#4a3d33",
+          "#695a50",
+          "#897a6f",
+          "#ab9b8f",
+          "#d5c4b8",
+          "#fcebde"
+        ]
+      },
+      "on-cocoa-muted": {
+        "role": "neutral",
+        "displayName": "Rosa sobre Chocolate",
+        "canonical": "oklch(87.3% 0.034 46.4)",
+        "tonalRamp": [
+          "#160602",
+          "#321f16",
+          "#4f3a31",
+          "#6e584e",
+          "#8f786d",
+          "#b1998d",
+          "#dbc1b5",
+          "#ffe8dc"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Só o título da abertura."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos de seção."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nomes de bolos, endereço, despedida do convite."
+      },
+      "invitation": {
+        "displayName": "Convite",
+        "purpose": "A frase do cartão-convite, com entrelinha para as lacunas."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido em 34–56ch."
+      },
+      "body-sm": {
+        "displayName": "Body small",
+        "purpose": "Apoio, rótulos de escolha, links do rodapé."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Versalete do selo: rótulo pinado da abertura e colunas do rodapé."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Rótulos de botão em versalete."
+      },
+      "signature": {
+        "displayName": "Signature",
+        "purpose": "Só o nome \"Regiane Camilo\"."
+      }
+    },
+    "shadows": [
+      {
+        "name": "papel-repouso",
+        "value": "0 14px 30px -26px rgb(75 38 22 / 0.6)",
+        "purpose": "Cartões de estilo em repouso."
+      },
+      {
+        "name": "papel-levantado",
+        "value": "0 24px 40px -26px rgb(75 38 22 / 0.7)",
+        "purpose": "Hover dos cartões de estilo (com subida de 4px)."
+      },
+      {
+        "name": "convite",
+        "value": "0 30px 60px -30px rgb(20 8 4 / 0.7)",
+        "purpose": "Cartão-convite completo sobre o chocolate."
+      },
+      {
+        "name": "convite-compacto",
+        "value": "0 20px 40px -26px rgb(20 8 4 / 0.8)",
+        "purpose": "Convite compacto no celular."
+      },
+      {
+        "name": "carimbo",
+        "value": "0 8px 18px -10px rgb(75 38 22 / 0.6)",
+        "purpose": "Selo carimbado no convite."
+      },
+      {
+        "name": "selo-sobre",
+        "value": "0 24px 50px -28px rgb(75 38 22 / 0.6)",
+        "purpose": "Selo na seção Sobre."
+      },
+      {
+        "name": "botao-hover",
+        "value": "0 10px 24px -14px rgb(75 38 22 / 0.7)",
+        "purpose": "Hover do botão chocolate."
+      },
+      {
+        "name": "fio-cabecalho",
+        "value": "0 1px 0 var(--color-line)",
+        "purpose": "Cabeçalho depois de rolar 40px."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Entradas, revelações, seta do botão, sublinhados."
+      },
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Transições de estado (cor, borda, sombra)."
+      },
+      {
+        "name": "rise",
+        "value": "900ms ease-out-expo, translateY(18px) + opacity",
+        "purpose": "Entrada em cascata da abertura."
+      },
+      {
+        "name": "unveil",
+        "value": "1400ms ease-out-expo, clip-path de baixo para cima",
+        "purpose": "Revelação da foto da abertura."
+      },
+      {
+        "name": "settle",
+        "value": "2400ms ease-out-expo, scale(1.07) para 1",
+        "purpose": "A foto da abertura assenta."
+      },
+      {
+        "name": "ink-in",
+        "value": "700ms ease-out-expo, blur(4px) + translateY(-3px)",
+        "purpose": "Palavra preenchida no convite; desligada com movimento reduzido."
+      },
+      {
+        "name": "step-in",
+        "value": "520ms ease-out-expo, translateY(10px)",
+        "purpose": "Troca de etapa do pedido."
+      },
+      {
+        "name": "sheet-in",
+        "value": "420ms ease-out-expo, translateY(-8px)",
+        "purpose": "Menu móvel."
+      },
+      {
+        "name": "reveal",
+        "value": "900ms (blocos) / 1200ms (fotos por recorte) ease-out-expo",
+        "purpose": "Revelação no scroll; visível por padrão, armada por JS."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "420px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão chocolate",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal: encomendar.",
+      "html": "<button class=\"ds-btn-cocoa\">Encomendar meu bolo <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-cocoa{display:inline-flex;align-items:center;justify-content:center;gap:.7rem;min-height:3.25rem;padding:0 1.75rem;border-radius:999px;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;font-size:.8125rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1px solid transparent;cursor:pointer;transition:background-color 240ms cubic-bezier(.25,1,.5,1),color 240ms cubic-bezier(.25,1,.5,1),border-color 240ms cubic-bezier(.25,1,.5,1),box-shadow 320ms cubic-bezier(.25,1,.5,1),transform 320ms cubic-bezier(.16,1,.3,1);background:#63341f;color:#fff7ef;} .ds-btn-cocoa svg{transition:transform 360ms cubic-bezier(.16,1,.3,1);} .ds-btn-cocoa:hover{background:#4b2616;box-shadow:0 10px 24px -14px rgb(75 38 22 / .7);} .ds-btn-cocoa:hover svg{transform:translateX(4px);} .ds-btn-cocoa:active{transform:translateY(1px);} .ds-btn-cocoa:focus-visible{outline:2px solid #b73439;outline-offset:3px;}"
+    },
+    {
+      "name": "Botão contorno",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação secundária sobre fundo claro.",
+      "html": "<button class=\"ds-btn-outline\">Conhecer nossos bolos</button>",
+      "css": ".ds-btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:.7rem;min-height:3.25rem;padding:0 1.75rem;border-radius:999px;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;font-size:.8125rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1px solid transparent;cursor:pointer;transition:background-color 240ms cubic-bezier(.25,1,.5,1),color 240ms cubic-bezier(.25,1,.5,1),border-color 240ms cubic-bezier(.25,1,.5,1),box-shadow 320ms cubic-bezier(.25,1,.5,1),transform 320ms cubic-bezier(.16,1,.3,1);background:transparent;border-color:#63341f;color:#63341f;} .ds-btn-outline:hover{background:#63341f;color:#fff7ef;} .ds-btn-outline:active{transform:translateY(1px);} .ds-btn-outline:focus-visible{outline:2px solid #b73439;outline-offset:3px;}"
+    },
+    {
+      "name": "Botão creme sobre chocolate",
+      "kind": "button",
+      "refersTo": "button-cream",
+      "description": "Ação principal dentro do campo de chocolate.",
+      "html": "<div class=\"ds-cocoa-bg\"><button class=\"ds-btn-cream\">Continuar <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button></div>",
+      "css": ".ds-cocoa-bg{background:#63341f;padding:24px;} .ds-btn-cream{display:inline-flex;align-items:center;justify-content:center;gap:.7rem;min-height:3.25rem;padding:0 1.75rem;border-radius:999px;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;font-size:.8125rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1px solid transparent;cursor:pointer;transition:background-color 240ms cubic-bezier(.25,1,.5,1),color 240ms cubic-bezier(.25,1,.5,1),border-color 240ms cubic-bezier(.25,1,.5,1),box-shadow 320ms cubic-bezier(.25,1,.5,1),transform 320ms cubic-bezier(.16,1,.3,1);background:#fff7ef;color:#4b2616;} .ds-btn-cream:hover{background:#f1d2c8;} .ds-btn-cream:focus-visible{outline:2px solid #b73439;outline-offset:3px;}"
+    },
+    {
+      "name": "Campo do pedido",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Papel creme sobre o chocolate; foco vira borda rosa.",
+      "html": "<div class=\"ds-cocoa-bg2\"><label class=\"ds-field-label\">Tema da festa<input class=\"ds-field\" placeholder=\"Ex.: fundo do mar\"></label></div>",
+      "css": ".ds-cocoa-bg2{background:#63341f;padding:24px;} .ds-field-label{display:block;color:#fff7ef;font-family:Figtree,sans-serif;font-size:.9375rem;} .ds-field{display:block;width:100%;margin-top:8px;min-height:3.25rem;padding:0 1rem;border-radius:.875rem;border:2px solid transparent;background:#fff7ef;color:#36251f;font-family:Figtree,sans-serif;font-size:1rem;caret-color:#b73439;transition:border-color 200ms cubic-bezier(.25,1,.5,1);} .ds-field::placeholder{color:#76665f;} .ds-field:hover{border-color:#e8bfb2;} .ds-field:focus-visible{outline:none;border-color:#eba1bb;}"
+    },
+    {
+      "name": "Escolha do pedido",
+      "kind": "chip",
+      "refersTo": "order-choice",
+      "description": "Opção de ocasião/estilo sobre o chocolate; selecionada vira papel creme.",
+      "html": "<div class=\"ds-cocoa-bg3\"><button class=\"ds-choice\" aria-pressed=\"false\"><span class=\"ds-choice-ico\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/></svg></span>Casamento</button><button class=\"ds-choice\" aria-pressed=\"true\"><span class=\"ds-choice-ico\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg></span>Aniversário</button></div>",
+      "css": ".ds-cocoa-bg3{background:#63341f;padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;} .ds-choice{display:flex;align-items:center;gap:.875rem;min-height:4rem;padding:.75rem 1rem;border-radius:1rem;border:1px solid #7a4a33;background:transparent;color:#fff7ef;font-family:Figtree,sans-serif;font-size:1rem;text-align:left;cursor:pointer;transition:background-color 300ms,border-color 300ms,color 300ms;} .ds-choice:hover{border-color:#e9cfc3;} .ds-choice[aria-pressed=true]{background:#fff7ef;border-color:#fff7ef;color:#63341f;} .ds-choice-ico{display:grid;place-items:center;width:2.5rem;height:2.5rem;border-radius:999px;background:#4b2616;color:#eba1bb;flex:none;} .ds-choice[aria-pressed=true] .ds-choice-ico{background:#63341f;color:#fff7ef;} .ds-choice:focus-visible{outline:2px solid #b73439;outline-offset:3px;}"
+    },
+    {
+      "name": "Navegação do cabeçalho",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Links Figtree; ativo em chocolate com sublinhado rosa que cresce do centro.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-a\" aria-current=\"location\">Início</a><a href=\"#\" class=\"ds-nav-a\">Nossos Bolos</a><a href=\"#\" class=\"ds-nav-a\">Personalize</a><a href=\"#\" class=\"ds-nav-a\">Contato</a></nav>",
+      "css": ".ds-nav{display:flex;gap:2.25rem;background:#fff7ef;padding:12px 24px;} .ds-nav-a{position:relative;display:block;padding:.75rem 0;font-family:Figtree,sans-serif;font-size:.95rem;font-weight:500;color:rgb(54 37 31 / .8);text-decoration:none;transition:color 200ms;} .ds-nav-a:hover,.ds-nav-a[aria-current]{color:#63341f;} .ds-nav-a::after{content:'';position:absolute;left:4px;right:4px;bottom:6px;height:2px;border-radius:999px;background:#eba1bb;transform:scaleX(0);transition:transform 500ms cubic-bezier(.16,1,.3,1);} .ds-nav-a[aria-current]::after{transform:scaleX(1);} .ds-nav-a:focus-visible{outline:2px solid #b73439;outline-offset:3px;}"
+    },
+    {
+      "name": "Filtro da galeria",
+      "kind": "chip",
+      "refersTo": "gallery-filter",
+      "description": "Pílulas de filtro; ativo preenchido de chocolate.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Todos</button><button class=\"ds-chip\" aria-pressed=\"false\">Com frutas</button><button class=\"ds-chip\" aria-pressed=\"false\">Chocolate</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px;background:#fff7ef;padding:16px;} .ds-chip{min-height:2.75rem;padding:0 1.25rem;border-radius:999px;border:1px solid #d9c8bc;background:#fff;color:#36251f;font-family:Figtree,sans-serif;font-size:.9375rem;cursor:pointer;transition:background-color 300ms,border-color 300ms,color 300ms;} .ds-chip:hover{border-color:#63341f;} .ds-chip[aria-pressed=true]{background:#63341f;border-color:#63341f;color:#fff7ef;} .ds-chip:focus-visible{outline:2px solid #b73439;outline-offset:3px;}"
+    },
+    {
+      "name": "Cartão de estilo",
+      "kind": "card",
+      "refersTo": "style-card",
+      "description": "Papel branco com foto quadrada; sobe e amplia a foto no hover.",
+      "html": "<button class=\"ds-card\"><span class=\"ds-card-photo\"></span><span class=\"ds-card-body\"><span><span class=\"ds-card-title\">Com frutas</span><span class=\"ds-card-hint\">Morangos e rosetas</span></span><span class=\"ds-card-arrow\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></span></span></button>",
+      "css": ".ds-card{display:flex;flex-direction:column;width:200px;overflow:hidden;border:0;padding:0;border-radius:1.125rem;background:#fff;text-align:left;cursor:pointer;box-shadow:0 14px 30px -26px rgb(75 38 22 / .6);transition:transform 500ms cubic-bezier(.16,1,.3,1),box-shadow 500ms cubic-bezier(.16,1,.3,1);} .ds-card:hover{transform:translateY(-4px);box-shadow:0 24px 40px -26px rgb(75 38 22 / .7);} .ds-card-photo{display:block;aspect-ratio:1;background:#f1d2c8;} .ds-card-body{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:16px;} .ds-card-title{display:block;font-family:Castoro,Georgia,serif;font-size:1.2rem;line-height:1.25;color:#36251f;} .ds-card-hint{display:block;margin-top:4px;font-family:Figtree,sans-serif;font-size:.8125rem;color:#76665f;} .ds-card-arrow{display:grid;place-items:center;width:2rem;height:2rem;flex:none;border-radius:999px;border:1px solid #d9c8bc;color:#63341f;transition:background-color 300ms,border-color 300ms,color 300ms;} .ds-card:hover .ds-card-arrow{background:#63341f;border-color:#63341f;color:#fff7ef;} .ds-card:focus-visible{outline:2px solid #b73439;outline-offset:3px;}"
+    },
+    {
+      "name": "O Convite",
+      "kind": "custom",
+      "refersTo": "invitation-card",
+      "description": "Cartão-convite com borda em ondinhas, moldura rosa, carimbo e lacunas que se preenchem.",
+      "html": "<div class=\"ds-cocoa-bg4\"><article class=\"ds-convite\"><span class=\"ds-convite-frame\"></span><span class=\"ds-convite-seal\">BOLOS</span><p class=\"ds-convite-text\">Olá, Regiane!<br>Gostaria de um bolo para <span class=\"ds-filled\">um casamento</span>, inspirado em <span class=\"ds-blank\">um estilo</span>, para cerca de <span class=\"ds-blank\">quantas pessoas</span>.</p></article></div>",
+      "css": ".ds-cocoa-bg4{background:#63341f;padding:32px;} .ds-convite{position:relative;mask: radial-gradient(11px at 50% 11px, #000 97%, #0000) 50% 0 / 22px 22px repeat-x, linear-gradient(#000 0 0) 0 11px / 100% 100% no-repeat;-webkit-mask: radial-gradient(11px at 50% 11px, #000 97%, #0000) 50% 0 / 22px 22px repeat-x, linear-gradient(#000 0 0) 0 11px / 100% 100% no-repeat;border-radius:0 0 1.125rem 1.125rem;background:#fff7ef;color:#36251f;padding:3.5rem 2.5rem 2.5rem;box-shadow:0 30px 60px -30px rgb(20 8 4 / .7);} .ds-convite-frame{position:absolute;left:12px;right:12px;top:24px;bottom:12px;border:1px solid rgb(235 161 187 / .5);border-radius:0 0 .75rem .75rem;pointer-events:none;} .ds-convite-seal{position:absolute;top:12px;right:28px;display:grid;place-items:center;width:4.75rem;height:4.75rem;border-radius:999px;background:#63341f;color:#fff7ef;font-family:Figtree,sans-serif;font-size:.625rem;font-weight:600;letter-spacing:.16em;transform:rotate(8deg);box-shadow:0 8px 18px -10px rgb(75 38 22 / .6);} .ds-convite-text{position:relative;margin:0;padding-right:5rem;font-family:Castoro,Georgia,serif;font-size:1.45rem;line-height:1.75;} .ds-blank{padding:0 .15em .05em;background-image:radial-gradient(circle,#d9c8bc 1px,transparent 1.4px);background-size:6px 3px;background-repeat:repeat-x;background-position:0 100%;color:#76665f;font-style:italic;} .ds-filled{padding:0 .1em .05em;background-image:linear-gradient(#eba1bb,#eba1bb);background-size:100% 2px;background-repeat:no-repeat;background-position:0 100%;color:#63341f;animation:ds-ink 700ms cubic-bezier(.16,1,.3,1) both;} @keyframes ds-ink{from{opacity:0;filter:blur(4px);transform:translateY(-3px);}to{opacity:1;filter:blur(0);transform:none;}} @media (prefers-reduced-motion:reduce){.ds-filled{animation:none;}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "O Convite da Confeitaria",
+    "overview": "**Creative North Star: \"O Convite da Confeitaria\"**\n\nO site é uma confeitaria de bairro bem apresentada, não uma loja virtual. O chão é creme de confeitaria; sobre ele, campos inteiros de chocolate e de rosa suave se alternam em faixas de largura total, e as fotos reais dos bolos da Regiane (sempre no cenário dela: parede clara, letras rosé, gramadinho) são a cor principal da página. O pedido não é um formulário de etapas cinza: é um cartão-convite em papel creme, com borda recortada em ondinhas e o selo da Regiane carimbado no canto, cujas lacunas pontilhadas se preenchem enquanto a cliente escolhe.\n\nA densidade é calma e generosa: títulos grandes em Castoro, texto corrido em Figtree com folga de linha, muito ar entre seções. A tipografia carrega a voz: a serifada fala como uma carta escrita à mão, a cursiva Norican assina, o versalete espaçado ecoa o \"·BOLOS·\" do selo. O movimento é de papel e tinta: a foto da abertura é revelada de baixo para cima, o conteúdo sobe suavemente, e cada palavra nova do convite \"assenta\" como tinta.\n\nRejeições confirmadas: vitrine de e-commerce com carrinho e preços, formulário de etapas cinza, estética infantil.",
+    "keyCharacteristics": [
+      "Creme como chão; chocolate e rosa suave como campos inteiros, nunca como faixas decorativas finas.",
+      "Cereja raríssima: só a palavra de destaque da abertura e o anel de foco.",
+      "Castoro para títulos e para o convite; Norican só na assinatura \"Regiane Camilo\"; Figtree para todo o resto.",
+      "Cantos suaves e generosos, fio fino quente, sombras quentes, baixas e difusas.",
+      "O selo original como carimbo do convite e como peça da seção Sobre."
+    ],
+    "rules": [
+      {
+        "name": "The Uma Cereja Rule",
+        "body": "A cereja aparece em um único ponto do conteúdo por página (a palavra de destaque da abertura) e no foco. Nenhum botão, ícone, título ou estado de navegação é cereja.",
+        "section": "colors"
+      },
+      {
+        "name": "The Campo Inteiro Rule",
+        "body": "Chocolate e rosa suave entram como seções de largura total que mudam o chão da página. O pedido e o rodapé são os mesmos campos de chocolate; \"Nossos Bolos\" e Instagram são campos de rosa suave.",
+        "section": "colors"
+      },
+      {
+        "name": "The Secundário Rosado Rule",
+        "body": "Sobre o chocolate, o texto secundário é on-cocoa-muted e os títulos de coluna são rose. Cinza nunca entra sobre chocolate.",
+        "section": "colors"
+      },
+      {
+        "name": "The Assinatura Única Rule",
+        "body": "Norican escreve apenas o nome \"Regiane Camilo\". Nenhum título, botão ou frase usa a cursiva.",
+        "section": "typography"
+      },
+      {
+        "name": "The Título Sem Sobretítulo Rule",
+        "body": "Títulos de seção não levam rótulo acima. A única exceção é o rótulo \"Bolos para momentos especiais\" da abertura, pinado pelo cliente, em versalete chocolate com o pontinho rosa.",
+        "section": "typography"
+      },
+      {
+        "name": "The Itálico Tem Motivo Rule",
+        "body": "O itálico de Castoro marca só a palavra de destaque, o nome do bolo na anotação e as lacunas do convite.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sombra Quente Rule",
+        "body": "Toda sombra é tingida de chocolate e tem espalhamento negativo. Sombra cinza, preta neutra ou deslocada em bloco não existe neste mundo.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do alternar campos inteiros de creme, rosa suave e chocolate para marcar seções.",
+      "Do usar as fotos reais da Regiane, no cenário dela, com cantos de 18px.",
+      "Do usar Castoro para títulos e para o convite, Figtree para texto e controles, Norican só para \"Regiane Camilo\".",
+      "Do usar o selo original redondo como carimbo girado (convite) e como peça da seção Sobre, do ícone e da imagem de compartilhamento.",
+      "Do usar a borda em ondinhas no topo do rodapé e do convite.",
+      "Do manter o texto secundário sobre chocolate em on-cocoa-muted e os destaques sobre chocolate em rose.",
+      "Do usar ícones de traço fino (1.4–1.6) em círculos, nunca emoji ou glifos de texto."
+    ],
+    "donts": [
+      "Don't usar cereja fora da palavra de destaque da abertura e do anel de foco.",
+      "Don't colocar rótulos ou sobretítulos acima de títulos; o único é o rótulo pinado da abertura.",
+      "Don't usar Norican em títulos, botões ou frases.",
+      "Don't criar sombras cinzas, neutras ou deslocadas em bloco; toda sombra é quente e difusa.",
+      "Don't mostrar carrinho, preço, sabor, prazo ou disponibilidade como se estivessem confirmados; campo sem dado fica \"a combinar\".",
+      "Don't usar cinza como texto sobre chocolate."
+    ]
+  }
+}

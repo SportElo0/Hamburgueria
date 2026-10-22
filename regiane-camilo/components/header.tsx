@@ -159,7 +159,7 @@ export function Header() {
                     href={item.href}
                     onClick={() => setOpen(false)}
                     aria-current={active === item.href ? "location" : undefined}
-                    className="serif flex min-h-16 items-center justify-between py-3 text-[2rem] text-ink aria-[current=location]:text-cherry"
+                    className="serif flex min-h-16 items-center justify-between py-3 text-[2rem] text-ink aria-[current=location]:text-cocoa aria-[current=location]:underline aria-[current=location]:decoration-rose aria-[current=location]:decoration-2 aria-[current=location]:underline-offset-8"
                   >
                     {item.label}
                     <ArrowRight size={20} strokeWidth={1.4} className="text-rose" />
