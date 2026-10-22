@@ -1,0 +1,334 @@
+@import "tailwindcss";
+
+/*
+ * Convés Ilhabela — "a travessia".
+ * Areia e branco quente no chão, azul profundo em campos inteiros, champanhe
+ * só em fios, no casco e no botão principal. As fotos reais carregam a cor.
+ */
+@theme {
+  --color-sand: #f8f5ef;
+  --color-paper: #ffffff;
+  --color-shell: #efe9df;
+  --color-sage: #d8e1d8;
+  --color-sea: #123b53;
+  --color-deep: #102f45;
+  --color-deep-2: #0c2537;
+  --color-deep-line: #2a4a60;
+  --color-champagne: #b49a67;
+  --color-champagne-deep: #76603d;
+  --color-champagne-soft: #d6c4a0;
+  --color-graphite: #2d302b;
+  --color-ink: #1d2a33;
+  --color-muted: #5f6660;
+  --color-line: #e6e1d6;
+  --color-line-strong: #d3cbbb;
+  /* Texto secundário sobre o azul: areia acinzentada, nunca cinza puro. */
+  --color-on-deep: #f8f5ef;
+  --color-on-deep-muted: #c3cdd2;
+  --color-alert: #a3332b;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-marcellus), Georgia, serif;
+  --font-mark: var(--font-josefin), ui-sans-serif, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --animate-rise: rise 1000ms var(--ease-out-expo) both;
+  --animate-step: step-in 520ms var(--ease-out-expo) both;
+  --animate-sheet: sheet-in 420ms var(--ease-out-expo) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-sand);
+    color: var(--color-ink);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-line-strong) var(--color-sand);
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-sea);
+    color: var(--color-sand);
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-champagne-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-champagne-deep);
+    outline-offset: 3px;
+  }
+
+  a {
+    text-underline-offset: 0.25em;
+    text-decoration-thickness: 1px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-sand);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border: 2px solid var(--color-sand);
+  }
+}
+
+@layer components {
+  .serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    line-height: 1.08;
+    font-variant-numeric: lining-nums;
+  }
+
+  /* Marca "convés": geométrica fina, como no cardápio impresso. */
+  .mark {
+    font-family: var(--font-mark);
+    font-weight: 200;
+    line-height: 1;
+  }
+
+  /* Rótulos de interface: versalete espaçado, mínimo 12px. */
+  .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Fio champanhe com o casco no meio, divisor das seções. */
+  .rule {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-champagne);
+  }
+  .rule::before,
+  .rule::after {
+    content: "";
+    height: 1px;
+    width: 3rem;
+    background: currentColor;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    min-height: 3.25rem;
+    padding: 0 1.6rem;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition:
+      background-color 240ms var(--ease-out-quart),
+      color 240ms var(--ease-out-quart),
+      border-color 240ms var(--ease-out-quart),
+      transform 320ms var(--ease-out-expo);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn svg {
+    flex: none;
+    transition: transform 360ms var(--ease-out-expo);
+  }
+  .btn:hover svg.nudge {
+    transform: translateX(4px);
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-gold {
+    background: var(--color-champagne);
+    color: var(--color-deep-2);
+  }
+  .btn-gold:hover {
+    background: var(--color-champagne-soft);
+  }
+  .btn-deep {
+    background: var(--color-deep);
+    color: var(--color-sand);
+  }
+  .btn-deep:hover {
+    background: var(--color-sea);
+  }
+  .btn-outline {
+    border-color: var(--color-deep);
+    color: var(--color-deep);
+  }
+  .btn-outline:hover {
+    background: var(--color-deep);
+    color: var(--color-sand);
+  }
+  .btn-outline-light {
+    border-color: var(--color-on-deep-muted);
+    color: var(--color-sand);
+  }
+  .btn-outline-light:hover {
+    background: var(--color-sand);
+    border-color: var(--color-sand);
+    color: var(--color-deep);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    background: var(--color-line);
+    color: var(--color-muted);
+    border-color: transparent;
+    cursor: not-allowed;
+  }
+
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 420ms var(--ease-out-expo);
+  }
+  .link-line:hover {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+
+  /* Campos de formulário: papel areia, fio fino, sem caixa pesada. */
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0 1rem;
+    border-radius: 2px;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-size: 1rem;
+    transition: border-color 200ms var(--ease-out-quart);
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+  }
+  .field:hover {
+    border-color: var(--color-champagne);
+  }
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--color-deep);
+    box-shadow: 0 0 0 1px var(--color-deep);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-alert);
+  }
+
+  /* Picote do bilhete de reserva. */
+  .perforation {
+    height: 1px;
+    background-image: radial-gradient(circle, var(--color-line-strong) 1.2px, transparent 1.6px);
+    background-size: 8px 2px;
+    background-repeat: repeat-x;
+    background-position: center;
+  }
+
+  /* Travessia com movimento: legendas empilhadas, uma de cada vez. */
+  .is-scene [data-steps] {
+    grid-template-columns: 1fr;
+  }
+  .is-scene [data-travessia-step] {
+    grid-area: 1 / 1;
+  }
+
+  /* Revelação no scroll: tudo visível por padrão; o JS arma o efeito. */
+  .reveal-armed [data-reveal]:not(.is-in) {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  [data-reveal] {
+    transition:
+      opacity 900ms var(--ease-out-expo),
+      transform 900ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-armed [data-reveal]:not(.is-in) {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}

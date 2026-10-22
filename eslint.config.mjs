@@ -16,6 +16,7 @@ const eslintConfig = defineConfig([
     ".impeccable/**",
     // Outro projeto, com configuração própria.
     "regiane-camilo/**",
+    "conves-ilhabela/**",
   ]),
 ]);
 

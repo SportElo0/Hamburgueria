@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "scripts", "regiane-camilo"]
+  "exclude": ["node_modules", "scripts", "regiane-camilo", "conves-ilhabela"]
 }
