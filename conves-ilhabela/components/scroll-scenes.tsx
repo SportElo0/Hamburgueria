@@ -76,11 +76,20 @@ export function ScrollScenes() {
         if (section && stage) {
           section.classList.add("is-scene");
           const steps = gsap.utils.toArray<HTMLElement>("[data-travessia-step]");
-          // A faixa começa onde a água aparece na foto da varanda, entre o telhado e o deck.
+          // A fresta começa entre os pilares, abaixo do telhado, onde a água aparece na
+          // foto da varanda; alarga até a abertura real e depois toma a tela.
           // No desktop a varanda vem aproximada pelo lado esquerdo (tronco e pilares no quadro);
           // no celular fica no tamanho natural, para a foto não perder nitidez.
-          const band = desktop ? { t: 31, b: 63 } : { t: 40, b: 62 };
-          gsap.set("[data-travessia-over]", { "--t": `${band.t}%`, "--b": `${band.b}%` });
+          const gap = desktop
+            ? { start: { t: 38, b: 56, l: 50, r: 70 }, open: { t: 31, b: 63, l: 40, r: 80 } }
+            : { start: { t: 45, b: 58, l: 26, r: 56 }, open: { t: 40, b: 62, l: 6, r: 74 } };
+          const vars = (g: { t: number; b: number; l: number; r: number }) => ({
+            "--t": `${g.t}%`,
+            "--b": `${g.b}%`,
+            "--l": `${g.l}%`,
+            "--r": `${g.r}%`,
+          });
+          gsap.set("[data-travessia-over]", vars(gap.start));
           if (desktop) gsap.set("[data-travessia-under]", { scale: 1.45, transformOrigin: "12% 60%" });
           gsap.set(steps, { autoAlpha: 0, y: 20 });
           gsap.set(steps[0], { autoAlpha: 1, y: 0 });
@@ -97,18 +106,25 @@ export function ScrollScenes() {
             },
           });
           tl.to("[data-travessia-under]", { scale: desktop ? 1.58 : 1.06, duration: 1 }, 0)
-            .to("[data-travessia-over]", { "--t": "-10%", "--b": "110%", duration: 0.62, ease: "power2.inOut" }, 0.2)
+            // 1. A fresta alarga até a abertura entre telhado, pilares e deck.
+            .to("[data-travessia-over]", { ...vars(gap.open), duration: 0.3, ease: "power1.out" }, 0)
+            // 2. A abertura toma a tela.
+            .to(
+              "[data-travessia-over]",
+              { "--t": "-10%", "--b": "110%", "--l": "-10%", "--r": "110%", duration: 0.42, ease: "power2.inOut" },
+              0.32,
+            )
             .fromTo(
               "[data-travessia-over-img]",
               { scale: desktop ? 1.16 : 1.06 },
-              { scale: 1, duration: 0.62, ease: "power2.out" },
-              0.2,
+              { scale: 1, duration: 0.74, ease: "power2.out" },
+              0,
             )
             // Legendas: uma sai por completo antes da próxima entrar.
-            .to(steps[0], { autoAlpha: 0, y: -20, duration: 0.1 }, 0.2)
-            .to(steps[1], { autoAlpha: 1, y: 0, duration: 0.1 }, 0.34)
-            .to(steps[1], { autoAlpha: 0, y: -20, duration: 0.1 }, 0.64)
-            .to(steps[2], { autoAlpha: 1, y: 0, duration: 0.1 }, 0.78);
+            .to(steps[0], { autoAlpha: 0, y: -20, duration: 0.06 }, 0.3)
+            .to(steps[1], { autoAlpha: 1, y: 0, duration: 0.08 }, 0.37)
+            .to(steps[1], { autoAlpha: 0, y: -20, duration: 0.08 }, 0.66)
+            .to(steps[2], { autoAlpha: 1, y: 0, duration: 0.08 }, 0.78);
 
           // Limpa a classe ao desmontar (volta ao layout estático).
           return () => section.classList.remove("is-scene");

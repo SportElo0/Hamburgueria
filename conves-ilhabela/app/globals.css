@@ -295,25 +295,21 @@
     background-position: center;
   }
 
-  /* Travessia com movimento: a camada de cima aparece por uma faixa de bordas
-     esfumadas (--t e --b, animadas pelo scroll). */
+  /* Travessia com movimento: a camada de cima aparece por uma fresta de bordas
+     esfumadas, limitada em cima/embaixo (--t, --b) e dos lados (--l, --r). */
   .is-scene [data-travessia-over] {
     --t: 0%;
     --b: 100%;
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent calc(var(--t) - 7%),
-      #000 var(--t),
-      #000 var(--b),
-      transparent calc(var(--b) + 7%)
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent calc(var(--t) - 7%),
-      #000 var(--t),
-      #000 var(--b),
-      transparent calc(var(--b) + 7%)
-    );
+    --l: 0%;
+    --r: 100%;
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent calc(var(--t) - 5%), #000 var(--t), #000 var(--b), transparent calc(var(--b) + 5%)),
+      linear-gradient(to right, transparent calc(var(--l) - 4%), #000 var(--l), #000 var(--r), transparent calc(var(--r) + 4%));
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to bottom, transparent calc(var(--t) - 5%), #000 var(--t), #000 var(--b), transparent calc(var(--b) + 5%)),
+      linear-gradient(to right, transparent calc(var(--l) - 4%), #000 var(--l), #000 var(--r), transparent calc(var(--r) + 4%));
+    mask-composite: intersect;
   }
 
   /* Revelação no scroll: tudo visível por padrão; o JS arma o efeito. */
