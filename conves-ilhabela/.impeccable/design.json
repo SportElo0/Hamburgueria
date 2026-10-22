@@ -1,0 +1,539 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T22:23:39+00:00",
+  "title": "Design System: Convés Ilhabela",
+  "extensions": {
+    "colorMeta": {
+      "sand": {
+        "role": "neutral",
+        "displayName": "Areia",
+        "canonical": "#f8f5ef",
+        "tonalRamp": [
+          "#0d0b07",
+          "#272520",
+          "#44423d",
+          "#63615c",
+          "#85827d",
+          "#a7a59f",
+          "#ccc9c3",
+          "#f1eee8"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Papel",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "shell": {
+        "role": "neutral",
+        "displayName": "Concha",
+        "canonical": "#efe9df",
+        "tonalRamp": [
+          "#0e0b05",
+          "#29241d",
+          "#464139",
+          "#666058",
+          "#878279",
+          "#aaa49b",
+          "#cec8bf",
+          "#f4eee4"
+        ]
+      },
+      "sage": {
+        "role": "tertiary",
+        "displayName": "Sálvia",
+        "canonical": "#d8e1d8",
+        "tonalRamp": [
+          "#070d07",
+          "#202721",
+          "#3d443d",
+          "#5c645c",
+          "#7d857d",
+          "#9fa89f",
+          "#c3ccc3",
+          "#e8f1e8"
+        ]
+      },
+      "sea": {
+        "role": "primary",
+        "displayName": "Azul-mar",
+        "canonical": "#123b53",
+        "tonalRamp": [
+          "#000d22",
+          "#00283f",
+          "#1e465f",
+          "#3e6680",
+          "#5f88a3",
+          "#81abc8",
+          "#a4d0ed",
+          "#c9f5ff"
+        ]
+      },
+      "deep": {
+        "role": "primary",
+        "displayName": "Azul profundo",
+        "canonical": "#102f45",
+        "tonalRamp": [
+          "#000c20",
+          "#08283d",
+          "#27455d",
+          "#46657e",
+          "#6687a1",
+          "#88aac5",
+          "#abceea",
+          "#d0f4ff"
+        ]
+      },
+      "deep-2": {
+        "role": "primary",
+        "displayName": "Azul noturno",
+        "canonical": "#0c2537",
+        "tonalRamp": [
+          "#000c1d",
+          "#0e273a",
+          "#2c4559",
+          "#4a657a",
+          "#6b869c",
+          "#8da9c0",
+          "#b0cde5",
+          "#d5f3ff"
+        ]
+      },
+      "deep-line": {
+        "role": "primary",
+        "displayName": "Fio do mar",
+        "canonical": "#2a4a60",
+        "tonalRamp": [
+          "#000d1f",
+          "#06283c",
+          "#26465c",
+          "#45667d",
+          "#65879f",
+          "#87aac4",
+          "#abcfe9",
+          "#cff4ff"
+        ]
+      },
+      "champagne": {
+        "role": "secondary",
+        "displayName": "Champanhe",
+        "canonical": "#b49a67",
+        "tonalRamp": [
+          "#190500",
+          "#362000",
+          "#553e05",
+          "#765d2b",
+          "#987f4c",
+          "#bca16e",
+          "#e1c691",
+          "#ffebb5"
+        ]
+      },
+      "champagne-deep": {
+        "role": "secondary",
+        "displayName": "Champanhe escuro",
+        "canonical": "#76603d",
+        "tonalRamp": [
+          "#180600",
+          "#342100",
+          "#533e1b",
+          "#735d3a",
+          "#957e5b",
+          "#b9a17c",
+          "#dec59f",
+          "#ffebc4"
+        ]
+      },
+      "champagne-soft": {
+        "role": "secondary",
+        "displayName": "Champanhe claro",
+        "canonical": "#d6c4a0",
+        "tonalRamp": [
+          "#150800",
+          "#312302",
+          "#4f401f",
+          "#6f5f3e",
+          "#91805e",
+          "#b4a380",
+          "#d9c7a3",
+          "#ffecc7"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#1d2a33",
+        "tonalRamp": [
+          "#030c14",
+          "#1a2730",
+          "#36444e",
+          "#55636e",
+          "#758590",
+          "#98a8b3",
+          "#bbccd8",
+          "#e0f1fd"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Cinza-sálvia",
+        "canonical": "#5f6660",
+        "tonalRamp": [
+          "#080d08",
+          "#212722",
+          "#3d443e",
+          "#5c635d",
+          "#7d857e",
+          "#a0a7a1",
+          "#c4ccc5",
+          "#e9f1ea"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Fio",
+        "canonical": "#e6e1d6",
+        "tonalRamp": [
+          "#0e0b05",
+          "#28251c",
+          "#464239",
+          "#656157",
+          "#868278",
+          "#a9a59a",
+          "#cec9be",
+          "#f3eee3"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Fio forte",
+        "canonical": "#d3cbbb",
+        "tonalRamp": [
+          "#100a02",
+          "#2a2418",
+          "#484134",
+          "#676052",
+          "#898173",
+          "#aca495",
+          "#d0c8b8",
+          "#f6eedd"
+        ]
+      },
+      "on-deep": {
+        "role": "neutral",
+        "displayName": "Sobre o azul",
+        "canonical": "#f8f5ef",
+        "tonalRamp": [
+          "#0d0b07",
+          "#272520",
+          "#44423d",
+          "#63615c",
+          "#85827d",
+          "#a7a59f",
+          "#ccc9c3",
+          "#f1eee8"
+        ]
+      },
+      "on-deep-muted": {
+        "role": "neutral",
+        "displayName": "Sobre o azul, secundário",
+        "canonical": "#c3cdd2",
+        "tonalRamp": [
+          "#060c10",
+          "#1f262a",
+          "#3b4348",
+          "#5a6367",
+          "#7b8489",
+          "#9da7ac",
+          "#c1cbd0",
+          "#e6f0f6"
+        ]
+      },
+      "alert": {
+        "role": "error",
+        "displayName": "Alerta",
+        "canonical": "#a3332b",
+        "tonalRamp": [
+          "#240000",
+          "#490806",
+          "#71241e",
+          "#9b4038",
+          "#c16258",
+          "#e18a7e",
+          "#ffb2a6",
+          "#ffdad0"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Título da abertura, duas frases, a segunda em champagne-deep."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos de seção, balanceados, 16–18ch."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nome do prato no cartão; título do bilhete; itens do menu móvel."
+      },
+      "caption-title": {
+        "displayName": "Caption title",
+        "purpose": "Legendas da travessia sobre foto."
+      },
+      "body-lg": {
+        "displayName": "Body large",
+        "purpose": "Parágrafos de abertura de seção."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido e descrições de prato, 40–44ch."
+      },
+      "body-sm": {
+        "displayName": "Body small",
+        "purpose": "Apoio, dicas, dados de contato."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Navegação, rótulos de campo, termos do bilhete, colunas do rodapé, botões (0.16em). Nunca acima de título, salvo o rótulo pinado da abertura."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Só a marca \"convés\"."
+      }
+    },
+    "shadows": [
+      {
+        "name": "header-hairline",
+        "value": "0 1px 0 var(--color-line)",
+        "purpose": "Fio inferior do cabeçalho rolado ou com menu aberto."
+      },
+      {
+        "name": "ticket-lift",
+        "value": "0 40px 80px -40px rgb(0 0 0 / 0.6)",
+        "purpose": "Só o bilhete de reserva sobre o campo azul."
+      },
+      {
+        "name": "field-focus",
+        "value": "0 0 0 1px var(--color-deep)",
+        "purpose": "Dobra a borda do campo em foco."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Entradas, revelações, fios que se estendem, sublinhados."
+      },
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Trocas de cor em botões e campos (200–240ms)."
+      },
+      {
+        "name": "rise",
+        "value": "1000ms ease-out-expo, translateY(18px)→0",
+        "purpose": "Entrada escalonada do texto da abertura (0–280ms de atraso)."
+      },
+      {
+        "name": "reveal",
+        "value": "900ms ease-out-expo, translateY(22px)→0",
+        "purpose": "Revelação no scroll, armada só por JS."
+      },
+      {
+        "name": "step-in",
+        "value": "520ms ease-out-expo",
+        "purpose": "Troca do formulário para o bilhete."
+      },
+      {
+        "name": "sheet-in",
+        "value": "420ms ease-out-expo",
+        "purpose": "Abertura do menu móvel."
+      },
+      {
+        "name": "scroll-scrub",
+        "value": "GSAP ScrollTrigger scrub 0.6 (cenas presas), 0.8 (esteira)",
+        "purpose": "Travessia (+=220% desktop, +=170% celular), trilho de destaques (só desktop), esteira, parallax da abertura. Desligado com prefers-reduced-motion."
+      },
+      {
+        "name": "travessia-mask-feather",
+        "value": "5% vertical, 4% horizontal",
+        "purpose": "Bordas esfumadas da fresta da travessia."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão principal (champanhe)",
+      "kind": "button",
+      "refersTo": "button-gold",
+      "description": "Ação de reserva em todo o site.",
+      "html": "<a class=\"ds-btn ds-btn-gold\" href=\"#\">Solicitar reserva <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a>",
+      "css": ".ds-btn { display:inline-flex; align-items:center; justify-content:center; gap:0.7rem; min-height:3.25rem; padding:0 1.6rem; border-radius:2px; font-family:var(--font-sans, Manrope, sans-serif); font-size:0.75rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; border:1px solid transparent; cursor:pointer; transition: background-color 240ms cubic-bezier(0.25,1,0.5,1), color 240ms cubic-bezier(0.25,1,0.5,1), border-color 240ms cubic-bezier(0.25,1,0.5,1), transform 320ms cubic-bezier(0.16,1,0.3,1); } .ds-btn svg { transition: transform 360ms cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover svg { transform: translateX(4px); } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline:2px solid #76603d; outline-offset:3px; } .ds-btn-gold { background:#b49a67; color:#0c2537; text-decoration:none; } .ds-btn-gold:hover { background:#d6c4a0; }"
+    },
+    {
+      "name": "Botão azul profundo",
+      "kind": "button",
+      "refersTo": "button-deep",
+      "description": "Ações de avanço: conhecer o cardápio, revisar solicitação.",
+      "html": "<button class=\"ds-btn ds-btn-deep\">Conhecer o cardápio <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn { display:inline-flex; align-items:center; justify-content:center; gap:0.7rem; min-height:3.25rem; padding:0 1.6rem; border-radius:2px; font-family:var(--font-sans, Manrope, sans-serif); font-size:0.75rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; border:1px solid transparent; cursor:pointer; transition: background-color 240ms cubic-bezier(0.25,1,0.5,1), color 240ms cubic-bezier(0.25,1,0.5,1), border-color 240ms cubic-bezier(0.25,1,0.5,1), transform 320ms cubic-bezier(0.16,1,0.3,1); } .ds-btn svg { transition: transform 360ms cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover svg { transform: translateX(4px); } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline:2px solid #76603d; outline-offset:3px; } .ds-btn-deep { background:#102f45; color:#f8f5ef; } .ds-btn-deep:hover { background:#123b53; }"
+    },
+    {
+      "name": "Botão contorno",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ações secundárias sobre areia: ligar, copiar mensagem, editar.",
+      "html": "<button class=\"ds-btn ds-btn-outline\">Copiar mensagem</button>",
+      "css": ".ds-btn { display:inline-flex; align-items:center; justify-content:center; gap:0.7rem; min-height:3.25rem; padding:0 1.6rem; border-radius:2px; font-family:var(--font-sans, Manrope, sans-serif); font-size:0.75rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; border:1px solid transparent; cursor:pointer; transition: background-color 240ms cubic-bezier(0.25,1,0.5,1), color 240ms cubic-bezier(0.25,1,0.5,1), border-color 240ms cubic-bezier(0.25,1,0.5,1), transform 320ms cubic-bezier(0.16,1,0.3,1); } .ds-btn svg { transition: transform 360ms cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover svg { transform: translateX(4px); } .ds-btn:active { transform: translateY(1px); } .ds-btn:focus-visible { outline:2px solid #76603d; outline-offset:3px; } .ds-btn-outline { background:transparent; border-color:#102f45; color:#102f45; } .ds-btn-outline:hover { background:#102f45; color:#f8f5ef; }"
+    },
+    {
+      "name": "Campo de formulário",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Papel, fio fino, raio 2px; hover champanhe, foco azul dobrado.",
+      "html": "<label class=\"ds-label\" for=\"ds-n\">Nome</label><input id=\"ds-n\" class=\"ds-field\" placeholder=\"Como devemos chamar você?\">",
+      "css": ".ds-label { display:block; margin-bottom:0.75rem; font-family:Manrope, sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#102f45; } .ds-field { display:block; width:100%; min-height:3.25rem; padding:0 1rem; border-radius:2px; border:1px solid #d3cbbb; background:#fff; color:#1d2a33; font:1rem Manrope, sans-serif; caret-color:#76603d; transition:border-color 200ms cubic-bezier(0.25,1,0.5,1); } .ds-field::placeholder { color:#5f6660; } .ds-field:hover { border-color:#b49a67; } .ds-field:focus-visible { outline:none; border-color:#102f45; box-shadow:0 0 0 1px #102f45; }"
+    },
+    {
+      "name": "Navegação",
+      "kind": "nav",
+      "refersTo": "header",
+      "description": "Itens em voz de rótulo; o atual em azul com fio champanhe.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" aria-current=\"location\">Início</a><a href=\"#\">O Convés</a><a href=\"#\">Cardápio</a></nav>",
+      "css": ".ds-nav { display:flex; gap:2rem; background:#f8f5ef; padding:1rem 1.5rem; box-shadow:0 1px 0 #e6e1d6; } .ds-nav a { position:relative; padding:0.75rem 0; font:700 0.75rem/1.25 Manrope, sans-serif; letter-spacing:0.18em; text-transform:uppercase; color:rgb(29 42 51 / 0.75); text-decoration:none; transition:color 240ms; } .ds-nav a::after { content:''; position:absolute; left:0; right:0; bottom:4px; height:1px; background:#b49a67; transform:scaleX(0); transform-origin:left; transition:transform 500ms cubic-bezier(0.16,1,0.3,1); } .ds-nav a:hover { color:#102f45; } .ds-nav a[aria-current] { color:#102f45; } .ds-nav a[aria-current]::after { transform:scaleX(1); } .ds-nav a:focus-visible { outline:2px solid #76603d; outline-offset:3px; }"
+    },
+    {
+      "name": "Categoria do cardápio",
+      "kind": "chip",
+      "refersTo": "menu-category",
+      "description": "Filtro sem caixa; selecionado com fio champanhe de 2px.",
+      "html": "<div class=\"ds-cats\"><button class=\"ds-cat\">Todos</button><button class=\"ds-cat\" aria-pressed=\"true\">Peixes</button><button class=\"ds-cat\">Camarões</button></div>",
+      "css": ".ds-cats { display:flex; gap:0.375rem; background:#f8f5ef; padding:0.5rem; } .ds-cat { position:relative; min-height:2.75rem; padding:0 0.875rem; background:none; border:0; font:0.9375rem Manrope, sans-serif; color:rgb(29 42 51 / 0.75); cursor:pointer; } .ds-cat::after { content:''; position:absolute; left:0.875rem; right:0.875rem; bottom:4px; height:2px; background:#b49a67; transform:scaleX(0); transform-origin:left; transition:transform 500ms cubic-bezier(0.16,1,0.3,1); } .ds-cat:hover { color:#102f45; } .ds-cat[aria-pressed=true] { font-weight:600; color:#102f45; } .ds-cat[aria-pressed=true]::after { transform:scaleX(1); } .ds-cat:focus-visible { outline:2px solid #76603d; outline-offset:3px; }"
+    },
+    {
+      "name": "Horário (opção)",
+      "kind": "chip",
+      "refersTo": "time-chip",
+      "description": "Opção de horário da reserva; selecionada em azul profundo.",
+      "html": "<div class=\"ds-times\"><button class=\"ds-time\">12h30</button><button class=\"ds-time\" aria-pressed=\"true\">13h00</button><button class=\"ds-time\">13h30</button></div>",
+      "css": ".ds-times { display:grid; grid-template-columns:repeat(3,6rem); gap:0.375rem; } .ds-time { min-height:2.75rem; border-radius:2px; border:1px solid #d3cbbb; background:#fff; color:#102f45; font:0.9375rem Manrope, sans-serif; font-variant-numeric:tabular-nums; cursor:pointer; transition:border-color 200ms, background-color 200ms; } .ds-time:hover { border-color:#102f45; } .ds-time[aria-pressed=true] { background:#102f45; border-color:#102f45; color:#f8f5ef; font-weight:600; } .ds-time:focus-visible { outline:2px solid #76603d; outline-offset:3px; }"
+    },
+    {
+      "name": "Cartão de prato",
+      "kind": "card",
+      "refersTo": "dish-card",
+      "description": "Destaque do cardápio no trilho azul, com casco em marca-d'água.",
+      "html": "<div class=\"ds-field-deep\"><article class=\"ds-dish\"><svg class=\"ds-dish-hull\" width=\"220\" height=\"220\" viewBox=\"0 0 40 40\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"0.6\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M20 2v35\"/><path d=\"M3 14c6 2 11 3 17 3s11-1 17-3c-2 11-8 19-17 23C11 33 5 25 3 14Z\"/><path d=\"M7 21c4 1.6 8.5 2.4 13 2.4s9-.8 13-2.4\"/><path d=\"M11 27c3 1.2 6 1.8 9 1.8s6-.6 9-1.8\"/></svg><h3>Moqueca de peixe</h3><p class=\"ds-dish-cat\"><span></span>Peixes</p><p class=\"ds-dish-desc\">Postas de peixe no leite de coco e dendê, com arroz e pirão.</p><div class=\"ds-dish-foot\"><span>Para 2 pessoas</span><a href=\"#\">Ver no cardápio</a></div></article></div>",
+      "css": ".ds-field-deep { background:#102f45; padding:2rem; } .ds-dish { position:relative; overflow:hidden; display:flex; flex-direction:column; width:24rem; min-height:24rem; padding:2.5rem 2.25rem 1.75rem; border-radius:3px; background:#f8f5ef; color:#1d2a33; font-family:Manrope, sans-serif; } .ds-dish-hull { position:absolute; right:-3.5rem; bottom:-3rem; color:rgb(180 154 103 / 0.25); pointer-events:none; } .ds-dish h3 { position:relative; margin:0; font:400 2.1rem/1.05 Marcellus, Georgia, serif; color:#102f45; } .ds-dish-cat { position:relative; display:flex; align-items:center; gap:0.75rem; margin:0.75rem 0 0; font-size:0.875rem; color:#76603d; } .ds-dish-cat span { width:1.5rem; height:1px; background:#b49a67; } .ds-dish-desc { position:relative; margin:1rem 0 0; line-height:1.625; color:rgb(29 42 51 / 0.85); } .ds-dish-foot { position:relative; margin-top:auto; display:flex; justify-content:space-between; padding-top:1.25rem; border-top:1px solid #e6e1d6; font-size:0.875rem; color:#5f6660; } .ds-dish-foot a { font-weight:600; color:#102f45; text-decoration:none; background-image:linear-gradient(currentColor,currentColor); background-size:100% 1px; background-position:0 100%; background-repeat:no-repeat; padding-bottom:2px; transition:background-size 420ms cubic-bezier(0.16,1,0.3,1); } .ds-dish-foot a:hover { background-size:0% 1px; background-position:100% 100%; } .ds-dish-foot a:focus-visible { outline:2px solid #76603d; outline-offset:3px; }"
+    },
+    {
+      "name": "Bilhete de reserva",
+      "kind": "custom",
+      "refersTo": "ticket",
+      "description": "Resumo da solicitação com picote e recortes; o único objeto com sombra.",
+      "html": "<div class=\"ds-field-deep\"><div class=\"ds-ticket\"><div class=\"ds-ticket-top\"><h3>Sua solicitação</h3><dl><div><dt>Data</dt><dd>Sábado, 14 de novembro</dd></div><div><dt>Horário</dt><dd>19h30</dd></div><div><dt>Pessoas</dt><dd>4</dd></div></dl></div><div class=\"ds-perf\"><i></i><i></i></div><div class=\"ds-ticket-stub\">A mesa só está reservada depois da confirmação do restaurante.</div></div></div>",
+      "css": ".ds-field-deep { background:#102f45; padding:2.5rem; } .ds-ticket { border-radius:3px; background:#f8f5ef; color:#1d2a33; font-family:Manrope, sans-serif; box-shadow:0 40px 80px -40px rgb(0 0 0 / 0.6); } .ds-ticket-top, .ds-ticket-stub { padding:2rem; } .ds-ticket h3 { margin:0; font:400 2rem Marcellus, Georgia, serif; color:#102f45; } .ds-ticket dl { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin:1.5rem 0 0; } .ds-ticket dt { font-size:0.75rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:#5f6660; } .ds-ticket dd { margin:0.375rem 0 0; font:400 1.25rem/1.375 Marcellus, Georgia, serif; color:#102f45; } .ds-perf { position:relative; height:1px; margin:0 1.25rem; background-image:radial-gradient(circle, #d3cbbb 1.2px, transparent 1.6px); background-size:8px 2px; background-repeat:repeat-x; } .ds-perf i { position:absolute; top:50%; width:1.5rem; height:1.5rem; border-radius:50%; background:#102f45; transform:translateY(-50%); } .ds-perf i:first-child { left:-2rem; } .ds-perf i:last-child { right:-2rem; } .ds-ticket-stub { font-size:0.9375rem; font-weight:600; color:#102f45; }"
+    },
+    {
+      "name": "Divisor com casco",
+      "kind": "custom",
+      "refersTo": "rule",
+      "description": "Fios champanhe com o casco do logo no meio.",
+      "html": "<span class=\"ds-rule\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 40 40\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M20 2v35\"/><path d=\"M3 14c6 2 11 3 17 3s11-1 17-3c-2 11-8 19-17 23C11 33 5 25 3 14Z\"/><path d=\"M7 21c4 1.6 8.5 2.4 13 2.4s9-.8 13-2.4\"/><path d=\"M11 27c3 1.2 6 1.8 9 1.8s6-.6 9-1.8\"/></svg></span>",
+      "css": ".ds-rule { display:flex; align-items:center; gap:0.75rem; color:#b49a67; padding:1rem; background:#f8f5ef; } .ds-rule::before, .ds-rule::after { content:''; height:1px; width:3rem; background:currentColor; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A travessia",
+    "overview": "O site é o caminho do convés até a água: o visitante desce da varanda coberta de madeira para o gramado e o canal, e o cardápio passa por ele como um barco. Areia e branco quente ocupam o chão; o azul profundo aparece em campos inteiros, de borda a borda, quando a página \"entra na água\" (Experiência, trilho de destaques, Reserva, rodapé); o champanhe é só fio, casco e o botão principal. As fotos reais do lugar carregam a cor viva; a interface fica calma ao redor delas.\n\nA densidade é editorial e respirada: títulos grandes em Marcellus, texto em Manrope com linhas curtas, listas separadas por fios de 1px em vez de caixas. O único ornamento desenhado é o casco do logo, com mastro e nervuras curvas, e a esteira em SVG que se desenha com o scroll. O movimento (GSAP ScrollTrigger, scrub suave) serve ao lugar: com movimento reduzido tudo fica visível e estático, e nada depende da animação para ser lido.\n\nA página recusa o template de rooftop com fotos de banco de imagem e a planilha de preços. Nada de desfoque, nada de vidro: profundidade vem de camadas de foto, véus de cor sólida e máscaras esfumadas.",
+    "keyCharacteristics": [
+      "Areia no chão, azul profundo em campos inteiros, champanhe só em fios, casco e botão principal.",
+      "Marcellus nos títulos, Manrope no texto, Josefin Sans fina exclusiva da marca \"convés\".",
+      "Cantos retos com raio mínimo (2–3px); círculos só para controles de ícone, dias do calendário e os recortes do bilhete.",
+      "Fios de 1px e o casco com nervuras como único ornamento; esteira desenhada no scroll.",
+      "Fotos reais e creditadas, nunca imagem de banco; crédito vive dentro da própria foto.",
+      "Movimento guiado pelo scroll, com fallback estático completo."
+    ],
+    "rules": [
+      {
+        "name": "The Champagne Thread Rule",
+        "body": "O champanhe é fio, casco e botão principal. Quando precisa ser texto sobre areia, usa champagne-deep; o champanhe base nunca carrega leitura.",
+        "section": "colors"
+      },
+      {
+        "name": "The Whole Field Rule",
+        "body": "O azul profundo entra como campo de borda a borda, nunca como cartão azul solto sobre areia.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Pinned Label Rule",
+        "body": "Nenhum rótulo pequeno acima de título. A única exceção é o texto pinado pelo cliente na abertura (\"Ilhabela • Perequê • Gastronomia à beira-mar\"); ela não se estende a outras seções nem a novas páginas.",
+        "section": "typography"
+      },
+      {
+        "name": "The Wordmark-Only Rule",
+        "body": "Josefin Sans existe só na marca \"convés\". Títulos são Marcellus; todo o resto é Manrope.",
+        "section": "typography"
+      },
+      {
+        "name": "The Static Fallback Rule",
+        "body": "Toda cena tem um layout estático completo: com movimento reduzido ou sem JS, a travessia vira duas fotos emolduradas lado a lado, cada uma com legenda e crédito, e o trilho de destaques vira rolagem horizontal com encaixe.",
+        "section": "layout"
+      },
+      {
+        "name": "The No-Blur Rule",
+        "body": "Nada de backdrop-filter nem desfoque. Superfícies sobre foto ou sobre conteúdo são sólidas ou gradientes de cor sólida.",
+        "section": "elevation"
+      },
+      {
+        "name": "The One Lifted Object Rule",
+        "body": "O bilhete de reserva é o único objeto com sombra difusa. Cartões de prato e placas ficam planos.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usar areia (#f8f5ef) como chão e azul profundo (#102f45) como campo de seção inteira.",
+      "Do usar champagne-deep (#76603d) sempre que o champanhe precisar ser lido como texto sobre areia.",
+      "Do manter os cantos em 2px (controles, fotos) e 3px (cartões, bilhete).",
+      "Do usar o casco com nervuras e a esteira como o único ornamento desenhado.",
+      "Do creditar cada foto dentro dela mesma e marcar as provisórias.",
+      "Do entregar o layout estático completo com movimento reduzido: fotos lado a lado, cada uma com sua legenda e crédito.",
+      "Do separar listas e linhas de dados com fios de 1px em vez de caixas."
+    ],
+    "donts": [
+      "Don't usar backdrop-filter ou desfoque; o cabeçalho é areia sólida.",
+      "Don't colocar rótulos pequenos acima de títulos; o rótulo pinado da abertura é a única exceção.",
+      "Don't usar Josefin Sans fora da marca \"convés\".",
+      "Don't usar o champanhe base (#b49a67) como texto sobre areia.",
+      "Don't dar sombra difusa a nada além do bilhete de reserva.",
+      "Don't usar imagem de banco ou fotos que não sejam do Convés; onde falta foto, um ladrilho provisório rotulado.",
+      "Don't usar raios acima de 3px em retângulos."
+    ]
+  }
+}
