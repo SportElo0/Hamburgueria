@@ -3,9 +3,10 @@
 Demonstração comercial do site do Restaurante Convés, no Perequê, em Ilhabela (SP): o ambiente à beira
 d'água, o cardápio digital transcrito do impresso e solicitações de mesa e de evento.
 
-> **Demonstração protegida.** Usa duas fotos de clientes publicadas no Google, creditadas e marcadas como
-> provisórias. Por isso a prévia na Vercel exige login e o site fica fora do Google. Troque pelas fotos
-> oficiais antes de qualquer publicação aberta.
+> **Demonstração aberta, fora do Google.** A prévia em https://conves-ilhabela.vercel.app é pública (sem
+> login) para apresentar ao restaurante. Usa duas fotos de clientes publicadas no Google, creditadas e
+> marcadas como provisórias, por isso o site continua com noindex. Troque pelas fotos oficiais antes de
+> liberar a indexação.
 
 ## Como rodar
 
@@ -83,8 +84,9 @@ busca e na categoria certa automaticamente.
 
 ## Publicação na Vercel
 
-Projeto separado, com **Root Directory = `conves-ilhabela`**. Enquanto usar fotos de terceiros,
-mantenha a proteção da Vercel ligada para todas as URLs.
+Projeto separado, com **Root Directory = `conves-ilhabela`**. A proteção por login da Vercel foi
+desligada para a demonstração; enquanto usar fotos de terceiros, mantenha `NEXT_PUBLIC_ALLOW_INDEXING`
+desligada.
 
 | Variável | Para quê |
 |---|---|
