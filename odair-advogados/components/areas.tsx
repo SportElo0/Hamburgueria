@@ -32,14 +32,7 @@ export function Areas() {
                         : "border-paper bg-paper text-navy hover:border-gold"
                     }`}
                   >
-                    <p
-                      className={`label self-start rounded-[3px] border px-3 py-1.5 ${
-                        dark ? "border-blue-line text-gold" : "border-line-strong text-gold-ink"
-                      }`}
-                    >
-                      {area.tag}
-                    </p>
-                    <h3 className="mt-5 min-h-[2lh] text-[1.375rem] leading-tight font-semibold tracking-[-0.01em]">{area.name}</h3>
+                    <h3 className="min-h-[2lh] text-[1.375rem] leading-tight font-semibold tracking-[-0.01em]">{area.name}</h3>
 
                     <ViewTransition name={`rosette-${area.slug}`}>
                       <div className={`my-7 flex justify-center ${dark ? "text-gold/85" : "text-gold-ink/80"}`}>

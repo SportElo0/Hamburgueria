@@ -14,8 +14,6 @@ export type Area = {
   name: string;
   /** Nome curto (índice da abertura, menus). */
   short: string;
-  /** Rótulo de categoria do card. */
-  tag: string;
   /** Uma linha para o card. */
   summary: string;
   /** Descrição objetiva da página. */
@@ -48,7 +46,6 @@ export const areas: Area[] = [
     slug: "familia-e-sucessoes",
     name: "Direito de Família e Sucessões",
     short: "Família e Sucessões",
-    tag: "Família",
     summary: "Divórcio, guarda de filhos, regime de bens, inventários e sucessões.",
     description:
       "Orientação e atuação em questões de família e de sucessão patrimonial, com atenção à delicadeza que esses assuntos costumam envolver.",
@@ -82,7 +79,7 @@ export const areas: Area[] = [
       commonFaq.result,
     ],
     references: ["Código Civil (Lei nº 10.406/2002)", "Código de Processo Civil (Lei nº 13.105/2015)"],
-    rosette: { lobes: 12, wobble: 5, rings: 3, copies: 6, seed: 0.2 },
+    rosette: { lobes: 12, wobble: 3, rings: 3, copies: 6, seed: 0.2 },
     seo: {
       title: "Direito de Família e Sucessões em São Paulo",
       description:
@@ -93,7 +90,6 @@ export const areas: Area[] = [
     slug: "previdenciario",
     name: "Direito Previdenciário",
     short: "Previdenciário",
-    tag: "Previdência",
     summary: "Benefícios do INSS, aposentadorias, pensões e auxílio-acidente.",
     description:
       "Orientação sobre benefícios previdenciários e acompanhamento de questões administrativas e judiciais relacionadas ao INSS.",
@@ -130,7 +126,7 @@ export const areas: Area[] = [
       "Lei de Benefícios da Previdência Social (Lei nº 8.213/1991)",
       "Emenda Constitucional nº 103/2019",
     ],
-    rosette: { lobes: 9, wobble: 7, rings: 3, copies: 5, seed: 0.55 },
+    rosette: { lobes: 7, wobble: 2, rings: 2, copies: 4, seed: 0.55 },
     seo: {
       title: "Direito Previdenciário em São Paulo",
       description:
@@ -141,7 +137,6 @@ export const areas: Area[] = [
     slug: "contratual-e-consumidor",
     name: "Direito Contratual e do Consumidor",
     short: "Contratual e Consumidor",
-    tag: "Contratos",
     summary: "Elaboração, análise e revisão de contratos e relações de consumo.",
     description:
       "Elaboração e análise de contratos e orientação jurídica nas relações de consumo, com atenção à clareza das obrigações de cada parte.",
@@ -177,7 +172,7 @@ export const areas: Area[] = [
       "Código Civil (Lei nº 10.406/2002)",
       "Código de Defesa do Consumidor (Lei nº 8.078/1990)",
     ],
-    rosette: { lobes: 16, wobble: 4, rings: 3, copies: 5, seed: 0.9 },
+    rosette: { lobes: 20, wobble: 6, rings: 5, copies: 3, seed: 0.9 },
     seo: {
       title: "Direito Contratual e do Consumidor em São Paulo",
       description:
@@ -188,7 +183,6 @@ export const areas: Area[] = [
     slug: "trabalhista",
     name: "Direito Trabalhista",
     short: "Trabalhista",
-    tag: "Trabalho",
     summary: "Orientação ao trabalhador, contratos, horas extras, bancários e telemarketing.",
     description:
       "Orientação jurídica ao trabalhador sobre contratos e direitos trabalhistas, incluindo questões que envolvem atividades bancárias e de telemarketing.",
@@ -222,7 +216,7 @@ export const areas: Area[] = [
       commonFaq.result,
     ],
     references: ["Consolidação das Leis do Trabalho (Decreto-Lei nº 5.452/1943)"],
-    rosette: { lobes: 10, wobble: 6, rings: 3, copies: 6, seed: 0.35 },
+    rosette: { lobes: 9, wobble: 0, rings: 4, copies: 9, seed: 0.35 },
     seo: {
       title: "Direito Trabalhista em São Paulo",
       description:
@@ -233,7 +227,6 @@ export const areas: Area[] = [
     slug: "empresarial-e-penal-economico",
     name: "Direito Empresarial e Penal Econômico",
     short: "Empresarial e Penal Econômico",
-    tag: "Empresas",
     summary: "Assessoria jurídica empresarial e defesa em direito penal econômico.",
     description:
       "Assessoria jurídica para atividades empresariais e atuação na defesa em matérias de direito penal econômico.",
@@ -269,7 +262,7 @@ export const areas: Area[] = [
       "Lei dos Crimes contra o Sistema Financeiro Nacional (Lei nº 7.492/1986)",
       "Código Civil (Lei nº 10.406/2002)",
     ],
-    rosette: { lobes: 14, wobble: 5, rings: 3, copies: 5, seed: 0.7 },
+    rosette: { lobes: 26, wobble: 9, rings: 2, copies: 8, seed: 0.7 },
     seo: {
       title: "Direito Empresarial e Penal Econômico em São Paulo",
       description:

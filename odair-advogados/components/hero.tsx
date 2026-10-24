@@ -11,11 +11,9 @@ export function Hero() {
     <section id="inicio" aria-labelledby="inicio-title" className="relative overflow-hidden bg-navy text-ivory">
       <div className="mx-auto grid max-w-[90rem] grid-cols-1 gap-12 px-5 pt-10 pb-12 sm:px-8 lg:grid-cols-12 lg:gap-8 lg:px-12 lg:pt-16 lg:pb-16">
         <div className="relative z-10 flex flex-col justify-center lg:col-span-7 lg:py-10">
-          <p className="label flex items-center gap-3 text-gold">
-            <span aria-hidden className="h-px w-8 bg-gold/70" />
-            Advocacia • São Paulo
-          </p>
-          <h1 id="inicio-title" className="display mt-6 max-w-[15ch] text-[clamp(2.6rem,5.6vw,5.4rem)]">
+          {/* A identificação pedida no briefing vai gravada na legenda do selo; aqui, para leitores de tela. */}
+          <p className="sr-only">Advocacia • São Paulo</p>
+          <h1 id="inicio-title" className="display max-w-[15ch] text-[clamp(2.6rem,5.6vw,5.4rem)]">
             Compromisso com o Direito. <span className="text-gold">Atenção a cada questão.</span>
           </h1>
           <p className="mt-7 max-w-[48ch] text-[1.0625rem] leading-relaxed text-on-navy-muted lg:text-[1.125rem]">
@@ -40,6 +38,9 @@ export function Hero() {
             engrave
             turn
             steps={720}
+            outer={0.8}
+            legend="Advocacia • São Paulo • Advocacia • São Paulo •"
+            legendClassName="text-[7.6px] lg:text-[5.4px]"
             className="w-[min(21rem,86vw)] text-gold/80 sm:w-[25rem] lg:w-[min(34rem,40vw)]"
           >
             <div className="seal flex w-[34%] flex-col items-center">

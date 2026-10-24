@@ -9,7 +9,7 @@ import { Year } from "@/components/year";
 export function Footer() {
   const wa = whatsappUrl();
   return (
-    <footer className="bg-navy-deep text-ivory">
+    <footer className="bg-navy text-ivory">
       <Band className="text-gold/35" seed={1.3} copies={5} />
       <div className="mx-auto max-w-[90rem] px-5 pt-16 pb-10 sm:px-8 lg:px-12 lg:pt-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">

@@ -15,6 +15,9 @@ export function Rosette({
   turn = false,
   steps,
   inner,
+  outer,
+  legend,
+  legendClassName = "",
   strokeWidth = 0.7,
   engraveStroke = 0.3,
   children,
@@ -25,6 +28,10 @@ export function Rosette({
   turn?: boolean;
   steps?: number;
   inner?: number;
+  outer?: number;
+  /** Legenda do selo, gravada ao redor do anel externo (decorativa; o texto real fica no DOM ao lado). */
+  legend?: string;
+  legendClassName?: string;
   strokeWidth?: number;
   /**
    * Espessura em unidades do viewBox quando há gravação. No Chrome,
@@ -34,7 +41,8 @@ export function Rosette({
   engraveStroke?: number;
   children?: React.ReactNode;
 }) {
-  const rings = rosette(spec, { steps, inner });
+  const rings = rosette(spec, { steps, inner, outer });
+  const legendId = legend ? `legenda-${spec.lobes}-${spec.rings}-${spec.copies}` : undefined;
   const innerR = (inner ?? 0.42) * 100;
   return (
     <div className={`relative aspect-square ${className}`}>
@@ -66,6 +74,17 @@ export function Rosette({
           <circle r={101.5} fill="none" stroke="currentColor" strokeWidth={1} vectorEffect="non-scaling-stroke" />
           <circle r={103.5} fill="none" stroke="currentColor" strokeWidth={0.6} opacity={0.6} vectorEffect="non-scaling-stroke" />
           <circle r={innerR - 7} fill="none" stroke="currentColor" strokeWidth={0.8} vectorEffect="non-scaling-stroke" />
+          {legend && (
+            <>
+              <circle r={90} fill="none" stroke="currentColor" strokeWidth={0.6} opacity={0.7} vectorEffect="non-scaling-stroke" />
+              <path id={legendId} d="M 0 -95.5 A 95.5 95.5 0 1 1 -0.01 -95.5" fill="none" />
+              <text className={`fill-current font-sans font-semibold tracking-[0.32em] uppercase ${legendClassName}`} dominantBaseline="middle">
+                <textPath href={`#${legendId}`} startOffset="0" textLength={600} lengthAdjust="spacing">
+                  {legend}
+                </textPath>
+              </text>
+            </>
+          )}
         </g>
       </svg>
       {children && <div className="absolute inset-0 grid place-items-center">{children}</div>}

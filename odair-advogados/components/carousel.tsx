@@ -100,8 +100,21 @@ export function Carousel({ children, label }: { children: React.ReactNode; label
           setDragging(false);
         }}
         onPointerUp={() => {
-          // O snap volta só depois do arrasto, para o card assentar no lugar.
-          window.setTimeout(() => setDragging(false), 0);
+          const el = trackRef.current;
+          const d = drag.current;
+          if (el && d?.moved) {
+            // Assenta no card seguinte (ou anterior) na direção do arrasto; o snap volta depois.
+            const card = el.querySelector<HTMLElement>("li");
+            const stepWidth = (card?.offsetWidth ?? 320) + parseFloat(getComputedStyle(el).columnGap || "0");
+            const delta = el.scrollLeft - d.left;
+            const from = Math.round(d.left / stepWidth);
+            const target = Math.abs(delta) > 40 ? from + Math.sign(delta) * Math.max(1, Math.round(Math.abs(delta) / stepWidth)) : from;
+            const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            el.scrollTo({ left: target * stepWidth, behavior: reduce ? "auto" : "smooth" });
+            window.setTimeout(() => setDragging(false), reduce ? 0 : 450);
+          } else {
+            setDragging(false);
+          }
           window.setTimeout(() => {
             drag.current = null;
           }, 0);

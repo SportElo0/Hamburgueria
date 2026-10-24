@@ -262,9 +262,10 @@
   }
 
   /* Revelação no scroll: tudo visível por padrão; o JS arma o efeito. */
+  /* Parte já visível: só desliza um pouco, a opacidade quase não muda. */
   .reveal-armed [data-reveal]:not(.is-in) {
-    opacity: 0;
-    transform: translateY(18px);
+    opacity: 0.88;
+    transform: translateY(14px);
   }
   [data-reveal] {
     transition:

@@ -1,4 +1,4 @@
-import { Mail, MapPin, MessageCircle, Phone, Scale } from "lucide-react";
+import { Map as MapIcon, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { site, whatsappUrl } from "@/config/site";
 import { ContactForm } from "@/components/contact-form";
 import { Pending } from "@/components/pending";
@@ -22,7 +22,7 @@ export function Contact() {
 
   return (
     <section id="contato" aria-labelledby="contato-title" className="relative overflow-hidden bg-navy text-ivory">
-      <div aria-hidden className="pointer-events-none absolute -bottom-40 -left-40 w-[38rem] text-gold/15 max-lg:hidden">
+      <div aria-hidden className="pointer-events-none absolute -bottom-40 -left-40 w-[38rem] text-gold/30 max-lg:hidden">
         <Rosette spec={watermark} steps={480} />
       </div>
       <div className="relative mx-auto grid max-w-[90rem] grid-cols-1 gap-12 px-5 py-20 sm:px-8 lg:grid-cols-12 lg:gap-8 lg:px-12 lg:py-32">
@@ -56,7 +56,7 @@ export function Contact() {
               </div>
             ))}
             <div className="flex items-center gap-4 border-b border-blue-line py-4">
-              <Scale size={18} strokeWidth={1.4} aria-hidden className="flex-none text-gold" />
+              <MapIcon size={18} strokeWidth={1.4} aria-hidden className="flex-none text-gold" />
               <dt className="w-24 flex-none text-[0.875rem] text-on-navy-muted">Atuação</dt>
               <dd className="text-[1rem]">{site.region}</dd>
             </div>
