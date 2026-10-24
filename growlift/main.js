@@ -7,6 +7,13 @@
 
   document.getElementById('ano').textContent = String(new Date().getFullYear());
 
+  // Hero video: hold the still poster for people who ask for less motion.
+  const heroVideo = document.querySelector('.hero-video');
+  if (heroVideo && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVideo.removeAttribute('autoplay');
+    heroVideo.pause();
+  }
+
   // Reveal blocks as they enter the screen; the site preview and the x-ray start their animation then.
   const watched = document.querySelectorAll('.reveal, .browser, .xray');
   if ('IntersectionObserver' in window) {
@@ -25,7 +32,7 @@
     watched.forEach((el) => el.classList.add('in'));
   }
 
-  // Subida: frames cut from a Higgsfield video (tools/growlift-frames.mjs) that play with the scroll.
+  // Subida: a 3D frame sequence (rendered by tools/growlift-scene) that plays with the scroll.
   const lift = document.getElementById('subida');
   if (lift) {
     const canvas = lift.querySelector('.lift-canvas');
