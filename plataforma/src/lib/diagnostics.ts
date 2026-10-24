@@ -13,14 +13,14 @@ const keyOf = (day: string) => `diagnosticos/${day}.json`;
 /** A ceiling against floods; far above what the form gets in a day. */
 const MAX_PER_DAY = 300;
 
-const text = (max: number) => z.string().trim().max(max);
+const text = (max: number, message = 'Confira os dados do formulário.') => z.string({ message }).trim().max(max);
 
 export const diagnosisInputSchema = z.object({
-  business: text(80).min(2, 'Informe o nome do negócio.'),
-  segment: text(60).min(2, 'Informe o ramo do negócio.'),
+  business: text(80, 'Informe o nome do negócio.').min(2, 'Informe o nome do negócio.'),
+  segment: text(60, 'Informe o ramo do negócio.').min(2, 'Informe o ramo do negócio.'),
   city: text(60).default(''),
   whatsapp: z
-    .string()
+    .string({ message: 'Informe um WhatsApp com DDD.' })
     .transform((v) => v.replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, ''))
     .refine((v) => /^\d{10,11}$/.test(v), 'Informe um WhatsApp com DDD.'),
   presence: text(200).default(''),
