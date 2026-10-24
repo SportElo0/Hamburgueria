@@ -16,6 +16,7 @@ export function Rosette({
   steps,
   inner,
   strokeWidth = 0.7,
+  engraveStroke = 0.3,
   children,
 }: {
   spec: RosetteSpec;
@@ -25,6 +26,12 @@ export function Rosette({
   steps?: number;
   inner?: number;
   strokeWidth?: number;
+  /**
+   * Espessura em unidades do viewBox quando há gravação. No Chrome,
+   * `pathLength` combinado com `non-scaling-stroke` corta o traço ao fim da
+   * animação, então a roseta gravada usa espessura proporcional.
+   */
+  engraveStroke?: number;
   children?: React.ReactNode;
 }) {
   const rings = rosette(spec, { steps, inner });
@@ -47,8 +54,8 @@ export function Rosette({
                   pathLength={1}
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth={strokeWidth}
-                  vectorEffect="non-scaling-stroke"
+                  strokeWidth={engrave ? engraveStroke : strokeWidth}
+                  vectorEffect={engrave ? undefined : "non-scaling-stroke"}
                 />
               ))}
             </g>

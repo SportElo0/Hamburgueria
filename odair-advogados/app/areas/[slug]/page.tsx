@@ -58,7 +58,7 @@ export default async function AreaPage({ params }: PageProps<"/areas/[slug]">) {
         aside={
           <ViewTransition name={`rosette-${area.slug}`}>
             <div className="text-gold/85">
-              <Rosette spec={area.rosette} steps={540} inner={0.3} engrave className="w-[min(17rem,70vw)] lg:w-[22rem]" />
+              <Rosette spec={area.rosette} steps={540} inner={0.3} engrave engraveStroke={0.36} className="w-[min(17rem,70vw)] lg:w-[22rem]" />
             </div>
           </ViewTransition>
         }
