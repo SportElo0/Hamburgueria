@@ -1,0 +1,541 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T18:56:03+00:00",
+  "title": "Design System: Odair Alves da Silva & Advogados",
+  "extensions": {
+    "colorMeta": {
+      "navy": {
+        "role": "primary",
+        "displayName": "Notarial Navy",
+        "canonical": "#071b2e",
+        "tonalRamp": [
+          "#000c1d",
+          "#12273a",
+          "#2f445a",
+          "#4d647b",
+          "#6e859d",
+          "#90a8c1",
+          "#b3cce6",
+          "#d8f2ff"
+        ]
+      },
+      "navy-deep": {
+        "role": "secondary",
+        "displayName": "Deep Navy",
+        "canonical": "#051424",
+        "tonalRamp": [
+          "#010c1b",
+          "#162638",
+          "#324456",
+          "#516377",
+          "#71859a",
+          "#93a7bd",
+          "#b7cce3",
+          "#dcf1ff"
+        ]
+      },
+      "blue": {
+        "role": "secondary",
+        "displayName": "Institutional Blue",
+        "canonical": "#102c43",
+        "tonalRamp": [
+          "#000c20",
+          "#0b273e",
+          "#29455d",
+          "#47657f",
+          "#6886a1",
+          "#8aa9c6",
+          "#adcdeb",
+          "#d2f3ff"
+        ]
+      },
+      "blue-line": {
+        "role": "secondary",
+        "displayName": "Field Line Blue",
+        "canonical": "#23435d",
+        "tonalRamp": [
+          "#000c22",
+          "#06273f",
+          "#25455f",
+          "#446581",
+          "#6486a4",
+          "#86aac8",
+          "#aaceee",
+          "#cef4ff"
+        ]
+      },
+      "gold": {
+        "role": "primary",
+        "displayName": "Engraver's Gold",
+        "canonical": "#c6a15a",
+        "tonalRamp": [
+          "#1e0200",
+          "#3c1d00",
+          "#5c3b00",
+          "#7d5b05",
+          "#a07c34",
+          "#c49f58",
+          "#e9c37c",
+          "#ffe9a0"
+        ]
+      },
+      "gold-soft": {
+        "role": "tertiary",
+        "displayName": "Soft Gold",
+        "canonical": "#d9bf88",
+        "tonalRamp": [
+          "#190600",
+          "#362000",
+          "#553e00",
+          "#755e28",
+          "#977f4a",
+          "#bba26c",
+          "#e0c68f",
+          "#ffebb3"
+        ]
+      },
+      "gold-ink": {
+        "role": "tertiary",
+        "displayName": "Gold Ink",
+        "canonical": "#7a5f22",
+        "tonalRamp": [
+          "#1b0400",
+          "#381f00",
+          "#573d00",
+          "#785d1f",
+          "#9a7e43",
+          "#bea165",
+          "#e3c588",
+          "#ffebad"
+        ]
+      },
+      "ivory": {
+        "role": "neutral",
+        "displayName": "Ivory",
+        "canonical": "#f7f5f0",
+        "tonalRamp": [
+          "#0c0b08",
+          "#262521",
+          "#43423e",
+          "#63615d",
+          "#84827e",
+          "#a7a5a0",
+          "#cbc9c4",
+          "#f0eee9"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#252b31",
+        "tonalRamp": [
+          "#070c11",
+          "#20262c",
+          "#3c4349",
+          "#5b6269",
+          "#7c838a",
+          "#9ea6ae",
+          "#c2cad2",
+          "#e7f0f8"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Slate Muted",
+        "canonical": "#59616a",
+        "tonalRamp": [
+          "#060c12",
+          "#1f262d",
+          "#3b434b",
+          "#5a626b",
+          "#7b838d",
+          "#9da6b0",
+          "#c1cad5",
+          "#e6f0fa"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e6e8ea",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#242527",
+          "#414244",
+          "#606163",
+          "#818284",
+          "#a3a5a7",
+          "#c7c9cb",
+          "#edeff1"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "canonical": "#cfd4d9",
+        "tonalRamp": [
+          "#080c0f",
+          "#222529",
+          "#3e4247",
+          "#5d6266",
+          "#7e8387",
+          "#a1a6aa",
+          "#c5cacf",
+          "#eaeff4"
+        ]
+      },
+      "on-navy": {
+        "role": "neutral",
+        "displayName": "On Navy",
+        "canonical": "#f7f5f0",
+        "tonalRamp": [
+          "#0c0b08",
+          "#262521",
+          "#43423e",
+          "#63615d",
+          "#84827e",
+          "#a7a5a0",
+          "#cbc9c4",
+          "#f0eee9"
+        ]
+      },
+      "on-navy-muted": {
+        "role": "neutral",
+        "displayName": "Mist Blue",
+        "canonical": "#b3c1ce",
+        "tonalRamp": [
+          "#040c15",
+          "#1b2630",
+          "#38434e",
+          "#56636e",
+          "#778490",
+          "#99a7b4",
+          "#bdcbd8",
+          "#e2f1fe"
+        ]
+      },
+      "alert": {
+        "role": "tertiary",
+        "displayName": "Alert Brick",
+        "canonical": "#a63a2f",
+        "tonalRamp": [
+          "#2d0000",
+          "#510000",
+          "#752018",
+          "#9a4237",
+          "#c06457",
+          "#e68779",
+          "#ffab9c",
+          "#ffd0c0"
+        ]
+      },
+      "alert-light": {
+        "role": "tertiary",
+        "displayName": "Alert Light",
+        "canonical": "#f2a196",
+        "tonalRamp": [
+          "#280000",
+          "#4a0605",
+          "#6d2923",
+          "#914941",
+          "#b66a61",
+          "#dc8d82",
+          "#ffb1a5",
+          "#ffd6ca"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The opening statement only; one closing gold phrase on navy."
+      },
+      "page-title": {
+        "displayName": "Page Title",
+        "purpose": "Inner page head headings."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings; 4.6vw / 4.2rem on navy fields."
+      },
+      "subhead": {
+        "displayName": "Subhead",
+        "purpose": "Section headings on area and article pages."
+      },
+      "entry-title": {
+        "displayName": "Entry Title",
+        "purpose": "Article titles in lists (1.6rem to 1.9rem) and mobile menu entries."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Numbered approach steps in gold-ink."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Area card names."
+      },
+      "title-sm": {
+        "displayName": "Title Small",
+        "purpose": "Step titles, area subsections, form headings."
+      },
+      "body-lg": {
+        "displayName": "Body Large",
+        "purpose": "Lead paragraphs and page prose, 42-66ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "FAQ answers, fields, general text."
+      },
+      "body-sm": {
+        "displayName": "Body Small",
+        "purpose": "Card summaries, footer, lists."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Definition terms, metadata, footer column headings; never below 12px."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "All button text."
+      }
+    },
+    "shadows": [
+      {
+        "name": "header-seam",
+        "value": "0 1px 0 var(--color-blue-line)",
+        "purpose": "Hairline under the sticky header after scroll or with the menu open."
+      },
+      {
+        "name": "field-focus",
+        "value": "0 0 0 1px var(--color-navy)",
+        "purpose": "Doubles the navy border of a focused field."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Reveals, sheet, link rule, rosette hover turn, arrow nudges."
+      },
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Button and field color transitions; ring engraving."
+      },
+      {
+        "name": "button-color",
+        "value": "240ms ease-out-quart",
+        "purpose": "Button background, color and border changes."
+      },
+      {
+        "name": "engrave",
+        "value": "2600ms ease-out-quart per ring, 240ms + 260ms per ring delay",
+        "purpose": "Rosette rings draw via stroke-dashoffset on load."
+      },
+      {
+        "name": "seal-in",
+        "value": "1400ms ease-out-expo, 900ms delay, scale 0.94 to 1",
+        "purpose": "Seal rings and monogram appear after engraving begins."
+      },
+      {
+        "name": "turn-on-scroll",
+        "value": "rotate 0 to 14deg over scroll 0-120vh (scroll timeline)",
+        "purpose": "Slow turn of the opening seal."
+      },
+      {
+        "name": "timeline-fill",
+        "value": "scaleX/scaleY from 0, view timeline entry 30% to cover 55%",
+        "purpose": "Gold line filling the approach timeline."
+      },
+      {
+        "name": "reveal",
+        "value": "900ms ease-out-expo, from opacity 0.88 and translateY 14px",
+        "purpose": "Scroll reveal; content visible by default, armed by JS."
+      },
+      {
+        "name": "sheet-in",
+        "value": "420ms ease-out-expo, translateY -8px",
+        "purpose": "Mobile menu sheet."
+      },
+      {
+        "name": "step-in",
+        "value": "520ms ease-out-expo, translateY 8px",
+        "purpose": "Form state change (sent / demo confirmation)."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all durations 1ms, reveals at rest",
+        "purpose": "Everything static under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Gold Button",
+      "kind": "button",
+      "refersTo": "button-gold",
+      "description": "Primary action on navy fields only.",
+      "html": "<div style=\"background:#071b2e;padding:24px;display:flex;gap:12px;flex-wrap:wrap\"><a class=\"ds-btn ds-btn-gold\" href=\"#\">Conheça as áreas de atuação <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a></div>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:3.25rem;padding:0 1.5rem;border-radius:3px;border:1px solid transparent;font-family:var(--font-sans, Manrope, sans-serif);font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),border-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),transform 320ms cubic-bezier(0.16,1,0.3,1);} .ds-btn svg{transition:transform 360ms cubic-bezier(0.16,1,0.3,1);} .ds-btn:hover svg{transform:translateX(4px);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid #c6a15a;outline-offset:3px;} .ds-btn-gold{background:#c6a15a;color:#071b2e;text-decoration:none;} .ds-btn-gold:hover{background:#d9bf88;}"
+    },
+    {
+      "name": "Navy Button",
+      "kind": "button",
+      "refersTo": "button-navy",
+      "description": "Primary action on ivory and white fields.",
+      "html": "<div style=\"background:#f7f5f0;padding:24px\"><button class=\"ds-btn ds-btn-navy\">Enviar mensagem <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button></div>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:3.25rem;padding:0 1.5rem;border-radius:3px;border:1px solid transparent;font-family:var(--font-sans, Manrope, sans-serif);font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),border-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),transform 320ms cubic-bezier(0.16,1,0.3,1);} .ds-btn svg{transition:transform 360ms cubic-bezier(0.16,1,0.3,1);} .ds-btn:hover svg{transform:translateX(4px);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid #c6a15a;outline-offset:3px;} .ds-btn-navy{background:#071b2e;color:#f7f5f0;} .ds-btn-navy:hover{background:#102c43;} .ds-btn-navy:disabled{background:#e6e8ea;color:#59616a;cursor:not-allowed;}"
+    },
+    {
+      "name": "Line Light Button",
+      "kind": "button",
+      "refersTo": "button-line-light",
+      "description": "Secondary action on navy, including the header contact action.",
+      "html": "<div style=\"background:#071b2e;padding:24px;display:flex;gap:12px;flex-wrap:wrap\"><a class=\"ds-btn ds-btn-line-light\" href=\"#\">Entrar em contato</a></div>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:3.25rem;padding:0 1.5rem;border-radius:3px;border:1px solid transparent;font-family:var(--font-sans, Manrope, sans-serif);font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),border-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),transform 320ms cubic-bezier(0.16,1,0.3,1);} .ds-btn svg{transition:transform 360ms cubic-bezier(0.16,1,0.3,1);} .ds-btn:hover svg{transform:translateX(4px);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid #c6a15a;outline-offset:3px;} .ds-btn-line-light{border-color:color-mix(in srgb,#c6a15a 70%,transparent);color:#f7f5f0;text-decoration:none;} .ds-btn-line-light:hover{border-color:#c6a15a;background:color-mix(in srgb,#c6a15a 12%,transparent);}"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Secondary action on light fields.",
+      "html": "<div style=\"background:#ffffff;padding:24px\"><button class=\"ds-btn ds-btn-line\">Enviar outra mensagem</button></div>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:3.25rem;padding:0 1.5rem;border-radius:3px;border:1px solid transparent;font-family:var(--font-sans, Manrope, sans-serif);font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),border-color 240ms var(--ease-out-quart, cubic-bezier(0.25,1,0.5,1)),transform 320ms cubic-bezier(0.16,1,0.3,1);} .ds-btn svg{transition:transform 360ms cubic-bezier(0.16,1,0.3,1);} .ds-btn:hover svg{transform:translateX(4px);} .ds-btn:active{transform:translateY(1px);} .ds-btn:focus-visible{outline:2px solid #c6a15a;outline-offset:3px;} .ds-btn-line{background:transparent;border-color:#071b2e;color:#071b2e;} .ds-btn-line:hover{background:#071b2e;color:#f7f5f0;}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Text input with label above; gold hover, navy focus, alert on error.",
+      "html": "<div style=\"background:#ffffff;padding:24px;max-width:420px\"><label class=\"ds-field-label\" for=\"ds-nome\">Nome <span>obrigatório</span></label><input id=\"ds-nome\" class=\"ds-field\" placeholder=\"Como podemos chamar você\"></div>",
+      "css": ".ds-field-label{display:flex;justify-content:space-between;margin-bottom:.5rem;font-family:Manrope,sans-serif;font-size:.9375rem;font-weight:600;color:#071b2e;} .ds-field-label span{font-size:.8125rem;font-weight:400;color:#59616a;} .ds-field{display:block;width:100%;min-height:3.25rem;padding:0 1rem;border-radius:3px;border:1px solid #cfd4d9;background:#fff;color:#252b31;font-family:Manrope,sans-serif;font-size:1rem;transition:border-color 200ms cubic-bezier(0.25,1,0.5,1),box-shadow 200ms cubic-bezier(0.25,1,0.5,1);} .ds-field::placeholder{color:#59616a;} .ds-field:hover{border-color:#c6a15a;} .ds-field:focus-visible{outline:none;border-color:#071b2e;box-shadow:0 0 0 1px #071b2e;} .ds-field[aria-invalid=true]{border-color:#a63a2f;}"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Desktop nav group: 3px bordered cluster, gold underline on the current section.",
+      "html": "<div style=\"background:#071b2e;padding:24px;display:flex;gap:12px;flex-wrap:wrap\"><nav class=\"ds-nav\"><a href=\"#\">Início</a><a href=\"#\" aria-current=\"true\">Áreas</a><a href=\"#\">Abordagem</a><a href=\"#\">Conteúdos</a></nav></div>",
+      "css": ".ds-nav{display:flex;gap:.25rem;border:1px solid rgba(35,67,93,.8);border-radius:3px;padding:0 .5rem;} .ds-nav a{position:relative;display:block;padding:.875rem .75rem;font-family:Manrope,sans-serif;font-size:.875rem;font-weight:500;color:#b3c1ce;text-decoration:none;transition:color 240ms;} .ds-nav a:hover,.ds-nav a[aria-current]{color:#f7f5f0;} .ds-nav a::after{content:'';position:absolute;left:.75rem;right:.75rem;bottom:.5rem;height:1px;background:#c6a15a;transform:scaleX(0);transform-origin:left;transition:transform 500ms cubic-bezier(0.16,1,0.3,1);} .ds-nav a[aria-current]::after{transform:scaleX(1);} .ds-nav a:focus-visible{outline:2px solid #c6a15a;outline-offset:3px;}"
+    },
+    {
+      "name": "Area Card",
+      "kind": "card",
+      "refersTo": "area-card-light",
+      "description": "Practice-area card in the carousel; alternates light and dark, gold border and filled arrow badge on hover.",
+      "html": "<div style=\"background:#071b2e;padding:24px;display:flex;gap:12px;flex-wrap:wrap\"><article class=\"ds-card\"><h3>Família e Sucessões</h3><svg class=\"ds-card-seal\" viewBox=\"-104 -104 208 208\" aria-hidden=\"true\"><circle r=\"101.5\" fill=\"none\" stroke=\"currentColor\"/><circle r=\"103.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\".6\" opacity=\".6\"/><circle r=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\".6\" stroke-dasharray=\"3 2\"/><circle r=\"56\" fill=\"none\" stroke=\"currentColor\" stroke-width=\".6\" stroke-dasharray=\"2 2\"/><circle r=\"23\" fill=\"none\" stroke=\"currentColor\" stroke-width=\".8\"/></svg><p>Regime de bens, divórcio, guarda de filhos, sucessões e inventários.</p><div class=\"ds-card-foot\"><a href=\"#\">Saiba mais</a><span class=\"ds-card-badge\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></span></div></article></div>",
+      "css": ".ds-card{width:22.5rem;display:flex;flex-direction:column;border-radius:4px;border:1px solid #fff;background:#fff;color:#071b2e;padding:1.75rem;transition:border-color 500ms;} .ds-card:hover{border-color:#c6a15a;} .ds-card h3{margin:0;font-family:Manrope,sans-serif;font-size:1.375rem;font-weight:600;line-height:1.25;letter-spacing:-.01em;} .ds-card-seal{width:9.5rem;margin:1.75rem auto;color:rgba(122,95,34,.8);transition:transform 1400ms cubic-bezier(0.16,1,0.3,1);} .ds-card:hover .ds-card-seal{transform:rotate(10deg);} .ds-card p{margin:0;font-family:Manrope,sans-serif;font-size:.9375rem;line-height:1.625;color:#59616a;} .ds-card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:1.75rem;} .ds-card-foot a{font-family:Manrope,sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#071b2e;text-decoration:none;} .ds-card-badge{display:grid;place-items:center;width:2.75rem;height:2.75rem;border-radius:9999px;border:1px solid #cfd4d9;color:#7a5f22;transition:all 500ms;} .ds-card:hover .ds-card-badge{background:#071b2e;border-color:#071b2e;color:#c6a15a;}"
+    },
+    {
+      "name": "Pending Tag",
+      "kind": "chip",
+      "refersTo": "pending-tag",
+      "description": "Dashed marker for any fact not yet confirmed by the office.",
+      "html": "<div style=\"background:#f7f5f0;padding:24px\"><span class=\"ds-pending\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg><em>a confirmar</em></span></div>",
+      "css": ".ds-pending{display:inline-flex;align-items:center;gap:.5rem;border:1px dashed #cfd4d9;border-radius:3px;padding:.375rem .75rem;font-family:Manrope,sans-serif;font-size:.8125rem;color:#59616a;}"
+    },
+    {
+      "name": "Ruled Link",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Inline call-to-action link whose 1px rule retracts on hover.",
+      "html": "<div style=\"background:#f7f5f0;padding:24px\"><a class=\"ds-link-line\" href=\"#\">Ver todos os conteúdos</a></div>",
+      "css": ".ds-link-line{font-family:Manrope,sans-serif;font-weight:600;color:#071b2e;text-decoration:none;background-image:linear-gradient(currentColor,currentColor);background-size:100% 1px;background-position:0 100%;background-repeat:no-repeat;padding-bottom:2px;transition:background-size 420ms cubic-bezier(0.16,1,0.3,1);} .ds-link-line:hover{background-size:0% 1px;background-position:100% 100%;} .ds-link-line:focus-visible{outline:2px solid #c6a15a;outline-offset:3px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Certificate",
+    "overview": "**Creative North Star: \"The Certificate\"**\n\nThe site reads as an authenticated document issued by the office: a certidão or escritura whose seriousness comes from the quality of the line, not from symbols of justice. Whole navy fields carry the opening, the practice areas, the contact and the footer; ivory and white sections carry the reading. Gold is ink, not metal: it lives in hairlines, guilloché, the monogram, numerals, the accent phrase of a heading and the primary button on navy.\n\nThe signature material is guilloché generated by formula (overlapping polar waves with shifted phase), drawn as SVG strokes and never as an image. It appears as a large seal around the monogram in the opening, as a smaller rosette unique to each practice area, as a faint watermark behind contact, and as horizontal bands that close a field like the margin of a title deed. Every rosette is decorative; its meaning is always in the text beside it.\n\nDensity is generous and calm, built for a tense reader on a phone. Type is a high-contrast Didone for headings over a clear humanist-geometric sans for everything a person must read or press. Motion is a discreet engraving: rings draw themselves on load, the seal turns slowly with scroll, a timeline fills in gold, and everything is static under reduced motion.",
+    "keyCharacteristics": [
+      "Whole navy fields alternating with ivory and white reading sections; no gradients between them.",
+      "Gold as a stroke color, never as a fill surface except the primary button on navy.",
+      "Formula-generated SVG guilloché (rosettes and bands) as the only ornament.",
+      "Bodoni Moda headings, Manrope everything else.",
+      "1px rules, 3-4px corners, near-zero shadow.",
+      "The office's own monogram rasters carry the brand; no legal clip art."
+    ],
+    "rules": [
+      {
+        "name": "The Gold Is Ink Rule",
+        "body": "Gold is a stroke, a numeral, a phrase or a button on navy; it never becomes a background panel, a gradient or a metallic sheen. The monogram raster is the only gold-textured object.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Swap Rule",
+        "body": "On ivory or white, gold text and small marks use gold-ink, never the bright gold. Bright gold on light grounds is reserved for 1px timeline lines, the timeline dot, guilloché bands at reduced opacity, and field hover borders.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Fields Rule",
+        "body": "A section is either a whole navy field or a light reading field (ivory or paper). Adjacent light sections alternate ivory and paper; there is no third ground.",
+        "section": "colors"
+      },
+      {
+        "name": "The Didone Speaks, Sans Explains Rule",
+        "body": "Bodoni Moda is for headings, numerals and menu entries only; any paragraph, control, field or label is Manrope.",
+        "section": "typography"
+      },
+      {
+        "name": "The Gold Phrase Rule",
+        "body": "A display heading on navy may carry one gold phrase, always its closing words. Headings on light grounds stay navy throughout.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Blur Rule",
+        "body": "No blurred drop shadows anywhere. If something needs separation, it gets a 1px line or a change of field.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep every section on one of two grounds: whole navy, or ivory/paper for reading.",
+      "Do use gold as ink: 1px lines, guilloché strokes, numerals, a closing gold phrase in a display heading on navy, and the gold button on navy.",
+      "Do switch gold text to gold-ink (#7a5f22) on ivory and white.",
+      "Do generate ornament from the guilloché formulas and stroke it in currentColor; give every new practice area its own rosette seed.",
+      "Do use the navy button as the primary action on light fields and the gold button as the primary action on navy.",
+      "Do mark every unconfirmed fact with the dashed pending tag.",
+      "Do keep motion an engraving: ease-out (expo or quart), short travel (8-14px), and fully static under reduced motion."
+    ],
+    "donts": [
+      "Don't use scales, gavels, stock legal photos, OAB symbols or a redrawn logo; the office's monogram rasters are the only brand mark.",
+      "Don't add a statistics or success-numbers band where the area index stands.",
+      "Don't render gold as a gradient, foil or sheen, or as a large filled panel.",
+      "Don't use blurred drop shadows; separation is a hairline or a change of field.",
+      "Don't round corners beyond 4px; circles are only for icon controls and timeline dots.",
+      "Don't set paragraphs, labels or controls in Bodoni, or headings in Manrope weight below 600.",
+      "Don't use neutral grey for secondary text on navy; use the mist blue (on-navy-muted)."
+    ]
+  }
+}
