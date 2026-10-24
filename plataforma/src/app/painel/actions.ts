@@ -23,6 +23,7 @@ import { createReferral, updateReferral, type ReferralPatch } from '@/lib/referr
 import { seedStores } from '@/lib/seeds';
 import { setMercadoPagoToken } from '@/lib/pix';
 import { OperatorError, removeOperator, upsertOperator } from '@/lib/operators';
+import { DiagnosisError, setDiagnosisStatus, type DiagnosisStatus } from '@/lib/diagnostics';
 
 export interface ActionResult {
   ok: boolean;
@@ -245,4 +246,14 @@ export async function removeOperatorAction(slug: string, email: string): Promise
   if (!isSlug(slug)) return BAD_SLUG;
   await removeOperator(slug, email);
   return { ok: true };
+}
+
+export async function setDiagnosisStatusAction(id: string, status: DiagnosisStatus): Promise<ActionResult> {
+  await requireUser();
+  try {
+    await setDiagnosisStatus(id, status);
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof DiagnosisError ? err.message : 'Não foi possível salvar.' };
+  }
 }

@@ -15,6 +15,9 @@ export default async function PainelLayout({ children }: { children: React.React
             <Link href="/painel/indicacoes" className="text-sm text-ink-mute hover:text-ink">
               Indicações
             </Link>
+            <Link href="/painel/diagnosticos" className="text-sm text-ink-mute hover:text-ink">
+              Diagnósticos
+            </Link>
           </div>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden text-ink-mute sm:inline">{user.name || user.email}</span>
