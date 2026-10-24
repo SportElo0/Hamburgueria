@@ -25,7 +25,7 @@
     watched.forEach((el) => el.classList.add('in'));
   }
 
-  // Subida: a 3D frame sequence (rendered by tools/growlift-scene) that plays with the scroll.
+  // Subida: frames cut from a Higgsfield video (tools/growlift-frames.mjs) that play with the scroll.
   const lift = document.getElementById('subida');
   if (lift) {
     const canvas = lift.querySelector('.lift-canvas');
