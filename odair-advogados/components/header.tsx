@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Menu, X } from "lucide-react";
-import { nav, site } from "@/config/site";
+import { ArrowRight, Menu, MessageCircle, X } from "lucide-react";
+import { nav, site, whatsappUrl } from "@/config/site";
 import { Signature } from "@/components/brand";
 
 export function Header() {
   const pathname = usePathname();
   const home = pathname === "/";
+  const wa = whatsappUrl();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("");
@@ -34,13 +35,21 @@ export function Header() {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           const id = entry.target.id;
+          // Dentro da abertura presa quem decide é a cena (evento "hero-phase").
+          if (id === "areas" && entry.target.closest(".is-scene")) continue;
           setActive(nav.some((item) => item.id === id) ? id : "");
         }
       },
       { rootMargin: "-45% 0px -50% 0px" },
     );
     sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    // Na abertura presa, a cena avisa quando as áreas estão na tela.
+    const onPhase = (event: Event) => setActive((event as CustomEvent<string>).detail);
+    window.addEventListener("hero-phase", onPhase);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("hero-phase", onPhase);
+    };
   }, [home]);
 
   const current = home ? active : pathname.startsWith("/areas") ? "areas" : pathname.startsWith("/conteudos") ? "conteudos" : "";
@@ -124,9 +133,27 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link href="/#contato" className="btn btn-line-light hidden min-h-11 px-5 sm:inline-flex">
-              Entrar em contato
-            </Link>
+            {wa ? (
+              <>
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-line-light hidden min-h-11 px-5 sm:inline-flex">
+                  <MessageCircle size={16} />
+                  Falar no WhatsApp
+                </a>
+                <a
+                  href={wa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Falar no WhatsApp"
+                  className="grid size-11 place-items-center rounded-[3px] text-gold hover:text-gold-soft sm:hidden"
+                >
+                  <MessageCircle size={22} strokeWidth={1.5} />
+                </a>
+              </>
+            ) : (
+              <Link href="/#contato" className="btn btn-line-light hidden min-h-11 px-5 sm:inline-flex">
+                Entrar em contato
+              </Link>
+            )}
             <button
               ref={toggleRef}
               type="button"
@@ -152,7 +179,7 @@ export function Header() {
           style={{ top: sheetTop }}
           className="animate-sheet fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-y-auto bg-navy px-5 sm:px-8 xl:hidden"
         >
-          <nav aria-label="Menu" className="pt-2">
+          <nav aria-label="Menu" className="flex flex-1 flex-col pt-2">
             <ul>
               {nav.map((item) => (
                 <li key={item.id} className="border-b border-blue-line">
@@ -168,13 +195,20 @@ export function Header() {
                 </li>
               ))}
             </ul>
+            <div className="mt-auto py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+              {wa ? (
+                <a href={wa} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="btn btn-gold w-full">
+                  <MessageCircle size={16} />
+                  Falar no WhatsApp
+                </a>
+              ) : (
+                <Link href="/#contato" onClick={() => setOpen(false)} className="btn btn-gold w-full">
+                  Entrar em contato
+                  <ArrowRight size={16} className="nudge" />
+                </Link>
+              )}
+            </div>
           </nav>
-          <div className="mt-auto py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-            <Link href="/#contato" onClick={() => setOpen(false)} className="btn btn-gold w-full">
-              Entrar em contato
-              <ArrowRight size={16} className="nudge" />
-            </Link>
-          </div>
         </div>
       )}
     </>

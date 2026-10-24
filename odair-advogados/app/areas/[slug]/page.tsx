@@ -2,7 +2,7 @@ import { ViewTransition } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, MessageCircle } from "lucide-react";
 import { areas, getArea } from "@/data/areas";
 import { articles } from "@/data/articles";
 import { FaqList } from "@/components/faq";
@@ -10,7 +10,7 @@ import { PageHead } from "@/components/page-head";
 import { DraftNote } from "@/components/pending";
 import { Rosette } from "@/components/rosette";
 import { jsonLdScript } from "@/lib/seo";
-import { site } from "@/config/site";
+import { site, whatsappUrl } from "@/config/site";
 
 export function generateStaticParams() {
   return areas.map((area) => ({ slug: area.slug }));
@@ -34,6 +34,7 @@ export default async function AreaPage({ params }: PageProps<"/areas/[slug]">) {
   if (!area) notFound();
 
   const index = areas.indexOf(area);
+  const wa = whatsappUrl(`${site.whatsappMessage.replace(/\.$/, "")}, na área de ${area.name}.`);
   const related = articles.filter((a) => a.area === area.slug);
   const others = areas.filter((a) => a.slug !== area.slug);
   const prev = areas[(index - 1 + areas.length) % areas.length];
@@ -76,10 +77,17 @@ export default async function AreaPage({ params }: PageProps<"/areas/[slug]">) {
                   </li>
                 ))}
               </ul>
-              <Link href="/#contato" className="btn btn-navy mt-8 w-full sm:w-auto">
-                Entrar em contato
-                <ArrowRight size={16} className="nudge" />
-              </Link>
+              {wa ? (
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-navy mt-8 w-full sm:w-auto">
+                  <MessageCircle size={16} />
+                  Conversar pelo WhatsApp
+                </a>
+              ) : (
+                <Link href="/#contato" className="btn btn-navy mt-8 w-full sm:w-auto">
+                  Entrar em contato
+                  <ArrowRight size={16} className="nudge" />
+                </Link>
+              )}
             </div>
           </aside>
 

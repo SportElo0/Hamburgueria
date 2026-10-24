@@ -34,9 +34,19 @@ O site se apresenta como um documento autenticado do escritório: guilhochê fin
   `brand` em `config/site.ts`).
 - **Guilhochê:** rosetas e faixas desenhadas em SVG por fórmula (`lib/guilloche.ts`). Cada área tem a sua
   roseta (`rosette` em `data/areas.ts`).
-- **Movimento:** a roseta da abertura se grava anel a anel e gira devagar com o scroll; o fio da linha do tempo
-  se preenche ao entrar na tela; a roseta do card "viaja" até a página da área. Com movimento reduzido, tudo
-  fica estático e visível.
+- **Abertura com scroll (GSAP ScrollTrigger, `components/scroll-scenes.tsx`):** o escritório ao fundo e o selo
+  do monograma; a cena fica presa e as cinco áreas entram uma de cada vez enquanto a foto se aproxima e o selo
+  gira. O índice ao lado (desktop) e os traços no topo (celular) mostram em que área se está. Com movimento
+  reduzido, as áreas aparecem em lista logo abaixo, sem cena presa.
+- **Outros movimentos:** a roseta da abertura se grava anel a anel; o fio da linha do tempo se preenche ao entrar
+  na tela; a roseta de cada área "viaja" até a página da área.
+
+### Foto da abertura
+
+Hoje é **ilustrativa** (gerada por IA, sem pessoas) e aparece marcada como "Imagem ilustrativa". Ela é baixada no
+build pelo script `scripts/baixar-foto.mjs` (roda sozinho antes de `next build`). Para trocar pela foto real do
+escritório: coloque o arquivo em `public/fotos/`, aponte `heroPhoto.src` para ele em `config/site.ts`, use
+`remote: null` e `illustrative: false`.
 
 ## Onde mudar cada coisa
 
@@ -51,8 +61,9 @@ O site se apresenta como um documento autenticado do escritório: guilhochê fin
 | `app/privacidade/page.tsx` | Minuta da política de privacidade. |
 
 Campos `null` em `config/site.ts` aparecem como "a confirmar"/"a informar" e nunca são preenchidos com dados
-fictícios. O botão de WhatsApp só aparece quando `site.whatsapp` for preenchido, com a mensagem neutra:
-"Olá, gostaria de obter informações sobre o atendimento do escritório Odair Alves da Silva & Advogados."
+fictícios. **WhatsApp confirmado: (11) 99751-9752.** Os botões "Falar no WhatsApp" abrem a conversa com a
+mensagem neutra: "Olá, gostaria de obter informações sobre o atendimento do escritório Odair Alves da Silva &
+Advogados." (nas páginas de área, com o nome da área).
 
 ### Publicar um artigo
 
@@ -62,9 +73,9 @@ Em `data/articles.ts`, escreva `content` (lista de parágrafos), preencha `autho
 ## Formulário de contato
 
 Pede só nome, e-mail ou telefone, área (opcional) e mensagem breve. A validação acontece no servidor
-(`app/actions/contact.ts`). **Nada é gravado.** Enquanto `site.contactDelivery` for `null`, o formulário
-mostra que é uma demonstração e descarta a mensagem. Para ativar o envio, integre um serviço com sigilo
-adequado no ponto indicado em `app/actions/contact.ts` e revise a política de privacidade.
+(`app/actions/contact.ts`). **Nada é gravado.** Com `site.contactDelivery = "whatsapp"`, o formulário monta a
+mensagem, mostra para revisão e o botão "Enviar pelo WhatsApp" abre a conversa com o escritório. Com `null`, volta
+ao modo demonstração (confere e não envia).
 
 ## Publicação na Vercel
 
@@ -81,9 +92,10 @@ Projeto separado com **Root Directory = `odair-advogados`**. Endereço da demons
 Rode `npm run check:config`. Em resumo:
 
 1. Número de inscrição na OAB (e da sociedade, se houver).
-2. Telefone, WhatsApp, e-mail, endereço e cidade da sede.
+2. Telefone fixo, e-mail, endereço e cidade da sede (o WhatsApp já está configurado).
 3. Foto profissional autorizada do Dr. Odair (opcional; hoje a abertura usa o monograma).
 4. Arquivo vetorial original do logotipo.
 5. Aprovação dos textos: escritório, áreas, abordagem, perguntas frequentes e política de privacidade.
-6. Serviço de envio do formulário e encarregado de dados (LGPD).
+6. Encarregado de dados (LGPD).
+8. Foto real do escritório para a abertura (hoje ilustrativa).
 7. Redes sociais, se houver.

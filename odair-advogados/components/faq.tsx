@@ -11,7 +11,9 @@ export const homeFaq: FaqItem[] = [
   },
   {
     q: "Como posso entrar em contato?",
-    a: "Pela seção de contato desta página, onde estão os canais do escritório. Basta um resumo breve do assunto e um meio de retorno.",
+    a: site.whatsapp
+      ? `Pelo WhatsApp ${site.whatsapp.display} ou pelo formulário da seção de contato, que deixa a mensagem pronta para enviar. Basta um resumo breve do assunto.`
+      : "Pela seção de contato desta página, onde estão os canais do escritório. Basta um resumo breve do assunto e um meio de retorno.",
   },
   {
     q: "O escritório atua no Estado de São Paulo?",

@@ -43,3 +43,6 @@ next-env.d.ts
 # impeccable (capturas locais)
 /.impeccable/review/
 /.impeccable/questions/
+
+# foto da abertura baixada no build (ver config/site.ts heroPhoto)
+/public/fotos/escritorio-ilustrativo.png

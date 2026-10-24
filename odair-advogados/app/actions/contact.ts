@@ -1,15 +1,17 @@
 "use server";
 
-import { site } from "@/config/site";
+import { site, whatsappUrl } from "@/config/site";
 import { areas } from "@/data/areas";
 
 export type ContactField = "name" | "reply" | "area" | "message";
 
 export type ContactState = {
-  status: "idle" | "error" | "demo" | "sent";
+  status: "idle" | "error" | "demo" | "sent" | "whatsapp";
   attempt: number;
   errors: Partial<Record<ContactField, string>>;
   values: Record<ContactField, string>;
+  /** Mensagem pronta e link do WhatsApp (quando o canal é o WhatsApp). */
+  whatsapp?: { url: string; text: string };
 };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -56,6 +58,24 @@ export async function submitContact(previous: ContactState, formData: FormData):
   if (values.message.length < 10) errors.message = "Escreva um resumo breve, com pelo menos 10 caracteres.";
 
   if (Object.keys(errors).length > 0) return { status: "error", attempt, errors, values };
+
+  if (site.contactDelivery === "whatsapp") {
+    // Nada é enviado nem guardado pelo site: a pessoa revisa e envia pelo próprio WhatsApp.
+    const area = areas.find((a) => a.slug === values.area)?.name;
+    const text = [
+      site.whatsappMessage,
+      "",
+      `Nome: ${values.name}`,
+      `Retorno: ${values.reply}`,
+      area ? `Área: ${area}` : null,
+      "",
+      values.message,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+    const url = whatsappUrl(text);
+    if (url) return { status: "whatsapp", attempt, errors: {}, values, whatsapp: { url, text } };
+  }
 
   if (!site.contactDelivery) {
     // Demonstração: nada é enviado nem armazenado.

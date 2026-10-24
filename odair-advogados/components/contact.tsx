@@ -72,8 +72,10 @@ export function Contact() {
 
         <div data-reveal className="rounded-[4px] bg-paper p-6 text-graphite sm:p-8 lg:col-span-6 lg:col-start-7 lg:p-10">
           <h3 className="text-[1.25rem] font-semibold text-navy">Envie uma mensagem</h3>
-          <p className="mt-1.5 mb-6 text-[0.9375rem] text-muted">Quatro campos, sem cadastro.</p>
-          <ContactForm demo={!site.contactDelivery} />
+          <p className="mt-1.5 mb-6 text-[0.9375rem] text-muted">
+            Quatro campos, sem cadastro.{site.contactDelivery === "whatsapp" ? " A conversa segue pelo WhatsApp." : ""}
+          </p>
+          <ContactForm channel={site.contactDelivery ?? "demo"} />
         </div>
       </div>
     </section>

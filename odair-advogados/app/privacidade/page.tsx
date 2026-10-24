@@ -26,8 +26,8 @@ const sections = [
   {
     title: "Armazenamento e segurança",
     body: [
-      "Nesta versão de demonstração, o formulário apenas confere os campos e não envia nem armazena nenhuma informação.",
-      "Quando o envio for ativado, os dados serão transmitidos por conexão segura e guardados somente pelo tempo necessário para o atendimento, com acesso restrito à equipe do escritório.",
+      "O site não guarda as mensagens. O formulário confere os campos e monta uma mensagem que você mesmo envia pelo WhatsApp do escritório; a conversa passa a seguir também as regras de privacidade do WhatsApp.",
+      "As informações recebidas pelo escritório são usadas somente para o atendimento, com acesso restrito à equipe.",
     ],
   },
   {

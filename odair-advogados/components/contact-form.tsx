@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, CircleAlert, Info, LoaderCircle, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, CircleAlert, Info, LoaderCircle, MessageCircle, ShieldCheck } from "lucide-react";
 import { submitContact, type ContactField, type ContactState } from "@/app/actions/contact";
 import { areas } from "@/data/areas";
 
@@ -13,13 +13,16 @@ const initial: ContactState = {
   values: { name: "", reply: "", area: "", message: "" },
 };
 
-export function ContactForm({ demo, defaultArea = "" }: { demo: boolean; defaultArea?: string }) {
+export function ContactForm({ channel, defaultArea = "" }: { channel: "demo" | "whatsapp" | "email"; defaultArea?: string }) {
+  const demo = channel === "demo";
   const [state, action, pending] = useActionState(submitContact, initial);
+  // Tentativa cuja mensagem pronta foi fechada para edição.
+  const [editing, setEditing] = useState(-1);
   const resultRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state.status === "demo" || state.status === "sent") resultRef.current?.focus();
+    if (state.status === "demo" || state.status === "sent" || state.status === "whatsapp") resultRef.current?.focus();
     if (state.status === "error") {
       const first = (["name", "reply", "area", "message"] as ContactField[]).find((f) => state.errors[f]);
       if (first) formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
@@ -27,9 +30,34 @@ export function ContactForm({ demo, defaultArea = "" }: { demo: boolean; default
   }, [state]);
 
   const done = state.status === "demo" || state.status === "sent";
+  const ready = state.status === "whatsapp" && state.whatsapp && editing !== state.attempt;
   const v = state.values;
   const err = (field: ContactField) => state.errors[field];
   const describedBy = (field: ContactField) => (err(field) ? `${field}-erro` : undefined);
+
+  if (ready && state.whatsapp) {
+    return (
+      <div ref={resultRef} tabIndex={-1} role="status" className="animate-step outline-none">
+        <p className="display text-[2rem] leading-tight text-navy">Mensagem pronta.</p>
+        <p className="mt-3 max-w-[46ch] text-[1rem] leading-relaxed text-muted">
+          Revise o texto abaixo. Ele só é enviado quando você tocar em enviar no WhatsApp.
+        </p>
+        <pre className="mt-5 max-h-56 overflow-auto rounded-[3px] border border-line-strong bg-ivory p-4 font-sans text-[0.9375rem] leading-relaxed whitespace-pre-wrap text-graphite">
+          {state.whatsapp.text}
+        </pre>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <a href={state.whatsapp.url} target="_blank" rel="noopener noreferrer" className="btn btn-navy">
+            <MessageCircle size={16} />
+            Enviar pelo WhatsApp
+          </a>
+          <button type="button" onClick={() => setEditing(state.attempt)} className="btn btn-line">
+            <ArrowLeft size={16} />
+            Editar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (done) {
     return (
@@ -60,6 +88,12 @@ export function ContactForm({ demo, defaultArea = "" }: { demo: boolean; default
 
   return (
     <form ref={formRef} action={action} noValidate key={state.attempt} className="grid grid-cols-1 gap-5">
+      {channel === "whatsapp" && (
+        <p className="flex items-start gap-2.5 rounded-[3px] bg-ivory px-4 py-3 text-[0.875rem] leading-snug text-muted">
+          <Info size={16} strokeWidth={1.6} aria-hidden className="mt-0.5 flex-none text-gold-ink" />
+          Ao continuar, a mensagem fica pronta para você enviar pelo WhatsApp do escritório. Nada fica guardado no site.
+        </p>
+      )}
       {demo && (
         <p className="flex items-start gap-2.5 rounded-[3px] border border-dashed border-line-strong bg-ivory px-4 py-3 text-[0.875rem] leading-snug text-muted">
           <Info size={16} strokeWidth={1.6} aria-hidden className="mt-0.5 flex-none text-gold-ink" />
@@ -146,7 +180,7 @@ export function ContactForm({ demo, defaultArea = "" }: { demo: boolean; default
             </>
           ) : (
             <>
-              Enviar mensagem
+              {channel === "whatsapp" ? "Continuar no WhatsApp" : "Enviar mensagem"}
               <ArrowRight size={16} className="nudge" />
             </>
           )}

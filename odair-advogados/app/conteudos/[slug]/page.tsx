@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, MessageCircle } from "lucide-react";
 import { articles, formatDate, getArticle, statusLabel } from "@/data/articles";
 import { getArea } from "@/data/areas";
+import { whatsappUrl } from "@/config/site";
 import { PageHead } from "@/components/page-head";
 import { DraftNote, Pending } from "@/components/pending";
 
@@ -115,10 +116,17 @@ export default async function ArticlePage({ params }: PageProps<"/conteudos/[slu
                 <ArrowLeft size={16} />
                 Todos os conteúdos
               </Link>
-              <Link href="/#contato" className="btn btn-navy">
-                Entrar em contato
-                <ArrowRight size={16} className="nudge" />
-              </Link>
+              {whatsappUrl() ? (
+                <a href={whatsappUrl()!} target="_blank" rel="noopener noreferrer" className="btn btn-navy">
+                  <MessageCircle size={16} />
+                  Conversar pelo WhatsApp
+                </a>
+              ) : (
+                <Link href="/#contato" className="btn btn-navy">
+                  Entrar em contato
+                  <ArrowRight size={16} className="nudge" />
+                </Link>
+              )}
             </div>
           </article>
         </div>

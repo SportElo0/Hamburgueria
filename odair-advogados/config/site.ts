@@ -31,7 +31,7 @@ export const site = {
 
   phone: null as Phone | null,
   /** Número com DDI e DDD, só dígitos. Ex.: { number: "5511900000000", display: "(11) 90000-0000" }. */
-  whatsapp: null as { number: string; display: string } | null,
+  whatsapp: { number: "5511997519752", display: "(11) 99751-9752" } as { number: string; display: string } | null,
   email: null as string | null,
   address: null as Address | null,
   /** Cidade da sede, quando confirmada (aparece no rodapé). */
@@ -45,16 +45,32 @@ export const site = {
   /** Foto profissional autorizada do Dr. Odair. Enquanto `null`, o site usa o monograma. */
   photo: null as { src: string; alt: string } | null,
 
+  /**
+   * Foto da abertura. HOJE É ILUSTRATIVA (gerada por IA, sem pessoas): não é o
+   * escritório do Dr. Odair e aparece marcada como "imagem ilustrativa".
+   * `remote` é baixado para `src` no build (scripts/baixar-foto.mjs) quando o
+   * arquivo não existe. Para usar a foto real: coloque o arquivo em
+   * public/fotos/, aponte `src` para ele, `remote: null` e `illustrative: false`.
+   */
+  heroPhoto: {
+    src: "/fotos/escritorio-ilustrativo.png",
+    remote:
+      "https://d8j0ntlcm91z4.cloudfront.net/user_3FePbBNXAIWrl462iiz2a7ygFXt/hf_20261024_185836_e9d2dc6f-43f6-4204-bd9e-8f45caf24f1c.png",
+    width: 1344,
+    height: 768,
+    illustrative: true,
+  } as { src: string; remote: string | null; width: number; height: number; illustrative: boolean },
+
   /** Mensagem inicial neutra do WhatsApp (pedido do briefing). */
   whatsappMessage:
     "Olá, gostaria de obter informações sobre o atendimento do escritório Odair Alves da Silva & Advogados.",
 
   /**
-   * Endereço que recebe o formulário (serviço de envio configurado no servidor).
-   * Enquanto não existir, o formulário funciona em demonstração: confere os
-   * campos no servidor e não envia nem guarda nada.
+   * Para onde vai o formulário. "whatsapp": o servidor confere os campos e o
+   * navegador abre o WhatsApp do escritório com a mensagem pronta (nada é
+   * guardado no site). `null`: demonstração, que confere e não envia nada.
    */
-  contactDelivery: null as null | "email",
+  contactDelivery: "whatsapp" as null | "whatsapp" | "email",
 
   /** Demonstração comercial não oficial. */
   demo: true,
@@ -77,9 +93,9 @@ export const nav = [
   { href: "/#contato", id: "contato", label: "Contato" },
 ] as const;
 
-export function whatsappUrl() {
+export function whatsappUrl(message: string = site.whatsappMessage) {
   if (!site.whatsapp) return null;
-  return `https://wa.me/${site.whatsapp.number}?text=${encodeURIComponent(site.whatsappMessage)}`;
+  return `https://wa.me/${site.whatsapp.number}?text=${encodeURIComponent(message)}`;
 }
 
 /** Lista do que ainda depende do escritório (usada em `npm run check:config`). */
