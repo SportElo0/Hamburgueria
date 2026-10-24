@@ -9,6 +9,7 @@ import { DEFAULT_ORDERING, applyCoupon, nextStatus, orderInputSchema, orderingSc
 import { ActionError, OrderError, applyAction, getOperation, getOrder, listOrders, ordersForDays, placeOrder, setOpen, setSoldOut, simulateDemoPayment, trackOrder } from '@/lib/orders';
 import { authenticateOperator, removeOperator, upsertOperator } from '@/lib/operators';
 import { listCustomers, setOptOut } from '@/lib/customers';
+import { addSubscriber } from '@/lib/subscribers';
 
 const SLUG = 'el-patron-burger';
 const ORIGIN = 'https://painel.example';
@@ -323,5 +324,32 @@ describe('clube: entrega grátis e clientes', () => {
     list = await listCustomers(SLUG);
     expect(by('11977776666').optIn).toBe(true);
     expect(caio.order.optIn).toBe(true);
+  });
+});
+
+describe('lista de ofertas pelo site', () => {
+  it('quem se inscreve no site entra na lista; quem pediu para sair não volta sozinho', async () => {
+    await publishStore(elPatron());
+    await expect(addSubscriber(SLUG, { phone: '11 96666-5555', consent: false })).rejects.toThrow(/autorização/);
+    await expect(addSubscriber('nao-existe', { phone: '11966665555', consent: true })).rejects.toThrow(/não encontrada/);
+    await addSubscriber(SLUG, { name: 'Duda', phone: '(11) 96666-5555', consent: true });
+    await addSubscriber(SLUG, { name: 'Duda Souza', phone: '11966665555', consent: true }); // same phone: one entry
+    let list = await listCustomers(SLUG);
+    expect(list).toHaveLength(1);
+    expect(list[0]).toMatchObject({ phone: '11966665555', name: 'Duda Souza', orders: 0, optIn: true });
+    expect(list[0].subscribedAt).toBeTruthy();
+
+    // A later order without the tick box withdraws consent; signing up again afterwards restores it.
+    await setOpen(SLUG, true, 'teste');
+    await placeOrder(SLUG, base({ customer: { name: 'Duda', phone: '11966665555' } }), ORIGIN);
+    list = await listCustomers(SLUG);
+    expect(list[0].optIn).toBe(false);
+    await addSubscriber(SLUG, { name: 'Duda', phone: '11966665555', consent: true });
+    list = await listCustomers(SLUG);
+    expect(list[0].optIn).toBe(true);
+
+    await setOptOut(SLUG, '11966665555', true);
+    await addSubscriber(SLUG, { name: 'Duda', phone: '11966665555', consent: true });
+    expect((await listCustomers(SLUG))[0]).toMatchObject({ optIn: false, optedOut: true });
   });
 });

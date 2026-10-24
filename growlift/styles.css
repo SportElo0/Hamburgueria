@@ -133,8 +133,7 @@ section { position: relative; }
 .models-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; }
 .models-head .lead { margin-top: 16px; }
 .models { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px; margin-top: 52px; }
-.model { grid-column: span 2; position: relative; border-radius: var(--radius); overflow: hidden; background: var(--surface); border: 1px solid var(--line); transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s; }
-.model:nth-child(1), .model:nth-child(2) { grid-column: span 3; }
+.model { grid-column: span 3; position: relative; border-radius: var(--radius); overflow: hidden; background: var(--surface); border: 1px solid var(--line); transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s; }
 .model:hover { transform: translateY(-6px); border-color: rgba(77, 141, 255, 0.45); }
 .model .pic { aspect-ratio: 16 / 10; overflow: hidden; }
 .model img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
@@ -143,8 +142,8 @@ section { position: relative; }
 .model h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .model p { margin: 2px 0 0; font-size: 14px; color: var(--dim); }
 .model .tag { flex-shrink: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-soft); border: 1px solid rgba(77, 141, 255, 0.35); padding: 5px 10px; border-radius: 999px; }
-@media (max-width: 980px) { .models { grid-template-columns: repeat(2, minmax(0, 1fr)); } .model, .model:nth-child(1), .model:nth-child(2) { grid-column: span 1; } .model:nth-child(1) { grid-column: span 2; } }
-@media (max-width: 600px) { .models { grid-template-columns: 1fr; } .model:nth-child(1) { grid-column: span 1; } }
+@media (max-width: 980px) { .models { grid-template-columns: repeat(2, minmax(0, 1fr)); } .model { grid-column: span 1; } }
+@media (max-width: 600px) { .models { grid-template-columns: 1fr; } }
 
 /* Como funciona */
 .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 56px; counter-reset: step; }

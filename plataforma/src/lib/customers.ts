@@ -2,6 +2,7 @@ import 'server-only';
 import { storage, ConflictError } from './storage';
 import { ordersForDays } from './orders';
 import { SOLD_STATUSES, effectiveStatus, type Order } from './ordering';
+import { listSubscribers, type Subscriber } from './subscribers';
 
 /**
  * The store's customers, built from its orders, and who agreed to promotions on WhatsApp.
@@ -18,8 +19,10 @@ export interface Customer {
   lastOrderAt: string;
   /** Ticked "receive promotions" on their latest order and not taken off since. */
   optIn: boolean;
-  /** What their latest order said, before any opt-out. */
+  /** What their latest order or sign-up said, before any opt-out. */
   ticked: boolean;
+  /** Signed up on the store's site to receive offers. */
+  subscribedAt?: string;
   optedOut: boolean;
 }
 
@@ -43,9 +46,11 @@ export async function setOptOut(slug: string, phone: string, out: boolean) {
 }
 
 /** Pure: customers from day documents (oldest first). Newest customers first. */
-export function customersFrom(days: { orders: Order[] }[], optOuts: readonly string[], now = Date.now()): Customer[] {
+export function customersFrom(days: { orders: Order[] }[], optOuts: readonly string[], now = Date.now(), subscribers: readonly Subscriber[] = []): Customer[] {
   const out = new Set(optOuts);
   const byPhone = new Map<string, Customer>();
+  /** When each phone last said yes or no, so the newest answer (order tick box or site sign-up) wins. */
+  const answeredAt = new Map<string, string>();
   for (const { orders } of days) {
     for (const o of [...orders].sort((a, b) => a.createdAt.localeCompare(b.createdAt))) {
       const status = effectiveStatus(o, now);
@@ -62,13 +67,22 @@ export function customersFrom(days: { orders: Order[] }[], optOuts: readonly str
       };
       c.name = o.customer.name;
       c.lastOrderAt = o.createdAt;
-      if (o.optIn !== undefined) c.ticked = o.optIn;
+      if (o.optIn !== undefined) {
+        c.ticked = o.optIn;
+        answeredAt.set(c.phone, o.createdAt);
+      }
       if (SOLD_STATUSES.includes(status)) {
         c.orders++;
         c.spent += o.total;
       }
       byPhone.set(c.phone, c);
     }
+  }
+  for (const s of subscribers) {
+    const c = byPhone.get(s.phone) ?? { phone: s.phone, name: s.name || 'Sem nome', orders: 0, spent: 0, lastOrderAt: s.subscribedAt, optIn: false, ticked: false, optedOut: false };
+    c.subscribedAt = s.subscribedAt;
+    if (s.subscribedAt >= (answeredAt.get(s.phone) ?? '')) c.ticked = true;
+    byPhone.set(c.phone, c);
   }
   return [...byPhone.values()]
     .map((c) => ({
@@ -80,6 +94,6 @@ export function customersFrom(days: { orders: Order[] }[], optOuts: readonly str
 }
 
 export async function listCustomers(slug: string, days = 90, now = new Date()) {
-  const [docs, optOuts] = await Promise.all([ordersForDays(slug, days, now), getOptOuts(slug)]);
-  return customersFrom(docs, optOuts, now.getTime());
+  const [docs, optOuts, subscribers] = await Promise.all([ordersForDays(slug, days, now), getOptOuts(slug), listSubscribers(slug)]);
+  return customersFrom(docs, optOuts, now.getTime(), subscribers);
 }

@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Envio inválido.' }, { status: 400, headers: CORS });
   }
   try {
-    const created = await createDiagnosisRequest(body, request.headers.get('origin') ?? '');
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '';
+    const created = await createDiagnosisRequest(body, request.headers.get('origin') ?? '', new Date(), ip);
     return NextResponse.json({ id: created.id }, { status: 201, headers: CORS });
   } catch (err) {
     if (err instanceof DiagnosisError) return NextResponse.json({ error: err.message }, { status: 422, headers: CORS });

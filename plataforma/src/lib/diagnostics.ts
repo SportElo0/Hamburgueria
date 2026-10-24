@@ -12,6 +12,14 @@ const dayOf = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year
 const keyOf = (day: string) => `diagnosticos/${day}.json`;
 /** A ceiling against floods; far above what the form gets in a day. */
 const MAX_PER_DAY = 300;
+/** Per sender (by network address) per day: a real business asks once, a bot asks hundreds of times. */
+const MAX_PER_SENDER = 5;
+
+/** The sender's address, hashed with the day so it is not kept in the clear and cannot be linked across days. */
+async function senderKey(ip: string, day: string) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${day}:${ip}`));
+  return Array.from(new Uint8Array(digest).slice(0, 12), (b) => b.toString(16).padStart(2, '0')).join('');
+}
 
 const text = (max: number, message = 'Confira os dados do formulário.') => z.string({ message }).trim().max(max);
 
@@ -47,17 +55,20 @@ export interface DiagnosisRequest {
   consentAt: string;
   status: DiagnosisStatus;
   source: string;
+  /** Hashed sender address for the per-sender daily limit; empty when unknown. */
+  sender?: string;
 }
 
 export class DiagnosisError extends Error {}
 
-export async function createDiagnosisRequest(raw: unknown, source: string, now = new Date()): Promise<DiagnosisRequest> {
+export async function createDiagnosisRequest(raw: unknown, source: string, now = new Date(), ip = ''): Promise<DiagnosisRequest> {
   const parsed = diagnosisInputSchema.safeParse(raw);
   if (!parsed.success) throw new DiagnosisError(parsed.error.issues[0]?.message || 'Confira os dados do formulário.');
   const input = parsed.data;
   if (input.website) throw new DiagnosisError('Não foi possível enviar.');
   const day = dayOf(now);
   const at = now.toISOString();
+  const sender = ip ? await senderKey(ip, day) : '';
   const request: DiagnosisRequest = {
     id: `${day.replace(/-/g, '')}-${crypto.randomUUID().slice(0, 8)}`,
     createdAt: at,
@@ -70,9 +81,11 @@ export async function createDiagnosisRequest(raw: unknown, source: string, now =
     consentAt: at,
     status: 'novo',
     source: source.slice(0, 120),
+    sender,
   };
   await updateDay(day, (list) => {
     if (list.length >= MAX_PER_DAY) throw new DiagnosisError('Recebemos muitos pedidos hoje. Tente de novo amanhã.');
+    if (sender && list.filter((r) => r.sender === sender).length >= MAX_PER_SENDER) throw new DiagnosisError('Você já mandou vários pedidos hoje. Se precisar corrigir algo, fale com contato@growlift.com.br.');
     return [...list, request];
   });
   return request;

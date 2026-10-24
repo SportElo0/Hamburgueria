@@ -38,6 +38,22 @@ ambiente dos projetos no Vercel, não no repositório.
 - Testes: `cd plataforma && npx vitest run` (62 testes). Ponta a ponta local:
   `plataforma/scripts/e2e/README.md`.
 
+## Lista de ofertas pelo site (plano Grow)
+
+O site do cliente manda o cadastro para o painel; aparece em `/loja/<slug>/clientes` junto com quem pediu pelo site.
+
+```js
+fetch('https://painel-lojas-sportelo.vercel.app/api/public/lojas/<slug>/ofertas', {
+  method: 'POST', headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name, phone, consent: true /* caixinha marcada pela pessoa */, website: '' /* campo isca */ }),
+});
+```
+Texto da caixinha: "Quero receber ofertas da <loja> no WhatsApp (no máximo uma mensagem por mês; para sair, responda SAIR)." Nunca pré-marcada.
+
+## Pedidos de diagnóstico (site da Growlift)
+
+`growlift/` posta em `/api/public/diagnosticos`; a lista fica em `/painel/diagnosticos`. Limite: 300 por dia e 5 por endereço por dia.
+
 ## Propostas
 
 - `marketing/apresentacao/deck-restaurantes.html` → `Growlift-Apresentacao-Restaurantes.pdf`

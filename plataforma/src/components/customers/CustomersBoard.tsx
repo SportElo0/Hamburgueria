@@ -86,7 +86,7 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
       <main className="mx-auto max-w-5xl space-y-4 px-4 pt-5">
         <section aria-label="Resumo" className="grid grid-cols-2 gap-3 md:grid-cols-3">
           <div className="card p-4">
-            <p className="text-[13px] font-semibold text-ink-mute">Clientes (90 dias)</p>
+            <p className="text-[13px] font-semibold text-ink-mute">Contatos (90 dias)</p>
             <p className="mt-1 text-2xl font-bold tabular-nums">{customers.length}</p>
           </div>
           <div className="card p-4">
@@ -190,7 +190,7 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
                       )}
                     </p>
                     <p className="text-sm text-ink-mute tabular-nums">
-                      {fmtPhone(c.phone)} · {c.orders} {c.orders === 1 ? 'pedido' : 'pedidos'} · {brl(c.spent)} · último em {fmtDay(c.lastOrderAt)}
+                      {fmtPhone(c.phone)} · {c.orders === 0 && c.subscribedAt ? `entrou pela lista do site em ${fmtDay(c.subscribedAt)}` : `${c.orders} ${c.orders === 1 ? 'pedido' : 'pedidos'} · ${brl(c.spent)} · último em ${fmtDay(c.lastOrderAt)}`}
                     </p>
                   </div>
                   <div className="flex gap-2">

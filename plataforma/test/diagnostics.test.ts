@@ -35,4 +35,12 @@ describe('pedidos de diagnóstico', () => {
     await setDiagnosisStatus(a.id, 'enviado');
     expect((await listDiagnosisRequests(2))[0].status).toBe('enviado');
   });
+
+  it('limita os pedidos do mesmo endereço por dia', async () => {
+    for (let i = 0; i < 5; i++) await createDiagnosisRequest({ ...ok, business: `Negócio ${i}` }, '', new Date(), '200.1.2.3');
+    await expect(createDiagnosisRequest(ok, '', new Date(), '200.1.2.3')).rejects.toThrow(/vários pedidos/);
+    await expect(createDiagnosisRequest(ok, '', new Date(), '200.9.9.9')).resolves.toBeTruthy();
+    const list = await listDiagnosisRequests(1);
+    expect(JSON.stringify(list)).not.toContain('200.1.2.3');
+  });
 });
