@@ -1,0 +1,85 @@
+import 'server-only';
+import { storage, ConflictError } from './storage';
+import { ordersForDays } from './orders';
+import { SOLD_STATUSES, effectiveStatus, type Order } from './ordering';
+
+/**
+ * The store's customers, built from its orders, and who agreed to promotions on WhatsApp.
+ * Consent comes from the checkout tick box on the customer's latest order; the store can also take
+ * someone off (they replied "SAIR"), kept in clientes/<slug>/descadastro.json and always winning.
+ */
+
+export interface Customer {
+  phone: string;
+  name: string;
+  /** Orders the store accepted. */
+  orders: number;
+  spent: number;
+  lastOrderAt: string;
+  /** Ticked "receive promotions" on their latest order and not taken off since. */
+  optIn: boolean;
+  /** What their latest order said, before any opt-out. */
+  ticked: boolean;
+  optedOut: boolean;
+}
+
+const optOutKey = (slug: string) => `clientes/${slug}/descadastro.json`;
+
+export async function getOptOuts(slug: string): Promise<string[]> {
+  return (await storage().readJSON<string[]>(optOutKey(slug)))?.data ?? [];
+}
+
+export async function setOptOut(slug: string, phone: string, out: boolean) {
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const doc = await storage().readJSON<string[]>(optOutKey(slug));
+    const list = (doc?.data ?? []).filter((p) => p !== phone);
+    try {
+      await storage().writeJSON(optOutKey(slug), out ? [...list, phone] : list, doc ? doc.etag : null);
+      return;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 3) throw err;
+    }
+  }
+}
+
+/** Pure: customers from day documents (oldest first). Newest customers first. */
+export function customersFrom(days: { orders: Order[] }[], optOuts: readonly string[], now = Date.now()): Customer[] {
+  const out = new Set(optOuts);
+  const byPhone = new Map<string, Customer>();
+  for (const { orders } of days) {
+    for (const o of [...orders].sort((a, b) => a.createdAt.localeCompare(b.createdAt))) {
+      const status = effectiveStatus(o, now);
+      if (status === 'expirado') continue;
+      const c = byPhone.get(o.customer.phone) ?? {
+        phone: o.customer.phone,
+        name: o.customer.name,
+        orders: 0,
+        spent: 0,
+        lastOrderAt: o.createdAt,
+        optIn: false,
+        ticked: false,
+        optedOut: false,
+      };
+      c.name = o.customer.name;
+      c.lastOrderAt = o.createdAt;
+      if (o.optIn !== undefined) c.ticked = o.optIn;
+      if (SOLD_STATUSES.includes(status)) {
+        c.orders++;
+        c.spent += o.total;
+      }
+      byPhone.set(c.phone, c);
+    }
+  }
+  return [...byPhone.values()]
+    .map((c) => ({
+      ...c,
+      optedOut: out.has(c.phone),
+      optIn: c.ticked && !out.has(c.phone),
+    }))
+    .sort((a, b) => b.lastOrderAt.localeCompare(a.lastOrderAt));
+}
+
+export async function listCustomers(slug: string, days = 90, now = new Date()) {
+  const [docs, optOuts] = await Promise.all([ordersForDays(slug, days, now), getOptOuts(slug)]);
+  return customersFrom(docs, optOuts, now.getTime());
+}

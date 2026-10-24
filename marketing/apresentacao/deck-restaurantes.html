@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Growlift · Restaurantes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070a10; --surface: #0d121b; --surface-2: #121927; --line: rgba(255,255,255,.09);
+    --blue: #0865fe; --blue-soft: #5c9cff; --text: #f3f5f9; --muted: #a3acbf; --dim: #8790a6;
+  }
+  @page { size: 1920px 1080px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: Inter, system-ui, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+  .slide { width: 1920px; height: 1080px; position: relative; overflow: hidden; padding: 112px 128px; page-break-after: always; break-after: page; background: var(--bg); display: flex; flex-direction: column; }
+  .slide::before { content: ''; position: absolute; inset: 0; background: radial-gradient(900px 600px at 100% 0%, rgba(8,101,254,.13), transparent 70%); pointer-events: none; }
+  .slide > * { position: relative; }
+  .foot { position: absolute; left: 128px; right: 128px; bottom: 56px; display: flex; justify-content: space-between; align-items: center; font-size: 18px; color: var(--dim); letter-spacing: .08em; text-transform: uppercase; }
+  .foot .brand { display: flex; align-items: center; gap: 12px; color: var(--muted); font-weight: 600; }
+  .foot svg { width: 30px; height: auto; }
+  .eyebrow { font-size: 22px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--blue-soft); margin-bottom: 28px; }
+  h1 { font-size: 112px; line-height: .98; font-weight: 800; letter-spacing: -.035em; }
+  h2 { font-size: 76px; line-height: 1.02; font-weight: 800; letter-spacing: -.03em; max-width: 1400px; }
+  h3 { font-size: 34px; font-weight: 700; letter-spacing: -.01em; }
+  p.lead { font-size: 32px; line-height: 1.45; color: var(--muted); max-width: 1180px; margin-top: 28px; }
+  .blue { color: var(--blue-soft); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 28px; padding: 48px; }
+  .card p { font-size: 25px; line-height: 1.5; color: var(--muted); margin-top: 16px; }
+  .num { font-size: 22px; font-weight: 700; color: var(--blue-soft); letter-spacing: .1em; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: auto; margin-bottom: auto; padding-bottom: 40px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: auto; margin-bottom: auto; padding-bottom: 40px; }
+  .icon { width: 64px; height: 64px; border-radius: 18px; background: rgba(8,101,254,.14); display: grid; place-items: center; margin-bottom: 28px; }
+  .icon svg { width: 34px; height: 34px; stroke: var(--blue-soft); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .shot { border-radius: 20px; border: 1px solid var(--line); box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); display: block; object-fit: cover; object-position: top; }
+  .phone { border-radius: 44px; border: 10px solid #1b2230; box-shadow: 0 50px 90px -30px rgba(0,0,0,.85); object-fit: cover; object-position: top; display: block; }
+  ul.checks { list-style: none; display: grid; gap: 26px; }
+  ul.checks li { font-size: 30px; line-height: 1.4; padding-left: 52px; position: relative; color: var(--text); }
+  ul.checks li span { color: var(--muted); }
+  ul.checks li::before { content: ''; position: absolute; left: 0; top: 7px; width: 30px; height: 30px; border-radius: 50%; background: var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/18px no-repeat; }
+  a { color: inherit; text-decoration: none; }
+  a.site { display: block; }
+  .ver { font-size: 22px; font-weight: 600; color: var(--blue-soft); margin-top: 10px; display: inline-block; }
+  table { border-collapse: collapse; width: 100%; }
+  td { white-space: nowrap; }
+  .tabular { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<!-- reusable logo -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="mark" viewBox="50 40 530 415"><path fill="#0865FE" d="M280 48H410L190 450H55Z"/><path fill="#0865FE" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></symbol>
+</svg>
+
+<!-- 1. Capa -->
+<section class="slide" style="justify-content:center">
+  <div style="position:absolute;right:-60px;top:110px;display:flex;gap:36px;transform:rotate(-6deg)">
+    <a class="site" href="https://downtown-burger-gilt.vercel.app/"><img class="phone" src="img/downtown-m.jpg" style="width:330px;height:715px"></a>
+    <a class="site" href="https://gara-pizza-juquehy.pages.dev/"><img class="phone" src="img/gara-m.jpg" style="width:330px;height:715px;margin-top:120px"></a>
+    <a class="site" href="https://surflife-juquehy.pages.dev/"><img class="phone" src="img/surflife-m.jpg" style="width:330px;height:715px;margin-top:40px"></a>
+  </div>
+  <div style="position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 42%,rgba(7,10,16,.55) 62%,transparent 85%)"></div>
+  <div style="display:flex;align-items:center;gap:40px;margin-bottom:96px">
+    <svg style="width:150px;height:118px"><use href="#mark"/></svg>
+    <div>
+      <div style="font-size:84px;font-weight:700;letter-spacing:.01em;line-height:1">GROWLIFT</div>
+    </div>
+  </div>
+  <h1 style="max-width:1000px">Presença digital<br>que <span class="blue">vende.</span></h1>
+  <p class="lead" style="max-width:760px">Site com cardápio, pedido pelo WhatsApp ou pelo nosso sistema próprio, Google em dia e Instagram ativo. Tudo por uma mensalidade fixa.</p>
+</section>
+
+<!-- 2. Problema -->
+<section class="slide">
+  <div class="eyebrow">O problema</div>
+  <h2>Seu cliente procura no celular. <span style="color:var(--dim)">O que ele encontra?</span></h2>
+  <div class="grid3">
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <h3>O iFood fica com uma parte grande</h3>
+      <p>De 12% a 27% de cada pedido vai em comissão. E o cliente não volta direto para você.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg></div>
+      <h3>O Instagram fica parado</h3>
+      <p>Não sobra tempo para criar posts. Quem visita o perfil acha que a casa fechou.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+      <h3>O Google mostra informação velha</h3>
+      <p>Horário, cardápio e fotos desatualizados. Você perde quem busca "perto de mim".</p>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>02</div></div>
+</section>
+
+<!-- 3. Conta do iFood -->
+<section class="slide">
+  <div class="eyebrow">A conta do iFood</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center;flex:1;margin-bottom:60px">
+    <div>
+      <h2 style="font-size:68px">30 pedidos diretos por mês economizam até</h2>
+      <div style="font-size:200px;font-weight:800;letter-spacing:-.05em;color:var(--blue-soft);line-height:1;margin-top:32px" class="tabular">R$ 650</div>
+      <p class="lead" style="font-size:28px">Com ticket médio de R$ 80. O plano se paga com o que deixa de ir em comissão, e o contato do cliente fica com você.</p>
+    </div>
+    <div class="card" style="padding:56px">
+      <table class="tabular" style="font-size:28px">
+        <tr style="color:var(--dim);font-size:20px;text-transform:uppercase;letter-spacing:.1em;text-align:left">
+          <th style="padding-bottom:28px;font-weight:600">Ticket médio</th><th style="padding-bottom:28px;font-weight:600">Comissão por pedido</th><th style="padding-bottom:28px;font-weight:600;text-align:right">30 pedidos/mês</th>
+        </tr>
+        <tr style="border-top:1px solid var(--line)"><td style="padding:30px 0">R$ 50</td><td style="color:var(--muted)">R$ 6 a R$ 14</td><td style="text-align:right;font-weight:700">R$ 180 a R$ 405</td></tr>
+        <tr style="border-top:1px solid var(--line)"><td style="padding:30px 0">R$ 80</td><td style="color:var(--muted)">R$ 10 a R$ 22</td><td style="text-align:right;font-weight:700;color:var(--blue-soft)">R$ 290 a R$ 650</td></tr>
+        <tr style="border-top:1px solid var(--line)"><td style="padding:30px 0">R$ 120</td><td style="color:var(--muted)">R$ 14 a R$ 32</td><td style="text-align:right;font-weight:700">R$ 430 a R$ 970</td></tr>
+      </table>
+      <p style="font-size:20px;color:var(--dim);margin-top:28px">Comissão de 12% a 27%, conforme o plano do iFood. Valores aproximados.</p>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>03</div></div>
+</section>
+
+<!-- 4. Solução -->
+<section class="slide">
+  <div class="eyebrow">O que entregamos</div>
+  <h2>Quatro peças que trabalham juntas, todo mês.</h2>
+  <div class="grid4">
+    <div class="card" style="padding:44px">
+      <div class="num">01</div>
+      <h3 style="margin-top:18px">Site com cardápio</h3>
+      <p>O cliente monta o pedido e envia pronto no seu WhatsApp. Sem comissão.</p>
+    </div>
+    <div class="card" style="padding:44px">
+      <div class="num">02</div>
+      <h3 style="margin-top:18px">Google Maps em dia</h3>
+      <p>Horários, fotos, cardápio e link do site sempre corretos no Perfil da Empresa.</p>
+    </div>
+    <div class="card" style="padding:44px">
+      <div class="num">03</div>
+      <h3 style="margin-top:18px">Posts para o Instagram</h3>
+      <p>Artes e legendas com a sua marca e os seus pratos, incluindo datas especiais.</p>
+    </div>
+    <div class="card" style="padding:44px">
+      <div class="num">04</div>
+      <h3 style="margin-top:18px">Relatório mensal</h3>
+      <p>Quantas pessoas clicaram no WhatsApp, pediram rota e visitaram o site.</p>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>04</div></div>
+</section>
+
+<!-- 5. O site -->
+<section class="slide">
+  <div style="display:grid;grid-template-columns:1fr 820px;gap:80px;flex:1;align-items:center;margin-bottom:40px">
+    <div>
+      <div class="eyebrow">O site</div>
+      <h2 style="font-size:68px">Feito para pedir pelo celular.</h2>
+      <ul class="checks" style="margin-top:56px">
+        <li>Cardápio completo <span>com fotos, adicionais e opções</span></li>
+        <li>Pedido no WhatsApp <span>ou direto no sistema da loja, com itens, total e observações</span></li>
+        <li>Pix com chave e QR code <span>no fim do pedido</span></li>
+        <li>Pensado para o celular <span>onde acontece a maioria dos pedidos</span></li>
+        <li>Preços e itens esgotados <span>atualizados pela nossa equipe</span></li>
+      </ul>
+    </div>
+    <div style="display:flex;gap:40px;justify-content:center">
+      <a class="site" href="https://downtown-burger-gilt.vercel.app/"><img class="phone" src="img/downtown-m.jpg" style="width:350px;height:740px"></a>
+      <a class="site" href="https://downtown-burger-gilt.vercel.app/"><img class="phone" src="img/downtown-m-menu.jpg" style="width:350px;height:740px;margin-top:50px"></a>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>05</div></div>
+</section>
+
+<!-- 6. Case Downtown -->
+<section class="slide">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end">
+    <div>
+      <div class="eyebrow">Case</div>
+      <h2>Downtown Burger</h2>
+    </div>
+    <p style="font-size:26px;color:var(--muted);max-width:620px;text-align:right;line-height:1.5">Cardápio completo, montagem de pedido e animação do burger da casa camada por camada. Mais 7 posts de Halloween.</p>
+  </div>
+  <a class="site" href="https://downtown-burger-gilt.vercel.app/"><img class="shot" src="img/downtown-d.jpg" style="width:100%;height:540px;margin-top:44px"></a>
+  <a href="https://downtown-burger-gilt.vercel.app/" style="font-size:24px;color:var(--blue-soft);margin-top:24px;font-weight:600;display:inline-block">Ver site ↗ downtown-burger-gilt.vercel.app</a>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>06</div></div>
+</section>
+
+<!-- 6b. Pedidos próprios: cliente -->
+<section class="slide">
+  <div style="display:grid;grid-template-columns:1fr 1040px;gap:64px;flex:1;align-items:center;margin-bottom:40px">
+    <div>
+      <div class="eyebrow">Sistema de pedidos próprio</div>
+      <h2 style="font-size:66px">O cliente pede e paga no site. Sem WhatsApp.</h2>
+      <ul class="checks" style="margin-top:52px;gap:22px">
+        <li>Entrega ou retirada <span>com taxa calculada pelo bairro</span></li>
+        <li>Pix na hora <span>com QR code e copia e cola</span></li>
+        <li>Cartão ou dinheiro na entrega <span>com troco já informado</span></li>
+        <li>Acompanhamento ao vivo <span>do preparo até a entrega</span></li>
+      </ul>
+    </div>
+    <div style="display:flex;gap:28px;justify-content:center;align-items:flex-start">
+      <img class="phone" src="img/ep-checkout-m.jpg" style="width:320px;height:692px;margin-top:70px">
+      <img class="phone" src="img/ep-pix-m.jpg" style="width:320px;height:692px">
+      <img class="phone" src="img/ep-acompanha-m.jpg" style="width:320px;height:692px;margin-top:70px">
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>07</div></div>
+</section>
+
+<!-- 6c. Pedidos próprios: loja -->
+<section class="slide">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:60px">
+    <div>
+      <div class="eyebrow">Tela da loja</div>
+      <h2 style="font-size:66px">O pedido cai direto na sua tela.</h2>
+    </div>
+    <p style="font-size:26px;color:var(--muted);max-width:640px;text-align:right;line-height:1.5">Toca um alerta até alguém aceitar. Aceitar, recusar, saiu para entrega e entregue com um toque. Imprime na cozinha.</p>
+  </div>
+  <a class="site" href="https://el-patron-burger.vercel.app/"><img class="shot" src="img/ep-loja-d.jpg" style="width:100%;height:600px;margin-top:40px;object-position:top left"></a>
+  <p style="font-size:22px;color:var(--dim);margin-top:20px">Sistema em uso no El Patron Burger · dados de demonstração</p>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>08</div></div>
+</section>
+
+<!-- 7. Portfólio -->
+<section class="slide">
+  <div class="eyebrow">Portfólio</div>
+  <h2>Restaurantes, lojas e serviços.</h2>
+  <div class="grid3" style="gap:36px">
+    <div>
+      <a class="site" href="https://gara-pizza-juquehy.pages.dev/"><img class="shot" src="img/gara-d.jpg" style="width:100%;height:440px"></a>
+      <h3 style="margin-top:28px">Gara Pizza Bar</h3>
+      <p style="font-size:24px;color:var(--muted);margin-top:8px">Pizzaria · cardápio com 56 itens</p>
+      <a class="ver" href="https://gara-pizza-juquehy.pages.dev/">Ver site ↗</a>
+    </div>
+    <div>
+      <a class="site" href="https://semvo-juquehy.pages.dev/"><img class="shot" src="img/semvo-d.jpg" style="width:100%;height:440px"></a>
+      <h3 style="margin-top:28px">SemvØ Clothing</h3>
+      <p style="font-size:24px;color:var(--muted);margin-top:8px">Moda · reserva de peças por tamanho</p>
+      <a class="ver" href="https://semvo-juquehy.pages.dev/">Ver site ↗</a>
+    </div>
+    <div>
+      <a class="site" href="https://surflife-juquehy.pages.dev/"><img class="shot" src="img/surflife-d.jpg" style="width:100%;height:440px"></a>
+      <h3 style="margin-top:28px">Surflife</h3>
+      <p style="font-size:24px;color:var(--muted);margin-top:8px">Surf shop · pranchas e aluguel</p>
+      <a class="ver" href="https://surflife-juquehy.pages.dev/">Ver site ↗</a>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>09</div></div>
+</section>
+
+<!-- 8. Painel -->
+<section class="slide">
+  <div style="display:grid;grid-template-columns:1fr 900px;gap:80px;flex:1;align-items:center;margin-bottom:40px">
+    <div>
+      <div class="eyebrow">Painel de gestão</div>
+      <h2 style="font-size:68px">Mudou o preço? Fica no ar em até 2 dias úteis.</h2>
+      <ul class="checks" style="margin-top:56px">
+        <li>Painel próprio <span>para atualizar cardápio, horários e avisos</span></li>
+        <li>Item esgotado <span>sai do pedido na hora em que publicamos</span></li>
+        <li>Histórico de cada alteração <span>com data e o que mudou</span></li>
+        <li>Domínio no seu nome <span>e site com cópia de segurança</span></li>
+      </ul>
+    </div>
+    <img class="shot" src="img/painel.jpg" style="width:900px;height:632px;object-position:top left">
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>10</div></div>
+</section>
+
+<!-- 9. Planos -->
+<section class="slide" style="padding-bottom:96px">
+  <div class="eyebrow">Planos</div>
+  <h2 style="font-size:64px">Dois jeitos de vender. Nenhuma comissão por pedido.</h2>
+  <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:36px;margin-top:56px;flex:1">
+    <div class="card" style="display:flex;flex-direction:column">
+      <h3>Site Cardápio</h3>
+      <p style="margin-top:8px">O pedido chega pronto no seu WhatsApp.</p>
+      <div style="font-size:80px;font-weight:800;letter-spacing:-.03em;margin-top:18px" class="tabular">R$ 247<span style="font-size:28px;font-weight:500;color:var(--muted)">/mês</span></div>
+      <ul class="checks" style="margin-top:30px;gap:16px">
+        <li style="font-size:23px">Site com cardápio, hospedagem e domínio</li>
+        <li style="font-size:23px">Pedido montado e enviado no WhatsApp</li>
+        <li style="font-size:23px">Google Maps em dia</li>
+        <li style="font-size:23px">4 posts por mês</li>
+        <li style="font-size:23px">2 alterações por mês</li>
+      </ul>
+      <p style="margin-top:auto;padding-top:24px;font-size:22px">Criação grátis com fidelidade de 6 meses.</p>
+    </div>
+    <div class="card" style="border:2px solid var(--blue);background:linear-gradient(180deg,rgba(8,101,254,.16),var(--surface) 60%);position:relative;display:flex;flex-direction:column">
+      <div style="position:absolute;top:-20px;left:48px;background:var(--blue);font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:8px 18px;border-radius:999px">Para quem faz delivery</div>
+      <h3>Pedidos Próprios</h3>
+      <p style="margin-top:8px">Substitui o app de cardápio: o pedido cai na tela da loja.</p>
+      <div style="font-size:80px;font-weight:800;letter-spacing:-.03em;margin-top:18px" class="tabular">R$ 597<span style="font-size:28px;font-weight:500;color:var(--muted)">/mês</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 36px;margin-top:30px">
+        <ul class="checks" style="gap:16px">
+        <li style="font-size:23px">Tudo do Site Cardápio</li>
+        <li style="font-size:23px">Cliente finaliza e paga no site</li>
+        <li style="font-size:23px">Pix automático na conta da loja</li>
+        <li style="font-size:23px">Cartão e dinheiro na entrega</li>
+        </ul>
+        <ul class="checks" style="gap:16px">
+        <li style="font-size:23px">Tela da loja com alerta e impressão</li>
+        <li style="font-size:23px">Acompanhamento para o cliente</li>
+        <li style="font-size:23px">Taxa por bairro e abrir/fechar</li>
+        <li style="font-size:23px">4 alterações por mês</li>
+        </ul>
+      </div>
+      <p style="margin-top:auto;padding-top:24px;font-size:22px">Implantação grátis com fidelidade de 12 meses. A taxa do Pix é cobrada pelo banco, direto da loja.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9b. Marketing -->
+<section class="slide" style="padding-bottom:96px">
+  <div class="eyebrow">Para crescer</div>
+  <h2 style="font-size:64px">Some marketing a qualquer plano.</h2>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:36px;margin-top:64px">
+    <div class="card">
+      <h3>Presença</h3>
+      <div style="font-size:72px;font-weight:800;letter-spacing:-.03em;margin-top:20px" class="tabular">+ R$ 150<span style="font-size:26px;font-weight:500;color:var(--muted)">/mês</span></div>
+      <ul class="checks" style="margin-top:36px;gap:18px">
+        <li style="font-size:23px">8 posts por mês, publicados por nós</li>
+        <li style="font-size:23px">1 campanha de data especial</li>
+        <li style="font-size:23px">Relatório mensal</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Crescimento</h3>
+      <div style="font-size:72px;font-weight:800;letter-spacing:-.03em;margin-top:20px" class="tabular">+ R$ 650<span style="font-size:26px;font-weight:500;color:var(--muted)">/mês</span></div>
+      <ul class="checks" style="margin-top:36px;gap:18px">
+        <li style="font-size:23px">12 posts e 8 stories por mês</li>
+        <li style="font-size:23px">Resposta às avaliações do Google</li>
+        <li style="font-size:23px">Anúncios: até 2 campanhas</li>
+        <li style="font-size:23px">Relatório mensal</li>
+      </ul>
+    </div>
+  </div>
+  <p class="lead" style="margin-top:44px;font-size:26px">Exemplo: Pedidos Próprios com Presença sai por R$ 747/mês. A verba dos anúncios é paga direto à plataforma.</p>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>12</div></div>
+</section>
+
+<!-- 10. Oferta -->
+<section class="slide" style="justify-content:center;align-items:center;text-align:center">
+  <div style="position:absolute;inset:0;background:radial-gradient(800px 500px at 50% 55%,rgba(8,101,254,.22),transparent 70%)"></div>
+  <div class="eyebrow">Oferta</div>
+  <div style="font-size:150px;font-weight:800;letter-spacing:-.05em;line-height:1">Implantação grátis.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:64px;width:1300px;text-align:left">
+    <div class="card" style="padding:40px">
+      <div style="font-size:30px;color:var(--dim);text-decoration:line-through;text-decoration-thickness:3px;font-weight:600" class="tabular">Site de R$ 997</div>
+      <h3 style="margin-top:12px">Site Cardápio</h3>
+      <p>Grátis com fidelidade de 6 meses.</p>
+    </div>
+    <div class="card" style="padding:40px;border:2px solid var(--blue)">
+      <div style="font-size:30px;color:var(--dim);text-decoration:line-through;text-decoration-thickness:3px;font-weight:600" class="tabular">Implantação de R$ 1.497</div>
+      <h3 style="margin-top:12px">Pedidos Próprios</h3>
+      <p>Grátis com fidelidade de 12 meses. Inclui configurar Pix, bairros e treinar a equipe.</p>
+    </div>
+  </div>
+  <p class="lead" style="margin:40px auto 0;max-width:1100px;font-size:26px">A primeira mensalidade é paga na assinatura.</p>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>13</div></div>
+</section>
+
+<!-- 11. Como funciona -->
+<section class="slide">
+  <div class="eyebrow">Como funciona</div>
+  <h2>No ar em até 7 dias úteis.</h2>
+  <div style="position:relative;margin-top:auto;margin-bottom:auto;padding-bottom:40px">
+    <div style="position:absolute;left:0;right:0;top:36px;height:2px;background:linear-gradient(90deg,var(--blue),rgba(8,101,254,.15))"></div>
+    <div class="grid4" style="margin:0">
+      <div><div style="width:74px;height:74px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-size:30px;font-weight:800">1</div><h3 style="margin-top:36px">Escolha o plano</h3><p style="font-size:25px;color:var(--muted);margin-top:14px;line-height:1.5">Assinatura e primeira mensalidade.</p></div>
+      <div><div style="width:74px;height:74px;border-radius:50%;background:var(--surface-2);border:2px solid var(--blue);display:grid;place-items:center;font-size:30px;font-weight:800">2</div><h3 style="margin-top:36px">Envie o material</h3><p style="font-size:25px;color:var(--muted);margin-top:14px;line-height:1.5">Cardápio com preços, logo, fotos, horários e bairros de entrega.</p></div>
+      <div><div style="width:74px;height:74px;border-radius:50%;background:var(--surface-2);border:2px solid var(--blue);display:grid;place-items:center;font-size:30px;font-weight:800">3</div><h3 style="margin-top:36px">Site e Google no ar</h3><p style="font-size:25px;color:var(--muted);margin-top:14px;line-height:1.5">Em até 7 dias úteis, com 2 rodadas de ajuste. Pedidos Próprios: equipe treinada no mesmo prazo.</p></div>
+      <div><div style="width:74px;height:74px;border-radius:50%;background:var(--surface-2);border:2px solid var(--blue);display:grid;place-items:center;font-size:30px;font-weight:800">4</div><h3 style="margin-top:36px">Posts do mês</h3><p style="font-size:25px;color:var(--muted);margin-top:14px;line-height:1.5">Na semana seguinte, prontos para você aprovar.</p></div>
+    </div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>14</div></div>
+</section>
+
+<!-- 12. Regras claras -->
+<section class="slide">
+  <div class="eyebrow">Regras claras</div>
+  <h2>Sem letra miúda.</h2>
+  <div class="grid3">
+    <div class="card"><h3>O domínio é seu</h3><p>O endereço do site é registrado no nome do restaurante, sempre.</p></div>
+    <div class="card"><h3>Sem passar senha</h3><p>Acesso ao Instagram e ao Google pelas ferramentas oficiais de parceiro. Você tira quando quiser.</p></div>
+    <div class="card"><h3>O dinheiro é direto</h3><p>O Pix cai na conta da loja e os pedidos vão direto para você. Nunca passam por nós.</p></div>
+  </div>
+  <div class="foot"><div class="brand"><svg><use href="#mark"/></svg>Growlift</div><div>15</div></div>
+</section>
+
+<!-- 13. Contato -->
+<section class="slide" style="justify-content:center">
+  <div style="position:absolute;inset:0;background:radial-gradient(900px 600px at 85% 60%,rgba(8,101,254,.2),transparent 70%)"></div>
+  <svg style="position:absolute;right:120px;top:50%;transform:translateY(-50%);width:620px;height:487px;opacity:.95"><use href="#mark"/></svg>
+  <h1 style="max-width:1100px">Vamos colocar o seu negócio <span class="blue">no ar?</span></h1>
+  <div style="margin-top:72px;display:grid;gap:18px;font-size:34px">
+    <div style="font-weight:700">Growlift</div>
+    <div style="color:var(--muted)">WhatsApp: [preencher]</div>
+    <div style="color:var(--muted)">E-mail: [preencher]</div>
+  </div>
+</section>
+
+</body>
+</html>

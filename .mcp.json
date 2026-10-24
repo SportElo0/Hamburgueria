@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        ".claude/mcp/playwright.mjs"
+      ],
+      "env": {}
+    }
+  }
+}
