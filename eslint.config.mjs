@@ -17,6 +17,7 @@ const eslintConfig = defineConfig([
     // Outro projeto, com configuração própria.
     "regiane-camilo/**",
     "conves-ilhabela/**",
+    "odair-advogados/**",
   ]),
 ]);
 

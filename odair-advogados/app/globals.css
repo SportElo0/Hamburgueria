@@ -1,0 +1,359 @@
+@import "tailwindcss";
+
+/*
+ * Odair Alves da Silva & Advogados — "a certidão".
+ * Marinho em campos inteiros, marfim e branco nas seções de leitura, dourado
+ * só no traço: guilhochê, monograma, numerais e o botão principal.
+ */
+@theme {
+  --color-navy: #071b2e;
+  --color-navy-deep: #051424;
+  --color-blue: #102c43;
+  --color-blue-line: #23435d;
+  --color-gold: #c6a15a;
+  --color-gold-soft: #d9bf88;
+  /* Dourado para texto sobre marfim e branco (contraste AA). */
+  --color-gold-ink: #7a5f22;
+  --color-ivory: #f7f5f0;
+  --color-paper: #ffffff;
+  --color-graphite: #252b31;
+  --color-muted: #59616a;
+  --color-line: #e6e8ea;
+  --color-line-strong: #cfd4d9;
+  /* Texto secundário sobre o marinho: azul acinzentado claro, nunca cinza puro. */
+  --color-on-navy: #f7f5f0;
+  --color-on-navy-muted: #b3c1ce;
+  --color-alert: #a63a2f;
+  --color-alert-light: #f2a196;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bodoni), "Bodoni 72", Didot, Georgia, serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --animate-sheet: sheet-in 420ms var(--ease-out-expo) both;
+  --animate-step: step-in 520ms var(--ease-out-expo) both;
+
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-navy);
+    color: var(--color-graphite);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--color-blue-line) var(--color-navy);
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-navy);
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-gold-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  a {
+    text-underline-offset: 0.25em;
+    text-decoration-thickness: 1px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-navy);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-blue-line);
+    border: 2px solid var(--color-navy);
+  }
+}
+
+@layer components {
+  /* Didone de documento gravado: contraste alto, eixo óptico automático. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-optical-sizing: auto;
+    letter-spacing: -0.012em;
+    line-height: 1.04;
+    font-variant-numeric: lining-nums;
+  }
+
+  /* Rótulos de interface: versalete espaçado, mínimo 12px. */
+  .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0 1.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition:
+      background-color 240ms var(--ease-out-quart),
+      color 240ms var(--ease-out-quart),
+      border-color 240ms var(--ease-out-quart),
+      transform 320ms var(--ease-out-expo);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn svg {
+    flex: none;
+    transition: transform 360ms var(--ease-out-expo);
+  }
+  .btn:hover svg.nudge {
+    transform: translateX(4px);
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-gold {
+    background: var(--color-gold);
+    color: var(--color-navy);
+  }
+  .btn-gold:hover {
+    background: var(--color-gold-soft);
+  }
+  .btn-navy {
+    background: var(--color-navy);
+    color: var(--color-ivory);
+  }
+  .btn-navy:hover {
+    background: var(--color-blue);
+  }
+  .btn-line {
+    border-color: var(--color-navy);
+    color: var(--color-navy);
+  }
+  .btn-line:hover {
+    background: var(--color-navy);
+    color: var(--color-ivory);
+  }
+  .btn-line-light {
+    border-color: color-mix(in srgb, var(--color-gold) 70%, transparent);
+    color: var(--color-ivory);
+  }
+  .btn-line-light:hover {
+    border-color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 12%, transparent);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    background: var(--color-line);
+    color: var(--color-muted);
+    border-color: transparent;
+    cursor: not-allowed;
+  }
+
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 420ms var(--ease-out-expo);
+  }
+  .link-line:hover {
+    background-size: 0% 1px;
+    background-position: 100% 100%;
+  }
+
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0 1rem;
+    border-radius: 3px;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-paper);
+    color: var(--color-graphite);
+    font-size: 1rem;
+    transition:
+      border-color 200ms var(--ease-out-quart),
+      box-shadow 200ms var(--ease-out-quart);
+  }
+  .field::placeholder {
+    color: var(--color-muted);
+  }
+  .field:hover {
+    border-color: var(--color-gold);
+  }
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--color-navy);
+    box-shadow: 0 0 0 1px var(--color-navy);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-alert);
+  }
+
+  /* Fio duplo de documento: linha cheia e linha fina, como em certidões. */
+  .rule-double {
+    height: 4px;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  }
+
+  /* Revelação no scroll: tudo visível por padrão; o JS arma o efeito. */
+  .reveal-armed [data-reveal]:not(.is-in) {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  [data-reveal] {
+    transition:
+      opacity 900ms var(--ease-out-expo),
+      transform 900ms var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+}
+
+/*
+ * Gravação do guilhochê: cada anel se desenha em sequência (só com movimento
+ * permitido; sem isso o traço já está completo).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .engrave path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: engrave 2600ms var(--ease-out-quart) forwards;
+    animation-delay: calc(240ms + var(--ring, 0) * 260ms);
+  }
+  .engrave .seal {
+    animation: seal-in 1400ms var(--ease-out-expo) 900ms both;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .turn-on-scroll {
+      animation: turn linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 120vh;
+    }
+  }
+
+  /* Fio da linha do tempo que se preenche ao entrar na tela. */
+  @supports (animation-timeline: view()) {
+    .fill-x,
+    .fill-y {
+      animation: fill-x linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 55%;
+      transform-origin: left top;
+    }
+    .fill-y {
+      animation-name: fill-y;
+    }
+  }
+}
+
+@keyframes fill-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes fill-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes engrave {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes seal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes turn {
+  to {
+    transform: rotate(14deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+  .reveal-armed [data-reveal]:not(.is-in) {
+    opacity: 1;
+    transform: none;
+  }
+}
