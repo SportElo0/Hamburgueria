@@ -59,38 +59,41 @@
     </div>
   </section>
 
-  <!-- Ramos: o site se monta -->
-  <section class="ramos section" aria-labelledby="ramos-titulo">
-    <div class="bg-grid" aria-hidden="true"></div>
-    <div class="glow" aria-hidden="true"></div>
-    <div class="wrap">
-      <h2 id="ramos-titulo" class="reveal">
-        Um site que vende de verdade<br>para a sua
-        <span class="spin" aria-hidden="true"><span class="track">
-          <span>hamburgueria.</span><span>barbearia.</span><span>confeitaria.</span><span>clínica.</span><span>loja.</span><span>hamburgueria.</span>
-        </span></span>
-        <span class="sr-only">hamburgueria, barbearia, confeitaria, clínica ou loja.</span>
-      </h2>
-      <p class="lead reveal d2">Cada site é feito do zero para o seu negócio, com as suas fotos, o seu cardápio ou os seus serviços. Nada de modelo pronto com cara de todo mundo.</p>
+  <!-- Ramos: a tela para e o navegador passa de lado pelos sites, um de cada ramo -->
+  <section class="ramos" id="ramos" aria-labelledby="ramos-titulo">
+    <div class="ramos-pin">
+      <div class="bg-grid" aria-hidden="true"></div>
+      <div class="glow" aria-hidden="true"></div>
+      <div class="wrap">
+        <h2 id="ramos-titulo">
+          Um site que vende de verdade para
+          <span class="spin" aria-hidden="true"><span class="track">
+            <span>a sua hamburgueria.</span><span>o seu restaurante.</span><span>a sua confeitaria.</span><span>o seu escritório.</span>
+          </span></span>
+          <span class="sr-only">hamburgueria, restaurante, confeitaria ou escritório.</span>
+        </h2>
+        <p class="lead">Cada site é feito do zero para o seu negócio, com as suas fotos, o seu cardápio ou os seus serviços. Nada de modelo pronto com cara de todo mundo.</p>
 
-      <div class="browser reveal" id="montagem">
-        <div class="frame">
-          <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">seunegocio.com.br</span></div>
-          <div class="screen">
-            <div class="skel" aria-hidden="true">
-              <i style="width:42%;height:12%"></i><i style="width:30%;height:12%"></i><i style="width:52%;height:4%;margin-top:2%"></i><i style="width:46%;height:4%"></i>
-              <div style="display:flex;gap:2%;margin-top:3%"><i style="width:17%;height:44px;background:#1d3a6e;border-radius:999px"></i><i style="width:14%;height:44px;border-radius:999px"></i></div>
+        <div class="browser" id="montagem">
+          <div class="frame">
+            <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">seunegocio.com.br</span></div>
+            <div class="screen">
+              <div class="slides">
+                <img src="img/site-hamburgueria.webp" alt="Exemplo de site de hamburgueria: fundo escuro e dourado com o burger em destaque" width="1280" height="720" loading="lazy">
+                <img src="img/site-restaurante.webp" alt="Exemplo de site de restaurante: varanda com vista para o mar" width="1280" height="800" loading="lazy">
+                <img src="img/site-confeitaria.webp" alt="Exemplo de site de confeitaria: bolo com morangos em destaque" width="1280" height="800" loading="lazy">
+                <img src="img/site-advocacia.webp" alt="Exemplo de site de escritório de advocacia: azul-marinho e dourado" width="1280" height="800" loading="lazy">
+              </div>
             </div>
-            <img class="shot" src="img/site-hamburgueria.webp" alt="Exemplo de site pronto: uma hamburgueria com o burger da casa em destaque" width="1280" height="720" loading="lazy">
-            <div class="sweep" aria-hidden="true"></div>
           </div>
-        </div>
         <ul class="chips">
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Cardápio e preços sempre em dia</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Achado no Google Maps</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.2-4.6A9 9 0 1 1 21 12z"/></svg>Contato direto no WhatsApp</li>
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></svg>Pedido e Pix no próprio site</li>
         </ul>
+        </div>
+        <div class="ramos-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
       </div>
     </div>
   </section>
@@ -211,28 +214,6 @@
     </div>
   </section>
 
-  <!-- Quem somos -->
-  <section class="section team" id="quem-somos" aria-labelledby="time-titulo" style="padding-top:0">
-    <div class="wrap team-grid">
-      <div class="team-copy">
-        <p class="eyebrow reveal">Quem somos</p>
-        <h2 id="time-titulo" class="h2 reveal d2" style="margin-top:16px">Gente de verdade do outro lado do WhatsApp.</h2>
-        <p class="lead reveal d2">A Growlift é o Lucas e o Antônio. Somos jovens, de São Paulo, e crescemos usando a internet do jeito que o seu cliente usa: pelo celular.</p>
-        <p class="lead reveal d3">Nós dois criamos os sites, cuidamos do Google e atendemos você. Quem conversa com você é quem faz o seu site.</p>
-      </div>
-      <div class="team-people">
-        <figure class="person reveal">
-          <div class="photo"><img src="img/time/lucas.webp" alt="Lucas, da Growlift" width="640" height="800" loading="lazy"></div>
-          <figcaption><b>Lucas</b><span>Sites, Google e atendimento</span></figcaption>
-        </figure>
-        <figure class="person reveal d2">
-          <div class="photo"><img src="img/time/antonio.webp" alt="Antônio, da Growlift" width="640" height="800" loading="lazy"></div>
-          <figcaption><b>Antônio</b><span>Sites, Google e atendimento</span></figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
   <!-- Diagnóstico -->
   <section class="diag section" id="diagnostico" aria-labelledby="diag-titulo" style="padding-top:0">
     <div class="glow" aria-hidden="true"></div>
@@ -294,6 +275,28 @@
         </ul>
         <div class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="#8db8ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4 4 10-10"/></svg>A prévia do site novo vai junto com o diagnóstico.</div>
       </aside>
+    </div>
+  </section>
+
+  <!-- Quem somos -->
+  <section class="section team" id="quem-somos" aria-labelledby="time-titulo" style="padding-top:0">
+    <div class="wrap team-grid">
+      <div class="team-copy">
+        <p class="eyebrow reveal">Quem somos</p>
+        <h2 id="time-titulo" class="h2 reveal d2" style="margin-top:16px">Gente de verdade do outro lado do WhatsApp.</h2>
+        <p class="lead reveal d2">A Growlift é o Lucas e o Antônio. Somos jovens, de São Paulo, e crescemos usando a internet do jeito que o seu cliente usa: pelo celular.</p>
+        <p class="lead reveal d3">Nós dois criamos os sites, cuidamos do Google e atendemos você. Quem conversa com você é quem faz o seu site.</p>
+      </div>
+      <div class="team-people">
+        <figure class="person reveal">
+          <div class="photo"><img src="img/time/lucas.webp" alt="Lucas, da Growlift" width="640" height="800" loading="lazy"></div>
+          <figcaption><b>Lucas</b><span>Sites, Google e atendimento</span></figcaption>
+        </figure>
+        <figure class="person reveal d2">
+          <div class="photo"><img src="img/time/antonio.webp" alt="Antônio, da Growlift" width="640" height="800" loading="lazy"></div>
+          <figcaption><b>Antônio</b><span>Sites, Google e atendimento</span></figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 

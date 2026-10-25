@@ -129,6 +129,63 @@
     update();
   }
 
+  // Ramos: the section holds still while the browser slides sideways through one site per trade;
+  // each site rests a moment, and the word in the title follows the site on screen.
+  const ramos = document.getElementById('ramos');
+  if (ramos && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const slides = ramos.querySelector('.slides');
+    const imgs = slides.querySelectorAll('img');
+    const words = ramos.querySelector('.spin .track');
+    const dots = ramos.querySelectorAll('.ramos-dots i');
+    const n = imgs.length;
+    let target = 0;
+    let shown = 0;
+    let raf = 0;
+    let current = -1;
+
+    const smooth = (x) => x * x * (3 - 2 * x);
+    const position = (p) => {
+      // Rest on each site for the first and last part of its stretch, slide in the middle.
+      const f = Math.min(p * (n - 1), n - 1);
+      const i = Math.min(Math.floor(f), n - 2);
+      const t = Math.min(1, Math.max(0, (f - i - 0.3) / 0.4));
+      return i + smooth(t);
+    };
+    const render = () => {
+      const s = position(shown);
+      slides.style.transform = `translate3d(${-s * 100}%, 0, 0)`;
+      const k = Math.round(s);
+      if (k !== current) {
+        current = k;
+        words.style.transform = `translateY(${-k * 1.15}em)`;
+        dots.forEach((d, j) => d.classList.toggle('on', j === k));
+      }
+    };
+    const tick = () => {
+      shown += (target - shown) * 0.14;
+      if (Math.abs(target - shown) < 0.0005) shown = target;
+      render();
+      raf = shown === target ? 0 : requestAnimationFrame(tick);
+    };
+    const update = () => {
+      const r = ramos.getBoundingClientRect();
+      const run = ramos.offsetHeight - window.innerHeight;
+      target = run > 0 ? Math.min(1, Math.max(0, -r.top / run)) : 0;
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    // The next sites sit off to the side, where lazy loading would wait too long: load them early.
+    const near = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      near.disconnect();
+      imgs.forEach((img) => (img.loading = 'eager'));
+    }, { rootMargin: '100% 0px' });
+    near.observe(ramos);
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+    shown = target;
+    render();
+  }
+
   // Phone mask: (11) 90000-0000
   const phone = document.getElementById('f-zap');
   phone.addEventListener('input', () => {
