@@ -308,6 +308,11 @@ export function OnlineOrdersPanel(props: {
           <label className="flex items-center gap-2 text-sm">
             <input type="radio" name="pixmode" checked={o.pixMode === 'mercadopago'} onChange={() => set('pixMode', 'mercadopago')} /> Mercado Pago da loja
           </label>
+          {o.enabled && o.pix && o.pixMode === 'demo' && (
+            <p role="alert" className="rounded-lg bg-bad/10 px-3 py-2 text-sm font-semibold text-bad">
+              Pedidos ligados com Pix de demonstração: o cliente consegue &quot;pagar&quot; sem pagar. Só use assim em teste ou apresentação; para clientes de verdade, escolha o Mercado Pago da loja.
+            </p>
+          )}
         </fieldset>
         <form
           className="space-y-2"

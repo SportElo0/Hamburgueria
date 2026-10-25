@@ -85,3 +85,12 @@ export async function authenticateOperator(email: string, password: string): Pro
   const ok = await verifyPassword(password, doc?.data.hash ?? 'pbkdf2.210000.eCAzA5ZVKqeqWGsesrdo-g.KDqd6hjPkfqmBszWRdu-00vcRG1bm0NSMZ8GLilWb98');
   return doc && ok ? doc.data : null;
 }
+
+/**
+ * A staff session stays valid only while its login exists for that store and was not re-issued
+ * after the session started: removing a login or giving it a new password ends old sessions.
+ */
+export async function operatorActive(email: string, slug: string, sessionStart: number): Promise<boolean> {
+  const doc = await storage().readJSON<Operator>(await keyOf(email));
+  return Boolean(doc && doc.data.slug === slug && Date.parse(doc.data.createdAt) <= sessionStart);
+}

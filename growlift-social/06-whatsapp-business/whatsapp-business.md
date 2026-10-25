@@ -32,7 +32,7 @@ Nada foi configurado. Os campos marcados como **[pendente]** precisam de dados q
 Enviada uma vez a quem escreve pela primeira vez:
 
 ```
-Olá! 👋 Seja bem-vindo à Growlift.
+Olá! 👋 Seja bem-vindo à Growlift. Esta é a nossa mensagem automática de boas-vindas; uma pessoa da equipe já vai responder.
 
 🚀 Desenvolvemos websites e soluções digitais para empresas que querem fortalecer sua presença online.
 
@@ -44,9 +44,9 @@ Como podemos ajudar seu negócio hoje?
 Vocês querem o WhatsApp respondendo a qualquer hora, com um robô quando vocês não puderem. Dá para fazer, com dois cuidados:
 
 1. **O robô se apresenta como robô.** O briefing e o bom senso pedem isso: ninguém pode achar que está falando com uma pessoa quando não está.
-2. **Ele não fecha venda nem promete nada.** Responde dúvidas com os textos aprovados (as respostas rápidas abaixo), manda o link do diagnóstico e avisa que uma pessoa continua a conversa. O contrato diz que o atendimento humano é em dias úteis.
+2. **Ele não fecha venda nem promete nada.** Responde dúvidas com os textos aprovados (as respostas rápidas abaixo), manda o link do diagnóstico e avisa que uma pessoa da equipe continua a conversa no próximo dia útil.
 
-**Até ter um robô de verdade:** o app WhatsApp Business não tem robô que conversa. O que ele tem é a mensagem de ausência, que já cobre a madrugada e o fim de semana. Use esta:
+**Até ter um robô de verdade:** o app WhatsApp Business não tem robô que conversa. O que ele tem é a mensagem de ausência, que cobre a madrugada e o fim de semana. Ao configurar, em "Agendar", escolham **Horário personalizado** (noites, fins de semana e feriados): com o horário do perfil em "Sempre aberto", a opção "Fora do horário comercial" nunca dispararia. Use esta:
 
 ```
 Oi! 👋 Aqui é o assistente automático da Growlift. Recebemos a sua mensagem e uma pessoa da equipe responde no próximo dia útil.
@@ -74,6 +74,7 @@ A gente trabalha com três planos, todos com mensalidade fixa e sem comissão po
 • Start: site feito do zero, com domínio e hospedagem.
 • Grow: tudo do Start, mais preparo para o Google e o Perfil da Empresa no Google.
 • Lift: tudo do Grow, mais pedido e Pix direto no seu site.
+Todos têm contrato com fidelidade (6 meses no Start e no Grow, 12 no Lift) e 7 dias para desistir sem multa.
 Valores e detalhes: growlift.com.br/#planos
 Qual desses parece mais perto do que você precisa?
 ```

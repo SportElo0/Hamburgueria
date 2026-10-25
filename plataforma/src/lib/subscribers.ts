@@ -2,6 +2,7 @@ import 'server-only';
 import { z } from 'zod';
 import { storage, ConflictError } from './storage';
 import { getPublished } from './stores';
+import { dayWindow, take } from './limits';
 
 /**
  * "Quero receber ofertas" sign-ups from a store's own site (plans without online ordering).
@@ -16,6 +17,9 @@ export interface Subscriber {
 }
 
 const MAX_SUBSCRIBERS = 20_000;
+/** Sign-ups per sending address and per store per day: a person signs up once; a script signs up thousands. */
+const MAX_PER_SENDER = 5;
+const MAX_PER_STORE_DAY = 300;
 const keyOf = (slug: string) => `clientes/${slug}/inscritos.json`;
 
 export const subscribeSchema = z.object({
@@ -35,11 +39,14 @@ export async function listSubscribers(slug: string): Promise<Subscriber[]> {
   return (await storage().readJSON<Subscriber[]>(keyOf(slug)))?.data ?? [];
 }
 
-export async function addSubscriber(slug: string, raw: unknown, now = new Date()): Promise<Subscriber> {
+export async function addSubscriber(slug: string, raw: unknown, now = new Date(), ip = ''): Promise<Subscriber> {
   if (!(await getPublished(slug))) throw new SubscribeError('Loja não encontrada.');
   const parsed = subscribeSchema.safeParse(raw);
   if (!parsed.success) throw new SubscribeError(parsed.error.issues[0]?.message || 'Confira os dados.');
   if (parsed.data.website) throw new SubscribeError('Não foi possível enviar.');
+  const day = dayWindow(now);
+  if (ip && !(await take(`ofertas-${slug}`, ip, MAX_PER_SENDER, day))) throw new SubscribeError('Você já se inscreveu várias vezes hoje.');
+  if (!(await take(`ofertas-${slug}-total`, 'loja', MAX_PER_STORE_DAY, day))) throw new SubscribeError('Muitas inscrições hoje. Tente de novo amanhã.');
   const entry: Subscriber = { phone: parsed.data.phone, name: parsed.data.name, subscribedAt: now.toISOString() };
   for (let attempt = 0; attempt < 5; attempt++) {
     const doc = await storage().readJSON<Subscriber[]>(keyOf(slug));

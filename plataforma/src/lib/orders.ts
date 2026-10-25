@@ -1,4 +1,5 @@
 import 'server-only';
+import { take } from './limits';
 import { ZodError } from 'zod';
 import { storage, ConflictError } from './storage';
 import { getPublished } from './stores';
@@ -32,6 +33,8 @@ const dayKey = (slug: string, day: string) => `pedidos/${slug}/${day}.json`;
 const opKey = (slug: string) => `lojas/${slug}/operacao.json`;
 const ORDER_ID = /^(\d{4})(\d{2})(\d{2})-[a-z0-9]{10}$/;
 const MAX_PER_DAY = 600;
+/** Per sending address per store per day: generous for a shared network, far below a flood. */
+const MAX_PER_SENDER = 20;
 
 export { OrderError };
 
@@ -146,8 +149,8 @@ export interface Placed {
   token: string;
 }
 
-/** Creates an order from what a site sent. `origin` is this panel's public URL (for payment notifications). */
-export async function placeOrder(slug: string, raw: unknown, origin: string, now = new Date()): Promise<Placed> {
+/** Creates an order from what a site sent. `origin` is this panel's public URL (for payment notifications); `ip` the sender's address, for the per-sender limit. */
+export async function placeOrder(slug: string, raw: unknown, origin: string, now = new Date(), ip = ''): Promise<Placed> {
   const record = await getPublished(slug);
   if (!record) throw new OrderError('Loja não encontrada.');
   const operation = await getOperation(slug);
@@ -166,6 +169,10 @@ export async function placeOrder(slug: string, raw: unknown, origin: string, now
   }
 
   const day = dayOf(now);
+  // Checked before any Pix is created, so a flood cannot open charges on the store's account either.
+  if (ip && !(await take(`pedidos-${slug}`, ip, MAX_PER_SENDER, day))) {
+    throw new OrderError('Recebemos muitos pedidos deste aparelho hoje. Se precisar, fale direto com a loja.');
+  }
   const id = `${day.replace(/-/g, '')}-${random(10)}`;
   const token = random(32);
   let pix = null;

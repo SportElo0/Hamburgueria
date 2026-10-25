@@ -356,7 +356,7 @@ const REELS = {
       scenes: [
         { start: 0, end: 3.4, html: hook('O seu negócio aparece no <span class="blue">Google Maps?</span>', { lead: 'O básico do Perfil da Empresa no Google, em 5 itens.', art: pin }) },
         { start: 3.4, end: 15.2, html: `<div class="glow" style="width:1300px;height:1300px;left:-500px;top:700px;opacity:.45"></div><div class="safe"><p class="eyebrow">Perfil da Empresa no Google</p><h2 class="h1" style="font-size:76px;margin-top:22px">Confira o seu:</h2><ul style="list-style:none;display:grid;gap:56px;margin-top:80px">${list}</ul></div>` },
-        { start: 15.2, end: 20, html: end('No plano Grow, a gente cuida disso para você.', { note: 'Dicas gerais. Ninguém pode garantir posição no Google.' }) },
+        { start: 15.2, end: 20, html: end('No plano Grow, a gente configura e acompanha o seu perfil no Google.', { note: 'Dicas gerais. Ninguém pode garantir posição no Google.' }) },
       ],
     });
     return { html, duration: 20, cover: 1.2 };

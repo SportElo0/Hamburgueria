@@ -1,12 +1,17 @@
 import 'server-only';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { SESSION_COOKIE, isTeam, verifySession, type Session } from './session';
+import { cache } from 'react';
+import { SESSION_COOKIE, SESSION_DAYS, isTeam, verifySession, type Session } from './session';
+import { operatorActive } from './operators';
 
-export async function currentUser(): Promise<Session | null> {
+/** Once per request. A store's staff session also needs its login to still exist (see operatorActive). */
+export const currentUser = cache(async (): Promise<Session | null> => {
   const jar = await cookies();
-  return verifySession(jar.get(SESSION_COOKIE)?.value);
-}
+  const session = await verifySession(jar.get(SESSION_COOKIE)?.value);
+  if (session?.role === 'loja' && !(await operatorActive(session.email, session.slug ?? '', session.exp - SESSION_DAYS * 86_400_000))) return null;
+  return session;
+});
 
 /** Agency team only. Every page and Server Function checks the session itself; the proxy redirect is only a convenience. */
 export async function requireUser(): Promise<Session> {

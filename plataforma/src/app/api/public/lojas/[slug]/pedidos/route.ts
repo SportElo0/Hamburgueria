@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { OrderError, placeOrder } from '@/lib/orders';
 import { publicOrder } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
+import { clientIp } from '@/lib/limits';
 
 // Public: a store's site sends the customer's order here. Prices come from the published catalogue.
 const CORS = {
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     return NextResponse.json({ error: 'Pedido inválido.' }, { status: 400, headers: CORS });
   }
   try {
-    const { order, token } = await placeOrder(slug, body, request.nextUrl.origin);
+    const { order, token } = await placeOrder(slug, body, request.nextUrl.origin, new Date(), clientIp(request.headers));
     return NextResponse.json({ id: order.id, token, order: publicOrder(order) }, { status: 201, headers: CORS });
   } catch (err) {
     if (err instanceof OrderError) return NextResponse.json({ error: err.message }, { status: 422, headers: CORS });

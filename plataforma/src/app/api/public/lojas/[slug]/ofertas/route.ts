@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { addSubscriber, SubscribeError } from '@/lib/subscribers';
 import { isSlug } from '@/lib/slug';
+import { clientIp } from '@/lib/limits';
 
 // Public: a store's site sends "quero receber ofertas" sign-ups here (name, WhatsApp, consent).
 const CORS = {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     return NextResponse.json({ error: 'Envio inválido.' }, { status: 400, headers: CORS });
   }
   try {
-    await addSubscriber(slug, body);
+    await addSubscriber(slug, body, new Date(), clientIp(request.headers));
     return NextResponse.json({ ok: true }, { status: 201, headers: CORS });
   } catch (err) {
     if (err instanceof SubscribeError) return NextResponse.json({ error: err.message }, { status: 422, headers: CORS });

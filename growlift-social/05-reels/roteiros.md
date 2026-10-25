@@ -105,7 +105,7 @@ Se você se viu em algum deles, a gente pode ajudar. Diagnóstico grátis no lin
 ## 5. Perfil da Empresa no Google: o básico (educativo)
 - **Gancho:** "O seu negócio aparece no Google Maps?"
 - **Pontos:** nome igual ao da fachada, horário certo, fotos reais, categoria correta, responder às avaliações.
-- **Chamada final:** "No plano Grow, a gente cuida disso para você."
+- **Chamada final:** "No plano Grow, a gente configura e acompanha o seu perfil no Google."
 - **Só dicas gerais:** nenhuma promessa de posição no Google. O próprio vídeo avisa: "Dicas gerais. Ninguém pode garantir posição no Google."
 
 **Vídeo pronto:** `05-perfil-no-google.mp4` (20 s).
@@ -121,7 +121,7 @@ Confira o básico do seu Perfil da Empresa no Google:
 ✔ Categoria correta
 ✔ Resposta para as avaliações
 
-No plano Grow, a gente cuida disso para você. Link na bio.
+No plano Grow, a gente configura e acompanha o seu perfil no Google. Link na bio.
 
 #growlift #googlemeunegocio #googlemaps #marketinglocal #pequenosnegocios
 ```

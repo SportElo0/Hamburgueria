@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
     '/painel/conteudos': ['./conteudos-gerados/manifest.json'],
     '/painel/conteudos/**': ['./conteudos-gerados/**/*'],
   },
+  // The panel is never framed by another site; files keep their declared type.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+    ];
+  },
   // Image uploads go through a Server Function; menu photos are small, but phones shoot big files.
   experimental: { serverActions: { bodySizeLimit: '6mb' } },
 };

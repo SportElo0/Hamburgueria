@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { getPublished } from '@/lib/stores';
 import { applyCoupon, brl, OrderError, orderingOf } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
+import { clientIp, hourWindow, take } from '@/lib/limits';
 
 // Public: lets the checkout show a coupon's discount before the order. The order itself checks it again.
 const CORS = {
@@ -18,6 +19,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const subtotal = typeof body.subtotal === 'number' && Number.isInteger(body.subtotal) && body.subtotal >= 0 ? body.subtotal : 0;
   const record = isSlug(slug) ? await getPublished(slug) : null;
   if (!record || !code) return NextResponse.json({ error: 'Cupom inválido ou vencido.' }, { status: 422, headers: CORS });
+  // Enough for a customer trying a few codes; stops guessing codes one after another.
+  const ip = clientIp(request.headers);
+  if (ip && !(await take(`cupom-${slug}`, ip, 30, hourWindow()))) {
+    return NextResponse.json({ error: 'Muitas tentativas de cupom. Tente de novo mais tarde.' }, { status: 429, headers: CORS });
+  }
   try {
     const { code: applied, discount, freeDelivery } = applyCoupon(orderingOf(record.store), code, subtotal);
     const label = freeDelivery ? `${applied}: entrega grátis` : `${applied}: ${brl(discount)} de desconto`;
