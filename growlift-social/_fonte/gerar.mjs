@@ -59,8 +59,8 @@ const STEPS = [
   ['Peça o diagnóstico', 'Conte o nome, o ramo e o Instagram ou site do seu negócio. Leva 2 minutos.', 'Pelo site growlift.com.br, sem compromisso.'],
   ['Receba a prévia', 'Em até 2 dias úteis chega no seu WhatsApp o diagnóstico e uma prévia do site novo.', 'Você vê o site antes de pagar.'],
   ['Escolha o plano', 'Start, Grow ou Lift. Mensalidade fixa, sem comissão por pedido.', 'Tudo combinado em contrato, com 7 dias para desistir sem multa.'],
-  ['Ajustes e publicação', 'A gente ajusta o que faltar e publica o site com o seu domínio.', 'O domínio fica no nome do seu negócio.'],
-  ['Depois do ar', 'Alterações todo mês, conforme o seu plano.', ''],
+  ['Ajustes e publicação', 'Com o seu material em mãos, o site vai ao ar em até 7 dias úteis, com até 2 rodadas de ajuste.', 'O domínio fica no nome do seu negócio.'],
+  ['Depois do ar', 'Alterações todo mês: 1 no Start, 2 no Grow e 4 no Lift.', 'Cada alteração fica pronta em até 2 dias úteis.'],
 ];
 S('5-processo', 1, P.storyTitle({ iconName: 'processo', eyebrow: 'Processo', title: `Do primeiro oi ao site no ${B('ar.')}`, lead: 'Cinco passos, sem surpresa no caminho.' }));
 STEPS.forEach(([t, l, d], i) => S('5-processo', i + 2, P.storyStep({ n: i + 1, total: STEPS.length, title: t, lead: l, detail: d })));
@@ -105,8 +105,8 @@ C('2-portfolio', 7, P.slideCta({ n: 7, total: p2, title: 'Quer ver o seu?', body
 const p3 = 6;
 C('3-servicos', 1, P.slideCover({ n: 1, total: p3, kicker: 'Serviços', title: `Sua marca merece ${B('mais.')}`, sub: 'Três planos, mensalidade fixa e nenhuma comissão por pedido.', art: bigMark }));
 C('3-servicos', 2, P.slideList({ n: 2, total: p3, eyebrow: 'Plano Start', title: 'Seu site no ar.', items: [['site', 'Site feito do zero', 'Para o seu negócio'], ['check', 'Domínio e hospedagem', 'Por nossa conta'], ['google', 'WhatsApp, mapa e horários', 'Tudo à mão do cliente'], ['check', '1 alteração por mês', '']] }));
-C('3-servicos', 3, P.slideList({ n: 3, total: p3, glow: 'right', eyebrow: 'Plano Grow', title: 'Achado no Google.', items: [['check', 'Tudo do Start', ''], ['google', 'SEO local', 'Site preparado para a sua cidade'], ['google', 'Perfil da Empresa no Google', 'Configurado e acompanhado'], ['lista', 'Lista de clientes', 'Quem quer receber ofertas']] }));
-C('3-servicos', 4, P.slideList({ n: 4, total: p3, eyebrow: 'Plano Lift', title: 'Vende pelo site.', items: [['check', 'Tudo do Grow', ''], ['pedido', 'Pedido e Pix no site', 'Pix, cartão ou dinheiro'], ['pedido', 'Tela da loja', 'Alerta, impressão e esgotado'], ['lista', 'Campanha mensal', 'No WhatsApp, só para quem aceitou']] }));
+C('3-servicos', 3, P.slideList({ n: 3, total: p3, glow: 'right', eyebrow: 'Plano Grow', title: 'Achado no Google.', items: [['check', 'Tudo do Start', 'Com 2 alterações por mês'], ['google', 'SEO local', 'Site preparado para a sua cidade'], ['google', 'Perfil da Empresa no Google', 'Configurado e acompanhado'], ['lista', 'Lista de clientes', 'Quem quer receber ofertas']] }));
+C('3-servicos', 4, P.slideList({ n: 4, total: p3, eyebrow: 'Plano Lift', title: 'Vende pelo site.', items: [['check', 'Tudo do Grow', 'Com 4 alterações por mês'], ['pedido', 'Pedido e Pix no site', 'Pix, cartão ou dinheiro'], ['pedido', 'Tela da loja', 'Alerta, impressão e esgotado'], ['lista', 'Campanha mensal', 'No WhatsApp, só para quem aceitou']] }));
 C('3-servicos', 5, P.slideList({ n: 5, total: p3, glow: 'bottom', eyebrow: 'Em todos os planos', title: 'Sem letra miúda.', items: [['check', 'Contrato claro', 'Fidelidade informada antes de assinar'], ['check', 'Domínio no seu nome', 'O endereço é do seu negócio'], ['check', '7 dias para desistir', 'Sem multa'], ['check', 'Sem comissão', 'Nada sobre os seus pedidos']] }));
 C('3-servicos', 6, P.slideCta({ n: 6, total: p3, title: 'Qual é o seu momento?', body: 'Conte como está o seu negócio. A gente indica o plano que faz sentido.', button: 'Pedir orçamento', url: 'growlift.com.br · link na bio' }));
 

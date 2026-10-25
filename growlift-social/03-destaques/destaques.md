@@ -58,10 +58,10 @@ Abertura e cinco passos:
 1. Diagnóstico grátis.
 2. Prévia no WhatsApp **em até 2 dias úteis**.
 3. Escolha do plano, com contrato e **7 dias para desistir sem multa**.
-4. Ajustes e publicação com o domínio no nome do cliente.
-5. Alterações mensais conforme o plano.
+4. Site no ar **em até 7 dias úteis** depois de receber o material, com até 2 rodadas de ajuste e o domínio no nome do cliente.
+5. Alterações mensais: 1 no Start, 2 no Grow e 4 no Lift, cada uma pronta em até 2 dias úteis.
 
-Não coloquei o prazo de criação do site. Ele está no contrato, que ainda vai passar pelo advogado.
+Os prazos são os do contrato. Se vocês entregarem antes, melhor; mas o que se promete é o que está escrito.
 
 ## 6 · Contato (2 stories, mais 1 pendente)
 

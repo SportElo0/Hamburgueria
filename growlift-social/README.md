@@ -21,12 +21,16 @@ São 58 imagens em PNG no tamanho do Instagram.
 
 ## Pendente (precisa de vocês)
 
-1. **Escolher o @:** @growlift.ai, que está no site, ou @growlift.agencia, que é a preferência do briefing. Conferir no app se está livre. O rodapé do site tem que usar o mesmo.
-2. **WhatsApp comercial:** número e horário real de atendimento. Com isso eu gero o story de contato do WhatsApp e completo o perfil.
-3. **Domínio growlift.com.br funcionando:** antes de pôr o link na bio e publicar os posts.
-4. **Contrato:** confirmar quantas alterações por mês têm o Grow e o Lift (hoje 2 e 4) e o prazo de criação, antes de usar as respostas rápidas que falam disso.
-5. **Clientes:** o destaque só entra com o primeiro cliente real, com depoimento autorizado por escrito.
-6. **Loja de demonstração genérica:** para o Reel do pedido com Pix. Posso montar quando quiserem.
+1. **Número do WhatsApp comercial** (em criação): com ele eu gero o story de contato do WhatsApp e completo o perfil.
+2. **Domínio growlift.com.br funcionando:** antes de pôr o link na bio e publicar os posts.
+3. **Clientes:** o destaque só entra com o primeiro cliente real, com depoimento autorizado por escrito.
+4. **Loja de demonstração genérica:** para o Reel do pedido com Pix. Posso montar quando quiserem.
+
+**Já decidido:**
+- Instagram **@growlift.ai**.
+- Alterações por mês: Grow 2 e Lift 4.
+- Site no ar em até 7 dias úteis depois do material, como no contrato.
+- WhatsApp sempre aberto, com mensagem automática que se identifica como automática.
 
 ## Regras que seguimos
 

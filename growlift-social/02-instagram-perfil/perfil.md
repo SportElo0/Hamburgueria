@@ -2,16 +2,9 @@
 
 Nada aqui foi publicado nem configurado no Instagram. É o texto pronto para vocês preencherem no app.
 
-## Nome de usuário (decidir)
+## Nome de usuário
 
-| Opção | Situação |
-| --- | --- |
-| **@growlift.ai** | É o que está hoje no rodapé do site. Se a conta já foi criada com esse nome, vale manter. |
-| @growlift.agencia | Preferência do briefing. |
-| @growlift.digital, @growlift.br, @growlift.studio, @growlift.web | Alternativas. |
-
-- Não consegui conferir quais estão livres: o Instagram só mostra isso dentro do app (Editar perfil, Nome de usuário).
-- Escolham um só e me avisem. O rodapé do site precisa usar o mesmo @.
+**@growlift.ai** (decidido: é o mais fácil de escrever e já está no rodapé do site).
 
 ## Nome do perfil
 

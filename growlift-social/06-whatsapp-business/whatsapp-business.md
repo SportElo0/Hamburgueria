@@ -13,7 +13,7 @@ Nada foi configurado. Os campos marcados como **[pendente]** precisam de dados q
 | Telefone | **[pendente: número comercial, separado do pessoal]** |
 | E-mail | contato@growlift.com.br |
 | Site | https://growlift.com.br (quando o domínio estiver no ar) |
-| Horário | **[pendente: só o horário em que vocês realmente respondem]** |
+| Horário | Sempre aberto (com a mensagem automática abaixo) |
 | Endereço | Não preencher. Só se houver um ponto comercial aberto ao público. |
 | Foto | `../02-instagram-perfil/foto-perfil.png` |
 
@@ -39,15 +39,22 @@ Olá! 👋 Seja bem-vindo à Growlift.
 Como podemos ajudar seu negócio hoje?
 ```
 
-## Mensagem de ausência
+## Atendimento 24 horas: como fazer sem enganar ninguém
 
-Fora do horário:
+Vocês querem o WhatsApp respondendo a qualquer hora, com um robô quando vocês não puderem. Dá para fazer, com dois cuidados:
+
+1. **O robô se apresenta como robô.** O briefing e o bom senso pedem isso: ninguém pode achar que está falando com uma pessoa quando não está.
+2. **Ele não fecha venda nem promete nada.** Responde dúvidas com os textos aprovados (as respostas rápidas abaixo), manda o link do diagnóstico e avisa que uma pessoa continua a conversa. O contrato diz que o atendimento humano é em dias úteis.
+
+**Até ter um robô de verdade:** o app WhatsApp Business não tem robô que conversa. O que ele tem é a mensagem de ausência, que já cobre a madrugada e o fim de semana. Use esta:
 
 ```
-Oi! Agora estamos fora do horário de atendimento ([pendente: horário]). Já recebemos a sua mensagem e respondemos assim que voltarmos. 😊
+Oi! 👋 Aqui é o assistente automático da Growlift. Recebemos a sua mensagem e uma pessoa da equipe responde no próximo dia útil.
+
+Se quiser adiantar, peça o diagnóstico grátis do seu site: growlift.com.br/#diagnostico
 ```
 
-Ela avisa que a resposta vem depois, sem fingir que alguém está respondendo agora.
+Um robô que conversa precisa da API oficial do WhatsApp (WhatsApp Business Platform), com um número próprio e custo por conversa. Fica para a fase "mais robusta" que vocês deixaram para depois.
 
 ## Respostas rápidas
 
@@ -73,12 +80,12 @@ Qual desses parece mais perto do que você precisa?
 
 **/prazo**
 ```
-Depois do diagnóstico, a prévia do seu site chega em até 2 dias úteis. O prazo para o site ficar pronto depois da aprovação fica escrito no contrato, e você vê antes de assinar.
+Depois do diagnóstico, a prévia do seu site chega em até 2 dias úteis. Fechando o plano, com o seu material em mãos (fotos, textos, cardápio ou serviços), o site vai ao ar em até 7 dias úteis, com até 2 rodadas de ajuste. Tudo isso fica escrito no contrato.
 ```
 
 **/manutencao**
 ```
-Depois que o site vai ao ar, a gente segue cuidando dele: domínio, hospedagem e alterações todo mês, conforme o plano. O Start inclui 1 alteração por mês; o Grow e o Lift incluem mais (a quantidade exata está no contrato).
+Depois que o site vai ao ar, a gente segue cuidando dele: domínio, hospedagem e alterações todo mês. São 1 por mês no Start, 2 no Grow e 4 no Lift, e cada uma fica pronta em até 2 dias úteis.
 ```
 
 **/portfolio**
@@ -102,10 +109,6 @@ Que tal uma conversa rápida, de uns 15 minutos? Assim eu entendo melhor o seu n
 ```
 Te mandei a proposta. O que ficou mais claro, e o que ainda ficou com dúvida? Pode falar sem cerimônia.
 ```
-
-**Prazos e quantidades a confirmar antes de usar:**
-- o número de alterações por mês do Grow e do Lift: no contrato estão 2 e 4, ainda a confirmar;
-- o prazo de criação que vai ficar no contrato final.
 
 ## Etiquetas
 
