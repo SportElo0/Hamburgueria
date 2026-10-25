@@ -2,7 +2,7 @@
 
 Resumo do que existe neste repositório, onde está no ar e o que ficou pendente.
 Escrito para continuar o trabalho em outra conta ou sessão do Claude sem depender
-do histórico da conversa.
+do histórico da conversa. As regras do projeto ficam em `CLAUDE.md`; publicar: skill `/publicar`.
 
 Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` está atrás).
 
@@ -14,12 +14,16 @@ Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` est
 | `elpatron/` | Site do El Patron Burger (Osasco), preto e dourado, história em 3D, pedidos próprios | https://el-patron-burger.vercel.app/ |
 | `plataforma/` | Painel das lojas: cardápio, pedidos online, tela da loja, relatório, clientes e campanhas | https://painel-lojas-sportelo.vercel.app/ |
 | `pousada/` | Site da Pousada Villa Verano (aguarda nova referência do cliente para o redesenho) | ver no Vercel |
+| `growlift/` | Site da Growlift (HTML estático, ainda com `noindex` até o domínio entrar no ar) | growlift.com.br (DNS pendente) |
+| `growlift-social/` | Instagram e WhatsApp da Growlift: imagens, 8 Reels em vídeo, legendas | aba Conteúdos do painel |
 | `marketing/` | Apresentações e propostas da Growlift (HTML + PDF) e posts | — |
 | `tools/`, `elpatron/tools/` | Estúdio 3D dos burgers (three.js) e tratamento de fotos | — |
 
 Vercel (time `team_YoPHQ4Hb11W9RPG1cwvdMC3G`):
 - painel: projeto `prj_RtyR3H3YbwXdXkv9s08IhAQszQvK`
 - El Patron: projeto `prj_XMxV4MsDwttCRq96OWsYhcM0AtQc` (diretório raiz `elpatron`)
+- Growlift: projeto `prj_6Bem4OwJHw2dAY96xpcLyZCbUbZt`
+- Downtown: projeto `prj_nyFCGwrqD9IQayLYrweIi5Rg6JEz`
 - publicação: deploy a partir do GitHub `SportElo0/Hamburgueria`, branch `claude/downtown-burger-site`.
 
 Os segredos (SESSION_SECRET, ADMIN_USERS, token do Vercel Blob) ficam nas variáveis de
