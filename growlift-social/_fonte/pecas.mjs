@@ -1,0 +1,227 @@
+// Growlift social: one design system for highlight covers, stories and carousels.
+// Every piece is an HTML page built from the same tokens as the website (growlift/styles.css)
+// and rendered to PNG by gerar.mjs. Edit the texts here and run gerar.mjs again.
+
+export const TOKENS = {
+  bg: '#06080d',
+  bg2: '#0b0f17',
+  surface: '#0f1520',
+  line: 'rgba(255,255,255,0.10)',
+  text: '#f3f5f9',
+  soft: '#c6cede',
+  muted: '#a9b3c7',
+  dim: '#8790a6',
+  blue: '#0865fe',
+  blueBright: '#4d8dff',
+  blueSoft: '#8db8ff',
+  eyebrow: '#6ea6ff',
+};
+
+// The official mark, exactly as in the site (viewBox 50 40 530 415).
+export const MARK = `<svg viewBox="50 40 530 415" xmlns="http://www.w3.org/2000/svg"><path fill="#0865FE" d="M280 48H410L190 450H55Z"/><path fill="#0865FE" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></svg>`;
+
+// Line icons on a 24 grid, drawn for this set so stroke and corners match.
+export const ICONS = {
+  projetos: '<rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/><path d="M6 7.5h5.5v5.5H6z"/><path d="M14 8h4M14 10.75h4M14 13.5h2.5"/>',
+  servicos: '<path d="M12 3 2.5 8 12 13l9.5-5L12 3z"/><path d="m2.5 12.5 9.5 5 9.5-5"/><path d="m2.5 16.5 9.5 5 9.5-5"/>',
+  clientes: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.3-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="m17.5 4 .9 1.9 2.1.3-1.5 1.5.4 2.1-1.9-1-1.9 1 .4-2.1-1.5-1.5 2.1-.3z"/>',
+  design: '<circle cx="7.5" cy="7.5" r="4"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M17.5 3 21.5 10h-8z"/><path d="M5 16.5h5.5v4.5H5z"/>',
+  processo: '<circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18.5" r="2.5"/><path d="M7.5 6h9M6.3 8.2l4.4 7.9M17.7 8.2l-4.4 7.9"/>',
+  contato: '<path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.5-4.7A8.5 8.5 0 1 1 20.5 11.5z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke-width="2.6"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  site: '<rect x="2.5" y="4" width="19" height="16" rx="2"/><path d="M2.5 8.5h19M6 6.25h.01M8.5 6.25h.01"/>',
+  google: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  pedido: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  lista: '<path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.5L3.5 20.5 5 15.8a8.5 8.5 0 1 1 16-4.3z"/><path d="M8.5 11.5l2.3 2.3 4.7-4.6"/>',
+  phone: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>',
+  type: '<path d="M4 7V5h16v2M12 5v14M9 19h6"/>',
+  motion: '<path d="M3 12c3-6 6-6 9 0s6 6 9 0"/><path d="M3 6.5h4M17 17.5h4"/>',
+};
+
+export const icon = (name, { size = 64, color = TOKENS.blueBright, width = 1.6 } = {}) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+
+const FONT = '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">';
+
+const BASE_CSS = `
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:var(--w);height:var(--h);overflow:hidden}
+body{position:relative;font-family:Inter,system-ui,sans-serif;color:${TOKENS.text};background:${TOKENS.bg};-webkit-font-smoothing:antialiased}
+.glow{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(8,101,254,.42),rgba(8,101,254,0) 70%)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:72px 72px;-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 25%,transparent 72%)}
+.eyebrow{font-size:28px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:${TOKENS.eyebrow}}
+.h1{font-weight:800;letter-spacing:-.035em;line-height:.98}
+.blue{color:${TOKENS.blueBright}}
+.lead{color:${TOKENS.soft};line-height:1.4}
+.muted{color:${TOKENS.muted}}
+.chip{display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(141,184,255,.35);color:${TOKENS.blueSoft};border-radius:999px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:${TOKENS.blue};color:#fff;border-radius:999px;font-weight:700;box-shadow:0 24px 50px -20px rgba(8,101,254,.9)}
+.card{background:${TOKENS.surface};border:1px solid ${TOKENS.line};border-radius:32px}
+.brand{display:flex;align-items:center;gap:16px;font-weight:700;letter-spacing:.12em}
+.brand svg{height:1.05em;width:auto}
+.browser{border-radius:26px;overflow:hidden;background:${TOKENS.surface};border:1px solid ${TOKENS.line};box-shadow:0 -30px 90px -30px rgba(8,101,254,.55),0 40px 80px -40px rgba(0,0,0,.9)}
+.browser .bar{display:flex;align-items:center;gap:10px;height:54px;padding:0 22px;border-bottom:1px solid rgba(255,255,255,.08)}
+.browser .bar i{width:14px;height:14px;border-radius:50%;background:#2a3344}
+.browser .bar span{margin-left:14px;font-size:20px;color:#7d879c;background:#161d2a;padding:6px 18px;border-radius:999px}
+.browser img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.phone{border-radius:64px;padding:16px;background:#1a2130;box-shadow:0 50px 90px -40px rgba(0,0,0,.95),0 0 0 2px rgba(255,255,255,.06)}
+.phone img{display:block;width:100%;border-radius:50px}
+.tag-conceito{display:inline-block;font-size:22px;font-weight:600;letter-spacing:.06em;color:${TOKENS.dim};border:1px dashed rgba(255,255,255,.22);border-radius:999px;padding:8px 18px}
+`;
+
+export function page(w, h, body, css = '') {
+  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">${FONT}<style>:root{--w:${w}px;--h:${h}px}${BASE_CSS}${css}</style></head><body>${body}</body></html>`;
+}
+
+const brandRow = (size = 30) => `<div class="brand" style="font-size:${size}px">${MARK}GROWLIFT</div>`;
+
+// ---------------------------------------------------------------------------------------
+// Highlight covers (1080x1920; Instagram shows the centre as a circle).
+export function cover(name, variant) {
+  if (variant === 'A') {
+    return page(1080, 1920, `
+      <div class="glow" style="width:1100px;height:1100px;left:-10px;top:410px;opacity:.55"></div>
+      <div style="position:absolute;left:50%;top:50%;width:860px;height:860px;margin:-430px 0 0 -430px;border-radius:50%;border:3px solid rgba(77,141,255,.24)"></div>
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">${icon(name, { size: 500, width: 1.05 })}</div>`,
+      `body{background:radial-gradient(circle at 50% 50%,#0c1630 0%,${TOKENS.bg} 62%)}`);
+  }
+  // B: technological; white icon, blue node accents, the site's grid.
+  return page(1080, 1920, `
+    <div class="grid"></div>
+    <div class="glow" style="width:900px;height:900px;left:90px;top:510px;opacity:.6"></div>
+    <div style="position:absolute;left:50%;top:50%;width:700px;height:700px;margin:-350px 0 0 -350px;border-radius:60px;transform:rotate(45deg);border:2px solid rgba(255,255,255,.08)"></div>
+    <div style="position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;transform:translate(0,-495px);border-radius:50%;background:${TOKENS.blueBright};box-shadow:0 0 24px ${TOKENS.blueBright}"></div>
+    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">${icon(name, { size: 480, color: '#ffffff', width: 1.1 })}</div>`);
+}
+
+// ---------------------------------------------------------------------------------------
+// Stories (1080x1920). Safe area: content between y=250 and y=1560.
+function storyShell(inner, { glow = 'top', footer = true } = {}) {
+  const glowPos = glow === 'top' ? 'left:-260px;top:-380px' : 'right:-320px;bottom:-200px';
+  return page(1080, 1920, `
+    <div class="glow" style="width:1300px;height:1300px;${glowPos};opacity:.5"></div>
+    <div style="position:absolute;left:96px;right:96px;top:250px;bottom:330px;display:flex;flex-direction:column">${inner}</div>
+    ${footer ? `<div style="position:absolute;left:96px;right:96px;bottom:250px;display:flex;justify-content:space-between;align-items:center;color:${TOKENS.dim};font-size:26px">${brandRow(26)}<span>growlift.com.br</span></div>` : ''}`);
+}
+
+export const storyTitle = ({ eyebrow, title, lead, iconName }) =>
+  storyShell(`
+    <div style="margin-top:auto">
+      ${iconName ? `<div style="margin-bottom:56px">${icon(iconName, { size: 120, width: 1.4 })}</div>` : ''}
+      <p class="eyebrow">${eyebrow}</p>
+      <h1 class="h1" style="font-size:118px;margin-top:28px">${title}</h1>
+      ${lead ? `<p class="lead" style="font-size:42px;margin-top:40px;max-width:820px">${lead}</p>` : ''}
+    </div>`);
+
+export const storyProject = ({ index, name, segment, img, features, note = 'Projeto conceito · nome fictício' }) =>
+  storyShell(`
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <p class="eyebrow">${segment}</p><span class="muted" style="font-size:28px;font-weight:600">${index}</span>
+    </div>
+    <h1 class="h1" style="font-size:96px;margin-top:22px">${name}</h1>
+    <div style="margin-top:22px"><span class="tag-conceito">${note}</span></div>
+    <div class="browser" style="margin:auto -40px 0"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="${img}"></div>
+    <ul style="list-style:none;margin-top:auto;display:grid;gap:22px">
+      ${features.map((f) => `<li style="display:flex;gap:20px;align-items:center;font-size:38px;color:${TOKENS.soft}">${icon('check', { size: 40, width: 2.2 })}${f}</li>`).join('')}
+    </ul>`, { glow: 'bottom' });
+
+export const storyService = ({ index, iconName, title, lead, items }) =>
+  storyShell(`
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="width:132px;height:132px;border-radius:36px;display:grid;place-items:center;background:rgba(8,101,254,.14);border:1px solid rgba(77,141,255,.35)">${icon(iconName, { size: 72, width: 1.6 })}</div>
+      <span class="muted" style="font-size:28px;font-weight:600">${index}</span>
+    </div>
+    <div style="margin:auto 0">
+    <h1 class="h1" style="font-size:104px">${title}</h1>
+    <p class="lead" style="font-size:42px;margin-top:36px">${lead}</p>
+    <ul style="list-style:none;margin-top:72px;display:grid;gap:26px">
+      ${items.map((f) => `<li class="card" style="display:flex;gap:22px;align-items:center;font-size:36px;padding:30px 34px;color:${TOKENS.soft}">${icon('check', { size: 40, width: 2.2 })}${f}</li>`).join('')}
+    </ul>
+    </div>`);
+
+export const storyStep = ({ n, total, title, lead, detail }) =>
+  storyShell(`
+    <p class="eyebrow">Como funciona · ${n} de ${total}</p>
+    <div style="margin:auto 0">
+    <div class="h1" style="font-size:420px;line-height:.8;color:transparent;-webkit-text-stroke:3px ${TOKENS.blueBright}">${n}</div>
+    <h1 class="h1" style="font-size:104px;margin-top:70px">${title}</h1>
+    <p class="lead" style="font-size:42px;margin-top:36px">${lead}</p>
+    ${detail ? `<p class="card" style="margin-top:60px;font-size:34px;padding:32px 36px;color:${TOKENS.muted}">${detail}</p>` : ''}
+    </div>
+    <div style="display:flex;gap:12px">${Array.from({ length: total }, (_, i) => `<i style="height:10px;border-radius:9px;background:${i + 1 === n ? TOKENS.blueBright : 'rgba(255,255,255,.18)'};width:${i + 1 === n ? 70 : 28}px"></i>`).join('')}</div>`);
+
+export const storyVisual = ({ eyebrow, title, lead, visual }) =>
+  storyShell(`
+    <p class="eyebrow">${eyebrow}</p>
+    <h1 class="h1" style="font-size:96px;margin-top:24px">${title}</h1>
+    ${lead ? `<p class="lead" style="font-size:40px;margin-top:30px">${lead}</p>` : ''}
+    <div style="margin-top:auto">${visual}</div>`, { glow: 'bottom' });
+
+export const storyContact = ({ title, lead, rows, cta }) =>
+  storyShell(`
+    <div>${icon('contato', { size: 120, width: 1.4 })}</div>
+    <h1 class="h1" style="font-size:110px;margin-top:56px">${title}</h1>
+    <p class="lead" style="font-size:42px;margin-top:36px">${lead}</p>
+    <div style="margin-top:auto;display:grid;gap:22px">
+      ${rows.map(([label, value]) => `<div class="card" style="padding:30px 36px"><p style="font-size:26px;letter-spacing:.12em;text-transform:uppercase;color:${TOKENS.dim};font-weight:600">${label}</p><p style="font-size:44px;font-weight:700;margin-top:8px">${value}</p></div>`).join('')}
+    </div>
+    ${cta ? `<div class="btn" style="margin-top:40px;height:120px;font-size:40px">${cta}</div>` : ''}`);
+
+// ---------------------------------------------------------------------------------------
+// Carousel slides (1080x1350).
+function slideShell(inner, { n, total, glow = 'top', footer = true } = {}) {
+  const glowPos = glow === 'top' ? 'left:-300px;top:-460px' : glow === 'right' ? 'right:-420px;top:200px' : 'left:-200px;bottom:-560px';
+  return page(1080, 1350, `
+    <div class="glow" style="width:1250px;height:1250px;${glowPos};opacity:.5"></div>
+    <div style="position:absolute;left:88px;right:88px;top:96px;bottom:150px;display:flex;flex-direction:column">${inner}</div>
+    ${footer ? `<div style="position:absolute;left:88px;right:88px;bottom:72px;display:flex;justify-content:space-between;align-items:center;color:${TOKENS.dim};font-size:24px">${brandRow(24)}<span>${n ? `${n}/${total}` : ''}</span></div>` : ''}`);
+}
+
+export const slideCover = ({ kicker, title, sub, n, total, art = '' }) =>
+  slideShell(`
+    ${art}
+    <div style="position:relative;margin-top:auto">
+      <p class="eyebrow">${kicker}</p>
+      <h1 class="h1" style="font-size:118px;margin-top:28px">${title}</h1>
+      ${sub ? `<p class="lead" style="font-size:38px;margin-top:34px;max-width:820px">${sub}</p>` : ''}
+      <p style="margin-top:48px;font-size:28px;color:${TOKENS.blueSoft};font-weight:600">Arraste para o lado →</p>
+    </div>`, { n, total });
+
+export const slideText = ({ eyebrow, title, body, n, total, extra = '', glow }) =>
+  slideShell(`
+    <p class="eyebrow">${eyebrow}</p>
+    <h2 class="h1" style="font-size:84px;margin-top:26px">${title}</h2>
+    ${body ? `<p class="lead" style="font-size:38px;margin-top:34px">${body}</p>` : ''}
+    ${extra}`, { n, total, glow });
+
+export const slideList = ({ eyebrow, title, items, n, total, glow }) =>
+  slideText({
+    eyebrow, title, n, total, glow,
+    extra: `<ul style="list-style:none;margin-top:auto;display:grid;gap:20px">${items
+      .map(([ic, t, d]) => `<li class="card" style="display:flex;gap:26px;align-items:center;padding:28px 32px"><div style="flex:none;width:84px;height:84px;border-radius:24px;display:grid;place-items:center;background:rgba(8,101,254,.14);border:1px solid rgba(77,141,255,.3)">${icon(ic, { size: 46, width: 1.7 })}</div><div><p style="font-size:36px;font-weight:700">${t}</p>${d ? `<p style="font-size:28px;color:${TOKENS.muted};margin-top:4px">${d}</p>` : ''}</div></li>`)
+      .join('')}</ul>`,
+  });
+
+export const slideProject = ({ name, segment, img, features, n, total }) =>
+  slideShell(`
+    <div style="display:flex;justify-content:space-between;align-items:baseline"><p class="eyebrow">${segment}</p><span class="tag-conceito">Projeto conceito</span></div>
+    <h2 class="h1" style="font-size:88px;margin-top:22px">${name}</h2>
+    <div class="browser" style="margin-top:44px"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="${img}"></div>
+    <div style="margin-top:auto;display:flex;flex-wrap:wrap;gap:14px">${features.map((f) => `<span class="chip" style="font-size:24px;padding:14px 22px">${f}</span>`).join('')}</div>`, { n, total, glow: 'right' });
+
+export const slideCta = ({ title, body, button, url, n, total }) =>
+  slideShell(`
+    <div style="margin-top:auto">
+      ${icon('contato', { size: 110, width: 1.4 })}
+      <h2 class="h1" style="font-size:96px;margin-top:44px">${title}</h2>
+      <p class="lead" style="font-size:38px;margin-top:30px">${body}</p>
+      <div class="btn" style="margin-top:56px;height:112px;padding:0 56px;font-size:38px">${button}</div>
+      <p style="margin-top:28px;font-size:30px;color:${TOKENS.muted}">${url}</p>
+    </div>`, { n, total, glow: 'bottom' });
+
+// Profile photo: the mark alone, centred, legible as a 110px circle.
+export const profilePhoto = () =>
+  page(1080, 1080, `
+    <div class="glow" style="width:1200px;height:1200px;left:-60px;top:-40px;opacity:.55"></div>
+    <div style="position:absolute;left:50%;top:50%;width:560px;transform:translate(-50%,-52%)">${MARK.replace('<svg ', '<svg width="560" ')}</div>`,
+    `body{background:radial-gradient(circle at 50% 46%,#0f1d3d 0%,${TOKENS.bg} 66%)}`);

@@ -1,0 +1,54 @@
+# Perfil do Instagram
+
+Nada aqui foi publicado nem configurado no Instagram. É o texto pronto para vocês preencherem no app.
+
+## Nome de usuário (decidir)
+
+| Opção | Situação |
+| --- | --- |
+| **@growlift.ai** | É o que está hoje no rodapé do site. Se a conta já foi criada com esse nome, vale manter. |
+| @growlift.agencia | Preferência do briefing. |
+| @growlift.digital, @growlift.br, @growlift.studio, @growlift.web | Alternativas. |
+
+- Não consegui conferir quais estão livres: o Instagram só mostra isso dentro do app (Editar perfil, Nome de usuário).
+- Escolham um só e me avisem. O rodapé do site precisa usar o mesmo @.
+
+## Nome do perfil
+
+**Growlift | Sites & Marketing** (28 de 30 caracteres)
+
+O nome aparece na busca do Instagram, então "Sites" ajuda quem procura por isso. Alternativa: Growlift | Agência Digital (26).
+
+## Tipo de conta e categoria
+
+- Conta profissional, do tipo Empresa.
+- Categoria: **Agência de marketing**. Se não aparecer, escolham a mais próxima, como "Serviço de design de sites".
+
+## Bio
+
+```
+🚀 Transformamos negócios em experiências digitais.
+💻 Websites • Design • Soluções Digitais
+✨ Projetos personalizados
+👇 Conheça nosso trabalho
+```
+
+**Contagem:** 141 caracteres. Se o Instagram contar cada emoji como dois, são 144. Cabe no limite de 150 dos dois jeitos. Mantive o texto aprovado sem mudar nada.
+
+## Link
+
+- **Um link só:** https://growlift.com.br. O site já reúne os modelos, os planos e o pedido de diagnóstico (orçamento).
+- **Só coloquem depois que o domínio estiver funcionando.** O endereço provisório (growlift-nu.vercel.app) pede login do Vercel, então quem não é da equipe não consegue abrir.
+- O WhatsApp entra como botão de contato (abaixo), não como segundo link.
+
+## Botões de contato
+
+| Botão | Valor |
+| --- | --- |
+| E-mail | contato@growlift.com.br |
+| WhatsApp | **[número comercial da Growlift: pendente]** |
+| Endereço | Não exibir. Só faz sentido se houver um ponto comercial aberto ao público. |
+
+## Foto de perfil
+
+`foto-perfil.png` (1080×1080): o símbolo oficial, sem alteração, centralizado no fundo azul-marinho do site, com um brilho azul suave. Testei em 110 px, o tamanho do círculo no perfil: continua legível.
