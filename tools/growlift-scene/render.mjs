@@ -11,7 +11,7 @@ import sharp from 'sharp';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const MIME = { '.js': 'text/javascript', '.html': 'text/html' };
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const FRAMES = 72;
+const FRAMES = 96;
 const SETS = [
   { name: 'd', w: 1600, h: 900 },
   { name: 'm', w: 720, h: 1200 },

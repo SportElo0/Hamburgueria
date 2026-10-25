@@ -33,37 +33,47 @@
   }
 
   // Subida: a 3D frame sequence (rendered by tools/growlift-scene) that plays with the scroll.
+  // The picture eases toward the scroll position and cross-fades neighbouring frames, so it glides.
   const lift = document.getElementById('subida');
   if (lift) {
     const canvas = lift.querySelector('.lift-canvas');
     const ctx = canvas.getContext('2d');
     const steps = lift.querySelectorAll('.lift-steps li');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const FRAMES = 72;
+    const FRAMES = 96;
     const set = window.innerWidth / window.innerHeight < 1 ? 'm' : 'd';
     const frames = new Array(FRAMES);
-    let current = -1;
+    let target = 0;
+    let shown = 0;
+    let raf = 0;
     let started = false;
 
-    const draw = (i) => {
-      // Nearest frame already loaded, so a fast scroll never shows a blank canvas.
-      const ready = (k) => k >= 0 && k < FRAMES && frames[k] && frames[k].naturalWidth;
-      let k = -1;
-      for (let d = 0; d < FRAMES && k < 0; d++) k = ready(i - d) ? i - d : ready(i + d) ? i + d : -1;
-      if (k < 0) return;
-      const img = frames[k];
+    const ready = (k) => k >= 0 && k < FRAMES && frames[k] && frames[k].naturalWidth;
+    const paint = (img, alpha) => {
       const w = canvas.width;
       const h = canvas.height;
       const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
       const dw = img.naturalWidth * s;
       const dh = img.naturalHeight * s;
+      ctx.globalAlpha = alpha;
       ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+      ctx.globalAlpha = 1;
     };
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(canvas.clientWidth * dpr);
-      canvas.height = Math.round(canvas.clientHeight * dpr);
-      if (current >= 0) draw(current);
+    const render = (p) => {
+      const f = p * (FRAMES - 1);
+      const i = Math.floor(f);
+      // Nearest frame already loaded, so a fast scroll never shows a blank canvas.
+      let k = -1;
+      for (let d = 0; d < FRAMES && k < 0; d++) k = ready(i - d) ? i - d : ready(i + d) ? i + d : -1;
+      if (k < 0) return;
+      paint(frames[k], 1);
+      if (k === i && ready(i + 1) && f > i) paint(frames[i + 1], f - i);
+    };
+    const tick = () => {
+      shown += (target - shown) * 0.16;
+      if (Math.abs(target - shown) < 0.0004) shown = target;
+      render(shown);
+      raf = shown === target ? 0 : requestAnimationFrame(tick);
     };
     const progress = () => {
       const r = lift.getBoundingClientRect();
@@ -71,13 +81,15 @@
       return run > 0 ? Math.min(1, Math.max(0, -r.top / run)) : 1;
     };
     const update = () => {
-      const p = reduced ? 1 : progress();
-      const i = Math.round(p * (FRAMES - 1));
-      if (i !== current) {
-        current = i;
-        draw(i);
-      }
-      if (!reduced) steps.forEach((li, n) => li.classList.toggle('on', p >= [0, 0.36, 0.68][n]));
+      target = reduced ? 1 : progress();
+      if (!raf) raf = requestAnimationFrame(tick);
+      if (!reduced) steps.forEach((li, n) => li.classList.toggle('on', target >= [0, 0.36, 0.68][n]));
+    };
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(canvas.clientWidth * dpr);
+      canvas.height = Math.round(canvas.clientHeight * dpr);
+      render(shown);
     };
     const load = (i) =>
       new Promise((resolve) => {
@@ -85,7 +97,7 @@
         img.decoding = 'async';
         img.onload = img.onerror = () => {
           frames[i] = img;
-          if (Math.abs(i - current) <= 4) draw(current);
+          if (Math.abs(i - shown * (FRAMES - 1)) <= 6) render(shown);
           resolve();
         };
         img.src = `img/lift/${set}/${String(i).padStart(2, '0')}.webp`;
@@ -113,6 +125,7 @@
       }, { rootMargin: '150% 0px' });
       near.observe(lift);
     } else start();
+    shown = target = reduced ? 1 : progress();
     update();
   }
 
