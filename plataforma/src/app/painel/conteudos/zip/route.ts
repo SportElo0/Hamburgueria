@@ -14,6 +14,8 @@ export async function GET(request: Request) {
   for (const f of group.files) {
     const found = await readContentFile(f.path, 'arquivo');
     if (found) files.push({ name: f.name, data: found.data });
+    const cover = f.cover ? await readContentFile(f.cover, 'arquivo') : null;
+    if (cover && f.cover) files.push({ name: f.cover.split('/').pop()!, data: cover.data });
   }
   return new NextResponse(new Uint8Array(zip(files)), {
     headers: {

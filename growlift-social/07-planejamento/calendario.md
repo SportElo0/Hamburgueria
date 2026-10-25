@@ -33,6 +33,8 @@ Nada de comprar seguidores, sorteio para ganhar seguidor nem engajamento combina
 | 3 | Portfólio: Brasa Burger em detalhe, marcado como conceito (carrossel) | **Reel 5:** Perfil da Empresa no Google, o básico | Educação: o que não pode faltar no site de um restaurante (carrossel) |
 | 4 | Bastidores: como nasce um modelo (foto ou carrossel) | **Reel 7:** quem somos | Soluções: pedido com Pix no próprio site, sem comissão (carrossel) |
 
+**Depois da semana 4:** os outros Reels já estão prontos (`05-reels/`). Postem um por semana, na quarta: 4 (três sinais), 3 (diagnóstico), 8 (pedido e Pix), 2 (a marca se monta) e 6 (bastidores).
+
 ## Banco de ideias (educação e soluções)
 
 1. Por que o cardápio em foto no Instagram afasta clientes do Google.

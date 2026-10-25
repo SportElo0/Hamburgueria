@@ -18,6 +18,8 @@ export interface ContentFile {
   format: string;
   thumb: string;
   doNotPublish: boolean;
+  /** A video's cover image (the Reel cover to upload with it), or ''. */
+  cover?: string;
 }
 export interface ContentGroup {
   id: string;
@@ -84,6 +86,8 @@ export async function readContentFile(rel: string, kind: 'arquivo' | 'miniatura'
     for (const g of f.groups)
       for (const file of g.files) {
         if (kind === 'arquivo' && file.path === rel) return { file, data: await fs.readFile(path.join(root(), 'arquivos', file.path)) };
+        if (kind === 'arquivo' && file.cover && file.cover === rel)
+          return { file: { ...file, path: file.cover, type: 'image/png' }, data: await fs.readFile(path.join(root(), 'arquivos', file.cover)) };
         if (kind === 'miniatura' && file.thumb === rel) {
           const thumbDir = file.thumb === file.path ? 'arquivos' : 'miniaturas';
           return { file: { ...file, type: thumbDir === 'arquivos' ? file.type : 'image/webp' }, data: await fs.readFile(path.join(root(), thumbDir, file.thumb)) };
@@ -96,6 +100,15 @@ export async function findGroup(id: string) {
   const m = await getManifest();
   for (const f of m.folders) for (const g of f.groups) if (g.id === id) return g;
   return null;
+}
+
+/** A single `Range: bytes=…` request (what video players send), clamped to the file; null = whole file, 'invalida' = 416. */
+export function byteRange(header: string | null, total: number): { start: number; end: number } | null | 'invalida' {
+  const m = /^bytes=(\d*)-(\d*)$/.exec(header?.trim() ?? '');
+  if (!m || (!m[1] && !m[2])) return null;
+  const start = m[1] ? Number(m[1]) : Math.max(0, total - Number(m[2]));
+  const end = m[1] && m[2] ? Math.min(Number(m[2]), total - 1) : total - 1;
+  return start >= total || start > end ? 'invalida' : { start, end };
 }
 
 /** 03-destaques/1-projetos/01.png → growlift-destaques-projetos-01.png */

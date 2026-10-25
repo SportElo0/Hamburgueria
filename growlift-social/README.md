@@ -12,13 +12,13 @@ Material para o Instagram e o WhatsApp Business da Growlift. Segue a mesma ident
 | `02-instagram-perfil/` | Foto de perfil e textos do perfil: nome, @, bio conferida, categoria, link e contato |
 | `03-destaques/` | Capas (direção A escolhida, B de registro) e stories de Projetos (6), Serviços (6), Design (4), Processo (6) e Contato (2), mais o modelo de Clientes **sem publicar** |
 | `04-posts-fixados/` | Três carrosséis prontos (Quem somos, Portfólio, Serviços), com legendas e ordem para fixar |
-| `05-reels/` | Oito roteiros, com gancho, demonstração, explicação e chamada |
+| `05-reels/` | Os 8 Reels prontos em vídeo (MP4 vertical, com capa), com roteiro e legenda de cada um |
 | `06-whatsapp-business/` | Perfil, saudação, ausência, 8 respostas rápidas, etiquetas e guia de conversa (Chris Voss) |
 | `07-planejamento/` | Pilares, ritmo, calendário de 4 semanas e o que medir |
 | `08-prompts/` | Prompts das imagens e do vídeo do site, e um modelo para pedir conteúdo novo |
 | `_fonte/` | Gerador das peças, modelos editáveis em HTML e imagens de origem |
 
-São 58 imagens em PNG no tamanho do Instagram.
+São 58 imagens em PNG no tamanho do Instagram e 8 Reels em MP4.
 
 ## No painel
 
@@ -31,7 +31,6 @@ O painel lê esta pasta toda vez que é publicado. Para entrar uma peça nova, b
 1. **Número do WhatsApp comercial** (em criação): com ele eu gero o story de contato do WhatsApp e completo o perfil.
 2. **Domínio growlift.com.br funcionando:** antes de pôr o link na bio e publicar os posts.
 3. **Clientes:** o destaque só entra com o primeiro cliente real, com depoimento autorizado por escrito.
-4. **Loja de demonstração genérica:** para o Reel do pedido com Pix. Posso montar quando quiserem.
 
 **Já decidido:**
 - Instagram **@growlift.ai**.
@@ -50,7 +49,10 @@ O painel lê esta pasta toda vez que é publicado. Para entrar uma peça nova, b
 
 ```
 node growlift-social/_fonte/gerar.mjs
+node growlift-social/_fonte/reels/gerar-reels.mjs      # os Reels (ou só alguns: ... gerar-reels.mjs 3 7)
 ```
+
+O Reel 8 sobe o painel (`plataforma/`) nesta máquina, com uma loja de demonstração; rode `npm run build` em `plataforma/` antes.
 
 Para conferir as capas no tamanho real do perfil:
 

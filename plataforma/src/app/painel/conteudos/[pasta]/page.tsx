@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ pasta: st
 }
 
 const kb = (n: number) => (n > 1_000_000 ? `${(n / 1_000_000).toFixed(1).replace('.', ',')} MB` : `${Math.round(n / 1000)} KB`);
-const cols = (f: ContentFile) => (f.height > f.width * 1.5 ? 'grid-cols-3 sm:grid-cols-4 lg:grid-cols-6' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4');
+const isVideo = (f: ContentFile) => f.type.startsWith('video/');
+const cols = (f: ContentFile) => (f.height > f.width * 1.5 && !isVideo(f) ? 'grid-cols-3 sm:grid-cols-4 lg:grid-cols-6' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4');
 
 export default async function PastaPage({ params }: { params: Promise<{ pasta: string }> }) {
   await requireUser();
@@ -45,9 +46,9 @@ export default async function PastaPage({ params }: { params: Promise<{ pasta: s
                       {g.title}
                     </h2>
                     <p className="text-sm text-ink-mute">
-                      {g.files.length} {g.files.length === 1 ? 'imagem' : 'imagens'}
+                      {g.files.length} {isVideo(first) ? (g.files.length === 1 ? 'vídeo' : 'vídeos') : g.files.length === 1 ? 'imagem' : 'imagens'}
                       {first.format && ` · ${first.format}`}
-                      {g.files.length > 1 && (g.id.includes('/capas/') ? ' · uma para cada destaque' : ' · postar na ordem dos números')}
+                      {isVideo(first) ? ' · sem som: a música entra no Instagram · capa junto' : g.files.length > 1 && (g.id.includes('/capas/') ? ' · uma para cada destaque' : ' · postar na ordem dos números')}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-start gap-2">
@@ -56,31 +57,51 @@ export default async function PastaPage({ params }: { params: Promise<{ pasta: s
                         Baixar tudo (.zip)
                       </a>
                     )}
-                    <ContentStatusControl statusKey={g.id} status={s?.status ?? 'rascunho'} by={s?.by} label={g.title} />
+                    {/* Where each script has its own status (Reels), the group-wide one would only repeat it. */}
+                    {!folder.sectionStatus && <ContentStatusControl statusKey={g.id} status={s?.status ?? 'rascunho'} by={s?.by} label={g.title} />}
                   </div>
                 </div>
                 <ul className={`mt-4 grid gap-3 ${cols(first)}`}>
                   {g.files.map((f) => (
                     <li key={f.path}>
-                      <a href={fileUrl(f)} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-lg border border-line bg-ink">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={fileUrl(f, 'mini')}
-                          alt={`${g.title}, ${f.name}`}
-                          width={f.width || undefined}
-                          height={f.height || undefined}
-                          loading="lazy"
-                          className="h-auto w-full transition-opacity group-hover:opacity-90"
+                      {isVideo(f) ? (
+                        <video
+                          controls
+                          playsInline
+                          preload="none"
+                          poster={fileUrl(f, 'mini')}
+                          src={fileUrl(f)}
+                          aria-label={`${g.title}, ${f.name}`}
+                          className="block aspect-[9/16] w-full rounded-lg border border-line bg-ink object-cover"
                         />
-                        {f.doNotPublish && <span className="chip absolute top-2 left-2 bg-bad text-white">Não publicar</span>}
-                      </a>
+                      ) : (
+                        <a href={fileUrl(f)} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-lg border border-line bg-ink">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={fileUrl(f, 'mini')}
+                            alt={`${g.title}, ${f.name}`}
+                            width={f.width || undefined}
+                            height={f.height || undefined}
+                            loading="lazy"
+                            className="h-auto w-full transition-opacity group-hover:opacity-90"
+                          />
+                          {f.doNotPublish && <span className="chip absolute top-2 left-2 bg-bad text-white">Não publicar</span>}
+                        </a>
+                      )}
                       <div className="mt-1.5 flex items-center justify-between gap-2 text-xs">
                         <span className="truncate text-ink-mute" title={`${f.name} · ${kb(f.size)}`}>
                           {f.name}
                         </span>
-                        <a href={fileUrl(f, 'baixar')} className="shrink-0 font-semibold text-ink underline-offset-2 hover:underline">
-                          Baixar
-                        </a>
+                        <span className="flex shrink-0 gap-3">
+                          <a href={fileUrl(f, 'baixar')} className="font-semibold text-ink underline-offset-2 hover:underline">
+                            {f.cover ? 'Vídeo' : 'Baixar'}
+                          </a>
+                          {f.cover && (
+                            <a href={fileUrl({ path: f.cover, thumb: f.thumb }, 'baixar')} className="font-semibold text-ink underline-offset-2 hover:underline">
+                              Capa
+                            </a>
+                          )}
+                        </span>
                       </div>
                     </li>
                   ))}

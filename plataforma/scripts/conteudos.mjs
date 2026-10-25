@@ -1,6 +1,6 @@
 // Runs before `next build`: turns ../growlift-social into the panel's Conteúdos section.
 //   node scripts/conteudos.mjs [source-dir]
-// Writes conteudos-gerados/: manifest.json, the original files and WebP thumbnails.
+// Writes conteudos-gerados/: manifest.json, the original files and WebP thumbnails (a video's comes from its -capa.png).
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -24,7 +24,7 @@ const FOLDERS = {
   '02-instagram-perfil': { title: 'Perfil do Instagram', blurb: 'Foto, nome, bio e botões de contato.' },
   '03-destaques': { title: 'Stories e destaques', blurb: 'Capas e stories de cada destaque, na ordem de postar.' },
   '04-posts-fixados': { title: 'Posts e carrosséis', blurb: 'Os carrosséis fixados, com legenda pronta.' },
-  '05-reels': { title: 'Reels', blurb: 'Roteiros com gancho, demonstração e chamada.', sectionStatus: true },
+  '05-reels': { title: 'Reels', blurb: 'Os 8 Reels prontos em vídeo, com capa, legenda e roteiro.', sectionStatus: true },
   '06-whatsapp-business': { title: 'WhatsApp Business', blurb: 'Perfil, mensagens automáticas, respostas rápidas e etiquetas.' },
   '07-planejamento': { title: 'Planejamento', blurb: 'Pilares, ritmo e calendário das primeiras semanas.' },
   '08-prompts': { title: 'Prompts', blurb: 'Os prompts das imagens e do vídeo do site, e um modelo para pedir conteúdo novo.' },
@@ -36,7 +36,8 @@ const WORDS = {
   'foto-perfil': 'Foto de perfil', 'sistema-visual': 'Sistema visual',
 };
 const IMAGE = /\.(png|jpe?g|webp)$/i;
-const TYPES = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
+const VIDEO = /\.mp4$/i;
+const TYPES = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp', mp4: 'video/mp4' };
 
 const pretty = (name) => {
   const key = name.toLowerCase();
@@ -162,7 +163,7 @@ for (const name of folderNames) {
       if (e.name.startsWith('.')) continue;
       const full = path.join(dir, e.name);
       if (e.isDirectory()) walk(full);
-      else if (IMAGE.test(e.name)) {
+      else if (IMAGE.test(e.name) || VIDEO.test(e.name)) {
         const rel = path.relative(SRC, full).split(path.sep).join('/');
         const groupDir = path.dirname(rel);
         if (!groups.has(groupDir)) groups.set(groupDir, []);
@@ -175,21 +176,32 @@ for (const name of folderNames) {
   walk(path.join(SRC, name));
 
   const outGroups = [];
-  for (const [dir, files] of groups) {
+  for (const [dir, all] of groups) {
+    // A video's cover (name-capa.png) travels with the video instead of showing up on its own.
+    const coverOf = (rel) => rel.replace(VIDEO, '-capa.png');
+    const covers = new Set(all.filter((r) => VIDEO.test(r)).map(coverOf).filter((c) => all.includes(c)));
+    const files = all.filter((r) => !covers.has(r));
+    const videos = files.every((r) => VIDEO.test(r));
     const parts = dir.split('/').slice(1);
-    const title = parts.length ? parts.map(pretty).join(' · ') : files.length === 1 ? pretty(path.basename(files[0]).replace(IMAGE, '')) : 'Imagens';
+    const title = parts.length ? parts.map(pretty).join(' · ') : files.length === 1 ? pretty(path.basename(files[0]).replace(IMAGE, '')) : videos ? 'Vídeos' : 'Imagens';
     const items = [];
-    for (const rel of files) {
-      const ext = rel.split('.').pop().toLowerCase();
-      const src = path.join(SRC, rel);
+    const copy = (rel) => {
       const dest = path.join(OUT, 'arquivos', rel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.copyFileSync(src, dest);
-      let width = 0, height = 0, thumb = rel;
-      if (sharp) {
-        const img = sharp(src);
+      fs.copyFileSync(path.join(SRC, rel), dest);
+    };
+    for (const rel of files) {
+      const ext = rel.split('.').pop().toLowerCase();
+      const isVideo = VIDEO.test(rel);
+      const cover = isVideo && covers.has(coverOf(rel)) ? coverOf(rel) : '';
+      copy(rel);
+      if (cover) copy(cover);
+      const still = isVideo ? cover : rel;
+      let width = 0, height = 0, thumb = still || rel;
+      if (sharp && still) {
+        const img = sharp(path.join(SRC, still));
         ({ width, height } = await img.metadata());
-        thumb = rel.replace(IMAGE, '.webp');
+        thumb = still.replace(IMAGE, '.webp');
         const tdest = path.join(OUT, 'miniaturas', thumb);
         fs.mkdirSync(path.dirname(tdest), { recursive: true });
         await img.resize({ width: 480, withoutEnlargement: true }).webp({ quality: 78 }).toFile(tdest);
@@ -198,11 +210,12 @@ for (const name of folderNames) {
         path: rel,
         name: path.basename(rel),
         type: TYPES[ext],
-        size: fs.statSync(src).size,
+        size: fs.statSync(path.join(SRC, rel)).size,
         width,
         height,
-        format: width ? formatOf(width, height) : '',
+        format: isVideo ? 'Reel 9:16' : width ? formatOf(width, height) : '',
         thumb,
+        cover,
         doNotPublish: path.basename(rel).startsWith('_'),
       });
       fileCount++;
@@ -224,4 +237,4 @@ for (const name of folderNames) {
 }
 
 fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({ generatedAt: new Date().toISOString(), folders }, null, 1));
-console.log(`conteudos: ${folders.length} pastas, ${fileCount} imagens, ${folders.reduce((n, f) => n + f.docs.length, 0)} textos.`);
+console.log(`conteudos: ${folders.length} pastas, ${fileCount} imagens e vídeos, ${folders.reduce((n, f) => n + f.docs.length, 0)} textos.`);
