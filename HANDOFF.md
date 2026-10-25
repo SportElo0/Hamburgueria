@@ -35,8 +35,14 @@ ambiente dos projetos no Vercel, não no repositório.
   esgotados num toque, aviso pronto no WhatsApp, relatório (`/relatorio`), clientes e
   campanhas (`/clientes`).
 - Regras de código em `plataforma/src/lib/ordering.ts` (puro) e `orders.ts`, `customers.ts`.
-- Testes: `cd plataforma && npx vitest run` (62 testes). Ponta a ponta local:
+- Testes: `cd plataforma && npx vitest run` (72 testes). Ponta a ponta local:
   `plataforma/scripts/e2e/README.md`.
+
+## Conteúdos da Growlift no painel
+
+- `/painel/conteudos` mostra `growlift-social/`: imagens em galeria (abrir, baixar, .zip por grupo), `.md` com botão de copiar, e a situação de cada peça (Para aprovar, Aprovado, Postado), guardada no Blob em `conteudos/status.json`.
+- O build do painel roda `scripts/conteudos.mjs`, que copia `../growlift-social` para `conteudos-gerados/` (fora do git) com miniaturas WebP. Só arquivos listados no manifesto podem ser lidos.
+- **Todo conteúdo novo** (story, carrossel, roteiro, legenda, prompt) vai em `growlift-social/NN-pasta/`; depois commit, push e novo deploy do painel. Se for uma pasta nova, dar nome e descrição em `FOLDERS`, no script.
 
 ## Lista de ofertas pelo site (plano Grow)
 

@@ -37,3 +37,29 @@
   .ticket { width: 74mm; font: 12px/1.35 ui-monospace, Menlo, Consolas, monospace; color: #000; }
   .ticket hr { border: 0; border-top: 1px dashed #000; margin: 6px 0; }
 }
+
+/* Conteúdos: docs rendered from growlift-social's Markdown (scripts/conteudos.mjs). */
+.doc { font-size: 15px; line-height: 1.6; color: var(--color-ink-soft); }
+.doc > * + * { margin-top: 0.75rem; }
+.doc h4 { margin-top: 1.25rem; font-weight: 700; color: var(--color-ink); }
+.doc strong { color: var(--color-ink); }
+.doc a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.doc ul, .doc ol { padding-left: 1.25rem; }
+.doc ul { list-style: disc; }
+.doc ol { list-style: decimal; }
+.doc li + li { margin-top: 0.25rem; }
+.doc li > ul, .doc li > ol { margin-top: 0.25rem; }
+.doc code { border-radius: 4px; background: var(--color-paper); padding: 0.1em 0.35em; font-size: 0.9em; font-family: ui-monospace, Menlo, Consolas, monospace; }
+.doc hr { border: 0; border-top: 1px solid var(--color-line); }
+.doc .table-wrap { overflow-x: auto; }
+.doc table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.doc th, .doc td { border-bottom: 1px solid var(--color-line); padding: 0.5rem 0.75rem 0.5rem 0; text-align: left; vertical-align: top; }
+.doc th { font-weight: 700; color: var(--color-ink); }
+.doc .copy-block { position: relative; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-paper); }
+.doc .copy-block pre { margin: 0; padding: 0.875rem 1rem; padding-right: 6.5rem; white-space: pre-wrap; overflow-wrap: anywhere; font: 14px/1.55 var(--font-sans); color: var(--color-ink); }
+.doc .copy-block button {
+  position: absolute; top: 0.5rem; right: 0.5rem; min-height: 2.25rem; cursor: pointer; border: 1px solid var(--color-line); border-radius: 8px;
+  background: #fff; padding: 0 0.75rem; font-size: 13px; font-weight: 600; color: var(--color-ink); transition: border-color 0.15s, background-color 0.15s;
+}
+.doc .copy-block button:hover { border-color: var(--color-ink); }
+.doc .copy-block button[data-done] { border-color: var(--color-ok); background: var(--color-ok); color: #fff; }

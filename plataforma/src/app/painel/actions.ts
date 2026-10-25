@@ -24,6 +24,7 @@ import { seedStores } from '@/lib/seeds';
 import { setMercadoPagoToken } from '@/lib/pix';
 import { OperatorError, removeOperator, upsertOperator } from '@/lib/operators';
 import { DiagnosisError, setDiagnosisStatus, type DiagnosisStatus } from '@/lib/diagnostics';
+import { ContentError, setContentStatus, type ContentStatus } from '@/lib/conteudos';
 
 export interface ActionResult {
   ok: boolean;
@@ -255,5 +256,16 @@ export async function setDiagnosisStatusAction(id: string, status: DiagnosisStat
     return { ok: true };
   } catch (err) {
     return { ok: false, error: err instanceof DiagnosisError ? err.message : 'Não foi possível salvar.' };
+  }
+}
+
+export async function setContentStatusAction(key: string, status: ContentStatus): Promise<ActionResult> {
+  const user = await requireUser();
+  try {
+    await setContentStatus(key, status, user.name || user.email);
+    revalidatePath('/painel/conteudos', 'layout');
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof ContentError ? err.message : 'Não foi possível salvar. Recarregue a página e tente de novo.' };
   }
 }

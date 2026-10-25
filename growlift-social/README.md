@@ -15,9 +15,16 @@ Material para o Instagram e o WhatsApp Business da Growlift. Segue a mesma ident
 | `05-reels/` | Oito roteiros, com gancho, demonstração, explicação e chamada |
 | `06-whatsapp-business/` | Perfil, saudação, ausência, 8 respostas rápidas, etiquetas e guia de conversa (Chris Voss) |
 | `07-planejamento/` | Pilares, ritmo, calendário de 4 semanas e o que medir |
+| `08-prompts/` | Prompts das imagens e do vídeo do site, e um modelo para pedir conteúdo novo |
 | `_fonte/` | Gerador das peças, modelos editáveis em HTML e imagens de origem |
 
 São 58 imagens em PNG no tamanho do Instagram.
+
+## No painel
+
+Tudo daqui aparece no painel das lojas, na aba **Conteúdos** (https://painel-lojas-sportelo.vercel.app/painel/conteudos), com o mesmo login de vocês. Lá dá para ver as peças, baixar uma a uma ou o destaque inteiro em .zip, copiar as legendas e as respostas com um toque, e marcar cada peça como **Para aprovar**, **Aprovado** ou **Postado**.
+
+O painel lê esta pasta toda vez que é publicado. Para entrar uma peça nova, basta ela estar numa pasta `NN-nome/` aqui: imagens viram galeria, arquivos `.md` viram texto com botão de copiar.
 
 ## Pendente (precisa de vocês)
 

@@ -7,18 +7,22 @@ export default async function PainelLayout({ children }: { children: React.React
   return (
     <div className="min-h-dvh">
       <header className="sticky top-0 z-20 border-b border-line bg-paper/90 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
-          <div className="flex items-center gap-5">
-            <Link href="/painel" className="text-[15px] font-bold">
-              Painel das lojas
-            </Link>
+        {/* Phones: the section links take a second row instead of pushing the page wider. */}
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-1 px-4 py-2 sm:h-14 sm:flex-nowrap sm:py-0">
+          <Link href="/painel" className="text-[15px] font-bold">
+            Painel das lojas
+          </Link>
+          <nav className="order-last flex w-full items-center gap-5 overflow-x-auto pb-1 whitespace-nowrap sm:order-none sm:w-auto sm:flex-1 sm:pb-0">
             <Link href="/painel/indicacoes" className="text-sm text-ink-mute hover:text-ink">
               Indicações
             </Link>
             <Link href="/painel/diagnosticos" className="text-sm text-ink-mute hover:text-ink">
               Diagnósticos
             </Link>
-          </div>
+            <Link href="/painel/conteudos" className="text-sm text-ink-mute hover:text-ink">
+              Conteúdos
+            </Link>
+          </nav>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden text-ink-mute sm:inline">{user.name || user.email}</span>
             <form action={logout}>
