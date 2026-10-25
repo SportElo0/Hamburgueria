@@ -9,9 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#06080d">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -261,7 +259,7 @@
         </div>
       </div>
 
-      <aside class="xray reveal d2" aria-label="Exemplo de diagnóstico">
+      <div class="xray reveal d2" role="group" aria-label="Exemplo de diagnóstico">
         <div class="scan" aria-hidden="true"></div>
         <div class="head"><b>Raio-X · exemplo</b><span>Barbearia fictícia</span></div>
         <div class="score">
@@ -276,7 +274,7 @@
           <li><div class="row"><span>Agendamento pelo WhatsApp</span><b class="c-warn">Manual</b></div><div class="track-bar"><i class="b-warn" style="width:50%"></i></div></li>
         </ul>
         <div class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="#8db8ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4 4 10-10"/></svg>A prévia do site novo vai junto com o diagnóstico.</div>
-      </aside>
+      </div>
     </div>
   </section>
 
@@ -341,6 +339,8 @@
     <div class="legal">
       <span>© <span id="ano">2026</span> Growlift · 69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP, CEP 05687-010</span>
       <a href="privacidade.html">Política de privacidade</a>
+      <a href="termos.html">Termos de uso</a>
+      <a href="termos.html#cancelamento">Cancelamento e reembolso</a>
     </div>
   </div>
 </footer>

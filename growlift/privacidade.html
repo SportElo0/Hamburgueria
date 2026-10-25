@@ -7,21 +7,22 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#06080d">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 <style>
   .doc { max-width: 760px; margin: 0 auto; padding: 140px var(--pad) 100px; }
   .doc h1 { font-size: clamp(36px, 5vw, 52px); line-height: 1.05; font-weight: 800; }
   .doc h2 { font-size: 22px; font-weight: 700; margin-top: 44px; letter-spacing: -0.01em; }
   .doc p, .doc li { color: var(--text-soft); }
-  .doc ul { padding-left: 22px; }
+  .doc ul, .doc ol { padding-left: 22px; }
+  .doc-foot { max-width: 760px; margin: 0 auto; padding: 0 var(--pad) 60px; color: var(--dim); font-size: 14px; }
+  .doc-foot a { color: var(--blue-soft); }
   .doc a { color: var(--blue-soft); }
   .doc .updated { color: var(--dim); font-size: 15px; margin-top: 14px; }
 </style>
 </head>
 <body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="marca" viewBox="50 40 530 415"><path fill="#0865FE" d="M280 48H410L190 450H55Z"/><path fill="#0865FE" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></symbol>
 </svg>
@@ -31,7 +32,7 @@
     <nav class="nav" aria-label="Principal"><a class="btn btn-ghost" href="index.html">Voltar ao site</a></nav>
   </div>
 </header>
-<main class="doc">
+<main class="doc" id="conteudo">
   <h1>Política de privacidade</h1>
   <p class="updated">Última atualização: outubro de 2026</p>
 
@@ -62,13 +63,23 @@
   <p>Enquanto estivermos conversando sobre o diagnóstico e, depois disso, por até 12 meses, a não ser que você peça para apagar antes.</p>
 
   <h2>Seus direitos</h2>
-  <p>Você pode, a qualquer momento, pedir para ver, corrigir ou apagar os seus dados, ou retirar a autorização de contato. Basta escrever para <a href="mailto:contato@growlift.com.br">contato@growlift.com.br</a> ou responder “SAIR” no WhatsApp.</p>
+  <p>Você pode, a qualquer momento, pedir para ver, corrigir ou apagar os seus dados, saber com quem eles foram compartilhados ou retirar a autorização de contato. Basta escrever para <a href="mailto:contato@growlift.com.br">contato@growlift.com.br</a> ou responder “SAIR” no WhatsApp. Se achar que não foi atendido, você também pode reclamar na Autoridade Nacional de Proteção de Dados (ANPD).</p>
+
+  <h2>Como pedir para apagar os seus dados</h2>
+  <ol>
+    <li>Escreva para <a href="mailto:contato@growlift.com.br?subject=Apagar%20meus%20dados">contato@growlift.com.br</a> com o assunto “Apagar meus dados”, informando o nome do negócio e o WhatsApp usados no formulário. Se preferir, mande o pedido pelo mesmo WhatsApp.</li>
+    <li>Se precisarmos confirmar que o pedido é seu, perguntamos pelo WhatsApp informado no formulário.</li>
+    <li>Respondemos em até 15 dias, confirmando o que foi apagado.</li>
+  </ol>
+  <p>Depois de apagar, guardamos só o número de WhatsApp numa lista de “não contatar”, para garantir que você não receba mais mensagens nossas.</p>
+
+  <h2>Cookies e rastreamento</h2>
+  <p>Este site não usa cookies, Google Analytics, Pixel do Facebook nem nenhum outro script de rastreamento ou publicidade, e as fontes são servidas pelo próprio site. Por isso não há aviso de cookies. Se isso mudar, vamos pedir o seu consentimento antes de ativar qualquer rastreamento.</p>
 
   <h2>Com quem compartilhamos</h2>
   <p>Usamos fornecedores para operar o site e guardar os dados, que só podem usá-los para prestar esse serviço:</p>
   <ul>
     <li><b>Vercel</b> (hospedagem do site e armazenamento dos pedidos de diagnóstico);</li>
-    <li><b>Google Fonts</b> (as fontes do site; ao carregar a página, o seu navegador acessa os servidores do Google);</li>
     <li><b>WhatsApp (Meta)</b> (é por onde enviamos o diagnóstico e a prévia e conversamos com você).</li>
   </ul>
   <p>Esses fornecedores podem guardar ou processar os dados em servidores fora do Brasil, com as garantias previstas na LGPD.</p>
@@ -76,5 +87,10 @@
   <h2>Segurança</h2>
   <p>Os pedidos ficam em armazenamento privado, acessível só pela equipe da Growlift com login. O site usa conexão segura (HTTPS).</p>
 </main>
+<footer class="doc-foot">
+  <p>Growlift · 69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP, CEP 05687-010 · <a href="mailto:contato@growlift.com.br">contato@growlift.com.br</a></p>
+  <p><a href="privacidade.html">Política de privacidade</a> · <a href="termos.html">Termos de uso</a> · <a href="termos.html#cancelamento">Cancelamento e reembolso</a></p>
+</footer>
 </body>
 </html>
+
