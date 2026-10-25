@@ -37,6 +37,8 @@
   ],
   "exclude": [
     "plataforma",
+    "elpatron",
+    "pousada",
     "node_modules"
   ]
 }
