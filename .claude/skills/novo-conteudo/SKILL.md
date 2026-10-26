@@ -37,3 +37,4 @@ Tudo mora em `growlift-social/` e aparece no painel (`/painel/conteudos`) depois
 2. Atualize o `.md` da pasta: o que é cada peça, em que ordem postar e a legenda.
 3. O conteúdo chega ao painel quando ele é publicado. Diga ao usuário para rodar `/publicar painel`, ou siga os passos de `.claude/skills/publicar/SKILL.md` se ele já pediu para publicar.
 4. Avise em poucas linhas o que ficou pronto e onde ver.
+5. **Story com link:** a arte deixa um espaço livre para o adesivo (frase "Toque no link…", setinha e área de luz azul, sem texto embaixo: o Instagram não põe o adesivo por cima de texto). Na mensagem de entrega, mande sempre, para cada story com link, o **link** e o **texto do adesivo**, prontos para copiar.

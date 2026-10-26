@@ -32,6 +32,7 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 - **Marcas de terceiros:** sites feitos para negócios reais (El Patron, Downtown etc.) não aparecem em material público sem autorização por escrito. Modelos de portfólio são fictícios e marcados "Projeto conceito".
 - **CPF nunca é salvo** em arquivo, commit ou documento (o hook `.claude/hooks/proteger.mjs` bloqueia).
 - **Senhas:** nunca usar senha pessoal deles; segredos ficam nas variáveis de ambiente da Vercel, nunca no repositório nem impressos na conversa.
+- **Artes com link (stories):** deixar na arte um espaço livre para o adesivo de link (sem texto embaixo, o Instagram não sobrepõe texto) e, ao entregar, mandar sempre na mensagem o link e o texto do adesivo de cada uma.
 - **Instagram e WhatsApp:** nada é publicado sem aprovação. Sem envio em massa, sem robô fingindo ser pessoa, sem sorteio falso. Campanhas só para quem aceitou, no máximo uma por mês, com opção SAIR. Nada de vender ou cobrar sozinho pelo WhatsApp.
 - **Imagem de pessoas:** só de quem autorizou. O Antônio é menor de idade; a foto dele está autorizada pela mãe por e-mail.
 - **Lead Finder (aba Oportunidades):** nunca guardar nem exportar nome, endereço, telefone ou site vindos do Google (só o place ID); nenhuma pesquisa paga sem mostrar o custo e ter aprovação. Detalhes em `plataforma/LEAD-FINDER.md`.
