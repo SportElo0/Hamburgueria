@@ -12,14 +12,14 @@ Três carrosséis de 1080×1350, prontos em `1-quem-somos/`, `2-portfolio/` e `3
 
 ---
 
-## 1 · Quem somos (6 imagens) · **ADIADO, não publicar** (decisão de 26/10/2026: rever depois)
+## 1 · Quem somos (5 imagens)
 
 **Legenda**
 
 ```
 Prazer, somos a Growlift. 👋
 
-Somos o Lucas e o Antônio, de São Paulo. A gente cria sites para negócios locais, cuida da presença no Google e coloca o pedido e o pagamento no próprio site do cliente.
+Somos de São Paulo e a gente cria sites para negócios locais, cuida da presença no Google e coloca o pedido e o pagamento no próprio site do cliente.
 
 Quem conversa com você é quem faz o seu site.
 
@@ -30,7 +30,7 @@ Quer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link 
 
 **Texto alternativo da 1ª imagem**: Capa com a marca da Growlift em vidro azul e o texto "Presença digital que vende".
 
-Sem fotos de pessoas (decisão de 26/10/2026): no slide 2, o Lucas e o Antônio aparecem pelas iniciais.
+Sem fotos e sem o slide do Lucas e do Antônio (decisão de 26/10/2026).
 
 ## 2 · Portfólio (7 imagens)
 
