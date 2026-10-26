@@ -22,12 +22,12 @@ Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícon
 
 | Destaque | Story | Endereço do link | Texto do adesivo |
 | --- | --- | --- | --- |
-| Projetos | 06 (o nosso próprio site, computador e celular) | `https://growlift.com.br` | Ver o site ao vivo (por cima do botão azul desenhado na arte) |
-| Serviços | 06 (peça um diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
-| Contato | 01 (chama no WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp (por cima do botão azul) |
-| Contato | 02 (diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis (por cima do botão azul) |
+| Projetos | 06 (o nosso próprio site, computador e celular) | `https://growlift.com.br` | Ver o site ao vivo |
+| Serviços | 06 (qual é o seu momento? os 3 planos) | `https://growlift.com.br/#planos` | Ver os planos |
+| Contato | 01 (chama no WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp |
+| Contato | 02 (diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis |
 
-   Nas artes novas, o lugar do link já vem desenhado: um botão azul do tamanho do adesivo. Ponham o adesivo exatamente em cima dele.
+   Nas artes novas, o lugar do link já vem desenhado: uma frase "Toque no link…" com uma setinha e, embaixo, uma área de luz azul **sem texto**. Ponham o adesivo dentro dessa luz (o Instagram não deixa pôr o adesivo por cima de texto da imagem).
    No Instagram: adesivos › **Link** › colem o endereço › **Personalizar texto do adesivo**. Ponham o adesivo num espaço vazio, nunca na barra de baixo ("Enviar mensagem").
 
 ## 1 · Projetos (6 stories)
@@ -42,14 +42,16 @@ Os quatro modelos são fictícios e estão identificados como tal. Os sites feit
 
 ## 2 · Serviços (6 stories)
 
-1. Abertura.
-2. Site feito do zero.
-3. Achado no Google.
-4. Pedido e Pix no site.
-5. Clientes que voltam.
-6. Chamada para o diagnóstico grátis.
+| Arquivo | O que mostra |
+| --- | --- |
+| 01 | Abertura: "O que a gente faz.", com a marca de vidro |
+| 02 | Site feito do zero (em todos os planos), com dois projetos conceito |
+| 03 | Achado no Google (a partir do Grow), com um exemplo de perfil no mapa, nome fictício |
+| 04 | Pedido e Pix no site (no Lift), com a tela da loja de demonstração e um pedido de teste |
+| 05 | Clientes que voltam (a partir do Grow), com um exemplo de campanha com opção SAIR, nomes fictícios |
+| 06 | "Qual é o seu momento?": Start, Grow e Lift em uma linha cada, com o lugar do link para os planos no site |
 
-Tudo o que aparece está nos planos do site. Não incluí nada que vocês ainda não entregam, como agendamento online ou relatórios de marketing.
+Tudo o que aparece está nos planos do site. Os exemplos estão marcados como exemplo. Os preços não aparecem nos stories: o link leva aos planos no site, onde estão completos.
 
 ## 3 · Clientes (estrutura pronta, **não publicar ainda**)
 

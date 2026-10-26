@@ -38,20 +38,59 @@ const S = (d, n, html) => add(`03-destaques/${d}/${String(n).padStart(2, '0')}.p
 const HD = { 'Brasa Burger': 'hd/burger.png', 'Varanda Bistrô': 'hd/restaurante.png', 'Doce Ateliê': 'hd/confeitaria.png', 'Aurora Advocacia': 'hd/advocacia.png' };
 S('1-projetos', 1, P.storyOpenV2({ plate: 'hd/marca-vidro-vertical.png', title: `Um visual para<br>cada ${B('ramo.')}`, lead: 'Modelos que criamos para mostrar o que dá para fazer. O site do seu negócio é feito do zero.' }));
 MODELS.forEach((m, i) => S('1-projetos', i + 2, P.storyShowcaseV2({ index: `${i + 1}/4`, name: m.name, segment: m.segment, img: HD[m.name], features: m.story })));
-S('1-projetos', 6, P.storySiteV2({ chip: 'Projeto real', title: `O nosso próprio ${B('site.')}`, lead: 'No computador e no celular.', desktop: 'hd/growlift.png', mobile: 'hd/growlift-cel.png', link: { label: 'Ver o site ao vivo', hint: 'Toque e veja funcionando' } }));
+S('1-projetos', 6, P.storySiteV2({ chip: 'Projeto real', title: `O nosso próprio ${B('site.')}`, lead: 'No computador e no celular.', desktop: 'hd/growlift.png', mobile: 'hd/growlift-cel.png', link: { sticker: 'Ver o site ao vivo', hint: 'Toque no link e veja funcionando' } }));
 
 // --- 03 Stories: Serviços -----------------------------------------------------------------
-S('2-servicos', 1, P.storyTitle({ iconName: 'servicos', eyebrow: 'Serviços', title: `O que a gente ${B('faz.')}`, lead: 'Site, Google e vendas pelo site. Você escolhe até onde ir.' }));
-S('2-servicos', 2, P.storyService({ index: '1/4', iconName: 'site', title: 'Site feito do zero', lead: 'Com as fotos, as cores e os serviços do seu negócio.', items: ['Domínio e hospedagem por nossa conta', 'Botão de WhatsApp, mapa e horários', 'Pensado primeiro para o celular'] }));
-S('2-servicos', 3, P.storyService({ index: '2/4', iconName: 'google', title: 'Achado no Google', lead: 'Para quem procura o seu ramo na sua cidade.', items: ['SEO local no site', 'Perfil da Empresa no Google configurado', 'Acompanhamento do perfil'] }));
-S('2-servicos', 4, P.storyService({ index: '3/4', iconName: 'pedido', title: 'Pedido e Pix no site', lead: 'Para restaurantes que querem vender direto.', items: ['Cardápio com pedido e pagamento', 'Tela da loja com alerta e impressão', 'Sem comissão por pedido'] }));
-S('2-servicos', 5, P.storyService({ index: '4/4', iconName: 'lista', title: 'Clientes que voltam', lead: 'Uma lista de quem autorizou receber as suas ofertas.', items: ['No Grow: cadastro direto pelo site', 'No Lift: uma campanha por mês no WhatsApp', 'Só para quem aceitou, com opção de sair'] }));
-S('2-servicos', 6, P.storyTitle({ iconName: 'contato', eyebrow: 'Por onde começar', title: `Peça um diagnóstico ${B('grátis.')}`, lead: 'Em até 2 dias úteis chega no seu WhatsApp uma prévia do seu site novo.' }));
+// Serviços, second generation. Each service shows itself at work: real captures of the concept
+// sites, or demonstrations drawn here and labelled as such (fictitious names, test order, sample text).
+const demo = (t) => `<span style="position:absolute;left:24px;top:24px;z-index:3;font-size:24px;font-weight:600;color:#e8eefa;background:rgba(6,8,13,.72);border:1.5px solid rgba(255,255,255,.2);padding:8px 18px;border-radius:999px">${t}</span>`;
+const card = (inner, style = '') => `<div style="position:absolute;border-radius:34px;background:#0f1520;border:1.5px solid rgba(255,255,255,.14);box-shadow:0 60px 120px -40px rgba(0,0,0,.95);${style}">${inner}</div>`;
+const winHd = (src, url, style) => `<div class="win" style="position:absolute;${style}"><div class="bar"><i></i><i></i><i></i><span>${url}</span></div><img src="${src}"></div>`;
+
+const visSite = `${winHd('hd/restaurante.png', 'seunegocio.com.br', 'left:260px;right:0;top:0;opacity:.8')}${winHd('hd/confeitaria.png', 'seunegocio.com.br', 'left:0;right:200px;top:110px')}${demo('Projetos conceito · nomes fictícios')}`;
+
+const pinSvg = (x, y, c = '#0865fe') => `<svg style="position:absolute;left:${x}px;top:${y}px" width="56" height="70" viewBox="0 0 24 30"><path d="M12 29s9-9.4 9-17A9 9 0 0 0 3 12c0 7.6 9 17 9 17z" fill="${c}" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="3.6" fill="#fff"/></svg>`;
+const mapBg = `<div style="position:absolute;inset:0;border-radius:34px;overflow:hidden;background:#101826"><svg width="1000" height="680" viewBox="0 0 1000 680" style="position:absolute;inset:0"><g stroke="#1d2a3d" stroke-width="22" fill="none" stroke-linecap="round"><path d="M-20 180 L1020 120"/><path d="M-20 470 L1020 540"/><path d="M260 -20 L330 700"/><path d="M700 -20 L640 700"/></g><g stroke="#16212f" stroke-width="10" fill="none"><path d="M-20 320 L1020 300"/><path d="M480 -20 L470 700"/><path d="M120 -20 L180 700"/><path d="M860 -20 L900 700"/></g><rect x="360" y="190" width="90" height="90" rx="14" fill="#13321f"/><rect x="740" y="360" width="140" height="70" rx="14" fill="#13321f"/></svg>${pinSvg(560, 120, '#3a4a63')}${pinSvg(820, 230, '#3a4a63')}${pinSvg(150, 260, '#3a4a63')}${pinSvg(470, 250)}</div>`;
+const visGoogle = `${mapBg}${demo('Exemplo · nome fictício')}${card(`
+  <div style="padding:34px 38px">
+    <div style="display:flex;align-items:center;gap:18px;height:84px;padding:0 28px;border-radius:999px;background:#1a2333;font-size:32px;color:#c6cede">${P.icon('google', { size: 40, width: 2 })}confeitaria perto de mim</div>
+    <p style="font-size:50px;font-weight:800;margin-top:30px;letter-spacing:-.02em">Doce Ateliê</p>
+    <p style="font-size:30px;color:#c6cede;margin-top:6px">Confeitaria · Centro</p>
+    <p style="font-size:30px;margin-top:6px"><span style="color:#6fcf8f;font-weight:700">Aberto</span><span style="color:#c6cede"> · fecha às 19h</span></p>
+    <div style="display:flex;gap:14px;margin-top:28px">${['Rota', 'Ligar', 'Site'].map((b, i) => `<span style="flex:1;height:72px;border-radius:999px;display:grid;place-items:center;font-size:30px;font-weight:700;${i === 2 ? 'background:#0865fe;color:#fff' : 'background:#1a2333;color:#e8eefa'}">${b}</span>`).join('')}</div>
+  </div>`, 'left:60px;right:60px;bottom:0')}`;
+
+const visPedido = `${winHd('hd/burger.png', 'seunegocio.com.br', 'left:0;right:220px;top:0;opacity:.9')}${demo('Loja de demonstração · pedido de teste')}${card(`
+  <div style="padding:34px 36px">
+    <p style="font-size:26px;font-weight:700;letter-spacing:.08em;color:#8db8ff;text-transform:uppercase">Tela da loja</p>
+    <p style="font-size:46px;font-weight:800;margin-top:10px;letter-spacing:-.02em">Novo pedido #0128</p>
+    <p style="font-size:32px;color:#c6cede;margin-top:14px">2× Brasa Duplo</p>
+    <p style="font-size:38px;font-weight:800;margin-top:6px">R$ 79,80</p>
+    <div style="display:grid;gap:12px;margin-top:22px">
+      <span style="height:66px;border-radius:999px;display:flex;align-items:center;gap:12px;padding:0 24px;font-size:28px;font-weight:700;color:#0b2a17;background:#6fcf8f">${P.icon('check', { size: 30, color: '#0b2a17', width: 3 })}Pix pago</span>
+      <span style="height:66px;border-radius:999px;display:flex;align-items:center;padding:0 24px;font-size:28px;font-weight:700;color:#fff;background:#0865fe">Saiu para entrega</span>
+    </div>
+  </div>`, 'right:0;width:470px;top:250px')}`;
+
+const visLista = `<div style="position:absolute;inset:0;border-radius:34px;overflow:hidden;background:#0b141a;border:1.5px solid rgba(255,255,255,.12)">
+  <div style="display:flex;align-items:center;gap:20px;height:104px;padding:0 30px;background:#1f2c33"><span style="width:64px;height:64px;border-radius:50%;background:#e8b04a;display:grid;place-items:center;font-size:30px;font-weight:800;color:#0b0907">B</span><span><span style="display:block;font-size:32px;font-weight:700">Brasa Burger</span><span style="display:block;font-size:24px;color:#a9b3c7">Conta comercial</span></span></div>
+  <div style="padding:40px 30px">
+    <div style="max-width:780px;padding:30px 34px;border-radius:8px 30px 30px 30px;background:#1f2c33;font-size:34px;line-height:1.38;color:#eef2f7">Oi, Ana! Esta semana a entrega é grátis nos pedidos pelo site. 🍔<br><br><span style="color:#a9b3c7">Para não receber mais ofertas, responda <b style="color:#fff">SAIR</b>.</span><span style="display:block;text-align:right;font-size:24px;color:#8790a6;margin-top:10px">18:02</span></div>
+    <div style="margin-top:26px;display:inline-flex;align-items:center;gap:12px;padding:16px 26px;border-radius:999px;background:rgba(111,207,143,.14);border:1.5px solid rgba(111,207,143,.5);font-size:28px;font-weight:600;color:#bff0cf">${P.icon('check', { size: 30, color: '#6fcf8f', width: 3 })}Ana aceitou receber ofertas ao pedir</div>
+  </div>
+</div>${demo('Exemplo de campanha · nomes fictícios').replace('left:24px;top:24px', 'right:24px;bottom:24px')}`;
+
+S('2-servicos', 1, P.storyOpenV2({ plate: 'hd/marca-vidro-vertical.png', title: `O que a gente<br>${B('faz.')}`, lead: 'Site, Google e vendas pelo site. Você escolhe até onde ir.' }));
+S('2-servicos', 2, P.storyServiceV2({ index: '1/4', plan: 'Em todos os planos', title: 'Site feito do zero', lead: 'Com as fotos, as cores e os serviços do seu negócio.', visual: visSite, bg: 'hd/confeitaria.png', items: ['Domínio e hospedagem por nossa conta', 'Botão de WhatsApp, mapa e horários', 'Pensado primeiro para o celular'] }));
+S('2-servicos', 3, P.storyServiceV2({ index: '2/4', plan: 'A partir do Grow', title: 'Achado no Google', lead: 'Para quem procura o seu ramo na sua cidade.', visual: visGoogle, bg: 'hd/restaurante.png', items: ['SEO local no site', 'Perfil da Empresa no Google configurado', 'Acompanhamento do perfil'] }));
+S('2-servicos', 4, P.storyServiceV2({ index: '3/4', plan: 'No plano Lift', title: 'Pedido e Pix no site', lead: 'Para restaurantes que querem vender direto.', visual: visPedido, bg: 'hd/burger.png', items: ['Cardápio com pedido e pagamento', 'Tela da loja com alerta e impressão', 'Sem comissão por pedido'] }));
+S('2-servicos', 5, P.storyServiceV2({ index: '4/4', plan: 'A partir do Grow', title: 'Clientes que voltam', lead: 'Uma lista de quem autorizou receber as suas ofertas.', visual: visLista, bg: 'hd/burger.png', items: ['No Grow: cadastro direto pelo site', 'No Lift: campanha mensal no WhatsApp', 'Só para quem aceitou, com opção de sair'] }));
+S('2-servicos', 6, P.storyPlansV2({ plate: 'hd/marca-vidro-vertical.png', title: `Qual é o seu ${B('momento?')}`, lead: 'Mensalidade fixa e nenhuma comissão por pedido.', plans: [['Start', 'Seu site no ar', 'Site feito do zero, com domínio e hospedagem.'], ['Grow', 'Achado no Google', 'Tudo do Start, mais SEO local e o seu perfil no Google.'], ['Lift', 'Vende pelo site', 'Tudo do Grow, mais pedido e Pix no seu site.']], link: { sticker: 'Ver os planos', hint: 'Toque no link e compare os planos' } }));
 
 // --- 03 Stories: Contato ------------------------------------------------------------------
 // Contato, second generation: two stories, each with its link button drawn where the sticker goes.
-S('6-contato', 1, P.storyWhatsV2({ title: `Chama no ${B('WhatsApp.')}`, number: '(11) 99446-3234', note: 'Quem responde é quem faz o seu site', plate: 'hd/marca-vidro-vertical.png', link: { label: 'Chamar no WhatsApp', hint: 'Atendimento em dias úteis' } }));
-S('6-contato', 2, P.storyDiagnosisV2({ chip: 'Diagnóstico grátis', title: `Peça o seu ${B('diagnóstico.')}`, lead: 'Sem compromisso. Você vê a prévia antes de decidir.', plate: 'hd/marca-vidro-vertical.png', steps: [['Conte sobre o seu negócio', 'Pelo site, em 2 minutos'], ['Receba a prévia do site', 'No WhatsApp, em até 2 dias úteis'], ['Decida com calma', 'Só segue se você quiser']], link: { label: 'Pedir diagnóstico grátis', hint: 'Toque e preencha pelo site' } }));
+S('6-contato', 1, P.storyWhatsV2({ title: `Chama no ${B('WhatsApp.')}`, number: '(11) 99446-3234', note: 'Quem responde é quem faz o seu site', plate: 'hd/marca-vidro-vertical.png', link: { sticker: 'Chamar no WhatsApp', hint: 'Toque no link e chame a gente' } }));
+S('6-contato', 2, P.storyDiagnosisV2({ chip: 'Diagnóstico grátis', title: `Peça o seu ${B('diagnóstico.')}`, lead: 'Sem compromisso. Você vê a prévia antes de decidir.', plate: 'hd/marca-vidro-vertical.png', steps: [['Conte sobre o seu negócio', 'Pelo site, em 2 minutos'], ['Receba a prévia do site', 'No WhatsApp, em até 2 dias úteis'], ['Decida com calma', 'Só segue se você quiser']], link: { sticker: 'Pedir diagnóstico grátis', hint: 'Toque no link e preencha pelo site' } }));
 
 // --- 03 Clientes: template only, never with invented content ---------------------------
 add('03-destaques/3-clientes/_modelo-nao-publicar.png', P.page(1080, 1920, `

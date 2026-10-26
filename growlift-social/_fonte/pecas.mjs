@@ -281,19 +281,22 @@ export const storyShowcaseV2 = ({ index, segment, name, img, features, note = 'P
     ${foot()}`,
     `body{background:${TOKENS.bg}}${V2_CSS}`);
 
-const ARROW = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>';
 
-/**
- * The place for the Instagram link sticker, designed into the story: a hint line and a button of the
- * sticker's size. When posting, the sticker goes right on top of the button; without it, the button
- * still reads as the call to action.
- */
+const CHEVRON = '<svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
 const WHATS = '<svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>';
 
-export const linkSlot = (label, hint, top, { whatsapp = false } = {}) => `
-    <div style="position:absolute;left:84px;right:84px;top:${top}px">
-      <p style="font-size:32px;font-weight:600;color:#cfe0ff;display:flex;align-items:center;gap:12px">${hint}</p>
-      <div style="margin-top:22px;height:116px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:18px;font-size:42px;font-weight:700;color:#fff;background:${TOKENS.blue};box-shadow:0 0 0 8px rgba(8,101,254,.18),0 30px 70px -20px rgba(8,101,254,.95)">${whatsapp ? `<span style="width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:#25d366;color:#fff">${WHATS}</span>` : ''}${label}${whatsapp ? '' : ARROW}</div>
+/**
+ * Where the Instagram link sticker goes. Instagram cannot lay a sticker over text in the picture,
+ * so the place is left empty on purpose: a short line pointing down and a pool of blue light, with
+ * no words inside, sized for the sticker. When posting, the sticker sits in the light.
+ */
+export const linkSlot = (hint, top, { whatsapp = false } = {}) => `
+    <div style="position:absolute;left:0;right:0;top:${top}px;text-align:center">
+      <p style="display:inline-flex;align-items:center;gap:16px;font-size:36px;font-weight:600;color:#e3ebfb">${whatsapp ? `<span style="width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#25d366;color:#fff">${WHATS.replace(/44/g, '36')}</span>` : ''}${hint}</p>
+      <div style="margin:6px auto 0;width:54px;color:${TOKENS.blueBright}">${CHEVRON}</div>
+      <div style="position:relative;margin:4px auto 0;width:860px;height:150px">
+        <div style="position:absolute;inset:-70px -60px;border-radius:50%;background:radial-gradient(closest-side,rgba(8,101,254,.5),rgba(8,101,254,.16) 55%,rgba(8,101,254,0))"></div>
+      </div>
     </div>`;
 
 /** Our own site, on the computer and on the phone at once, with the link button below. */
@@ -309,8 +312,8 @@ export const storySiteV2 = ({ chip, title, lead, desktop, mobile, link }) =>
     <div style="position:absolute;right:40px;top:860px;width:310px;padding:12px;border-radius:52px;background:#151c29;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 50px 100px -30px rgba(0,0,0,.95),0 0 80px -20px rgba(8,101,254,.6)">
       <img src="${mobile}" style="display:block;width:100%;height:500px;object-fit:cover;object-position:top;border-radius:42px">
     </div>
-    <p class="t-lead" style="position:absolute;left:84px;width:560px;top:1290px;font-size:44px;font-weight:600;color:#fff">${lead}</p>
-    ${link ? linkSlot(link.label, link.hint, 1420) : ''}`,
+    <p class="t-lead" style="position:absolute;left:84px;width:640px;top:1280px;font-size:40px;font-weight:600;color:#fff">${lead}</p>
+    ${link ? linkSlot(link.hint, 1400) : ''}`,
     `body{background:#02050f}${V2_CSS}`);
 
 /** The free diagnosis: three short steps, the glass mark behind, the button to the form. */
@@ -329,20 +332,59 @@ export const storyDiagnosisV2 = ({ chip, title, lead, steps, plate, link }) =>
         <span><span style="display:block;font-size:42px;font-weight:700;color:#fff;letter-spacing:-.01em">${t}</span><span style="display:block;font-size:32px;color:#c6cede;margin-top:4px">${d}</span></span>
       </li>`).join('')}
     </ol>
-    ${linkSlot(link.label, link.hint, 1420)}`,
+    ${linkSlot(link.hint, 1400)}`,
     `body{background:#02050f}${V2_CSS}`);
 
 /** WhatsApp contact without photos: the glass mark centre stage, the number large, the button below. */
 export const storyWhatsV2 = ({ title, number, note, plate, link }) =>
   page(1080, 1920, `
-    <img src="${plate}" style="position:absolute;left:0;top:-150px;width:1080px;height:1910px;object-fit:cover">
+    <img src="${plate}" style="position:absolute;left:0;top:-200px;width:1080px;height:1910px;object-fit:cover">
     <div style="position:absolute;inset:0;background:linear-gradient(180deg,#02050f 12%,rgba(2,5,15,.2) 32%,rgba(2,5,15,0) 50%,rgba(2,5,15,.78) 66%,#02050f 84%)"></div>
     <div style="position:absolute;left:84px;right:84px;top:250px">
       <h1 class="t-title" style="font-size:120px">${title}</h1>
     </div>
-    <div style="position:absolute;left:84px;right:84px;top:1250px;text-align:center">
+    <div style="position:absolute;left:84px;right:84px;top:1190px;text-align:center">
       <p style="font-size:76px;font-weight:800;letter-spacing:-.02em;color:#fff">${number}</p>
       <p style="font-size:34px;color:#c6cede;margin-top:6px">${note}</p>
     </div>
-    ${linkSlot(link.label, link.hint, 1440, { whatsapp: true })}`,
+    ${linkSlot(link.hint, 1400, { whatsapp: true })}`,
+    `body{background:#02050f}${V2_CSS}`);
+
+/**
+ * One service: which plans include it, a large picture of the service at work (a real capture or a
+ * labelled demonstration), and three short points. `bg` is the capture whose colours fill the frame.
+ */
+export const storyServiceV2 = ({ index, plan, title, lead, visual, items, bg }) =>
+  page(1080, 1920, `
+    <img src="${bg}" style="position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;object-fit:cover;filter:blur(90px) saturate(1.35);opacity:.7">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,13,.6) 0%,rgba(6,8,13,.4) 40%,rgba(6,8,13,.88) 70%,rgba(6,8,13,.96) 100%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px;display:flex;justify-content:space-between;align-items:center">
+      <span class="pill blue">${plan}</span><span style="font-size:32px;font-weight:700;color:#e8eefa">${index}</span>
+    </div>
+    <h1 class="t-title fit" style="position:absolute;left:84px;right:84px;top:360px;font-size:120px;white-space:nowrap">${title}</h1>
+    <script>for (const el of document.querySelectorAll('.fit')) { let s = 120; while (el.scrollWidth > el.clientWidth && s > 60) el.style.fontSize = (s -= 2) + 'px'; }</script>
+    <p class="t-lead" style="position:absolute;left:84px;right:84px;top:500px;font-size:42px">${lead}</p>
+    <div style="position:absolute;left:40px;right:40px;top:640px;height:680px">${visual}</div>
+    <ul style="position:absolute;left:84px;right:84px;top:1360px;list-style:none;display:grid;gap:28px">
+      ${items.map((f) => `<li class="feat" style="font-size:40px">${check()}${f}</li>`).join('')}
+    </ul>
+    ${foot()}`,
+    `body{background:${TOKENS.bg}}${V2_CSS}`);
+
+/** The three plans side by side in words, with the button to the plans on the site. */
+export const storyPlansV2 = ({ title, lead, plans, plate, link }) =>
+  page(1080, 1920, `
+    <img src="${plate}" style="position:absolute;left:-60px;top:420px;width:1200px;height:2122px;object-fit:cover;opacity:.45">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#02050f 18%,rgba(2,5,15,.55) 50%,rgba(2,5,15,.85) 72%,#02050f 100%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px">
+      <h1 class="t-title" style="font-size:120px">${title}</h1>
+      <p class="t-lead" style="margin-top:26px">${lead}</p>
+    </div>
+    <ol style="position:absolute;left:84px;right:84px;top:720px;list-style:none;display:grid;gap:22px">
+      ${plans.map(([name, tag, desc], i) => `<li style="padding:32px 36px;border-radius:34px;background:${i === 1 ? 'rgba(8,101,254,.22)' : 'rgba(15,21,32,.75)'};border:1.5px solid ${i === 1 ? 'rgba(77,141,255,.7)' : 'rgba(255,255,255,.12)'};backdrop-filter:blur(20px)">
+        <p style="display:flex;align-items:baseline;gap:18px"><span style="font-size:52px;font-weight:800;letter-spacing:-.02em;color:#fff">${name}</span><span style="font-size:34px;font-weight:600;color:${TOKENS.blueSoft}">${tag}</span></p>
+        <p style="font-size:32px;color:#c6cede;margin-top:8px;line-height:1.3">${desc}</p>
+      </li>`).join('')}
+    </ol>
+    ${linkSlot(link.hint, 1400)}`,
     `body{background:#02050f}${V2_CSS}`);
