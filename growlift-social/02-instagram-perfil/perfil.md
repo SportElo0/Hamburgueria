@@ -31,7 +31,7 @@ O nome aparece na busca do Instagram, então "Sites" ajuda quem procura por isso
 ## Link
 
 - **Um link só:** https://growlift.com.br. O site já reúne os modelos, os planos e o pedido de diagnóstico (orçamento).
-- **Só coloquem depois que o domínio estiver funcionando.** O endereço provisório (growlift-nu.vercel.app) pede login do Vercel, então quem não é da equipe não consegue abrir.
+- O domínio está no ar desde 26/10/2026; podem colocar o link.
 - O WhatsApp entra como botão de contato (abaixo), não como segundo link.
 
 ## Botões de contato

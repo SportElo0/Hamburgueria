@@ -44,4 +44,4 @@ Time: `team_YoPHQ4Hb11W9RPG1cwvdMC3G`. Repositório `SportElo0/Hamburgueria`, br
 - Publicar com teste, tipo ou lint falhando.
 - Imprimir segredos ou variáveis de ambiente.
 - Abrir pull request sem pedido.
-- Tirar o `noindex` do site da Growlift sem o usuário confirmar que o domínio está no ar.
+- Colocar `noindex` de volta no site da Growlift (ele está no ar em growlift.com.br e deve aparecer no Google).

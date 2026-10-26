@@ -14,7 +14,7 @@ Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` est
 | `elpatron/` | Site do El Patron Burger (Osasco), preto e dourado, história em 3D, pedidos próprios | https://el-patron-burger.vercel.app/ |
 | `plataforma/` | Painel das lojas: cardápio, pedidos online, tela da loja, relatório, clientes e campanhas | https://painel-lojas-sportelo.vercel.app/ |
 | `pousada/` | Site da Pousada Villa Verano (aguarda nova referência do cliente para o redesenho) | ver no Vercel |
-| `growlift/` | Site da Growlift (HTML estático, ainda com `noindex` até o domínio entrar no ar) | growlift.com.br (DNS pendente) |
+| `growlift/` | Site da Growlift (HTML estático), no ar desde 26/10/2026 | https://growlift.com.br (DNS no Registro.br: endereço do site = `216.198.79.1`) |
 | `growlift-social/` | Instagram e WhatsApp da Growlift: imagens, 8 Reels em vídeo, legendas | aba Conteúdos do painel |
 | `marketing/` | Apresentações e propostas da Growlift (HTML + PDF) e posts | — |
 | `tools/`, `elpatron/tools/` | Estúdio 3D dos burgers (three.js) e tratamento de fotos | — |

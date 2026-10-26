@@ -29,10 +29,10 @@ O painel lê esta pasta toda vez que é publicado. Para entrar uma peça nova, b
 ## Pendente (precisa de vocês)
 
 1. **Número do WhatsApp comercial** (em criação): com ele eu gero o story de contato do WhatsApp e completo o perfil.
-2. **Domínio growlift.com.br funcionando:** antes de pôr o link na bio e publicar os posts.
-3. **Clientes:** o destaque só entra com o primeiro cliente real, com depoimento autorizado por escrito.
+2. **Clientes:** o destaque só entra com o primeiro cliente real, com depoimento autorizado por escrito.
 
 **Já decidido:**
+- Site no ar em https://growlift.com.br (desde 26/10/2026): link da bio e posts liberados.
 - Instagram **@growlift.ai**.
 - Alterações por mês: Grow 2 e Lift 4.
 - Site no ar em até 7 dias úteis depois do material, como no contrato.
