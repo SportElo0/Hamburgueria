@@ -61,3 +61,11 @@ Quando terminar, manda para a aba Conteúdos do painel.
 - Sempre terminar com "no text, no letters, no logos": a IA escreve errado e inventa marca.
 - Nada de pessoa que pareça cliente real, nem rosto de alguém sem autorização.
 - Conferir o custo antes de gerar. Imagem simples custa bem menos que imagem em alta qualidade, e vídeo custa mais que as duas.
+
+## Marca em vidro na vertical (stories, outubro de 2026)
+
+Higgsfield, `gpt_image_2_5`, 9:16, 2k, qualidade alta, referência `growlift/img/hero.webp`. Custo: 2,75 créditos. Arquivo: `_fonte/assets/hd/marca-vidro-vertical.png`.
+
+```
+Vertical 9:16 version of the reference: the exact same glass logo (a tall slanted parallelogram bar on the left and a hollow triangle on the right, same proportions and angles as the reference, no changes to the shape), made of luminous translucent blue glass (#0865FE) with bright cyan-white edge highlights, standing on a dark glossy water-like floor with a soft blue reflection. The logo sits in the lower half of the frame, centered, large (about 80% of the frame width). Upper half: deep near-black navy (#06080d) with a faint blue atmospheric glow, clean and calm so headline text can be placed there. Cinematic product lighting, ultra sharp, high detail, no text, no letters, no watermark, no extra objects.
+```

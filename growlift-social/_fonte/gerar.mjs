@@ -34,9 +34,11 @@ for (const v of ['A', 'B']) for (const [slug, ic] of HIGHLIGHTS) add(`03-destaqu
 
 // --- 03 Stories: Projetos -----------------------------------------------------------------
 const S = (d, n, html) => add(`03-destaques/${d}/${String(n).padStart(2, '0')}.png`, html, 1080, 1920);
-S('1-projetos', 1, P.storyTitle({ iconName: 'projetos', eyebrow: 'Projetos', title: `Um visual para cada ${B('ramo.')}`, lead: 'Modelos que criamos para mostrar o que dá para fazer. O site do seu negócio é feito do zero.' }));
-MODELS.forEach((m, i) => S('1-projetos', i + 2, P.storyProject({ index: `${i + 1}/4`, name: m.name, segment: m.segment, img: m.img, features: m.story })));
-S('1-projetos', 6, P.storyVisual({ eyebrow: 'Projeto real', title: `O nosso próprio ${B('site.')}`, lead: 'Animações, diagnóstico grátis e planos, tudo pensado para o celular.', visual: phone('site-growlift-mobile.png', 560, 'height:900px;object-fit:cover;object-position:top') }));
+// Projetos, second generation: glass mark plate, HD captures of the concept sites (assets/hd/).
+const HD = { 'Brasa Burger': 'hd/burger.png', 'Varanda Bistrô': 'hd/restaurante.png', 'Doce Ateliê': 'hd/confeitaria.png', 'Aurora Advocacia': 'hd/advocacia.png' };
+S('1-projetos', 1, P.storyOpenV2({ plate: 'hd/marca-vidro-vertical.png', title: `Um visual para<br>cada ${B('ramo.')}`, lead: 'Modelos que criamos para mostrar o que dá para fazer. O site do seu negócio é feito do zero.' }));
+MODELS.forEach((m, i) => S('1-projetos', i + 2, P.storyShowcaseV2({ index: `${i + 1}/4`, name: m.name, segment: m.segment, img: HD[m.name], features: m.story })));
+S('1-projetos', 6, P.storyDeviceV2({ chip: 'Projeto real', title: `O nosso próprio ${B('site.')}`, lead: 'Animações, diagnóstico grátis e planos, tudo pensado para o celular.', img: 'hd/growlift-cel.png', plate: 'hd/marca-vidro-vertical.png' }));
 
 // --- 03 Stories: Serviços -----------------------------------------------------------------
 S('2-servicos', 1, P.storyTitle({ iconName: 'servicos', eyebrow: 'Serviços', title: `O que a gente ${B('faz.')}`, lead: 'Site, Google e vendas pelo site. Você escolhe até onde ir.' }));
@@ -138,11 +140,16 @@ add('01-identidade/sistema-visual.png', P.page(1600, 1200, `
   </div>`), 1600, 1200);
 
 // --- Render -------------------------------------------------------------------------------
+// node gerar.mjs [prefixo...]  → only the pieces whose path starts with one of the prefixes.
+// ESCALA (default 2): pixel density of the PNGs; 2 gives 2160×3840 stories, sharp in the photo app.
+const ONLY = process.argv.slice(2);
+const SCALE = Number(process.env.ESCALA || 2);
 const browser = await chromium.launch({ executablePath: CHROME });
-const page = await browser.newPage();
+const page = await (await browser.newContext({ deviceScaleFactor: SCALE })).newPage();
 let count = 0;
 for (const { file, html, w, h } of pieces) {
   if (!html) continue;
+  if (ONLY.length && !ONLY.some((o) => file.startsWith(o))) continue;
   const doc = html.replace('<head>', `<head><base href="${ASSETS}">`);
   const htmlPath = path.join(HERE, 'html', file.replace(/\.png$/, '.html'));
   await fs.mkdir(path.dirname(htmlPath), { recursive: true });

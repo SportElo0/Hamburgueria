@@ -6,6 +6,8 @@ De onde vem cada imagem do site da Growlift (`growlift/`) e por que podemos usá
 | --- | --- | --- | --- |
 | `img/hero.webp` | Fundo da capa (a marca em vidro azul) | Gerada pela Growlift no Higgsfield (`gpt_image_2_5`), prompt em `08-prompts/prompts.md` | Criada por nós. Confiram nos termos do plano do Higgsfield que o uso comercial está liberado no plano assinado |
 | `img/hero.webm`, `img/hero.mp4` | Vídeo da capa | Gerado pela Growlift no Higgsfield (`kling4_0`) a partir da imagem acima | Idem |
+| `_fonte/assets/hd/marca-vidro-vertical.png` | A marca em vidro azul, na vertical (fundo dos stories) | Gerada pela Growlift no Higgsfield (`gpt_image_2_5`, 2k, qualidade alta) com `img/hero.webp` como referência; prompt em `08-prompts/prompts.md` | Idem |
+| `_fonte/assets/hd/*.png` (sites) | Telas dos modelos e do site da Growlift em alta definição | Capturadas de `tools/growlift-models/` e de growlift.com.br | Feitas por nós |
 | `img/lift/d/*`, `img/lift/m/*` | Animação da marca se montando | Renderizada em código (three.js) pela Growlift, `tools/growlift-scene/` | Feita por nós, do zero |
 | `img/site-*.webp` | Telas dos 4 modelos | Sites conceito montados pela Growlift (`tools/growlift-models/`). Nomes fictícios | Feitas por nós. As fotos de comida, varanda e escritório dentro deles foram geradas no Higgsfield (prompts em `08-prompts/prompts.md`); nenhuma foto de banco de imagem nem de marca real |
 | `img/time/lucas.webp` | Foto do Lucas | Foto enviada pelo próprio Lucas, tratada pela Growlift | Lucas é maior de idade e autorizou |

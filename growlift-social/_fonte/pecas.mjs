@@ -41,7 +41,9 @@ export const ICONS = {
 export const icon = (name, { size = 64, color = TOKENS.blueBright, width = 1.6 } = {}) =>
   `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
 
-const FONT = '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">';
+// Inter served from the site's own files, so every render uses exactly the site's font.
+const FONTS = new URL('../../growlift/fonts/', import.meta.url).href;
+const FONT = `<style>@font-face{font-family:Inter;font-weight:100 900;src:url(${FONTS}inter-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:Inter;font-weight:100 900;src:url(${FONTS}inter-latin-ext-wght-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}</style>`;
 
 const BASE_CSS = `
 *{box-sizing:border-box;margin:0;padding:0}
@@ -225,3 +227,72 @@ export const profilePhoto = () =>
     <div class="glow" style="width:1200px;height:1200px;left:-60px;top:-40px;opacity:.55"></div>
     <div style="position:absolute;left:50%;top:50%;width:560px;transform:translate(-50%,-52%)">${MARK.replace('<svg ', '<svg width="560" ')}</div>`,
     `body{background:radial-gradient(circle at 50% 46%,#0f1d3d 0%,${TOKENS.bg} 66%)}`);
+
+// ---------------------------------------------------------------------------------------
+// Stories, second generation (Projetos first). Every frame is filled edge to edge: the glass
+// mark or the project's own colours behind, nothing left as a flat black void. Type is larger
+// and brighter than the first set: titles 112 px and up, text 44 px and up, near-white.
+const V2_CSS = `
+.t-title{font-weight:800;letter-spacing:-.04em;line-height:.98;color:#fff}
+.t-lead{font-size:46px;line-height:1.32;color:#dfe5f0;font-weight:450}
+.pill{display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 28px;border-radius:999px;font-size:28px;font-weight:600;letter-spacing:.02em;color:#e8eefa;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);backdrop-filter:blur(18px)}
+.pill.blue{color:#cfe0ff;background:rgba(8,101,254,.22);border-color:rgba(77,141,255,.55)}
+.foot{position:absolute;left:84px;right:84px;top:1628px;display:flex;justify-content:space-between;align-items:center;font-size:28px;color:#aeb8cc}
+.foot .brand{color:#e8eefa;font-size:28px}
+.win{border-radius:30px;overflow:hidden;background:#0f1520;border:1.5px solid rgba(255,255,255,.14);box-shadow:0 60px 120px -40px rgba(0,0,0,.95),0 0 0 1px rgba(0,0,0,.4)}
+.win .bar{display:flex;align-items:center;gap:12px;height:66px;padding:0 26px;background:#121a27;border-bottom:1px solid rgba(255,255,255,.08)}
+.win .bar i{width:16px;height:16px;border-radius:50%;background:#2c3648}
+.win .bar span{margin-left:16px;font-size:24px;color:#9aa6bd;background:#1a2333;padding:8px 22px;border-radius:999px}
+.win img{display:block;width:100%}
+.feat{display:flex;align-items:center;gap:24px;font-size:44px;font-weight:600;color:#f3f6fb;line-height:1.2}
+.feat b{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:${TOKENS.blue};box-shadow:0 10px 30px -8px rgba(8,101,254,.9)}
+`;
+
+const foot = () => `<div class="foot">${brandRow(28)}<span>growlift.com.br</span></div>`;
+const check = () => `<b>${icon('check', { size: 34, color: '#fff', width: 2.6 })}</b>`;
+
+/** Opening story: the glass mark from the site fills the lower half, the headline sits above it. */
+export const storyOpenV2 = ({ title, lead, plate }) =>
+  page(1080, 1920, `
+    <img src="${plate}" style="position:absolute;left:0;top:150px;width:1080px;height:1910px;object-fit:cover;object-position:50% 100%">
+    <div style="position:absolute;inset:0 0 auto 0;height:420px;background:linear-gradient(180deg,#02050f 35%,rgba(2,5,15,0))"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px">
+      ${brandRow(30)}
+      <h1 class="t-title" style="font-size:112px;margin-top:64px">${title}</h1>
+      <p class="t-lead" style="margin-top:34px;max-width:900px">${lead}</p>
+    </div>`,
+    `body{background:#02050f}${V2_CSS}`);
+
+/** One concept project: its own colours fill the frame, the site sits big in a browser window. */
+export const storyShowcaseV2 = ({ index, segment, name, img, features, note = 'Projeto conceito · nome fictício' }) =>
+  page(1080, 1920, `
+    <img src="${img}" style="position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;object-fit:cover;filter:blur(90px) saturate(1.35);opacity:.75">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,13,.55) 0%,rgba(6,8,13,.35) 40%,rgba(6,8,13,.86) 70%,rgba(6,8,13,.94) 100%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px;display:flex;justify-content:space-between;align-items:center">
+      <span class="pill">${segment}</span><span style="font-size:32px;font-weight:700;color:#e8eefa">${index}</span>
+    </div>
+    <h1 class="t-title fit" style="position:absolute;left:84px;right:84px;top:360px;font-size:120px;white-space:nowrap">${name}</h1>
+    <script>for (const el of document.querySelectorAll('.fit')) { let s = 120; while (el.scrollWidth > el.clientWidth && s > 60) el.style.fontSize = (s -= 2) + 'px'; }</script>
+    <div style="position:absolute;left:84px;top:516px"><span class="pill blue">${note}</span></div>
+    <div class="win" style="position:absolute;left:40px;right:40px;top:640px"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="${img}"></div>
+    <ul style="position:absolute;left:84px;right:84px;top:1352px;list-style:none;display:grid;gap:30px">
+      ${features.map((f) => `<li class="feat">${check()}${f}</li>`).join('')}
+    </ul>
+    ${foot()}`,
+    `body{background:${TOKENS.bg}}${V2_CSS}`);
+
+/** Our own site on a phone, large, rising from the bottom edge. */
+export const storyDeviceV2 = ({ title, lead, img, chip, plate }) =>
+  page(1080, 1920, `
+    <img src="${plate}" style="position:absolute;left:-120px;top:520px;width:1320px;height:2334px;object-fit:cover;opacity:.55;filter:blur(2px)">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#02050f 30%,rgba(2,5,15,.35) 62%,rgba(2,5,15,.2) 100%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px">
+      <span class="pill blue">${chip}</span>
+      <h1 class="t-title" style="font-size:120px;margin-top:40px">${title}</h1>
+      <p class="t-lead" style="margin-top:30px">${lead}</p>
+    </div>
+    <div class="phone" style="position:absolute;left:50%;top:880px;width:600px;margin-left:-300px;padding:18px;border-radius:78px;background:#151c29;box-shadow:0 0 0 2px rgba(255,255,255,.1),0 -40px 120px -30px rgba(8,101,254,.75),0 60px 120px -30px rgba(0,0,0,.95)">
+      <img src="${img}" style="display:block;width:100%;border-radius:62px">
+    </div>
+    <div style="position:absolute;left:0;right:0;top:1560px;height:360px;background:linear-gradient(180deg,rgba(2,5,15,0),#02050f 70%)"></div>`,
+    `body{background:#02050f}${V2_CSS}`);
