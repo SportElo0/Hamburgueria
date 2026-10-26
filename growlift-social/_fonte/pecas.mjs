@@ -281,18 +281,32 @@ export const storyShowcaseV2 = ({ index, segment, name, img, features, note = 'P
     ${foot()}`,
     `body{background:${TOKENS.bg}}${V2_CSS}`);
 
-/** Our own site on a phone, large, rising from the bottom edge. */
-export const storyDeviceV2 = ({ title, lead, img, chip, plate }) =>
+const ARROW = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+
+/**
+ * The place for the Instagram link sticker, designed into the story: a hint line and a button of the
+ * sticker's size. When posting, the sticker goes right on top of the button; without it, the button
+ * still reads as the call to action.
+ */
+export const linkSlot = (label, hint, top) => `
+    <div style="position:absolute;left:84px;right:84px;top:${top}px">
+      <p style="font-size:32px;font-weight:600;color:#cfe0ff;display:flex;align-items:center;gap:12px">${hint}</p>
+      <div style="margin-top:22px;height:116px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:42px;font-weight:700;color:#fff;background:${TOKENS.blue};box-shadow:0 0 0 8px rgba(8,101,254,.18),0 30px 70px -20px rgba(8,101,254,.95)">${label}${ARROW}</div>
+    </div>`;
+
+/** Our own site, on the computer and on the phone at once, with the link button below. */
+export const storySiteV2 = ({ chip, title, lead, desktop, mobile, link }) =>
   page(1080, 1920, `
-    <img src="${plate}" style="position:absolute;left:-120px;top:520px;width:1320px;height:2334px;object-fit:cover;opacity:.55;filter:blur(2px)">
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#02050f 30%,rgba(2,5,15,.35) 62%,rgba(2,5,15,.2) 100%)"></div>
+    <img src="${desktop}" style="position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;object-fit:cover;filter:blur(90px) saturate(1.4);opacity:.8">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,5,15,.6) 0%,rgba(2,5,15,.35) 40%,rgba(2,5,15,.88) 68%,#02050f 100%)"></div>
     <div style="position:absolute;left:84px;right:84px;top:250px">
       <span class="pill blue">${chip}</span>
-      <h1 class="t-title" style="font-size:120px;margin-top:40px">${title}</h1>
-      <p class="t-lead" style="margin-top:30px">${lead}</p>
+      <h1 class="t-title" style="font-size:120px;margin-top:36px">${title}</h1>
     </div>
-    <div class="phone" style="position:absolute;left:50%;top:880px;width:600px;margin-left:-300px;padding:18px;border-radius:78px;background:#151c29;box-shadow:0 0 0 2px rgba(255,255,255,.1),0 -40px 120px -30px rgba(8,101,254,.75),0 60px 120px -30px rgba(0,0,0,.95)">
-      <img src="${img}" style="display:block;width:100%;border-radius:62px">
+    <div class="win" style="position:absolute;left:40px;width:840px;top:640px"><div class="bar"><i></i><i></i><i></i><span>growlift.com.br</span></div><img src="${desktop}"></div>
+    <div style="position:absolute;right:40px;top:860px;width:310px;padding:12px;border-radius:52px;background:#151c29;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 50px 100px -30px rgba(0,0,0,.95),0 0 80px -20px rgba(8,101,254,.6)">
+      <img src="${mobile}" style="display:block;width:100%;height:500px;object-fit:cover;object-position:top;border-radius:42px">
     </div>
-    <div style="position:absolute;left:0;right:0;top:1560px;height:360px;background:linear-gradient(180deg,rgba(2,5,15,0),#02050f 70%)"></div>`,
+    <p class="t-lead" style="position:absolute;left:84px;width:560px;top:1290px;font-size:44px;font-weight:600;color:#fff">${lead}</p>
+    ${link ? linkSlot(link.label, link.hint, 1420) : ''}`,
     `body{background:#02050f}${V2_CSS}`);

@@ -38,7 +38,7 @@ const S = (d, n, html) => add(`03-destaques/${d}/${String(n).padStart(2, '0')}.p
 const HD = { 'Brasa Burger': 'hd/burger.png', 'Varanda Bistrô': 'hd/restaurante.png', 'Doce Ateliê': 'hd/confeitaria.png', 'Aurora Advocacia': 'hd/advocacia.png' };
 S('1-projetos', 1, P.storyOpenV2({ plate: 'hd/marca-vidro-vertical.png', title: `Um visual para<br>cada ${B('ramo.')}`, lead: 'Modelos que criamos para mostrar o que dá para fazer. O site do seu negócio é feito do zero.' }));
 MODELS.forEach((m, i) => S('1-projetos', i + 2, P.storyShowcaseV2({ index: `${i + 1}/4`, name: m.name, segment: m.segment, img: HD[m.name], features: m.story })));
-S('1-projetos', 6, P.storyDeviceV2({ chip: 'Projeto real', title: `O nosso próprio ${B('site.')}`, lead: 'Animações, diagnóstico grátis e planos, tudo pensado para o celular.', img: 'hd/growlift-cel.png', plate: 'hd/marca-vidro-vertical.png' }));
+S('1-projetos', 6, P.storySiteV2({ chip: 'Projeto real', title: `O nosso próprio ${B('site.')}`, lead: 'No computador e no celular.', desktop: 'hd/growlift.png', mobile: 'hd/growlift-cel.png', link: { label: 'Ver o site ao vivo', hint: 'Toque e veja funcionando' } }));
 
 // --- 03 Stories: Serviços -----------------------------------------------------------------
 S('2-servicos', 1, P.storyTitle({ iconName: 'servicos', eyebrow: 'Serviços', title: `O que a gente ${B('faz.')}`, lead: 'Site, Google e vendas pelo site. Você escolhe até onde ir.' }));

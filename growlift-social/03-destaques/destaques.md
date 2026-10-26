@@ -20,13 +20,14 @@ Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícon
 
 | Destaque | Story | Endereço do link | Texto do adesivo |
 | --- | --- | --- | --- |
-| Projetos | 06 (o nosso próprio site) | `https://growlift.com.br/#modelos` | Ver os modelos |
+| Projetos | 06 (o nosso próprio site) | `https://growlift.com.br` | Ver o site ao vivo (por cima do botão azul desenhado na arte) |
 | Serviços | 06 (peça um diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
 | Processo | 02 (passo 1, peça o diagnóstico) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
 | Design | 03 (pensado para o celular) | `https://growlift.com.br` | Ver o site |
 | Contato | 01 (vamos conversar?) | `https://growlift.com.br` | Visitar o site |
 | Contato | 03 (WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp |
 
+   Nas artes novas, o lugar do link já vem desenhado: um botão azul do tamanho do adesivo. Ponham o adesivo exatamente em cima dele.
    No Instagram: adesivos › **Link** › colem o endereço › **Personalizar texto do adesivo**. Ponham o adesivo num espaço vazio, nunca na barra de baixo ("Enviar mensagem").
 
 ## 1 · Projetos (6 stories)
