@@ -1,6 +1,6 @@
 # WhatsApp Business
 
-Nada foi configurado. Os campos marcados como **[pendente]** precisam de dados que só vocês têm. Não inventei nenhum.
+Nada foi configurado. O número comercial é o (11) 99446-3234; o botão do site já abre a conversa nele.
 
 ## Perfil comercial
 
@@ -10,7 +10,7 @@ Nada foi configurado. Os campos marcados como **[pendente]** precisam de dados q
 | Categoria | Agência de marketing. Se não existir na lista, a mais próxima, como "Serviços profissionais". |
 | Descrição | Texto abaixo |
 | Recado | `Sites e soluções digitais para negócios locais.` (47 de 139 caracteres) |
-| Telefone | **[pendente: número comercial, separado do pessoal]** |
+| Telefone | (11) 99446-3234 |
 | E-mail | contato@growlift.com.br |
 | Site | https://growlift.com.br (quando o domínio estiver no ar) |
 | Horário | Sempre aberto (com a mensagem automática abaixo) |
@@ -74,7 +74,7 @@ A gente trabalha com três planos, todos com mensalidade fixa e sem comissão po
 • Start: site feito do zero, com domínio e hospedagem.
 • Grow: tudo do Start, mais preparo para o Google e o Perfil da Empresa no Google.
 • Lift: tudo do Grow, mais pedido e Pix direto no seu site.
-Todos têm contrato com fidelidade (6 meses no Start e no Grow, 12 no Lift) e 7 dias para desistir sem multa.
+Todos têm contrato com fidelidade (6 meses no Start e no Grow, 4 no Lift) e 7 dias para desistir sem multa.
 Valores e detalhes: growlift.com.br/#planos
 Qual desses parece mais perto do que você precisa?
 ```

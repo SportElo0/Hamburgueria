@@ -63,6 +63,12 @@ section { position: relative; }
 .nav a:not(.btn) { color: var(--muted); text-decoration: none; }
 .nav a:not(.btn):hover { color: var(--text); }
 .nav .btn { min-height: 44px; padding: 0 20px; font-size: 15px; white-space: nowrap; }
+.btn-wa { gap: 8px; }
+.btn-wa svg { width: 20px; height: 20px; color: #25d366; flex: none; }
+.nav .btn-wa + .btn { margin-left: -18px; }
+@media (max-width: 860px) { .nav .btn-wa { width: 44px; padding: 0; } .btn-wa span { display: none; } }
+/* Phones: the mark alone, so the WhatsApp and diagnosis buttons fit beside it. */
+@media (max-width: 480px) { .top .logo-word { display: none; } }
 @media (max-width: 420px) { .nav .btn { padding: 0 16px; font-size: 14px; } .logo { font-size: 18px; } }
 @media (max-width: 860px) { .nav a:not(.btn) { display: none; } }
 

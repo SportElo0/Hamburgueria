@@ -66,7 +66,8 @@ S('5-processo', 1, P.storyTitle({ iconName: 'processo', eyebrow: 'Processo', tit
 STEPS.forEach(([t, l, d], i) => S('5-processo', i + 2, P.storyStep({ n: i + 1, total: STEPS.length, title: t, lead: l, detail: d })));
 
 // --- 03 Stories: Contato ------------------------------------------------------------------
-S('6-contato', 1, P.storyContact({ title: 'Vamos conversar?', lead: 'Peça o diagnóstico grátis ou escreva para a gente.', rows: [['Site', 'growlift.com.br'], ['E-mail', 'contato@growlift.com.br']], cta: 'Diagnóstico grátis no site' }));
+S('6-contato', 1, P.storyContact({ title: 'Vamos conversar?', lead: 'Peça o diagnóstico grátis ou escreva para a gente.', rows: [['Site', 'growlift.com.br'], ['WhatsApp', '(11) 99446-3234'], ['E-mail', 'contato@growlift.com.br']], cta: 'Diagnóstico grátis no site' }));
+S('6-contato', 3, P.storyContact({ title: 'Chama no WhatsApp.', lead: 'Tire dúvidas sobre os planos ou peça o seu diagnóstico.', rows: [['WhatsApp', '(11) 99446-3234'], ['Resposta', 'Por uma pessoa, em dias úteis']], cta: 'Toque no link para conversar' }));
 S('6-contato', 2, P.storyVisual({ eyebrow: 'Quem atende você', title: `Lucas e ${B('Antônio.')}`, lead: 'Quem conversa com você é quem faz o seu site.', visual: photos(640) }));
 
 // --- 03 Clientes: template only, never with invented content ---------------------------

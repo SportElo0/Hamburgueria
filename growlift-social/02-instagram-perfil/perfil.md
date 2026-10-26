@@ -39,7 +39,7 @@ O nome aparece na busca do Instagram, então "Sites" ajuda quem procura por isso
 | Botão | Valor |
 | --- | --- |
 | E-mail | contato@growlift.com.br |
-| WhatsApp | **[número comercial da Growlift: pendente]** |
+| WhatsApp | (11) 99446-3234 |
 | Endereço | Não exibir. Só faz sentido se houver um ponto comercial aberto ao público. |
 
 ## Foto de perfil

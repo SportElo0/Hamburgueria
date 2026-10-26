@@ -63,13 +63,13 @@ Abertura e cinco passos:
 
 Os prazos são os do contrato. Se vocês entregarem antes, melhor; mas o que se promete é o que está escrito.
 
-## 6 · Contato (2 stories, mais 1 pendente)
+## 6 · Contato (3 stories)
 
 | Arquivo | O que mostra |
 | --- | --- |
-| 01 | Site e e-mail, com o botão do diagnóstico grátis |
+| 01 | Site, WhatsApp e e-mail, com o botão do diagnóstico grátis |
 | 02 | Lucas e Antônio, "quem conversa com você é quem faz o seu site" |
-| pendente | **Story do WhatsApp:** gero quando vocês passarem o número comercial |
+| 03 | **WhatsApp** (11) 99446-3234. Ao postar, ponham o adesivo de link para `https://wa.me/5511994463234` |
 
 ## Editar
 
