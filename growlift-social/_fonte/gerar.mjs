@@ -122,10 +122,11 @@ C('1-quem-somos', 5, P.slideCtaV2({ n: 5, total: q, plate: 'hd/marca-vidro-verti
 // Post 2: Portfólio
 const p2 = 7;
 const coverArt = `<div class="browser" style="position:absolute;left:260px;right:-140px;top:-40px;transform:rotate(-6deg);-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 92%)"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="site-hamburgueria.webp"></div>`;
-C('2-portfolio', 1, P.slideCover({ n: 1, total: p2, kicker: 'Portfólio', title: `Ideias que viram ${B('experiências digitais.')}`, sub: 'Projetos conceito para quatro ramos e o nosso próprio site.', art: coverArt }));
-MODELS.forEach((m, i) => C('2-portfolio', i + 2, P.slideProject({ n: i + 2, total: p2, name: m.name, segment: m.segment, img: m.img, features: m.chips })));
-C('2-portfolio', 6, P.slideText({ n: 6, total: p2, glow: 'right', eyebrow: 'Projeto real', title: 'O nosso site, no computador e no celular.', extra: `<div style="position:relative;margin-top:auto;height:560px"><div class="browser" style="position:absolute;left:0;right:150px;top:30px"><div class="bar"><i></i><i></i><i></i><span>growlift.com.br</span></div><img src="site-growlift-desktop.png"></div><div class="phone" style="position:absolute;right:0;top:0;width:250px;padding:10px;border-radius:40px"><img src="site-growlift-mobile.png" style="height:500px;object-fit:cover;object-position:top;border-radius:32px"></div></div>` }));
-C('2-portfolio', 7, P.slideCta({ n: 7, total: p2, title: 'Quer ver o seu?', body: 'No diagnóstico grátis você recebe uma prévia feita para o seu negócio.', button: 'Pedir minha prévia', url: 'growlift.com.br · link na bio' }));
+// Portfólio, second generation: HD captures, project colours behind, link in the bio.
+C('2-portfolio', 1, P.slideCoverWallV2({ n: 1, total: p2, note: 'Projetos conceito · nomes fictícios', imgs: ['hd/burger.png', 'hd/restaurante.png', 'hd/confeitaria.png', 'hd/advocacia.png'], title: `Ideias que viram ${B('experiências digitais.')}`, sub: 'Projetos conceito para quatro ramos e o nosso próprio site.' }));
+MODELS.forEach((m, i) => C('2-portfolio', i + 2, P.slideProjectV2({ n: i + 2, total: p2, name: m.name, segment: m.segment, img: HD[m.name], chips: m.chips })));
+C('2-portfolio', 6, P.slideSiteV2({ n: 6, total: p2, chip: 'Projeto real', title: `O nosso site, no computador e no ${B('celular.')}`, desktop: 'hd/growlift.png', mobile: 'hd/growlift-cel.png' }));
+C('2-portfolio', 7, P.slideCtaV2({ n: 7, total: p2, plate: 'hd/marca-vidro-vertical.png', title: `Quer ver o ${B('seu?')}`, body: 'No diagnóstico grátis você recebe uma prévia feita para o seu negócio.', button: 'Pedir minha prévia' }));
 
 // Post 3: Serviços
 const p3 = 6;

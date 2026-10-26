@@ -452,3 +452,35 @@ export const slideCtaV2 = ({ n, total, title, body, button, plate }) =>
       <div style="margin-top:40px;height:112px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#fff;background:${TOKENS.blue};box-shadow:0 0 0 8px rgba(8,101,254,.18),0 30px 70px -20px rgba(8,101,254,.95)">${button}</div>
       <p style="margin-top:22px;font-size:32px;font-weight:600;color:#cfe0ff;text-align:center">growlift.com.br · link na bio</p>
     </div>`, { n, total, plate, plateTop: -660 });
+
+/** Portfolio cover: the four concept sites as a tilted wall of browser windows, the title below. */
+export const slideCoverWallV2 = ({ n, total, title, sub, imgs, note }) =>
+  slideV2(`
+    <div style="position:absolute;left:-150px;right:-150px;top:-140px;height:760px;transform:rotate(-7deg);display:grid;grid-template-columns:1fr 1fr;gap:28px;-webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%)">
+      ${imgs.map((src) => `<div class="win" style="box-shadow:0 40px 80px -30px rgba(0,0,0,.9)"><div class="bar" style="height:44px"><i></i><i></i><i></i></div><img src="${src}"></div>`).join('')}
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0">
+      <span class="pill" style="height:54px;font-size:24px">${note}</span>
+      <h1 class="t-title" style="font-size:96px;margin-top:24px">${title}</h1>
+      <p class="t-lead" style="font-size:38px;margin-top:22px">${sub}</p>
+      <span class="pill blue" style="margin-top:30px">Arraste para o lado →</span>
+    </div>`, { n, total });
+
+/** One concept project in the feed: its colours behind, the site large, features as chips. */
+export const slideProjectV2 = ({ n, total, name, segment, img, chips, note = 'Projeto conceito · nome fictício' }) =>
+  slideV2(`
+    <div style="display:flex;gap:14px;flex-wrap:wrap"><span class="pill">${segment}</span><span class="pill blue">${note}</span></div>
+    <h2 class="t-title fit" style="font-size:100px;margin-top:26px;white-space:nowrap">${name}</h2>
+    <script>for (const el of document.querySelectorAll('.fit')) { let s = 100; while (el.scrollWidth > el.clientWidth && s > 56) el.style.fontSize = (s -= 2) + 'px'; }</script>
+    <div class="win" style="position:absolute;left:-48px;right:-48px;top:250px"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="${img}"></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:14px">${chips.map((c) => `<span style="height:74px;padding:0 24px;border-radius:999px;display:inline-flex;align-items:center;gap:10px;font-size:30px;font-weight:600;color:#fff;background:rgba(8,101,254,.25);border:1.5px solid rgba(77,141,255,.6)">${icon('check', { size: 30, color: '#8db8ff', width: 2.8 })}${c}</span>`).join('')}</div>`, { n, total, bg: img });
+
+/** Our own site, computer and phone, for the feed. */
+export const slideSiteV2 = ({ n, total, title, chip, desktop, mobile }) =>
+  slideV2(`
+    <span class="pill blue">${chip}</span>
+    <h2 class="t-title" style="font-size:92px;margin-top:26px">${title}</h2>
+    <div class="win" style="position:absolute;left:-48px;width:840px;top:470px"><div class="bar"><i></i><i></i><i></i><span>growlift.com.br</span></div><img src="${desktop}"></div>
+    <div style="position:absolute;right:-30px;top:600px;width:290px;padding:12px;border-radius:50px;background:#151c29;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 50px 100px -30px rgba(0,0,0,.95),0 0 80px -20px rgba(8,101,254,.6)">
+      <img src="${mobile}" style="display:block;width:100%;height:500px;object-fit:cover;object-position:top;border-radius:40px">
+    </div>`, { n, total, bg: desktop });
