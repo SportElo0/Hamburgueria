@@ -16,7 +16,18 @@ Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícon
 
 1. Postem os stories de cada pasta em ordem (01, 02, 03…), no mesmo dia.
 2. Depois juntem todos no destaque.
-3. Nos stories que mostram growlift.com.br, coloquem o adesivo de link para https://growlift.com.br. Só depois que o domínio estiver funcionando.
+3. Adesivo de link: um por destaque, só no story abaixo. Os outros ficam sem link.
+
+| Destaque | Story | Endereço do link | Texto do adesivo |
+| --- | --- | --- | --- |
+| Projetos | 06 (o nosso próprio site) | `https://growlift.com.br/#modelos` | Ver os modelos |
+| Serviços | 06 (peça um diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
+| Processo | 02 (passo 1, peça o diagnóstico) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
+| Design | 03 (pensado para o celular) | `https://growlift.com.br` | Ver o site |
+| Contato | 01 (vamos conversar?) | `https://growlift.com.br` | Visitar o site |
+| Contato | 03 (WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp |
+
+   No Instagram: adesivos › **Link** › colem o endereço › **Personalizar texto do adesivo**. Ponham o adesivo num espaço vazio, nunca na barra de baixo ("Enviar mensagem").
 
 ## 1 · Projetos (6 stories)
 
