@@ -28,7 +28,9 @@ Quer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link 
 #growlift #criacaodesites #negocioslocais #sitesprofissionais #presencadigital #saopaulo
 ```
 
-**Texto alternativo da 1ª imagem**: Capa com o símbolo da Growlift e o texto "Presença digital que vende".
+**Texto alternativo da 1ª imagem**: Capa com a marca da Growlift em vidro azul e o texto "Presença digital que vende".
+
+Sem fotos de pessoas (decisão de 26/10/2026): no slide 2, o Lucas e o Antônio aparecem pelas iniciais.
 
 ## 2 · Portfólio (7 imagens)
 

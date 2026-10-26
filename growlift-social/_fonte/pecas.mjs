@@ -400,3 +400,55 @@ export const coverV2 = (name) =>
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 34% at 40% 12%,rgba(255,255,255,.32),rgba(255,255,255,0) 70%)"></div>
     <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">${icon(name, { size: 470, color: '#ffffff', width: 1.9 })}</div>`,
     `body{background:#0865fe}`);
+
+// ---------------------------------------------------------------------------------------
+// Carousel slides, second generation (1080×1350). Same rules as the new stories: frames filled
+// edge to edge, titles 88 px and up, text 38 px and up, near-white. Feed posts take no link
+// sticker, so the last slide sends people to the link in the bio.
+function slideV2(inner, { n, total, bg = '', plate = '', plateTop = -620 } = {}) {
+  return page(1080, 1350, `
+    ${plate ? `<img src="${plate}" style="position:absolute;left:0;top:${plateTop}px;width:1080px;height:1910px;object-fit:cover">` : ''}
+    ${bg ? `<img src="${bg}" style="position:absolute;left:-200px;top:-200px;width:1480px;height:1750px;object-fit:cover;filter:blur(90px) saturate(1.35);opacity:.7">` : ''}
+    ${!plate && !bg ? '<div class="glow" style="width:1300px;height:1300px;left:-420px;top:-560px;opacity:.55"></div><div class="glow" style="width:1000px;height:1000px;right:-520px;bottom:-520px;opacity:.35"></div>' : ''}
+    <div style="position:absolute;inset:0;background:${plate ? 'linear-gradient(180deg,rgba(2,5,15,.15) 0%,rgba(2,5,15,0) 35%,rgba(2,5,15,.82) 58%,#02050f 80%)' : bg ? 'linear-gradient(180deg,rgba(6,8,13,.6),rgba(6,8,13,.88) 60%,rgba(6,8,13,.96))' : 'transparent'}"></div>
+    <div style="position:absolute;left:88px;right:88px;top:96px;bottom:150px">${inner}</div>
+    <div style="position:absolute;left:88px;right:88px;bottom:62px;display:flex;justify-content:space-between;align-items:center;font-size:26px;color:#aeb8cc"><div class="brand" style="font-size:26px;color:#e8eefa">${MARK}GROWLIFT</div><span style="font-weight:600">${n}/${total}</span></div>`,
+    `body{background:#02050f}${V2_CSS}`);
+}
+
+export const slideCoverV2 = ({ n, total, title, sub, plate }) =>
+  slideV2(`
+    <div style="position:absolute;left:0;right:0;bottom:0">
+      <h1 class="t-title" style="font-size:108px">${title}</h1>
+      <p class="t-lead" style="font-size:40px;margin-top:26px">${sub}</p>
+      <span class="pill blue" style="margin-top:36px">Arraste para o lado →</span>
+    </div>`, { n, total, plate });
+
+export const slideTextV2 = ({ n, total, title, body, visual = '', bg = '' }) =>
+  slideV2(`
+    <h2 class="t-title" style="font-size:88px">${title}</h2>
+    ${body ? `<p class="t-lead" style="font-size:38px;margin-top:26px">${body}</p>` : ''}
+    <div style="position:absolute;left:0;right:0;bottom:0">${visual}</div>`, { n, total, bg });
+
+/** Numbered or pictured rows: [picture-or-number, title, detail], large enough to fill the slide. */
+export const slideRowsV2 = ({ n, total, title, lead = '', rows, bg = '' }) =>
+  slideV2(`
+    <h2 class="t-title" style="font-size:88px">${title}</h2>
+    ${lead ? `<p class="t-lead" style="font-size:38px;margin-top:22px">${lead}</p>` : ''}
+    <ol style="position:absolute;left:0;right:0;bottom:0;list-style:none;display:grid;gap:22px">
+      ${rows.map(([pic, t, d]) => `<li style="display:flex;gap:30px;align-items:center;padding:26px;border-radius:36px;background:rgba(15,21,32,.8);border:1.5px solid rgba(255,255,255,.12)">
+        ${typeof pic === 'number'
+          ? `<span style="flex:none;width:132px;height:132px;margin:8px 4px 8px 8px;border-radius:36px;display:grid;place-items:center;font-size:66px;font-weight:800;color:#fff;background:${TOKENS.blue};box-shadow:0 16px 40px -10px rgba(8,101,254,.9)">${pic}</span>`
+          : `<img src="${pic}" style="flex:none;width:300px;height:188px;object-fit:cover;object-position:top;border-radius:24px;border:1.5px solid rgba(255,255,255,.14)">`}
+        <span><span style="display:block;font-size:46px;font-weight:800;color:#fff;letter-spacing:-.02em">${t}</span><span style="display:block;font-size:34px;color:#c6cede;margin-top:8px">${d}</span></span>
+      </li>`).join('')}
+    </ol>`, { n, total, bg });
+
+export const slideCtaV2 = ({ n, total, title, body, button, plate }) =>
+  slideV2(`
+    <div style="position:absolute;left:0;right:0;bottom:0">
+      <h2 class="t-title" style="font-size:104px">${title}</h2>
+      <p class="t-lead" style="font-size:40px;margin-top:24px">${body}</p>
+      <div style="margin-top:40px;height:112px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#fff;background:${TOKENS.blue};box-shadow:0 0 0 8px rgba(8,101,254,.18),0 30px 70px -20px rgba(8,101,254,.95)">${button}</div>
+      <p style="margin-top:22px;font-size:32px;font-weight:600;color:#cfe0ff;text-align:center">growlift.com.br · link na bio</p>
+    </div>`, { n, total, plate, plateTop: -660 });
