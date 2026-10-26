@@ -30,7 +30,8 @@ add('02-instagram-perfil/foto-perfil.png', P.profilePhoto(), 1080, 1080);
 
 // --- 03 Highlight covers: both directions, all six ---------------------------------------
 const HIGHLIGHTS = [['1-projetos', 'projetos'], ['2-servicos', 'servicos'], ['3-clientes', 'clientes'], ['6-contato', 'contato']];
-for (const v of ['A', 'B']) for (const [slug, ic] of HIGHLIGHTS) add(`03-destaques/capas/direcao-${v}/${slug}.png`, P.cover(ic, v), 1080, 1920);
+// Square covers, one per highlight in use (Clientes waits for a real client).
+for (const [slug, ic] of HIGHLIGHTS) add(`03-destaques/capas/${slug}.png`, P.coverV2(ic), 1080, 1080);
 
 // --- 03 Stories: Projetos -----------------------------------------------------------------
 const S = (d, n, html) => add(`03-destaques/${d}/${String(n).padStart(2, '0')}.png`, html, 1080, 1920);

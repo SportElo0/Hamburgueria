@@ -388,3 +388,15 @@ export const storyPlansV2 = ({ title, lead, plans, plate, link }) =>
     </ol>
     ${linkSlot(link.hint, 1400)}`,
     `body{background:#02050f}${V2_CSS}`);
+
+/**
+ * Highlight cover, second generation: square, so it drops straight into Instagram's circle. A disc of
+ * the brand blue fills the frame and a thick white icon sits in it, readable at the profile's ~64 pt.
+ * No words: Instagram prints the highlight's name under the circle.
+ */
+export const coverV2 = (name) =>
+  page(1080, 1080, `
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 34% 26%,#4d8dff 0%,#0865fe 40%,#0544b8 76%,#04307f 100%)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 34% at 40% 12%,rgba(255,255,255,.32),rgba(255,255,255,0) 70%)"></div>
+    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">${icon(name, { size: 470, color: '#ffffff', width: 1.9 })}</div>`,
+    `body{background:#0865fe}`);

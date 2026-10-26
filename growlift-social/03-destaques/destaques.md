@@ -6,13 +6,9 @@
 
 ## Capas
 
-Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícone azul de traço fino e um anel discreto. A direção B (`capas/direcao-B/`) fica de registro.
+Uma por destaque, em `capas/`: `1-projetos.png`, `2-servicos.png`, `6-contato.png` (e `3-clientes.png` para quando houver cliente). Quadradas (2160×2160), azul da marca até a borda e ícone branco grosso, sem texto: o nome do destaque o Instagram já escreve embaixo do círculo.
 
-**Por que a A:**
-- **Combina com o site:** os ícones do site também são azuis e de traço fino.
-- **Funciona pequena:** no círculo do perfil (cerca de 64 pt), a grade e o losango da B somem.
-
-**Como trocar a capa no app:** abram o destaque, toquem em "Editar destaque" e depois em "Editar capa". Escolham a imagem e deixem o ícone no centro do círculo.
+**Como trocar a capa no app:** abram o destaque › "Editar destaque" › "Editar capa" › escolham a imagem da galeria e deixem o ícone no centro do círculo.
 
 ## Como publicar
 
