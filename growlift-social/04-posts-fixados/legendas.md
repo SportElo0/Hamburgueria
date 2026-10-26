@@ -12,7 +12,7 @@ Três carrosséis de 1080×1350, prontos em `1-quem-somos/`, `2-portfolio/` e `3
 
 ---
 
-## 1 · Quem somos (6 imagens)
+## 1 · Quem somos (6 imagens) · **ADIADO, não publicar** (decisão de 26/10/2026: rever depois)
 
 **Legenda**
 
