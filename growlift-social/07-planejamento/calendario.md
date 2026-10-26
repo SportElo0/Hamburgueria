@@ -22,7 +22,7 @@ Nada de comprar seguidores, sorteio para ganhar seguidor nem engajamento combina
 
 1. Domínio growlift.com.br funcionando e link na bio.
 2. Foto, nome, bio e botões de contato configurados (`02-instagram-perfil/perfil.md`).
-3. Destaques Projetos, Serviços, Processo, Design e Contato publicados (`03-destaques/`).
+3. Destaques Projetos, Serviços e Contato publicados (criar Contato primeiro e Projetos por último) (`03-destaques/`).
 
 ## Primeiras 4 semanas
 

@@ -29,7 +29,7 @@ const add = (file, html, w, h) => pieces.push({ file, html, w, h });
 add('02-instagram-perfil/foto-perfil.png', P.profilePhoto(), 1080, 1080);
 
 // --- 03 Highlight covers: both directions, all six ---------------------------------------
-const HIGHLIGHTS = [['1-projetos', 'projetos'], ['2-servicos', 'servicos'], ['3-clientes', 'clientes'], ['4-design', 'design'], ['5-processo', 'processo'], ['6-contato', 'contato']];
+const HIGHLIGHTS = [['1-projetos', 'projetos'], ['2-servicos', 'servicos'], ['3-clientes', 'clientes'], ['6-contato', 'contato']];
 for (const v of ['A', 'B']) for (const [slug, ic] of HIGHLIGHTS) add(`03-destaques/capas/direcao-${v}/${slug}.png`, P.cover(ic, v), 1080, 1920);
 
 // --- 03 Stories: Projetos -----------------------------------------------------------------
@@ -47,25 +47,6 @@ S('2-servicos', 3, P.storyService({ index: '2/4', iconName: 'google', title: 'Ac
 S('2-servicos', 4, P.storyService({ index: '3/4', iconName: 'pedido', title: 'Pedido e Pix no site', lead: 'Para restaurantes que querem vender direto.', items: ['Cardápio com pedido e pagamento', 'Tela da loja com alerta e impressão', 'Sem comissão por pedido'] }));
 S('2-servicos', 5, P.storyService({ index: '4/4', iconName: 'lista', title: 'Clientes que voltam', lead: 'Uma lista de quem autorizou receber as suas ofertas.', items: ['No Grow: cadastro direto pelo site', 'No Lift: uma campanha por mês no WhatsApp', 'Só para quem aceitou, com opção de sair'] }));
 S('2-servicos', 6, P.storyTitle({ iconName: 'contato', eyebrow: 'Por onde começar', title: `Peça um diagnóstico ${B('grátis.')}`, lead: 'Em até 2 dias úteis chega no seu WhatsApp uma prévia do seu site novo.' }));
-
-// --- 03 Stories: Design -------------------------------------------------------------------
-const palettes = [['Brasa Burger', 'Anton', ['#0b0907', '#e8b04a', '#f4ead8']], ['Varanda Bistrô', 'Fraunces', ['#f6f1e7', '#2f4a3c', '#a07a43']], ['Doce Ateliê', 'Cormorant', ['#fbf4ee', '#5a3527', '#c06a6a']], ['Aurora Advocacia', 'Cormorant', ['#0d1626', '#c2a26a', '#eef1f6']]];
-const paletteGrid = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">${palettes.map(([n, f, cs]) => `<div class="card" style="padding:30px"><div style="display:flex;gap:10px">${cs.map((c) => `<i style="flex:1;height:120px;border-radius:18px;background:${c};border:1px solid rgba(255,255,255,.12)"></i>`).join('')}</div><p style="font-size:32px;font-weight:700;margin-top:22px">${n}</p><p style="font-size:26px;color:#8790a6;margin-top:4px">Letra: ${f}</p></div>`).join('')}</div>`;
-S('4-design', 1, P.storyTitle({ iconName: 'design', eyebrow: 'Design', title: `Nada de modelo com cara de todo ${B('mundo.')}`, lead: 'Cada negócio tem as suas cores, letras e fotos.' }));
-S('4-design', 2, P.storyVisual({ eyebrow: 'Cores e letras', title: `Cada ramo, uma ${B('identidade.')}`, lead: 'As cores e as letras dos nossos projetos conceito.', visual: paletteGrid }));
-S('4-design', 3, P.storyVisual({ eyebrow: 'Celular primeiro', title: `Pensado para o ${B('celular.')}`, lead: 'Tudo cabe na tela e o botão de contato fica sempre à mão.', visual: phone('site-growlift-mobile.png', 520, 'height:880px;object-fit:cover;object-position:top') }));
-S('4-design', 4, P.storyVisual({ eyebrow: 'Movimento', title: `Animação com ${B('propósito.')}`, lead: 'Movimento que guia o olhar, sem atrapalhar a leitura.', visual: `<div style="display:grid;gap:22px"><img src="hero.webp" style="width:100%;border-radius:28px;border:1px solid rgba(255,255,255,.1)"><img src="marca-3d.webp" style="width:100%;border-radius:28px;border:1px solid rgba(255,255,255,.1)"></div>` }));
-
-// --- 03 Stories: Processo -----------------------------------------------------------------
-const STEPS = [
-  ['Peça o diagnóstico', 'Conte o nome, o ramo e o Instagram ou site do seu negócio. Leva 2 minutos.', 'Pelo site growlift.com.br, sem compromisso.'],
-  ['Receba a prévia', 'Em até 2 dias úteis chega no seu WhatsApp o diagnóstico e uma prévia do site novo.', 'Você vê o site antes de pagar.'],
-  ['Escolha o plano', 'Start, Grow ou Lift. Mensalidade fixa, sem comissão por pedido.', 'Tudo combinado em contrato, com 7 dias para desistir sem multa.'],
-  ['Ajustes e publicação', 'Com o seu material em mãos, o site vai ao ar em até 7 dias úteis, com até 2 rodadas de ajuste.', 'O domínio fica no nome do seu negócio.'],
-  ['Depois do ar', 'Alterações todo mês: 1 no Start, 2 no Grow e 4 no Lift.', 'Cada alteração fica pronta em até 2 dias úteis.'],
-];
-S('5-processo', 1, P.storyTitle({ iconName: 'processo', eyebrow: 'Processo', title: `Do primeiro oi ao site no ${B('ar.')}`, lead: 'Cinco passos, sem surpresa no caminho.' }));
-STEPS.forEach(([t, l, d], i) => S('5-processo', i + 2, P.storyStep({ n: i + 1, total: STEPS.length, title: t, lead: l, detail: d })));
 
 // --- 03 Stories: Contato ------------------------------------------------------------------
 S('6-contato', 1, P.storyContact({ title: 'Vamos conversar?', lead: 'Peça o diagnóstico grátis ou escreva para a gente.', rows: [['Site', 'growlift.com.br'], ['WhatsApp', '(11) 99446-3234'], ['E-mail', 'contato@growlift.com.br']], cta: 'Diagnóstico grátis no site' }));

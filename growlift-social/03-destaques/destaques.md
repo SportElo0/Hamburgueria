@@ -1,6 +1,8 @@
 # Destaques
 
-**Ordem no perfil:** Projetos, Serviços, Processo, Design, Contato. "Clientes" só entra quando houver um cliente real com autorização (ver abaixo).
+**Ordem no perfil:** Projetos, Serviços, Contato. "Clientes" só entra quando houver um cliente real com autorização (ver abaixo). Os destaques Design e Processo saíram (decisão de 26/10/2026).
+
+**Como deixar nessa ordem:** o Instagram põe na frente o destaque criado ou atualizado por último. Então criem **Contato primeiro, depois Serviços e Projetos por último**. Adicionar um story a um destaque antigo o joga para a frente de novo.
 
 ## Capas
 
@@ -14,16 +16,14 @@ Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícon
 
 ## Como publicar
 
-1. Postem os stories de cada pasta em ordem (01, 02, 03…), no mesmo dia.
+1. Postem os stories de cada pasta em ordem (01 primeiro, o último por último): o destaque mostra do mais antigo para o mais novo.
 2. Depois juntem todos no destaque.
 3. Adesivo de link: um por destaque, só no story abaixo. Os outros ficam sem link.
 
 | Destaque | Story | Endereço do link | Texto do adesivo |
 | --- | --- | --- | --- |
-| Projetos | 06 (o nosso próprio site) | `https://growlift.com.br` | Ver o site ao vivo (por cima do botão azul desenhado na arte) |
+| Projetos | 06 (o nosso próprio site, computador e celular) | `https://growlift.com.br` | Ver o site ao vivo (por cima do botão azul desenhado na arte) |
 | Serviços | 06 (peça um diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
-| Processo | 02 (passo 1, peça o diagnóstico) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
-| Design | 03 (pensado para o celular) | `https://growlift.com.br` | Ver o site |
 | Contato | 01 (vamos conversar?) | `https://growlift.com.br` | Visitar o site |
 | Contato | 03 (WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp |
 
@@ -36,7 +36,7 @@ Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícon
 | --- | --- |
 | 01 | Abertura: "Um visual para cada ramo." |
 | 02 a 05 | Brasa Burger, Varanda Bistrô, Doce Ateliê e Aurora Advocacia, cada um marcado **"Projeto conceito · nome fictício"**, com 3 funcionalidades |
-| 06 | **Projeto real:** o próprio site da Growlift no celular |
+| 06 | **Projeto real:** o site da Growlift no computador e no celular, com o botão "Ver o site ao vivo" para o adesivo de link |
 
 Os quatro modelos são fictícios e estão identificados como tal. Os sites feitos para negócios reais (El Patron, Downtown e outros) **ficam de fora**: foram demonstrações, não clientes, e não temos autorização para mostrar a marca deles.
 
@@ -57,25 +57,7 @@ Tudo o que aparece está nos planos do site. Não incluí nada que vocês ainda 
 - Quando houver o primeiro cliente, preencham com o depoimento **nas palavras dele, com autorização por escrito**, o nome do negócio e o print do site entregue. Eu gero a peça final.
 - Até lá, não criem esse destaque.
 
-## 4 · Design (4 stories)
-
-1. Abertura.
-2. Cores e letras dos quatro projetos conceito.
-3. Pensado para o celular, com o site real.
-4. Animação com propósito: o vídeo da capa e a animação da marca, os dois reais.
-
-## 5 · Processo (6 stories)
-
-Abertura e cinco passos:
-1. Diagnóstico grátis.
-2. Prévia no WhatsApp **em até 2 dias úteis**.
-3. Escolha do plano, com contrato e **7 dias para desistir sem multa**.
-4. Site no ar **em até 7 dias úteis** depois de receber o material, com até 2 rodadas de ajuste e o domínio no nome do cliente.
-5. Alterações mensais: 1 no Start, 2 no Grow e 4 no Lift, cada uma pronta em até 2 dias úteis.
-
-Os prazos são os do contrato. Se vocês entregarem antes, melhor; mas o que se promete é o que está escrito.
-
-## 6 · Contato (3 stories)
+## 6 · Contato (será refeito com 2 stories)
 
 | Arquivo | O que mostra |
 | --- | --- |
