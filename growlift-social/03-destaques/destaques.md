@@ -20,7 +20,7 @@ Uma por destaque, em `capas/`: `1-projetos.png`, `2-servicos.png`, `6-contato.pn
 | --- | --- | --- | --- |
 | Projetos | 06 (o nosso próprio site, computador e celular) | `https://growlift.com.br` | Ver o site ao vivo |
 | Serviços | 06 (qual é o seu momento? os 3 planos) | `https://growlift.com.br/#planos` | Ver os planos |
-| Contato | 01 (chama no WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp |
+| Contato | 01 (chama no WhatsApp) | `https://wa.me/5511942279336` | Chamar no WhatsApp |
 | Contato | 02 (diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis |
 
    Nas artes novas, o lugar do link já vem desenhado: uma frase "Toque no link…" com uma setinha e, embaixo, uma área de luz azul **sem texto**. Ponham o adesivo dentro dessa luz (o Instagram não deixa pôr o adesivo por cima de texto da imagem).
@@ -59,7 +59,7 @@ Tudo o que aparece está nos planos do site. Os exemplos estão marcados como ex
 
 | Arquivo | O que mostra |
 | --- | --- |
-| 01 | "Chama no WhatsApp.", a marca de vidro, o número (11) 99446-3234 e o botão **Chamar no WhatsApp**. Sem fotos de pessoas nos destaques (decisão de 26/10/2026) |
+| 01 | "Chama no WhatsApp.", a marca de vidro, o número (11) 94227-9336 e o botão **Chamar no WhatsApp**. Sem fotos de pessoas nos destaques (decisão de 26/10/2026) |
 | 02 | Diagnóstico grátis em 3 passos (conte sobre o negócio, receba a prévia em até 2 dias úteis, decida com calma), com o botão **Pedir diagnóstico grátis** |
 
 ## Editar

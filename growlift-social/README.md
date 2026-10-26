@@ -31,7 +31,7 @@ O painel lê esta pasta toda vez que é publicado. Para entrar uma peça nova, b
 1. **Clientes:** o destaque só entra com o primeiro cliente real, com depoimento autorizado por escrito.
 
 **Já decidido:**
-- WhatsApp comercial: (11) 99446-3234 (botão no topo do site e story de contato).
+- WhatsApp comercial: (11) 94227-9336 (botão no topo do site e story de contato).
 - Fidelidade: 6 meses no Start e no Grow, 4 meses no Lift.
 - Site no ar em https://growlift.com.br (desde 26/10/2026): link da bio e posts liberados.
 - Instagram **@growlift.ai**.

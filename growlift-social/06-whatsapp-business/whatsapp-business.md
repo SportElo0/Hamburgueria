@@ -1,6 +1,6 @@
 # WhatsApp Business
 
-Nada foi configurado. O número comercial é o (11) 99446-3234; o botão do site já abre a conversa nele.
+Nada foi configurado. O número comercial é o (11) 94227-9336; o botão do site já abre a conversa nele.
 
 ## Perfil comercial
 
@@ -10,7 +10,7 @@ Nada foi configurado. O número comercial é o (11) 99446-3234; o botão do site
 | Categoria | Agência de marketing. Se não existir na lista, a mais próxima, como "Serviços profissionais". |
 | Descrição | Texto abaixo |
 | Recado | `Sites e soluções digitais para negócios locais.` (47 de 139 caracteres) |
-| Telefone | (11) 99446-3234 |
+| Telefone | (11) 94227-9336 |
 | E-mail | contato@growlift.com.br |
 | Site | https://growlift.com.br (quando o domínio estiver no ar) |
 | Horário | Sempre aberto (com a mensagem automática abaixo) |

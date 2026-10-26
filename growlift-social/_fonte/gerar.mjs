@@ -90,7 +90,7 @@ S('2-servicos', 6, P.storyPlansV2({ plate: 'hd/marca-vidro-vertical.png', title:
 
 // --- 03 Stories: Contato ------------------------------------------------------------------
 // Contato, second generation: two stories, each with its link button drawn where the sticker goes.
-S('6-contato', 1, P.storyWhatsV2({ title: `Chama no ${B('WhatsApp.')}`, number: '(11) 99446-3234', note: 'Quem responde é quem faz o seu site', plate: 'hd/marca-vidro-vertical.png', link: { sticker: 'Chamar no WhatsApp', hint: 'Toque no link e chame a gente' } }));
+S('6-contato', 1, P.storyWhatsV2({ title: `Chama no ${B('WhatsApp.')}`, number: '(11) 94227-9336', note: 'Quem responde é quem faz o seu site', plate: 'hd/marca-vidro-vertical.png', link: { sticker: 'Chamar no WhatsApp', hint: 'Toque no link e chame a gente' } }));
 S('6-contato', 2, P.storyDiagnosisV2({ chip: 'Diagnóstico grátis', title: `Peça o seu ${B('diagnóstico.')}`, lead: 'Sem compromisso. Você vê a prévia antes de decidir.', plate: 'hd/marca-vidro-vertical.png', steps: [['Conte sobre o seu negócio', 'Pelo site, em 2 minutos'], ['Receba a prévia do site', 'No WhatsApp, em até 2 dias úteis'], ['Decida com calma', 'Só segue se você quiser']], link: { sticker: 'Pedir diagnóstico grátis', hint: 'Toque no link e preencha pelo site' } }));
 
 // --- 03 Clientes: template only, never with invented content ---------------------------
