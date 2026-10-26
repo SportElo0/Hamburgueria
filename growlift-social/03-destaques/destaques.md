@@ -18,14 +18,14 @@ Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícon
 
 1. Postem os stories de cada pasta em ordem (01 primeiro, o último por último): o destaque mostra do mais antigo para o mais novo.
 2. Depois juntem todos no destaque.
-3. Adesivo de link: um por destaque, só no story abaixo. Os outros ficam sem link.
+3. Adesivo de link: só nos stories abaixo. Os outros ficam sem link.
 
 | Destaque | Story | Endereço do link | Texto do adesivo |
 | --- | --- | --- | --- |
 | Projetos | 06 (o nosso próprio site, computador e celular) | `https://growlift.com.br` | Ver o site ao vivo (por cima do botão azul desenhado na arte) |
 | Serviços | 06 (peça um diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
-| Contato | 01 (vamos conversar?) | `https://growlift.com.br` | Visitar o site |
-| Contato | 03 (WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp |
+| Contato | 01 (Lucas e Antônio) | `https://wa.me/5511994463234` | Chamar no WhatsApp (por cima do botão azul) |
+| Contato | 02 (diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis (por cima do botão azul) |
 
    Nas artes novas, o lugar do link já vem desenhado: um botão azul do tamanho do adesivo. Ponham o adesivo exatamente em cima dele.
    No Instagram: adesivos › **Link** › colem o endereço › **Personalizar texto do adesivo**. Ponham o adesivo num espaço vazio, nunca na barra de baixo ("Enviar mensagem").
@@ -57,13 +57,12 @@ Tudo o que aparece está nos planos do site. Não incluí nada que vocês ainda 
 - Quando houver o primeiro cliente, preencham com o depoimento **nas palavras dele, com autorização por escrito**, o nome do negócio e o print do site entregue. Eu gero a peça final.
 - Até lá, não criem esse destaque.
 
-## 6 · Contato (será refeito com 2 stories)
+## 6 · Contato (2 stories)
 
 | Arquivo | O que mostra |
 | --- | --- |
-| 01 | Site, WhatsApp e e-mail, com o botão do diagnóstico grátis |
-| 02 | Lucas e Antônio, "quem conversa com você é quem faz o seu site" |
-| 03 | **WhatsApp** (11) 99446-3234. Ao postar, ponham o adesivo de link para `https://wa.me/5511994463234` |
+| 01 | Lucas e Antônio, "quem conversa com você é quem faz o seu site", com o botão **Chamar no WhatsApp** |
+| 02 | Diagnóstico grátis em 3 passos (conte sobre o negócio, receba a prévia em até 2 dias úteis, decida com calma), com o botão **Pedir diagnóstico grátis** |
 
 ## Editar
 

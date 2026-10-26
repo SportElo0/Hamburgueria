@@ -288,10 +288,12 @@ const ARROW = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" strok
  * sticker's size. When posting, the sticker goes right on top of the button; without it, the button
  * still reads as the call to action.
  */
-export const linkSlot = (label, hint, top) => `
+const WHATS = '<svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg>';
+
+export const linkSlot = (label, hint, top, { whatsapp = false } = {}) => `
     <div style="position:absolute;left:84px;right:84px;top:${top}px">
       <p style="font-size:32px;font-weight:600;color:#cfe0ff;display:flex;align-items:center;gap:12px">${hint}</p>
-      <div style="margin-top:22px;height:116px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:42px;font-weight:700;color:#fff;background:${TOKENS.blue};box-shadow:0 0 0 8px rgba(8,101,254,.18),0 30px 70px -20px rgba(8,101,254,.95)">${label}${ARROW}</div>
+      <div style="margin-top:22px;height:116px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:18px;font-size:42px;font-weight:700;color:#fff;background:${TOKENS.blue};box-shadow:0 0 0 8px rgba(8,101,254,.18),0 30px 70px -20px rgba(8,101,254,.95)">${whatsapp ? `<span style="width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:#25d366;color:#fff">${WHATS}</span>` : ''}${label}${whatsapp ? '' : ARROW}</div>
     </div>`;
 
 /** Our own site, on the computer and on the phone at once, with the link button below. */
@@ -309,4 +311,43 @@ export const storySiteV2 = ({ chip, title, lead, desktop, mobile, link }) =>
     </div>
     <p class="t-lead" style="position:absolute;left:84px;width:560px;top:1290px;font-size:44px;font-weight:600;color:#fff">${lead}</p>
     ${link ? linkSlot(link.label, link.hint, 1420) : ''}`,
+    `body{background:#02050f}${V2_CSS}`);
+
+/** Who answers: Lucas and Antônio, large, with the WhatsApp button below. */
+export const storyTeamV2 = ({ chip, title, lead, people, link }) =>
+  page(1080, 1920, `
+    <img src="${people[0][0]}" style="position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;object-fit:cover;filter:blur(110px) saturate(1.2);opacity:.45">
+    <div class="glow" style="width:1300px;height:1300px;right:-500px;top:500px;opacity:.55"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,5,15,.55) 0%,rgba(2,5,15,.3) 45%,rgba(2,5,15,.9) 75%,#02050f 100%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px">
+      <span class="pill blue">${chip}</span>
+      <h1 class="t-title" style="font-size:120px;margin-top:36px">${title}</h1>
+      <p class="t-lead" style="margin-top:26px">${lead}</p>
+    </div>
+    <div style="position:absolute;left:84px;right:84px;top:770px;display:grid;grid-template-columns:1fr 1fr;gap:28px">
+      ${people.map(([src, name]) => `<figure style="position:relative;border-radius:40px;overflow:hidden;height:580px;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 0 1.5px rgba(255,255,255,.14)">
+        <img src="${src}" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%">
+        <figcaption style="position:absolute;left:0;right:0;bottom:0;padding:90px 30px 26px;background:linear-gradient(180deg,rgba(2,5,15,0),rgba(2,5,15,.85));font-size:44px;font-weight:800;letter-spacing:-.02em">${name}</figcaption>
+      </figure>`).join('')}
+    </div>
+    ${linkSlot(link.label, link.hint, 1420, { whatsapp: true })}`,
+    `body{background:#02050f}${V2_CSS}`);
+
+/** The free diagnosis: three short steps, the glass mark behind, the button to the form. */
+export const storyDiagnosisV2 = ({ chip, title, lead, steps, plate, link }) =>
+  page(1080, 1920, `
+    <img src="${plate}" style="position:absolute;left:-60px;top:380px;width:1200px;height:2122px;object-fit:cover;opacity:.5">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#02050f 18%,rgba(2,5,15,.55) 50%,rgba(2,5,15,.85) 72%,#02050f 100%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px">
+      <span class="pill blue">${chip}</span>
+      <h1 class="t-title" style="font-size:120px;margin-top:36px">${title}</h1>
+      <p class="t-lead" style="margin-top:26px">${lead}</p>
+    </div>
+    <ol style="position:absolute;left:84px;right:84px;top:820px;list-style:none;display:grid;gap:22px">
+      ${steps.map(([t, d], i) => `<li style="display:flex;gap:28px;align-items:center;padding:30px 34px;border-radius:34px;background:rgba(15,21,32,.72);border:1.5px solid rgba(255,255,255,.12);backdrop-filter:blur(20px)">
+        <span style="flex:none;width:84px;height:84px;border-radius:26px;display:grid;place-items:center;font-size:44px;font-weight:800;color:#fff;background:${TOKENS.blue};box-shadow:0 14px 34px -10px rgba(8,101,254,.9)">${i + 1}</span>
+        <span><span style="display:block;font-size:42px;font-weight:700;color:#fff;letter-spacing:-.01em">${t}</span><span style="display:block;font-size:32px;color:#c6cede;margin-top:4px">${d}</span></span>
+      </li>`).join('')}
+    </ol>
+    ${linkSlot(link.label, link.hint, 1420)}`,
     `body{background:#02050f}${V2_CSS}`);
