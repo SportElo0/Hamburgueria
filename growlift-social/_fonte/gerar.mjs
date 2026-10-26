@@ -50,7 +50,7 @@ S('2-servicos', 6, P.storyTitle({ iconName: 'contato', eyebrow: 'Por onde começ
 
 // --- 03 Stories: Contato ------------------------------------------------------------------
 // Contato, second generation: two stories, each with its link button drawn where the sticker goes.
-S('6-contato', 1, P.storyTeamV2({ chip: 'Quem atende você', title: `Lucas e ${B('Antônio.')}`, lead: 'Quem conversa com você é quem faz o seu site.', people: [['lucas.webp', 'Lucas'], ['antonio.webp', 'Antônio']], link: { label: 'Chamar no WhatsApp', hint: 'Tire suas dúvidas com a gente' } }));
+S('6-contato', 1, P.storyWhatsV2({ title: `Chama no ${B('WhatsApp.')}`, number: '(11) 99446-3234', note: 'Quem responde é quem faz o seu site', plate: 'hd/marca-vidro-vertical.png', link: { label: 'Chamar no WhatsApp', hint: 'Atendimento em dias úteis' } }));
 S('6-contato', 2, P.storyDiagnosisV2({ chip: 'Diagnóstico grátis', title: `Peça o seu ${B('diagnóstico.')}`, lead: 'Sem compromisso. Você vê a prévia antes de decidir.', plate: 'hd/marca-vidro-vertical.png', steps: [['Conte sobre o seu negócio', 'Pelo site, em 2 minutos'], ['Receba a prévia do site', 'No WhatsApp, em até 2 dias úteis'], ['Decida com calma', 'Só segue se você quiser']], link: { label: 'Pedir diagnóstico grátis', hint: 'Toque e preencha pelo site' } }));
 
 // --- 03 Clientes: template only, never with invented content ---------------------------

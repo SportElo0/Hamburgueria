@@ -313,26 +313,6 @@ export const storySiteV2 = ({ chip, title, lead, desktop, mobile, link }) =>
     ${link ? linkSlot(link.label, link.hint, 1420) : ''}`,
     `body{background:#02050f}${V2_CSS}`);
 
-/** Who answers: Lucas and Antônio, large, with the WhatsApp button below. */
-export const storyTeamV2 = ({ chip, title, lead, people, link }) =>
-  page(1080, 1920, `
-    <img src="${people[0][0]}" style="position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;object-fit:cover;filter:blur(110px) saturate(1.2);opacity:.45">
-    <div class="glow" style="width:1300px;height:1300px;right:-500px;top:500px;opacity:.55"></div>
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,5,15,.55) 0%,rgba(2,5,15,.3) 45%,rgba(2,5,15,.9) 75%,#02050f 100%)"></div>
-    <div style="position:absolute;left:84px;right:84px;top:250px">
-      <span class="pill blue">${chip}</span>
-      <h1 class="t-title" style="font-size:120px;margin-top:36px">${title}</h1>
-      <p class="t-lead" style="margin-top:26px">${lead}</p>
-    </div>
-    <div style="position:absolute;left:84px;right:84px;top:770px;display:grid;grid-template-columns:1fr 1fr;gap:28px">
-      ${people.map(([src, name]) => `<figure style="position:relative;border-radius:40px;overflow:hidden;height:580px;box-shadow:0 50px 100px -40px rgba(0,0,0,.95),0 0 0 1.5px rgba(255,255,255,.14)">
-        <img src="${src}" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%">
-        <figcaption style="position:absolute;left:0;right:0;bottom:0;padding:90px 30px 26px;background:linear-gradient(180deg,rgba(2,5,15,0),rgba(2,5,15,.85));font-size:44px;font-weight:800;letter-spacing:-.02em">${name}</figcaption>
-      </figure>`).join('')}
-    </div>
-    ${linkSlot(link.label, link.hint, 1420, { whatsapp: true })}`,
-    `body{background:#02050f}${V2_CSS}`);
-
 /** The free diagnosis: three short steps, the glass mark behind, the button to the form. */
 export const storyDiagnosisV2 = ({ chip, title, lead, steps, plate, link }) =>
   page(1080, 1920, `
@@ -350,4 +330,19 @@ export const storyDiagnosisV2 = ({ chip, title, lead, steps, plate, link }) =>
       </li>`).join('')}
     </ol>
     ${linkSlot(link.label, link.hint, 1420)}`,
+    `body{background:#02050f}${V2_CSS}`);
+
+/** WhatsApp contact without photos: the glass mark centre stage, the number large, the button below. */
+export const storyWhatsV2 = ({ title, number, note, plate, link }) =>
+  page(1080, 1920, `
+    <img src="${plate}" style="position:absolute;left:0;top:-150px;width:1080px;height:1910px;object-fit:cover">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#02050f 12%,rgba(2,5,15,.2) 32%,rgba(2,5,15,0) 50%,rgba(2,5,15,.78) 66%,#02050f 84%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px">
+      <h1 class="t-title" style="font-size:120px">${title}</h1>
+    </div>
+    <div style="position:absolute;left:84px;right:84px;top:1250px;text-align:center">
+      <p style="font-size:76px;font-weight:800;letter-spacing:-.02em;color:#fff">${number}</p>
+      <p style="font-size:34px;color:#c6cede;margin-top:6px">${note}</p>
+    </div>
+    ${linkSlot(link.label, link.hint, 1440, { whatsapp: true })}`,
     `body{background:#02050f}${V2_CSS}`);

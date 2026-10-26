@@ -24,7 +24,7 @@ Usem as capas da **direção A** (`capas/direcao-A/`): fundo azul-marinho, ícon
 | --- | --- | --- | --- |
 | Projetos | 06 (o nosso próprio site, computador e celular) | `https://growlift.com.br` | Ver o site ao vivo (por cima do botão azul desenhado na arte) |
 | Serviços | 06 (peça um diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico |
-| Contato | 01 (Lucas e Antônio) | `https://wa.me/5511994463234` | Chamar no WhatsApp (por cima do botão azul) |
+| Contato | 01 (chama no WhatsApp) | `https://wa.me/5511994463234` | Chamar no WhatsApp (por cima do botão azul) |
 | Contato | 02 (diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis (por cima do botão azul) |
 
    Nas artes novas, o lugar do link já vem desenhado: um botão azul do tamanho do adesivo. Ponham o adesivo exatamente em cima dele.
@@ -61,7 +61,7 @@ Tudo o que aparece está nos planos do site. Não incluí nada que vocês ainda 
 
 | Arquivo | O que mostra |
 | --- | --- |
-| 01 | Lucas e Antônio, "quem conversa com você é quem faz o seu site", com o botão **Chamar no WhatsApp** |
+| 01 | "Chama no WhatsApp.", a marca de vidro, o número (11) 99446-3234 e o botão **Chamar no WhatsApp**. Sem fotos de pessoas nos destaques (decisão de 26/10/2026) |
 | 02 | Diagnóstico grátis em 3 passos (conte sobre o negócio, receba a prévia em até 2 dias úteis, decida com calma), com o botão **Pedir diagnóstico grátis** |
 
 ## Editar
