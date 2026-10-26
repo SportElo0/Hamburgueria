@@ -15,6 +15,10 @@
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "google-maps-platform-code-assist": {
+      "type": "http",
+      "url": "https://mapscodeassist.googleapis.com/mcp"
     }
   }
 }

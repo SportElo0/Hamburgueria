@@ -135,7 +135,10 @@ class FileStorage implements Storage {
       const text = JSON.stringify(data, null, 1);
       const target = this.file(key);
       await fs.mkdir(path.dirname(target), { recursive: true });
-      await fs.writeFile(target, text);
+      // Write aside and rename: a reader never sees a half-written file.
+      const tmp = `${target}.${crypto.randomUUID()}.tmp`;
+      await fs.writeFile(tmp, text);
+      await fs.rename(tmp, target);
       return this.etagOf(text);
     });
   }
@@ -170,7 +173,7 @@ class FileStorage implements Storage {
       for (const e of entries) {
         const full = path.join(dir, e.name);
         if (e.isDirectory()) await walk(full);
-        else if (!e.name.endsWith('.meta.json')) out.push(path.relative(this.root, full).split(path.sep).join('/'));
+        else if (!e.name.endsWith('.meta.json') && !e.name.endsWith('.tmp')) out.push(path.relative(this.root, full).split(path.sep).join('/'));
       }
     };
     await walk(this.root);

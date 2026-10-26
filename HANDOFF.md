@@ -39,7 +39,7 @@ ambiente dos projetos no Vercel, não no repositório.
   esgotados num toque, aviso pronto no WhatsApp, relatório (`/relatorio`), clientes e
   campanhas (`/clientes`).
 - Regras de código em `plataforma/src/lib/ordering.ts` (puro) e `orders.ts`, `customers.ts`.
-- Testes: `cd plataforma && npx vitest run` (78 testes). Ponta a ponta local:
+- Testes: `cd plataforma && npx vitest run` (93 testes). Ponta a ponta local:
   `plataforma/scripts/e2e/README.md`.
 
 ## Conteúdos da Growlift no painel
@@ -63,6 +63,14 @@ Texto da caixinha: "Quero receber ofertas da <loja> no WhatsApp (no máximo uma 
 ## Pedidos de diagnóstico (site da Growlift)
 
 `growlift/` posta em `/api/public/diagnosticos`; a lista fica em `/painel/diagnosticos`. Limite: 300 por dia e 5 por endereço por dia.
+
+## Oportunidades (Growlift Lead Finder)
+
+`/painel/oportunidades`: pesquisa negócios por cidade, bairro e segmento na Places API (New) do Google, classifica a presença digital e exporta CSV. Tudo em `plataforma/LEAD-FINDER.md`.
+- Precisa da variável `GOOGLE_MAPS_API_KEY` na Vercel. A chave é criada pelo Lucas, em projeto próprio no Google Cloud, com cotas e alerta de gasto.
+- Toda pesquisa mostra o custo e pede aprovação. O painel limita as chamadas por mês (padrão 200 buscas e 300 consultas), abaixo da parte grátis do Google.
+- Guarda só o place ID e as conclusões da equipe; nome, endereço, telefone e site do Google não são guardados nem exportados (termos do Google).
+- Não envia mensagem. "Sem website" só é confirmado depois de 2 fontes públicas conferidas à mão.
 
 ## Propostas
 

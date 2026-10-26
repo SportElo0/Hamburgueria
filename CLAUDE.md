@@ -34,5 +34,6 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 - **Senhas:** nunca usar senha pessoal deles; segredos ficam nas variáveis de ambiente da Vercel, nunca no repositório nem impressos na conversa.
 - **Instagram e WhatsApp:** nada é publicado sem aprovação. Sem envio em massa, sem robô fingindo ser pessoa, sem sorteio falso. Campanhas só para quem aceitou, no máximo uma por mês, com opção SAIR. Nada de vender ou cobrar sozinho pelo WhatsApp.
 - **Imagem de pessoas:** só de quem autorizou. O Antônio é menor de idade; a foto dele está autorizada pela mãe por e-mail.
+- **Lead Finder (aba Oportunidades):** nunca guardar nem exportar nome, endereço, telefone ou site vindos do Google (só o place ID); nenhuma pesquisa paga sem mostrar o custo e ter aprovação. Detalhes em `plataforma/LEAD-FINDER.md`.
 - **Higgsfield:** conferir o custo (`get_cost`) antes de gerar; não gastar crédito à toa. O que der para fazer em código (HTML, Playwright, ffmpeg) não vai para o Higgsfield.
 - **Revisões:** antes de publicar algo com login, pagamento ou dados pessoais, rode o subagente `revisor-seguranca`; antes de publicar oferta, campanha ou site de cliente, o `revisor-legal`.
