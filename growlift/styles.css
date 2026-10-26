@@ -295,16 +295,5 @@ section { position: relative; }
 .reveal.in { opacity: 1; transform: none; }
 .reveal.d2 { transition-delay: 0.1s; } .reveal.d3 { transition-delay: 0.2s; }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  .reveal { opacity: 1; transform: none; }
-  .ramos { height: auto; }
-  .ramos-pin { position: relative; height: auto; padding: 120px 0 80px; }
-  .slides { overflow-x: auto; scroll-snap-type: x mandatory; }
-  .slides img { scroll-snap-align: start; }
-  .track-bar i { transform: none; }
-  .lift { height: auto; }
-  .lift-pin { position: relative; }
-  .lift-steps li { opacity: 1; transform: none; }
-}
+/* The animations run for everyone, "reduce motion" included: the owners want the site to move everywhere,
+   and the big ones (the mark, the trades) follow the visitor's own scroll. */

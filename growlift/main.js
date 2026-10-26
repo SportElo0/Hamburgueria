@@ -7,11 +7,18 @@
 
   document.getElementById('ano').textContent = String(new Date().getFullYear());
 
-  // Hero video: hold the still poster for people who ask for less motion.
+  // Hero video: always plays (the owners want the motion everywhere). iPhones in Low Power Mode
+  // block autoplay, so the first touch or scroll starts it.
   const heroVideo = document.querySelector('.hero-video');
-  if (heroVideo && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    heroVideo.removeAttribute('autoplay');
-    heroVideo.pause();
+  if (heroVideo) {
+    const play = () => heroVideo.play().catch(() => {});
+    play();
+    const kick = () => {
+      play();
+      if (!heroVideo.paused) ['touchstart', 'scroll', 'click'].forEach((t) => window.removeEventListener(t, kick));
+    };
+    ['touchstart', 'scroll', 'click'].forEach((t) => window.addEventListener(t, kick, { passive: true }));
+    document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && play());
   }
 
   // Reveal blocks as they enter the screen; the site preview and the x-ray start their animation then.
@@ -39,7 +46,6 @@
     const canvas = lift.querySelector('.lift-canvas');
     const ctx = canvas.getContext('2d');
     const steps = lift.querySelectorAll('.lift-steps li');
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const FRAMES = 96;
     const set = window.innerWidth / window.innerHeight < 1 ? 'm' : 'd';
     const frames = new Array(FRAMES);
@@ -81,9 +87,9 @@
       return run > 0 ? Math.min(1, Math.max(0, -r.top / run)) : 1;
     };
     const update = () => {
-      target = reduced ? 1 : progress();
+      target = progress();
       if (!raf) raf = requestAnimationFrame(tick);
-      if (!reduced) steps.forEach((li, n) => li.classList.toggle('on', target >= [0, 0.36, 0.68][n]));
+      steps.forEach((li, n) => li.classList.toggle('on', target >= [0, 0.36, 0.68][n]));
     };
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -105,7 +111,6 @@
     const start = async () => {
       if (started) return;
       started = true;
-      if (reduced) return load(FRAMES - 1).then(update);
       // Every 8th frame first, so the whole scroll has something to show quickly, then the rest.
       const order = [];
       for (let step of [8, 4, 2, 1]) for (let i = 0; i < FRAMES; i += step) if (!order.includes(i)) order.push(i);
@@ -125,14 +130,14 @@
       }, { rootMargin: '150% 0px' });
       near.observe(lift);
     } else start();
-    shown = target = reduced ? 1 : progress();
+    shown = target = progress();
     update();
   }
 
   // Ramos: the section holds still while the browser slides sideways through one site per trade;
   // each site rests a moment, and the word in the title follows the site on screen.
   const ramos = document.getElementById('ramos');
-  if (ramos && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (ramos) {
     const slides = ramos.querySelector('.slides');
     const imgs = slides.querySelectorAll('img');
     const words = ramos.querySelector('.spin .track');
