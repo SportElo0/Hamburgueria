@@ -39,7 +39,7 @@ ambiente dos projetos no Vercel, não no repositório.
   esgotados num toque, aviso pronto no WhatsApp, relatório (`/relatorio`), clientes e
   campanhas (`/clientes`).
 - Regras de código em `plataforma/src/lib/ordering.ts` (puro) e `orders.ts`, `customers.ts`.
-- Testes: `cd plataforma && npx vitest run` (93 testes). Ponta a ponta local:
+- Testes: `cd plataforma && npx vitest run` (95 testes). Ponta a ponta local:
   `plataforma/scripts/e2e/README.md`.
 
 ## Conteúdos da Growlift no painel

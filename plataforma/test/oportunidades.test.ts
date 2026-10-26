@@ -6,11 +6,14 @@ import { useFileStorage } from '@/lib/storage';
 import { csv, estimar, lerLink, linhasCsv, naCidade, textoDaBusca } from '@/lib/oportunidades/regras';
 import { mascaraBusca, mascaraDetalhes } from '@/lib/oportunidades/places';
 import { executarPesquisa, estimarPesquisa, listarLeads, listarPesquisas, revisar, usoDoMes, verAoVivo } from '@/lib/oportunidades/dados';
-import type { Checagem } from '@/lib/oportunidades/site';
+import { checarLink, ipInterno, lookupPublico, type Abertura, type Checagem } from '@/lib/oportunidades/site';
 
-vi.mock('node:dns/promises', () => ({
-  lookup: vi.fn(async (host: string) => (host === 'interno.exemplo.com.br' ? [{ address: '10.0.0.5', family: 4 }] : [{ address: '93.184.216.34', family: 4 }])),
-}));
+/** Fake DNS: one name answers with an internal address, everything else with a public one. */
+vi.mock('node:dns', () => {
+  const lookup = (host: string, _opts: unknown, cb: (e: Error | null, a: { address: string; family: number }[]) => void) =>
+    cb(null, host === 'interno.exemplo.com.br' ? [{ address: '10.0.0.5', family: 4 }] : [{ address: '93.184.216.34', family: 4 }]);
+  return { default: { lookup }, lookup };
+});
 
 const CHAVE = 'chave-de-teste-nao-real';
 const pedido = { cidade: 'Ilhabela', uf: 'SP', bairro: '', segmento: 'barbearias', paginas: 2 };
@@ -200,33 +203,46 @@ describe('pesquisa paga', () => {
 });
 
 describe('checagem do site', () => {
-  const html = (body: string, extra = {}) => new Response(body, { status: 200, headers: { 'Content-Type': 'text/html', ...extra } });
   const conteudo = `<p>${'Cardápio e horários da casa. '.repeat(20)}</p>`;
+  const pagina = (html: string, status = 200, location: string | null = null): Abertura => ({ status, location, html });
 
   it('site bom, sem HTTPS, sem celular, parado e redirecionando para o Instagram', async () => {
-    const { checarLink } = await import('@/lib/oportunidades/site');
-    const respostas: Record<string, () => Response> = {
-      'https://bom.exemplo.com.br/': () => html(`<meta name="viewport" content="width=device-width">${conteudo}`),
-      'http://velho.exemplo.com.br/': () => html(conteudo),
-      'https://parado.exemplo.com.br/': () => html('<meta name="viewport" content="x"><h1>Este domínio está à venda</h1>'),
-      'https://pulo.exemplo.com.br/': () => new Response(null, { status: 301, headers: { Location: 'https://www.instagram.com/exemplo' } }),
-      'https://erro.exemplo.com.br/': () => new Response('x', { status: 500 }),
+    const respostas: Record<string, Abertura> = {
+      'https://bom.exemplo.com.br/': pagina(`<meta name="viewport" content="width=device-width">${conteudo}`),
+      'http://velho.exemplo.com.br/': pagina(conteudo),
+      'https://parado.exemplo.com.br/': pagina('<meta name="viewport" content="x"><h1>Este domínio está à venda</h1>'),
+      'https://pulo.exemplo.com.br/': pagina('', 301, 'https://www.instagram.com/exemplo'),
+      'https://erro.exemplo.com.br/': pagina('x', 500),
     };
-    vi.stubGlobal('fetch', vi.fn(async (u: URL | string) => respostas[String(u)]()));
-    expect((await checarLink('https://bom.exemplo.com.br')).categoria).toBe('site-proprio');
-    const velho = await checarLink('velho.exemplo.com.br');
+    const abrir = async (u: URL) => respostas[String(u)];
+    expect((await checarLink('https://bom.exemplo.com.br', abrir)).categoria).toBe('site-proprio');
+    const velho = await checarLink('velho.exemplo.com.br', abrir);
     expect(velho.categoria).toBe('site-com-problemas');
     expect(velho.sinais.join()).toMatch(/HTTPS.*celular/);
-    expect((await checarLink('https://parado.exemplo.com.br')).sinais.join()).toMatch(/parada/);
-    expect(await checarLink('https://pulo.exemplo.com.br')).toEqual({ categoria: 'so-rede-social', sinais: ['O site cadastrado redireciona para o Instagram.'] });
-    expect((await checarLink('https://erro.exemplo.com.br')).sinais).toEqual(['O site responde com erro 500.']);
+    expect((await checarLink('https://parado.exemplo.com.br', abrir)).sinais.join()).toMatch(/parada/);
+    expect(await checarLink('https://pulo.exemplo.com.br', abrir)).toEqual({ categoria: 'so-rede-social', sinais: ['O site cadastrado redireciona para o Instagram.'] });
+    expect((await checarLink('https://erro.exemplo.com.br', abrir)).sinais).toEqual(['O site responde com erro 500.']);
   });
 
-  it('não abre endereços internos', async () => {
-    const { checarLink } = await import('@/lib/oportunidades/site');
-    const fetchMock = vi.fn();
-    vi.stubGlobal('fetch', fetchMock);
-    for (const u of ['http://127.0.0.1/', 'http://169.254.169.254/latest', 'http://localhost:3000', 'https://interno.exemplo.com.br', 'http://[::1]/']) expect((await checarLink(u)).categoria).toBe('incerta');
-    expect(fetchMock).not.toHaveBeenCalled();
+  it('não abre endereços internos, nem escritos em IPv6 nem depois de redirecionar', async () => {
+    const abrir = vi.fn(async () => pagina('', 302, 'http://[::ffff:a9fe:a9fe]/latest'));
+    for (const u of ['http://127.0.0.1/', 'http://169.254.169.254/latest', 'http://localhost:3000', 'http://[::1]/', 'http://[::ffff:127.0.0.1]/', 'http://[::ffff:7f00:1]/', 'http://[64:ff9b::a9fe:a9fe]/', 'http://[2002:7f00:1::]/', 'http://intranet/'])
+      expect((await checarLink(u, abrir)).categoria).toBe('incerta');
+    expect(abrir).not.toHaveBeenCalled();
+    // A public site that redirects to an internal address stops at the redirect.
+    expect((await checarLink('https://publico.exemplo.com.br', abrir)).categoria).toBe('incerta');
+    expect(abrir).toHaveBeenCalledTimes(1);
+  });
+
+  it('classifica endereços internos e públicos em IPv4 e IPv6', () => {
+    for (const ip of ['10.1.2.3', '192.168.0.1', '172.20.0.1', '100.64.0.1', '198.18.0.1', '192.0.2.5', '0.0.0.0', '::', '::1', '::ffff:7f00:1', '::7f00:1', '::ffff:10.0.0.1', '64:ff9b::7f00:1', '2002:a9fe:a9fe::1', 'fc00::1', 'fd12::1', 'fe80::1', 'fec0::1', 'ff02::1', '2001:db8::1', '2001:0:1::1'])
+      expect(ipInterno(ip), ip).toBe(true);
+    for (const ip of ['93.184.216.34', '8.8.8.8', '2606:4700::1111', '::ffff:8.8.8.8', '2002:0808:0808::1']) expect(ipInterno(ip), ip).toBe(false);
+  });
+
+  it('a conexão recusa nomes que o DNS manda para endereço interno', async () => {
+    const resposta = (host: string) => new Promise<{ err: NodeJS.ErrnoException | null; addr: unknown }>((r) => lookupPublico(host, { all: true }, (err, addr) => r({ err, addr })));
+    expect((await resposta('interno.exemplo.com.br')).err?.code).toBe('EINTERNO');
+    expect((await resposta('publico.exemplo.com.br')).addr).toEqual([{ address: '93.184.216.34', family: 4 }]);
   });
 });

@@ -9,6 +9,7 @@ import {
   FONTE_IDS,
   FONTES_MINIMAS,
   MAX_PAGINAS,
+  PLACE_ID,
   SEGMENTO_IDS,
   SITUACAO_IDS,
   VERIFICACAO_IDS,
@@ -216,6 +217,7 @@ export async function executarPesquisa(raw: unknown, aprovadas: number, por: str
 
 /** Google's current data for one place, for the review screen. Counted against the month's cap; never stored. */
 export async function verAoVivo(placeId: string, now = new Date()): Promise<LugarAoVivo> {
+  if (!PLACE_ID.test(placeId)) throw new LeadError('Identificador de lugar inválido.');
   if (!chaveConfigurada()) throw new LeadError('A chave GOOGLE_MAPS_API_KEY não está configurada na Vercel.');
   if (!(await take('places', 'detalhes', limites().detalhes, mes(now)))) throw new LeadError(`O limite do mês para consultar lugares (${limites().detalhes}) acabou.`);
   return detalhesDoLugar(placeId, telefoneLiberado());
@@ -235,6 +237,7 @@ export type RevisaoInput = z.input<typeof revisaoSchema>;
 
 /** The team's review of one place. "Sem website" is only confirmed after enough other sources were checked. */
 export async function revisar(placeId: string, raw: unknown, por: string, now = new Date()): Promise<Lead> {
+  if (!PLACE_ID.test(placeId)) throw new LeadError('Lugar não encontrado.');
   const parsed = revisaoSchema.safeParse(raw);
   if (!parsed.success) throw new LeadError(parsed.error.issues[0]?.message || 'Confira a revisão.');
   const r = parsed.data;
@@ -244,7 +247,7 @@ export async function revisar(placeId: string, raw: unknown, por: string, now = 
   if (r.verificacao.situacao === 'encontrou-site' && r.categoria === 'sem-site') throw new LeadError('Se acharam um site, mude a categoria (website próprio ou com problemas).');
   let salvo: Lead | undefined;
   await atualizar<Record<string, Lead>>(LUGARES, {}, (atual) => {
-    const antes = atual[placeId];
+    const antes = Object.hasOwn(atual, placeId) ? atual[placeId] : undefined;
     if (!antes) throw new LeadError('Lugar não encontrado.');
     const mudouVerificacao = r.verificacao.situacao !== antes.verificacao.situacao || fontes.join() !== antes.verificacao.fontes.join() || r.verificacao.links !== antes.verificacao.links;
     salvo = {

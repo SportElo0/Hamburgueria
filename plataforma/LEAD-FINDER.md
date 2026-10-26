@@ -24,7 +24,7 @@ Só a equipe da Growlift entra; os logins de loja não veem esta aba.
      - o site não respondeu a tempo;
      - o link é estranho;
      - o Google marca o lugar como fechado definitivamente.
-5. **Checagem do site:** uma única visita à página inicial, como uma pessoa abrindo o link. Não abre outras páginas nem guarda o conteúdo. Recusa endereços internos (proteção contra SSRF), inclusive depois de redirecionamentos.
+5. **Checagem do site:** uma única visita à página inicial, como uma pessoa abrindo o link. Não abre outras páginas nem guarda o conteúdo. Recusa endereços internos (proteção contra SSRF), também em IPv6, depois de redirecionamentos e no momento da conexão.
 6. **Verificação manual:** "Sem website" só vale como confirmado depois de a equipe marcar pelo menos **2 fontes públicas** consultadas:
    - busca no Google;
    - Instagram;
@@ -116,7 +116,7 @@ Para incluir outro segmento, acrescente uma linha em `SEGMENTOS`, em `src/lib/op
 - `src/lib/oportunidades/site.ts`: checagem da página inicial, com proteção contra endereços internos.
 - `src/lib/oportunidades/dados.ts`: aprovação, limite do mês, pesquisa, remoção de repetidos, revisão. Os dados ficam no Blob, em `oportunidades/lugares.json` e `oportunidades/pesquisas.json`; os contadores em `limites/places/<AAAA-MM>.json`.
 - `src/app/painel/oportunidades/`: página, ações e `exportar/route.ts` (CSV).
-- `test/oportunidades.test.ts`: 15 testes com o Google e os sites simulados. Nenhum teste chama a API de verdade.
+- `test/oportunidades.test.ts`: 17 testes com o Google e os sites simulados. Nenhum teste chama a API de verdade.
 
 ## Ferramenta de documentação
 
