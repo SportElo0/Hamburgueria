@@ -73,7 +73,7 @@ Arquivo final: H.264 High, 1080×1920, 30 fps, 750 quadros, 25,0 s, cerca de 10,
 | --- | --- | --- |
 | **A1 (alta)** | O Chapa 77 mostrava fotos recortadas do cardápio impresso do negócio real, os 4 preços reais (R$ 39,90 / 69,90 / 58,90 / 58,90), o slogan e a faixa "Burgers ★ Steaks ★ Fries ★ Shakes" | Na captura, as fotos são trocadas pelos renders 3D da Growlift (`public/renders`). Os preços ficam escondidos, o slogan vira "Hambúrguer na chapa, do jeito da casa." e a faixa sai. Capturas, recortes, gravação e vídeo foram refeitos |
 | **A2 (alta até provar)** | A foto "Camada por camada" e a cena da bebida da Fornada não têm origem comprovada | A Fornada aparece só pela tela de reserva do café, com toque no dia, rolagem e dois produtos adicionados. Não há nenhuma foto do site |
-| B1 | O selo aparecia por 1 a 2 s | O selo fica na tela de 3,0 a 19,4 s |
+| B1 | O selo aparecia por 1 a 2 s | O selo fica na tela de 3,0 a 20,9 s |
 | B2 | Subir o aviso na legenda | A legenda abre com "Quatro projetos conceito, com nomes fictícios. Não são clientes." (`05-reels/roteiros.md`) |
 | B3 | Rótulo de IA | A legenda diz que o surfista foi gerado com IA. Ao postar, ativar o "Rótulo de IA" do Instagram |
 | B4 | Música de conta comercial | Instrução corrigida em `05-reels/roteiros.md` |

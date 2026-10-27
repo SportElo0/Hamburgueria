@@ -40,7 +40,7 @@ Nenhuma transição funde duas imagens diferentes no mesmo retângulo: onde isso
 
 ## Selo de projeto conceito
 
-"Projeto conceito · nome fictício" é uma pílula escura translúcida no pé da área segura (x 96, y 1530), visível de 3,0 a 19,4 s. As legendas de cada projeto ficam logo acima dela.
+"Projeto conceito · nome fictício" é uma pílula escura translúcida no pé da área segura (x 96, y 1530), visível de 3,0 a 20,9 s. As legendas de cada projeto ficam logo acima dela.
 
 ## Higgsfield
 

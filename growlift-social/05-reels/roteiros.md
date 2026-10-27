@@ -205,7 +205,7 @@ Conheça o plano Lift no link da bio.
   - Fornada, padaria: a reserva do café da manhã (escolher o dia e os produtos).
 - **Passagens:** cada uma nasce de algo do próprio site. O botão "Reserve minha peça" vira a janela do Chapa 77, o verde-água leva ao Swell Club e o creme leva à Fornada.
 - **Assinatura, 21 a 25 s:** a marca Growlift, "Sua marca merece mais.", "Peça seu diagnóstico grátis" e growlift.com.br.
-- **Marcação:** do primeiro site até a assinatura, fica na tela o selo "Projeto conceito · nome fictício". Nomes, logos, endereços e a região dos negócios originais foram trocados na página antes da gravação.
+- **Marcação:** do primeiro site até os projetos virarem a marca, fica na tela o selo "Projeto conceito · nome fictício". Nomes, logos, endereços e a região dos negócios originais foram trocados na página antes da gravação.
 - **Imagens (revisão legal de 27/10):**
   - Os lanches do Chapa 77 são renders 3D da própria Growlift. As fotos do site original, recortadas do cardápio impresso do negócio real, não aparecem. Os preços e o slogan do negócio real foram tirados.
   - A Fornada aparece só pela tela de reserva, sem fotos (as fotos do site não têm origem comprovada).

@@ -387,7 +387,7 @@ window.render = async (t) => {
   }
 
   // the concept label, from the first site to the moment the four projects become the mark
-  put('tagPC', { o: P(t, 3.0, 3.25, 'lin') * (1 - P(t, 19.25, 19.45, 'lin')) });
+  put('tagPC', { o: P(t, 3.0, 3.25, 'lin') * (1 - P(t, 20.6, 20.9, 'lin')) });
 
   // ---- 13 · signature (21.0–25.0)
   {

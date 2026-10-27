@@ -22,7 +22,7 @@ São 13 momentos: 8 cenas e 5 transições. Os quadros de `renders/quadros/` for
 | 12 | 19,4–21,0 | Transição 5 · os projetos viram a marca | — | o símbolo da Growlift |
 | 13 | 21,0–25,0 | Assinatura | GROWLIFT · Sua marca merece mais. · Peça seu diagnóstico grátis · growlift.com.br | loop com o 01 |
 
-Todo texto descritivo é o que o site realmente tem. O selo "Projeto conceito · nome fictício" fica na tela de 3,0 a 19,4 s, do primeiro site até os projetos virarem a marca. Os lanches do Chapa 77 são renders 3D da Growlift, sem preços; a Fornada aparece só pela tela de reserva.
+Todo texto descritivo é o que o site realmente tem. O selo "Projeto conceito · nome fictício" fica na tela de 3,0 a 20,9 s, do primeiro site até os projetos virarem a marca. Os lanches do Chapa 77 são renders 3D da Growlift, sem preços; a Fornada aparece só pela tela de reserva.
 
 ## Segundo a segundo
 
