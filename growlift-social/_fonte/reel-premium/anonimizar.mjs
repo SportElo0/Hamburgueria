@@ -3,31 +3,50 @@
 // are not touched.   node growlift-social/_fonte/reel-premium/anonimizar.mjs
 import { chromium } from 'playwright-core';
 import fs from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'capturas');
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const OUT = path.join(HERE, 'capturas');
+const RENDERS = path.resolve(HERE, '../../../public/renders');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 
 // [pattern, replacement] applied to every text node and attribute that shows text.
 export const SITES = {
   salinho: {
     url: 'https://semvo-juquehy.pages.dev/pt/?loja=juquehy', // straight into the shop, past the store picker
-    swap: [[/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/Maresias/g, 'Praia'], [/MARESIAS/g, 'PRAIA'], [/Av\. Dr\. Francisco Loup/g, 'orla'], [/SemvØ Clothing/gi, 'Salinho'], [/SEMVØ CLOTHING/g, 'SALINHO'], [/SEMVØ/g, 'SALINHO'], [/SemvØ/g, 'Salinho'], [/Farias Boulevard/g, 'centro'], [/JUQUEHY · MARESIAS/g, 'LITORAL'], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'Litoral'], [/São Sebastião/g, 'Brasil']],
+    swap: [[/, SÃO SEBASTIÃO/g, ''], [/SÃO SEBASTIÃO/g, 'LITORAL'], [/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/Maresias/g, 'Praia'], [/MARESIAS/g, 'PRAIA'], [/Av\. Dr\. Francisco Loup/g, 'orla'], [/SemvØ Clothing/gi, 'Salinho'], [/SEMVØ CLOTHING/g, 'SALINHO'], [/SEMVØ/g, 'SALINHO'], [/SemvØ/g, 'Salinho'], [/Farias Boulevard/g, 'centro'], [/JUQUEHY, LITORAL NORTE/g, 'LITORAL'], [/JUQUEHY · MARESIAS/g, 'LITORAL'], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'Litoral'], [/São Sebastião/g, 'Brasil'], [/LITORAL NORTE/g, 'LITORAL'], [/Litoral Norte/g, 'litoral']],
     logos: ['semvo-logo'],
     logoText: 'Salinho',
     css: '.brand img,.showroom img[data-anon],img[src*="semvo-logo"]{display:none!important}.brand::before{display:none!important}.brand::after{content:"Salinho";font:700 26px/1 Georgia,serif;color:#ece6da;letter-spacing:.01em}',
   },
   chapa77: {
     url: 'https://downtown-burger-gilt.vercel.app',
-    swap: [[/[®™]/g, ''], [/DOWNTOWN/g, 'CHAPA 77'], [/Downtown/g, 'Chapa 77'], [/HOLYFIELD/gi, 'DUPLO 77'], [/KILL BILL/gi, 'DA CASA'], [/AUSTRALIAN CHEDDAR/gi, 'CHEDDAR DUPLO']],
+    swap: [[/burguer artesanal feito com qualidade/gi, 'hambúrguer na chapa, do jeito da casa'], [/[®™]/g, ''], [/DOWNTOWN/g, 'CHAPA 77'], [/Downtown/g, 'Chapa 77'], [/HOLYFIELD/gi, 'DUPLO 77'], [/KILL BILL/gi, 'DA CASA'], [/AUSTRALIAN CHEDDAR/gi, 'CHEDDAR DUPLO'],
+      [/Burger artesanal feito com qualidade\./gi, 'Hambúrguer na chapa, do jeito da casa.']], // the real shop's slogan
     logos: [],
     hideSvgWith: /DOWNTOWN|STEAKS|skyline/i, // the round skyline badge is the real brand's mark
     logoText: 'CHAPA 77',
+    // The site's burger photos were cut from the real shop's printed menu: Growlift's own 3D renders of the
+    // same items are served instead (public/renders, "procedural 3D render, not a photograph").
+    photos: [[/\/photos\/[a-z0-9-]+(\.sm)?\.webp(\?.*)?$/, (url) => {
+      const id = url.match(/\/photos\/([a-z0-9-]+)/)[1];
+      const burger = path.join(RENDERS, 'burgers', id, 'hero.webp'), prop = path.join(RENDERS, 'props', `${id}.webp`);
+      return existsSync(burger) ? burger : existsSync(prop) ? prop : null;
+    }]],
+    // The real shop's prices and its "Burgers ★ Steaks ★ Fries ★ Shakes" strip stay out of the picture.
+    fix: () => {
+      for (const s of document.querySelectorAll('.sr-only')) if (/^R\$\s*\d/.test(s.textContent.trim())) s.parentElement.style.visibility = 'hidden';
+      // the rotated strip at the hero's right edge (the marquee further down the page is not filmed)
+      for (const e of document.querySelectorAll('#inicio p, #inicio div')) {
+        if (/^burgers★?steaks★?fries★?shakes$/i.test(e.textContent.replace(/[\s·•*]/g, ''))) e.style.visibility = 'hidden';
+      }
+    },
   },
   swellclub: {
     url: 'https://surflife-juquehy.pages.dev/',
-    swap: [[/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/SURFLIFE/g, 'SWELL CLUB'], [/SurfLife|Surflife/g, 'Swell Club'], [/JUQUEHY, SP/g, 'LITORAL NORTE'], [/JUQUEHY · /g, ''], [/ · JUQUEHY/g, ''], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'no litoral'], [/São Sebastião/g, 'Litoral Norte']],
+    swap: [[/SÃO SEBASTIÃO/g, 'LITORAL'], [/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/SURFLIFE/g, 'SWELL CLUB'], [/SurfLife|Surflife/g, 'Swell Club'], [/JUQUEHY, SP/g, 'LITORAL'], [/JUQUEHY · /g, ''], [/ · JUQUEHY/g, ''], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'no litoral'], [/São Sebastião/g, 'Litoral Norte'], [/LITORAL NORTE/g, 'LITORAL'], [/Litoral Norte/g, 'litoral']],
     logos: ['logo-original'],
     // The hero photo is the shop owner (a real person): swapped for a generated generic surfer (08-prompts).
     photos: [[/surf-owner-(desktop|mobile)\.webp/, 'v2/assets/swellclub/foto-generica/surfista-generico.png']],
@@ -36,7 +55,7 @@ export const SITES = {
   },
   fornada: {
     url: 'https://feito-a-mao-juquehy.pages.dev',
-    swap: [[/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/Feito à Mão/g, 'Fornada'], [/Feito à mão\./g, 'Fornada.'], [/Cibele e Renato Costa/g, 'quem faz os pães'], [/Cibele e Renato/g, 'Quem faz os pães'], [/Juquehy/g, 'no litoral'], [/JUQUEHY/g, 'LITORAL']],
+    swap: [[/São Sebastião/g, 'Litoral'], [/SÃO SEBASTIÃO/g, 'LITORAL'], [/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/Feito à Mão/g, 'Fornada'], [/Feito à mão\./g, 'Fornada.'], [/Cibele e Renato Costa/g, 'quem faz os pães'], [/Cibele e Renato/g, 'Quem faz os pães'], [/Juquehy/g, 'no litoral'], [/JUQUEHY/g, 'LITORAL'], [/LITORAL NORTE/g, 'LITORAL'], [/Litoral Norte/g, 'litoral']],
     logos: ['feito-logo'],
     logoText: '',
   },
@@ -45,7 +64,11 @@ export const SITES = {
 /** Serves the replacement photos instead of the site's own files; call before page.goto(). */
 export async function swapPhotos(ctx, site) {
   for (const [re, file] of site.photos || []) {
-    await ctx.route(re, (route) => route.fulfill({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), file), contentType: 'image/png' }));
+    await ctx.route(re, (route) => {
+      const local = typeof file === 'function' ? file(route.request().url()) : path.join(HERE, file);
+      if (!local) return route.continue();
+      return route.fulfill({ path: local, contentType: local.endsWith('.webp') ? 'image/webp' : 'image/png' });
+    });
   }
 }
 
@@ -72,6 +95,7 @@ export async function anonymize(page, site) {
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     }
   }, { swap: site.swap.map(([re, r]) => [re.source, re.flags, r]), logos: site.logos, logoText: site.logoText, logoStyle: site.logoStyle, hideSvgWith: site.hideSvgWith?.source });
+  if (site.fix) await page.evaluate(site.fix);
 }
 
 // Run directly: the hero and full-page captures. Imported: only SITES and anonymize().

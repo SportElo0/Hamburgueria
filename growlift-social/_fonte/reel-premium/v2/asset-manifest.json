@@ -763,6 +763,17 @@
       ]
     },
     {
+      "arquivo": "assets/fornada/pc-cafe-selecao.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"cafe-selecao\" inteira (computador 2×)",
+      "tamanho_px": [
+        994,
+        1472
+      ]
+    },
+    {
       "arquivo": "assets/fornada/pc-cafe.png",
       "projeto": "Fornada",
       "origem": "https://feito-a-mao-juquehy.pages.dev",
@@ -1035,11 +1046,11 @@
       "arquivo": "assets/_recortes/chapa77-burger.png",
       "projeto": "chapa77",
       "origem": "assets/chapa77/pc4x-hero.png",
-      "o_que_e": "lanche do hero sobre o vermelho",
-      "como": "recorte da captura (caixa CSS [430, 290, 990, 760], 4×), sem alteração",
+      "o_que_e": "lanche do hero sobre o vermelho (render 3D da Growlift)",
+      "como": "recorte da captura (caixa CSS [430, 280, 990, 728], 4×), sem alteração",
       "tamanho_px": [
         2240,
-        1880
+        1792
       ]
     },
     {
@@ -1062,6 +1073,28 @@
       "tamanho_px": [
         1040,
         1560
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-reserva-titulo.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/pc-cafe.png",
+      "o_que_e": "título \"Reserve seu café da manhã.\"",
+      "como": "recorte da captura (caixa CSS [100, 115, 600, 310], 2×), sem alteração",
+      "tamanho_px": [
+        1000,
+        390
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-reserva-cel.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/cel-cafe.png",
+      "o_que_e": "topo da reserva do café no celular",
+      "como": "recorte da captura (caixa CSS [0, 0, 390, 844], 3×), sem alteração",
+      "tamanho_px": [
+        1170,
+        2532
       ]
     },
     {

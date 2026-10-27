@@ -9,9 +9,9 @@ As telas dos sites não são imagens paradas. São **gravações quadro a quadro
 | Gravação | O que mostra | Quadros |
 | --- | --- | --- |
 | `rec-salinho` | celular: dois toques nas miniaturas (camisa → short → calça), a página muda de cor | 69 |
-| `rec-chapa77` | computador: a história do lanche na rolagem (vermelho, laranja, verde, roxo, verde-água, lanche em camadas) | 78 |
+| `rec-chapa77` | computador: a história do lanche na rolagem (vermelho, laranja, verde, roxo, verde-água, lanche em camadas), com os renders 3D da Growlift no lugar das fotos do cardápio e sem preços | 78 |
 | `rec-swellclub` | celular: "A vida pede mar." → "A gente vive isso.", com o surfista genérico no lugar do dono | 66 |
-| `rec-fornada` | celular: a bebida quente caindo (animação do site) e os textos mudando | 96 |
+| `rec-fornada` | celular: a reserva do café da manhã, com toque no dia 30, rolagem até os produtos e dois "Adicionar" (só interface) | 96 |
 
 | | Motor próprio (usado) | HyperFrames | Remotion | Lemo-Opuscar |
 | --- | --- | --- | --- | --- |
@@ -33,10 +33,14 @@ As telas dos sites não são imagens paradas. São **gravações quadro a quadro
 | 1 | 01 → **02** → 03 | o **ponto azul** de MAIS.: medido na própria fonte, cresce exatamente a partir dele e vira a tela arredondada | retângulo animado (posição, tamanho, cantos), anel azul que some | 2,0–2,8 s |
 | 2 | 05 → **06** → 07 | o **botão "Reserve minha peça"** sobe, ocupa a largura e se abre para baixo numa janela vermelha com o lanche | o mesmo elemento muda de tamanho; a janela vira a carta da frente do 07 | 8,0–8,8 s |
 | 3 | 07 → **08** → 09 | o **verde-água**: o último capítulo do Chapa 77 e a seção de pranchas da Swell Club têm quase a mesma cor | a carta cresce até o lanche em camadas tomar a tela (sem fusão de imagens); linha diagonal com `clip-path`; zoom na prancha amarela leva à prancha amarela do surfista | 11,3–12,9 s |
-| 4 | 09 → **10** → 11 | o **creme**: rodapé da Swell Club (#f3f0e5) e página da Fornada (#f4ede0) | o último cartão do carrossel cresce até cobrir a tela, com o SWELL gigante dentro dele; SWELL sai pelo alto e o bloco da Fornada sobe no mesmo creme | 14,65–16,2 s |
+| 4 | 09 → **10** → 11 | o **creme**: rodapé da Swell Club (#f3f0e5) e página da Fornada (#f4ede0) | o último cartão do carrossel cresce até cobrir a tela, com o SWELL gigante dentro dele; SWELL sai pelo alto e o título da reserva e o cartão da seleção sobem no mesmo creme | 14,65–16,2 s |
 | 5 | 11 → **12** → 13 | o **símbolo da Growlift** | a página da Fornada encolhe para uma grade 2×2; o vetor oficial da marca recorta as quatro telas e se enche de azul | 19,3–21,0 s |
 
 Nenhuma transição funde duas imagens diferentes no mesmo retângulo: onde isso aparecia nos testes (computador → celular e Chapa 77 → verde-água), o movimento foi refeito.
+
+## Selo de projeto conceito
+
+"Projeto conceito · nome fictício" é uma pílula escura translúcida no pé da área segura (x 96, y 1530), visível de 3,0 a 19,4 s. As legendas de cada projeto ficam logo acima dela.
 
 ## Higgsfield
 

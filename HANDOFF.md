@@ -93,7 +93,8 @@ El Patron (aguardando o dono):
   só na tela da loja e na impressão.
 
 Reel premium "Sua marca merece mais." (`growlift-social/05-reels/09-…`, fonte em `growlift-social/_fonte/reel-premium/v2/`):
-- Pronto, aguardando a aprovação dos sócios. Vai para o painel no próximo `/publicar painel` (as miniaturas da aba Conteúdos passaram para 960 px).
+- Pronto e revisado pelo `revisor-legal`, com as correções em `v2/audit.md`, aguardando a aprovação dos sócios. Pendências deles: busca dos nomes no INPI, "ok" por escrito dos quatro donos (recomendado), rótulo de IA e música comercial ao postar.
+- O repositório no GitHub é **público** e os commits antigos têm a foto do dono da Swell Club. Recomendação: deixar o repositório privado. Vai para o painel no próximo `/publicar painel` (as miniaturas da aba Conteúdos passaram para 960 px).
 - Os quatro projetos aparecem com nome fictício (Salinho, Chapa 77, Swell Club, Fornada). Para usar os nomes reais é preciso autorização por escrito de cada negócio.
 - A foto do dono da Swell Club nunca entra: a captura troca por um surfista gerado por IA (`swapPhotos`). A prévia v1 (`_fonte/reel-premium/styleframes/`) ainda tem a foto do dono e não deve ser usada.
 

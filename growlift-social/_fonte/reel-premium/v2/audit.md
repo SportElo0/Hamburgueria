@@ -66,3 +66,22 @@ Conferido no MP4, não só na página: quadros a cada 0,5 s e, nas transições,
 | O ponto de MAIS. encostava na coluna de botões do Instagram | MAIS. um pouco menor (320 px) |
 
 Arquivo final: H.264 High, 1080×1920, 30 fps, 750 quadros, 25,0 s, cerca de 10,9 MB, decodifica sem erro.
+
+## Revisão legal (subagente `revisor-legal`, 27/10/2026) e correções
+
+| Ponto | O que o parecer apontou | O que foi feito |
+| --- | --- | --- |
+| **A1 (alta)** | O Chapa 77 mostrava fotos recortadas do cardápio impresso do negócio real, os 4 preços reais (R$ 39,90 / 69,90 / 58,90 / 58,90), o slogan e a faixa "Burgers ★ Steaks ★ Fries ★ Shakes" | Na captura, as fotos são trocadas pelos renders 3D da Growlift (`public/renders`). Os preços ficam escondidos, o slogan vira "Hambúrguer na chapa, do jeito da casa." e a faixa sai. Capturas, recortes, gravação e vídeo foram refeitos |
+| **A2 (alta até provar)** | A foto "Camada por camada" e a cena da bebida da Fornada não têm origem comprovada | A Fornada aparece só pela tela de reserva do café, com toque no dia, rolagem e dois produtos adicionados. Não há nenhuma foto do site |
+| B1 | O selo aparecia por 1 a 2 s | O selo fica na tela de 3,0 a 19,4 s |
+| B2 | Subir o aviso na legenda | A legenda abre com "Quatro projetos conceito, com nomes fictícios. Não são clientes." (`05-reels/roteiros.md`) |
+| B3 | Rótulo de IA | A legenda diz que o surfista foi gerado com IA. Ao postar, ativar o "Rótulo de IA" do Instagram |
+| B4 | Música de conta comercial | Instrução corrigida em `05-reels/roteiros.md` |
+| B5 | Busca no INPI dos nomes fictícios | **Pendente, com vocês** |
+| B6 | "Ok" por escrito dos quatro donos | **Recomendado, com vocês** |
+| B7 | "Litoral Norte" e o nome da cidade | Trocados por "litoral" nos quatro sites |
+| B8 | Pedido de "quero igual ao do vídeo" | Orientação em `05-reels/roteiros.md` |
+| B9 | Foto do dono ainda no repositório | A prévia v1 e as capturas v1 foram refeitas com o surfista genérico. **O repositório no GitHub é público** e os commits antigos ainda têm a foto. Recomendação: deixar o repositório privado. Apagar do histórico exige reescrever o git, e só deve ser feito se vocês pedirem |
+| B10 | `marketing/apresentacao/deck-negocios.html` usa os nomes reais dos sites | Fora deste Reel e não alterado. Vale a mesma regra se for enviado a terceiros |
+
+Ainda contêm material antigo, só para histórico e sem publicar: `keyframes/` (prévia parada da pré-produção, com as fotos do cardápio do Chapa 77 e da Fornada) e os recortes `fornada-folhado`, `fornada-paes` e `fornada-bebida`.

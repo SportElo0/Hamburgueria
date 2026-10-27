@@ -149,7 +149,7 @@
       "tecnica": "escala do botão + máscara em código",
       "origem": [
         "assets/_recortes/salinho-botao.png",
-        "assets/_recortes/chapa77-burger.png"
+        "assets/_recortes/chapa77-burger.png (render 3D da Growlift)"
       ],
       "status": "no vídeo final",
       "momento_do_quadro": 8.6
@@ -171,7 +171,7 @@
       "entrada": "a janela da transição vira a primeira carta",
       "saida": "a carta cresce até o lanche em camadas tomar a tela",
       "preservado": "o verde-água #0c6d69",
-      "tecnica": "gravação real da rolagem do site no computador, na carta da frente (vermelho, laranja, verde, roxo, verde-água); as cartas de trás saem quando a da frente chega na cor delas",
+      "tecnica": "gravação real da rolagem do site no computador, na carta da frente (vermelho, laranja, verde, roxo, verde-água); as cartas de trás saem quando a da frente chega na cor delas; os lanches são os renders 3D da Growlift (as fotos do cardápio do negócio real não entram) e os preços ficam escondidos",
       "origem": [
         "assets/_gravacoes/rec-chapa77 (gravação)",
         "assets/chapa77/pc-historia-2..5.png"
@@ -241,9 +241,9 @@
       "tipo": "transicao",
       "projeto": "Swell Club → Fornada",
       "objetivo": "Trocar a energia: a velocidade do surf desacelera numa página calma e editorial.",
-      "texto": "(dos sites) SWELL · O simples. Extraordinário.",
+      "texto": "(dos sites) SWELL · Reserve seu café da manhã.",
       "cor": "creme #f3f0e5 → #f4ede0 (os dois sites usam quase o mesmo creme)",
-      "composicao": "no mesmo creme, o nome SWELL sai pelo alto enquanto o título e a foto da Fornada sobem para o lugar exato do 11",
+      "composicao": "no mesmo creme, o nome SWELL sai pelo alto enquanto o título da reserva e o cartão da seleção da Fornada sobem",
       "camera": "sobe (tilt) acompanhando a página",
       "profundidade": "letras ao fundo, foto com sombra à frente",
       "entrada": "o cartão creme do rodapé da Swell Club cobre a tela",
@@ -252,8 +252,8 @@
       "tecnica": "troca de página por translação vertical em código; sem crédito",
       "origem": [
         "assets/_recortes/swellclub-letras.png",
-        "assets/_recortes/fornada-titulo.png",
-        "assets/_recortes/fornada-folhado.png"
+        "assets/_recortes/fornada-reserva-titulo.png",
+        "assets/fornada/pc-cafe-selecao.png"
       ],
       "status": "no vídeo final",
       "momento_do_quadro": 15.62
@@ -267,23 +267,22 @@
       "tipo": "cena",
       "projeto": "Fornada",
       "objetivo": "Pausa calorosa: fotografia e tipografia editorial.",
-      "texto": "(do site) O simples. Extraordinário. · Fornada · Padaria · reserva do café da manhã pelo site · Projeto conceito",
+      "texto": "(do site) Reserve seu café da manhã. · Fornada · Padaria · reserva do café da manhã pelo site",
       "cor": "creme #f4ede0 + marrom",
-      "composicao": "título serifado do site no alto; foto do folhado e a legenda Growlift à esquerda; celular à direita com a gravação real da bebida caindo",
+      "composicao": "título da reserva no alto; à esquerda o cartão \"Confira sua seleção\" já preenchido e a legenda Growlift; à direita o celular com a gravação real: toque no dia, rolagem até os produtos, dois \"Adicionar\"",
       "camera": "subida lenta",
       "profundidade": "celular e foto em planos diferentes",
       "entrada": "o título e a foto chegam do 10; o celular sobe",
       "saida": "os quatro projetos se juntam",
       "preservado": "—",
-      "tecnica": "gravação real do site no celular (a bebida é a animação do próprio site)",
+      "tecnica": "gravação real da reserva no celular (só interface; as fotos do site ficaram de fora por não terem origem comprovada)",
       "origem": [
-        "assets/_recortes/fornada-titulo.png",
-        "assets/_recortes/fornada-folhado.png",
-        "assets/_recortes/fornada-folhado-legenda.png",
+        "assets/_recortes/fornada-reserva-titulo.png",
+        "assets/fornada/pc-cafe-selecao.png",
         "assets/_gravacoes/rec-fornada (gravação)"
       ],
       "status": "no vídeo final",
-      "momento_do_quadro": 18.8
+      "momento_do_quadro": 19
     },
     {
       "n": "12",
@@ -309,7 +308,7 @@
         "assets/chapa77/cel-hero.png",
         "assets/chapa77/cel-historia-1.png",
         "assets/swellclub/cel-historia-1.png",
-        "assets/fornada/cel-historia-4.png"
+        "assets/_recortes/fornada-reserva-cel.png"
       ],
       "status": "no vídeo final",
       "momento_do_quadro": 20.3
@@ -341,5 +340,6 @@
     }
   ],
   "video": "renders/sua-marca-merece-mais.mp4",
-  "nota": "Os quadros são tirados do vídeo final (renders/quadros), no momento indicado em momento_do_quadro."
+  "nota": "Os quadros são tirados do vídeo final (renders/quadros), no momento indicado em momento_do_quadro.",
+  "selo": "\"Projeto conceito · nome fictício\" fica na tela de 3,0 a 19,4 s, do primeiro site até os projetos virarem a marca."
 }

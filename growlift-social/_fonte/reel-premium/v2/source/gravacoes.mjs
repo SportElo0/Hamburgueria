@@ -66,6 +66,7 @@ const RECS = {
   // Chapa 77 on the computer: the whole scroll story, red to teal.
   chapa77: {
     ...DESKTOP, duration: 2.6,
+    setup: (page, ctx) => swapPhotos(ctx, SITES.chapa77), // Growlift's 3D renders instead of the menu photos
     async steps(t, page, i) {
       await anon('chapa77')(page, i);
       await scrollStory(page, '#inicio', t, 2.5, 0, 0.995);
@@ -80,19 +81,25 @@ const RECS = {
       await scrollStory(page, '.hero-frame', Math.max(0, t - 0.5), 1.4, 0, 0.62);
     },
   },
-  // Fornada on the phone: the hot chocolate pours while the story text changes.
+  // Fornada on the phone: the breakfast reservation, which is only interface (no photos): a day is chosen,
+  // the page scrolls to the products and two are added (the header's "Seu café" counter goes up).
   fornada: {
     ...MOBILE, duration: 3.2,
     async steps(t, page, i) {
-      if (!page.__warm) {
-        // The pour is a frame sequence drawn on a canvas: run through it once so every frame is cached.
-        page.__warm = true;
-        for (let p = 0; p <= 1; p += 0.05) { await scrollStory(page, '#inicio', p, 1, 0, 1); await page.waitForTimeout(120); }
-        await scrollStory(page, '#inicio', 0, 1, 0, 0);
-        await page.waitForTimeout(600);
-      }
       await anon('fornada')(page, i);
-      await scrollStory(page, '#inicio', t, 3.1, 0.02, 0.66);
+      const top = await page.evaluate(() => document.querySelector('#seu-cafe').getBoundingClientRect().top + scrollY);
+      const p = Math.min(1, Math.max(0, (t - 0.8) / 0.8));
+      await page.evaluate((y) => { document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo({ top: y, behavior: 'instant' }); }, Math.round(top - 70 + 516 * easeInOut(p)));
+      for (const [at, sel] of [[0.45, 'button[aria-label*="30 de outubro"]'], [1.85, 'button[aria-label="Adicionar Croissant à seleção"]'], [2.45, 'button[aria-label="Adicionar Pain au chocolat à seleção"]']]) {
+        const d = t - at;
+        const k = d < -0.2 || d > 0.35 ? 0 : d < 0 ? 1 + d / 0.2 : 1 - d / 0.35;
+        if (k > 0) {
+          const box = await page.evaluate((sel) => { const r = document.querySelector(sel)?.getBoundingClientRect(); return r ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null; }, sel);
+          if (box) await page.evaluate(({ x, y, k }) => window.__tap(x, y, k), { ...box, k });
+        }
+        if (i === Math.round(at * FPS)) await page.evaluate((sel) => document.querySelector(sel)?.click(), sel);
+      }
+      if (t > 2.85) await page.evaluate(() => window.__tap(0, 0, 0));
     },
   },
 };
@@ -104,3 +111,27 @@ for (const [name, rec] of Object.entries(RECS)) {
   console.log(name, count, 'quadros em', path.relative(ROOT, dir));
 }
 await close();
+
+// The Fornada selection card on the computer, filled in the same way (a day and two products), for scene 11.
+if (!only.length || only.includes('fornada')) {
+  const { chromium } = await import('playwright-core');
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, locale: 'pt-BR' });
+  await page.goto(SITES.fornada.url, { waitUntil: 'networkidle' });
+  await anonymize(page, site('fornada'));
+  await page.addStyleTag({ content: SKIP });
+  await page.locator('#seu-cafe').scrollIntoViewIfNeeded();
+  for (const sel of ['button[aria-label*="30 de outubro"]', 'button[aria-label="Adicionar Croissant à seleção"]', 'button[aria-label="Adicionar Pain au chocolat à seleção"]']) {
+    await page.evaluate((sel) => document.querySelector(sel)?.click(), sel);
+    await page.waitForTimeout(400);
+  }
+  await anonymize(page, site('fornada'));
+  const card = page.locator('#seu-cafe aside.selection-summary');
+  await card.scrollIntoViewIfNeeded();
+  // The floating "Adicionado · ver seleção" bar and the sticky header would land on top of the card.
+  await card.evaluate((root) => { for (const e of document.querySelectorAll('body *')) { const p = getComputedStyle(e).position; if ((p === 'fixed' || p === 'sticky') && !root.contains(e) && !e.contains(root)) e.style.visibility = 'hidden'; } });
+  await page.waitForTimeout(900);
+  await card.screenshot({ path: path.join(ROOT, 'assets', 'fornada', 'pc-cafe-selecao.png'), animations: 'disabled' });
+  await browser.close();
+  console.log('fornada: cartão da seleção em assets/fornada/pc-cafe-selecao.png');
+}

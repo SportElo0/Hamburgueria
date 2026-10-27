@@ -40,5 +40,5 @@ Depois de refazer o vídeo, copiem `renders/sua-marca-merece-mais.mp4` e a capa 
 As gravações (`assets/_gravacoes/`) e as capturas brutas não vão para o git, porque são grandes e se refazem com os comandos acima. No git ficam o vídeo, a capa, os quadros, os recortes usados, a marca, as fontes e o surfista genérico.
 
 **Pastas antigas:**
-- `keyframes/` é a prévia parada da pré-produção, já aprovada.
-- A v1 continua intacta em `../styleframes/`. Ela tem a foto do dono da Swell Club: não publicar.
+- `keyframes/` é a prévia parada da pré-produção, anterior à revisão legal. Tem as fotos do cardápio do Chapa 77 e da Fornada: não publicar.
+- A v1 está em `../styleframes/`. Foi refeita em 27/10 com as capturas novas (surfista genérico, lanches 3D) e é só para comparação.

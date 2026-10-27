@@ -17,12 +17,12 @@ São 13 momentos: 8 cenas e 5 transições. Os quadros de `renders/quadros/` for
 | 07 | 8,8–11,6 | Chapa 77 (gravação real) | Chapa 77 · Hamburgueria · a história do lanche contada na rolagem, com cardápio e pedido | o lanche em camadas, no verde-água |
 | 08 | 11,6–12,4 | Transição 3 · Chapa 77 → Swell Club | (do site) os ingredientes do lanche | o mesmo verde-água nos dois sites |
 | 09 | 12,4–15,2 | Swell Club (gravação real) | (do site) A vida pede mar. · A gente vive isso. · Swell Club · Surf shop · pranchas, aluguel por diária e kit montado no site | a prancha amarela; depois, o creme do rodapé |
-| 10 | 15,2–16,2 | Transição 4 · Swell Club → Fornada | (dos sites) SWELL · O simples. Extraordinário. | o mesmo creme nos dois sites |
-| 11 | 16,2–19,4 | Fornada (gravação real) | Fornada · Padaria · reserva do café da manhã pelo site | a página encolhe para a grade |
+| 10 | 15,2–16,2 | Transição 4 · Swell Club → Fornada | (dos sites) SWELL · Reserve seu café da manhã. | o mesmo creme nos dois sites |
+| 11 | 16,2–19,4 | Fornada, a reserva (gravação real) | (do site) Reserve seu café da manhã. · Fornada · Padaria · reserva do café da manhã pelo site | a página encolhe para a grade |
 | 12 | 19,4–21,0 | Transição 5 · os projetos viram a marca | — | o símbolo da Growlift |
 | 13 | 21,0–25,0 | Assinatura | GROWLIFT · Sua marca merece mais. · Peça seu diagnóstico grátis · growlift.com.br | loop com o 01 |
 
-Todo texto descritivo é o que o site realmente tem. Os quatro projetos aparecem com "Projeto conceito · nome fictício".
+Todo texto descritivo é o que o site realmente tem. O selo "Projeto conceito · nome fictício" fica na tela de 3,0 a 19,4 s, do primeiro site até os projetos virarem a marca. Os lanches do Chapa 77 são renders 3D da Growlift, sem preços; a Fornada aparece só pela tela de reserva.
 
 ## Segundo a segundo
 
@@ -44,9 +44,9 @@ Todo texto descritivo é o que o site realmente tem. Os quatro projetos aparecem
 | 13 | A prancha amarela vira a do surfista, no topo do site no celular. Legenda Swell Club. |
 | 14 | "A vida pede mar." vira "A gente vive isso."; as seções do site passam em carrossel. |
 | 15 | O último cartão, o rodapé creme, cresce até cobrir a tela; o SWELL gigante vai para o topo. |
-| 16 | No mesmo creme, SWELL sai por cima; o título e a foto da Fornada sobem; o celular entra pela direita. |
-| 17 | A bebida quente cai na xícara (a animação do próprio site). Legenda Fornada. |
-| 18 | "O bom está nos detalhes." e "Uma pausa que abraça."; a foto e o celular derivam em velocidades diferentes. |
+| 16 | No mesmo creme, SWELL sai por cima; o título da reserva e o cartão "Confira sua seleção" sobem; o celular entra pela direita. |
+| 17 | No celular, um toque escolhe o dia 30; a página desce até os produtos. Legenda Fornada. |
+| 18 | Dois toques em "Adicionar" (croissant e pain au chocolat); o contador "Seu café" sobe e aparece "Adicionado · ver seleção". |
 | 19 | A página encolhe para um canto de uma grade com os quatro projetos. |
 | 20 | O símbolo da Growlift recorta as quatro telas e se enche de azul. |
 | 21 | O símbolo sobe, ganha reflexo, e entra GROWLIFT. |

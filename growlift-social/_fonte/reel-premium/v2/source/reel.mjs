@@ -33,8 +33,7 @@ const MARK_MASK = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='htt
 
 const caption = (id, name, desc, dark = false, style = '') => `<div class="cap${dark ? ' dark' : ''}" id="${id}" style="${style}">
   <div class="lock cp">${mark(36, dark ? '#241a14' : T.blueHi)}GROWLIFT</div>
-  <div class="name cp">${name}</div><div class="desc cp">${desc}</div>
-  <div class="tag cp">Projeto conceito · nome fictício</div></div>`;
+  <div class="name cp">${name}</div><div class="desc cp">${desc}</div></div>`;
 
 const phone = (id, img, style, rec = '') => `<div class="phone" id="${id}" style="${style}"><img ${rec ? `data-rec="${rec}"` : ''} src="${img}"></div>`;
 
@@ -55,11 +54,12 @@ img{display:block}
 .phone>img{width:100%;height:100%;object-fit:cover;object-position:50% 0;border-radius:53px}
 .shot{position:absolute;overflow:hidden;box-shadow:0 60px 120px -40px rgba(0,0,0,.65),0 0 0 1.5px rgba(255,255,255,.12)}
 .lift{box-shadow:0 40px 70px -24px rgba(0,0,0,.55),0 8px 18px -8px rgba(0,0,0,.35)}
-.cap{position:absolute;left:96px;bottom:340px;max-width:830px;z-index:60}
+.cap{position:absolute;left:96px;bottom:414px;max-width:830px;z-index:60}
 .cap .name{margin-top:20px;font:800 96px/.94 Inter;letter-spacing:-.045em}
 .cap .desc{margin-top:16px;font:500 36px/1.28 Inter;color:${T.soft};letter-spacing:-.015em}
-.cap .tag{display:inline-block;margin-top:24px;padding:11px 18px;border-radius:999px;border:1.5px solid rgba(243,245,249,.32);font:600 22px/1 Inter;letter-spacing:.12em;text-transform:uppercase;color:rgba(243,245,249,.85)}
-.cap.dark .lock{color:rgba(36,26,20,.78)}#capFor .tag{white-space:nowrap}.cap.dark .name{color:#241a14}.cap.dark .desc{color:#5b4a3d}.cap.dark .tag{color:#4a3a2e;border-color:rgba(36,26,20,.32)}
+.cap.dark .lock{color:rgba(36,26,20,.78)}.cap.dark .name{color:#241a14}.cap.dark .desc{color:#5b4a3d}
+/* On screen for as long as any of the four projects is (legal review: they must never read as clients). */
+#tagPC{position:absolute;left:96px;top:1530px;z-index:70;padding:13px 20px;border-radius:999px;white-space:nowrap;background:rgba(6,8,13,.66);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.22);font:700 24px/1 Inter;letter-spacing:.1em;text-transform:uppercase;color:#f3f5f9}
 .mk{-webkit-mask:${MARK_MASK} center/contain no-repeat;mask:${MARK_MASK} center/contain no-repeat}
 </style></head><body>
 
@@ -102,7 +102,7 @@ ${[5, 4, 3, 2].map((n, i) => `<div class="shot L" id="bc${i}" style="width:936px
 
 <!-- 05 · Salinho, the interface taken apart -->
 <img class="L" id="pTitle" src="${CUT('salinho-titulo')}" style="width:600px;z-index:14">
-<img class="L" id="pShirt" src="${A('salinho/pecas/linen-short.webp')}" style="width:720px;z-index:15;filter:drop-shadow(0 60px 50px rgba(0,0,0,.45))">
+<img class="L" id="pShirt" src="${A('salinho/pecas/linen-short.webp')}" style="width:680px;z-index:15;filter:drop-shadow(0 60px 50px rgba(0,0,0,.45))">
 <img class="L lift" id="pMini" src="${CUT('salinho-miniaturas')}" style="width:470px;border-radius:12px;z-index:16">
 
 <!-- 08 · Chapa 77 → Swell Club: one teal, a diagonal cut -->
@@ -121,17 +121,16 @@ ${['pc-aluguel', 'pc-session', 'pc-rodape'].map((f, i) => `<div class="shot lift
 <!-- 10 → 11 · Fornada (one container, so it can shrink into the grid) -->
 <div class="full" id="foScene" style="z-index:30;transform-origin:0 0">
   <div class="full" id="foBg" style="background:#f4ede0"></div>
-  <img class="L" id="foTitle" src="${CUT('fornada-titulo')}" style="width:620px">
+  <img class="L" id="foTitle" src="${CUT('fornada-reserva-titulo')}" style="width:620px">
   ${phone('foPhone', recSrc('fornada'), 'left:0;top:0;width:470px;height:985px;background:#1b1410', 'fornada')}
-  <img class="L lift" id="foPhoto" src="${CUT('fornada-folhado')}" style="width:418px;border-radius:6px">
-  <img class="L" id="foLegend" src="${CUT('fornada-folhado-legenda')}" style="width:230px">
+  <img class="L lift" id="foCard" src="${A('fornada/pc-cafe-selecao.png')}" style="width:420px;border-radius:4px">
   ${caption('capFor', 'Fornada', 'Padaria · reserva do café da manhã pelo site', true, 'max-width:450px')}
 </div>
 
 <!-- 12 · the four projects become the mark -->
 ${[['salinho/cel-hero.png', 60, 250], ['chapa77/cel-hero.png', 552, 250], ['swellclub/cel-historia-1.png', 60, 944]].map(([f, x, y], i) => `<div class="shot L" id="tl${i}" style="width:468px;height:670px;border-radius:28px;z-index:31" data-x="${x}" data-y="${y}"><img class="fit" src="${A(f)}" style="object-position:50% 0"></div>`).join('')}
 <div class="L mk" id="mkBox" style="width:960px;height:752px;z-index:32;display:flex">
-  ${['salinho/cel-hero.png', 'chapa77/cel-historia-1.png', 'swellclub/cel-historia-1.png', 'fornada/cel-historia-4.png'].map((f) => `<div style="flex:1;overflow:hidden"><img class="fit" src="${A(f)}"></div>`).join('')}
+  ${[A('salinho/cel-hero.png'), A('chapa77/cel-historia-1.png'), A('swellclub/cel-historia-1.png'), CUT('fornada-reserva-cel')].map((u) => `<div style="flex:1;overflow:hidden"><img class="fit" src="${u}"></div>`).join('')}
   <div class="full" id="mkFill" style="background:${T.blue}"></div>
   <div class="full" id="mkSweep" style="background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.5) 50%,transparent 58%);background-size:300% 100%"></div>
 </div>
@@ -146,6 +145,7 @@ ${[['salinho/cel-hero.png', 60, 250], ['chapa77/cel-hero.png', 552, 250], ['swel
 ${caption('capSal', 'Salinho', 'Moda de linho · site com reserva da peça pelo WhatsApp')}
 ${caption('capCha', 'Chapa 77', 'Hamburgueria · a história do lanche contada na rolagem, com cardápio e pedido')}
 ${caption('capSwe', 'Swell Club', 'Surf shop · pranchas, aluguel por diária e kit montado no site')}
+<div id="tagPC">Projeto conceito · nome fictício</div>
 
 <script>
 const REC = ${JSON.stringify(REC)};
@@ -278,8 +278,8 @@ window.render = async (t) => {
     const drift = P(t, 7.0, 8.0, 'lin');
     const away = P(t, 7.82, 8.12, 'in');                  // everything but the button leaves
     put('pTitle', { x: 60, y: 250, o: p2 * (1 - away), ty: (1 - p2) * 50 - drift * 16 - away * 40 });
-    put('pShirt', { x: 300, y: 540, o: p1 * (1 - away), s: L(0.72, 1, p1) * L(1, 0.96, away), ty: (1 - p1) * 80 - drift * 10, rot: -1.2 * drift, origin: '50% 50%' });
-    put('pMini', { x: 72, y: 1300, o: p3 * (1 - away), ty: (1 - p3) * 90 - drift * 26 + away * 40 });
+    put('pShirt', { x: 330, y: 540, o: p1 * (1 - away), s: L(0.72, 1, p1) * L(1, 0.96, away), ty: (1 - p1) * 80 - drift * 10, rot: -1.2 * drift, origin: '50% 50%' });
+    put('pMini', { x: 72, y: 1180, o: p3 * (1 - away), ty: (1 - p3) * 90 - drift * 26 + away * 40 });
   }
 
   // ---- 05 → 06 → 07 · the reserve button grows into the Chapa 77 window, then the front story card
@@ -289,17 +289,17 @@ window.render = async (t) => {
     const open = P(t, 8.2, 8.66, 'out');                  // and it opens downwards into a red window
     const card = P(t, 8.8, 9.25, 'io');                   // the window becomes the front card of the story
     const big = P(t, 11.3, 11.6, 'io');                   // the teal card fills the screen
-    let x = 72, y = 1450 - drift * 34, w = L(600, 600, 0), h, r = 12;
+    let x = 72, y = 1330 - drift * 34, w = 600, h, r = 12;
     const btnH = (ww) => ww * 268 / 1036;
-    w = L(600, 936, lift); y = L(1450 - 34, 330, lift); h = btnH(w) + L(0, 1028, open); r = L(12, 28, lift);
-    if (t >= 8.8) { x = 72; y = L(330, 548, card); w = 936; h = L(btnH(936) + 1028, 585, card); r = L(28, 40, card); }
+    w = L(600, 936, lift); y = L(1330 - 34, 330, lift); h = btnH(w) + L(0, 940, open); r = L(12, 28, lift);
+    if (t >= 8.8) { x = 72; y = L(330, 548, card); w = 936; h = L(btnH(936) + 940, 585, card); r = L(28, 40, card); }
     // framed so the site's title stays above the screen and the burger in layers fills the top half
     if (t >= 11.3) { x = L(72, -460, big); y = L(548, -290, big); w = L(936, 2000, big); h = L(585, 1250, big); r = L(40, 0, big); }
     put('t2', { x, y, w, h, r, o: p4 * (t > 11.7 ? 0 : 1), ty: (1 - p4) * 90 });
     put('t2btn', { o: 1 - P(t, 8.8, 9.0, 'lin') });
     $('t2red').style.top = (t < 8.8 ? btnH(w) : L(btnH(936), 0, card)) + 'px';
     put('t2red', { o: t < 8.18 ? 0 : 1 });
-    put('t2burger', { y: 380 - btnH(936), o: P(t, 8.3, 8.6, 'lin') * (1 - P(t, 8.85, 9.1, 'lin')), s: L(1.12, 1, P(t, 8.3, 8.8, 'out')), origin: '50% 40%' });
+    put('t2burger', { y: 330 - btnH(936), o: P(t, 8.3, 8.6, 'lin') * (1 - P(t, 8.85, 9.1, 'lin')), s: L(1.12, 1, P(t, 8.3, 8.8, 'out')), origin: '50% 40%' });
     put('t2rec', { o: P(t, 8.85, 9.1, 'lin') });
     put('t2fade', { o: P(t, 11.35, 11.6, 'lin') });          // the site's order button fades into the teal
     // the recording slows a little so the card hands over on the burger taken apart in layers (teal)
@@ -341,9 +341,9 @@ window.render = async (t) => {
     const grow = P(t, 14.65, 15.25, 'io');
     for (const i of [0, 1, 2]) {
       const x0 = off + i * 470;
-      if (i < 2) { put('k' + i, { x: x0, y: 990, o: (t > 13.05 ? 1 : 0) * (1 - fade) }); continue; }
+      if (i < 2) { put('k' + i, { x: x0, y: 950, o: (t > 13.05 ? 1 : 0) * (1 - fade) }); continue; }
       // the last card (the cream footer) grows to fill the screen
-      put('k2', { x: L(x0, 0, grow), y: L(990, 0, grow), w: L(440, 1080, grow), h: L(275, 1920, grow), r: L(22, 0, grow), o: (t > 13.05 ? 1 : 0) * (t > 16.2 ? 0 : 1) });
+      put('k2', { x: L(x0, 0, grow), y: L(950, 0, grow), w: L(440, 1080, grow), h: L(275, 1920, grow), r: L(22, 0, grow), o: (t > 13.05 ? 1 : 0) * (t > 16.2 ? 0 : 1) });
       put('k2img', { o: 1 - P(t, 14.7, 14.95, 'lin') });
     }
     // the giant SWELL of that footer: from its place in the card to the top of the cream page, then out
@@ -359,11 +359,11 @@ window.render = async (t) => {
     put('foBg', { o: P(t, 15.85, 16.15, 'lin') });
     const drift = P(t, 16.8, 19.4, 'lin');
     put('foTitle', { x: 72, y: L(1150, 250, P(t, 15.45, 16.25, 'io')) - drift * 10, o: P(t, 15.4, 15.7, 'lin') });
-    put('foPhoto', { x: 72, y: L(1500, 540, P(t, 15.55, 16.35, 'io')) - drift * 40, o: P(t, 15.5, 15.8, 'lin') });
-    put('foLegend', { x: 68, y: 1112 - drift * 40, o: P(t, 16.45, 16.8, 'lin') });
+    put('foCard', { x: 72, y: L(1500, 560, P(t, 15.55, 16.35, 'io')) - drift * 34, o: P(t, 15.5, 15.8, 'lin') });
     put('foPhone', { x: 538, y: L(1950, 520, P(t, 16.0, 16.7, 'out')) - drift * 24, o: t > 15.95 ? 1 : 0 });
-    play($('foPhone').firstElementChild, t - 16.2);
-    cap('capFor', 16.8, 19.05, t);
+    // the recording: a day is tapped (16.75), the page scrolls to the products, two are added (18.15, 18.75)
+    play($('foPhone').firstElementChild, t - 16.3);
+    cap('capFor', 16.8, 19.12, t);
     // 11 → 12: the whole page shrinks into the bottom-right tile of a 2×2 grid
     const k = 468 / 1080, p = P(t, 19.3, 19.85, 'io'), dim = P(t, 20.0, 20.4, 'io'), gone = P(t, 20.6, 20.9, 'lin');
     const inset = 187 * p;
@@ -385,6 +385,9 @@ window.render = async (t) => {
     $('mkSweep').style.backgroundPosition = L(120, -20, P(t, 23.0, 23.9, 'io')) + '% 0';
     put('mkSweep', { o: t > 22.95 && t < 23.95 ? 1 : 0 });
   }
+
+  // the concept label, from the first site to the moment the four projects become the mark
+  put('tagPC', { o: P(t, 3.0, 3.25, 'lin') * (1 - P(t, 19.25, 19.45, 'lin')) });
 
   // ---- 13 · signature (21.0–25.0)
   {
@@ -409,7 +412,7 @@ window.render = async (t) => {
 const KEY = [
   [1.9, '01-hook'], [2.55, '02-transicao-hook-salinho'], [3.9, '03-salinho-entrada'], [5.9, '04-salinho-celular'],
   [7.6, '05-salinho-principal'], [8.6, '06-transicao-salinho-chapa77'], [9.75, '07-chapa77'], [11.95, '08-transicao-chapa77-swellclub'],
-  [13.9, '09-swellclub'], [15.62, '10-transicao-swellclub-fornada'], [18.8, '11-fornada'], [20.3, '12-transicao-convergencia'], [24.2, '13-assinatura'],
+  [13.9, '09-swellclub'], [15.62, '10-transicao-swellclub-fornada'], [19.0, '11-fornada'], [20.3, '12-transicao-convergencia'], [24.2, '13-assinatura'],
 ];
 
 async function open() {

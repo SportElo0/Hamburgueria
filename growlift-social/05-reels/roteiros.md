@@ -4,7 +4,7 @@
 
 **Como postar:**
 1. No Instagram, toquem em + e depois em Reel, e escolham o vídeo.
-2. **Música:** os vídeos vão sem som de propósito. Escolham uma da biblioteca do próprio Instagram, que já vem liberada para usar.
+2. **Música:** os vídeos vão sem som de propósito. Escolham uma faixa que o próprio Instagram libera para contas comerciais (a biblioteca de empresa é menor que a de conta pessoal). Não reaproveitem o áudio de outro Reel.
 3. **Capa:** em "Editar capa", toquem em "Adicionar da galeria" e escolham o `-capa.png` do mesmo Reel.
 4. **Legenda:** copiem a legenda do Reel, logo abaixo.
 5. Só publiquem depois que growlift.com.br estiver no ar, porque todos mandam para o link da bio.
@@ -200,28 +200,31 @@ Conheça o plano Lift no link da bio.
 - **Gancho, 0 a 2 s:** "SUA MARCA MERECE MAIS." em três batidas. O ponto azul vira a tela do primeiro site.
 - **Demonstração, 2 a 21 s:** quatro projetos conceito, gravados de sites que a Growlift criou, funcionando no navegador:
   - Salinho, moda de linho: o destaque, com 6 segundos;
-  - Chapa 77, hamburgueria;
+  - Chapa 77, hamburgueria: a história do lanche na rolagem;
   - Swell Club, surf shop;
-  - Fornada, padaria.
+  - Fornada, padaria: a reserva do café da manhã (escolher o dia e os produtos).
 - **Passagens:** cada uma nasce de algo do próprio site. O botão "Reserve minha peça" vira a janela do Chapa 77, o verde-água leva ao Swell Club e o creme leva à Fornada.
 - **Assinatura, 21 a 25 s:** a marca Growlift, "Sua marca merece mais.", "Peça seu diagnóstico grátis" e growlift.com.br.
-- **Marcação:** cada projeto aparece com "Projeto conceito · nome fictício". Nomes, logos e endereços dos negócios originais foram trocados na página antes da gravação.
-- **Imagens:**
+- **Marcação:** do primeiro site até a assinatura, fica na tela o selo "Projeto conceito · nome fictício". Nomes, logos, endereços e a região dos negócios originais foram trocados na página antes da gravação.
+- **Imagens (revisão legal de 27/10):**
+  - Os lanches do Chapa 77 são renders 3D da própria Growlift. As fotos do site original, recortadas do cardápio impresso do negócio real, não aparecem. Os preços e o slogan do negócio real foram tirados.
+  - A Fornada aparece só pela tela de reserva, sem fotos (as fotos do site não têm origem comprovada).
   - O surfista é uma imagem gerada por IA, de uma pessoa que não existe. Entrou no lugar da foto do dono da loja, que não aparece no vídeo.
-  - A bebida da Fornada é a cena do próprio site, com o aviso "Cena ilustrativa de chocolate quente".
-- **Música:** uma batida limpa de 100 a 110 BPM. Os cortes caem em 2,0 / 2,8 / 4,4 / 6,4 / 8,0 / 8,8 / 11,6 / 12,4 / 15,2 / 16,2 / 19,4 / 21,0 s.
 
 **Vídeo pronto:** `09-sua-marca-merece-mais.mp4` (25 s). Fonte e documentação em `_fonte/reel-premium/v2/`.
 
+**Ao postar:**
+- **Rótulo de IA:** em "Configurações avançadas", ativem "Rótulo de IA". O surfista é imagem gerada por IA e parece foto real.
+- **Música:** conta comercial só usa as faixas que o próprio Instagram libera para empresas. Não reaproveitem o áudio de outro Reel. Se forem impulsionar, só faixa liberada para anúncio. Uma batida limpa de 100 a 110 BPM combina com os cortes (2,0 / 2,8 / 4,4 / 6,4 / 8,0 / 8,8 / 11,6 / 12,4 / 15,2 / 16,2 / 19,4 / 21,0 s).
+- **Se alguém pedir "quero igual ao do vídeo":** respondam pelo que cada plano inclui no site. Reserva, aluguel por diária, kit e animação na rolagem não estão nas listas de Start, Grow e Lift; viram orçamento à parte.
+
 **Legenda**
 ```
-Sua marca merece mais. 💙
+Quatro projetos conceito, com nomes fictícios. Não são clientes. Sua marca merece mais. 💙
 
-Moda, hamburgueria, surf shop e padaria: quatro projetos conceito, com nomes fictícios, para mostrar como cada negócio pode ter um site com a cara dele.
+Moda, hamburgueria, surf shop e padaria: sites de demonstração que a gente criou para mostrar como cada negócio pode ter um site com a cara dele. As telas foram gravadas dos sites funcionando no navegador; os lanches são ilustrações 3D e o surfista foi gerado com IA.
 
-As telas do vídeo foram gravadas de sites que a gente criou, funcionando no navegador.
-
-Quer ver como ficaria o seu? Peça o diagnóstico grátis pelo link na bio.
+Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo link na bio. O que cada plano inclui está em growlift.com.br.
 
 #growlift #criacaodesites #webdesign #sitesprofissionais #presencadigital
 ```

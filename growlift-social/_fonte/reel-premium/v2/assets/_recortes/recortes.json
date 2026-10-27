@@ -108,16 +108,16 @@
     "origem": "chapa77/pc4x-hero.png",
     "caixa_css": [
       430,
-      290,
+      280,
       990,
-      760
+      728
     ],
     "dpr": 4,
     "tamanho_px": [
       2240,
-      1880
+      1792
     ],
-    "o_que_e": "lanche do hero sobre o vermelho"
+    "o_que_e": "lanche do hero sobre o vermelho (render 3D da Growlift)"
   },
   "swellclub-letras": {
     "origem": "swellclub/pc-rodape.png",
@@ -148,6 +148,36 @@
       1560
     ],
     "o_que_e": "cena ilustrativa de chocolate quente (hero)"
+  },
+  "fornada-reserva-titulo": {
+    "origem": "fornada/pc-cafe.png",
+    "caixa_css": [
+      100,
+      115,
+      600,
+      310
+    ],
+    "dpr": 2,
+    "tamanho_px": [
+      1000,
+      390
+    ],
+    "o_que_e": "título \"Reserve seu café da manhã.\""
+  },
+  "fornada-reserva-cel": {
+    "origem": "fornada/cel-cafe.png",
+    "caixa_css": [
+      0,
+      0,
+      390,
+      844
+    ],
+    "dpr": 3,
+    "tamanho_px": [
+      1170,
+      2532
+    ],
+    "o_que_e": "topo da reserva do café no celular"
   },
   "fornada-titulo": {
     "origem": "fornada/pc-vitrine.png",
