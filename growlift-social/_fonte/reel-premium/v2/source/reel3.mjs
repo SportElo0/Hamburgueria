@@ -1,10 +1,10 @@
-// Reel 001 "Sua marca merece mais." · v3 (review cut, 26.95 s, 1080×1920, 30 fps).
+// Reel 001 "Sua marca merece mais." · v3.2 (review cut, 30.6 s, 1080×1920, 30 fps).
 // Same engine as reel.mjs (v2, kept as it was): one HTML page, window.render(t) places every layer, Playwright
 // shoots each frame and ffmpeg encodes. What changed in v3, from the client's review:
 //   · Chapa 77 shows the real order flow (burger → add-ons → bag → order message) instead of zooms over screens;
-//   · Swell Club moves sideways at a constant scale (a strip of screens, real board swipes);
+//   · v3.2: Swell Club is out; Chapa 77 plays slower (85 %, with holds) and ends with Pix and the shop's screen;
 //   · the Salinho → Chapa 77 bridge is a plain shape (the reserve button loses its text before it grows);
-//   · "SWELL" leaves the screen before the Fornada scene comes in (the Fornada scene itself is unchanged, only shifted);
+//   · the shop's cream screen opens into the Fornada page (the Fornada scene itself is unchanged, only shifted);
 //   · the ending says "SEU PRÓXIMO SITE COMEÇA AQUI." and keeps moving; sound comes from audio3.py.
 //   node growlift-social/_fonte/reel-premium/v2/source/reel3.mjs              → renders/v3/revisao-v3.mp4 (+ -capa.png)
 //   node growlift-social/_fonte/reel-premium/v2/source/reel3.mjs 9.5 12.6    → renders/v3/_teste/t-….png
@@ -18,11 +18,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'renders', 'v3');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const FPS = 30, W = 1080, H = 1920, DURATION = 26.95, COVER = 1.6;
+const FPS = 30, W = 1080, H = 1920, DURATION = 30.6, COVER = 1.6;
 const A = (f) => pathToFileURL(path.join(ROOT, 'assets', f)).href;
 const CUT = (f) => A(`_recortes/${f}.png`);
 
-const REC = Object.fromEntries(['salinho', 'chapa77pedido', 'chapa77pagamento', 'chapa77painel', 'swellclub', 'swellpranchas', 'fornada'].map((id) => {
+const REC = Object.fromEntries(['salinho', 'chapa77pedido', 'chapa77pagamento', 'chapa77painel', 'fornada'].map((id) => {
   const dir = path.join(ROOT, 'assets', '_gravacoes', `rec-${id}`);
   if (!fs.existsSync(dir)) throw new Error(`Falta a gravação ${id}: rode source/gravacoes.mjs`);
   return [id, { url: pathToFileURL(dir).href, count: fs.readdirSync(dir).filter((f) => f.endsWith('.jpg')).length }];
@@ -35,12 +35,16 @@ const mark = (w, color) => `<svg viewBox="50 40 530 415" width="${w}" height="${
 const MARK_MASK = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='50 40 530 415'>${MARK_PATHS}</svg>`)}")`;
 
 // Timeline anchors (s). The Fornada scene is v2's, moved by FO; nothing inside it changed.
-const FO = 3.6;
-const CH = 8.3, CH_SPEED = 1.35; // Chapa 77 menu recording: starts at CH, played 35 % faster
-const PAY = 11.37, PAY_FROM = 0.2; // the checkout recording takes over from the bag (same phone, same scale)
-const PAN = 13.9; // the shop's screen slides in: the paid order arrives and is accepted
-const SW = 15.75; // Chapa 77 → Swell Club push
-const EN = 1.45; // the signature, later by what Chapa 77 gained and Swell Club gave back
+// Chapa 77 plays its three recordings at 85 % of real speed, holding on the moments that tell the story.
+// Each list maps video time → recording time (linear between keys; equal recording times are a hold).
+const K_MENU = [[8.3, 0], [11.36, 2.6], [11.86, 2.6], [13.68, 4.15], [14.4, 4.15]];          // add-ons checked; the bag
+const K_PAY = [[14.4, 0.2], [15.81, 1.4], [16.05, 1.6], [16.75, 1.6], [17.93, 2.6], [18.75, 3.3]]; // the QR code; Pix confirmed
+const K_SHOP = [[18.75, 0], [21.8, 2.6], [22.1, 2.6]];                                       // the order arrives; accepted
+const PAY = 14.4;  // the checkout recording takes over from the bag (same phone, same scale)
+const PAN = 18.75; // the shop's screen slides in
+const GROW = 22.1; // the shop's cream screen grows into the Fornada page
+const FO = 7.25;   // the Fornada scene comes right after (its title enters at 15.4 + FO)
+const EN = FO - 2.15; // the signature, after Fornada as before
 
 const caption = (id, name, desc, dark = false, style = '') => `<div class="cap${dark ? ' dark' : ''}" id="${id}" style="${style}">
   <div class="lock cp">${mark(36, dark ? '#241a14' : T.blueHi)}GROWLIFT</div>
@@ -102,26 +106,12 @@ img{display:block}
   <div class="full" style="background:radial-gradient(90% 60% at 50% 40%,#c11d23,#a3171c 50%,#5e0a0e)"></div>
   <img class="L" id="chBurger" src="${CUT('chapa77-burger')}" style="width:960px">
   <div class="shot L" id="chCard" style="left:72px;top:250px;width:936px;height:1000px;border-radius:40px;background:#f6efe2"><img id="chRec" data-rec="chapa77pedido" src="${recSrc('chapa77pedido')}" style="position:absolute;left:0;top:0;width:936px"><img id="chPay" data-rec="chapa77pagamento" src="${recSrc('chapa77pagamento')}" style="position:absolute;left:0;top:0;width:936px;opacity:0"></div>
-  <!-- the shop's screen at 1.56× its size: the "Novos" and "Em preparo" columns, legible on a phone -->
+  <!-- the shop's screen at 1.56× its size: the "Novos" and "Em preparo" columns, legible on a phone; its cream later opens into Fornada -->
   <div class="shot L" id="chPanel" style="left:72px;top:290px;width:936px;height:760px;border-radius:28px;background:#f8f6f1"><img id="chPan" data-rec="chapa77painel" src="${recSrc('chapa77painel')}" style="position:absolute;left:-6px;top:0;width:1841px"></div>
   ${caption('capCha', 'Chapa 77', 'Hamburgueria · cardápio com adicionais e sacola')}
   ${caption('capCha2', 'Chapa 77', 'Pagamento por Pix no próprio site')}
   ${caption('capCha3', 'Chapa 77', 'O pedido chega pago na tela da loja')}
 </div>
-
-<!-- 11–14 · Swell Club: a strip of screens, the camera moves sideways at a constant scale -->
-<div class="scene" id="scSwell" style="z-index:21">
-  <div class="full" style="background:radial-gradient(90% 60% at 50% 35%,#0f7d86,#086d75 45%,#03191c)"></div>
-  <div class="L" id="swGhost" style="top:560px;white-space:nowrap;font:800 360px/1 Inter;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.12)">SWELL CLUB · SWELL CLUB</div>
-  <div class="L" id="strip">
-    <div class="shot L" id="sw0" style="left:0;top:250px;width:462px;height:1000px;border-radius:36px"><img class="fit" data-rec="swellclub" src="${recSrc('swellclub')}" style="object-position:50% 0"></div>
-    <div class="shot L" id="sw1" style="left:520px;top:250px;width:462px;height:1000px;border-radius:36px"><img class="fit" data-rec="swellpranchas" src="${recSrc('swellpranchas')}" style="object-position:50% 0"></div>
-    <div class="shot L" id="sw2" style="left:1040px;top:250px;width:462px;height:1000px;border-radius:36px"><img class="fit" src="${A('swellclub/cel-aluguel.png')}" style="object-position:50% 0"></div>
-  </div>
-  ${caption('capSwe', 'Swell Club', 'Surf shop · pranchas, aluguel por diária e kit montado no site')}
-</div>
-<!-- the cream footer card: last card of the strip, it grows into the cream page (above the strip, below Fornada) -->
-<div class="shot L" id="sw3" style="z-index:22;background:linear-gradient(#f3f0e5 32%,#f4ede0 42%)"><img class="L" id="swLetters" src="${CUT('swellclub-letras')}"></div>
 
 <!-- 15 · Fornada (v2 scene, unchanged inside) -->
 <div class="full" id="foScene" style="z-index:30;transform-origin:0 0">
@@ -133,9 +123,9 @@ img{display:block}
 </div>
 
 <!-- 16 · the four projects become the mark -->
-${[['salinho/cel-hero.png', 60, 250], ['chapa77/cel-hero.png', 552, 250], ['swellclub/cel-historia-1.png', 60, 944]].map(([f, x, y], i) => `<div class="shot L" id="tl${i}" style="width:468px;height:670px;border-radius:28px;z-index:31" data-x="${x}" data-y="${y}"><img class="fit" src="${A(f)}" style="object-position:50% 0"></div>`).join('')}
+${[['salinho/cel-hero.png', 60, 250], ['chapa77/cel-hero.png', 552, 250], ['chapa77/cel-pix.png', 60, 944]].map(([f, x, y], i) => `<div class="shot L" id="tl${i}" style="width:468px;height:670px;border-radius:28px;z-index:31" data-x="${x}" data-y="${y}"><img class="fit" src="${A(f)}" style="object-position:50% 0"></div>`).join('')}
 <div class="L mk" id="mkBox" style="width:960px;height:752px;z-index:32;display:flex">
-  ${[A('salinho/cel-hero.png'), A('chapa77/cel-historia-1.png'), A('swellclub/cel-historia-1.png'), CUT('fornada-reserva-cel')].map((u) => `<div style="flex:1;overflow:hidden"><img class="fit" src="${u}"></div>`).join('')}
+  ${[A('salinho/cel-hero.png'), A('chapa77/cel-historia-1.png'), A('chapa77/cel-pix.png'), CUT('fornada-reserva-cel')].map((u) => `<div style="flex:1;overflow:hidden"><img class="fit" src="${u}"></div>`).join('')}
   <div class="full" id="mkFill" style="background:${T.blue}"></div>
   <div class="full" id="mkSweep" style="background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.5) 50%,transparent 58%);background-size:300% 100%"></div>
 </div>
@@ -154,7 +144,8 @@ ${caption('capSal', 'Salinho', 'Moda de linho · site com reserva da peça pelo 
 
 <script>
 const REC = ${JSON.stringify(REC)};
-const FO = ${FO}, CH = ${CH}, CH_SPEED = ${CH_SPEED}, PAY = ${PAY}, PAY_FROM = ${PAY_FROM}, PAN = ${PAN}, SW = ${SW}, EN = ${EN}, DURATION = ${DURATION};
+const FO = ${FO}, PAY = ${PAY}, PAN = ${PAN}, GROW = ${GROW}, EN = ${EN}, DURATION = ${DURATION};
+const K_MENU = ${JSON.stringify(K_MENU)}, K_PAY = ${JSON.stringify(K_PAY)}, K_SHOP = ${JSON.stringify(K_SHOP)};
 const clamp = (x) => Math.max(0, Math.min(1, x));
 const E = {
   lin: (p) => p,
@@ -165,6 +156,12 @@ const E = {
 const P = (t, a, b, e = 'io') => E[e](clamp((t - a) / (b - a)));
 const L = (x, y, p) => x + (y - x) * p;
 const $ = (id) => document.getElementById(id);
+/** Recording time for video time t: linear between [time, recording time] keys. */
+function seg(keys, t) {
+  if (t <= keys[0][0]) return keys[0][1];
+  for (let i = 1; i < keys.length; i++) if (t <= keys[i][0]) return L(keys[i - 1][1], keys[i][1], (t - keys[i - 1][0]) / (keys[i][0] - keys[i - 1][0]));
+  return keys[keys.length - 1][1];
+}
 /** Value at time t of a list of [time, value] keys, eased in-out between neighbours. */
 function track(keys, t) {
   if (t <= keys[0][0]) return keys[0][1];
@@ -285,48 +282,32 @@ window.render = async (t) => {
     $('shape').style.background = mix([35, 118, 71], [176, 26, 33], col);
   }
 
-  // ---- 07–10 · Chapa 77 (7.6–15.75): the burger; menu, add-ons and bag; Pix on the site; the shop's screen
+  // ---- 07–13 · Chapa 77 (7.6–22.6): the burger; menu, add-ons and bag; Pix on the site; the shop's screen
   {
-    const push = P(t, SW, SW + 0.5, 'io');
-    put('scChapa', { o: t >= 7.58 && t < SW + 0.55 ? 1 : 0, tx: -1080 * push });
+    put('scChapa', { o: t >= 7.58 && t < 15.3 + FO + 0.9 ? 1 : 0 });
     const bIn = P(t, 7.6, 7.95, 'out'), bOut = P(t, 8.1, 8.45, 'in');
     put('chBurger', { x: 60, y: 560, o: bIn * (1 - bOut), ty: -20 * P(t, 7.6, 8.45, 'lin') - 80 * bOut });
     // the phone leaves to the left as the shop's screen comes in from the right: the order goes to the shop
     const cIn = P(t, 8.0, 8.45, 'out'), hand = P(t, PAN - 0.05, PAN + 0.4, 'io');
     put('chCard', { ty: (1 - cIn) * 1400, tx: -1180 * hand, o: P(t, 8.0, 8.1, 'lin') * (t < PAN + 0.45 ? 1 : 0) });
-    const rt = (t - CH) * CH_SPEED;
+    const rt = seg(K_MENU, t);
     play('chRec', rt);
     // vertical pans only, scale fixed: card → sheet → add-ons → button → bag
-    const camY = track([[0, 100], [0.55, 100], [0.8, 60], [1.2, 60], [1.5, 420], [3.65, 420], [3.85, 0]], rt);
+    const camY = track([[0, 100], [0.55, 100], [0.8, 60], [1.2, 60], [1.5, 420], [3.57, 420], [3.575, 0]], rt);   // cut to the bag's top as it opens (its foot is the old WhatsApp demo note)
     put('chRec', { ty: -camY * 2.4, o: t < PAY ? 1 : 0 });   // a cut, as the site itself swaps the bag for the checkout
-    const pt = PAY_FROM + Math.max(0, t - PAY) * CH_SPEED;
+    const pt = seg(K_PAY, t);
     play('chPay', pt);
     // checkout: payment, total and button in view; then the Pix page from its title
     put('chPay', { ty: -track([[0, 150], [1.41, 150], [1.415, 40]], pt) * 2.4, o: t < PAY ? 0 : 1 });
-    put('chPanel', { tx: 1180 * (1 - hand), o: t > PAN - 0.06 ? 1 : 0 });
-    play('chPan', (t - PAN) * 1.15);
-    cap('capCha', 7.8, 9.3, t);
-    cap('capCha2', 11.75, 13.6, t);
-    cap('capCha3', 14.35, 15.55, t);
-  }
-
-  // ---- 11–14 · Swell Club (SW … SW+3.45): sideways only; S is the time inside the scene
-  {
-    const push = P(t, SW, SW + 0.5, 'io'), S = t - SW;
-    put('scSwell', { o: S >= 0 && S < 3.2 ? 1 : 0, tx: 1080 * (1 - push) });
-    // the strip's position: hero card centred, then the boards (one swipe), then on to the cream footer card
-    const sx = track([[0, 309], [0.95, 309], [1.45, -211], [2.1, -211], [2.6, -1251]], S);
-    put('strip', { tx: sx });
-    put('swGhost', { tx: 120 + (sx - 309) * 0.4 });   // the outline name drifts at 40 %: depth without zoom
-    play($('sw0').firstElementChild, S - 0.2);
-    play($('sw1').firstElementChild, S - 1.25);
-    cap('capSwe', SW + 0.55, SW + 1.4, t);
-    // the cream footer card rides with the strip, then opens into the page; SWELL leaves before Fornada comes
-    const grow = P(S, 2.6, 3.1, 'io');
-    const cx = sx + 1560 + 1080 * (1 - push);
-    put('sw3', { x: L(cx, 0, grow), y: L(250, 0, grow), w: L(462, 1080, grow), h: L(1000, 1920, grow), r: L(36, 0, grow), o: S >= 0 && S < 4.4 ? 1 : 0 });
-    const up = P(S, 3.15, 3.45, 'in');
-    put('swLetters', { x: L(24, 40, grow), y: L(110, 250, grow) - up * 700, w: L(760, 1600, grow), o: 1 - P(S, 3.3, 3.45, 'lin') });
+    // the shop's screen; at the end its picture goes and the cream card opens to the whole frame (no zoom: the box grows)
+    const g = P(t, GROW, GROW + 0.5, 'io');
+    put('chPanel', { tx: 1180 * (1 - hand), o: t > PAN - 0.06 ? 1 : 0, x: L(72, 0, g), y: L(290, 0, g), w: L(936, 1080, g), h: L(760, 1920, g), r: L(28, 0, g) });
+    $('chPanel').style.background = mix([248, 246, 241], [244, 237, 224], g);
+    play('chPan', seg(K_SHOP, t));
+    put('chPan', { o: 1 - P(t, GROW - 0.15, GROW, 'lin') });
+    cap('capCha', 7.8, 9.6, t);
+    cap('capCha2', 15.5, 18.4, t);
+    cap('capCha3', 19.3, 21.8, t);
   }
 
   // ---- 15 · Fornada: the v2 scene, every time moved by FO
@@ -384,10 +365,10 @@ window.render = async (t) => {
 // ---------------------------------------------------------------------------------------------
 const KEY = [
   [1.6, '01-abertura'], [2.55, '02-mais-vira-tela'], [3.45, '03-salinho-site'], [5.6, '04-salinho-pecas-no-celular'],
-  [6.85, '05-salinho-composicao'], [7.35, '06-transicao-forma'], [7.9, '07-chapa77-produto'], [10.0, '08-chapa77-adicionais'],
-  [11.2, '09-chapa77-sacola'], [12.85, '10-chapa77-pix'], [13.5, '11-chapa77-pago'], [14.85, '12-chapa77-loja-recebe'],
-  [15.6, '13-chapa77-loja-aceita'], [16.0, '14-transicao-lateral'], [16.65, '15-swell-hero'], [17.75, '16-swell-pranchas'],
-  [19.05, '17-swell-sai-fornada-entra'], [22.6, '18-fornada-preservada'], [23.8, '19-grid-marca'], [26.05, '20-assinatura'],
+  [6.85, '05-salinho-composicao'], [7.35, '06-transicao-forma'], [7.9, '07-chapa77-produto'], [11.6, '08-chapa77-adicionais'],
+  [14.2, '09-chapa77-sacola'], [16.4, '10-chapa77-pix'], [18.4, '11-chapa77-pago'], [20.2, '12-chapa77-loja-recebe'],
+  [21.6, '13-chapa77-loja-aceita'], [22.45, '14-transicao-creme'], [26.25, '15-fornada-preservada'], [27.45, '16-grid-marca'],
+  [29.7, '17-assinatura'],
 ];
 
 async function open() {

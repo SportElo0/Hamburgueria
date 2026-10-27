@@ -32,7 +32,7 @@ figcaption{margin-top:14px;display:flex;flex-direction:column;gap:6px}
 b{font-size:23px}span{font-size:19px;color:var(--blue-hi);font-weight:600}
 em{font-style:normal;font-size:18px;color:var(--soft);line-height:1.35}i{font-style:normal;font-size:17px;color:var(--muted);line-height:1.35}
 </style></head><body>
-<h1>Sua marca merece mais. · Storyboard v3.1 (revisão)</h1>
+<h1>Sua marca merece mais. · Storyboard v3.2 (revisão)</h1>
 <div class="sub">${sb.duracao.toString().replace('.', ',')} s · ${sb.formato} · ${sb.ritmo} · quadros tirados do vídeo de revisão · projetos conceito com nome fictício</div>
 <div class="grid">${sb.quadros.map((q) => `<figure class="f"><img src="${img(path.join(V3, q.arquivo))}"><span class="n">${q.n}</span>
 <figcaption><b>${q.nome}</b><span>${sec(q.inicio)} – ${sec(q.fim)} · ${q.projeto}</span>${q.texto ? `<em>“${q.texto}”</em>` : ''}<i>${q.mudou}</i></figcaption></figure>`).join('')}</div>
@@ -45,8 +45,8 @@ h2{font-size:26px;font-weight:700}p{margin-top:8px;font-size:19px;line-height:1.
 .two{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.two div{position:relative}
 .two span{position:absolute;left:10px;top:10px;font:700 16px/1 Inter;letter-spacing:.08em;text-transform:uppercase;padding:8px 11px;border-radius:999px;background:rgba(0,0,0,.65)}
 .two div+div span{background:var(--blue)}
-</style></head><body><h1>Antes e depois · v2 entregue → v3.1 revisão</h1><div class="rows">
-${sb.comparacao.map(([a, b, t, why]) => `<div><h2>${t}</h2><p>${why}</p><div class="two"><div><img src="${img(path.join(V2, a))}"><span>v2</span></div><div><img src="${img(path.join(V3, b))}"><span>v3.1</span></div></div></div>`).join('')}
+</style></head><body><h1>Antes e depois · v2 entregue → v3.2 revisão</h1><div class="rows">
+${sb.comparacao.map(([a, b, t, why]) => `<div><h2>${t}</h2><p>${why}</p><div class="two"><div><img src="${img(path.join(V2, a))}"><span>v2</span></div><div><img src="${img(path.join(V3, b))}"><span>v3.2</span></div></div></div>`).join('')}
 </div></body></html>`;
 
 const browser = await chromium.launch({ executablePath: CHROME });

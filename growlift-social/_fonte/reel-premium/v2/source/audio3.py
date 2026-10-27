@@ -7,9 +7,23 @@ from scipy.io import wavfile
 from scipy.signal import butter, sosfilt
 
 SR = 48000
-DUR = 26.95
-# anchors of reel3.mjs
-CH, CH_SPEED, PAY, PAY_FROM, PAN, SW, FO, EN = 8.3, 1.35, 11.37, 0.2, 13.9, 15.75, 3.6, 1.45
+DUR = 30.6
+# anchors of reel3.mjs (v3.2: no Swell Club; Chapa 77 at 85 % with holds)
+K_MENU = [(8.3, 0), (11.36, 2.6), (11.86, 2.6), (13.68, 4.15), (14.4, 4.15)]
+K_PAY = [(14.4, 0.2), (15.81, 1.4), (16.05, 1.6), (16.75, 1.6), (17.93, 2.6), (18.75, 3.3)]
+K_SHOP = [(18.75, 0), (21.8, 2.6), (22.1, 2.6)]
+PAY, PAN, GROW, FO = 14.4, 18.75, 22.1, 7.25
+EN = FO - 2.15
+
+
+def at_rec(keys, r):
+    """Video time at which a recording reaches recording time r (first pass)."""
+    for (t0, r0), (t1, r1) in zip(keys, keys[1:]):
+        if r0 <= r <= r1 and r1 > r0:
+            return t0 + (r - r0) / (r1 - r0) * (t1 - t0)
+    raise ValueError(r)
+
+
 GRID = 19.3 + FO        # the four screens become the mark
 SIGN = 20.45 + FO       # the mark fills with blue
 OUT = Path(__file__).resolve().parent.parent / 'renders' / 'v3' / 'trilha-v3.wav'
@@ -167,24 +181,23 @@ add(note(880, 1.2, ((1, 1), (2.01, 0.3)), attack=0.002, release=0.5), 0.72, gain
 
 # --- transitions -----------------------------------------------------------------------------------
 for at, d, g, pan in [(2.0, 0.8, 0.35, -0.3), (4.25, 0.5, 0.18, 0.3), (7.05, 0.65, 0.3, 0.0), (PAN - 0.05, 0.5, 0.22, 0.5),
-                      (SW - 0.05, 0.6, 0.3, 0.6), (SW + 2.6, 0.6, 0.22, 0.0), (SW + 3.1, 0.4, 0.15, 0.0), (GRID - 0.05, 0.7, 0.25, 0.0)]:
+                      (GROW, 0.6, 0.22, 0.0), (GRID - 0.05, 0.7, 0.25, 0.0)]:
     add(whoosh(d) * g, at, pan=pan)
 
-# --- interactions (the real taps and swipes of the recordings) --------------------------------------
+# --- interactions (the real taps of the recordings, at the video time each one is shown) -------------
 for at in [4.85, 5.7]:                                        # Salinho thumbnails
     add(click(0.16), at, pan=0.1)
-for rt in [0.45, 1.8, 2.3, 2.85, 3.55]:                       # Chapa 77: Personalizar, 2 add-ons, Adicionar, Ver sacola
-    add(click(0.18), CH + rt / CH_SPEED, pan=0.15)
-add(note(1320, 0.35, ((1, 1), (2, 0.2)), attack=0.002, release=0.25), CH + 2.95 / CH_SPEED, gain=0.05)  # item in the bag
-for pt in [0.4, 1.4]:                                         # Pix, Gerar Pix
-    add(click(0.18), PAY + (pt - PAY_FROM) / CH_SPEED, pan=0.15)
-paid = PAY + (2.6 - PAY_FROM) / CH_SPEED                      # Pix confirmed: two rising notes
+for r in [0.45, 1.8, 2.3, 2.85, 3.55]:                        # Chapa 77: Personalizar, 2 add-ons, Adicionar, Ver sacola
+    add(click(0.18), at_rec(K_MENU, r), pan=0.15)
+add(note(1320, 0.35, ((1, 1), (2, 0.2)), attack=0.002, release=0.25), at_rec(K_MENU, 2.95), gain=0.05)  # item in the bag
+for r in [0.4, 1.4]:                                          # Pix, Gerar Pix
+    add(click(0.18), at_rec(K_PAY, r), pan=0.15)
+paid = at_rec(K_PAY, 2.6)                                     # Pix confirmed: two rising notes
 for k, f in enumerate((1046.5, 1568.0)):
     add(note(f, 0.5, ((1, 1), (2, 0.15)), attack=0.002, release=0.3), paid + k * 0.09, gain=0.06)
 for k, f in enumerate((880.0, 1108.7, 880.0, 1108.7)):        # the shop's order alert, short and soft
-    add(note(f, 0.22, ((1, 1), (3, 0.1)), attack=0.003, release=0.12), PAN + 0.5 / 1.15 + k * 0.12, gain=0.045, pan=-0.2)
-add(click(0.18), PAN + 1.7 / 1.15, pan=-0.15)                 # Aceitar pedido
-add(swipe(), SW + 1.6, gain=0.5, pan=-0.4)                    # Swell Club: board swipe
+    add(note(f, 0.22, ((1, 1), (3, 0.1)), attack=0.003, release=0.12), at_rec(K_SHOP, 0.5) + k * 0.12, gain=0.045, pan=-0.2)
+add(click(0.18), at_rec(K_SHOP, 1.7), pan=-0.15)              # Aceitar pedido
 for rt in [0.45, 1.85, 2.45]:                                 # Fornada: day, croissant, pain au chocolat
     add(click(0.15), 16.3 + FO + rt, pan=0.15)
 

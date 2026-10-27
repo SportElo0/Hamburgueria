@@ -3,11 +3,23 @@
 **Versão para vocês avaliarem. Não é a versão comercial final.** Não foi publicada nem copiada para `05-reels/`. A v2 entregue continua intacta como versão de segurança: `renders/sua-marca-merece-mais.mp4` e `05-reels/09-sua-marca-merece-mais.mp4`.
 
 - **Vídeo:** `renders/v3/revisao-v3.mp4`, com a capa em `revisao-v3-capa.png`.
-- **Formato:** 26,95 s, 1080×1920, 30 fps, H.264 High + som AAC 48 kHz estéreo, −15,5 LUFS.
-- **Storyboard novo:** `previews/v3-storyboard.png`, com os 20 momentos e o que mudou em cada um. A ficha está em `storyboard-v3.json`.
-- **Antes e depois:** `previews/v3-antes-depois.png`, com a v2 ao lado da v3.1, cena a cena.
-- **Quadros em tamanho real:** `renders/v3/quadros/01…20.png`, com os tempos em `tempos.json`.
+- **Formato:** 30,6 s, 1080×1920, 30 fps, H.264 High + som AAC 48 kHz estéreo, −15,7 LUFS.
+- **Storyboard novo:** `previews/v3-storyboard.png`, com os 17 momentos e o que mudou em cada um. A ficha está em `storyboard-v3.json`.
+- **Antes e depois:** `previews/v3-antes-depois.png`, com a v2 ao lado da v3.2, cena a cena.
+- **Quadros em tamanho real:** `renders/v3/quadros/01…17.png`, com os tempos em `tempos.json`.
 - **Gasto:** zero. Nenhum crédito do Higgsfield foi usado; o saldo continua 194,50.
+
+## v3.2: sem o Swell Club e com o Chapa 77 mais devagar (pedido de vocês)
+
+- **Três projetos:** Salinho (ver a peça), Chapa 77 (pedido e Pix) e Fornada (reserva do café da manhã). O Swell Club saiu inteiro.
+- **Chapa 77 mais devagar:**
+  - As três gravações rodam a 85% da velocidade real; antes era 115% a 135%.
+  - Há pausas nos momentos que contam a história: os dois adicionais marcados com o total em R$ 66, a sacola, o QR code do Pix, "Pix confirmado" e o pedido chegando na loja.
+  - O trecho passou de 8,2 s para 14,5 s.
+- **Chapa 77 → Fornada:** a tela da loja apaga e o cartão creme cresce até ocupar a tela, virando a página creme da Fornada. O retângulo cresce; não há zoom.
+- **Fornada:** igual, só mais tarde no tempo.
+- **Grade final:** no lugar da tela do surf entra a tela do Pix do Chapa 77 (`assets/chapa77/cel-pix.png`).
+- **Duração:** 30,6 s. Os nomes das seções abaixo valem para a v3.1, exceto o que fala do Swell Club.
 
 ## v3.1: pagamento e tela da loja no Chapa 77 (pedido de vocês)
 

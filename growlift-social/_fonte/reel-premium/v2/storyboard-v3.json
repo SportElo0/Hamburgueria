@@ -1,6 +1,6 @@
 {
-  "versao": "v3.1 · revisão (não é a versão comercial final)",
-  "duracao": 26.95,
+  "versao": "v3.2 · revisão (não é a versão comercial final)",
+  "duracao": 30.6,
   "formato": "1080×1920 · 30 fps · H.264 + AAC 48 kHz",
   "ritmo": "abertura explosiva, demonstrações mais suaves, assinatura calma",
   "quadros": [
@@ -69,7 +69,7 @@
       "arquivo": "07-chapa77-produto.png",
       "nome": "Chapa 77 · cardápio",
       "inicio": 7.6,
-      "fim": 8.7,
+      "fim": 9.6,
       "projeto": "Chapa 77",
       "texto": "Hamburgueria · cardápio com adicionais e sacola",
       "mudou": "O lanche entra e o celular sobe com o cardápio real (renders 3D, preços de exemplo)."
@@ -78,128 +78,98 @@
       "n": "08",
       "arquivo": "08-chapa77-adicionais.png",
       "nome": "Chapa 77 · adicionais",
-      "inicio": 8.7,
-      "fim": 10.4,
+      "inicio": 9.6,
+      "fim": 12.4,
       "projeto": "Chapa 77",
       "texto": "",
-      "mudou": "Personalizar → Cheddar cremoso e Maionese artesanal; o total vai de R$ 58 para R$ 66 (valores de exemplo)."
+      "mudou": "Personalizar → Cheddar cremoso e Maionese artesanal; o total vai de R$ 58 para R$ 66. Pausa com os dois marcados."
     },
     {
       "n": "09",
       "arquivo": "09-chapa77-sacola.png",
       "nome": "Chapa 77 · sacola",
-      "inicio": 10.4,
-      "fim": 11.37,
+      "inicio": 12.4,
+      "fim": 14.4,
       "projeto": "Chapa 77",
       "texto": "",
-      "mudou": "Adicionar → Ver sacola → Sua sacola com o item e os adicionais."
+      "mudou": "Adicionar → Ver sacola → Sua sacola com o item e os adicionais. Pausa na sacola."
     },
     {
       "n": "10",
       "arquivo": "10-chapa77-pix.png",
       "nome": "Chapa 77 · Pix no site",
-      "inicio": 11.37,
-      "fim": 13.1,
+      "inicio": 14.4,
+      "fim": 17.9,
       "projeto": "Chapa 77",
       "texto": "Pagamento por Pix no próprio site",
-      "mudou": "Novo na v3.1: Finalizar com retirada no local → Pix → QR code e copia e cola. Pix de demonstração: o código não paga nada."
+      "mudou": "Retirada no local → Pix → QR code e copia e cola (de demonstração). Pausa no QR."
     },
     {
       "n": "11",
       "arquivo": "11-chapa77-pago.png",
       "nome": "Chapa 77 · Pix confirmado",
-      "inicio": 13.1,
-      "fim": 13.9,
+      "inicio": 17.9,
+      "fim": 18.75,
       "projeto": "Chapa 77",
       "texto": "",
-      "mudou": "Novo na v3.1: \"Pedido recebido · Pix confirmado\", com o acompanhamento do pedido."
+      "mudou": "\"Pedido recebido · Pix confirmado\"."
     },
     {
       "n": "12",
       "arquivo": "12-chapa77-loja-recebe.png",
       "nome": "Chapa 77 · a loja recebe",
-      "inicio": 13.9,
-      "fim": 15.0,
+      "inicio": 18.75,
+      "fim": 20.7,
       "projeto": "Chapa 77",
       "texto": "O pedido chega pago na tela da loja",
-      "mudou": "Novo na v3.1: o celular sai pela esquerda e a tela da loja entra; o pedido chega em Novos com \"Pix pago\"."
+      "mudou": "O celular sai pela esquerda e entra a tela da loja; o pedido chega em Novos com \"Pix pago\"."
     },
     {
       "n": "13",
       "arquivo": "13-chapa77-loja-aceita.png",
       "nome": "Chapa 77 · a loja aceita",
-      "inicio": 15.0,
-      "fim": 15.75,
+      "inicio": 20.7,
+      "fim": 22.1,
       "projeto": "Chapa 77",
       "texto": "",
-      "mudou": "Novo na v3.1: Aceitar pedido → o pedido vai para Em preparo."
+      "mudou": "Aceitar pedido → o pedido vai para Em preparo."
     },
     {
       "n": "14",
-      "arquivo": "14-transicao-lateral.png",
-      "nome": "Transição lateral",
-      "inicio": 15.75,
-      "fim": 16.25,
-      "projeto": "Chapa 77 → Swell Club",
+      "arquivo": "14-transicao-creme.png",
+      "nome": "Transição · o creme da loja vira a Fornada",
+      "inicio": 22.1,
+      "fim": 22.65,
+      "projeto": "Chapa 77 → Fornada",
       "texto": "",
-      "mudou": "Empurrão para a esquerda, sem zoom."
+      "mudou": "A tela da loja apaga e o cartão creme cresce até a tela inteira (sem zoom: o retângulo cresce) e vira a página creme da Fornada."
     },
     {
       "n": "15",
-      "arquivo": "15-swell-hero.png",
-      "nome": "Swell Club · abertura",
-      "inicio": 16.25,
-      "fim": 17.2,
-      "projeto": "Swell Club",
-      "texto": "Surf shop · pranchas, aluguel por diária e kit montado no site",
-      "mudou": "Câmera lateral em escala constante; o nome aparece só como contorno ao fundo. Encurtado em 0,5 s."
-    },
-    {
-      "n": "16",
-      "arquivo": "16-swell-pranchas.png",
-      "nome": "Swell Club · pranchas",
-      "inicio": 17.2,
-      "fim": 18.35,
-      "projeto": "Swell Club",
-      "texto": "",
-      "mudou": "Um arrasto real no carrossel de pranchas (eram dois)."
-    },
-    {
-      "n": "17",
-      "arquivo": "17-swell-sai-fornada-entra.png",
-      "nome": "Swell sai · Fornada entra",
-      "inicio": 18.35,
-      "fim": 19.2,
-      "projeto": "Swell Club → Fornada",
-      "texto": "",
-      "mudou": "O creme cobre a tela e as letras SWELL saem antes do título da Fornada entrar."
-    },
-    {
-      "n": "18",
-      "arquivo": "18-fornada-preservada.png",
+      "arquivo": "15-fornada-preservada.png",
       "nome": "Fornada",
-      "inicio": 19.0,
-      "fim": 22.9,
+      "inicio": 22.65,
+      "fim": 26.55,
       "projeto": "Fornada",
       "texto": "Padaria · reserva do café da manhã pelo site",
       "mudou": "Preservada exatamente como na v2 (só mudou de lugar no tempo)."
     },
     {
-      "n": "19",
-      "arquivo": "19-grid-marca.png",
+      "n": "16",
+      "arquivo": "16-grid-marca.png",
       "nome": "Grade → marca",
-      "inicio": 22.9,
-      "fim": 24.6,
+      "inicio": 26.55,
+      "fim": 28.25,
       "projeto": "Growlift",
       "texto": "",
-      "mudou": "As quatro telas viram o símbolo da Growlift, com leve flutuação."
+      "mudou": "As telas viram o símbolo da Growlift; no lugar do surf, a tela do Pix do Chapa 77."
     },
     {
-      "n": "20",
-      "arquivo": "20-assinatura.png",
+      "n": "17",
+      "arquivo": "17-assinatura.png",
       "nome": "Assinatura",
-      "inicio": 24.6,
-      "fim": 26.95,
+      "inicio": 28.25,
+      "fim": 30.6,
       "projeto": "Growlift",
       "texto": "GROWLIFT / SEU PRÓXIMO SITE COMEÇA AQUI. / growlift.com.br",
       "mudou": "Fecho em etapas, luz atravessando a marca, subida lenta. Sem botão e sem \"diagnóstico grátis\"."
@@ -228,7 +198,7 @@
       "07-chapa77.png",
       "08-chapa77-adicionais.png",
       "Chapa 77 · pedido",
-      "Antes: rolagem pela história das cores. Agora: o pedido de verdade (adicionais e sacola)."
+      "Antes: rolagem pela história das cores. Agora: o pedido de verdade, mais devagar."
     ],
     [
       "07-chapa77.png",
@@ -244,25 +214,19 @@
     ],
     [
       "09-swellclub.png",
-      "16-swell-pranchas.png",
-      "Swell Club",
-      "Antes: carrossel com aproximação. Agora: câmera de lado e arrasto real nas pranchas."
-    ],
-    [
-      "10-transicao-swellclub-fornada.png",
-      "17-swell-sai-fornada-entra.png",
-      "Swell → Fornada",
-      "Antes: SWELL gigante junto do título da Fornada. Agora: SWELL sai antes."
+      "14-transicao-creme.png",
+      "Swell Club → saiu",
+      "O Swell Club saiu; o creme da tela da loja leva direto à Fornada."
     ],
     [
       "11-fornada.png",
-      "18-fornada-preservada.png",
+      "15-fornada-preservada.png",
       "Fornada",
       "Preservada."
     ],
     [
       "13-assinatura.png",
-      "20-assinatura.png",
+      "17-assinatura.png",
       "Assinatura",
       "Antes: chamada de diagnóstico grátis. Agora: SEU PRÓXIMO SITE COMEÇA AQUI., sem botão."
     ]
