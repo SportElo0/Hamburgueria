@@ -19,7 +19,7 @@ import {
   type Situacao,
   type Verificacao,
 } from '@/lib/oportunidades/regras';
-import { AtribuicaoGoogle, CHIP_CATEGORIA, dataCurta, linkSeguro } from './estilos';
+import { AtribuicaoGoogle, CHIP_CATEGORIA, Telefone, dataCurta, linkSeguro } from './estilos';
 
 const POR_PAGINA = 40;
 
@@ -31,7 +31,8 @@ export function ListaOportunidades({ leads, limiteDetalhes, usadasDetalhes }: { 
 
   const visiveis = items.filter(
     (l) =>
-      (!filtro.categoria || l.categoria === filtro.categoria) &&
+      // places with a working site of their own stay out unless that chip is picked (searches no longer keep them)
+      (filtro.categoria ? l.categoria === filtro.categoria : l.categoria !== 'site-proprio') &&
       (!filtro.cidade || l.cidade === filtro.cidade) &&
       (!filtro.segmento || l.segmento === filtro.segmento) &&
       (filtro.situacao ? l.situacao === filtro.situacao : l.situacao !== 'descartada' && l.situacao !== 'nao-contatar'),
@@ -172,7 +173,7 @@ function CartaoLead({ lead: l, salvo }: { lead: Lead; salvo: (l: Lead) => void }
         <div className="mt-3 rounded-lg border border-line bg-paper p-3 text-sm">
           <p className="font-semibold">{aoVivo.nome}</p>
           <p className="text-ink-soft">{aoVivo.endereco}</p>
-          {aoVivo.telefone && <p className="text-ink-soft">Tel. comercial: {aoVivo.telefone}</p>}
+          <Telefone telefone={aoVivo.telefone} className="text-ink-soft" />
           <p className="break-words text-ink-soft">
             Site no Google:{' '}
             {linkSeguro(aoVivo.site) ? (

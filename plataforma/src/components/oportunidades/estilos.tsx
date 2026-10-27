@@ -1,4 +1,4 @@
-import type { Categoria } from '@/lib/oportunidades/regras';
+import { linkLigar, linkWhatsApp, type Categoria } from '@/lib/oportunidades/regras';
 
 export const CHIP_CATEGORIA: Record<Categoria, string> = {
   'sem-site': 'bg-accent-soft text-accent',
@@ -14,6 +14,28 @@ export const dataCurta = (iso?: string) => (iso ? new Intl.DateTimeFormat('pt-BR
 export const linkSeguro = (url?: string) => (url && /^https?:\/\//i.test(url) ? url : undefined);
 
 export const usd = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
+
+/** The live business phone with a one-tap contact: WhatsApp for a mobile number, a call for a landline. Shown, never saved. */
+export function Telefone({ telefone, className = '' }: { telefone?: string; className?: string }) {
+  if (!telefone) return null;
+  const whats = linkWhatsApp(telefone), ligar = linkLigar(telefone);
+  return (
+    <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 ${className}`}>
+      <span>Tel. comercial: {telefone}</span>
+      {whats ? (
+        <a className="btn-ghost min-h-8 px-3 text-sm" href={whats} target="_blank" rel="noopener noreferrer">
+          Chamar no WhatsApp
+        </a>
+      ) : (
+        ligar && (
+          <a className="text-accent underline underline-offset-2" href={ligar}>
+            Ligar (fixo)
+          </a>
+        )
+      )}
+    </p>
+  );
+}
 
 /** Google Maps text attribution, required wherever Places content is shown without a Google map. */
 export function AtribuicaoGoogle() {

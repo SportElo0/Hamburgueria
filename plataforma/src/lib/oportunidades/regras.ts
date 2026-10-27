@@ -94,6 +94,8 @@ export interface Pesquisa {
   novos: number;
   repetidos: number;
   foraDaCidade: number;
+  /** Places whose own site passed the check: not leads, so neither listed nor kept (older searches lack it). */
+  comSite?: number;
 }
 
 /**
@@ -196,6 +198,21 @@ export function lerLink(raw: string | undefined): Link {
 
 /** Official Maps URL that opens a place from its ID alone (developers.google.com/maps/documentation/urls). */
 export const linkMaps = (placeId: string) => `https://www.google.com/maps/search/?api=1&query=Google&query_place_id=${encodeURIComponent(placeId)}`;
+
+/**
+ * WhatsApp link for a Brazilian mobile number as Google shows it ("(12) 99123-4567"); landlines get none.
+ * Built on screen from the live phone, never stored.
+ */
+export function linkWhatsApp(telefone: string | undefined): string | undefined {
+  const d = (telefone ?? '').replace(/\D/g, '').replace(/^0/, '');
+  return /^[1-9]{2}9\d{8}$/.test(d) ? `https://wa.me/55${d}` : undefined;
+}
+
+/** Call link for a Brazilian landline (area code + 8 digits); anything else gets no link. */
+export function linkLigar(telefone: string | undefined): string | undefined {
+  const d = (telefone ?? '').replace(/\D/g, '').replace(/^0/, '');
+  return /^[1-9]{2}[2-5]\d{7}$/.test(d) ? `tel:+55${d}` : undefined;
+}
 
 export const PLACE_ID = /^[A-Za-z0-9_-]{10,300}$/;
 

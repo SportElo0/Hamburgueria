@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { estimarAction, pesquisarAction } from '@/app/painel/oportunidades/actions';
 import type { Resultado } from '@/lib/oportunidades/dados';
 import { CIDADES_SUGERIDAS, MAX_PAGINAS, SEGMENTOS, nomeCategoria, type Estimativa, type Segmento } from '@/lib/oportunidades/regras';
-import { AtribuicaoGoogle, CHIP_CATEGORIA, linkSeguro, usd } from './estilos';
+import { AtribuicaoGoogle, CHIP_CATEGORIA, Telefone, linkSeguro, usd } from './estilos';
 
 interface Props {
   chave: boolean;
@@ -179,10 +179,10 @@ function ResultadoAoVivo({ resultado }: { resultado: Resultado }) {
     <div className="mt-6 border-t border-line pt-5">
       <h3 className="text-lg font-bold">Resultado</h3>
       <p className="mt-1 text-sm text-ink-soft">
-        {p.chamadas} {p.chamadas === 1 ? 'busca usada' : 'buscas usadas'} · {p.encontrados} lugares em {p.cidade} · {p.novos} novos na lista · {p.repetidos} já estavam · {p.foraDaCidade} de outras cidades ignorados
+        {p.chamadas} {p.chamadas === 1 ? 'busca usada' : 'buscas usadas'} · {p.encontrados} lugares em {p.cidade} · {p.novos} novos na lista · {p.repetidos} já estavam · {p.foraDaCidade} de outras cidades ignorados{p.comSite ? ` · ${p.comSite} com site funcionando ficaram de fora` : ''}
       </p>
       <p className="mt-1 text-xs text-ink-mute">
-        Nome, endereço, site e telefone aparecem só agora: os termos do Google não deixam guardar. Na lista abaixo ficam o identificador do lugar e a conclusão da equipe.
+        Aqui aparecem só os lugares sem site funcionando. Nome, endereço, site e telefone aparecem só agora: os termos do Google não deixam guardar nem exportar. Na lista abaixo ficam o identificador do lugar e a conclusão da equipe.
       </p>
       {linhas.length === 0 ? (
         <p className="mt-4 text-ink-mute">Nenhum lugar encontrado nessa cidade.</p>
@@ -205,7 +205,7 @@ function ResultadoAoVivo({ resultado }: { resultado: Resultado }) {
                       {l.novo && <span className="chip ml-2 bg-ink text-white">novo</span>}
                     </p>
                     <p className="text-ink-mute">{l.endereco}</p>
-                    {l.telefone && <p className="text-ink-mute">Tel. comercial: {l.telefone}</p>}
+                    <Telefone telefone={l.telefone} className="mt-1 text-ink-mute" />
                   </td>
                   <td className="max-w-[220px] px-3 py-2 break-words">
                     {linkSeguro(l.site) ? (

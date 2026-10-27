@@ -159,6 +159,8 @@ export async function executarPesquisa(raw: unknown, aprovadas: number, por: str
     l.fechado ? Promise.resolve<Checagem>({ categoria: 'incerta', sinais: ['O Google marca como fechado definitivamente.'] }) : checar(l.site),
   );
 
+  // A place whose own site works is not a lead: it is counted, not listed or kept.
+  const alvos = naRegiao.map((l, i) => ({ l, c: checagens[i] })).filter(({ c }) => c.categoria !== 'site-proprio');
   const agora = now.toISOString();
   const pesquisaId = `${dayWindow(now).replace(/-/g, '')}-${crypto.randomUUID().slice(0, 8)}`;
   let novos = 0;
@@ -167,8 +169,7 @@ export async function executarPesquisa(raw: unknown, aprovadas: number, por: str
     const lista = { ...atual };
     novos = 0;
     marcados.length = 0;
-    naRegiao.forEach((l, i) => {
-      const c = checagens[i];
+    alvos.forEach(({ l, c }) => {
       const antes = lista[l.id];
       marcados.push(!antes);
       if (!antes) {
@@ -208,11 +209,12 @@ export async function executarPesquisa(raw: unknown, aprovadas: number, por: str
     chamadas,
     encontrados: naRegiao.length,
     novos,
-    repetidos: naRegiao.length - novos,
+    repetidos: alvos.length - novos,
     foraDaCidade: todos.length - naRegiao.length,
+    comSite: naRegiao.length - alvos.length,
   };
   await atualizar<Pesquisa[]>(PESQUISAS, [], (lista) => [pesquisa, ...lista].slice(0, MAX_PESQUISAS_GUARDADAS));
-  return { pesquisa, linhas: naRegiao.map((l, i) => ({ ...l, ...checagens[i], novo: marcados[i] })) };
+  return { pesquisa, linhas: alvos.map(({ l, c }, i) => ({ ...l, ...c, novo: marcados[i] })) };
 }
 
 /** Google's current data for one place, for the review screen. Counted against the month's cap; never stored. */

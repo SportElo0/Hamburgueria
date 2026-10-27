@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { useFileStorage } from '@/lib/storage';
-import { csv, estimar, lerLink, linhasCsv, naCidade, textoDaBusca } from '@/lib/oportunidades/regras';
+import { csv, estimar, lerLink, linhasCsv, linkLigar, linkWhatsApp, naCidade, textoDaBusca } from '@/lib/oportunidades/regras';
 import { mascaraBusca, mascaraDetalhes } from '@/lib/oportunidades/places';
 import { executarPesquisa, estimarPesquisa, listarLeads, listarPesquisas, revisar, usoDoMes, verAoVivo } from '@/lib/oportunidades/dados';
 import { checarLink, ipInterno, lookupPublico, type Abertura, type Checagem } from '@/lib/oportunidades/site';
@@ -91,6 +91,17 @@ describe('regras do Lead Finder', () => {
     expect(naCidade('Rua Y, 2 - Perequê, Ilhabela - SP, 11630-000, Brasil', 'São Sebastião', 'SP')).toBe(false);
   });
 
+  it('botão de WhatsApp só para celular brasileiro; fixo fica de fora', () => {
+    expect(linkWhatsApp('(12) 99123-4567')).toBe('https://wa.me/5512991234567');
+    expect(linkWhatsApp('012 99123-4567')).toBe('https://wa.me/5512991234567');
+    expect(linkWhatsApp('(12) 3896-1234')).toBeUndefined();
+    expect(linkWhatsApp('0800 123 4567')).toBeUndefined();
+    expect(linkWhatsApp(undefined)).toBeUndefined();
+    expect(linkLigar('(12) 3896-1234')).toBe('tel:+551238961234');
+    expect(linkLigar('0800 123 4567')).toBeUndefined();
+    expect(linkLigar('(12) 99123-4567')).toBeUndefined();
+  });
+
   it('gera CSV para o Excel e neutraliza células que parecem fórmula', () => {
     const out = csv([
       ['a', 'b;c'],
@@ -126,16 +137,16 @@ describe('pesquisa paga', () => {
     expect(JSON.parse(String(primeira.body))).toMatchObject({ textQuery: 'barbearia em Ilhabela - SP', includedType: 'barber_shop', pageSize: 20, regionCode: 'BR' });
     expect(JSON.parse(String(chamadas[1].init!.body)).pageToken).toBe('pagina2');
 
-    expect(r.pesquisa).toMatchObject({ chamadas: 2, encontrados: 3, novos: 3, repetidos: 0, foraDaCidade: 1 });
+    // the place with a working site of its own is counted, but neither shown nor kept
+    expect(r.pesquisa).toMatchObject({ chamadas: 2, encontrados: 3, novos: 2, repetidos: 0, foraDaCidade: 1, comSite: 1 });
     expect(r.linhas.map((l) => [l.id, l.categoria])).toEqual([
       ['PlaceAAAAAAAA1', 'sem-site'],
       ['PlaceAAAAAAAA2', 'so-rede-social'],
-      ['PlaceAAAAAAAA4', 'site-proprio'],
     ]);
     // The result screen gets Google's data; storage gets none of it.
     expect(r.linhas[0].nome).toBe('Barbearia Exemplo PlaceAAAAAAAA1');
     const leads = await listarLeads();
-    expect(leads.map((l) => l.placeId).sort()).toEqual(['PlaceAAAAAAAA1', 'PlaceAAAAAAAA2', 'PlaceAAAAAAAA4']);
+    expect(leads.map((l) => l.placeId).sort()).toEqual(['PlaceAAAAAAAA1', 'PlaceAAAAAAAA2']);
     const guardado = JSON.stringify([leads, await listarPesquisas()]);
     for (const proibido of ['Barbearia Exemplo', 'Rua Exemplo', '11630', 'instagram.com', 'exemplo.com.br', 'maps.google.com', CHAVE]) expect(guardado).not.toContain(proibido);
     expect((await usoDoMes()).busca).toBe(2);
@@ -146,7 +157,7 @@ describe('pesquisa paga', () => {
     await executarPesquisa(pedido, 2, 'a@growlift.com.br', { checar: checarFalso });
     await revisar('PlaceAAAAAAAA1', { categoria: 'so-rede-social', situacao: 'boa', observacoes: 'Tem Instagram ativo', verificacao: { situacao: 'confirmado', fontes: ['instagram', 'busca-google'], links: 'https://instagram.com/x' } }, 'b@growlift.com.br');
     const r = await executarPesquisa(pedido, 2, 'a@growlift.com.br', { checar: checarFalso });
-    expect(r.pesquisa).toMatchObject({ novos: 0, repetidos: 3 });
+    expect(r.pesquisa).toMatchObject({ novos: 0, repetidos: 2, comSite: 1 });
     const lead = (await listarLeads()).find((l) => l.placeId === 'PlaceAAAAAAAA1')!;
     expect(lead).toMatchObject({ categoria: 'so-rede-social', categoriaRevisada: true, situacao: 'boa', observacoes: 'Tem Instagram ativo' });
     expect(lead.verificacao).toMatchObject({ situacao: 'confirmado', por: 'b@growlift.com.br' });
@@ -196,7 +207,7 @@ describe('pesquisa paga', () => {
     const linhas = linhasCsv(await listarLeads());
     expect(linhas[0]).toContain('place_id');
     expect(linhas[0]).toContain('fontes_consultadas');
-    expect(linhas).toHaveLength(4);
+    expect(linhas).toHaveLength(3); // header + the two places without a working site
     expect(JSON.stringify(linhas)).not.toContain('Barbearia Exemplo');
     expect(linhas[1][1]).toMatch(/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=Google&query_place_id=Place/);
   });
