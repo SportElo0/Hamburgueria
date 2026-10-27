@@ -10,7 +10,7 @@ const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'capturas');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 
 // [pattern, replacement] applied to every text node and attribute that shows text.
-const SITES = {
+export const SITES = {
   salinho: {
     url: 'https://semvo-juquehy.pages.dev/pt/?loja=juquehy', // straight into the shop, past the store picker
     swap: [[/em Juquehy/g, 'no litoral'], [/Maresias/g, 'Praia'], [/MARESIAS/g, 'PRAIA'], [/Av\. Dr\. Francisco Loup/g, 'orla'], [/SemvØ Clothing/gi, 'Salinho'], [/SEMVØ CLOTHING/g, 'SALINHO'], [/SEMVØ/g, 'SALINHO'], [/SemvØ/g, 'Salinho'], [/Farias Boulevard/g, 'centro'], [/JUQUEHY · MARESIAS/g, 'LITORAL'], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'Litoral'], [/São Sebastião/g, 'Brasil']],
@@ -40,7 +40,7 @@ const SITES = {
   },
 };
 
-async function anonymize(page, site) {
+export async function anonymize(page, site) {
   if (site.css) await page.addStyleTag({ content: site.css });
   await page.evaluate(({ swap, logos, logoText, logoStyle, hideSvgWith }) => {
     if (hideSvgWith) for (const svg of document.querySelectorAll('svg')) if (new RegExp(hideSvgWith, 'i').test(svg.outerHTML) && !svg.closest('[data-anon-keep]')) svg.style.display = 'none';
@@ -65,6 +65,8 @@ async function anonymize(page, site) {
   }, { swap: site.swap.map(([re, r]) => [re.source, re.flags, r]), logos: site.logos, logoText: site.logoText, logoStyle: site.logoStyle, hideSvgWith: site.hideSvgWith?.source });
 }
 
+// Run directly: the hero and full-page captures. Imported: only SITES and anonymize().
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
 const browser = await chromium.launch({ executablePath: CHROME });
 for (const [name, site] of Object.entries(SITES)) {
   for (const [kind, vp, scale] of [['pc', { width: 1440, height: 900 }, 2], ['cel', { width: 390, height: 844 }, 3]]) {
@@ -91,3 +93,4 @@ for (const [name, site] of Object.entries(SITES)) {
   }
 }
 await browser.close();
+}

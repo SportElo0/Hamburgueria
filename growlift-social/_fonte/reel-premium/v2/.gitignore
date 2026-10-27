@@ -1,0 +1,20 @@
+# Raw captures are large and come back with source/capturar.mjs; only the ones the frames use are kept.
+assets/*/*.png
+assets/*/*.mp4
+previews/_tmp-*
+!assets/_recortes/*.png
+!assets/growlift/*.png
+!assets/salinho/cel-hero.png
+!assets/salinho/cel-hero-peca-3.png
+!assets/salinho/cel-hero-peca-4.png
+!assets/chapa77/pc-historia-[1-5].png
+!assets/chapa77/cel-historia-1.png
+!assets/chapa77/cel-historia-6.png
+!assets/chapa77/cel-hero.png
+!assets/swellclub/cel-hero.png
+!assets/swellclub/cel-pranchas.png
+!assets/swellclub/pc-pranchas.png
+!assets/swellclub/pc-aluguel.png
+!assets/swellclub/pc-session.png
+!assets/fornada/cel-historia-4.png
+!assets/fornada/cel-hero.png

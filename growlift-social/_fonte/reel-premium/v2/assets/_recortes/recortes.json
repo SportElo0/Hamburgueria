@@ -1,0 +1,182 @@
+{
+  "salinho-titulo": {
+    "origem": "salinho/pc4x-hero.png",
+    "caixa_css": [
+      58,
+      284,
+      388,
+      466
+    ],
+    "dpr": 4,
+    "tamanho_px": [
+      1320,
+      728
+    ],
+    "o_que_e": "título do hero \"Leve por natureza.\""
+  },
+  "salinho-painel": {
+    "origem": "salinho/pc4x-hero.png",
+    "caixa_css": [
+      1108,
+      182,
+      1388,
+      716
+    ],
+    "dpr": 4,
+    "tamanho_px": [
+      1120,
+      2136
+    ],
+    "o_que_e": "painel da peça com tamanho e reserva"
+  },
+  "salinho-botao": {
+    "origem": "salinho/pc4x-hero.png",
+    "caixa_css": [
+      1120,
+      463,
+      1379,
+      530
+    ],
+    "dpr": 4,
+    "tamanho_px": [
+      1036,
+      268
+    ],
+    "o_que_e": "botão \"Reserve minha peça\""
+  },
+  "salinho-miniaturas": {
+    "origem": "salinho/pc4x-hero.png",
+    "caixa_css": [
+      1118,
+      624,
+      1382,
+      714
+    ],
+    "dpr": 4,
+    "tamanho_px": [
+      1056,
+      360
+    ],
+    "o_que_e": "seletor das 4 peças"
+  },
+  "salinho-cartao": {
+    "origem": "salinho/pc4x-hero.png",
+    "caixa_css": [
+      16,
+      16,
+      1424,
+      884
+    ],
+    "dpr": 4,
+    "tamanho_px": [
+      2900,
+      1788
+    ],
+    "o_que_e": "hero inteiro, sem a margem creme da página"
+  },
+  "chapa77-burger": {
+    "origem": "chapa77/pc4x-hero.png",
+    "caixa_css": [
+      430,
+      290,
+      990,
+      760
+    ],
+    "dpr": 4,
+    "tamanho_px": [
+      2240,
+      1880
+    ],
+    "o_que_e": "lanche do hero sobre o vermelho"
+  },
+  "swellclub-espuma": {
+    "origem": "swellclub/pc4x-hero.png",
+    "caixa_css": [
+      470,
+      540,
+      1424,
+      884
+    ],
+    "dpr": 4,
+    "tamanho_px": [
+      2900,
+      1046
+    ],
+    "o_que_e": "espuma da onda no hero, abaixo da prancha"
+  },
+  "fornada-bebida": {
+    "origem": "fornada/pc-historia-4.png",
+    "caixa_css": [
+      900,
+      40,
+      1420,
+      820
+    ],
+    "dpr": 2,
+    "tamanho_px": [
+      1040,
+      1560
+    ],
+    "o_que_e": "cena ilustrativa de chocolate quente (hero)"
+  },
+  "fornada-titulo": {
+    "origem": "fornada/pc-vitrine.png",
+    "caixa_css": [
+      108,
+      108,
+      604,
+      296
+    ],
+    "dpr": 2,
+    "tamanho_px": [
+      992,
+      376
+    ],
+    "o_que_e": "título \"O simples. Extraordinário.\""
+  },
+  "fornada-folhado": {
+    "origem": "fornada/pc-vitrine.png",
+    "caixa_css": [
+      546,
+      467,
+      998,
+      1071
+    ],
+    "dpr": 2,
+    "tamanho_px": [
+      904,
+      1208
+    ],
+    "o_que_e": "foto \"Camada por camada.\""
+  },
+  "fornada-folhado-legenda": {
+    "origem": "fornada/pc-vitrine.png",
+    "caixa_css": [
+      540,
+      1086,
+      770,
+      1144
+    ],
+    "dpr": 2,
+    "tamanho_px": [
+      460,
+      116
+    ],
+    "o_que_e": "legenda da foto"
+  },
+  "fornada-paes": {
+    "origem": "fornada/pc-vitrine.png",
+    "caixa_css": [
+      115,
+      362,
+      516,
+      896
+    ],
+    "dpr": 2,
+    "tamanho_px": [
+      802,
+      1068
+    ],
+    "o_que_e": "foto \"Pães com personalidade.\""
+  }
+}
