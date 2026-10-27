@@ -1,0 +1,37 @@
+{
+  "versao": "v3 · revisão (não é a versão comercial final)",
+  "duracao": 25.5,
+  "formato": "1080×1920 · 30 fps · H.264 + AAC 48 kHz",
+  "ritmo": "abertura explosiva, demonstrações mais suaves, assinatura calma",
+  "quadros": [
+    { "n": "01", "arquivo": "01-abertura.png", "nome": "Abertura", "inicio": 0, "fim": 2.0, "projeto": "Growlift", "texto": "SUA MARCA / MERECE / MAIS.", "mudou": "Preservada: frase, paleta e hierarquia. Ganhou três impactos de som, um por palavra." },
+    { "n": "02", "arquivo": "02-mais-vira-tela.png", "nome": "MAIS. vira tela", "inicio": 2.0, "fim": 3.0, "projeto": "Growlift → Salinho", "texto": "MAIS.", "mudou": "O ponto azul cresce e vira a tela da Salinho, como na v2." },
+    { "n": "03", "arquivo": "03-salinho-site.png", "nome": "Salinho · site", "inicio": 3.0, "fim": 4.4, "projeto": "Salinho", "texto": "Salinho · moda de linho", "mudou": "Sem zoom: a câmera desliza de lado sobre o site em tamanho fixo." },
+    { "n": "04", "arquivo": "04-salinho-pecas-no-celular.png", "nome": "Salinho · troca das peças", "inicio": 4.4, "fim": 6.1, "projeto": "Salinho", "texto": "", "mudou": "Preservado: os dois toques reais trocam camisa → short → calça. O celular só sobe; não aproxima." },
+    { "n": "05", "arquivo": "05-salinho-composicao.png", "nome": "Salinho · Leve por natureza", "inicio": 6.1, "fim": 7.0, "projeto": "Salinho", "texto": "Leve por natureza.", "mudou": "Preservada a composição; o celular sai com fade para cima em vez de zoom." },
+    { "n": "06", "arquivo": "06-transicao-forma.png", "nome": "Transição · o botão vira forma", "inicio": 7.0, "fim": 7.6, "projeto": "Salinho → Chapa 77", "texto": "", "mudou": "O texto \"Reserve minha peça\" some antes; só a forma verde cresce e vira o vermelho do Chapa 77. Nenhum botão aparece por cima do restaurante." },
+    { "n": "07", "arquivo": "07-chapa77-produto.png", "nome": "Chapa 77 · cardápio", "inicio": 7.6, "fim": 8.7, "projeto": "Chapa 77", "texto": "Hamburgueria · cardápio com adicionais e sacola de pedido", "mudou": "Novo: o lanche entra e o celular sobe com o cardápio real (renders 3D, preços de exemplo)." },
+    { "n": "08", "arquivo": "08-chapa77-adicionais.png", "nome": "Chapa 77 · adicionais", "inicio": 8.7, "fim": 10.9, "projeto": "Chapa 77", "texto": "", "mudou": "Novo: Personalizar → Cheddar cremoso e Maionese artesanal; o total muda de R$ 58 para R$ 66 (valores de exemplo)." },
+    { "n": "09", "arquivo": "09-chapa77-sacola.png", "nome": "Chapa 77 · sacola", "inicio": 10.9, "fim": 11.9, "projeto": "Chapa 77", "texto": "", "mudou": "Novo: Adicionar → Ver sacola → Sua sacola com o item e os adicionais." },
+    { "n": "10", "arquivo": "10-chapa77-mensagem.png", "nome": "Chapa 77 · mensagem do pedido", "inicio": 11.9, "fim": 13.0, "projeto": "Chapa 77", "texto": "Do lanche à sacola: o pedido sai pronto em mensagem para a loja", "mudou": "Novo: \"Gerar mensagem do pedido\" mostra a prévia em modo demonstração (nenhum pedido é enviado, nada é pago)." },
+    { "n": "11", "arquivo": "11-transicao-lateral.png", "nome": "Transição lateral", "inicio": 13.0, "fim": 13.5, "projeto": "Chapa 77 → Swell Club", "texto": "", "mudou": "Empurrão para a esquerda, sem zoom." },
+    { "n": "12", "arquivo": "12-swell-hero.png", "nome": "Swell Club · abertura", "inicio": 13.5, "fim": 14.95, "projeto": "Swell Club", "texto": "Surf shop · pranchas, aluguel por diária e kit montado no site", "mudou": "Câmera lateral em escala constante; o nome aparece só como contorno ao fundo." },
+    { "n": "13", "arquivo": "13-swell-pranchas.png", "nome": "Swell Club · pranchas", "inicio": 14.95, "fim": 16.7, "projeto": "Swell Club", "texto": "", "mudou": "Novo: dois arrastos reais no carrossel de pranchas; a faixa segue de lado." },
+    { "n": "14", "arquivo": "14-swell-sai-fornada-entra.png", "nome": "Swell sai · Fornada entra", "inicio": 16.7, "fim": 17.6, "projeto": "Swell Club → Fornada", "texto": "", "mudou": "O creme cobre a tela e as letras SWELL saem antes do título da Fornada entrar: não disputam mais o mesmo quadro." },
+    { "n": "15", "arquivo": "15-fornada-preservada.png", "nome": "Fornada", "inicio": 17.6, "fim": 21.45, "projeto": "Fornada", "texto": "Padaria · reserva do café da manhã pelo site", "mudou": "Preservada exatamente como na v2 (só mudou de lugar no tempo)." },
+    { "n": "16", "arquivo": "16-grid-marca.png", "nome": "Grade → marca", "inicio": 21.45, "fim": 23.15, "projeto": "Growlift", "texto": "", "mudou": "Mesma ideia da v2: as quatro telas viram o símbolo da Growlift, agora com leve flutuação." },
+    { "n": "17", "arquivo": "17-assinatura.png", "nome": "Assinatura", "inicio": 23.15, "fim": 25.5, "projeto": "Growlift", "texto": "GROWLIFT / SEU PRÓXIMO SITE COMEÇA AQUI. / growlift.com.br", "mudou": "Novo fecho: entra em etapas, luz atravessa a marca e tudo sobe devagar. Sem botão e sem \"diagnóstico grátis\"." }
+  ],
+  "comparacao": [
+    ["01-hook.png", "01-abertura.png", "Abertura", "Mantida. Agora com som."],
+    ["03-salinho-entrada.png", "03-salinho-site.png", "Salinho · entrada", "Antes: aproximação contínua. Agora: deslize lateral em tamanho fixo."],
+    ["05-salinho-principal.png", "05-salinho-composicao.png", "Salinho · composição", "Mantida; a saída do celular virou fade para cima."],
+    ["06-transicao-salinho-chapa77.png", "06-transicao-forma.png", "Salinho → Chapa 77", "Antes: o botão com texto abria sobre o restaurante. Agora: só a forma, sem texto."],
+    ["07-chapa77.png", "08-chapa77-adicionais.png", "Chapa 77", "Antes: rolagem pela história das cores. Agora: o pedido de verdade (adicionais, sacola, mensagem)."],
+    ["08-transicao-chapa77-swellclub.png", "11-transicao-lateral.png", "Chapa 77 → Swell Club", "Antes: zoom até o verde-água. Agora: empurrão lateral."],
+    ["09-swellclub.png", "13-swell-pranchas.png", "Swell Club", "Antes: carrossel com aproximação. Agora: câmera de lado e arrasto real nas pranchas."],
+    ["10-transicao-swellclub-fornada.png", "14-swell-sai-fornada-entra.png", "Swell → Fornada", "Antes: SWELL gigante junto do título da Fornada. Agora: SWELL sai antes."],
+    ["11-fornada.png", "15-fornada-preservada.png", "Fornada", "Preservada."],
+    ["13-assinatura.png", "17-assinatura.png", "Assinatura", "Antes: chamada de diagnóstico grátis. Agora: SEU PRÓXIMO SITE COMEÇA AQUI., sem botão."]
+  ]
+}

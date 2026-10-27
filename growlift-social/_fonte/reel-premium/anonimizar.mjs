@@ -23,7 +23,7 @@ export const SITES = {
   },
   chapa77: {
     url: 'https://downtown-burger-gilt.vercel.app',
-    swap: [[/burguer artesanal feito com qualidade/gi, 'hambúrguer na chapa, do jeito da casa'], [/[®™]/g, ''], [/DOWNTOWN/g, 'CHAPA 77'], [/Downtown/g, 'Chapa 77'], [/HOLYFIELD/gi, 'DUPLO 77'], [/KILL BILL/gi, 'DA CASA'], [/AUSTRALIAN CHEDDAR/gi, 'CHEDDAR DUPLO'],
+    swap: [[/burguer artesanal feito com qualidade/gi, 'hambúrguer na chapa, do jeito da casa'], [/Foto do cardápio/gi, 'Ilustração 3D'], [/[®™]/g, ''], [/DOWNTOWN/g, 'CHAPA 77'], [/Downtown/g, 'Chapa 77'], [/HOLYFIELD/gi, 'DUPLO 77'], [/KILL BILL/gi, 'DA CASA'], [/AUSTRALIAN CHEDDAR/gi, 'CHEDDAR DUPLO'],
       [/Burger artesanal feito com qualidade\./gi, 'Hambúrguer na chapa, do jeito da casa.']], // the real shop's slogan
     logos: [],
     hideSvgWith: /DOWNTOWN|STEAKS|skyline/i, // the round skyline badge is the real brand's mark

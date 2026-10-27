@@ -1,5 +1,7 @@
 # Reel "Sua marca merece mais." · vídeo final
 
+> **Em revisão: v3** (`renders/v3/revisao-v3.mp4`, com som). Diagnóstico, mudanças e pendências em `v3-revisao.md`. O que segue abaixo é a v2 entregue, mantida como versão de segurança até vocês aprovarem a v3.
+
 **Pronto para postar (depois da aprovação de vocês):** `growlift-social/05-reels/09-sua-marca-merece-mais.mp4`, com a capa `09-sua-marca-merece-mais-capa.png`. A legenda e o passo a passo para postar estão em `growlift-social/05-reels/roteiros.md`, item 9.
 
 25 s · 1080×1920 · 30 fps · sem som (a música entra pelo Instagram). Nada foi publicado.

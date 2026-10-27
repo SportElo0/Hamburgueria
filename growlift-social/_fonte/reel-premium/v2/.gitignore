@@ -23,3 +23,6 @@ previews/_tmp-*
 assets/_gravacoes/
 renders/_tmp/
 renders/_teste/
+!assets/swellclub/cel-aluguel.png
+renders/v3/_tmp/
+renders/v3/_teste/
