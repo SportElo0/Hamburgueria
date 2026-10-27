@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { estimarAction, pesquisarAction } from '@/app/painel/oportunidades/actions';
 import type { Resultado } from '@/lib/oportunidades/dados';
-import { CIDADES_SUGERIDAS, MAX_PAGINAS, SEGMENTOS, nomeCategoria, type Estimativa, type Segmento } from '@/lib/oportunidades/regras';
+import { CIDADES_SUGERIDAS, GRUPOS_SEGMENTO, MAX_PAGINAS, SEGMENTOS, nomeCategoria, type Estimativa, type Segmento } from '@/lib/oportunidades/regras';
 import { AtribuicaoGoogle, CHIP_CATEGORIA, Telefone, linkSeguro, usd } from './estilos';
 
 interface Props {
@@ -98,10 +98,14 @@ export function NovaPesquisa({ chave, usadas, limite }: Props) {
             Segmento
           </label>
           <select id="np-segmento" className="field" value={form.segmento} onChange={(e) => mudar({ segmento: e.target.value as Segmento })}>
-            {SEGMENTOS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.nome}
-              </option>
+            {GRUPOS_SEGMENTO.map((g) => (
+              <optgroup key={g} label={g}>
+                {SEGMENTOS.filter((s) => s.grupo === g).map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.nome}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </div>

@@ -15,12 +15,33 @@ export type Categoria = (typeof CATEGORIAS)[number]['id'];
 export const CATEGORIA_IDS = CATEGORIAS.map((c) => c.id) as [Categoria, ...Categoria[]];
 export const nomeCategoria = (id: Categoria) => CATEGORIAS.find((c) => c.id === id)?.nome ?? id;
 
-/** `tipo`: the Google place type that steers the search; confeitaria spans several (cake_shop, confectionery, pastry_shop), so the words alone steer it. */
+/**
+ * The niches worth searching, grouped by the plan that fits them (see LEAD-FINDER.md, "Nichos").
+ * `tipo`: the Google place type that steers the search (Table A of the place types). Where Brazilian places are
+ * tagged unevenly (confeitaria spans cake_shop/confectionery/pastry_shop; açaí, marmita, pousada and boat tours
+ * come under several types), it stays undefined and the words alone steer the search.
+ */
 export const SEGMENTOS = [
-  { id: 'restaurantes', nome: 'Restaurantes', termo: 'restaurante', tipo: 'restaurant' },
-  { id: 'confeitarias', nome: 'Confeitarias', termo: 'confeitaria', tipo: undefined },
-  { id: 'barbearias', nome: 'Barbearias', termo: 'barbearia', tipo: 'barber_shop' },
+  // Pedido e Pix no site (plano Lift): delivery and take-away, where the apps' commission hurts most
+  { id: 'restaurantes', nome: 'Restaurantes', termo: 'restaurante', tipo: 'restaurant', grupo: 'Pedido e Pix no site' },
+  { id: 'pizzarias', nome: 'Pizzarias', termo: 'pizzaria', tipo: 'pizza_restaurant', grupo: 'Pedido e Pix no site' },
+  { id: 'hamburguerias', nome: 'Hamburguerias', termo: 'hamburgueria', tipo: 'hamburger_restaurant', grupo: 'Pedido e Pix no site' },
+  { id: 'japoneses', nome: 'Japonês e sushi', termo: 'restaurante japonês sushi', tipo: 'japanese_restaurant', grupo: 'Pedido e Pix no site' },
+  { id: 'acai', nome: 'Açaí', termo: 'açaí', tipo: undefined, grupo: 'Pedido e Pix no site' },
+  { id: 'marmitarias', nome: 'Marmitarias', termo: 'marmitaria', tipo: undefined, grupo: 'Pedido e Pix no site' },
+  { id: 'adegas', nome: 'Adegas e bebidas', termo: 'adega distribuidora de bebidas', tipo: 'liquor_store', grupo: 'Pedido e Pix no site' },
+  { id: 'padarias', nome: 'Padarias', termo: 'padaria', tipo: 'bakery', grupo: 'Pedido e Pix no site' },
+  { id: 'confeitarias', nome: 'Confeitarias', termo: 'confeitaria', tipo: undefined, grupo: 'Pedido e Pix no site' },
+  { id: 'sorveterias', nome: 'Sorveterias', termo: 'sorveteria', tipo: 'ice_cream_shop', grupo: 'Pedido e Pix no site' },
+  // Site, Google e WhatsApp (Start e Grow): services booked by message
+  { id: 'barbearias', nome: 'Barbearias', termo: 'barbearia', tipo: 'barber_shop', grupo: 'Serviços com horário' },
+  { id: 'saloes', nome: 'Salões de beleza', termo: 'salão de beleza', tipo: 'beauty_salon', grupo: 'Serviços com horário' },
+  { id: 'petshops', nome: 'Pet shops', termo: 'pet shop banho e tosa', tipo: 'pet_store', grupo: 'Serviços com horário' },
+  // Litoral: tourists search on the phone before they arrive
+  { id: 'pousadas', nome: 'Pousadas', termo: 'pousada', tipo: undefined, grupo: 'Turismo no litoral' },
+  { id: 'passeios', nome: 'Passeios de barco', termo: 'passeio de barco', tipo: undefined, grupo: 'Turismo no litoral' },
 ] as const;
+export const GRUPOS_SEGMENTO = [...new Set(SEGMENTOS.map((s) => s.grupo))];
 export type Segmento = (typeof SEGMENTOS)[number]['id'];
 export const SEGMENTO_IDS = SEGMENTOS.map((s) => s.id) as [Segmento, ...Segmento[]];
 export const segmento = (id: Segmento) => SEGMENTOS.find((s) => s.id === id) ?? SEGMENTOS[0];

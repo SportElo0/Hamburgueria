@@ -108,6 +108,48 @@ O Google Cloud exige ser maior de 18 anos, então a conta e a chave ficam no nom
    - escolher a situação: Nova, Boa oportunidade, Descartada ou Não contatar.
 5. **Exportar CSV** respeita os filtros da tela.
 
+## Nichos (pesquisa de 27/10/2026)
+
+A lista de segmentos da pesquisa segue o que a Growlift vende. A ordem é pelo plano que cada nicho usa melhor.
+
+**1. Pedido e Pix no site (plano Lift, R$ 597/mês).** É o produto mais forte, para quem vende por delivery ou retirada e hoje paga comissão a aplicativo.
+- No iFood, as fontes citam de 12% a 27% por pedido, além da mensalidade. Com a entrega do iFood, o custo pode passar de 30%. O Lift é mensalidade fixa, sem comissão.
+- Nos dados de 2025 da Abrasel, os aplicativos ainda somam 54% do faturamento de delivery, o WhatsApp 26% e o site ou app próprio só 12%. É exatamente aí que o Lift entra.
+- No iFood, a marmita lidera o almoço (38% dos pedidos), lanche e açaí dominam a tarde e a noite, e a padaria domina o café da manhã (54%).
+
+| Segmento | Por quê |
+| --- | --- |
+| Restaurantes, Pizzarias, Hamburguerias, Japonês e sushi | Ticket alto e pedido de noite; quase todos estão no iFood e sentem a comissão |
+| Açaí, Marmitarias | Muito pedido, ticket menor: a comissão pesa mais na margem |
+| Adegas e bebidas | Pedido à noite e no fim de semana; muitos vendem só pelo WhatsApp |
+| Padarias, Confeitarias | Encomenda (bolo, café da manhã) e retirada; a Fornada é o modelo |
+| Sorveterias | Temporada de verão no litoral |
+
+**2. Serviços com horário (Start e Grow).** Site, perfil no Google e WhatsApp com serviços e preços; o atendimento por mensagem continua com eles.
+- Barbearias, Salões de beleza, Pet shops (banho e tosa).
+- Segundo a mesma pesquisa sobre o WhatsApp, beleza e saúde estão entre os ramos que mais atendem e vendem por ele.
+
+**3. Turismo no litoral (Start e Grow), para Ilhabela e São Sebastião.**
+- **Pousadas:** o Booking cobra de 13% a 17% por reserva, e o Airbnb 16% no Brasil (taxa única de 2026). Um site próprio com reserva pelo WhatsApp é o canal sem comissão. A Villa Verano é o modelo.
+- **Passeios de barco:** o turista procura pelo celular antes de chegar. Na temporada 2025/2026 são 51 escalas de cruzeiro em Ilhabela, com cerca de 217 mil pessoas.
+
+**Como usar:**
+- Comece pelo grupo 1: é o que paga mais e onde o argumento "sem comissão" é mais forte.
+- Em cidade pequena, pesquise o segmento na cidade inteira. Bairro só em cidade grande.
+- Cada pesquisa custa uma busca, tenha resultado bom ou ruim.
+
+**Fontes:**
+- [Câmara: taxas do iFood](https://www.camara.leg.br/noticias/1150933-comissao-debate-cobranca-de-taxas-e-possivel-abuso)
+- [Diário do Comércio: custo com a entrega do iFood](https://diariodocomercio.com.br/geral/?p=4369)
+- [Abrasel: canais de venda do delivery](https://mercadoeconsumo.com.br/16/10/2024/foodservice/whatsapp-impulsiona-vendas-em-bares-e-restaurantes-aponta-abrasel/)
+- [iFood: horários e culinárias](https://diariodocomercio.com.br/negocios/marmitas-dominam-mercado-delivery-brasil/)
+- [WhatsApp por setor](https://mercadoeconsumo.com.br/09/05/2025/noticias/farmacias-saude-e-beleza-lideram-o-uso-do-whatsapp-para-atendimento-e-vendas-no-brasil/amp/)
+- [Booking e Airbnb](https://stays.net/blog/comissao-do-airbnb-novo-modelo)
+- [Airbnb: taxa de 2026](https://www.hostfully.com/pt-br/blog/taxas-do-anfitriao-no-airbnb-a-taxa-exclusiva-do-anfitriao-de-155-explicada-2026/)
+- [Cruzeiros em Ilhabela](https://www.gazetasp.com.br/cotidiano/cidade-litoral-sp-ferve-com-navio-luxo-passageiros-economia-dispara/)
+
+Os números vêm de reportagens e blogs do setor e mudam com o tempo. Conferir antes de usar em material de venda. Os tipos de lugar do Google vêm da [Tabela A](https://developers.google.com/maps/documentation/places/web-service/place-types).
+
 Para incluir outro segmento, acrescente uma linha em `SEGMENTOS`, em `src/lib/oportunidades/regras.ts`. O `tipo` vem da tabela oficial em developers.google.com/maps/documentation/places/web-service/place-types.
 
 ## Arquivos

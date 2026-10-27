@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { useFileStorage } from '@/lib/storage';
-import { csv, estimar, lerLink, linhasCsv, linkLigar, linkWhatsApp, naCidade, textoDaBusca } from '@/lib/oportunidades/regras';
+import { SEGMENTOS, csv, estimar, lerLink, linhasCsv, linkLigar, linkWhatsApp, naCidade, textoDaBusca } from '@/lib/oportunidades/regras';
 import { mascaraBusca, mascaraDetalhes } from '@/lib/oportunidades/places';
 import { executarPesquisa, estimarPesquisa, listarLeads, listarPesquisas, revisar, usoDoMes, verAoVivo } from '@/lib/oportunidades/dados';
 import { checarLink, ipInterno, lookupPublico, type Abertura, type Checagem } from '@/lib/oportunidades/site';
@@ -89,6 +89,14 @@ describe('regras do Lead Finder', () => {
     expect(textoDaBusca('confeitarias', 'São Sebastião', 'SP', 'Maresias')).toBe('confeitaria em Maresias, São Sebastião - SP');
     expect(naCidade('Av. X, 1 - Maresias, São Sebastião - SP, 11600-000, Brasil', 'Sao Sebastiao', 'SP')).toBe(true);
     expect(naCidade('Rua Y, 2 - Perequê, Ilhabela - SP, 11630-000, Brasil', 'São Sebastião', 'SP')).toBe(false);
+  });
+
+  it('nichos: nomes únicos, busca em português e só tipos da Tabela A do Google', () => {
+    expect(new Set(SEGMENTOS.map((x) => x.id)).size).toBe(SEGMENTOS.length);
+    expect(textoDaBusca('pizzarias', 'Ilhabela', 'SP', '')).toBe('pizzaria em Ilhabela - SP');
+    expect(textoDaBusca('pousadas', 'São Sebastião', 'SP', 'Maresias')).toBe('pousada em Maresias, São Sebastião - SP');
+    const tabelaA = ['restaurant', 'pizza_restaurant', 'hamburger_restaurant', 'japanese_restaurant', 'liquor_store', 'bakery', 'ice_cream_shop', 'barber_shop', 'beauty_salon', 'pet_store'];
+    for (const x of SEGMENTOS) if (x.tipo) expect(tabelaA).toContain(x.tipo);
   });
 
   it('botão de WhatsApp só para celular brasileiro; fixo fica de fora', () => {
