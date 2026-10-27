@@ -1,4 +1,4 @@
-// Reel 001 "Sua marca merece mais." · v3 (review cut, 25.5 s, 1080×1920, 30 fps).
+// Reel 001 "Sua marca merece mais." · v3 (review cut, 26.95 s, 1080×1920, 30 fps).
 // Same engine as reel.mjs (v2, kept as it was): one HTML page, window.render(t) places every layer, Playwright
 // shoots each frame and ffmpeg encodes. What changed in v3, from the client's review:
 //   · Chapa 77 shows the real order flow (burger → add-ons → bag → order message) instead of zooms over screens;
@@ -18,11 +18,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'renders', 'v3');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const FPS = 30, W = 1080, H = 1920, DURATION = 25.5, COVER = 1.6;
+const FPS = 30, W = 1080, H = 1920, DURATION = 26.95, COVER = 1.6;
 const A = (f) => pathToFileURL(path.join(ROOT, 'assets', f)).href;
 const CUT = (f) => A(`_recortes/${f}.png`);
 
-const REC = Object.fromEntries(['salinho', 'chapa77pedido', 'swellclub', 'swellpranchas', 'fornada'].map((id) => {
+const REC = Object.fromEntries(['salinho', 'chapa77pedido', 'chapa77pagamento', 'chapa77painel', 'swellclub', 'swellpranchas', 'fornada'].map((id) => {
   const dir = path.join(ROOT, 'assets', '_gravacoes', `rec-${id}`);
   if (!fs.existsSync(dir)) throw new Error(`Falta a gravação ${id}: rode source/gravacoes.mjs`);
   return [id, { url: pathToFileURL(dir).href, count: fs.readdirSync(dir).filter((f) => f.endsWith('.jpg')).length }];
@@ -35,9 +35,12 @@ const mark = (w, color) => `<svg viewBox="50 40 530 415" width="${w}" height="${
 const MARK_MASK = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='50 40 530 415'>${MARK_PATHS}</svg>`)}")`;
 
 // Timeline anchors (s). The Fornada scene is v2's, moved by FO; nothing inside it changed.
-const FO = 2.15;
-const CH = 8.3, CH_SPEED = 1.15; // Chapa 77 order recording: starts at CH, played 15 % faster
-const SW = 13.0; // Chapa 77 → Swell Club push
+const FO = 3.6;
+const CH = 8.3, CH_SPEED = 1.35; // Chapa 77 menu recording: starts at CH, played 35 % faster
+const PAY = 11.37, PAY_FROM = 0.2; // the checkout recording takes over from the bag (same phone, same scale)
+const PAN = 13.9; // the shop's screen slides in: the paid order arrives and is accepted
+const SW = 15.75; // Chapa 77 → Swell Club push
+const EN = 1.45; // the signature, later by what Chapa 77 gained and Swell Club gave back
 
 const caption = (id, name, desc, dark = false, style = '') => `<div class="cap${dark ? ' dark' : ''}" id="${id}" style="${style}">
   <div class="lock cp">${mark(36, dark ? '#241a14' : T.blueHi)}GROWLIFT</div>
@@ -98,9 +101,12 @@ img{display:block}
 <div class="scene" id="scChapa" style="z-index:20">
   <div class="full" style="background:radial-gradient(90% 60% at 50% 40%,#c11d23,#a3171c 50%,#5e0a0e)"></div>
   <img class="L" id="chBurger" src="${CUT('chapa77-burger')}" style="width:960px">
-  <div class="shot L" id="chCard" style="left:72px;top:250px;width:936px;height:1000px;border-radius:40px;background:#f6efe2"><img id="chRec" data-rec="chapa77pedido" src="${recSrc('chapa77pedido')}" style="position:absolute;left:0;top:0;width:936px"></div>
-  ${caption('capCha', 'Chapa 77', 'Hamburgueria · cardápio com adicionais e sacola de pedido')}
-  ${caption('capCha2', 'Chapa 77', 'Do lanche à sacola: o pedido sai pronto em mensagem para a loja')}
+  <div class="shot L" id="chCard" style="left:72px;top:250px;width:936px;height:1000px;border-radius:40px;background:#f6efe2"><img id="chRec" data-rec="chapa77pedido" src="${recSrc('chapa77pedido')}" style="position:absolute;left:0;top:0;width:936px"><img id="chPay" data-rec="chapa77pagamento" src="${recSrc('chapa77pagamento')}" style="position:absolute;left:0;top:0;width:936px;opacity:0"></div>
+  <!-- the shop's screen at 1.56× its size: the "Novos" and "Em preparo" columns, legible on a phone -->
+  <div class="shot L" id="chPanel" style="left:72px;top:290px;width:936px;height:760px;border-radius:28px;background:#f8f6f1"><img id="chPan" data-rec="chapa77painel" src="${recSrc('chapa77painel')}" style="position:absolute;left:-6px;top:0;width:1841px"></div>
+  ${caption('capCha', 'Chapa 77', 'Hamburgueria · cardápio com adicionais e sacola')}
+  ${caption('capCha2', 'Chapa 77', 'Pagamento por Pix no próprio site')}
+  ${caption('capCha3', 'Chapa 77', 'O pedido chega pago na tela da loja')}
 </div>
 
 <!-- 11–14 · Swell Club: a strip of screens, the camera moves sideways at a constant scale -->
@@ -148,7 +154,7 @@ ${caption('capSal', 'Salinho', 'Moda de linho · site com reserva da peça pelo 
 
 <script>
 const REC = ${JSON.stringify(REC)};
-const FO = ${FO}, CH = ${CH}, CH_SPEED = ${CH_SPEED}, SW = ${SW};
+const FO = ${FO}, CH = ${CH}, CH_SPEED = ${CH_SPEED}, PAY = ${PAY}, PAY_FROM = ${PAY_FROM}, PAN = ${PAN}, SW = ${SW}, EN = ${EN}, DURATION = ${DURATION};
 const clamp = (x) => Math.max(0, Math.min(1, x));
 const E = {
   lin: (p) => p,
@@ -279,40 +285,48 @@ window.render = async (t) => {
     $('shape').style.background = mix([35, 118, 71], [176, 26, 33], col);
   }
 
-  // ---- 07–10 · Chapa 77 (7.6–13.0): the burger, then the real order on the phone
+  // ---- 07–10 · Chapa 77 (7.6–15.75): the burger; menu, add-ons and bag; Pix on the site; the shop's screen
   {
     const push = P(t, SW, SW + 0.5, 'io');
     put('scChapa', { o: t >= 7.58 && t < SW + 0.55 ? 1 : 0, tx: -1080 * push });
     const bIn = P(t, 7.6, 7.95, 'out'), bOut = P(t, 8.1, 8.45, 'in');
     put('chBurger', { x: 60, y: 560, o: bIn * (1 - bOut), ty: -20 * P(t, 7.6, 8.45, 'lin') - 80 * bOut });
-    const cIn = P(t, 8.0, 8.45, 'out');
-    put('chCard', { ty: (1 - cIn) * 1400, o: P(t, 8.0, 8.1, 'lin') });
+    // the phone leaves to the left as the shop's screen comes in from the right: the order goes to the shop
+    const cIn = P(t, 8.0, 8.45, 'out'), hand = P(t, PAN - 0.05, PAN + 0.4, 'io');
+    put('chCard', { ty: (1 - cIn) * 1400, tx: -1180 * hand, o: P(t, 8.0, 8.1, 'lin') * (t < PAN + 0.45 ? 1 : 0) });
     const rt = (t - CH) * CH_SPEED;
     play('chRec', rt);
-    // the camera follows the flow inside the screen (vertical pans only, scale fixed): card → sheet → add-ons → button → bag → total
-    const camY = track([[0, 100], [0.55, 100], [0.8, 60], [1.2, 60], [1.5, 420], [3.65, 420], [3.85, 0], [4.15, 0], [4.35, 420], [6, 420]], rt);
-    put('chRec', { ty: -camY * 2.4 });
+    // vertical pans only, scale fixed: card → sheet → add-ons → button → bag
+    const camY = track([[0, 100], [0.55, 100], [0.8, 60], [1.2, 60], [1.5, 420], [3.65, 420], [3.85, 0]], rt);
+    put('chRec', { ty: -camY * 2.4, o: t < PAY ? 1 : 0 });   // a cut, as the site itself swaps the bag for the checkout
+    const pt = PAY_FROM + Math.max(0, t - PAY) * CH_SPEED;
+    play('chPay', pt);
+    // checkout: payment, total and button in view; then the Pix page from its title
+    put('chPay', { ty: -track([[0, 150], [1.41, 150], [1.415, 40]], pt) * 2.4, o: t < PAY ? 0 : 1 });
+    put('chPanel', { tx: 1180 * (1 - hand), o: t > PAN - 0.06 ? 1 : 0 });
+    play('chPan', (t - PAN) * 1.15);
     cap('capCha', 7.8, 9.3, t);
-    cap('capCha2', 11.9, 12.85, t);
+    cap('capCha2', 11.75, 13.6, t);
+    cap('capCha3', 14.35, 15.55, t);
   }
 
-  // ---- 11–14 · Swell Club (13.0–17.2): sideways only
+  // ---- 11–14 · Swell Club (SW … SW+3.45): sideways only; S is the time inside the scene
   {
-    const push = P(t, SW, SW + 0.5, 'io');
-    put('scSwell', { o: t >= SW && t < 17.3 ? 1 : 0, tx: 1080 * (1 - push) });
-    // the strip's position: hero card centred, then the boards, then on to the cream footer card
-    const sx = track([[0, 309], [14.45, 309], [14.95, -211], [16.2, -211], [16.7, -1251]], t);
+    const push = P(t, SW, SW + 0.5, 'io'), S = t - SW;
+    put('scSwell', { o: S >= 0 && S < 3.2 ? 1 : 0, tx: 1080 * (1 - push) });
+    // the strip's position: hero card centred, then the boards (one swipe), then on to the cream footer card
+    const sx = track([[0, 309], [0.95, 309], [1.45, -211], [2.1, -211], [2.6, -1251]], S);
     put('strip', { tx: sx });
     put('swGhost', { tx: 120 + (sx - 309) * 0.4 });   // the outline name drifts at 40 %: depth without zoom
-    play($('sw0').firstElementChild, t - 13.2);
-    play($('sw1').firstElementChild, t - 14.65);
-    cap('capSwe', 13.55, 14.9, t);
+    play($('sw0').firstElementChild, S - 0.2);
+    play($('sw1').firstElementChild, S - 1.25);
+    cap('capSwe', SW + 0.55, SW + 1.4, t);
     // the cream footer card rides with the strip, then opens into the page; SWELL leaves before Fornada comes
-    const grow = P(t, 16.7, 17.2, 'io');
+    const grow = P(S, 2.6, 3.1, 'io');
     const cx = sx + 1560 + 1080 * (1 - push);
-    put('sw3', { x: L(cx, 0, grow), y: L(250, 0, grow), w: L(462, 1080, grow), h: L(1000, 1920, grow), r: L(36, 0, grow), o: t >= SW && t < 18.4 ? 1 : 0 });
-    const up = P(t, 17.25, 17.55, 'in');
-    put('swLetters', { x: L(24, 40, grow), y: L(110, 250, grow) - up * 700, w: L(760, 1600, grow), o: 1 - P(t, 17.4, 17.55, 'lin') });
+    put('sw3', { x: L(cx, 0, grow), y: L(250, 0, grow), w: L(462, 1080, grow), h: L(1000, 1920, grow), r: L(36, 0, grow), o: S >= 0 && S < 4.4 ? 1 : 0 });
+    const up = P(S, 3.15, 3.45, 'in');
+    put('swLetters', { x: L(24, 40, grow), y: L(110, 250, grow) - up * 700, w: L(760, 1600, grow), o: 1 - P(S, 3.3, 3.45, 'lin') });
   }
 
   // ---- 15 · Fornada: the v2 scene, every time moved by FO
@@ -340,23 +354,23 @@ window.render = async (t) => {
       put(el, { x: +el.dataset.x, y: +el.dataset.y, o: p * L(1, 0.07, dim) * (1 - gone), s: L(0.92, 1, p), origin: '50% 50%' });
     });
     const show = P(t, 20.0 + FO, 20.45 + FO, 'out'), shrink = P(t, 20.5 + FO, 21.0 + FO, 'io');
-    const float = -12 * P(t, 21.0 + FO, 25.5, 'lin');
+    const float = -12 * P(t, 21.0 + FO, DURATION, 'lin');
     put('mkBox', { x: 60, y: 584, o: show, s: L(0.7, 1, show) * L(1, 0.375, shrink), ty: L(0, -399, shrink) + float, origin: '50% 50%' });
     put('mkFill', { o: P(t, 20.45 + FO, 20.8 + FO, 'lin') });
-    $('mkSweep').style.backgroundPosition = L(120, -20, P(t, 24.2, 25.0, 'io')) + '% 0';
-    put('mkSweep', { o: t > 24.15 && t < 25.05 ? 1 : 0 });
+    $('mkSweep').style.backgroundPosition = L(120, -20, P(t, 24.2 + EN, 25.0 + EN, 'io')) + '% 0';
+    put('mkSweep', { o: t > 24.15 + EN && t < 25.05 + EN ? 1 : 0 });
   }
   put('tagPC', { o: P(t, 3.0, 3.25, 'lin') * (1 - P(t, 20.45 + FO, 20.75 + FO, 'lin')) });
 
-  // ---- 17 · signature (23.1–25.5): logo, the new line, the address; the group keeps a slow rise
+  // ---- 17 · signature (23.1+EN to the end): logo, the new line, the address; the group keeps a slow rise
   {
-    put('endGroup', { ty: -12 * P(t, 23.1, 25.5, 'lin') });
-    put('endRefl', { o: 0.14 * P(t, 23.15, 23.5, 'lin') });
-    const wp = P(t, 23.15, 23.7, 'out');
+    put('endGroup', { ty: -12 * P(t, 23.1 + EN, DURATION, 'lin') });
+    put('endRefl', { o: 0.14 * P(t, 23.15 + EN, 23.5 + EN, 'lin') });
+    const wp = P(t, 23.15 + EN, 23.7 + EN, 'out');
     put('endWord', { o: wp, ty: (1 - wp) * 20 });
     $('endWord').style.letterSpacing = L(0.26, 0.08, wp) + 'em';
     $('endWord').style.paddingLeft = L(0.26, 0.08, wp) + 'em';
-    for (const [id, a] of [['endLine1', 23.5], ['endLine2', 23.62], ['endUrl', 24.0]]) {
+    for (const [id, a] of [['endLine1', 23.5 + EN], ['endLine2', 23.62 + EN], ['endUrl', 24.0 + EN]]) {
       const p = P(t, a, a + 0.45, 'out');
       put(id, { o: p, ty: (1 - p) * 26 });
     }
@@ -370,10 +384,10 @@ window.render = async (t) => {
 // ---------------------------------------------------------------------------------------------
 const KEY = [
   [1.6, '01-abertura'], [2.55, '02-mais-vira-tela'], [3.45, '03-salinho-site'], [5.6, '04-salinho-pecas-no-celular'],
-  [6.85, '05-salinho-composicao'], [7.35, '06-transicao-forma'], [7.9, '07-chapa77-produto'], [10.6, '08-chapa77-adicionais'],
-  [11.75, '09-chapa77-sacola'], [12.75, '10-chapa77-mensagem'], [13.25, '11-transicao-lateral'], [14.0, '12-swell-hero'],
-  [15.55, '13-swell-pranchas'], [17.3, '14-swell-sai-fornada-entra'], [21.15, '15-fornada-preservada'], [22.35, '16-grid-marca'],
-  [24.6, '17-assinatura'],
+  [6.85, '05-salinho-composicao'], [7.35, '06-transicao-forma'], [7.9, '07-chapa77-produto'], [10.0, '08-chapa77-adicionais'],
+  [11.2, '09-chapa77-sacola'], [12.85, '10-chapa77-pix'], [13.5, '11-chapa77-pago'], [14.85, '12-chapa77-loja-recebe'],
+  [15.6, '13-chapa77-loja-aceita'], [16.0, '14-transicao-lateral'], [16.65, '15-swell-hero'], [17.75, '16-swell-pranchas'],
+  [19.05, '17-swell-sai-fornada-entra'], [22.6, '18-fornada-preservada'], [23.8, '19-grid-marca'], [26.05, '20-assinatura'],
 ];
 
 async function open() {

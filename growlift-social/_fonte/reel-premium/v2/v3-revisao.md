@@ -3,11 +3,34 @@
 **Versão para vocês avaliarem. Não é a versão comercial final.** Não foi publicada nem copiada para `05-reels/`. A v2 entregue continua intacta como versão de segurança: `renders/sua-marca-merece-mais.mp4` e `05-reels/09-sua-marca-merece-mais.mp4`.
 
 - **Vídeo:** `renders/v3/revisao-v3.mp4`, com a capa em `revisao-v3-capa.png`.
-- **Formato:** 25,5 s, 1080×1920, 30 fps, H.264 High + som AAC 48 kHz estéreo, −15 LUFS. Tamanho: 9,8 MB.
-- **Storyboard novo:** `previews/v3-storyboard.png`, com os 17 momentos e o que mudou em cada um. A ficha está em `storyboard-v3.json`.
-- **Antes e depois:** `previews/v3-antes-depois.png`, com a v2 ao lado da v3, cena a cena.
-- **Quadros em tamanho real:** `renders/v3/quadros/01…17.png`, com os tempos em `tempos.json`.
+- **Formato:** 26,95 s, 1080×1920, 30 fps, H.264 High + som AAC 48 kHz estéreo, −15,5 LUFS.
+- **Storyboard novo:** `previews/v3-storyboard.png`, com os 20 momentos e o que mudou em cada um. A ficha está em `storyboard-v3.json`.
+- **Antes e depois:** `previews/v3-antes-depois.png`, com a v2 ao lado da v3.1, cena a cena.
+- **Quadros em tamanho real:** `renders/v3/quadros/01…20.png`, com os tempos em `tempos.json`.
 - **Gasto:** zero. Nenhum crédito do Higgsfield foi usado; o saldo continua 194,50.
+
+## v3.1: pagamento e tela da loja no Chapa 77 (pedido de vocês)
+
+**O fim do Chapa 77 mudou.** A mensagem em "modo demonstração" saiu. No lugar:
+- Sacola → Finalizar (retirada no local) → Pix → QR code → "Pedido recebido · Pix confirmado".
+- O celular sai pela esquerda e entra a tela da loja: o pedido chega em Novos com "Pix pago", a loja toca em Aceitar e ele vai para Em preparo.
+
+**De onde vem, e por que é seguro:**
+- O site do Downtown (a base do Chapa 77) só manda o pedido pelo WhatsApp. O pagamento que aparece é o do **sistema de pedidos da Growlift**: o checkout feito para o El Patron e o painel das lojas (`plataforma/`).
+- Esse sistema rodou **só nesta máquina** (`source/loja-demo.mjs`), com uma loja fictícia "Chapa 77", cliente "Cliente de teste", telefone (11) 90000-0000 e o **Pix em modo de demonstração**.
+- O QR code só contém o texto "PIX DE DEMONSTRACAO" e não paga nada. Nenhum pedido chegou a uma loja de verdade, nada foi cobrado e nenhum site no ar foi tocado.
+- O checkout está com as cores e a fonte do Chapa 77 e com os nomes trocados. A gravação confere quadro a quadro que não aparece "El Patron", nem nomes do cardápio dele, nem "Downtown".
+- O pagamento foi confirmado pelo atalho de teste do sistema. Na loja real, quem confirma é o Mercado Pago, e a página do cliente se atualiza sozinha. Os avisos de "demonstração" e o botão "Simular pagamento" ficaram fora do quadro.
+
+**Tempo:**
+- O Chapa 77 passou de 5,4 s para 8,2 s.
+- O Swell Club perdeu 1,1 s: abertura mais curta e um arrasto nas pranchas, em vez de dois.
+- A Fornada ficou igual.
+- O vídeo foi de 25,5 s para 26,95 s.
+
+**Para a revisão legal antes de postar:**
+- As legendas novas são "Pagamento por Pix no próprio site" e "O pedido chega pago na tela da loja". Isso é o que o sistema faz de verdade, com o Mercado Pago da loja ligado.
+- Não falamos de taxa, comissão nem de confirmação automática.
 
 ## Diagnóstico da v2 e o que foi feito
 
@@ -48,7 +71,7 @@
 
 ## Autoconferência
 
-- [x] 1080×1920, 30 fps, 25,5 s, com faixa de som (ffprobe).
+- [x] 1080×1920, 30 fps, 26,95 s, com faixa de som (ffprobe).
 - [x] Os zooms saíram. Só a forma da transição P03 cresce, e ela é o elemento de ligação.
 - [x] Salinho e Fornada preservadas (comparadas no antes e depois).
 - [x] O fluxo do Chapa 77 se lê: o total muda de 58 para 62 para 66, aparece a sacola com o item e a mensagem.
@@ -71,10 +94,12 @@
 ## Refazer
 
 ```
-node growlift-social/_fonte/reel-premium/v2/source/gravacoes.mjs        # gravações (inclui chapa77pedido e swellpranchas)
+(cd plataforma && npm run build)                                          # painel, para a loja local
+(cd elpatron && NEXT_PUBLIC_CATALOG_URL=http://localhost:3121/api/public/lojas/chapa-77 npx next build)   # checkout apontando para ela
+node growlift-social/_fonte/reel-premium/v2/source/gravacoes.mjs        # gravações (inclui chapa77pedido, chapa77painel, chapa77pagamento e swellpranchas)
 python3 growlift-social/_fonte/reel-premium/v2/source/audio3.py          # trilha → renders/v3/trilha-v3.wav
-node growlift-social/_fonte/reel-premium/v2/source/reel3.mjs             # vídeo de revisão + capa (~1,7 min)
+node growlift-social/_fonte/reel-premium/v2/source/reel3.mjs             # vídeo de revisão + capa (~2 min)
 node growlift-social/_fonte/reel-premium/v2/source/reel3.mjs 10.6 24.6   # só alguns quadros, para conferir
-node growlift-social/_fonte/reel-premium/v2/source/reel3.mjs --quadros   # os 17 momentos
+node growlift-social/_fonte/reel-premium/v2/source/reel3.mjs --quadros   # os 20 momentos
 node growlift-social/_fonte/reel-premium/v2/source/pranchas3.mjs         # storyboard v3 e antes/depois
 ```

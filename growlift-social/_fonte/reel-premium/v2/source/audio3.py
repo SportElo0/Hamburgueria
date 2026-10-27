@@ -7,7 +7,11 @@ from scipy.io import wavfile
 from scipy.signal import butter, sosfilt
 
 SR = 48000
-DUR = 25.5
+DUR = 26.95
+# anchors of reel3.mjs
+CH, CH_SPEED, PAY, PAY_FROM, PAN, SW, FO, EN = 8.3, 1.35, 11.37, 0.2, 13.9, 15.75, 3.6, 1.45
+GRID = 19.3 + FO        # the four screens become the mark
+SIGN = 20.45 + FO       # the mark fills with blue
 OUT = Path(__file__).resolve().parent.parent / 'renders' / 'v3' / 'trilha-v3.wav'
 rng = np.random.default_rng(7)
 N = int(DUR * SR)
@@ -106,7 +110,7 @@ def intensity(t):
     """Loud in the opening and in the signature, quieter while the projects are shown."""
     if t < 2.3:
         return 1.0
-    if t < 21.4:
+    if t < GRID:
         return 0.55
     return 0.85
 
@@ -126,7 +130,7 @@ for b in range(int(DUR / (2 * BAR)) + 1):
 step = BEAT / 2
 t = 2.6
 k = 0
-while t < 21.2:
+while t < GRID - 0.2:
     ch = CHORDS[int((t - 1.0) // (2 * BAR)) % 4]
     f = ch[2 + (k % 4)] * (2 if k % 8 >= 4 else 1)
     add(note(f, 0.5, ((1, 1), (2, 0.4), (4, 0.1)), attack=0.004, release=0.18), t, gain=0.05, pan=0.35 * np.sin(k))
@@ -138,11 +142,11 @@ t = 0.0
 while t < DUR - 0.5:
     if t < 2.3:
         pass  # the opening is carried by the three hits
-    elif t < 21.4:
+    elif t < GRID:
         if int(round(t / BEAT)) % 2 == 0:
             add(kick(0.32), t)
         add(hat(), t + BEAT / 2, gain=0.035, pan=0.25)
-    elif t < 24.6:
+    elif t < 24.6 + EN:
         add(kick(0.45), t)
         add(hat(), t + BEAT / 2, gain=0.045, pan=-0.25)
     t += BEAT
@@ -150,7 +154,7 @@ while t < DUR - 0.5:
 # bass: root of each chord, one note per half bar from the first site to the signature
 for b in range(int(DUR / (BAR / 2))):
     at = 2.3 + b * BAR / 2
-    if at >= 24.6:
+    if at >= 24.6 + EN:
         break
     root = CHORDS[int((at - 1.0) // (2 * BAR)) % 4][0]
     add(filt(note(root, BAR / 2 - 0.05, ((1, 1), (2, 0.5)), attack=0.01, release=0.5), 'lowpass', 400), at, gain=0.09 * intensity(at))
@@ -162,28 +166,35 @@ add(whoosh(0.75, 800, 9000, 0.85) * 0.25, 1.35)            # rises into the dot
 add(note(880, 1.2, ((1, 1), (2.01, 0.3)), attack=0.002, release=0.5), 0.72, gain=0.05, pan=0.2)  # bright edge on MAIS.
 
 # --- transitions -----------------------------------------------------------------------------------
-for at, d, g, pan in [(2.0, 0.8, 0.35, -0.3), (4.25, 0.5, 0.18, 0.3), (7.05, 0.65, 0.3, 0.0), (12.95, 0.6, 0.3, 0.6),
-                      (16.65, 0.6, 0.22, 0.0), (17.2, 0.4, 0.15, 0.0), (21.4, 0.7, 0.25, 0.0)]:
+for at, d, g, pan in [(2.0, 0.8, 0.35, -0.3), (4.25, 0.5, 0.18, 0.3), (7.05, 0.65, 0.3, 0.0), (PAN - 0.05, 0.5, 0.22, 0.5),
+                      (SW - 0.05, 0.6, 0.3, 0.6), (SW + 2.6, 0.6, 0.22, 0.0), (SW + 3.1, 0.4, 0.15, 0.0), (GRID - 0.05, 0.7, 0.25, 0.0)]:
     add(whoosh(d) * g, at, pan=pan)
 
 # --- interactions (the real taps and swipes of the recordings) --------------------------------------
 for at in [4.85, 5.7]:                                        # Salinho thumbnails
     add(click(0.16), at, pan=0.1)
-for rt in [0.45, 1.8, 2.3, 2.85, 3.55, 4.45]:                 # Chapa 77: Personalizar, 2 add-ons, Adicionar, Ver sacola, Gerar
-    add(click(0.18), 8.3 + rt / 1.15, pan=0.15)
-add(note(1320, 0.35, ((1, 1), (2, 0.2)), attack=0.002, release=0.25), 8.3 + 2.95 / 1.15, gain=0.05)  # item in the bag
-for at in [15.0, 16.0]:                                       # Swell Club: board swipes
-    add(swipe(), at, gain=0.5, pan=-0.4)
+for rt in [0.45, 1.8, 2.3, 2.85, 3.55]:                       # Chapa 77: Personalizar, 2 add-ons, Adicionar, Ver sacola
+    add(click(0.18), CH + rt / CH_SPEED, pan=0.15)
+add(note(1320, 0.35, ((1, 1), (2, 0.2)), attack=0.002, release=0.25), CH + 2.95 / CH_SPEED, gain=0.05)  # item in the bag
+for pt in [0.4, 1.4]:                                         # Pix, Gerar Pix
+    add(click(0.18), PAY + (pt - PAY_FROM) / CH_SPEED, pan=0.15)
+paid = PAY + (2.6 - PAY_FROM) / CH_SPEED                      # Pix confirmed: two rising notes
+for k, f in enumerate((1046.5, 1568.0)):
+    add(note(f, 0.5, ((1, 1), (2, 0.15)), attack=0.002, release=0.3), paid + k * 0.09, gain=0.06)
+for k, f in enumerate((880.0, 1108.7, 880.0, 1108.7)):        # the shop's order alert, short and soft
+    add(note(f, 0.22, ((1, 1), (3, 0.1)), attack=0.003, release=0.12), PAN + 0.5 / 1.15 + k * 0.12, gain=0.045, pan=-0.2)
+add(click(0.18), PAN + 1.7 / 1.15, pan=-0.15)                 # Aceitar pedido
+add(swipe(), SW + 1.6, gain=0.5, pan=-0.4)                    # Swell Club: board swipe
 for rt in [0.45, 1.85, 2.45]:                                 # Fornada: day, croissant, pain au chocolat
-    add(click(0.15), 18.45 + rt, pan=0.15)
+    add(click(0.15), 16.3 + FO + rt, pan=0.15)
 
 # --- the signature ---------------------------------------------------------------------------------
-add(boom() * 0.6, 22.6)                                       # the mark fills with blue
+add(boom() * 0.6, SIGN)                                       # the mark fills with blue
 bell = sum(note(f, 2.6, ((1, 1), (2.76, 0.25), (5.4, 0.08)), attack=0.004, release=1.6) for f in (523.3, 659.3, 784.0, 987.8))
-add(bell, 23.15, gain=0.07)                                   # GROWLIFT
-add(whoosh(0.9, 3000, 12000, 0.5) * 0.1, 24.15, pan=0.5)      # light across the mark
+add(bell, 23.15 + EN, gain=0.07)                              # GROWLIFT
+add(whoosh(0.9, 3000, 12000, 0.5) * 0.1, 24.15 + EN, pan=0.5)  # light across the mark
 end_chord = sum(note(f, 2.2, ((1, 1), (2, 0.2)), attack=0.3, release=4) for f in CHORDS[0])
-add(filt(end_chord, 'lowpass', 2500), 23.3, gain=0.05)
+add(filt(end_chord, 'lowpass', 2500), 23.3 + EN, gain=0.05)
 
 # --- master ----------------------------------------------------------------------------------------
 fade = np.ones(N)

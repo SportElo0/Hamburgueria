@@ -3,9 +3,11 @@
 // frame at 30 fps, the site's own animations running).
 //   node growlift-social/_fonte/reel-premium/v2/source/gravacoes.mjs [salinho chapa77 …]
 //   → v2/assets/_gravacoes/rec-<id>/00000.jpg …
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SITES, anonymize, swapPhotos } from '../../anonimizar.mjs';
+import { startShop } from './loja-demo.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 process.env.REELS_TMP = path.join(ROOT, 'assets', '_gravacoes');
@@ -76,7 +78,89 @@ async function taps(page, t, i, list) {
 }
 const center = (el) => { if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
 
+
+// Chapa 77 payment: the checkout built for El Patron, running locally against the demo shop (loja-demo.mjs),
+// dressed in the Chapa 77 colours and type (the Downtown site's own tokens). Fictitious shop, Pix in demo mode.
+const FONTS = path.join(ROOT, 'assets', 'fontes');
+const SHOP_SITE = {
+  swap: [[/El Patron Burger/gi, 'Chapa 77 Burger'], [/El Patron/gi, 'Chapa 77'], [/O Chefão/gi, 'O Chapa'], [/\s*\(teste\)/g, ''],
+    [/Loja de demonstração/g, 'Chapa 77'], [/Osasco/gi, 'Centro'],
+    [/\b(Al Capone|El Chapo|Ochoa|Dimas|Vel[aá]squez|Nomura|Lucchese|Gacha|Blanco|Figueroa|G[uú]zman)\b/gi, 'Burger da casa']],
+  logos: ['/photos/logo.webp'], logoText: '',
+  css: `@font-face{font-family:BS77;font-weight:100 900;src:url(data:font/woff2;base64,${fs.readFileSync(path.join(FONTS, 'big-shoulders-latin.woff2')).toString('base64')}) format('woff2')}
+:root{--color-cream:#f3e9d6;--color-cream-deep:#e9dbc0;--color-paper:#fbf6ec;--color-ink:#1d1712;--color-ink-soft:#3d3229;--color-ink-mute:#66564a;
+--color-brand:#a61e22;--color-brand-deep:#7a1317;--color-mustard:#f4b740;--color-mustard-deep:#dc9a17;--color-gold-dim:#a61e22;
+--color-scene-red:#a3171c;--color-on-dark:#fbf3e4;--color-on-dark-mute:#f0dcc4;--font-display:BS77,"Arial Narrow",sans-serif}
+main h1{color:#a61e22!important}
+${SKIP}`,
+};
+// The panel's demo-only helpers stay out of the picture (the QR code itself only reads "PIX DE DEMONSTRACAO").
+const HIDE_DEMO = () => {
+  for (const b of document.querySelectorAll('button')) if (/simular pagamento/i.test(b.textContent)) b.style.visibility = 'hidden';
+  for (const p of document.querySelectorAll('p')) if (/pix de demonstração/i.test(p.textContent)) p.style.display = 'none';
+};
+const PHOTO_77 = path.resolve(ROOT, '../../../../public/renders/burgers/holyfield/hero.webp');
+const byText = (sel, re) => `[...document.querySelectorAll('${sel}')].filter((x) => ${re}.test(x.textContent) && x.getBoundingClientRect().width > 0).pop()`;
+const at = (expr) => new Function(`const b = ${expr}; const r = b?.getBoundingClientRect(); return r && r.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null;`);
+const click = (expr) => new Function(`${expr}.click();`);
+
 const RECS = {
+
+  // The shop's screen on the computer: the paid order arrives in "Novos" and the shop accepts it.
+  chapa77painel: {
+    viewport: { width: 1180, height: 820 }, device: { deviceScaleFactor: 2, isMobile: false, hasTouch: false },
+    duration: 2.8, shop: true, url: (shop) => `${shop.panel}/loja/chapa-77`,
+    setup: async (page, ctx, shop) => { await ctx.addCookies([{ name: 'plataforma_sessao', value: shop.cookie, url: shop.panel }]); },
+    async steps(t, page, i, shop) {
+      if (i === Math.round(0.5 * FPS)) { const o = await shop.placeOrder(); await shop.payPix(o); await page.reload({ waitUntil: 'networkidle' }); }
+      const first = "[...document.querySelectorAll('button')].find((x) => /aceitar pedido/i.test(x.textContent))";
+      await taps(page, t, i, [[1.7, at(first), click(first)]]);
+      if (i === Math.round(1.7 * FPS)) await page.waitForTimeout(700);
+      await anonymize(page, SHOP_SITE);
+    },
+  },
+  // The order on the phone, from the checkout: pick-up, Pix, the QR code, then "Pix confirmado".
+  chapa77pagamento: {
+    ...MOBILE3, duration: 3.6, shop: true, url: (shop) => shop.site,
+    setup: async (page, ctx) => { await ctx.route(/\/photos\/(?!logo)[a-z0-9-]+(\.sm)?\.webp/, (r) => r.fulfill({ path: PHOTO_77, contentType: 'image/webp' })); },
+    async steps(t, page, i, shop) {
+      if (!page.__ready) {
+        page.__ready = true;
+        await anonymize(page, SHOP_SITE);
+        // Before the first frame: the same burger and add-ons as the menu scene, into the bag and on to the checkout.
+        await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; document.getElementById('cardapio').scrollIntoView(); });
+        await page.waitForTimeout(800);
+        await page.getByRole('button', { name: 'Personalizar' }).first().click();
+        await page.waitForTimeout(700);
+        for (const l of ['Cheddar cremoso', 'Maionese artesanal']) await page.locator('dialog[open] label', { hasText: l }).first().click();
+        await page.locator('dialog[open] form button[type=submit]').click();
+        await page.waitForTimeout(900);
+        await page.evaluate(() => document.querySelector('button[aria-label*="Abrir sacola"]').click());
+        await page.waitForTimeout(700);
+        await page.getByRole('button', { name: 'Continuar' }).click();
+        const f = page.locator('dialog[open] form');
+        await f.getByLabel('Seu nome').fill('Cliente de teste');
+        await f.getByLabel('Telefone (WhatsApp)').fill('11 90000-0000');
+        await f.getByText('Retirar no local', { exact: true }).click();
+        await page.waitForTimeout(600);
+        await page.locator('dialog[open] .scroll-cream').evaluate((el) => el.scrollTo(0, 200));
+        await anonymize(page, SHOP_SITE);
+      }
+      if (t >= 0.75 && t <= 1.2) await page.locator('dialog[open] .scroll-cream').evaluate((el, p) => el.scrollTo(0, 200 + p * (el.scrollHeight - el.clientHeight - 200)), easeInOut((t - 0.75) / 0.45)).catch(() => {});
+      await taps(page, t, i, [
+        [0.4, at(byText('dialog[open] label', '/^\\s*pix\\s*$/i')), click(byText('dialog[open] label', '/^\\s*pix\\s*$/i'))],
+        [1.4, at(byText('dialog[open] button[type=submit]', '/gerar pix/i')), click(byText('dialog[open] button[type=submit]', '/gerar pix/i'))],
+      ]);
+      if (i === Math.round(1.4 * FPS)) { await page.waitForURL(/\/pedido/, { timeout: 15000 }); await page.waitForSelector('img[alt="QR code do Pix"]'); await page.waitForTimeout(900); }
+      if (i === Math.round(2.55 * FPS)) {
+        const u = new URL(page.url());
+        await shop.payPix({ id: u.searchParams.get('id') ?? u.searchParams.get('pedido'), token: u.searchParams.get('t') ?? u.searchParams.get('token') });
+        await page.reload({ waitUntil: 'networkidle' });
+      }
+      await anonymize(page, SHOP_SITE);
+      await page.evaluate(HIDE_DEMO);
+    },
+  },
   // Chapa 77 on the phone: the burger, two add-ons, the bag and the order message the site writes for the shop.
   // The live shop has no WhatsApp set, so the site is in demo mode: it builds the message and sends nothing.
   chapa77pedido: {
@@ -210,22 +294,32 @@ const RECS = {
 };
 
 const only = process.argv.slice(2);
+let shop = null;
 // Every recorded frame is checked against the real names: the page text at the moment of the screenshot.
-const LEAK = /downtown|holyfield|kill bill|australian cheddar|semv|surflife|feito à mão|juquehy|maresias|são sebastião|cibele|renato/i;
+const LEAK = /patron|chef[aã]o|capone|el chapo|osasco|downtown|holyfield|kill bill|australian cheddar|semv|surflife|feito à mão|juquehy|maresias|são sebastião|cibele|renato/i;
 for (const [name, rec] of Object.entries(RECS)) {
   if (only.length && !only.includes(name)) continue;
   const leaks = [];
+  if (rec.shop) {
+    // a fresh shop for each recording: both show the same order as #1, and the shop's screen starts empty
+    await shop?.stop();
+    shop = await startShop();
+    const { setup } = rec;
+    Object.assign(rec, { url: rec.url(shop), setup: setup && ((page, ctx) => setup(page, ctx, shop)) });
+    rec.steps = ((inner) => (t, page, i) => inner(t, page, i, shop))(rec.steps);
+  }
   const steps = rec.steps;
   rec.steps = async (t, page, i) => {
     await steps(t, page, i);
     const hit = await page.evaluate((re) => (document.body.innerText.match(new RegExp(re, 'gi')) || []).filter((w) => !/^feito à mão$/i.test(w)), LEAK.source);
     if (hit.length) leaks.push(`${i}: ${[...new Set(hit)].join(', ')}`);
   };
-  const { dir, count } = await captureSite({ id: name, url: (SITES[name] ?? SITES[rec.site]).url, ...rec });
+  const { dir, count } = await captureSite({ id: name, url: rec.url ?? (SITES[name] ?? SITES[rec.site]).url, ...rec });
   console.log(name, count, 'quadros em', path.relative(ROOT, dir));
   console.log(name, leaks.length ? `NOMES REAIS EM ${leaks.length} QUADROS: ${leaks.slice(0, 5).join(' | ')}` : 'nenhum nome real no texto da página');
 }
 await close();
+await shop?.stop();
 
 // The Fornada selection card on the computer, filled in the same way (a day and two products), for scene 11.
 if (!only.length || only.includes('fornada')) {
