@@ -18,7 +18,7 @@ CUTS = {
     'salinho-miniaturas': ('salinho/pc4x-hero.png', 4, (1118, 624, 1382, 714), 'seletor das 4 peças'),
     'salinho-cartao': ('salinho/pc4x-hero.png', 4, (16, 16, 1424, 884), 'hero inteiro, sem a margem creme da página'),
     'chapa77-burger': ('chapa77/pc4x-hero.png', 4, (430, 290, 990, 760), 'lanche do hero sobre o vermelho'),
-    'swellclub-espuma': ('swellclub/pc4x-hero.png', 4, (470, 540, 1424, 884), 'espuma da onda no hero, abaixo da prancha'),
+    'swellclub-letras': ('swellclub/pc-rodape.png', 2, (95, 205, 1440, 492), 'nome gigante do rodapé'),
     'fornada-bebida': ('fornada/pc-historia-4.png', 2, (900, 40, 1420, 820), 'cena ilustrativa de chocolate quente (hero)'),
     'fornada-titulo': ('fornada/pc-vitrine.png', 2, (108, 108, 604, 296), 'título "O simples. Extraordinário."'),
     'fornada-folhado': ('fornada/pc-vitrine.png', 2, (546, 467, 998, 1071), 'foto "Camada por camada."'),

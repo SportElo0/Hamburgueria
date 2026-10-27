@@ -13,28 +13,28 @@ const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome
 export const SITES = {
   salinho: {
     url: 'https://semvo-juquehy.pages.dev/pt/?loja=juquehy', // straight into the shop, past the store picker
-    swap: [[/em Juquehy/g, 'no litoral'], [/Maresias/g, 'Praia'], [/MARESIAS/g, 'PRAIA'], [/Av\. Dr\. Francisco Loup/g, 'orla'], [/SemvØ Clothing/gi, 'Salinho'], [/SEMVØ CLOTHING/g, 'SALINHO'], [/SEMVØ/g, 'SALINHO'], [/SemvØ/g, 'Salinho'], [/Farias Boulevard/g, 'centro'], [/JUQUEHY · MARESIAS/g, 'LITORAL'], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'Litoral'], [/São Sebastião/g, 'Brasil']],
+    swap: [[/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/Maresias/g, 'Praia'], [/MARESIAS/g, 'PRAIA'], [/Av\. Dr\. Francisco Loup/g, 'orla'], [/SemvØ Clothing/gi, 'Salinho'], [/SEMVØ CLOTHING/g, 'SALINHO'], [/SEMVØ/g, 'SALINHO'], [/SemvØ/g, 'Salinho'], [/Farias Boulevard/g, 'centro'], [/JUQUEHY · MARESIAS/g, 'LITORAL'], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'Litoral'], [/São Sebastião/g, 'Brasil']],
     logos: ['semvo-logo'],
     logoText: 'Salinho',
     css: '.brand img,.showroom img[data-anon],img[src*="semvo-logo"]{display:none!important}.brand::before{display:none!important}.brand::after{content:"Salinho";font:700 26px/1 Georgia,serif;color:#ece6da;letter-spacing:.01em}',
   },
   chapa77: {
     url: 'https://downtown-burger-gilt.vercel.app',
-    swap: [[/DOWNTOWN/g, 'CHAPA 77'], [/Downtown/g, 'Chapa 77'], [/HOLYFIELD/gi, 'DUPLO 77'], [/KILL BILL/gi, 'DA CASA'], [/AUSTRALIAN CHEDDAR/gi, 'CHEDDAR DUPLO']],
+    swap: [[/[®™]/g, ''], [/DOWNTOWN/g, 'CHAPA 77'], [/Downtown/g, 'Chapa 77'], [/HOLYFIELD/gi, 'DUPLO 77'], [/KILL BILL/gi, 'DA CASA'], [/AUSTRALIAN CHEDDAR/gi, 'CHEDDAR DUPLO']],
     logos: [],
     hideSvgWith: /DOWNTOWN|STEAKS|skyline/i, // the round skyline badge is the real brand's mark
     logoText: 'CHAPA 77',
   },
   swellclub: {
     url: 'https://surflife-juquehy.pages.dev/',
-    swap: [[/em Juquehy/g, 'no litoral'], [/SURFLIFE/g, 'SWELL CLUB'], [/SurfLife|Surflife/g, 'Swell Club'], [/JUQUEHY, SP/g, 'LITORAL NORTE'], [/JUQUEHY · /g, ''], [/ · JUQUEHY/g, ''], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'no litoral'], [/São Sebastião/g, 'Litoral Norte']],
+    swap: [[/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/SURFLIFE/g, 'SWELL CLUB'], [/SurfLife|Surflife/g, 'Swell Club'], [/JUQUEHY, SP/g, 'LITORAL NORTE'], [/JUQUEHY · /g, ''], [/ · JUQUEHY/g, ''], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'no litoral'], [/São Sebastião/g, 'Litoral Norte']],
     logos: ['logo-original'],
     logoText: 'SWELL',
     logoStyle: 'border-radius:50%;background:#f2c94c;color:#0d2b33;font:800 13px/1 Arial,sans-serif;letter-spacing:.06em',
   },
   fornada: {
     url: 'https://feito-a-mao-juquehy.pages.dev',
-    swap: [[/em Juquehy/g, 'no litoral'], [/Feito à Mão/g, 'Fornada'], [/Feito à mão\./g, 'Fornada.'], [/Cibele e Renato Costa/g, 'quem faz os pães'], [/Cibele e Renato/g, 'Quem faz os pães'], [/Juquehy/g, 'no litoral'], [/JUQUEHY/g, 'LITORAL']],
+    swap: [[/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/Feito à Mão/g, 'Fornada'], [/Feito à mão\./g, 'Fornada.'], [/Cibele e Renato Costa/g, 'quem faz os pães'], [/Cibele e Renato/g, 'Quem faz os pães'], [/Juquehy/g, 'no litoral'], [/JUQUEHY/g, 'LITORAL']],
     logos: ['feito-logo'],
     logoText: '',
   },

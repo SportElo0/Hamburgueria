@@ -31,11 +31,14 @@
 | I | Logo da Salinho com o original por trás e "Ø" da marca real na roleta | vazava a marca verdadeira | O logo antigo também era desenhado por máscara CSS (`.brand::before`); escondido. O "Ø" da roleta e do endereço foi removido | | `assets/salinho/pc-roleta.png` |
 | J | A cena da Fornada não é café | o roteiro v1 falava em "espuma de café" | O próprio site diz "Cena ilustrativa de chocolate quente". Passa a ser "bebida quente" | | 10 e 11 |
 | K | Barras fixas e "Pular para o conteúdo" por cima das capturas de seção | captura com defeito | Escondidos só durante a foto | | capturas de seção |
+| M | A foto do hero da Swell Club (o surfista) é do **dono da loja**, pessoa real (avisado por vocês em 27/10) | imagem de pessoa sem autorização; e é foto do negócio, não da Growlift | Nenhum quadro usa essa foto, nem recortes dela (a espuma da transição 4 vinha dela). A Swell Club entra pelas pranchas; a transição 4 virou a ponte do creme (os dois sites usam quase o mesmo). O script de captura não fotografa mais o hero da Swell Club | 09, 10, 12 refeitos | `asset-manifest.json` sem nenhum arquivo do hero da Swell Club |
+| N | "®" depois de SWELL CLUB no rodapé (herdado da marca real) | nome fictício não pode parecer marca registrada | O anonimizador tira ® e ™ dos quatro sites | | `assets/swellclub/pc-rodape.png` |
 | L | Capturas pequenas ampliadas | perde nitidez | Hero dos 4 sites refeito a 4× (5760×3600); todo recorte é reduzido, nunca ampliado acima da captura | | `assets/*/pc4x-hero.png` |
 
 ## O que ficou de fora de propósito
 
-- Avaliação de cliente com nome e foto da fachada (Swell Club) e a foto do casal (Fornada): pessoas e lugar reais.
+- A foto do hero da Swell Club (o dono da loja), a avaliação de cliente com nome e a foto da fachada (Swell Club), e a foto do casal (Fornada): pessoas e lugar reais.
+- A prévia v1 (`../styleframes/`) ainda mostra a foto do dono nos quadros 08, 09 e 11. Ficou como histórico, sem uso; não publicar.
 - Lista de bebidas do Chapa 77 (marcas de terceiros: Heineken, Coca e outras).
 - Nenhuma palavra das marcas reais sobrou no texto das páginas capturadas (conferido automaticamente; só "feito à mão", que é expressão comum).
 

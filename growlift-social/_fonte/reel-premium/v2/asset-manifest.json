@@ -481,50 +481,6 @@
       ]
     },
     {
-      "arquivo": "assets/swellclub/cel-hero.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "hero no celular, 390×844 a 3×",
-      "tamanho_px": [
-        1170,
-        2532
-      ]
-    },
-    {
-      "arquivo": "assets/swellclub/cel-historia-1.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "momento 1 da história contada na rolagem (celular 3×)",
-      "tamanho_px": [
-        1170,
-        2532
-      ]
-    },
-    {
-      "arquivo": "assets/swellclub/cel-historia-2.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "momento 2 da história contada na rolagem (celular 3×)",
-      "tamanho_px": [
-        1170,
-        2532
-      ]
-    },
-    {
-      "arquivo": "assets/swellclub/cel-historia-3.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "momento 3 da história contada na rolagem (celular 3×)",
-      "tamanho_px": [
-        1170,
-        2532
-      ]
-    },
-    {
       "arquivo": "assets/swellclub/cel-pranchas.png",
       "projeto": "Swell Club",
       "origem": "https://surflife-juquehy.pages.dev/",
@@ -569,50 +525,6 @@
       ]
     },
     {
-      "arquivo": "assets/swellclub/pc-hero.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "hero no computador, 1440×900 a 2×",
-      "tamanho_px": [
-        2880,
-        1800
-      ]
-    },
-    {
-      "arquivo": "assets/swellclub/pc-historia-1.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "momento 1 da história contada na rolagem (computador 2×)",
-      "tamanho_px": [
-        2880,
-        1800
-      ]
-    },
-    {
-      "arquivo": "assets/swellclub/pc-historia-2.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "momento 2 da história contada na rolagem (computador 2×)",
-      "tamanho_px": [
-        2880,
-        1800
-      ]
-    },
-    {
-      "arquivo": "assets/swellclub/pc-historia-3.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "momento 3 da história contada na rolagem (computador 2×)",
-      "tamanho_px": [
-        2880,
-        1800
-      ]
-    },
-    {
       "arquivo": "assets/swellclub/pc-pranchas.png",
       "projeto": "Swell Club",
       "origem": "https://surflife-juquehy.pages.dev/",
@@ -635,13 +547,6 @@
       ]
     },
     {
-      "arquivo": "assets/swellclub/pc-rolagem.mp4",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "gravação da rolagem no computador (referência do movimento)"
-    },
-    {
       "arquivo": "assets/swellclub/pc-session.png",
       "projeto": "Swell Club",
       "origem": "https://surflife-juquehy.pages.dev/",
@@ -650,17 +555,6 @@
       "tamanho_px": [
         2880,
         2574
-      ]
-    },
-    {
-      "arquivo": "assets/swellclub/pc4x-hero.png",
-      "projeto": "Swell Club",
-      "origem": "https://surflife-juquehy.pages.dev/",
-      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
-      "o_que_e": "hero no computador, 1440×900 a 4× (para recortes)",
-      "tamanho_px": [
-        5760,
-        3600
       ]
     },
     {
@@ -1004,14 +898,14 @@
       ]
     },
     {
-      "arquivo": "assets/_recortes/swellclub-espuma.png",
+      "arquivo": "assets/_recortes/swellclub-letras.png",
       "projeto": "swellclub",
-      "origem": "assets/swellclub/pc4x-hero.png",
-      "o_que_e": "espuma da onda no hero, abaixo da prancha",
-      "como": "recorte da captura (caixa CSS [470, 540, 1424, 884], 4×), sem alteração",
+      "origem": "assets/swellclub/pc-rodape.png",
+      "o_que_e": "nome gigante do rodapé",
+      "como": "recorte da captura (caixa CSS [95, 205, 1440, 492], 2×), sem alteração",
       "tamanho_px": [
-        2900,
-        1046
+        2690,
+        574
       ]
     },
     {

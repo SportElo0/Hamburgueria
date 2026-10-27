@@ -89,20 +89,20 @@
     ],
     "o_que_e": "lanche do hero sobre o vermelho"
   },
-  "swellclub-espuma": {
-    "origem": "swellclub/pc4x-hero.png",
+  "swellclub-letras": {
+    "origem": "swellclub/pc-rodape.png",
     "caixa_css": [
-      470,
-      540,
-      1424,
-      884
+      95,
+      205,
+      1440,
+      492
     ],
-    "dpr": 4,
+    "dpr": 2,
     "tamanho_px": [
-      2900,
-      1046
+      2690,
+      574
     ],
-    "o_que_e": "espuma da onda no hero, abaixo da prancha"
+    "o_que_e": "nome gigante do rodapé"
   },
   "fornada-bebida": {
     "origem": "fornada/pc-historia-4.png",

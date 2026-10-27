@@ -16,11 +16,13 @@
 | 06 | 8,0–8,8 | Transição 2 · Salinho → Chapa 77 | (do site) Reserve minha peça | o botão vira janela |
 | 07 | 8,8–11,6 | Chapa 77 | Chapa 77 · Hamburgueria · a história do lanche contada na rolagem, com cardápio e pedido | o verde-água |
 | 08 | 11,6–12,4 | Transição 3 · Chapa 77 → Swell Club | (do site) Duplo 77, camada por camada. | a mesma cor nos dois sites |
-| 09 | 12,4–15,2 | Swell Club | Swell Club · Surf shop · pranchas, aluguel por diária e kit montado no site | a espuma |
-| 10 | 15,2–16,2 | Transição 4 · Swell Club → Fornada | — | o líquido |
+| 09 | 12,4–15,2 | Swell Club | Swell Club · Surf shop · pranchas, aluguel por diária e kit montado no site | o creme do rodapé |
+| 10 | 15,2–16,2 | Transição 4 · Swell Club → Fornada | (dos sites) SWELL · O simples. Extraordinário. | o mesmo creme nos dois sites |
 | 11 | 16,2–19,4 | Fornada | Fornada · Padaria · reserva do café da manhã pelo site | a tela encolhe |
 | 12 | 19,4–21,0 | Transição 5 · os projetos viram a marca | — | o símbolo |
 | 13 | 21,0–25,0 | Assinatura | GROWLIFT · Sua marca merece mais. · Peça seu diagnóstico grátis · growlift.com.br | loop com o 01 |
+
+A foto do hero da Swell Club é do dono da loja (pessoa real) e não aparece em nenhum quadro.
 
 Todo texto descritivo é o que o site realmente tem. Por exemplo, "Reserve minha peça" pelo WhatsApp está na Salinho, e "Prancha por diária" e "Monte sua session" estão na Swell Club.
 
@@ -41,11 +43,11 @@ Todo texto descritivo é o que o site realmente tem. Por exemplo, "Reserve minha
 | 10 | As cartas passam no ritmo: vermelho, laranja, verde, roxo. |
 | 11 | Última carta, verde-água, com o lanche em camadas. |
 | 12 | Uma linha diagonal sobe; embaixo dela, no mesmo verde-água, as pranchas da Swell Club. |
-| 13 | Hero da Swell Club no celular. Legenda Swell Club. |
-| 14 | Carrossel das seções (pranchas, aluguel, session) desliza da direita para a esquerda. |
-| 15 | Zoom na espuma da onda; a espuma desce e vira a bebida quente caindo na xícara. |
-| 16 | A xícara assenta; corte para o creme da Fornada. |
-| 17 | Título serifado do site, o celular sobe com "Uma pausa que abraça.". Legenda Fornada. |
+| 13 | A câmera recua: as pranchas estão dentro do celular ("Encontre sua onda."). Legenda Swell Club. |
+| 14 | Carrossel das seções (aluguel, session, rodapé) desliza da direita para a esquerda. |
+| 15 | O último cartão (rodapé creme com SWELL CLUB gigante) cresce e cobre a tela. |
+| 16 | No mesmo creme, SWELL sai pelo alto; o título e a foto da Fornada sobem. |
+| 17 | O celular sobe com "Uma pausa que abraça." e a bebida quente caindo. Legenda Fornada. |
 | 18 | A foto do folhado entra em parallax mais lento. |
 | 19 | A cena encolhe para uma grade de quatro telas, os quatro projetos. |
 | 20 | O símbolo da Growlift recorta as quatro telas: as quatro cores dentro da marca. |

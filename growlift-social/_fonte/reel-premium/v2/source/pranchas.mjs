@@ -79,7 +79,6 @@ const PAIRS = [
   ['04-salinho-celular.png', '04-salinho-principal.png', 'Salinho · principal', 'A interface desmontada em camadas, no fundo exato do site; nada pixelado.'],
   ['06-chapa77.png', '07-chapa77.png', 'Chapa 77', 'Mostra a história em cores do site (5 capítulos), não um recorte isolado do lanche.'],
   ['07-transicao-amarelo.png', '08-transicao-chapa77-swellclub.png', 'Chapa 77 → Swell Club', 'A ponte usa o verde-água que os dois sites já têm, no lugar de um amarelo inventado.'],
-  ['08-swellclub.png', '09-swellclub.png', 'Swell Club', 'Tela, carrossel e legenda em faixas separadas; nada se sobrepõe ao texto.'],
   ['10-fornada.png', '11-fornada.png', 'Fornada', 'Fundo creme e tipografia editorial do próprio site, com a fotografia.'],
   ['12-assinatura.png', '13-assinatura.png', 'Assinatura', 'Logotipo oficial (símbolo + GROWLIFT) como protagonista, com chamada e endereço.'],
 ];

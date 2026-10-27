@@ -25,7 +25,8 @@ const PLAN = {
     sections: { cardapio: '#cardapio', historia: '#historia', rodape: 'footer' },
   },
   swellclub: {
-    story: ['.hero-frame', [0, 0.3, 0.62]],
+    // The hero photo (and its scroll story) shows the shop's owner, a real person: no hero shots, no recording.
+    semHero: true,
     sections: { pranchas: '#pranchas', aluguel: '#aluguel', session: '#session', rodape: 'footer.site-footer' },
   },
   fornada: {
@@ -108,7 +109,7 @@ for (const [name, site0] of Object.entries(SITES)) {
   }
 
   // Desktop hero at 4×: interface pieces cut from it can be enlarged in the frames without going soft.
-  {
+  if (!plan.semHero) {
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 4, locale: 'pt-BR' });
     const page = await ctx.newPage();
     await page.goto(site.url, { waitUntil: 'networkidle', timeout: 60000 });
@@ -122,7 +123,7 @@ for (const [name, site0] of Object.entries(SITES)) {
     await ctx.close();
   }
 
-  if (process.env.SO_HERO4) { console.log(name, 'ok'); continue; } // only the 4× hero
+  if (process.env.SO_HERO4 || plan.semHero) { console.log(name, 'ok'); continue; } // only the 4× hero, or no hero at all
 
   // Scroll recording (reference for the motion, desktop): starts after the swap, the lead-in is cut off.
   const vdir = path.join(dir, '_video');

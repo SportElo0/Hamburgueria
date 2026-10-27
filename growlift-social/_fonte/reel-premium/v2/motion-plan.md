@@ -25,25 +25,25 @@ Cada uma tem quadro de origem, quadro intermediário (o quadro de transição) e
 | 1 | 01 → **02** → 03 | o **ponto azul** de MAIS. vira a tela arredondada | escala + `border-radius` animado; o hero da Salinho já está dentro da moldura | 0,8 s |
 | 2 | 05 → **06** → 07 | o **botão "Reserve minha peça"** da Salinho estica e vira a janela do Chapa 77 | altura do retângulo animada, máscara; verde → vermelho | 0,8 s |
 | 3 | 07 → **08** → 09 | o **verde-água**: o último capítulo do Chapa 77 (#0c6d69) e a seção de pranchas da Swell Club (#086d75) têm quase a mesma cor | wipe diagonal com `clip-path`, linha de luz fina | 0,8 s |
-| 4 | 09 → **10** → 11 | o **líquido**: espuma da onda → bebida quente caindo na xícara | zoom + desfoque na espuma; a bebida é a **animação real do site da Fornada** (canvas que roda com a rolagem), gravada quadro a quadro com o motor; fusão com máscara em gradiente | 1,0 s |
+| 4 | 09 → **10** → 11 | o **creme**: o rodapé da Swell Club (#f3f0e5) e a página da Fornada (#f4ede0) têm quase a mesma cor | o último cartão do carrossel cresce até cobrir a tela; no mesmo creme, SWELL sai pelo alto e o bloco da Fornada sobe (translação vertical, a velocidade cai de rápida para lenta) | 1,0 s |
 | 5 | 11 → **12** → 13 | o **símbolo da Growlift** recorta as quatro telas e depois se preenche de azul | máscara com o vetor oficial; grade 2×2 recuando | 1,6 s |
 
 ## Higgsfield: uso econômico
 
 **Gasto nesta fase: zero.** Saldo: 197,25 créditos.
 
-Nenhuma transição precisa do Higgsfield. A única que pedia (espuma → bebida) agora usa a animação real do site da Fornada, o que é melhor porque não distorce o site. Fica documentado só como plano B:
+Nenhuma transição precisa do Higgsfield. A ideia da espuma da onda virando bebida saiu: a espuma vinha da foto do dono da Swell Club. A bebida quente continua no Reel, como a animação real do site da Fornada (canvas que roda com a rolagem), dentro do celular do quadro 11.
 
-| Campo | Plano B (só com autorização) |
+**Opcional, só com autorização: um surfista genérico.** Uma imagem nova (pessoa que não existe, surfando onda com espuma, 16:10) entraria no lugar da foto do dono **dentro da página, na hora da captura**, como já fazemos com nomes e logos. O layout continua real; só a foto muda. Isso devolve ao Reel o hero "A vida pede mar.", o quadro mais enérgico da Swell Club, e permitiria voltar com a ponte espuma → bebida.
+
+| Campo | Surfista genérico |
 | --- | --- |
-| Objetivo | morph líquido espuma → bebida, se a fusão em código não convencer |
-| Quadro de entrada | `keyframes/09-swellclub.png` (recorte da espuma) |
-| Quadro de saída | `assets/_recortes/fornada-bebida.png` |
-| Modelo | MiniMax H3 Max (quadro inicial e final, 9:16, 768p, mínimo de 5 s) ou FLUX 3 Video (720p, mínimo de 5 s) |
-| Duração usada | ~1 s dos 5 gerados |
-| Prompt | "Ocean wave foam in extreme close-up slowly turns into hot chocolate pouring into a white ceramic cup, continuous liquid motion, macro, shallow depth of field, cinematic, no text" |
-| Custo | **não verificado**: o catálogo do Higgsfield (`models_explore`) não mostra preço e não há ferramenta de orçamento sem gerar. O custo só aparece na geração, que pede confirmação; estimo na faixa de outros vídeos curtos, a confirmar na hora |
-| Alternativa sem crédito | a do plano principal (gravação real + máscara) |
-| Risco de distorcer o site | baixo: não mexe em nenhuma interface, só no líquido |
+| Objetivo | trocar a foto do dono no hero da Swell Club |
+| Modelo | `gpt_image_2_5`, 2k, qualidade alta (o mesmo da marca de vidro) |
+| Custo | **2,75 créditos**: o que essa conta pagou pela última imagem nesse modelo e configuração |
+| Prompt | "Editorial surf photograph: a surfer (adult, generic, face not identifiable, back three-quarter view) riding a turquoise wave on a yellow shortboard, big white spray, sunny, shot from the water with a telephoto lens, 16:10, no text, no logos" |
+| Uso | hero desktop e celular na captura, quadros 09 e 10 |
+| Alternativa sem crédito | a versão atual (pranchas + ponte do creme) |
+| Risco de distorcer o site | nenhum no layout; a foto é nova |
 
-Regra: nada de geração antes da aprovação dos quadros; uma tentativa em resolução baixa antes da final; teto de 25 créditos para o Reel inteiro.
+Regra: nada de geração sem a autorização de vocês; uma tentativa por vez; teto de 25 créditos para o Reel inteiro.

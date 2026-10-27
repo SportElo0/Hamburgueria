@@ -16,7 +16,7 @@ const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome
 // Growlift tokens, taken from growlift/styles.css (the live site), not from the brief's approximations.
 const T = { bg: '#06080d', bg2: '#0b0f17', blue: '#0865fe', blueHi: '#4d8dff', text: '#f3f5f9', soft: '#c6cede', muted: '#a9b3c7' };
 // Each site's own colours, sampled from the captures.
-const C = { salinho: '#35312b', salinhoGreen: '#227a4b', chapa: '#a3171c', teal: '#0c6d69', swell: '#0c4b71', petrol: '#086d75', fornadaDark: '#241a14', fornadaCream: '#f4ede0' };
+const C = { salinho: '#35312b', salinhoGreen: '#227a4b', chapa: '#a3171c', teal: '#0c6d69', swell: '#0c4b71', petrol: '#086d75', fornadaDark: '#241a14', fornadaCream: '#f4ede0', swellCream: '#f3f0e5' };
 
 const MARK_PATHS = '<path d="M280 48H410L190 450H55Z"/><path fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/>';
 const mark = (w, color = T.blue) => `<svg viewBox="50 40 530 415" width="${w}" height="${Math.round((w * 415) / 530)}" fill="${color}" aria-hidden="true">${MARK_PATHS}</svg>`;
@@ -103,16 +103,16 @@ const FRAMES = [
     <div class="abs" style="left:-60px;width:1200px;top:959px;height:2px;background:rgba(255,255,255,.8);transform:rotate(-23.07deg);box-shadow:0 0 16px rgba(255,255,255,.45)"></div>`],
 
   ['09-swellclub', `
-    <div class="abs" style="inset:0;background:radial-gradient(90% 60% at 50% 35%,#0f5f86,${C.swell} 45%,#04131c)"></div>
-    <div class="screen" style="left:72px;top:250px;width:936px;height:860px"><img src="${A('swellclub/cel-hero.png')}" style="object-position:50% 15%"></div>
-    ${[['pc-pranchas', 0], ['pc-aluguel', 1], ['pc-session', 2]].map(([f, i]) => `<div class="screen lift" style="left:${150 + i * 470}px;top:990px;width:440px;height:275px;border-radius:22px"><img src="${A(`swellclub/${f}.png`)}" style="object-position:0 0"></div>`).join('')}
+    <div class="abs" style="inset:0;background:radial-gradient(90% 60% at 50% 35%,#0f7d86,${C.petrol} 45%,#03191c)"></div>
+    <div class="screen" style="left:72px;top:250px;width:936px;height:860px"><img src="${A('swellclub/cel-pranchas.png')}" style="object-position:50% 0"></div>
+    ${[['pc-aluguel', 0], ['pc-session', 1], ['pc-rodape', 2]].map(([f, i]) => `<div class="screen lift" style="left:${150 + i * 470}px;top:990px;width:440px;height:275px;border-radius:22px"><img src="${A(`swellclub/${f}.png`)}" style="object-position:0 0"></div>`).join('')}
     ${caption('Swell Club', 'Surf shop · pranchas, aluguel por diária e kit montado no site')}`],
 
   ['10-transicao-swellclub-fornada', `
-    <div class="abs" style="inset:0;background:${C.fornadaDark}"></div>
-    <img class="abs" src="${CUT('fornada-bebida')}" style="left:-30px;top:520px;width:1140px">
-    <div class="abs" style="left:0;right:0;top:0;height:1180px;-webkit-mask-image:linear-gradient(#000 62%,transparent)"><img src="${CUT('swellclub-espuma')}" style="height:1180px;margin-left:-560px;filter:saturate(.85)"></div>
-    <div class="abs" style="left:0;right:0;top:640px;height:560px;backdrop-filter:blur(16px);-webkit-mask-image:linear-gradient(transparent,#000 45%,#000 55%,transparent)"></div>`],
+    <div class="abs" style="inset:0;background:linear-gradient(${C.swellCream} 32%,${C.fornadaCream} 42%)"></div>
+    <img class="abs" src="${CUT('swellclub-letras')}" style="left:40px;top:250px;width:1600px">
+    <img class="abs" src="${CUT('fornada-titulo')}" style="left:72px;top:860px;width:620px">
+    <img class="abs lift" src="${CUT('fornada-folhado')}" style="left:590px;top:1170px;width:418px;border-radius:6px">`],
 
   ['11-fornada', `
     <div class="abs" style="inset:0;background:${C.fornadaCream}"></div>
@@ -129,10 +129,10 @@ const FRAMES = [
   ['12-transicao-convergencia', `
     <div class="abs" style="inset:0;background:${T.bg}"></div>
     <div class="abs" style="left:60px;top:250px;width:960px;display:grid;grid-template-columns:1fr 1fr;gap:24px;opacity:.07;filter:grayscale(.5)">
-      ${['salinho', 'chapa77', 'swellclub', 'fornada'].map((s) => `<div style="height:670px;border-radius:28px;overflow:hidden"><img src="${A(`${s}/cel-hero.png`)}" style="width:100%"></div>`).join('')}</div>
+      ${['salinho', 'chapa77', 'swellclub', 'fornada'].map((s) => `<div style="height:670px;border-radius:28px;overflow:hidden"><img src="${A(s === 'swellclub' ? 'swellclub/cel-pranchas.png' : `${s}/cel-hero.png`)}" style="width:100%"></div>`).join('')}</div>
     <style>.mk{-webkit-mask:${MARK_MASK} center/contain no-repeat;mask:${MARK_MASK} center/contain no-repeat}</style>
     <div class="abs mk" style="left:60px;top:584px;width:960px;height:752px;display:flex">
-      ${['salinho/cel-hero.png', 'chapa77/cel-historia-1.png', 'swellclub/cel-hero.png', 'fornada/cel-historia-4.png'].map((f) => `<div style="flex:1;overflow:hidden"><img src="${A(f)}" style="height:100%;width:100%;object-fit:cover"></div>`).join('')}</div>`],
+      ${['salinho/cel-hero.png', 'chapa77/cel-historia-1.png', 'swellclub/cel-pranchas.png', 'fornada/cel-historia-4.png'].map((f) => `<div style="flex:1;overflow:hidden"><img src="${A(f)}" style="height:100%;width:100%;object-fit:cover"></div>`).join('')}</div>`],
 
   ['13-assinatura', `
     <div class="abs" style="inset:0;background:radial-gradient(70% 45% at 50% 42%,#0b1a3a,${T.bg} 70%)"></div>

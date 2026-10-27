@@ -168,7 +168,7 @@ growlift-social/_fonte/reel-premium/
 
 `styleframes/01…12.png` (1080×1920) e `styleframes/00-visao-geral.jpg`: uma imagem por momento do roteiro, feitas em código, sem crédito do Higgsfield. A 09 só simula a passagem espuma → café, que no vídeo é a única cena do Higgsfield. Para gerar de novo: `node growlift-social/_fonte/reel-premium/styleframes.mjs` (ou só algumas: `… styleframes.mjs 03 06`).
 
-Fotos: decidido em 27/10/2026 que todas as imagens dos quatro sites foram geradas por IA, então ficam (inclusive a do surfista no Swell Club; a troca por imagem nova saiu do plano).
+Fotos: as imagens dos quatro sites foram geradas por IA e ficam, **exceto a foto do hero da Swell Club (o surfista), que é do dono da loja** (avisado em 27/10/2026). Ela não entra no Reel; ver `v2/audit.md`, item M.
 
 ## Decisões pendentes
 
