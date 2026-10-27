@@ -481,6 +481,39 @@
       ]
     },
     {
+      "arquivo": "assets/swellclub/cel-historia-1.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-historia-2.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-historia-3.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
       "arquivo": "assets/swellclub/cel-pranchas.png",
       "projeto": "Swell Club",
       "origem": "https://surflife-juquehy.pages.dev/",
@@ -514,6 +547,17 @@
       ]
     },
     {
+      "arquivo": "assets/swellclub/foto-generica/surfista-generico.png",
+      "projeto": "Swell Club",
+      "origem": "imagem gerada por IA, pessoa que não existe",
+      "como": "gerada no Higgsfield (gpt_image_2_5, 2k, qualidade alta, 2,75 créditos); prompt em growlift-social/08-prompts/prompts.md",
+      "o_que_e": "surfista genérico que substitui, só na captura, a foto do dono da loja",
+      "tamanho_px": [
+        1360,
+        2048
+      ]
+    },
+    {
       "arquivo": "assets/swellclub/pc-aluguel.png",
       "projeto": "Swell Club",
       "origem": "https://surflife-juquehy.pages.dev/",
@@ -522,6 +566,39 @@
       "tamanho_px": [
         2880,
         1444
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-historia-1.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-historia-2.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-historia-3.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
       ]
     },
     {
@@ -547,6 +624,13 @@
       ]
     },
     {
+      "arquivo": "assets/swellclub/pc-rolagem.mp4",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "gravação da rolagem no computador (referência do movimento)"
+    },
+    {
       "arquivo": "assets/swellclub/pc-session.png",
       "projeto": "Swell Club",
       "origem": "https://surflife-juquehy.pages.dev/",
@@ -555,6 +639,17 @@
       "tamanho_px": [
         2880,
         2574
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc4x-hero.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 4× (para recortes)",
+      "tamanho_px": [
+        5760,
+        3600
       ]
     },
     {
@@ -832,6 +927,34 @@
       "o_que_e": "fonte da marca"
     },
     {
+      "arquivo": "assets/_gravacoes/rec-chapa77/",
+      "projeto": "chapa77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "o_que_e": "gravação quadro a quadro do site (78 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
+      "arquivo": "assets/_gravacoes/rec-fornada/",
+      "projeto": "fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "o_que_e": "gravação quadro a quadro do site (96 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
+      "arquivo": "assets/_gravacoes/rec-salinho/",
+      "projeto": "salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "o_que_e": "gravação quadro a quadro do site (69 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
+      "arquivo": "assets/_gravacoes/rec-swellclub/",
+      "projeto": "swellclub",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "o_que_e": "gravação quadro a quadro do site (66 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
       "arquivo": "assets/_recortes/salinho-titulo.png",
       "projeto": "salinho",
       "origem": "assets/salinho/pc4x-hero.png",
@@ -884,6 +1007,28 @@
       "tamanho_px": [
         2900,
         1788
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-look-topo.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/cel-look.png",
+      "o_que_e": "topo da página \"Branco para novos começos\" no celular",
+      "como": "recorte da captura (caixa CSS [0, 0, 340, 736], 3×), sem alteração",
+      "tamanho_px": [
+        1020,
+        2208
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-selecao-topo.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/cel-selecao.png",
+      "o_que_e": "topo da página \"A virada pede leveza\" no celular",
+      "como": "recorte da captura (caixa CSS [0, 0, 390, 844], 3×), sem alteração",
+      "tamanho_px": [
+        1170,
+        2532
       ]
     },
     {

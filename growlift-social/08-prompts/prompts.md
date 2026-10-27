@@ -69,3 +69,13 @@ Higgsfield, `gpt_image_2_5`, 9:16, 2k, qualidade alta, referência `growlift/img
 ```
 Vertical 9:16 version of the reference: the exact same glass logo (a tall slanted parallelogram bar on the left and a hollow triangle on the right, same proportions and angles as the reference, no changes to the shape), made of luminous translucent blue glass (#0865FE) with bright cyan-white edge highlights, standing on a dark glossy water-like floor with a soft blue reflection. The logo sits in the lower half of the frame, centered, large (about 80% of the frame width). Upper half: deep near-black navy (#06080d) with a faint blue atmospheric glow, clean and calm so headline text can be placed there. Cinematic product lighting, ultra sharp, high detail, no text, no letters, no watermark, no extra objects.
 ```
+
+## Surfista genérico (Reel premium, outubro de 2026)
+
+Higgsfield, `gpt_image_2_5`, 2:3, 2k, qualidade alta. Custo: 2,75 créditos (conferido com `get_cost` antes de gerar). Arquivo: `_fonte/reel-premium/v2/assets/swellclub/foto-generica/surfista-generico.png`.
+
+**Para que serve:** a foto do topo do site que virou o Swell Club é do dono da loja. Esta imagem, de uma pessoa que não existe, de costas e sem rosto, entra no lugar dela só na hora da captura (`anonimizar.mjs`, `swapPhotos`). O site original não muda.
+
+```
+Editorial surf action photograph, vertical 2:3. Turquoise-blue ocean on a sunny day, shot from the water with a long telephoto lens. A generic adult surfer, not a real person, seen from behind in three-quarter view with the face turned away and not identifiable, wearing a plain black wetsuit with no logos, launches off the lip of a wave on a bright yellow shortboard. The surfer and board sit right of center and slightly above the middle of the frame. A large burst of white spray and foam fills the lower 40 percent of the image. The top third is calm deep-blue open sea, clean and uncluttered. Natural colours, crisp detail, high shutter speed frozen droplets, no text, no logos, no watermark.
+```

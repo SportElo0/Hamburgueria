@@ -25,7 +25,8 @@
         "assets/growlift/marca.svg",
         "assets/fontes/inter (do site da Growlift)"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 1.9
     },
     {
       "n": "02",
@@ -48,37 +49,65 @@
       "origem": [
         "assets/_recortes/salinho-cartao.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 2.55
     },
     {
       "n": "03",
       "arquivo": "03-salinho-entrada.png",
       "nome": "Salinho · entrada editorial",
       "inicio": 2.8,
-      "fim": 4.6,
+      "fim": 4.4,
       "tipo": "cena",
       "projeto": "Salinho",
       "objetivo": "Mostrar o projeto principal inteiro, como ele é no computador.",
       "texto": "Salinho · Moda de linho · site com reserva da peça pelo WhatsApp · Projeto conceito",
       "cor": "oliva #35312b",
       "composicao": "hero do computador maior que a tela, cortado nas laterais; legenda Growlift embaixo",
-      "camera": "dolly lento da esquerda para a direita",
+      "camera": "aproximação lenta ancorada no título do site (nada fica cortado)",
       "profundidade": "tela sobre fundo com luz oliva",
       "entrada": "continua a moldura da transição",
-      "saida": "a camisa se solta da tela (entra no 04)",
-      "preservado": "a camisa",
+      "saida": "a tela sobe e sai; o celular sobe no lugar (04)",
+      "preservado": "o site",
       "tecnica": "captura 4× com movimento de câmera em código",
       "origem": [
         "assets/_recortes/salinho-cartao.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 3.9
     },
     {
       "n": "04",
-      "arquivo": "04-salinho-principal.png",
-      "nome": "Salinho · composição principal",
-      "inicio": 4.6,
+      "arquivo": "04-salinho-celular.png",
+      "nome": "Salinho · celular e peças",
+      "inicio": 4.4,
       "fim": 6.4,
+      "tipo": "cena",
+      "projeto": "Salinho",
+      "objetivo": "Provar que o site funciona no celular e que cada peça muda o clima da página.",
+      "texto": "(texto do próprio site)",
+      "cor": "oliva, marrom e verde das três peças",
+      "composicao": "celular no centro com a gravação real do site: dois toques nas miniaturas trocam camisa, short e calça, e a página muda de cor; nas laterais, as páginas \"Branco para novos começos\" e \"A virada pede leveza\"",
+      "camera": "frontal; o celular sobe no lugar da tela do computador, os das laterais saem de trás dele",
+      "profundidade": "3 planos",
+      "entrada": "a tela do computador sobe e sai; o celular entra no mesmo lugar",
+      "saida": "o celular vem para a câmera e se abre nas peças do 05",
+      "preservado": "o site, do computador para o celular",
+      "tecnica": "gravação quadro a quadro do site no celular (390×844, 2×), com o toque marcado",
+      "origem": [
+        "assets/_gravacoes/rec-salinho (gravação)",
+        "assets/salinho/cel-look.png",
+        "assets/salinho/cel-selecao.png"
+      ],
+      "status": "no vídeo final",
+      "momento_do_quadro": 5.9
+    },
+    {
+      "n": "05",
+      "arquivo": "05-salinho-principal.png",
+      "nome": "Salinho · composição principal",
+      "inicio": 6.4,
+      "fim": 8.0,
       "tipo": "cena",
       "projeto": "Salinho",
       "objetivo": "O quadro mais bonito do vídeo: a interface desmontada em camadas.",
@@ -87,8 +116,8 @@
       "composicao": "título do site no alto, camisa grande no centro, seletor das peças e botão de reserva em primeiro plano",
       "camera": "parallax: cada camada se move numa velocidade",
       "profundidade": "4 camadas (título, camisa, seletor, botão)",
-      "entrada": "a camisa sai da tela do 03",
-      "saida": "o seletor troca as peças; o fundo muda de cor como no site",
+      "entrada": "as peças saem do celular do 04",
+      "saida": "título, camisa e seletor saem; fica o botão de reserva",
       "preservado": "o botão verde de reserva",
       "tecnica": "camadas recortadas da captura 4× + arquivo da peça do próprio site",
       "origem": [
@@ -97,32 +126,8 @@
         "assets/_recortes/salinho-miniaturas.png",
         "assets/_recortes/salinho-botao.png"
       ],
-      "status": "pronto para aprovação"
-    },
-    {
-      "n": "05",
-      "arquivo": "05-salinho-celular.png",
-      "nome": "Salinho · celular e peças",
-      "inicio": 6.4,
-      "fim": 8.0,
-      "tipo": "cena",
-      "projeto": "Salinho",
-      "objetivo": "Provar que o site funciona no celular e que cada peça muda o clima da página.",
-      "texto": "(texto do próprio site)",
-      "cor": "oliva, marrom e verde das três peças",
-      "composicao": "três celulares: a camisa na frente, short e calça atrás",
-      "camera": "frontal, os celulares de trás entram pelas laterais",
-      "profundidade": "3 planos",
-      "entrada": "o fundo troca de cor junto com a peça",
-      "saida": "o botão de reserva cresce (06)",
-      "preservado": "o botão 'Reserve minha peça'",
-      "tecnica": "capturas de celular a 3×, troca de peça clicada de verdade",
-      "origem": [
-        "assets/salinho/cel-hero.png",
-        "assets/salinho/cel-hero-peca-3.png",
-        "assets/salinho/cel-hero-peca-4.png"
-      ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 7.6
     },
     {
       "n": "06",
@@ -146,7 +151,8 @@
         "assets/_recortes/salinho-botao.png",
         "assets/_recortes/chapa77-burger.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 8.6
     },
     {
       "n": "07",
@@ -163,13 +169,15 @@
       "camera": "as cartas passam de baixo para cima no ritmo da batida",
       "profundidade": "5 planos",
       "entrada": "a janela da transição vira a primeira carta",
-      "saida": "a última carta (verde-água) ocupa a tela",
+      "saida": "a carta cresce até o lanche em camadas tomar a tela",
       "preservado": "o verde-água #0c6d69",
-      "tecnica": "capturas da rolagem real, troca no ritmo da música",
+      "tecnica": "gravação real da rolagem do site no computador, na carta da frente (vermelho, laranja, verde, roxo, verde-água); as cartas de trás saem quando a da frente chega na cor delas",
       "origem": [
-        "assets/chapa77/pc-historia-1..5.png"
+        "assets/_gravacoes/rec-chapa77 (gravação)",
+        "assets/chapa77/pc-historia-2..5.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 9.75
     },
     {
       "n": "08",
@@ -182,7 +190,7 @@
       "objetivo": "Passar de um site ao outro pela cor que os dois já têm.",
       "texto": "(do site) Duplo 77, camada por camada.",
       "cor": "verde-água #0c6d69 ≈ #086d75",
-      "composicao": "corte diagonal: o lanche em camadas em cima, as pranchas subindo embaixo",
+      "composicao": "o lanche em camadas (quadro da gravação) em cima; a linha diagonal sobe pelo mesmo verde-água e as pranchas sobem embaixo",
       "camera": "a linha de corte sobe e varre a tela",
       "profundidade": "duas camadas com a mesma cor de fundo",
       "entrada": "último capítulo do Chapa 77",
@@ -190,10 +198,11 @@
       "preservado": "a cor de fundo (os dois sites usam quase o mesmo verde-água)",
       "tecnica": "wipe diagonal com clip-path em código",
       "origem": [
-        "assets/chapa77/cel-historia-6.png",
+        "assets/_gravacoes/rec-chapa77 (quadro 54)",
         "assets/swellclub/cel-pranchas.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 11.95
     },
     {
       "n": "09",
@@ -204,22 +213,24 @@
       "tipo": "cena",
       "projeto": "Swell Club",
       "objetivo": "Manter a energia com movimento horizontal.",
-      "texto": "(do site) Encontre sua onda. · Swell Club · Surf shop · pranchas, aluguel por diária e kit montado no site · Projeto conceito",
+      "texto": "(do site) A vida pede mar. · A gente vive isso. · Swell Club · Surf shop · pranchas, aluguel por diária e kit montado no site · Projeto conceito",
       "cor": "verde-água #086d75 + amarelo",
-      "composicao": "a câmera recua: as pranchas do 08 estão dentro da tela (seção \"Encontre sua onda\" no celular); três seções do site passam como carrossel embaixo",
+      "composicao": "zoom na prancha amarela leva à prancha amarela do surfista, no topo do site no celular (\"A vida pede mar.\" vira \"A gente vive isso.\"); três seções do site passam em carrossel",
       "camera": "carrossel desliza da direita para a esquerda",
       "profundidade": "tela + cartões à frente",
-      "entrada": "as pranchas do 08 recuam e viram a tela do celular",
+      "entrada": "zoom na prancha amarela do 08",
       "saida": "o último cartão do carrossel (rodapé creme, SWELL CLUB gigante) cresce e cobre a tela",
-      "preservado": "o creme do rodapé",
-      "tecnica": "capturas + deslize horizontal em código",
+      "preservado": "a prancha amarela; depois, o creme do rodapé",
+      "tecnica": "gravação real do site no celular, com a foto do dono trocada pela do surfista genérico na hora da gravação; carrossel em código",
       "origem": [
-        "assets/swellclub/cel-pranchas.png",
+        "assets/_gravacoes/rec-swellclub (gravação)",
+        "assets/swellclub/foto-generica/surfista-generico.png",
         "assets/swellclub/pc-aluguel.png",
         "assets/swellclub/pc-session.png",
         "assets/swellclub/pc-rodape.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 13.9
     },
     {
       "n": "10",
@@ -244,7 +255,8 @@
         "assets/_recortes/fornada-titulo.png",
         "assets/_recortes/fornada-folhado.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 15.62
     },
     {
       "n": "11",
@@ -257,20 +269,21 @@
       "objetivo": "Pausa calorosa: fotografia e tipografia editorial.",
       "texto": "(do site) O simples. Extraordinário. · Fornada · Padaria · reserva do café da manhã pelo site · Projeto conceito",
       "cor": "creme #f4ede0 + marrom",
-      "composicao": "título serifado do site, celular com o hero e a foto do folhado em coluna, legenda à direita",
+      "composicao": "título serifado do site no alto; foto do folhado e a legenda Growlift à esquerda; celular à direita com a gravação real da bebida caindo",
       "camera": "subida lenta",
       "profundidade": "celular e foto em planos diferentes",
-      "entrada": "o título e a foto chegam do 10; o celular sobe com a bebida quente caindo",
+      "entrada": "o título e a foto chegam do 10; o celular sobe",
       "saida": "os quatro projetos se juntam",
       "preservado": "—",
-      "tecnica": "capturas + recortes em código",
+      "tecnica": "gravação real do site no celular (a bebida é a animação do próprio site)",
       "origem": [
         "assets/_recortes/fornada-titulo.png",
-        "assets/fornada/cel-historia-4.png",
         "assets/_recortes/fornada-folhado.png",
-        "assets/_recortes/fornada-folhado-legenda.png"
+        "assets/_recortes/fornada-folhado-legenda.png",
+        "assets/_gravacoes/rec-fornada (gravação)"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 18.8
     },
     {
       "n": "12",
@@ -293,11 +306,13 @@
       "origem": [
         "assets/growlift/marca.svg",
         "assets/salinho/cel-hero.png",
+        "assets/chapa77/cel-hero.png",
         "assets/chapa77/cel-historia-1.png",
-        "assets/swellclub/cel-pranchas.png",
+        "assets/swellclub/cel-historia-1.png",
         "assets/fornada/cel-historia-4.png"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 20.3
     },
     {
       "n": "13",
@@ -321,7 +336,10 @@
         "assets/growlift/marca.svg",
         "assets/growlift/hero-video-quadro.png (vídeo do site)"
       ],
-      "status": "pronto para aprovação"
+      "status": "no vídeo final",
+      "momento_do_quadro": 24.2
     }
-  ]
+  ],
+  "video": "renders/sua-marca-merece-mais.mp4",
+  "nota": "Os quadros são tirados do vídeo final (renders/quadros), no momento indicado em momento_do_quadro."
 }

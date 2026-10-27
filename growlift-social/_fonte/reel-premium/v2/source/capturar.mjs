@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITES, anonymize } from '../../anonimizar.mjs';
+import { SITES, anonymize, swapPhotos } from '../../anonimizar.mjs';
 
 const ASSETS = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'assets');
 const CHROME = process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
@@ -25,8 +25,8 @@ const PLAN = {
     sections: { cardapio: '#cardapio', historia: '#historia', rodape: 'footer' },
   },
   swellclub: {
-    // The hero photo (and its scroll story) shows the shop's owner, a real person: no hero shots, no recording.
-    semHero: true,
+    // The hero photo is the shop owner: anonimizar.mjs serves a generic surfer in its place (swapPhotos).
+    story: ['.hero-frame', [0, 0.3, 0.62]],
     sections: { pranchas: '#pranchas', aluguel: '#aluguel', session: '#session', rodape: 'footer.site-footer' },
   },
   fornada: {
@@ -57,6 +57,7 @@ for (const [name, site0] of Object.entries(SITES)) {
 
   for (const [kind, vp, scale] of process.env.SO_HERO4 ? [] : DEVICES) {
     const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: scale, locale: 'pt-BR', reducedMotion: 'no-preference' });
+    await swapPhotos(ctx, site);
     const page = await ctx.newPage();
     await page.goto(site.url, { waitUntil: 'networkidle', timeout: 60000 });
     await page.evaluate(() => document.fonts.ready);
@@ -111,6 +112,7 @@ for (const [name, site0] of Object.entries(SITES)) {
   // Desktop hero at 4×: interface pieces cut from it can be enlarged in the frames without going soft.
   if (!plan.semHero) {
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 4, locale: 'pt-BR' });
+    await swapPhotos(ctx, site);
     const page = await ctx.newPage();
     await page.goto(site.url, { waitUntil: 'networkidle', timeout: 60000 });
     await page.evaluate(() => document.fonts.ready);
@@ -128,6 +130,7 @@ for (const [name, site0] of Object.entries(SITES)) {
   // Scroll recording (reference for the motion, desktop): starts after the swap, the lead-in is cut off.
   const vdir = path.join(dir, '_video');
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, recordVideo: { dir: vdir, size: { width: 1440, height: 900 } }, locale: 'pt-BR' });
+  await swapPhotos(ctx, site);
   const t0 = Date.now();
   const page = await ctx.newPage();
   await page.goto(site.url, { waitUntil: 'networkidle', timeout: 60000 });

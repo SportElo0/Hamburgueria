@@ -39,7 +39,10 @@ for site, meta in SITES.items():
             continue
         it = {'arquivo': str(f.relative_to(V2)), 'projeto': meta['nome_no_reel'], 'origem': meta['site_base'],
               'como': 'captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)'}
-        if f.parent.name == 'pecas':
+        if f.parent.name == 'foto-generica':
+            it.update(como='gerada no Higgsfield (gpt_image_2_5, 2k, qualidade alta, 2,75 créditos); prompt em growlift-social/08-prompts/prompts.md',
+                      origem='imagem gerada por IA, pessoa que não existe', o_que_e='surfista genérico que substitui, só na captura, a foto do dono da loja')
+        elif f.parent.name == 'pecas':
             it.update(como='arquivo de imagem do próprio site (peça com fundo transparente), baixado sem alteração',
                       origem=f"https://semvo-juquehy.pages.dev/assets/{f.name}", o_que_e='peça de linho')
         else:
@@ -58,6 +61,12 @@ growlift = {
 for name, (orig, what) in growlift.items():
     items.append({'arquivo': f'assets/growlift/{name}', 'projeto': 'Growlift', 'origem': orig, 'o_que_e': what})
 items.append({'arquivo': 'assets/fontes/', 'projeto': 'Growlift', 'origem': 'growlift/fonts (Inter, licença OFL, a mesma do site)', 'o_que_e': 'fonte da marca'})
+
+for d in sorted((A / '_gravacoes').glob('rec-*')):
+    n = len(list(d.glob('*.jpg')))
+    items.append({'arquivo': str(d.relative_to(V2)) + '/', 'projeto': d.name[4:], 'origem': SITES.get(d.name[4:], {}).get('site_base', ''),
+                  'o_que_e': f'gravação quadro a quadro do site ({n} quadros, 30 por segundo), para o vídeo final',
+                  'como': 'source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)'})
 
 cuts = json.loads((A / '_recortes' / 'recortes.json').read_text())
 for name, c in cuts.items():

@@ -17,6 +17,8 @@ CUTS = {
     'salinho-botao': ('salinho/pc4x-hero.png', 4, (1120, 463, 1379, 530), 'botão "Reserve minha peça"'),
     'salinho-miniaturas': ('salinho/pc4x-hero.png', 4, (1118, 624, 1382, 714), 'seletor das 4 peças'),
     'salinho-cartao': ('salinho/pc4x-hero.png', 4, (16, 16, 1424, 884), 'hero inteiro, sem a margem creme da página'),
+    'salinho-look-topo': ('salinho/cel-look.png', 3, (0, 0, 340, 736), 'topo da página "Branco para novos começos" no celular'),
+    'salinho-selecao-topo': ('salinho/cel-selecao.png', 3, (0, 0, 390, 844), 'topo da página "A virada pede leveza" no celular'),
     'chapa77-burger': ('chapa77/pc4x-hero.png', 4, (430, 290, 990, 760), 'lanche do hero sobre o vermelho'),
     'swellclub-letras': ('swellclub/pc-rodape.png', 2, (95, 205, 1440, 492), 'nome gigante do rodapé'),
     'fornada-bebida': ('fornada/pc-historia-4.png', 2, (900, 40, 1420, 820), 'cena ilustrativa de chocolate quente (hero)'),

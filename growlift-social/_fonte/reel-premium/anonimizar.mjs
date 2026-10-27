@@ -29,6 +29,8 @@ export const SITES = {
     url: 'https://surflife-juquehy.pages.dev/',
     swap: [[/[®™]/g, ''], [/em Juquehy/g, 'no litoral'], [/SURFLIFE/g, 'SWELL CLUB'], [/SurfLife|Surflife/g, 'Swell Club'], [/JUQUEHY, SP/g, 'LITORAL NORTE'], [/JUQUEHY · /g, ''], [/ · JUQUEHY/g, ''], [/JUQUEHY/g, 'LITORAL'], [/Juquehy/g, 'no litoral'], [/São Sebastião/g, 'Litoral Norte']],
     logos: ['logo-original'],
+    // The hero photo is the shop owner (a real person): swapped for a generated generic surfer (08-prompts).
+    photos: [[/surf-owner-(desktop|mobile)\.webp/, 'v2/assets/swellclub/foto-generica/surfista-generico.png']],
     logoText: 'SWELL',
     logoStyle: 'border-radius:50%;background:#f2c94c;color:#0d2b33;font:800 13px/1 Arial,sans-serif;letter-spacing:.06em',
   },
@@ -39,6 +41,13 @@ export const SITES = {
     logoText: '',
   },
 };
+
+/** Serves the replacement photos instead of the site's own files; call before page.goto(). */
+export async function swapPhotos(ctx, site) {
+  for (const [re, file] of site.photos || []) {
+    await ctx.route(re, (route) => route.fulfill({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), file), contentType: 'image/png' }));
+  }
+}
 
 export async function anonymize(page, site) {
   if (site.css) await page.addStyleTag({ content: site.css });
@@ -70,7 +79,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 const browser = await chromium.launch({ executablePath: CHROME });
 for (const [name, site] of Object.entries(SITES)) {
   for (const [kind, vp, scale] of [['pc', { width: 1440, height: 900 }, 2], ['cel', { width: 390, height: 844 }, 3]]) {
-    const page = await (await browser.newContext({ viewport: vp, deviceScaleFactor: scale, locale: 'pt-BR' })).newPage();
+    const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: scale, locale: 'pt-BR' });
+    await swapPhotos(ctx, site);
+    const page = await ctx.newPage();
     await page.goto(site.url, { waitUntil: 'networkidle', timeout: 60000 });
     await page.waitForTimeout(2500);
     await anonymize(page, site);

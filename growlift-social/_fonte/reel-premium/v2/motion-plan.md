@@ -1,49 +1,47 @@
-# Plano de motion e transições
+# Plano de motion e transições (como foi feito)
 
-## Ferramenta: recomendação
+## Ferramenta
 
-**Animar no motor que já existe, `growlift-social/_fonte/reels/motor.mjs`.** Ele renderizou os 8 Reels. Cada Reel é uma página HTML com uma linha do tempo; o motor fotografa cada quadro com `window.render(t)` e o ffmpeg monta o MP4. Ele também já grava os sites quadro a quadro, que é o que a transição 4 precisa. Os 13 quadros desta pasta são HTML no mesmo formato, então viram as cenas da animação sem reescrever nada.
+**O mesmo jeito do motor dos 8 Reels, sem trocar de stack.** O vídeo é uma página HTML (`source/reel.mjs`) com uma função `window.render(t)` que posiciona cada camada no tempo `t`. O Playwright fotografa os 750 quadros (30 por segundo) e o ffmpeg monta o MP4: H.264 High, yuv420p, CRF 17, `faststart`.
 
-| | Motor próprio | HyperFrames | Remotion | Lemo-Opuscar |
+As telas dos sites não são imagens paradas. São **gravações quadro a quadro dos sites de verdade** (`source/gravacoes.mjs`), feitas com o `captureSite` do motor dos Reels (`_fonte/reels/motor.mjs`), já anonimizadas:
+
+| Gravação | O que mostra | Quadros |
+| --- | --- | --- |
+| `rec-salinho` | celular: dois toques nas miniaturas (camisa → short → calça), a página muda de cor | 69 |
+| `rec-chapa77` | computador: a história do lanche na rolagem (vermelho, laranja, verde, roxo, verde-água, lanche em camadas) | 78 |
+| `rec-swellclub` | celular: "A vida pede mar." → "A gente vive isso.", com o surfista genérico no lugar do dono | 66 |
+| `rec-fornada` | celular: a bebida quente caindo (animação do site) e os textos mudando | 96 |
+
+| | Motor próprio (usado) | HyperFrames | Remotion | Lemo-Opuscar |
 | --- | --- | --- | --- | --- |
-| Formato | HTML + linha do tempo + Playwright + ffmpeg | HTML + animação buscável (GSAP) → MP4 determinístico | React | biblioteca de estilos artísticos |
-| Já usado aqui | sim, 8 Reels | não | não | não |
+| Formato | HTML + `render(t)` + Playwright + ffmpeg | HTML + animação buscável → MP4 | React | estilos artísticos |
 | Grava os sites quadro a quadro | sim | não pronto | não | não |
-| Custo de adotar | zero | baixo (mesmo paradigma) | alto (reescrever em React) | não se aplica |
-| Uso | **renderização** | alternativa se quisermos o estúdio visual de linha do tempo | não recomendado: troca de stack sem ganho | só referência de direção; estilos não aplicados |
+| Por que sim ou não | já fez os 8 Reels; os quadros da pré-produção já eram HTML | mesmo paradigma; fica de alternativa se quisermos um estúdio visual | trocaria de stack sem ganho | só referência; nenhum estilo aplicado |
 
-Um sistema só. Se o motor próprio esbarrar em algo (por exemplo, edição visual da linha do tempo), a migração natural é para o HyperFrames, porque a página continua sendo HTML. Ainda não rodei o HyperFrames neste projeto: a decisão acima é pela arquitetura, não por teste.
-
-Movimento: curvas exponenciais de saída (ease-out), nunca linear, exceto o carrossel e o líquido. Uma coisa se move por vez. Nada de zoom em toda cena: só o 03 (dolly) e o 09/10 (zoom na espuma).
+**Movimento:**
+- Saídas e entradas com curva exponencial (ease-out).
+- Trocas de lugar com in-out.
+- Só o carrossel e a aproximação da Salinho são lineares.
+- Uma coisa se move por vez.
+- Não há zoom em toda cena: só na Salinho (aproximação lenta) e na prancha amarela (ponte da transição 3 para o Swell Club).
 
 ## As 5 transições
 
-Cada uma tem quadro de origem, quadro intermediário (o quadro de transição) e quadro de destino. O elemento que liga os dois lados vem dos próprios sites.
-
-| # | Origem → intermediário → destino | Elemento que liga | Técnica (código) | Duração |
+| # | Origem → intermediário → destino | Elemento que liga | Técnica | Tempo |
 | --- | --- | --- | --- | --- |
-| 1 | 01 → **02** → 03 | o **ponto azul** de MAIS. vira a tela arredondada | escala + `border-radius` animado; o hero da Salinho já está dentro da moldura | 0,8 s |
-| 2 | 05 → **06** → 07 | o **botão "Reserve minha peça"** da Salinho estica e vira a janela do Chapa 77 | altura do retângulo animada, máscara; verde → vermelho | 0,8 s |
-| 3 | 07 → **08** → 09 | o **verde-água**: o último capítulo do Chapa 77 (#0c6d69) e a seção de pranchas da Swell Club (#086d75) têm quase a mesma cor | wipe diagonal com `clip-path`, linha de luz fina | 0,8 s |
-| 4 | 09 → **10** → 11 | o **creme**: o rodapé da Swell Club (#f3f0e5) e a página da Fornada (#f4ede0) têm quase a mesma cor | o último cartão do carrossel cresce até cobrir a tela; no mesmo creme, SWELL sai pelo alto e o bloco da Fornada sobe (translação vertical, a velocidade cai de rápida para lenta) | 1,0 s |
-| 5 | 11 → **12** → 13 | o **símbolo da Growlift** recorta as quatro telas e depois se preenche de azul | máscara com o vetor oficial; grade 2×2 recuando | 1,6 s |
+| 1 | 01 → **02** → 03 | o **ponto azul** de MAIS.: medido na própria fonte, cresce exatamente a partir dele e vira a tela arredondada | retângulo animado (posição, tamanho, cantos), anel azul que some | 2,0–2,8 s |
+| 2 | 05 → **06** → 07 | o **botão "Reserve minha peça"** sobe, ocupa a largura e se abre para baixo numa janela vermelha com o lanche | o mesmo elemento muda de tamanho; a janela vira a carta da frente do 07 | 8,0–8,8 s |
+| 3 | 07 → **08** → 09 | o **verde-água**: o último capítulo do Chapa 77 e a seção de pranchas da Swell Club têm quase a mesma cor | a carta cresce até o lanche em camadas tomar a tela (sem fusão de imagens); linha diagonal com `clip-path`; zoom na prancha amarela leva à prancha amarela do surfista | 11,3–12,9 s |
+| 4 | 09 → **10** → 11 | o **creme**: rodapé da Swell Club (#f3f0e5) e página da Fornada (#f4ede0) | o último cartão do carrossel cresce até cobrir a tela, com o SWELL gigante dentro dele; SWELL sai pelo alto e o bloco da Fornada sobe no mesmo creme | 14,65–16,2 s |
+| 5 | 11 → **12** → 13 | o **símbolo da Growlift** | a página da Fornada encolhe para uma grade 2×2; o vetor oficial da marca recorta as quatro telas e se enche de azul | 19,3–21,0 s |
 
-## Higgsfield: uso econômico
+Nenhuma transição funde duas imagens diferentes no mesmo retângulo: onde isso aparecia nos testes (computador → celular e Chapa 77 → verde-água), o movimento foi refeito.
 
-**Gasto nesta fase: zero.** Saldo: 197,25 créditos.
+## Higgsfield
 
-Nenhuma transição precisa do Higgsfield. A ideia da espuma da onda virando bebida saiu: a espuma vinha da foto do dono da Swell Club. A bebida quente continua no Reel, como a animação real do site da Fornada (canvas que roda com a rolagem), dentro do celular do quadro 11.
+**Gasto: 2,75 créditos**, na foto do surfista genérico, autorizada por vocês e com o custo conferido antes (`get_cost`). Saldo: 194,50.
 
-**Opcional, só com autorização: um surfista genérico.** Uma imagem nova (pessoa que não existe, surfando onda com espuma, 16:10) entraria no lugar da foto do dono **dentro da página, na hora da captura**, como já fazemos com nomes e logos. O layout continua real; só a foto muda. Isso devolve ao Reel o hero "A vida pede mar.", o quadro mais enérgico da Swell Club, e permitiria voltar com a ponte espuma → bebida.
-
-| Campo | Surfista genérico |
-| --- | --- |
-| Objetivo | trocar a foto do dono no hero da Swell Club |
-| Modelo | `gpt_image_2_5`, 2k, qualidade alta (o mesmo da marca de vidro) |
-| Custo | **2,75 créditos**: o que essa conta pagou pela última imagem nesse modelo e configuração |
-| Prompt | "Editorial surf photograph: a surfer (adult, generic, face not identifiable, back three-quarter view) riding a turquoise wave on a yellow shortboard, big white spray, sunny, shot from the water with a telephoto lens, 16:10, no text, no logos" |
-| Uso | hero desktop e celular na captura, quadros 09 e 10 |
-| Alternativa sem crédito | a versão atual (pranchas + ponte do creme) |
-| Risco de distorcer o site | nenhum no layout; a foto é nova |
-
-Regra: nada de geração sem a autorização de vocês; uma tentativa por vez; teto de 25 créditos para o Reel inteiro.
+- A ponte espuma → bebida, que era o plano B em vídeo, não foi usada. A transição 4 ficou sendo a do creme.
+- Nenhum vídeo foi gerado.
+- O prompt está em `growlift-social/08-prompts/prompts.md`.

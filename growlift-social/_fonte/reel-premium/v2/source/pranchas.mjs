@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const KF = path.join(ROOT, 'keyframes');
+const KF = path.join(ROOT, 'renders', 'quadros'); // frames taken from the final video (reel.mjs --quadros)
 const OUT = path.join(ROOT, 'previews');
 const V1 = path.join(ROOT, '..', 'styleframes');
 const FONT = path.join(ROOT, 'assets', 'fontes', 'inter-latin-wght-normal.woff2');
@@ -64,8 +64,8 @@ figcaption em{font-style:normal;font-size:18px;color:var(--muted);line-height:1.
 .ticks{display:flex;margin-top:10px;font-size:18px;color:var(--muted)}
 .ticks i{font-style:normal}
 </style></head><body>
-<h1>Sua marca merece mais. · Storyboard v2</h1>
-<div class="sub">Reel Growlift · 25 s · 1080×1920 · ${sb.quadros.length} quadros (8 cenas e 5 transições, com borda azul) · projetos conceito com nome fictício</div>
+<h1>Sua marca merece mais. · Storyboard final</h1>
+<div class="sub">Reel Growlift · 25 s · 1080×1920 · ${sb.quadros.length} quadros tirados do vídeo final (8 cenas e 5 transições, com borda azul) · projetos conceito com nome fictício</div>
 <div class="grid">${sb.quadros.map(card).join('')}</div>
 <div class="run"><h2>Progressão de cor ao longo dos 25 s (largura = tempo na tela)</h2><div class="bar">${run}</div>
 <div class="ticks">${sb.quadros.map((q) => `<i style="flex:${q.fim - q.inicio}">${q.n}</i>`).join('')}</div></div>
@@ -73,13 +73,14 @@ figcaption em{font-style:normal;font-size:18px;color:var(--muted);line-height:1.
 
 // C. Before and after, scene by scene.
 const PAIRS = [
-  ['01-hook.png', '01-hook.png', 'Abertura', 'MAIS. ganha o dobro do tamanho e a marca Growlift entra no topo; a linha de luz decorativa saiu.'],
+  ['01-hook.png', '01-hook.png', 'Abertura', 'MAIS. com quase o dobro do tamanho e a marca Growlift no topo; o texto já entra no primeiro quadro; a linha de luz decorativa saiu.'],
   ['02-provocacao.png', '02-transicao-hook-salinho.png', 'Segundo momento', 'A frase "Não basta estar online…" saiu (repetia o hook e atrasava os sites). O ponto azul vira a tela da Salinho.'],
   ['03-salinho-janela.png', '03-salinho-entrada.png', 'Salinho · entrada', 'Captura 4× sem a margem creme, sem barra de navegador falsa; legenda no sistema Growlift.'],
-  ['04-salinho-celular.png', '04-salinho-principal.png', 'Salinho · principal', 'A interface desmontada em camadas, no fundo exato do site; nada pixelado.'],
-  ['06-chapa77.png', '07-chapa77.png', 'Chapa 77', 'Mostra a história em cores do site (5 capítulos), não um recorte isolado do lanche.'],
+  ['04-salinho-celular.png', '04-salinho-celular.png', 'Salinho · celular', 'O celular mostra o site gravado de verdade: os toques nas miniaturas trocam a peça e a cor da página.'],
+  ['04-salinho-celular.png', '05-salinho-principal.png', 'Salinho · principal', 'A interface desmontada em camadas, no fundo exato do site; nada pixelado.'],
+  ['06-chapa77.png', '07-chapa77.png', 'Chapa 77', 'A história em cores do site rodando de verdade na carta da frente; as de trás saem quando ela chega na cor delas.'],
   ['07-transicao-amarelo.png', '08-transicao-chapa77-swellclub.png', 'Chapa 77 → Swell Club', 'A ponte usa o verde-água que os dois sites já têm, no lugar de um amarelo inventado.'],
-  ['10-fornada.png', '11-fornada.png', 'Fornada', 'Fundo creme e tipografia editorial do próprio site, com a fotografia.'],
+  ['10-fornada.png', '11-fornada.png', 'Fornada', 'Editorial do próprio site; a bebida caindo no celular é a animação real do site. Legenda longe dos botões do Instagram.'],
   ['12-assinatura.png', '13-assinatura.png', 'Assinatura', 'Logotipo oficial (símbolo + GROWLIFT) como protagonista, com chamada e endereço.'],
 ];
 const b64 = (f) => `data:image/png;base64,${fs.readFileSync(f).toString('base64')}`;
@@ -92,7 +93,7 @@ h1{font-size:56px;font-weight:800;letter-spacing:-.04em}
 .two div{position:relative}.two img{display:block;width:100%;border-radius:14px;box-shadow:0 0 0 1px var(--line)}
 .two span{position:absolute;left:10px;top:10px;font:700 16px/1 Inter;letter-spacing:.08em;text-transform:uppercase;padding:8px 11px;border-radius:999px;background:rgba(0,0,0,.65)}
 .two div+div span{background:var(--blue)}
-</style></head><body><h1>Antes e depois · storyboard v1 → v2</h1><div class="rows">
+</style></head><body><h1>Antes e depois · prévia v1 → vídeo final</h1><div class="rows">
 ${PAIRS.map(([a, b, t, why]) => `<div class="p"><h2>${t}</h2><p>${why}</p><div class="two"><div><img src="${b64(path.join(V1, a))}"><span>Antes</span></div><div><img src="${b64(path.join(KF, b))}"><span>Depois</span></div></div></div>`).join('')}
 </div></body></html>`;
 

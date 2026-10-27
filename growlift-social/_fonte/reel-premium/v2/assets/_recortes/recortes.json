@@ -74,6 +74,36 @@
     ],
     "o_que_e": "hero inteiro, sem a margem creme da página"
   },
+  "salinho-look-topo": {
+    "origem": "salinho/cel-look.png",
+    "caixa_css": [
+      0,
+      0,
+      340,
+      736
+    ],
+    "dpr": 3,
+    "tamanho_px": [
+      1020,
+      2208
+    ],
+    "o_que_e": "topo da página \"Branco para novos começos\" no celular"
+  },
+  "salinho-selecao-topo": {
+    "origem": "salinho/cel-selecao.png",
+    "caixa_css": [
+      0,
+      0,
+      390,
+      844
+    ],
+    "dpr": 3,
+    "tamanho_px": [
+      1170,
+      2532
+    ],
+    "o_que_e": "topo da página \"A virada pede leveza\" no celular"
+  },
   "chapa77-burger": {
     "origem": "chapa77/pc4x-hero.png",
     "caixa_css": [

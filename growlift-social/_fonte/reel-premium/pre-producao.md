@@ -1,6 +1,8 @@
 # Reel premium "Sua marca merece mais." · Pré-produção
 
-Fase atual: **pré-produção**. Nada animado, nada renderizado. Este documento resolve conceito, roteiro, ordem, estilo, frames e transições para a animação começar com o mínimo de retrabalho.
+> **Atualização de 27/10/2026:** o Reel foi animado e está pronto em `growlift-social/05-reels/09-sua-marca-merece-mais.mp4`. O que vale agora está em `v2/` (`v2/README.md`). Este documento fica como histórico da primeira pré-produção.
+
+Fase em que foi escrito: **pré-produção**. Nada animado, nada renderizado. Este documento resolve conceito, roteiro, ordem, estilo, frames e transições para a animação começar com o mínimo de retrabalho.
 
 ## 0. Regra que vem antes de tudo: projetos conceito
 

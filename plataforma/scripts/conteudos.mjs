@@ -24,7 +24,7 @@ const FOLDERS = {
   '02-instagram-perfil': { title: 'Perfil do Instagram', blurb: 'Foto, nome, bio e botões de contato.' },
   '03-destaques': { title: 'Stories e destaques', blurb: 'Capas e stories de cada destaque, na ordem de postar.' },
   '04-posts-fixados': { title: 'Posts e carrosséis', blurb: 'Os carrosséis fixados, com legenda pronta.' },
-  '05-reels': { title: 'Reels', blurb: 'Os 8 Reels prontos em vídeo, com capa, legenda e roteiro.', sectionStatus: true },
+  '05-reels': { title: 'Reels', blurb: 'Os 9 Reels prontos em vídeo, com capa, legenda e roteiro.', sectionStatus: true },
   '06-whatsapp-business': { title: 'WhatsApp Business', blurb: 'Perfil, mensagens automáticas, respostas rápidas e etiquetas.' },
   '07-planejamento': { title: 'Planejamento', blurb: 'Pilares, ritmo e calendário das primeiras semanas.' },
   '08-prompts': { title: 'Prompts', blurb: 'Os prompts das imagens e do vídeo do site, e um modelo para pedir conteúdo novo.' },
@@ -204,7 +204,8 @@ for (const name of folderNames) {
         thumb = still.replace(IMAGE, '.webp');
         const tdest = path.join(OUT, 'miniaturas', thumb);
         fs.mkdirSync(path.dirname(tdest), { recursive: true });
-        await img.resize({ width: 480, withoutEnlargement: true }).webp({ quality: 78 }).toFile(tdest);
+        // 960 px: sharp on 2× and 3× phone screens (480 px looked soft in the cards).
+        await img.resize({ width: 960, withoutEnlargement: true }).webp({ quality: 82 }).toFile(tdest);
       }
       items.push({
         path: rel,

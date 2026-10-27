@@ -15,7 +15,7 @@ Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` est
 | `plataforma/` | Painel das lojas: cardápio, pedidos online, tela da loja, relatório, clientes e campanhas | https://painel-lojas-sportelo.vercel.app/ |
 | `pousada/` | Site da Pousada Villa Verano (aguarda nova referência do cliente para o redesenho) | ver no Vercel |
 | `growlift/` | Site da Growlift (HTML estático), no ar desde 26/10/2026 | https://growlift.com.br (DNS no Registro.br: endereço do site = `216.198.79.1`) |
-| `growlift-social/` | Instagram e WhatsApp da Growlift: imagens, 8 Reels em vídeo, legendas | aba Conteúdos do painel |
+| `growlift-social/` | Instagram e WhatsApp da Growlift: imagens, 9 Reels em vídeo, legendas | aba Conteúdos do painel |
 | `marketing/` | Apresentações e propostas da Growlift (HTML + PDF) e posts | — |
 | `tools/`, `elpatron/tools/` | Estúdio 3D dos burgers (three.js) e tratamento de fotos | — |
 
@@ -91,6 +91,11 @@ El Patron (aguardando o dono):
 - qual PDV usam (provavelmente Consumer) e se têm impressora na cozinha.
 - Objeção provável: o MenuDino é ligado ao PDV deles; o nosso pedido não entra no PDV,
   só na tela da loja e na impressão.
+
+Reel premium "Sua marca merece mais." (`growlift-social/05-reels/09-…`, fonte em `growlift-social/_fonte/reel-premium/v2/`):
+- Pronto, aguardando a aprovação dos sócios. Vai para o painel no próximo `/publicar painel` (as miniaturas da aba Conteúdos passaram para 960 px).
+- Os quatro projetos aparecem com nome fictício (Salinho, Chapa 77, Swell Club, Fornada). Para usar os nomes reais é preciso autorização por escrito de cada negócio.
+- A foto do dono da Swell Club nunca entra: a captura troca por um surfista gerado por IA (`swapPhotos`). A prévia v1 (`_fonte/reel-premium/styleframes/`) ainda tem a foto do dono e não deve ser usada.
 
 Outros:
 - Pousada Villa Verano: redesenho aguarda referência nova; WhatsApp (5511999887127) e nota não confirmados.

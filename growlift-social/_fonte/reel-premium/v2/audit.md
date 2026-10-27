@@ -31,7 +31,7 @@
 | I | Logo da Salinho com o original por trás e "Ø" da marca real na roleta | vazava a marca verdadeira | O logo antigo também era desenhado por máscara CSS (`.brand::before`); escondido. O "Ø" da roleta e do endereço foi removido | | `assets/salinho/pc-roleta.png` |
 | J | A cena da Fornada não é café | o roteiro v1 falava em "espuma de café" | O próprio site diz "Cena ilustrativa de chocolate quente". Passa a ser "bebida quente" | | 10 e 11 |
 | K | Barras fixas e "Pular para o conteúdo" por cima das capturas de seção | captura com defeito | Escondidos só durante a foto | | capturas de seção |
-| M | A foto do hero da Swell Club (o surfista) é do **dono da loja**, pessoa real (avisado por vocês em 27/10) | imagem de pessoa sem autorização; e é foto do negócio, não da Growlift | Nenhum quadro usa essa foto, nem recortes dela (a espuma da transição 4 vinha dela). A Swell Club entra pelas pranchas; a transição 4 virou a ponte do creme (os dois sites usam quase o mesmo). O script de captura não fotografa mais o hero da Swell Club | 09, 10, 12 refeitos | `asset-manifest.json` sem nenhum arquivo do hero da Swell Club |
+| M | A foto do hero da Swell Club (o surfista) é do **dono da loja**, pessoa real (avisado por vocês em 27/10) | imagem de pessoa sem autorização; e é foto do negócio, não da Growlift | A foto foi trocada **na hora da captura** por um surfista gerado por IA (pessoa que não existe, de costas, sem rosto; 2,75 créditos, autorizado), com `swapPhotos` no `anonimizar.mjs`. Nenhum arquivo do dono foi guardado. A transição 4 ficou sendo a ponte do creme | 09 e 12 com o surfista genérico | `asset-manifest.json`: `foto-generica/surfista-generico.png` |
 | N | "®" depois de SWELL CLUB no rodapé (herdado da marca real) | nome fictício não pode parecer marca registrada | O anonimizador tira ® e ™ dos quatro sites | | `assets/swellclub/pc-rodape.png` |
 | L | Capturas pequenas ampliadas | perde nitidez | Hero dos 4 sites refeito a 4× (5760×3600); todo recorte é reduzido, nunca ampliado acima da captura | | `assets/*/pc4x-hero.png` |
 
@@ -45,3 +45,24 @@
 ## Pendência que depende de vocês
 
 **Nomes.** O briefing novo usa os nomes reais (Downtown Burger, Surflife, Feito à Mão). O CLAUDE.md proíbe marca de negócio real em material público sem autorização por escrito, e em 26/10 vocês decidiram usar nomes fictícios. Mantive Salinho, Chapa 77, Swell Club e Fornada. Se houver autorização por escrito de cada negócio, trocar é rápido: a captura sem anonimização e uma nova renderização dos quadros. Mesmo assim, como foram demonstrações, o selo continuaria dizendo que não são clientes contratados.
+
+## Conferência do vídeo final (27/10/2026)
+
+Conferido no MP4, não só na página: quadros a cada 0,5 s e, nas transições, a 10 por segundo. O que apareceu e foi corrigido:
+
+| Problema visto | Correção |
+| --- | --- |
+| O primeiro quadro era preto (no Reels, o primeiro quadro precisa ter conteúdo) | "SUA MARCA" já entra no quadro 0 |
+| O topo das letras de MAIS. aparecia antes da entrada | a máscara esconde as letras inteiras (conferido: 0 pixel azul antes da entrada) |
+| MAIS subia por cima de MERECE | as duas linhas saem antes |
+| Computador → celular e Chapa 77 → verde-água mostravam duas imagens fundidas no mesmo retângulo | o computador sobe e sai enquanto o celular sobe; a carta do Chapa 77 cresce até o lanche em camadas, sem fusão |
+| Título do site cortado no topo ao crescer a carta do Chapa 77 | novo enquadramento; o botão do site some no verde-água |
+| Faixa de cor diferente entre o verde-água do site e o fundo | fundo com o mesmo degradê do site |
+| Na aproximação da Salinho, o "L" de "Leve por natureza." encostava na borda | aproximação ancorada no título |
+| A janela vermelha abria com a camisa ainda na tela | as peças saem antes de a janela abrir |
+| O SWELL gigante passava para fora do cartão creme | as letras ficam dentro do cartão, cortadas pela borda dele |
+| Retângulo claro em volta do título da Fornada | o cartão creme tem o mesmo degradê do fundo |
+| Legenda da Fornada embaixo dos botões do Instagram, selo em duas linhas | legenda e foto à esquerda, celular à direita; selo numa linha só |
+| O ponto de MAIS. encostava na coluna de botões do Instagram | MAIS. um pouco menor (320 px) |
+
+Arquivo final: H.264 High, 1080×1920, 30 fps, 750 quadros, 25,0 s, cerca de 10,9 MB, decodifica sem erro.

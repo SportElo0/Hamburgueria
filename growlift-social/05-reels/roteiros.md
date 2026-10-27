@@ -1,6 +1,6 @@
 # Roteiros de Reels
 
-**Os 8 estão prontos em vídeo** nesta pasta: MP4 vertical 1080×1920, de 18 a 24 segundos, cada um com a sua capa (`-capa.png`). Nada foi publicado.
+**Os 9 estão prontos em vídeo** nesta pasta: MP4 vertical 1080×1920, de 18 a 25 segundos, cada um com a sua capa (`-capa.png`). Nada foi publicado.
 
 **Como postar:**
 1. No Instagram, toquem em + e depois em Reel, e escolham o vídeo.
@@ -14,6 +14,7 @@
 - **Projetos conceito:** os modelos aparecem com a marcação "Projetos conceito · nomes fictícios".
 - **Texto dentro da área segura:** nada fica embaixo dos botões do Instagram (ver `01-identidade/guia-visual.md`).
 - **Para regravar ou mudar um texto:** `node growlift-social/_fonte/reels/gerar-reels.mjs 3` refaz só o Reel 3.
+  - O Reel 9 tem o próprio motor: `node growlift-social/_fonte/reel-premium/v2/source/gravacoes.mjs` grava os sites de novo e `node growlift-social/_fonte/reel-premium/v2/source/reel.mjs` renderiza o vídeo.
 
 ---
 
@@ -193,4 +194,34 @@ No vídeo, uma loja de demonstração com nome fictício e um pedido de teste.
 Conheça o plano Lift no link da bio.
 
 #growlift #pedidoonline #pix #delivery #semcomissao
+```
+
+## 9. Sua marca merece mais. (Reel premium)
+- **Gancho, 0 a 2 s:** "SUA MARCA MERECE MAIS." em três batidas. O ponto azul vira a tela do primeiro site.
+- **Demonstração, 2 a 21 s:** quatro projetos conceito, gravados de sites que a Growlift criou, funcionando no navegador:
+  - Salinho, moda de linho: o destaque, com 6 segundos;
+  - Chapa 77, hamburgueria;
+  - Swell Club, surf shop;
+  - Fornada, padaria.
+- **Passagens:** cada uma nasce de algo do próprio site. O botão "Reserve minha peça" vira a janela do Chapa 77, o verde-água leva ao Swell Club e o creme leva à Fornada.
+- **Assinatura, 21 a 25 s:** a marca Growlift, "Sua marca merece mais.", "Peça seu diagnóstico grátis" e growlift.com.br.
+- **Marcação:** cada projeto aparece com "Projeto conceito · nome fictício". Nomes, logos e endereços dos negócios originais foram trocados na página antes da gravação.
+- **Imagens:**
+  - O surfista é uma imagem gerada por IA, de uma pessoa que não existe. Entrou no lugar da foto do dono da loja, que não aparece no vídeo.
+  - A bebida da Fornada é a cena do próprio site, com o aviso "Cena ilustrativa de chocolate quente".
+- **Música:** uma batida limpa de 100 a 110 BPM. Os cortes caem em 2,0 / 2,8 / 4,4 / 6,4 / 8,0 / 8,8 / 11,6 / 12,4 / 15,2 / 16,2 / 19,4 / 21,0 s.
+
+**Vídeo pronto:** `09-sua-marca-merece-mais.mp4` (25 s). Fonte e documentação em `_fonte/reel-premium/v2/`.
+
+**Legenda**
+```
+Sua marca merece mais. 💙
+
+Moda, hamburgueria, surf shop e padaria: quatro projetos conceito, com nomes fictícios, para mostrar como cada negócio pode ter um site com a cara dele.
+
+As telas do vídeo foram gravadas de sites que a gente criou, funcionando no navegador.
+
+Quer ver como ficaria o seu? Peça o diagnóstico grátis pelo link na bio.
+
+#growlift #criacaodesites #webdesign #sitesprofissionais #presencadigital
 ```
