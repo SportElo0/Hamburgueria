@@ -23,17 +23,8 @@ export function Capitulo1937() {
     const passos = q('[data-passo]');
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
-      scrollTrigger: {
-        trigger: q('[data-palco]')[0],
-        start: 'top top',
-        // long and heavy on purpose: each step takes about a screen and a half of scrolling
-        end: `+=${passos.length * 160}%`,
-        pin: true,
-        scrub: 1.2,
-        anticipatePin: 1,
-        // and the chapter settles on each step instead of sliding past it
-        snap: { snapTo: [0, ...passos.slice(1).map((_, i) => (i + 1.45) / passos.length), 1], duration: { min: 0.35, max: 0.9 }, delay: 0.12, ease: 'power2.inOut' },
-      },
+      // slow on purpose: each step takes about a screen and a half of scrolling, with a heavier scrub
+      scrollTrigger: { trigger: q('[data-palco]')[0], start: 'top top', end: `+=${passos.length * 150}%`, pin: true, scrub: 1, anticipatePin: 1 },
     });
     // the year fills, left to right, across the whole chapter
     tl.fromTo(q('[data-ano-cheio]'), { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: passos.length }, 0);

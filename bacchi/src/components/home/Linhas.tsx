@@ -29,7 +29,8 @@ export function Linhas() {
       defaults: { ease: 'none' },
       scrollTrigger: { trigger: q(desktop ? '[data-palco]' : '[data-pista]')[0], start: 'top top', end: () => `+=${distancia()}`, pin: true, scrub: 0.7, invalidateOnRefresh: true, anticipatePin: 1 },
     });
-    tl.to(trilho, { x: () => -distancia() }, 0);
+    // force3D keeps the whole track on one GPU layer, so iOS Safari paints the next panels while sliding
+    tl.to(trilho, { x: () => -distancia(), force3D: true }, 0);
     paineis.forEach((p, i) => {
       if (i === 0) return;
       const pos = (i - 1) / (paineis.length - 1);
@@ -59,7 +60,7 @@ export function Linhas() {
         </div>
 
         <div data-pista className="movimento:h-[100svh] movimento:overflow-hidden lg:movimento:h-full">
-          <div data-trilho className="flex flex-col movimento:h-full movimento:w-max movimento:flex-row">
+          <div data-trilho className="flex flex-col movimento:h-full movimento:w-max movimento:flex-row movimento:will-change-transform">
             {FAMILIAS.map((f, i) => {
               const d = DESTAQUE[f.id];
               const linhas = produtosDaFamilia(f.id);

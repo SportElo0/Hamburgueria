@@ -1,18 +1,16 @@
 'use client';
-// Chapter 2, on paper white. It slides over the hero (rounded top edge), then pins as one scene driven by the
-// scroll: a statement fills in word by word, lifts away, and the thirteen clips of the catalogue draw themselves
-// as technical lines at their real proportion (height × width from the table); the numbers then count up from
-// the catalogue data itself. Without motion both parts simply follow each other.
+// Chapter 2, on paper white. It slides over the hero (rounded top edge) and the thirteen clips of the catalogue
+// draw themselves as the page scrolls, small to large, as technical lines at their real proportion (height ×
+// width from the table). The numbers below are counted from the catalogue data itself.
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { PRODUTOS } from '@/data/catalogo';
 import { REPRESENTANTES } from '@/data/representantes';
 import { TOTAL_MODELOS } from '@/lib/cotacao';
 import { caminhoClip } from '@/lib/clip';
-import { gsap, useAnimacao } from '@/lib/animacao';
+import { gsap, revelarFilhos, useAnimacao } from '@/lib/animacao';
 
 const CLIPS = PRODUTOS.find((p) => p.slug === 'clips')!.variacoes.map((v) => ({ modelo: v.modelo, altura: +v.valores.altura, largura: +v.valores.largura })).reverse();
-const FRASE = 'Treze tamanhos de clips, do nº 5 ao 12/0. Grampos para cada aplicação. Alfinetes, colchetes, encadernadores. Em aço, com o cuidado de quem fabrica desde 1937.';
 const GAP = 6;
 // drawing geometry: clips stand on a common baseline, smallest on the left
 const ORDEM = CLIPS.slice().reverse();
@@ -32,59 +30,46 @@ export function Precisao() {
   ];
 
 
-  useAnimacao(ref, (_c, raiz) => {
+  useAnimacao(ref, ({ desktop }, raiz) => {
     const q = gsap.utils.selector(raiz);
-    const palavras = q('[data-p]');
-    const tracos = q<SVGPathElement>('[data-traco]');
-    const tl = gsap.timeline({
-      defaults: { ease: 'none' },
-      scrollTrigger: { trigger: raiz, start: 'top top', end: '+=360%', pin: true, scrub: 1, anticipatePin: 1 },
-    });
-    // 1. the statement fills in, word by word
-    tl.fromTo(q('[data-cena="frase"] .eyebrow'), { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.3 }, 0);
-    tl.fromTo(palavras, { opacity: 0.14 }, { opacity: 1, duration: 0.2, stagger: 1.5 / palavras.length }, 0.1);
-    // 2. it lifts away and the drawing takes the stage
-    tl.to(q('[data-cena="frase"]'), { autoAlpha: 0, y: -60, duration: 0.4, ease: 'power2.in' }, 2);
-    tl.fromTo(q('[data-cena="desenho"]'), { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' }, 2.2);
-    // 3. the thirteen clips draw themselves, small to large
-    tracos.forEach((p) => {
+    // the clips draw themselves with the scroll, small to large (scrolling back undraws them)
+    const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: q('[data-desenho]')[0], start: desktop ? 'top 85%' : 'top 90%', end: desktop ? 'bottom 55%' : 'bottom 45%', scrub: 0.8 } });
+    raiz.querySelectorAll<SVGPathElement>('[data-traco]').forEach((p, i) => {
       const len = p.getTotalLength();
-      tl.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.5, ease: 'power1.inOut' }, 2.5 + desenho.findIndex((c) => p.dataset.traco === c.modelo) * 0.08);
+      tl.fromTo(p, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: 1 }, i * 0.35);
     });
-    tl.fromTo(q('[data-num-clip]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2, stagger: 0.08 }, 2.7);
-    // 4. the numbers count up from the catalogue data (and back, when scrolling up)
-    q('[data-contador]').forEach((el, i) => {
+    tl.fromTo(q('[data-num-clip]'), { autoAlpha: 0, y: 4 }, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.35 }, 0.4);
+    // counters
+    q('[data-contador]').forEach((el) => {
       const alvo = Number(el.getAttribute('data-contador'));
       const ano = el.hasAttribute('data-ano');
       const obj = { v: ano ? 1900 : 0 };
-      tl.fromTo(el.parentElement, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.25 }, 3.5 + i * 0.1);
-      tl.to(obj, { v: alvo, duration: 0.7, ease: 'power2.out', onUpdate: () => { el.textContent = Math.round(obj.v).toLocaleString('pt-BR').replace(ano ? '.' : '', ''); } }, 3.5 + i * 0.1);
+      gsap.to(obj, {
+        v: alvo,
+        duration: 1.6,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+        onUpdate: () => {
+          el.textContent = Math.round(obj.v).toLocaleString('pt-BR').replace(ano ? '.' : '', '');
+        },
+      });
     });
-    tl.to({}, { duration: 0.5 });
+    revelarFilhos(raiz);
   });
 
   return (
-    <section
-      ref={ref}
-      className="relative z-10 -mt-8 rounded-t-[2rem] bg-papel shadow-[0_-30px_60px_-20px_rgba(4,13,25,.5)] md:-mt-12 md:rounded-t-[3rem] estatico:pt-24 estatico:pb-24 md:estatico:pt-36 md:estatico:pb-32 movimento:h-[100svh] movimento:overflow-hidden"
-    >
-      <div className="container-b relative movimento:h-full">
-        <div data-cena="frase" className="movimento:absolute movimento:inset-x-[clamp(1rem,4vw,3rem)] movimento:top-1/2 movimento:-translate-y-1/2">
-          <p className="eyebrow text-azul">Precisão em aço</p>
-          <p className="mt-6 max-w-[22ch] font-display text-[clamp(2rem,5vw,4.4rem)] leading-[1.04] font-semibold tracking-[-0.035em] text-tinta md:max-w-[24ch]">
-            {FRASE.split(' ').map((p, i) => (
-              <span key={i} data-p className="inline">
-                {p}{' '}
-              </span>
-            ))}
-          </p>
-        </div>
+    <section ref={ref} className="relative z-10 -mt-8 rounded-t-[2rem] bg-papel pt-24 pb-24 shadow-[0_-30px_60px_-20px_rgba(4,13,25,.5)] md:-mt-12 md:rounded-t-[3rem] md:pt-36 md:pb-32">
+      <div className="container-b">
+        <p className="eyebrow text-azul" data-revelar>Precisão em aço</p>
+        <h2 className="mt-5 max-w-[20ch] font-display text-[clamp(1.9rem,4vw,3.4rem)] leading-[1.05] font-semibold tracking-[-0.03em] text-tinta" data-revelar>
+          Treze tamanhos de clips, do nº 5 ao 12/0.
+        </h2>
 
-        <div data-cena="desenho" className="estatico:mt-16 md:estatico:mt-24 movimento:invisible movimento:flex movimento:h-full movimento:flex-col movimento:justify-center movimento:pt-16 movimento:pb-12">
-          <figure>
+        <figure className="mt-12 md:mt-16" data-desenho>
+          <div className="relative">
             <svg
               viewBox={`-2 -8 ${largura + 4} ${alturaMax + 24}`}
-              className="h-auto w-full movimento:h-[30svh] lg:movimento:h-[38svh]"
+              className="h-auto w-full"
               role="img"
               aria-label="Desenho dos treze clips Bacchi, do nº 5 (13 × 4 mm) ao 12/0 (70 × 26 mm), na proporção real entre os tamanhos"
             >
@@ -99,7 +84,7 @@ export function Precisao() {
                 >
                   <rect x={-GAP / 2} y={-6} width={c.largura + GAP} height={c.altura + 22} fill="transparent" />
                   <path
-                    data-traco={c.modelo}
+                    data-traco
                     d={caminhoClip(c.altura, c.largura)}
                     fill="none"
                     stroke={foco === i ? 'var(--color-azul)' : 'var(--color-tinta-2)'}
@@ -115,34 +100,34 @@ export function Precisao() {
                 </g>
               ))}
             </svg>
-            <figcaption className="mt-5 flex flex-col gap-2 text-sm text-tinta-2 sm:flex-row sm:items-center sm:justify-between">
-              <span aria-live="polite">
-                {foco === null ? (
-                  <>Desenho feito com as medidas do catálogo (altura × largura): os treze clips na proporção real entre si.</>
-                ) : (
-                  <>
-                    Clips nº <strong className="text-tinta">{desenho[foco].modelo}</strong>: {desenho[foco].altura} mm de altura × {desenho[foco].largura} mm de largura
-                  </>
-                )}
-              </span>
-              <Link href="/produtos/clips" className="link-b shrink-0 font-semibold text-azul">
-                Ver a tabela completa dos clips →
-              </Link>
-            </figcaption>
-          </figure>
+          </div>
+          <figcaption className="mt-6 flex flex-col gap-2 text-sm text-tinta-2 sm:flex-row sm:items-center sm:justify-between">
+            <span aria-live="polite">
+              {foco === null ? (
+                <>Desenho feito com as medidas do catálogo (altura × largura): os treze clips na proporção real entre si. Passe o mouse para ver cada um.</>
+              ) : (
+                <>
+                  Clips nº <strong className="text-tinta">{desenho[foco].modelo}</strong>: {desenho[foco].altura} mm de altura × {desenho[foco].largura} mm de largura
+                </>
+              )}
+            </span>
+            <Link href="/produtos/clips" className="link-b font-semibold text-azul">
+              Ver a tabela completa dos clips →
+            </Link>
+          </figcaption>
+        </figure>
 
-          <div className="regua mt-12 estatico:md:mt-28 movimento:mt-8 lg:movimento:mt-12" />
-          <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-4 estatico:mt-12 estatico:gap-y-10">
-            {dados.map((d) => (
-              <div key={d.rotulo} className="flex flex-col-reverse">
-                <dt className="mt-2 text-sm leading-snug text-tinta-2">{d.rotulo}</dt>
-                <dd className="font-display text-[clamp(2.4rem,5.5vw,4.5rem)] leading-none font-semibold tracking-[-0.04em] text-tinta tabular-nums" data-contador={d.valor} {...(d.ano ? { 'data-ano': '' } : {})}>
-                  {d.ano ? d.valor : d.valor.toLocaleString('pt-BR')}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        <div className="regua mt-20 md:mt-28" />
+        <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
+          {dados.map((d) => (
+            <div key={d.rotulo} data-revelar className="flex flex-col-reverse">
+              <dt className="mt-2 text-sm leading-snug text-tinta-2">{d.rotulo}</dt>
+              <dd className="font-display text-[clamp(2.6rem,5.5vw,4.5rem)] leading-none font-semibold tracking-[-0.04em] text-tinta tabular-nums" data-contador={d.valor} {...(d.ano ? { 'data-ano': '' } : {})}>
+                {d.ano ? d.valor : d.valor.toLocaleString('pt-BR')}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );
