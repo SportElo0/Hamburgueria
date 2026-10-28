@@ -34,6 +34,12 @@
 }
 
 @layer base {
+  /* nothing may widen the page sideways (the families' track slides inside a sticky stage, which iOS Safari
+     does not always clip); clip, unlike hidden, keeps the sticky stages working */
+  html,
+  body {
+    overflow-x: clip;
+  }
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;

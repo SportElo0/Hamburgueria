@@ -51,7 +51,7 @@ export function Capitulo1937() {
   });
 
   return (
-    <section ref={ref} aria-labelledby="titulo-1937" className="relative bg-marinho-950 text-white movimento:h-[700svh]">
+    <section ref={ref} aria-labelledby="titulo-1937" className="relative overflow-x-clip bg-marinho-950 text-white movimento:h-[700svh]">
       <div data-palco className="overflow-hidden estatico:relative movimento:sticky movimento:top-0 movimento:h-[100svh]">
         {/* the year */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-16 select-none movimento:top-1/2 movimento:-translate-y-1/2">

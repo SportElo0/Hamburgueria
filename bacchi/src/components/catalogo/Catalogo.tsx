@@ -58,7 +58,7 @@ export function Catalogo() {
 
   return (
     <div className="container-b pb-24">
-      <div className="sticky top-16 z-20 -mx-[clamp(1rem,4vw,3rem)] bg-papel/90 px-[clamp(1rem,4vw,3rem)] py-4 backdrop-blur-xl md:top-20">
+      <div className="z-20 -mx-[clamp(1rem,4vw,3rem)] bg-papel/90 sm:sticky sm:top-16 px-[clamp(1rem,4vw,3rem)] py-4 backdrop-blur-xl md:top-20">
         <label htmlFor="busca" className="sr-only">
           Buscar no catálogo
         </label>
@@ -119,24 +119,24 @@ export function Catalogo() {
           </div>
         </div>
       ) : (
-        <ul ref={grade} className="mt-6 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        <ul ref={grade} className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-3">
           {resultado.map(({ p, modelos }) => {
             const especificos = q.trim() && modelos.length < p.variacoes.length ? modelos : [];
             return (
               <li key={p.slug}>
                 <Link href={`/produtos/${p.slug}${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ''}`} className="group block">
-                  <div className="relative aspect-square overflow-hidden rounded-3xl bg-papel shadow-[inset_0_0_0_1px_rgba(13,23,38,.06)]">
-                    <Image src={p.imagens[0].src} alt={p.imagens[0].alt} fill sizes="(min-width:1024px) 30vw, (min-width:640px) 46vw, 92vw" className="object-cover transition-transform duration-[1.1s] ease-[var(--ease-saida)] group-hover:scale-[1.045]" />
-                    <span className="absolute top-4 left-4 rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-tinta-2 backdrop-blur">
+                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-papel shadow-[inset_0_0_0_1px_rgba(13,23,38,.06)] sm:rounded-3xl">
+                    <Image src={p.imagens[0].src} alt={p.imagens[0].alt} fill sizes="(min-width:1024px) 30vw, 46vw" className="object-cover transition-transform duration-[1.1s] ease-[var(--ease-saida)] group-hover:scale-[1.045]" />
+                    <span className="absolute top-4 left-4 hidden rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-tinta-2 backdrop-blur sm:block">
                       {FAMILIAS.find((f) => f.id === p.familia)!.nome}
                     </span>
                   </div>
-                  <div className="mt-5 flex items-start justify-between gap-4">
-                    <h2 className="font-display text-2xl leading-tight font-semibold group-hover:text-azul">{p.nome}</h2>
-                    <span className="mt-1 text-aco transition-transform duration-300 group-hover:translate-x-1 group-hover:text-azul" aria-hidden="true">→</span>
+                  <div className="mt-3 flex items-start justify-between gap-4 sm:mt-5">
+                    <h2 className="font-display text-[1.02rem] leading-snug font-semibold group-hover:text-azul sm:text-2xl sm:leading-tight">{p.nome}</h2>
+                    <span className="mt-1 hidden text-aco transition-transform duration-300 group-hover:translate-x-1 group-hover:text-azul sm:inline" aria-hidden="true">→</span>
                   </div>
-                  <p className="mt-2 text-[0.95rem] leading-relaxed text-tinta-2">{p.resumo}</p>
-                  <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-aco">
+                  <p className="mt-2 hidden text-[0.95rem] leading-relaxed text-tinta-2 sm:block">{p.resumo}</p>
+                  <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-aco sm:mt-4 sm:gap-3">
                     <span className="font-semibold text-tinta-2">{p.variacoes.length} {p.variacoes.length === 1 ? 'modelo' : 'modelos'}</span>
                     <span className="flex gap-1" aria-label={`Acabamentos: ${p.acabamentos.map((a) => ACABAMENTOS[a].nome).join(', ')}`}>
                       {p.acabamentos.map((a) => (

@@ -31,8 +31,7 @@ export function Linhas() {
       // with the panels; phones hold the panels only, one screen of scrolling per family.
       scrollTrigger: { trigger: desktop ? raiz : q('[data-trecho]')[0], start: 'top top', end: 'bottom bottom', scrub: 0.7, invalidateOnRefresh: true },
     });
-    // force3D keeps the whole track on one GPU layer, so iOS Safari paints the next panels while sliding
-    tl.to(trilho, { x: () => -distancia(), force3D: true, duration: 1 }, 0);
+    tl.to(trilho, { x: () => -distancia(), duration: 1 }, 0);
     paineis.forEach((p, i) => {
       if (i === 0) return;
       const pos = (i - 1) / (paineis.length - 1);
@@ -42,7 +41,7 @@ export function Linhas() {
   });
 
   return (
-    <section ref={ref} aria-labelledby="titulo-linhas" className="bg-papel lg:movimento:h-[calc(100svh_+_(var(--n)_-_1)_*_100vw)]" style={{ '--n': FAMILIAS.length } as React.CSSProperties}>
+    <section ref={ref} aria-labelledby="titulo-linhas" className="overflow-x-clip bg-papel lg:movimento:h-[calc(100svh_+_(var(--n)_-_1)_*_100vw)]" style={{ '--n': FAMILIAS.length } as React.CSSProperties}>
       <div data-palco className="lg:estatico:relative lg:movimento:sticky lg:movimento:top-0 lg:movimento:h-[100svh] lg:movimento:overflow-hidden">
         <div className="container-b pt-24 pb-6 lg:pt-28 lg:movimento:absolute lg:movimento:inset-x-0 lg:movimento:top-0 lg:movimento:z-10">
           <div className="flex items-end justify-between gap-6">
@@ -61,9 +60,9 @@ export function Linhas() {
           </div>
         </div>
 
-        <div data-trecho className="movimento:h-[calc(var(--n)_*_100svh)] lg:movimento:h-full">
+        <div data-trecho className="overflow-x-clip movimento:h-[calc(var(--n)_*_100svh)] lg:movimento:h-full">
           <div data-pista className="movimento:sticky movimento:top-0 movimento:h-[100svh] movimento:overflow-hidden lg:movimento:static lg:movimento:h-full">
-            <div data-trilho className="flex flex-col movimento:h-full movimento:w-max movimento:flex-row movimento:will-change-transform">
+            <div data-trilho className="flex flex-col movimento:h-full movimento:w-max movimento:flex-row">
               {FAMILIAS.map((f, i) => {
                 const d = DESTAQUE[f.id];
                 const linhas = produtosDaFamilia(f.id);
