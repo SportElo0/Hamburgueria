@@ -7,6 +7,7 @@ import { normalizar } from '@/data/catalogo';
 import { ESTADOS, REPRESENTANTES, linkTelefone, linkWhatsApp, type Representante } from '@/data/representantes';
 import { MapaBrasil } from './MapaBrasil';
 import { gsap } from '@/lib/animacao';
+import { mostrarNaTela } from '@/lib/rolar';
 
 const UFS = Object.keys(ESTADOS).sort((a, b) => ESTADOS[a].localeCompare(ESTADOS[b], 'pt-BR'));
 
@@ -17,12 +18,14 @@ export function DiretorioRepresentantes() {
   const uf = (params.get('uf') ?? '').toUpperCase();
   const [busca, setBusca] = useState('');
   const lista = useRef<HTMLUListElement>(null);
+  const resultados = useRef<HTMLDivElement>(null);
 
   const escolher = (novo: string) => {
     const u = new URLSearchParams(params.toString());
     if (!novo || novo === uf) u.delete('uf');
     else u.set('uf', novo);
     router.replace(`${caminho}${u.size ? `?${u}` : ''}`, { scroll: false });
+    mostrarNaTela(resultados.current);
   };
 
   const resultado = useMemo(() => {
@@ -62,7 +65,7 @@ export function DiretorioRepresentantes() {
         </div>
       </div>
 
-      <div className="lg:col-span-7">
+      <div ref={resultados} className="scroll-mt-24 lg:col-span-7">
         <p className="text-sm text-tinta-2" aria-live="polite">
           {resultado.length} {resultado.length === 1 ? 'representação' : 'representações'}
           {uf ? ` em ${ESTADOS[uf]}` : ' em todo o Brasil'}

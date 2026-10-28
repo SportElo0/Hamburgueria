@@ -1,15 +1,21 @@
 'use client';
 // Chapter 6: the sales network, on light steel. Picking a state on the tile map shows who serves it right
-// here; the full list with every contact is one tap away.
+// here (on phones the page moves up to that card); the full list with every contact is one tap away.
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { ESTADOS, representantesDe } from '@/data/representantes';
 import { MapaBrasil } from '@/components/representantes/MapaBrasil';
 import { revelarFilhos, useAnimacao } from '@/lib/animacao';
+import { mostrarNaTela } from '@/lib/rolar';
 
 export function Rede() {
   const ref = useRef<HTMLElement>(null);
   const [uf, setUf] = useState('SP');
+  const cartao = useRef<HTMLDivElement>(null);
+  const escolher = (novo: string) => {
+    setUf(novo);
+    mostrarNaTela(cartao.current);
+  };
   const lista = representantesDe(uf);
   useAnimacao(ref, (_c, raiz) => revelarFilhos(raiz));
 
@@ -25,7 +31,7 @@ export function Rede() {
             Escolha o estado no mapa para ver a representação que atende a sua região.
           </p>
 
-          <div className="mt-10 min-h-[220px] rounded-2xl bg-white p-6 shadow-[0_30px_60px_-40px_rgba(13,23,38,.4)]" aria-live="polite" data-revelar>
+          <div ref={cartao} className="mt-10 min-h-[220px] scroll-mt-24 rounded-2xl bg-white p-6 shadow-[0_30px_60px_-40px_rgba(13,23,38,.4)]" aria-live="polite" data-revelar>
             <p className="eyebrow text-aco">{ESTADOS[uf]}</p>
             <ul className="mt-4 divide-y divide-linha">
               {lista.map((r) => (
@@ -42,7 +48,7 @@ export function Rede() {
           </div>
         </div>
         <div className="lg:col-span-6 lg:col-start-7" data-revelar>
-          <MapaBrasil selecionado={uf} aoEscolher={setUf} />
+          <MapaBrasil selecionado={uf} aoEscolher={escolher} />
           <p className="mt-4 text-xs text-aco">Mapa esquemático: cada quadrado é um estado. O ponto indica mais de uma representação.</p>
         </div>
       </div>
