@@ -97,6 +97,16 @@ export function textoDoPedido(itens: Pick<ItemCotacao, 'slug' | 'modelo' | 'acab
   return linhas.join('\n');
 }
 
+/** The short message the WhatsApp button sends: a greeting, one block per item, thanks. *bold* is WhatsApp's. */
+export function mensagemWhatsApp(itens: Pick<ItemCotacao, 'slug' | 'modelo' | 'acabamento' | 'embalagem' | 'quantidade' | 'observacao'>[]): string {
+  const blocos = itens.map((i) => {
+    const p = produto(i.slug);
+    const detalhe = [i.acabamento ? (ACABAMENTOS[i.acabamento]?.nome ?? i.acabamento) : null, i.embalagem, `${fmt(i.quantidade)} ${i.quantidade === 1 ? 'embalagem' : 'embalagens'}`];
+    return [`• *${p?.nome ?? i.slug}* – ${p?.rotuloModelo ?? 'Modelo'} ${i.modelo}`, `   ${detalhe.filter(Boolean).join(' · ')}`, i.observacao ? `   Obs.: ${i.observacao}` : null].filter(Boolean).join('\n');
+  });
+  return ['Olá, Bacchi! Vim pelo site e gostaria de um orçamento:', '', ...blocos, '', 'Obrigado!'].join('\n');
+}
+
 export const linkWhatsAppPedido = (texto: string) => `${EMPRESA.whatsappLink}?text=${encodeURIComponent(texto)}`;
 export const linkEmailPedido = (texto: string) => `mailto:${EMPRESA.email}?subject=${encodeURIComponent('Solicitação de orçamento · site Bacchi')}&body=${encodeURIComponent(texto)}`;
 

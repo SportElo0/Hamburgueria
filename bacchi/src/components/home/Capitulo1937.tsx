@@ -1,5 +1,5 @@
 'use client';
-// Chapter 3: 1937. The chapter pins and the scroll drives it, on phones as on desktop: the giant year fills from
+// Chapter 3: 1937. The stage stays on screen (sticky) and the scroll drives it, on phones as on desktop: the giant year fills from
 // outline to solid, the four steps of the official history replace each other, and the photographs move from
 // the black-and-white archive to colour (the same scenes, then and now). Phones stack text over photo; desktop
 // alternates sides. Without motion it is a plain vertical sequence.
@@ -23,8 +23,10 @@ export function Capitulo1937() {
     const passos = q('[data-passo]');
     const tl = gsap.timeline({
       defaults: { ease: 'none' },
-      // slow on purpose: each step takes about a screen and a half of scrolling, with a heavier scrub
-      scrollTrigger: { trigger: q('[data-palco]')[0], start: 'top top', end: `+=${passos.length * 150}%`, pin: true, scrub: 1, anticipatePin: 1 },
+      // the section is tall (CSS) and the stage inside is sticky: the browser itself holds the stage, which iPhone
+      // Safari does reliably (a JS pin drifts there when the address bar resizes). The scroll through the tall
+      // section drives the timeline: about a screen and a half per step, with a heavy scrub.
+      scrollTrigger: { trigger: raiz, start: 'top top', end: 'bottom bottom', scrub: 1 },
     });
     // the year fills, left to right, across the whole chapter
     tl.fromTo(q('[data-ano-cheio]'), { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: passos.length }, 0);
@@ -49,8 +51,8 @@ export function Capitulo1937() {
   });
 
   return (
-    <section ref={ref} aria-labelledby="titulo-1937" className="relative bg-marinho-950 text-white">
-      <div data-palco className="relative overflow-hidden movimento:h-[100svh]">
+    <section ref={ref} aria-labelledby="titulo-1937" className="relative bg-marinho-950 text-white movimento:h-[700svh]">
+      <div data-palco className="overflow-hidden estatico:relative movimento:sticky movimento:top-0 movimento:h-[100svh]">
         {/* the year */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-16 select-none movimento:top-1/2 movimento:-translate-y-1/2">
           <div data-ano className="relative mx-auto w-fit font-display text-[clamp(7rem,30vw,30rem)] leading-none font-extrabold tracking-[-0.06em]">

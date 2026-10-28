@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { idDoItem, linhaDoItem, linkEmailPedido, linkWhatsAppPedido, pedidoSchema, textoDoPedido } from '@/lib/cotacao';
+import { idDoItem, linhaDoItem, linkEmailPedido, linkWhatsAppPedido, mensagemWhatsApp, pedidoSchema, textoDoPedido } from '@/lib/cotacao';
 
 const contato = { nome: 'Ana Souza', empresa: 'Papelaria Exemplo', email: 'ana@exemplo.com.br', telefone: '(11) 4000-0000', cidade: 'Campinas', uf: 'SP' as const, aceite: true as const };
 const item = { slug: 'clips', modelo: '2/0 (00)', acabamento: 'niquelado' as const, embalagem: 'Caixa grande · 720 un.', quantidade: 12 };
@@ -11,6 +11,24 @@ describe('mensagem da cotação', () => {
     expect(t).toContain('2. Grampos para grampeadores · Grampo 26/6 · Acabamento: Tipo cobreado · Embalagem: Caixa com · 5.000 un. · Quantidade: 1 embalagem · Obs.: Entrega em março');
     expect(t).toContain('Empresa: Papelaria Exemplo');
     expect(t).toContain('Local: Campinas – SP');
+  });
+
+  it('mensagem do WhatsApp: curta, um bloco por item, sem dados pessoais', () => {
+    const m = mensagemWhatsApp([item, { slug: 'grampos', modelo: '26/6', acabamento: 'cobreado', embalagem: 'Caixa com · 5.000 un.', quantidade: 1, observacao: 'Entrega em março' }]);
+    expect(m).toBe(
+      [
+        'Olá, Bacchi! Vim pelo site e gostaria de um orçamento:',
+        '',
+        '• *Clips* – Clips nº 2/0 (00)',
+        '   Niquelado · Caixa grande · 720 un. · 12 embalagens',
+        '• *Grampos para grampeadores* – Grampo 26/6',
+        '   Tipo cobreado · Caixa com · 5.000 un. · 1 embalagem',
+        '   Obs.: Entrega em março',
+        '',
+        'Obrigado!',
+      ].join('\n'),
+    );
+    expect(decodeURIComponent(linkWhatsAppPedido(m).split('text=')[1])).toBe(m);
   });
 
   it('mesma escolha soma no mesmo item; outra embalagem é outro item', () => {

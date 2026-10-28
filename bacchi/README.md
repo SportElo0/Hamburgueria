@@ -1,8 +1,8 @@
 # Bacchi: site institucional e catálogo digital
 
 Novo site da Bacchi Indústria e Comércio de Artefatos de Ferro Ltda. (desde 1937), feito a partir do site atual
-(clipsbacchi.com.br) e do PDF "Catálogo Bacchi (novo)". **Ainda não está publicado.** O site atual da Bacchi não
-foi alterado.
+(clipsbacchi.com.br) e do PDF "Catálogo Bacchi (novo)". Publicado só como **versão de teste** (bacchi-teste.vercel.app, fora do Google, com faixa "Versão de teste").
+O site atual da Bacchi não foi alterado.
 
 Next.js 16 (App Router) · TypeScript · Tailwind 4 · GSAP + ScrollTrigger · zod · vitest.
 
@@ -13,7 +13,7 @@ Next.js 16 (App Router) · TypeScript · Tailwind 4 · GSAP + ScrollTrigger · z
 | `/` | Abertura com o vídeo real do clip, os 13 clips desenhados em escala, capítulo 1937 (preto e branco → cor), as 4 famílias em rolagem lateral, fábrica, mapa de representantes, fechamento |
 | `/produtos` | Catálogo com busca (nome ou número: 2/0, 26/6, colchete 9…), filtro por família e acabamento; o filtro fica no endereço (dá para compartilhar) |
 | `/produtos/[linha]` | As 13 linhas, cada uma com fotos, especificações, ficha técnica do PDF e o botão "Adicionar" por modelo |
-| `/cotacao` | Lista de orçamento (fica salva no navegador), formulário e envio |
+| `/cotacao` | Lista de orçamento (fica salva no navegador) e botão que abre o WhatsApp da Bacchi com a mensagem pronta |
 | `/representantes` | 34 representações em 27 estados: mapa por estado, lista e busca |
 | `/sobre` | História, com os textos e as fotos históricas do site atual |
 | `/contato` | Endereço, telefone, WhatsApp, e-mail e formulário |
@@ -38,11 +38,14 @@ As imagens já estão em `public/`. Para refazer a partir do site atual: `npm ru
 e ffmpeg). O script baixa as fotos e o vídeo publicados em clipsbacchi.com.br, converte para WebP/MP4/WebM e
 copia `assets/catalogo-bacchi.pdf` para `public/`.
 
-## Envio da cotação e do contato
+## Cotação e contato
 
-O envio automático usa o Resend (e-mail). **Sem as variáveis abaixo o site não finge que enviou:** o botão
-mostra "Envio automático ainda não configurado" e a pessoa manda o mesmo pedido pelo WhatsApp, por e-mail ou
-copiando a lista. Com as variáveis, o pedido chega no e-mail da Bacchi com "responder para" o cliente.
+A cotação vai **pelo WhatsApp** da Bacchi, (11) 95089-2731, o número do botão do site atual. O botão abre a
+conversa com uma mensagem curta já escrita (saudação, um bloco por item com acabamento, embalagem e
+quantidade, agradecimento). Sem formulário nem e-mail, e nenhum dado passa pelo servidor do site.
+
+O formulário da página Contato envia por e-mail com o Resend. **Sem as variáveis abaixo o site não finge que
+enviou:** o botão mostra "Envio pelo site ainda não configurado" e oferece telefone, WhatsApp e e-mail.
 
 | Variável (na Vercel) | Exemplo |
 | --- | --- |
@@ -52,8 +55,8 @@ copiando a lista. Com as variáveis, o pedido chega no e-mail da Bacchi com "res
 | `NEXT_PUBLIC_SITE_URL` | endereço final do site, para sitemap e compartilhamento (sem ela, na Vercel usa o endereço do próprio projeto) |
 | `INDEXAR` | `sim` só na versão final aprovada. Sem ela o site fica fora do Google (noindex) e mostra a faixa "Versão de teste" |
 
-Proteções: mesma origem, limite de 5 envios a cada 10 minutos por IP, campo-armadilha para robôs, tempo mínimo
-de preenchimento, validação de cada item contra o catálogo, aceite obrigatório. Nada é guardado no servidor.
+Proteções do formulário de contato: mesma origem, limite de 5 envios a cada 10 minutos por IP,
+campo-armadilha para robôs, tempo mínimo de preenchimento, aceite obrigatório. Nada é guardado no servidor.
 
 ## Publicar na Vercel (só com autorização)
 
