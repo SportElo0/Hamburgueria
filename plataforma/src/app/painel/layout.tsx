@@ -13,6 +13,9 @@ export default async function PainelLayout({ children }: { children: React.React
             Painel das lojas
           </Link>
           <nav className="order-last flex w-full items-center gap-5 overflow-x-auto pb-1 whitespace-nowrap sm:order-none sm:w-auto sm:flex-1 sm:pb-0">
+            <Link href="/painel/inteligencia" className="text-sm text-ink-mute hover:text-ink">
+              Inteligência
+            </Link>
             <Link href="/painel/indicacoes" className="text-sm text-ink-mute hover:text-ink">
               Indicações
             </Link>

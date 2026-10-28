@@ -57,9 +57,14 @@ export default async function LojaPage({
 
   return (
     <>
-      <Link href="/painel" className="text-sm text-ink-mute hover:text-ink">
-        ← Lojas
-      </Link>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Link href="/painel" className="text-sm text-ink-mute hover:text-ink">
+          ← Lojas
+        </Link>
+        <Link href={`/painel/inteligencia/${slug}`} className="text-sm font-semibold text-ink-soft hover:text-ink">
+          Inteligência da loja →
+        </Link>
+      </div>
       <StoreEditor
         record={record}
         etag={draft.etag}

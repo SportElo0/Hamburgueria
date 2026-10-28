@@ -90,6 +90,8 @@ export interface PublishInput {
 export async function publish(slug: string, input: PublishInput, by: string) {
   const draft = await getDraft(slug);
   if (!draft) throw new Error('Loja não encontrada.');
+  // A loja de demonstração da Inteligência tem dados fictícios e nunca vai ao ar.
+  if (draft.data.store.extra.demo === true) throw new Error('A loja de demonstração não pode ser publicada.');
   const now = new Date();
   const publishedAt = now.toISOString();
 
