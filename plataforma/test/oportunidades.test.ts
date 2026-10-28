@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { useFileStorage } from '@/lib/storage';
-import { SEGMENTOS, csv, estimar, lerLink, linhasCsv, linkLigar, linkWhatsApp, naCidade, textoDaBusca } from '@/lib/oportunidades/regras';
+import { LUGARES, SEGMENTOS, csv, estimar, lerLink, linhasCsv, linkLigar, linkWhatsApp, lugarPeloNome, naCidade, textoDaBusca } from '@/lib/oportunidades/regras';
 import { mascaraBusca, mascaraDetalhes } from '@/lib/oportunidades/places';
 import { executarPesquisa, estimarPesquisa, listarLeads, listarPesquisas, revisar, usoDoMes, verAoVivo } from '@/lib/oportunidades/dados';
 import { checarLink, ipInterno, lookupPublico, type Abertura, type Checagem } from '@/lib/oportunidades/site';
@@ -263,5 +263,22 @@ describe('checagem do site', () => {
     const resposta = (host: string) => new Promise<{ err: NodeJS.ErrnoException | null; addr: unknown }>((r) => lookupPublico(host, { all: true }, (err, addr) => r({ err, addr })));
     expect((await resposta('interno.exemplo.com.br')).err?.code).toBe('EINTERNO');
     expect((await resposta('publico.exemplo.com.br')).addr).toEqual([{ address: '93.184.216.34', family: 4 }]);
+  });
+});
+
+describe('praias', () => {
+  it('praia digitada como cidade vira cidade de verdade + bairro', () => {
+    expect(lugarPeloNome('Maresias')).toMatchObject({ cidade: 'São Sebastião', uf: 'SP', bairro: 'Maresias' });
+    expect(lugarPeloNome('praia da baleia')).toMatchObject({ cidade: 'São Sebastião', bairro: 'Baleia' });
+    expect(lugarPeloNome('Baleia')).toMatchObject({ cidade: 'São Sebastião', bairro: 'Baleia' });
+    expect(lugarPeloNome('fernando de noronha')).toMatchObject({ cidade: 'Fernando de Noronha', uf: 'PE' });
+    expect(lugarPeloNome('Campinas')).toBeUndefined();
+  });
+
+  it('endereços do Google dessas praias passam na checagem da cidade', () => {
+    const maresias = LUGARES.find((l) => l.nome === 'Maresias')!;
+    expect(naCidade('Av. Dr. Francisco Loup, 1000 - Maresias, São Sebastião - SP, 11628-000, Brasil', maresias.cidade, maresias.uf)).toBe(true);
+    expect(naCidade('Alameda do Boldró, s/n - Vila do Boldró, Fernando de Noronha - PE, 53990-000, Brasil', 'Fernando de Noronha', 'PE')).toBe(true);
+    expect(textoDaBusca('restaurantes', maresias.cidade, maresias.uf, maresias.bairro)).toBe('restaurante em Maresias, São Sebastião - SP');
   });
 });

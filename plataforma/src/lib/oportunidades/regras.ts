@@ -46,7 +46,25 @@ export type Segmento = (typeof SEGMENTOS)[number]['id'];
 export const SEGMENTO_IDS = SEGMENTOS.map((s) => s.id) as [Segmento, ...Segmento[]];
 export const segmento = (id: Segmento) => SEGMENTOS.find((s) => s.id === id) ?? SEGMENTOS[0];
 
-export const CIDADES_SUGERIDAS = ['Ilhabela', 'São Sebastião'];
+/**
+ * Beach destinations for restaurants. Several are beaches (bairros) of a bigger city: Google writes their
+ * addresses as "…, Maresias, São Sebastião - SP", so the search keeps the real city and puts the beach in the
+ * bairro, or every result would be dropped by the city check.
+ */
+export const LUGARES = [
+  { nome: 'Ilhabela', cidade: 'Ilhabela', uf: 'SP', bairro: '' },
+  { nome: 'Maresias', cidade: 'São Sebastião', uf: 'SP', bairro: 'Maresias' },
+  { nome: 'Praia da Baleia', cidade: 'São Sebastião', uf: 'SP', bairro: 'Baleia' },
+  { nome: 'Fernando de Noronha', cidade: 'Fernando de Noronha', uf: 'PE', bairro: '' },
+] as const;
+export const CIDADES_SUGERIDAS = [...new Set(LUGARES.map((l) => l.cidade))];
+
+/** A beach typed in the city field ("Maresias", "baleia") becomes its real city + bairro. */
+export function lugarPeloNome(texto: string) {
+  const t = sem(texto).trim().replace(/^praia d[aoe]s? /, '');
+  if (!t) return undefined;
+  return LUGARES.find((l) => sem(l.nome).replace(/^praia d[aoe]s? /, '') === t || sem(l.bairro) === t);
+}
 
 export const SITUACOES = [
   { id: 'nova', nome: 'Nova' },

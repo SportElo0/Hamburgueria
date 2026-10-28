@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { estimarAction, pesquisarAction } from '@/app/painel/oportunidades/actions';
 import type { Resultado } from '@/lib/oportunidades/dados';
-import { CIDADES_SUGERIDAS, GRUPOS_SEGMENTO, MAX_PAGINAS, SEGMENTOS, type Categoria, type Estimativa, type Segmento } from '@/lib/oportunidades/regras';
+import { CIDADES_SUGERIDAS, GRUPOS_SEGMENTO, LUGARES, lugarPeloNome, MAX_PAGINAS, SEGMENTOS, type Categoria, type Estimativa, type Segmento } from '@/lib/oportunidades/regras';
 import { AtribuicaoGoogle, CHIP_CATEGORIA, Telefone, usd } from './estilos';
 
 interface Props {
@@ -69,12 +69,38 @@ export function NovaPesquisa({ chave, usadas, limite }: Props) {
         </p>
       )}
 
+      <div className="mt-4 flex flex-wrap items-center gap-2" role="group" aria-label="Praias para restaurantes">
+        <span className="text-sm text-ink-mute">Praias:</span>
+        {LUGARES.map((l) => {
+          const ativo = form.cidade === l.cidade && form.uf === l.uf && form.bairro === l.bairro;
+          return (
+            <button
+              key={l.nome}
+              type="button"
+              aria-pressed={ativo}
+              onClick={() => mudar({ cidade: l.cidade, uf: l.uf, bairro: l.bairro })}
+              className={`chip min-h-8 border ${ativo ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}
+            >
+              {l.nome}
+              {l.bairro && <span className={ativo ? 'text-white/70' : 'text-ink-mute'}> · {l.cidade}</span>}
+            </button>
+          );
+        })}
+      </div>
+
       <form onSubmit={calcular} className="mt-4 grid gap-3 sm:grid-cols-[2fr_70px_2fr_2fr_2fr]">
         <div>
           <label className="label" htmlFor="np-cidade">
             Cidade
           </label>
-          <input id="np-cidade" className="field" list="np-cidades" required minLength={2} maxLength={60} value={form.cidade} onChange={(e) => mudar({ cidade: e.target.value })} />
+          <input id="np-cidade" className="field" list="np-cidades" required minLength={2} maxLength={60} value={form.cidade}
+            onChange={(e) => mudar({ cidade: e.target.value })}
+            // a beach typed as the city ("Maresias") becomes its real city with the beach as bairro
+            onBlur={() => {
+              const l = lugarPeloNome(form.cidade);
+              if (l && l.cidade !== form.cidade) mudar({ cidade: l.cidade, uf: l.uf, bairro: l.bairro });
+            }}
+          />
           <datalist id="np-cidades">
             {CIDADES_SUGERIDAS.map((c) => (
               <option key={c} value={c} />

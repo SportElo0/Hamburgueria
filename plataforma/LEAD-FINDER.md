@@ -7,6 +7,7 @@ Só a equipe da Growlift entra; os logins de loja não veem esta aba.
 ## O que ele faz
 
 1. **Pesquisa** (Text Search) por segmento + cidade, com bairro opcional. Ex.: "barbearia em Perequê, Ilhabela - SP". Até 20 lugares por busca; no máximo 3 buscas (60 lugares) por pesquisa, que é o teto do Google.
+   Atalhos de praia (para restaurantes): Ilhabela, Maresias, Praia da Baleia e Fernando de Noronha (PE). Maresias e Baleia são praias de **São Sebastião**: a pesquisa usa a cidade São Sebastião com a praia no bairro, senão todos os resultados caem no filtro de cidade. Digitar "Maresias" no campo cidade corrige sozinho.
 2. **Mostra o custo antes** e só pesquisa depois de alguém marcar "Aprovo". O servidor confere de novo a aprovação e o limite do mês.
 3. **Tira repetidos** pelo place ID, dentro da pesquisa e contra a lista já guardada, e ignora lugares de outra cidade (pelo endereço).
 4. **Classifica** cada lugar em:
