@@ -16,7 +16,7 @@ Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` est
 | `pousada/` | Site da Pousada Villa Verano (aguarda nova referência do cliente para o redesenho) | ver no Vercel |
 | `growlift/` | Site da Growlift (HTML estático), no ar desde 26/10/2026 | https://growlift.com.br (DNS no Registro.br: endereço do site = `216.198.79.1`) |
 | `growlift-social/` | Instagram e WhatsApp da Growlift: imagens, 9 Reels em vídeo, legendas | aba Conteúdos do painel |
-| `bacchi/` | Site novo e catálogo digital da Bacchi (clips, desde 1937): catálogo das 13 linhas, cotação, representantes. **Não publicado**; o site atual da Bacchi não foi mexido. Ver `bacchi/README.md` | — |
+| `bacchi/` | Site novo e catálogo digital da Bacchi (clips, desde 1937): catálogo das 13 linhas, cotação, representantes. Versão de teste com faixa "não é o site oficial" e fora do Google; o site atual da Bacchi não foi mexido. Ver `bacchi/README.md` | https://bacchi-teste.vercel.app |
 | `marketing/` | Apresentações e propostas da Growlift (HTML + PDF) e posts | — |
 | `tools/`, `elpatron/tools/` | Estúdio 3D dos burgers (three.js) e tratamento de fotos | — |
 
@@ -25,6 +25,7 @@ Vercel (time `team_YoPHQ4Hb11W9RPG1cwvdMC3G`):
 - El Patron: projeto `prj_XMxV4MsDwttCRq96OWsYhcM0AtQc` (diretório raiz `elpatron`)
 - Growlift: projeto `prj_6Bem4OwJHw2dAY96xpcLyZCbUbZt`
 - Downtown: projeto `prj_nyFCGwrqD9IQayLYrweIi5Rg6JEz`
+- Bacchi (teste): projeto `prj_UVUjMXxWuY4y3p8k0hGGgWhsuPJm` (diretório raiz `bacchi`; publicar com `create_deployment` target production e o sha)
 - publicação: deploy a partir do GitHub `SportElo0/Hamburgueria`, branch `claude/downtown-burger-site`.
 
 Os segredos (SESSION_SECRET, ADMIN_USERS, token do Vercel Blob) ficam nas variáveis de
@@ -102,7 +103,7 @@ Reel premium "Sua marca merece mais." (`growlift-social/05-reels/09-…`, fonte 
 Bacchi (`bacchi/README.md`, aguardando a Bacchi):
 - aprovar as frases de destaque copiadas do site atual ("a mais antiga", "homologados", "escolhida por todos"), o WhatsApp (11) 95089-2731 e o e-mail do PDF;
 - conta no Resend e e-mail que recebe as cotações (sem isso o site manda pelo WhatsApp/e-mail, sem fingir envio);
-- rodar `revisor-seguranca` e `revisor-legal` e criar o projeto na Vercel (diretório raiz `bacchi`) só com autorização.
+- revisões de segurança e legal feitas em 28/10 para a versão de teste; para a versão final faltam autorização por escrito da Bacchi, CNPJ, política de privacidade e conferência dos representantes (lista no README).
 
 Outros:
 - Pousada Villa Verano: redesenho aguarda referência nova; WhatsApp (5511999887127) e nota não confirmados.

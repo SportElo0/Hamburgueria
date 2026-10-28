@@ -14,7 +14,7 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 | `elpatron/` | Site do El Patron | Vercel `prj_XMxV4MsDwttCRq96OWsYhcM0AtQc` |
 | `src/` (raiz) | Site do Downtown Burger | Vercel `prj_nyFCGwrqD9IQayLYrweIi5Rg6JEz` |
 | `pousada/` | Pousada Villa Verano | Vercel (`pousada-villa-verano` ou `villa-verano`: confirme no projeto antes) |
-| `bacchi/` | Site e catálogo da Bacchi (Next.js) | ainda não publicado (ver `bacchi/README.md`) |
+| `bacchi/` | Site e catálogo da Bacchi (Next.js), versão de teste | Vercel `prj_UVUjMXxWuY4y3p8k0hGGgWhsuPJm` (bacchi-teste.vercel.app, fora do Google; ver `bacchi/README.md`) |
 | `growlift-social/` | Instagram e WhatsApp da Growlift (imagens, Reels, textos) | aparece no painel, aba Conteúdos |
 
 - Time da Vercel: `team_YoPHQ4Hb11W9RPG1cwvdMC3G`. Deploy a partir do GitHub `SportElo0/Hamburgueria`, branch `claude/downtown-burger-site`.
