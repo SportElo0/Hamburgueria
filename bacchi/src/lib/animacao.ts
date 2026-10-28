@@ -27,6 +27,14 @@ export function useAnimacao<T extends HTMLElement>(ref: RefObject<T | null>, mon
       const mm = gsap.matchMedia();
       mm.add({ movimento: '(prefers-reduced-motion: no-preference)', desktop: '(min-width: 1024px)' }, (c) => {
         const { movimento, desktop } = c.conditions as unknown as Condicoes;
+        // the layout script marks <html> with js-motion before paint; if a client re-render dropped the mark, the
+        // CSS would show the static layout under running animations, so the mark follows the same condition here
+        const html = document.documentElement;
+        if (html.classList.contains('js-motion') !== movimento) {
+          html.classList.toggle('js-motion', movimento);
+          // the layout just changed under the sections that already measured it
+          requestAnimationFrame(() => ScrollTrigger.refresh());
+        }
         if (!movimento) return;
         return montar({ movimento, desktop }, raiz);
       });

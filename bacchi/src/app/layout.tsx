@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   description:
     'Indústria brasileira de clips, grampos, alfinetes e artigos metálicos para escritório desde 1937. Catálogo técnico completo, cotação para revendas e representantes em todo o Brasil.',
   applicationName: 'Bacchi',
+  // iPhone Safari would turn phone numbers into its own links, changing the page before React takes over (and
+  // making React rebuild it); every phone on the site is already a proper link
+  formatDetection: { telephone: false, email: false, address: false },
   openGraph: { type: 'website', locale: 'pt_BR', siteName: 'Bacchi', images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Clips Bacchi em aço, desde 1937' }] },
   twitter: { card: 'summary_large_image' },
   icons: { icon: '/img/marca/avatar.png', apple: '/img/marca/avatar.png' },
