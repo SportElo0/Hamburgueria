@@ -74,6 +74,14 @@ Texto da caixinha: "Quero receber ofertas da <loja> no WhatsApp (no máximo uma 
 - Guarda só o place ID e as conclusões da equipe; nome, endereço, telefone e site do Google não são guardados nem exportados (termos do Google).
 - Não envia mensagem. "Sem website" só é confirmado depois de 2 fontes públicas conferidas à mão.
 
+## Inteligência (Growlift Intelligence, fase 1)
+
+`/painel/inteligencia`: custos por item, margem de contribuição, matriz do cardápio e recomendações por regras, com a decisão
+registrada pela equipe. Sem IA: todos os números são calculados pelo painel, em centavos. Detalhes em `plataforma/INTELIGENCIA.md`.
+- Só a equipe vê. A loja `demo-inteligencia` tem dados fictícios e o painel recusa publicá-la.
+- Usa só os pedidos que chegam pelo site da loja (não vê iFood, balcão nem telefone).
+- Plano Scale (R$ 897) e Inteligência continuam **proposta**: não anunciar antes de testar com um restaurante-piloto.
+
 ## Propostas
 
 - `marketing/apresentacao/deck-restaurantes.html` → `Growlift-Apresentacao-Restaurantes.pdf`
