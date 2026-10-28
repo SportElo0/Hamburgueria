@@ -3,8 +3,8 @@
 import { useState, useTransition } from 'react';
 import { estimarAction, pesquisarAction } from '@/app/painel/oportunidades/actions';
 import type { Resultado } from '@/lib/oportunidades/dados';
-import { CIDADES_SUGERIDAS, GRUPOS_SEGMENTO, MAX_PAGINAS, SEGMENTOS, nomeCategoria, type Estimativa, type Segmento } from '@/lib/oportunidades/regras';
-import { AtribuicaoGoogle, CHIP_CATEGORIA, Telefone, linkSeguro, usd } from './estilos';
+import { CIDADES_SUGERIDAS, GRUPOS_SEGMENTO, MAX_PAGINAS, SEGMENTOS, type Categoria, type Estimativa, type Segmento } from '@/lib/oportunidades/regras';
+import { AtribuicaoGoogle, CHIP_CATEGORIA, Telefone, usd } from './estilos';
 
 interface Props {
   chave: boolean;
@@ -177,57 +177,43 @@ export function NovaPesquisa({ chave, usadas, limite }: Props) {
   );
 }
 
+/** Short words for the site column of the result table. */
+const SITE: Record<Categoria, string> = {
+  'sem-site': 'Sem site',
+  'so-rede-social': 'Só rede social',
+  'site-com-problemas': 'Site com problema',
+  'site-proprio': 'Tem site',
+  incerta: 'A conferir',
+};
+
 function ResultadoAoVivo({ resultado }: { resultado: Resultado }) {
   const { pesquisa: p, linhas } = resultado;
   return (
     <div className="mt-6 border-t border-line pt-5">
-      <h3 className="text-lg font-bold">Resultado</h3>
-      <p className="mt-1 text-sm text-ink-soft">
-        {p.chamadas} {p.chamadas === 1 ? 'busca usada' : 'buscas usadas'} · {p.encontrados} lugares em {p.cidade} · {p.novos} novos na lista · {p.repetidos} já estavam · {p.foraDaCidade} de outras cidades ignorados{p.comSite ? ` · ${p.comSite} com site funcionando ficaram de fora` : ''}
-      </p>
-      <p className="mt-1 text-xs text-ink-mute">
-        Aqui aparecem só os lugares sem site funcionando. Nome, endereço, site e telefone aparecem só agora: os termos do Google não deixam guardar nem exportar. Na lista abaixo ficam o identificador do lugar e a conclusão da equipe.
-      </p>
+      <h3 className="text-lg font-bold">
+        {linhas.length} sem site funcionando em {p.cidade}
+      </h3>
+      {p.comSite ? <p className="mt-1 text-sm text-ink-mute">{p.comSite} com site funcionando ficaram de fora.</p> : null}
       {linhas.length === 0 ? (
-        <p className="mt-4 text-ink-mute">Nenhum lugar encontrado nessa cidade.</p>
+        <p className="mt-4 text-ink-mute">Nenhum lugar sem site nessa pesquisa.</p>
       ) : (
         <div className="mt-4 overflow-x-auto rounded-lg border border-line">
-          <table className="w-full min-w-[640px] text-left text-sm">
+          <table className="w-full min-w-[480px] text-left text-sm">
             <thead className="bg-paper text-ink-soft">
               <tr>
-                <th className="px-3 py-2 font-semibold">Lugar</th>
-                <th className="px-3 py-2 font-semibold">Site no Google</th>
-                <th className="px-3 py-2 font-semibold">Categoria e o que a checagem viu</th>
+                <th className="px-3 py-2 font-semibold">Site</th>
+                <th className="px-3 py-2 font-semibold">Nome</th>
+                <th className="px-3 py-2 font-semibold">Telefone</th>
               </tr>
             </thead>
             <tbody>
               {linhas.map((l) => (
-                <tr key={l.id} className="border-t border-line align-top">
+                <tr key={l.id} className="border-t border-line align-middle">
                   <td className="px-3 py-2">
-                    <p className="font-semibold">
-                      {l.nome}
-                      {l.novo && <span className="chip ml-2 bg-ink text-white">novo</span>}
-                    </p>
-                    <p className="text-ink-mute">{l.endereco}</p>
-                    <Telefone telefone={l.telefone} className="mt-1 text-ink-mute" />
+                    <span className={`chip whitespace-nowrap ${CHIP_CATEGORIA[l.categoria]}`}>{SITE[l.categoria]}</span>
                   </td>
-                  <td className="max-w-[220px] px-3 py-2 break-words">
-                    {linkSeguro(l.site) ? (
-                      <a className="text-accent underline underline-offset-2" href={linkSeguro(l.site)} target="_blank" rel="noopener noreferrer nofollow">
-                        {l.site}
-                      </a>
-                    ) : (
-                      <span className="text-ink-mute">Nenhum</span>
-                    )}
-                  </td>
-                  <td className="px-3 py-2">
-                    <span className={`chip ${CHIP_CATEGORIA[l.categoria]}`}>{nomeCategoria(l.categoria)}</span>
-                    <ul className="mt-1 text-ink-soft">
-                      {l.sinais.map((s) => (
-                        <li key={s}>{s}</li>
-                      ))}
-                    </ul>
-                  </td>
+                  <td className="px-3 py-2 font-semibold">{l.nome}</td>
+                  <td className="px-3 py-2">{l.telefone ? <Telefone telefone={l.telefone} rotulo={false} /> : <span className="text-ink-mute">Sem telefone</span>}</td>
                 </tr>
               ))}
             </tbody>

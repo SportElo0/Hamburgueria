@@ -16,12 +16,12 @@ export const linkSeguro = (url?: string) => (url && /^https?:\/\//i.test(url) ? 
 export const usd = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'USD' });
 
 /** The live business phone with a one-tap contact: WhatsApp for a mobile number, a call for a landline. Shown, never saved. */
-export function Telefone({ telefone, className = '' }: { telefone?: string; className?: string }) {
+export function Telefone({ telefone, className = '', rotulo = true }: { telefone?: string; className?: string; rotulo?: boolean }) {
   if (!telefone) return null;
   const whats = linkWhatsApp(telefone), ligar = linkLigar(telefone);
   return (
     <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 ${className}`}>
-      <span>Tel. comercial: {telefone}</span>
+      <span className="whitespace-nowrap">{rotulo ? `Tel. comercial: ${telefone}` : telefone}</span>
       {whats ? (
         <a className="btn-ghost min-h-8 px-3 text-sm" href={whats} target="_blank" rel="noopener noreferrer">
           Chamar no WhatsApp
