@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* styles that apply only while scroll animation runs (scripts on, motion allowed); without it pages stay a plain
+   vertical read */
+@custom-variant movimento (&:where(.js-motion *));
+@custom-variant estatico (&:not(:where(.js-motion *)));
+
 /* Bacchi design tokens.
    azul: the logo blue (#007BC4, sampled from the official file). marinho: deep navy for the dark chapters.
    papel: the warm off-white of the studio product photos (#F3F2ED), so the products sit on the page itself.

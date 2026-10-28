@@ -1,11 +1,9 @@
 'use client';
 // Chapter 5: the factory. A full-bleed band of real footage (a mound of clips) moves slower than the page,
-// then two rows of production photographs drift in opposite directions. Then the proven differentials, as an
-// editorial list (no claim beyond what the official texts and the catalogue say).
+// then two rows of production photographs drift in opposite directions.
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
-import { HISTORIA } from '@/data/empresa';
-import { gsap, revelarFilhos, useAnimacao } from '@/lib/animacao';
+import { gsap, useAnimacao } from '@/lib/animacao';
 
 const LINHA_1 = [
   { src: '/img/fabrica/arame.webp', alt: 'Bobina de arame de aço na fábrica Bacchi' },
@@ -20,14 +18,6 @@ const LINHA_2 = [
   { src: '/img/fabrica/caixa-master.webp', alt: 'Caixas master Bacchi prontas para expedição' },
 ];
 
-const DIFERENCIAIS = [
-  { titulo: 'Tradição desde 1937', texto: 'Desde 1937 produzindo clips, alfinetes, pranchetas, grampos e artigos para escritório, com cuidado na fabricação.' },
-  { titulo: 'Fabricação própria', texto: HISTORIA.processo },
-  { titulo: 'Linha completa', texto: 'Treze linhas no catálogo, com medidas, acabamentos e embalagens de cada modelo: do clip nº 5 ao grampo para compensados de madeira.' },
-  { titulo: 'Embalagens lacradas', texto: 'As embalagens de clips são lacradas ou contêm sacos plásticos selados.' },
-  { titulo: 'Atendimento em todo o Brasil', texto: 'Uma rede de representantes comerciais cobre os 27 estados e atende distribuidores, revendedores, papelarias e corporações.' },
-];
-
 export function Fabrica() {
   const ref = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -38,7 +28,6 @@ export function Fabrica() {
     gsap.fromTo(q('[data-titulo-faixa] > span'), { yPercent: 105 }, { yPercent: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: q('[data-faixa]')[0], start: 'top 60%', once: true } });
     gsap.fromTo(q('[data-linha="1"]'), { xPercent: 0 }, { xPercent: -14, ease: 'none', scrollTrigger: { trigger: q('[data-fotos]')[0], start: 'top bottom', end: 'bottom top', scrub: true } });
     gsap.fromTo(q('[data-linha="2"]'), { xPercent: -14 }, { xPercent: 0, ease: 'none', scrollTrigger: { trigger: q('[data-fotos]')[0], start: 'top bottom', end: 'bottom top', scrub: true } });
-    revelarFilhos(raiz);
   });
 
   useEffect(() => {
@@ -82,25 +71,6 @@ export function Fabrica() {
         ))}
       </div>
 
-      <div className="container-b py-20 md:py-32">
-        <div className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <p className="eyebrow text-azul-claro" data-revelar>Por que Bacchi</p>
-            <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3.4rem)] leading-[1.02] font-semibold" data-revelar>
-              Feito com cuidado, do começo ao fim.
-            </h2>
-          </div>
-          <ol className="lg:col-span-7 lg:col-start-6">
-            {DIFERENCIAIS.map((d, i) => (
-              <li key={d.titulo} data-revelar className="grid grid-cols-[3rem_1fr] gap-4 border-t border-white/12 py-7 md:grid-cols-[4rem_1fr_1.4fr] md:gap-8">
-                <span className="font-display text-sm font-semibold text-aco tabular-nums">0{i + 1}</span>
-                <h3 className="font-display text-xl font-semibold md:text-2xl">{d.titulo}</h3>
-                <p className="col-start-2 leading-relaxed text-white/70 md:col-start-3">{d.texto}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
     </section>
   );
 }

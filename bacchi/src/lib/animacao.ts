@@ -6,7 +6,11 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useLayoutEffect, type RefObject } from 'react';
 
-if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+  // phones resize the viewport when the address bar slides; pinned chapters should not jump with it
+  ScrollTrigger.config({ ignoreMobileResize: true });
+}
 
 const useIsoLayout = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
