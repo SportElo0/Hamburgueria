@@ -8,7 +8,7 @@ import { PRODUTOS } from '@/data/catalogo';
 
 export const metadata: Metadata = {
   title: 'A Bacchi',
-  description: 'Fundada em 1937, a Bacchi é pioneira na produção de clips, alfinetes, pranchetas, grampos e artigos para escritório. Conheça a história e a fabricação.',
+  description: 'Fundada em 1937, a Bacchi produz clips, alfinetes, pranchetas, grampos e artigos para escritório. Conheça a história e a fabricação.',
   alternates: { canonical: '/sobre' },
 };
 
@@ -46,7 +46,6 @@ export default function SobrePage() {
           <div className="space-y-5 text-lg leading-relaxed text-tinta-2 lg:col-span-6 lg:col-start-7">
             <p data-revelar>{HISTORIA.tradicao}</p>
             <p data-revelar>{HISTORIA.hoje}</p>
-            <p data-revelar>{HISTORIA.homologacao}</p>
           </div>
         </Revelar>
         <div className="container-b mt-16">

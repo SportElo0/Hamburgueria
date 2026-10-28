@@ -49,7 +49,8 @@ copiando a lista. Com as variáveis, o pedido chega no e-mail da Bacchi com "res
 | `RESEND_API_KEY` | chave criada no Resend (nunca no repositório) |
 | `COTACAO_REMETENTE` | `Site Bacchi <site@dominio-da-bacchi>` (domínio verificado no Resend) |
 | `COTACAO_DESTINO` | `bacchivendas@uol.com.br` (vários: separar por vírgula) |
-| `NEXT_PUBLIC_SITE_URL` | endereço final do site, para sitemap e compartilhamento |
+| `NEXT_PUBLIC_SITE_URL` | endereço final do site, para sitemap e compartilhamento (sem ela, na Vercel usa o endereço do próprio projeto) |
+| `INDEXAR` | `sim` só na versão final aprovada. Sem ela o site fica fora do Google (noindex) e mostra a faixa "Versão de teste" |
 
 Proteções: mesma origem, limite de 5 envios a cada 10 minutos por IP, campo-armadilha para robôs, tempo mínimo
 de preenchimento, validação de cada item contra o catálogo, aceite obrigatório. Nada é guardado no servidor.
@@ -64,11 +65,18 @@ de preenchimento, validação de cada item contra o catálogo, aceite obrigatór
 
 ## Precisa de aprovação da Bacchi
 
-Textos copiados do site atual, que são afirmações da empresa (a Bacchi precisa confirmar que pode comprovar):
-- "Sendo a mais antiga e tradicional empresa do setor…"
-- "…é hoje a empresa escolhida por todos os mais importantes distribuidores…"
-- "Nossos produtos são homologados nas principais empresas e órgãos públicos…"
-- "pioneira na produção de clips, alfinetes…"
+Frases do site atual que **tirei** por recomendação da revisão legal (só voltam se a Bacchi tiver como provar):
+- "Sendo a mais antiga e tradicional empresa do setor…" (trocada por "Com mais de 85 anos de história…")
+- "…é hoje a empresa escolhida por todos os mais importantes distribuidores…" (trocada por "Atende distribuidores… em todo o Brasil")
+- "Nossos produtos são homologados nas principais empresas e órgãos públicos…" (removida)
+- "pioneira na produção de clips…" (removida) e "para garantir a inviolabilidade" (ficou "lacradas")
+
+Para a versão final (revisão legal):
+- Autorização por escrito (pode ser e-mail) de um sócio ou administrador da Bacchi para usar marca, fotos, vídeo, catálogo e contatos.
+- CNPJ no rodapé e página de política de privacidade (Vercel e Resend como operadores, direitos do titular).
+- Confirmar que cada representante está ativo e aceita aparecer; telefones suspeitos: MG (31) 8929-5459 e (31) 8600-4556, RN (84) 9808-3774, RS (51) 3361-4335 marcado como WhatsApp.
+- Contrato ou cessão das fotos e vídeos (Eduardo Sardinha) e autor das demais fotos; o crédito no rodapé hoje generaliza.
+- Documento que comprove 1937 e a origem das fotos históricas (há um operário identificável em `historica-02`).
 
 Dados de contato:
 - WhatsApp (11) 95089-2731: tirado do botão do site atual. Confirmar se é o número comercial.

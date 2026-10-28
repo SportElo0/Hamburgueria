@@ -21,10 +21,10 @@ const LINHA_2 = [
 ];
 
 const DIFERENCIAIS = [
-  { titulo: 'Tradição desde 1937', texto: 'Pioneira na produção de clips, alfinetes, pranchetas, grampos e artigos para escritório, sempre com qualidade e cuidado na fabricação.' },
+  { titulo: 'Tradição desde 1937', texto: 'Desde 1937 produzindo clips, alfinetes, pranchetas, grampos e artigos para escritório, com cuidado na fabricação.' },
   { titulo: 'Fabricação própria', texto: HISTORIA.processo },
   { titulo: 'Linha completa', texto: 'Treze linhas no catálogo, com medidas, acabamentos e embalagens de cada modelo: do clip nº 5 ao grampo para compensados de madeira.' },
-  { titulo: 'Embalagens invioláveis', texto: 'As embalagens de clips são lacradas ou contêm sacos plásticos selados para garantir a inviolabilidade.' },
+  { titulo: 'Embalagens lacradas', texto: 'As embalagens de clips são lacradas ou contêm sacos plásticos selados.' },
   { titulo: 'Atendimento em todo o Brasil', texto: 'Uma rede de representantes comerciais cobre os 27 estados e atende distribuidores, revendedores, papelarias e corporações.' },
 ];
 

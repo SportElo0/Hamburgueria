@@ -1,7 +1,12 @@
 import { EMPRESA } from '@/data/empresa';
 import type { Produto } from '@/data/catalogo';
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://clipsbacchi.com.br').replace(/\/$/, '');
+// On a Vercel test deploy without NEXT_PUBLIC_SITE_URL, links point at the deploy itself, not the current site.
+const naVercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : '';
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || naVercel || 'https://clipsbacchi.com.br').replace(/\/$/, '');
+
+/** Search engines index the site only once it is approved and on its own domain (INDEXAR=sim). */
+export const INDEXAR = process.env.INDEXAR === 'sim';
 
 export function jsonLdOrganizacao() {
   const e = EMPRESA;

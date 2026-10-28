@@ -24,7 +24,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ erro: 'Mensagem inválida.' }, { status: 400 });
   }
   const r = schema.safeParse(corpo);
-  if (!r.success) return NextResponse.json({ erro: r.error.issues[0]?.message ?? 'Dados inválidos.' }, { status: 400 });
+  if (!r.success) {
+    // the anti-bot fields get a generic answer, so a script cannot tell which one caught it
+    const campo = String(r.error.issues[0]?.path[0]);
+    const erro = campo === 'site' || campo === 'tempo' ? 'Não foi possível enviar.' : (r.error.issues[0]?.message ?? 'Dados inválidos.');
+    return NextResponse.json({ erro }, { status: 400 });
+  }
   if (!envioConfigurado()) return NextResponse.json({ erro: 'O envio automático ainda não está configurado. Use o telefone, o WhatsApp ou o e-mail ao lado.', configurado: false }, { status: 503 });
   const c = r.data.contato;
   try {

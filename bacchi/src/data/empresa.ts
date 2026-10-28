@@ -25,12 +25,12 @@ export const EMPRESA = {
   siteAntigo: 'https://clipsbacchi.com.br',
 };
 
-/** "A Empresa" page of the current site, in its own words, split into short paragraphs. */
+/** "A Empresa" page of the current site, split into short paragraphs. Claims that need proof ("a mais antiga do
+ * setor", "escolhida por todos", "homologados", "pioneira") are left out until Bacchi documents them (README). */
 export const HISTORIA = {
-  fundacao: 'Fundada em 1937, a Bacchi é pioneira na produção de clips, alfinetes, pranchetas, grampos e artigos para escritório.',
-  tradicao: 'Sendo a mais antiga e tradicional empresa do setor, sempre se destacou pela qualidade e cuidado na fabricação de seus produtos.',
-  hoje: 'Atualmente, com estrutura e agilidade para atender com rapidez todo o mercado brasileiro, é hoje a empresa escolhida por todos os mais importantes distribuidores, revendedores, papelarias e corporações.',
-  homologacao: 'Nossos produtos são homologados nas principais empresas e órgãos públicos e presentes nas mesas de todos os escritórios do país.',
+  fundacao: 'Fundada em 1937, a Bacchi produz clips, alfinetes, pranchetas, grampos e artigos para escritório.',
+  tradicao: 'Com mais de 85 anos de história, a Bacchi se dedica à qualidade e ao cuidado na fabricação de seus produtos.',
+  hoje: 'Atende distribuidores, revendedores, papelarias e corporações em todo o Brasil, com representantes comerciais nos estados.',
   santoAndre: 'As primeiras instalações em Santo André.',
   processo: 'A manutenção dos equipamentos e ferramentais Bacchi são feitas por uma equipe de profissionais treinados e com olhar atento. O processo de fabricação dos produtos é desde o recebimento da matéria prima até o envio do produto.',
 };

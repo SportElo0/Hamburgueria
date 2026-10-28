@@ -112,7 +112,7 @@ export const PRODUTOS: Produto[] = [
     material: 'Aço',
     acabamentos: [G, N, L, C],
     notaAcabamentos: 'O acabamento disponível varia por número; veja a tabela. Pintura epóxi nas cores abaixo, com embalagens em cores sortidas.',
-    embalagem: ['Caixa pequena, caixa grande, blister box ou caixa plástica (quantidades na tabela).', 'Embalagens lacradas ou com sacos plásticos selados para garantir a inviolabilidade.'],
+    embalagem: ['Caixa pequena, caixa grande, blister box ou caixa plástica (quantidades na tabela).', 'Embalagens lacradas ou com sacos plásticos selados.'],
     cores: {
       titulo: 'Pintura epóxi',
       lista: [
@@ -172,7 +172,7 @@ export const PRODUTOS: Produto[] = [
     descricao: ['Clips produzidos em aço, com acabamento galvanizado, em seis tamanhos: do 1/0 (0), com 30 mm de altura, ao 8/0, com 54 mm.'],
     material: 'Aço',
     acabamentos: [G],
-    embalagem: ['Caixa pequena ou caixa grande (quantidades na tabela).', 'Embalagens lacradas ou com sacos plásticos selados para garantir a inviolabilidade.'],
+    embalagem: ['Caixa pequena ou caixa grande (quantidades na tabela).', 'Embalagens lacradas ou com sacos plásticos selados.'],
     imagens: [
       { src: '/img/produtos/clips-leve.webp', alt: 'Clips Bacchi Linha Leve galvanizados' },
       { src: '/img/produtos/clips-leve-caixa.webp', alt: 'Caixa de clips Bacchi Linha Leve 8/0' },

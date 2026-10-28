@@ -147,7 +147,7 @@ export function RevisaoCotacao() {
                     {p?.nome} · {p?.rotuloModelo} {i.modelo}
                   </p>
                   <p className="mt-1 text-sm text-tinta-2">
-                    {i.acabamento ? `${ACABAMENTOS[i.acabamento].nome} · ` : ''}
+                    {i.acabamento && ACABAMENTOS[i.acabamento] ? `${ACABAMENTOS[i.acabamento].nome} · ` : ''}
                     {i.embalagem}
                   </p>
                   <label className="mt-3 block">
