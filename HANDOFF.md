@@ -16,6 +16,7 @@ Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` est
 | `pousada/` | Site da Pousada Villa Verano (aguarda nova referência do cliente para o redesenho) | ver no Vercel |
 | `growlift/` | Site da Growlift (HTML estático), no ar desde 26/10/2026 | https://growlift.com.br (DNS no Registro.br: endereço do site = `216.198.79.1`) |
 | `growlift-social/` | Instagram e WhatsApp da Growlift: imagens, 9 Reels em vídeo, legendas | aba Conteúdos do painel |
+| `bacchi/` | Site novo e catálogo digital da Bacchi (clips, desde 1937): catálogo das 13 linhas, cotação, representantes. **Não publicado**; o site atual da Bacchi não foi mexido. Ver `bacchi/README.md` | — |
 | `marketing/` | Apresentações e propostas da Growlift (HTML + PDF) e posts | — |
 | `tools/`, `elpatron/tools/` | Estúdio 3D dos burgers (three.js) e tratamento de fotos | — |
 
@@ -97,6 +98,11 @@ Reel premium "Sua marca merece mais." (`growlift-social/05-reels/09-…`, fonte 
 - O repositório no GitHub é **público** e os commits antigos têm a foto do dono da Swell Club. Recomendação: deixar o repositório privado. Vai para o painel no próximo `/publicar painel` (as miniaturas da aba Conteúdos passaram para 960 px).
 - Os quatro projetos aparecem com nome fictício (Salinho, Chapa 77, Swell Club, Fornada). Para usar os nomes reais é preciso autorização por escrito de cada negócio.
 - A foto do dono da Swell Club nunca entra: a captura troca por um surfista gerado por IA (`swapPhotos`). A prévia v1 (`_fonte/reel-premium/styleframes/`) ainda tem a foto do dono e não deve ser usada.
+
+Bacchi (`bacchi/README.md`, aguardando a Bacchi):
+- aprovar as frases de destaque copiadas do site atual ("a mais antiga", "homologados", "escolhida por todos"), o WhatsApp (11) 95089-2731 e o e-mail do PDF;
+- conta no Resend e e-mail que recebe as cotações (sem isso o site manda pelo WhatsApp/e-mail, sem fingir envio);
+- rodar `revisor-seguranca` e `revisor-legal` e criar o projeto na Vercel (diretório raiz `bacchi`) só com autorização.
 
 Outros:
 - Pousada Villa Verano: redesenho aguarda referência nova; WhatsApp (5511999887127) e nota não confirmados.

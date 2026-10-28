@@ -1,0 +1,210 @@
+@import 'tailwindcss';
+
+/* Bacchi design tokens.
+   azul: the logo blue (#007BC4, sampled from the official file). marinho: deep navy for the dark chapters.
+   papel: the warm off-white of the studio product photos (#F3F2ED), so the products sit on the page itself.
+   aco: steel greys for rules, captions and metal details. */
+@theme {
+  --color-azul: #007bc4;
+  --color-azul-claro: #3ea2e0;
+  --color-azul-profundo: #005a92;
+  --color-marinho: #0a1c33;
+  --color-marinho-900: #071628;
+  --color-marinho-950: #040d19;
+  --color-papel: #f3f2ed;
+  --color-papel-2: #e9e7e0;
+  --color-tinta: #0d1726;
+  --color-tinta-2: #3b4656;
+  --color-aco: #8b95a1;
+  --color-aco-claro: #c9cfd6;
+  --color-linha: #d9dbd6;
+
+  --font-display: var(--font-manrope), 'Manrope', system-ui, sans-serif;
+  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+
+  --ease-saida: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-industrial: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --breakpoint-xs: 380px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--color-papel);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: var(--color-azul);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-azul);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .container-b {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
+  .eyebrow {
+    font: 600 0.75rem/1 var(--font-sans);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  /* buttons: a solid blue primary and a quiet outline secondary; the arrow nudges on hover */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0 1.4rem;
+    border-radius: 999px;
+    font: 600 0.95rem/1 var(--font-sans);
+    transition: background-color 0.25s var(--ease-saida), color 0.25s var(--ease-saida), border-color 0.25s var(--ease-saida), transform 0.25s var(--ease-saida);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn .seta {
+    transition: transform 0.35s var(--ease-saida);
+  }
+  .btn:hover .seta {
+    transform: translateX(4px);
+  }
+  .btn-primario {
+    background: var(--color-azul);
+    color: #fff;
+  }
+  .btn-primario:hover {
+    background: var(--color-azul-profundo);
+  }
+  .btn-claro {
+    background: #fff;
+    color: var(--color-marinho);
+  }
+  .btn-claro:hover {
+    background: var(--color-papel-2);
+  }
+  .btn-contorno {
+    border: 1px solid currentColor;
+    color: inherit;
+  }
+  .btn-contorno:hover {
+    background: color-mix(in oklab, currentColor 10%, transparent);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  /* animated underline for text links */
+  .link-b {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.4s var(--ease-saida);
+  }
+  .link-b:hover,
+  .link-b:focus-visible {
+    background-size: 100% 1px;
+  }
+  .campo {
+    width: 100%;
+    min-height: 3rem;
+    border: 1px solid var(--color-linha);
+    border-radius: 0.75rem;
+    background: #fff;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: var(--color-tinta);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .campo:focus {
+    outline: none;
+    border-color: var(--color-azul);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-azul) 20%, transparent);
+  }
+  .campo[aria-invalid='true'] {
+    border-color: #c0392b;
+  }
+  .rotulo {
+    display: block;
+    margin-bottom: 0.4rem;
+    font: 600 0.85rem/1.2 var(--font-sans);
+    color: var(--color-tinta-2);
+  }
+  .amostra {
+    display: inline-block;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.15);
+    flex: none;
+  }
+  /* steel hairline used as a section divider */
+  .regua {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-aco-claro) 15%, var(--color-aco-claro) 85%, transparent);
+  }
+}
+
+/* Elements animated by GSAP start in their "before" state only when scripts run and motion is allowed
+   (the `js-motion` class comes from the inline script in the layout), so there is no flash before the
+   timelines take over, and nothing is hidden without JavaScript or with reduced motion. */
+.js-motion [data-revelar],
+.js-motion [data-sub],
+.js-motion [data-rodape] {
+  opacity: 0;
+}
+.js-motion [data-palavra] {
+  transform: translateY(110%);
+}
+.js-motion [data-video] {
+  clip-path: inset(49.6% 0 49.6% 0);
+}
+.js-intro [data-intro] {
+  visibility: visible;
+}
+
+@keyframes pulsar {
+  0% { transform: scale(0.6); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+@keyframes subir {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes descer {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(260%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
