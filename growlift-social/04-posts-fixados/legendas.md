@@ -30,7 +30,9 @@ Quer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link 
 
 **Texto alternativo da 1ª imagem**: Capa com a marca da Growlift em vidro azul e o texto "Presença digital que vende".
 
-Sem fotos e sem o slide do Lucas e do Antônio (decisão de 26/10/2026).
+Sem fotos e sem o slide do Lucas e do Antônio (decisão de 26/10/2026). A imagem 2 avisa que as telas são projetos conceito com nomes fictícios (29/10/2026).
+
+**Stories no dia do post:** compartilhem o carrossel no story (avião de papel › Adicionar ao story) e, depois, o story Contato 02 com o adesivo de link para `https://growlift.com.br/#diagnostico` e o texto "Pedir diagnóstico grátis".
 
 ## 2 · Portfólio (7 imagens)
 
