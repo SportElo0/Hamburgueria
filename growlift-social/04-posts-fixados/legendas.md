@@ -1,6 +1,6 @@
 # Posts fixados: legendas e ordem
 
-Três carrosséis de 1080×1350, prontos em `1-quem-somos/`, `2-portfolio/` e `3-servicos/`.
+Três carrosséis no formato 4:5 do feed, em alta definição (2160×2700), prontos em `1-quem-somos/`, `2-portfolio/` e `3-servicos/`.
 
 ## Ordem de publicação
 
@@ -71,7 +71,9 @@ Conte como está o seu negócio e a gente indica o plano que faz sentido. Link n
 #growlift #criacaodesites #marketingdigital #googlemeunegocio #cardapiodigital #pequenosnegocios
 ```
 
-**Texto alternativo da 1ª imagem**: Capa com o símbolo da Growlift e o texto "Sua marca merece mais".
+**Texto alternativo da 1ª imagem**: Capa com o texto "Sua marca merece mais" e os três planos da Growlift: Start, Grow e Lift.
+
+Refeito em 29/10/2026 no mesmo estilo de Quem somos e Portfólio (cartões grandes, logo de vidro no fim). Cada linha confere com os planos do site.
 
 ## O que foi evitado de propósito
 

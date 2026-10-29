@@ -444,14 +444,14 @@ export const slideRowsV2 = ({ n, total, title, lead = '', rows, bg = '' }) =>
       </li>`).join('')}
     </ol>`, { n, total, bg });
 
-export const slideCtaV2 = ({ n, total, title, body, button, plate }) =>
+export const slideCtaV2 = ({ n, total, title, body, button, plate, plateTop = -660 }) =>
   slideV2(`
     <div style="position:absolute;left:0;right:0;bottom:0">
       <h2 class="t-title" style="font-size:104px">${title}</h2>
       <p class="t-lead" style="font-size:40px;margin-top:24px">${body}</p>
       <div style="margin-top:40px;height:112px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:#fff;background:${TOKENS.blue};box-shadow:0 0 0 8px rgba(8,101,254,.18),0 30px 70px -20px rgba(8,101,254,.95)">${button}</div>
       <p style="margin-top:22px;font-size:32px;font-weight:600;color:#cfe0ff;text-align:center">growlift.com.br · link na bio</p>
-    </div>`, { n, total, plate, plateTop: -660 });
+    </div>`, { n, total, plate, plateTop });
 
 /** Portfolio cover: the four concept sites as a tilted wall of browser windows, the title below. */
 export const slideCoverWallV2 = ({ n, total, title, sub, imgs, note }) =>
@@ -484,3 +484,29 @@ export const slideSiteV2 = ({ n, total, title, chip, desktop, mobile }) =>
     <div style="position:absolute;right:-30px;top:600px;width:290px;padding:12px;border-radius:50px;background:#151c29;box-shadow:0 0 0 2px rgba(255,255,255,.12),0 50px 100px -30px rgba(0,0,0,.95),0 0 80px -20px rgba(8,101,254,.6)">
       <img src="${mobile}" style="display:block;width:100%;height:500px;object-fit:cover;object-position:top;border-radius:40px">
     </div>`, { n, total, bg: desktop });
+
+/** Services cover: the three plans as stacked glass cards under the title (no prices: they live on the site). */
+export const slidePlansCoverV2 = ({ n, total, title, sub, plans }) =>
+  slideV2(`
+    <h1 class="t-title" style="font-size:108px">${title}</h1>
+    <p class="t-lead" style="font-size:40px;margin-top:26px">${sub}</p>
+    <ol style="position:absolute;left:0;right:0;bottom:118px;list-style:none;display:grid;gap:20px">
+      ${plans.map(([name, tag], i) => `<li style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px 36px;border-radius:34px;background:${i === 2 ? 'rgba(8,101,254,.26)' : 'rgba(15,21,32,.78)'};border:1.5px solid ${i === 2 ? 'rgba(77,141,255,.75)' : 'rgba(255,255,255,.13)'};box-shadow:${i === 2 ? '0 30px 80px -30px rgba(8,101,254,.95)' : 'none'}">
+        <span style="font-size:54px;font-weight:800;letter-spacing:-.02em;color:#fff">${name}</span>
+        <span style="font-size:36px;font-weight:600;color:${i === 2 ? '#e8efff' : TOKENS.blueSoft}">${tag}</span>
+      </li>`).join('')}
+    </ol>
+    <span class="pill blue" style="position:absolute;left:0;bottom:0">Arraste para o lado →</span>`, { n, total });
+
+/** One plan (or the rules for all plans): a pill, the promise, and rows with an icon tile each. */
+export const slidePlanV2 = ({ n, total, pill, title, lead = '', rows, featured = false }) =>
+  slideV2(`
+    <span class="pill${featured ? ' blue' : ''}">${pill}</span>
+    <h2 class="t-title" style="font-size:96px;margin-top:30px">${title}</h2>
+    ${lead ? `<p class="t-lead" style="font-size:38px;margin-top:22px">${lead}</p>` : ''}
+    <ol style="position:absolute;left:0;right:0;bottom:0;list-style:none;display:grid;gap:20px">
+      ${rows.map(([ic, t, d]) => `<li style="display:flex;gap:30px;align-items:center;padding:26px 30px;border-radius:34px;background:rgba(15,21,32,.8);border:1.5px solid rgba(255,255,255,.12)">
+        <span style="flex:none;width:108px;height:108px;border-radius:30px;display:grid;place-items:center;background:rgba(8,101,254,.18);border:1.5px solid rgba(77,141,255,.45)">${icon(ic, { size: 58, color: '#8db8ff', width: 1.7 })}</span>
+        <span><span style="display:block;font-size:44px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1">${t}</span>${d ? `<span style="display:block;font-size:33px;color:#c6cede;margin-top:8px;line-height:1.25">${d}</span>` : ''}</span>
+      </li>`).join('')}
+    </ol>`, { n, total });
