@@ -266,9 +266,13 @@ export async function ordersForDays(slug: string, count: number, now = new Date(
   return ordersOfDays(slug, Array.from({ length: count }, (_, i) => dayOf(new Date(now.getTime() - (count - 1 - i) * 86_400_000))));
 }
 
-/** The orders of each given day (YYYY-MM-DD), in the order given. */
+/** The orders of each given day (YYYY-MM-DD), in the order given. Read a few at a time: the store limits requests per second. */
 export async function ordersOfDays(slug: string, days: string[]) {
-  return Promise.all(days.map(async (day) => ({ day, orders: (await readDay(slug, day))?.data ?? [] })));
+  const out: { day: string; orders: Order[] }[] = [];
+  for (let i = 0; i < days.length; i += 10) {
+    out.push(...(await Promise.all(days.slice(i, i + 10).map(async (day) => ({ day, orders: (await readDay(slug, day))?.data ?? [] })))));
+  }
+  return out;
 }
 
 /** Marks a Pix order paid once the provider (never the browser) has confirmed it. */

@@ -99,7 +99,7 @@ export async function summariesForDays(slug: string, count: number, now = new Da
   const missing = days.filter((d) => !docs.get(d.slice(0, 7))?.data.days[d]);
   const fresh = new Map((await ordersOfDays(slug, missing)).map(({ day, orders }) => [day, summarizeDay(day, orders, stamp, key)]));
 
-  // Guarda os dias fechados recém-resumidos. É só um atalho: se outra gravação chegou antes, fica para a próxima.
+  // Guarda os dias fechados recém-resumidos. É só um atalho: se a gravação falhar, a tela abre igual e tenta de novo na próxima.
   await Promise.all(
     months.map(async (m) => {
       const add = [...fresh.values()].filter((s) => s.day.startsWith(m) && s.day <= closed);
@@ -108,7 +108,7 @@ export async function summariesForDays(slug: string, count: number, now = new Da
       const next: MonthSummary = { version: SUMMARY_VERSION, days: { ...(doc?.data.days ?? {}) } };
       for (const s of add) next.days[s.day] = s;
       await storage().writeJSON(monthSummaryKey(slug, m), next, doc ? doc.etag : null).catch((err) => {
-        if (!(err instanceof ConflictError)) throw err;
+        if (!(err instanceof ConflictError)) console.error('resumo da inteligência não gravado', slug, m, err);
       });
     }),
   );
@@ -164,6 +164,6 @@ export async function createDemo(by: string, now = new Date()) {
     ...[...months].map(([m, doc]) => () => storage().writeJSON(monthSummaryKey(DEMO_SLUG, m), doc)),
     ...old.map((k) => () => storage().remove(k)),
   ];
-  for (let i = 0; i < writes.length; i += 25) await Promise.all(writes.slice(i, i + 25).map((w) => w()));
+  for (let i = 0; i < writes.length; i += 10) await Promise.all(writes.slice(i, i + 10).map((w) => w()));
   return { slug: DEMO_SLUG, days: days.length, orders: days.reduce((s, d) => s + d.orders.length, 0) };
 }
