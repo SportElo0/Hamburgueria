@@ -512,3 +512,120 @@ export const slidePlanV2 = ({ n, total, pill, title, lead = '', rows, featured =
         <span><span style="display:block;font-size:44px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1">${t}</span>${d ? `<span style="display:block;font-size:33px;color:#c6cede;margin-top:8px;line-height:1.25">${d}</span>` : ''}</span>
       </li>`).join('')}
     </ol>`, { n, total });
+
+// --- Serviços, third generation (29/10/2026): one composition per plan, so the swipe never repeats.
+const tag = (t, blue = false) => `<span class="pill${blue ? ' blue' : ''}" style="height:52px;font-size:24px;padding:0 22px">${t}</span>`;
+const glass = 'background:rgba(15,21,32,.82);border:1.5px solid rgba(255,255,255,.13);border-radius:30px';
+
+/** Cover: the four plans as a rising staircase (the brand is about growing). */
+export const slideStairsV2 = ({ n, total, title, sub, plans }) =>
+  slideV2(`
+    <h1 class="t-title" style="font-size:104px">${title}</h1>
+    <p class="t-lead" style="font-size:38px;margin-top:22px">${sub}</p>
+    <span class="pill blue" style="margin-top:26px;height:56px;font-size:24px">Arraste para o lado →</span>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:640px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:end">
+      ${plans.map(([name, line], i) => {
+        const top = i === plans.length - 1;
+        return `<div style="height:${280 + i * 120}px;display:flex;flex-direction:column;justify-content:flex-start;gap:12px;padding:26px 22px;border-radius:30px 30px 18px 18px;background:${top ? 'linear-gradient(180deg,#2f7bff,#0865fe 55%,#0647c4)' : `rgba(15,21,32,${0.6 + i * 0.1})`};border:1.5px solid ${top ? 'rgba(160,196,255,.8)' : 'rgba(255,255,255,.14)'};box-shadow:${top ? '0 40px 90px -30px rgba(8,101,254,1)' : 'none'}">
+          <span style="font-size:24px;font-weight:700;color:${top ? '#dbe8ff' : '#8db8ff'}">0${i + 1}</span>
+          <span style="font-size:46px;font-weight:800;letter-spacing:-.03em;color:#fff">${name}</span>
+          <span style="font-size:25px;line-height:1.25;color:${top ? '#eef4ff' : '#c6cede'}">${line}</span>
+        </div>`;
+      }).join('')}
+    </div>`, { n, total });
+
+/** Start: a concept site in a big tilted browser window, the inclusions as chips below. */
+export const slideStartV2 = ({ n, total, pill, title, img, note, chips }) =>
+  slideV2(`
+    ${tag(pill)}
+    <h2 class="t-title" style="font-size:100px;margin-top:26px">${title}</h2>
+    <div style="position:absolute;left:-30px;right:-170px;top:330px;transform:rotate(-4deg);transform-origin:left top">
+      <div class="win"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="${img}"></div>
+    </div>
+    <div style="position:absolute;right:0;top:250px">${tag(note, true)}</div>
+    <div style="position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      ${chips.map(([t, d]) => `<div style="background:#0d131e;border:1.5px solid rgba(255,255,255,.14);border-radius:30px;box-shadow:0 -20px 60px -10px rgba(2,5,15,.9);padding:24px 26px"><p style="font-size:34px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1">${t}</p><p style="font-size:26px;color:#c6cede;margin-top:6px;line-height:1.25">${d}</p></div>`).join('')}
+    </div>`, { n, total });
+
+/** Grow: an illustrative local search card on top, the promise and the inclusions below. */
+export const slideGrowV2 = ({ n, total, pill, title, query, place, lines, note }) =>
+  slideV2(`
+    <div style="position:absolute;left:0;right:0;top:0">
+      <div style="${glass};display:flex;align-items:center;gap:20px;height:96px;padding:0 32px;border-radius:999px">${icon('google', { size: 40, color: '#8db8ff', width: 1.8 })}<span style="font-size:34px;color:#e8eefa">${query}</span></div>
+      <div style="${glass};margin-top:20px;overflow:hidden">
+        <div style="height:230px;position:relative;background:linear-gradient(135deg,#132036,#0c1626);background-image:linear-gradient(rgba(255,255,255,.05) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.05) 2px,transparent 2px),linear-gradient(120deg,transparent 46%,rgba(77,141,255,.35) 47%,rgba(77,141,255,.35) 50%,transparent 51%);background-size:60px 60px,60px 60px,100% 100%">
+          <div style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:84px;height:84px;border-radius:50% 50% 50% 0;rotate:-45deg;background:#0865fe;box-shadow:0 0 0 14px rgba(8,101,254,.25),0 20px 40px -10px rgba(8,101,254,1)"></div>
+          <div style="position:absolute;left:24px;top:22px">${tag(note)}</div>
+        </div>
+        <div style="padding:28px 32px">
+          <p style="font-size:44px;font-weight:800;color:#fff;letter-spacing:-.02em">${place}</p>
+          <p style="font-size:28px;color:#6fcf8f;margin-top:6px;font-weight:600">Aberto agora <span style="color:#a9b3c7;font-weight:400">· horários, endereço e fotos</span></p>
+          <div style="display:flex;gap:12px;margin-top:22px">${['Rotas', 'Ligar', 'Site', 'WhatsApp'].map((b, i) => `<span style="height:62px;padding:0 26px;border-radius:999px;display:inline-flex;align-items:center;font-size:26px;font-weight:700;${i === 2 ? 'background:#0865fe;color:#fff' : 'color:#cfe0ff;border:1.5px solid rgba(77,141,255,.5)'}">${b}</span>`).join('')}</div>
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0">
+      ${tag(pill)}
+      <h2 class="t-title" style="font-size:96px;margin-top:22px">${title}</h2>
+      <ul style="list-style:none;margin-top:24px;display:grid;gap:10px">${lines.map((l) => `<li style="display:flex;gap:16px;align-items:center;font-size:32px;color:#dfe5f0">${icon('check', { size: 36, color: '#4d8dff', width: 2.2 })}${l}</li>`).join('')}</ul>
+    </div>`, { n, total });
+
+/** Lift: the promise on the left with the inclusions, a phone with an illustrative paid order on the right. */
+export const slideLiftV2 = ({ n, total, pill, title, rows, phone }) =>
+  slideV2(`
+    ${tag(pill)}
+    <h2 class="t-title" style="font-size:86px;margin-top:26px;max-width:470px">${title}</h2>
+    <ul style="position:absolute;left:0;bottom:0;width:470px;list-style:none;display:grid;gap:26px">
+      ${rows.map(([ic, t, d]) => `<li style="display:flex;gap:20px;align-items:flex-start">
+        <span style="flex:none;width:72px;height:72px;border-radius:22px;display:grid;place-items:center;background:rgba(8,101,254,.18);border:1.5px solid rgba(77,141,255,.45)">${icon(ic, { size: 40, color: '#8db8ff', width: 1.8 })}</span>
+        <span><span style="display:block;font-size:34px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1">${t}</span><span style="display:block;font-size:26px;color:#c6cede;margin-top:6px;line-height:1.25">${d}</span></span>
+      </li>`).join('')}
+    </ul>
+    <div style="position:absolute;right:-40px;top:70px;width:430px;height:900px;border-radius:64px;background:#0b0f17;border:10px solid #1c2433;box-shadow:0 60px 120px -40px rgba(0,0,0,.95),0 0 120px -30px rgba(8,101,254,.6);overflow:hidden;transform:rotate(4deg)">
+      <div style="padding:46px 30px">
+        <p style="font-size:22px;color:#a9b3c7;font-weight:600">${phone.store}</p>
+        <p style="font-size:38px;font-weight:800;color:#fff;margin-top:6px;letter-spacing:-.02em">Seu pedido</p>
+        <div style="margin-top:24px;display:grid;gap:14px">${phone.items.map(([q, name, price]) => `<div style="display:flex;justify-content:space-between;gap:10px;font-size:24px;color:#dfe5f0"><span>${q}× ${name}</span><span style="color:#fff;font-weight:700">${price}</span></div>`).join('')}</div>
+        <div style="margin-top:22px;padding-top:18px;border-top:1.5px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;font-size:30px;font-weight:800;color:#fff"><span>Total</span><span>${phone.total}</span></div>
+        <div style="margin-top:30px;padding:26px;border-radius:26px;background:rgba(111,207,143,.12);border:1.5px solid rgba(111,207,143,.45);text-align:center">
+          <div style="width:84px;height:84px;margin:0 auto;border-radius:50%;display:grid;place-items:center;background:#1f9d55">${icon('check', { size: 50, color: '#fff', width: 2.6 })}</div>
+          <p style="font-size:32px;font-weight:800;color:#fff;margin-top:16px">Pix aprovado</p>
+          <p style="font-size:22px;color:#c6cede;margin-top:6px">O pedido já chegou na loja</p>
+        </div>
+        <div style="margin-top:26px;padding:22px 24px;border-radius:24px;background:#0865fe;display:flex;gap:16px;align-items:center">${icon('pedido', { size: 40, color: '#fff', width: 1.8 })}<span style="font-size:24px;font-weight:700;color:#fff;line-height:1.2">Tela da loja: novo pedido ${phone.number}</span></div>
+        <p style="font-size:20px;color:#8790a6;margin-top:22px;text-align:center">${phone.note}</p>
+      </div>
+    </div>`, { n, total });
+
+/** Scale: an illustrative dashboard and an AI answer up top, the promise and four short tiles below. */
+export const slideScaleV2 = ({ n, total, pill, title, bars, channels, question, answer, note, tiles }) =>
+  slideV2(`
+    <div style="position:absolute;left:0;right:0;top:0;display:grid;grid-template-columns:1.05fr 1fr;gap:18px">
+      <div style="${glass};padding:26px 28px">
+        <p style="font-size:22px;color:#a9b3c7;font-weight:600">Vendas da semana</p>
+        <div style="height:190px;display:flex;align-items:flex-end;gap:12px;margin-top:18px">${bars.map((h, i) => `<div style="flex:1;height:${h}%;border-radius:10px 10px 4px 4px;background:${i === bars.length - 2 ? '#4d8dff' : 'rgba(77,141,255,.35)'}"></div>`).join('')}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:20px">${channels.map((c) => `<span style="font-size:20px;font-weight:600;color:#cfe0ff;padding:6px 14px;border-radius:999px;background:rgba(8,101,254,.18)">${c}</span>`).join('')}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <p style="align-self:flex-end;max-width:100%;font-size:26px;line-height:1.3;color:#fff;background:#0865fe;padding:18px 22px;border-radius:26px 26px 6px 26px">${question}</p>
+        <p style="font-size:24px;line-height:1.38;color:#e8eefa;${glass};border-radius:26px 26px 26px 6px;padding:20px 22px">${answer}</p>
+      </div>
+      <div style="position:absolute;left:0;top:-58px">${tag(note)}</div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0">
+      ${tag(pill, true)}
+      <h2 class="t-title" style="font-size:88px;margin-top:22px">${title}</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px">${tiles.map(([ic, t, d]) => `<div style="${glass};padding:22px 24px;display:flex;gap:16px;align-items:flex-start">${icon(ic, { size: 40, color: '#8db8ff', width: 1.8 })}<span><span style="display:block;font-size:30px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.1">${t}</span><span style="display:block;font-size:23px;color:#c6cede;margin-top:6px;line-height:1.25">${d}</span></span></div>`).join('')}</div>
+    </div>`, { n, total });
+
+/** Rules for every plan: four big typographic tiles, the key word huge. */
+export const slideRulesV2 = ({ n, total, pill, title, tiles }) =>
+  slideV2(`
+    ${tag(pill)}
+    <h2 class="t-title" style="font-size:100px;margin-top:26px">${title}</h2>
+    <div style="position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      ${tiles.map(([big, small], i) => `<div style="height:370px;padding:36px 32px;border-radius:36px;display:flex;flex-direction:column;justify-content:space-between;${i === 0 || i === 3 ? 'background:linear-gradient(160deg,rgba(8,101,254,.32),rgba(8,101,254,.1));border:1.5px solid rgba(77,141,255,.55)' : glass}">
+        <span style="font-size:${big.length > 6 ? 62 : 86}px;font-weight:800;letter-spacing:-.04em;line-height:.95;color:${i === 0 || i === 3 ? '#fff' : '#8db8ff'}">${big}</span>
+        <span style="font-size:29px;line-height:1.25;color:#dfe5f0">${small}</span>
+      </div>`).join('')}
+    </div>`, { n, total });
