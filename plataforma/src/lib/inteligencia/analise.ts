@@ -1,9 +1,10 @@
-import { SOLD_STATUSES, effectiveStatus, type Order, type PaymentMethod } from '../ordering';
+import { PAYMENT_METHODS } from '../ordering';
 import { unitCostOf, type CostSheet } from './custos';
+import type { DaySummary } from './resumo';
 
 /**
  * Análise de vendas e margens de uma loja. Funções puras: tudo é calculado aqui, em
- * centavos inteiros, a partir dos pedidos gravados. Nenhum número vem de IA.
+ * centavos inteiros, a partir dos resumos diários dos pedidos (ver resumo.ts). Nenhum número vem de IA.
  *
  * Regras:
  * - Conta como venda o pedido aceito pela loja (em preparo, a caminho, pronto ou entregue)
@@ -13,8 +14,6 @@ import { unitCostOf, type CostSheet } from './custos';
  *   aluguel, salários, entrega e impostos não entram.
  * - Itens sem custo informado aparecem, mas ficam fora da matriz e das margens.
  */
-
-export type DayOrders = { day: string; orders: Order[] };
 
 export const MIN_ORDERS_TO_COMPARE = 30;
 
@@ -109,13 +108,7 @@ export interface Analysis {
   feesConfirmed: boolean;
 }
 
-const TZ = 'America/Sao_Paulo';
-const hourSP = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour: '2-digit', hourCycle: 'h23' });
-
-const isSale = (o: Order, now: number) =>
-  SOLD_STATUSES.includes(effectiveStatus(o, now)) && o.payment.status !== 'devolvido' && o.payment.status !== 'devolver';
-
-function period(days: DayOrders[], now: number): Period {
+function period(days: DaySummary[]): Period {
   const p: Period = {
     from: days[0]?.day ?? '',
     to: days[days.length - 1]?.day ?? '',
@@ -132,79 +125,54 @@ function period(days: DayOrders[], now: number): Period {
     customers: 0,
     returning: 0,
   };
-  const phones = new Map<string, number>();
-  for (const { orders } of days) {
-    for (const o of orders) {
-      const status = effectiveStatus(o, now);
-      if (status === 'recusado') p.refused++;
-      if (status === 'expirado') p.abandoned++;
-      if (SOLD_STATUSES.includes(status) && (o.payment.status === 'devolvido' || o.payment.status === 'devolver')) p.refunded++;
-      if (!isSale(o, now)) continue;
-      p.orders++;
-      p.revenue += o.total;
-      p.deliveryFees += o.deliveryFee;
-      p.discounts += o.discount ?? 0;
-      p.itemsRevenue += o.total - o.deliveryFee;
-      phones.set(o.customer.phone, (phones.get(o.customer.phone) ?? 0) + 1);
-    }
+  const customers = new Map<string, number>();
+  for (const d of days) {
+    p.orders += d.orders;
+    p.revenue += d.revenue;
+    p.itemsRevenue += d.itemsRevenue;
+    p.deliveryFees += d.deliveryFees;
+    p.discounts += d.discounts;
+    p.refused += d.refused;
+    p.abandoned += d.abandoned;
+    p.refunded += d.refunded;
+    for (const [code, n] of Object.entries(d.customers)) customers.set(code, (customers.get(code) ?? 0) + n);
   }
   p.average = p.orders ? Math.round(p.revenue / p.orders) : 0;
-  p.customers = phones.size;
-  p.returning = [...phones.values()].filter((n) => n > 1).length;
+  p.customers = customers.size;
+  p.returning = [...customers.values()].filter((n) => n > 1).length;
   return p;
 }
 
 const change = (now: number, before: number) => (before > 0 ? (now - before) / before : null);
 
-/**
- * Receita de cada linha com o desconto do pedido rateado pelo valor dos itens.
- * O desconto de "entrega grátis" também é rateado: o painel não guarda o tipo do cupom no pedido.
- */
-function lineRevenues(o: Order): number[] {
-  const subtotal = o.lines.reduce((s, l) => s + l.total, 0);
-  const discount = Math.min(o.discount ?? 0, subtotal);
-  if (!discount || !subtotal) return o.lines.map((l) => l.total);
-  let given = 0;
-  return o.lines.map((l, i) => {
-    const share = i === o.lines.length - 1 ? discount - given : Math.round((discount * l.total) / subtotal);
-    given += share;
-    return l.total - share;
-  });
-}
-
 export function analyze(input: {
-  current: DayOrders[];
-  previous: DayOrders[];
+  current: DaySummary[];
+  previous: DaySummary[];
   sheet: CostSheet;
   /** Categoria de cada produto no cardápio atual; sem ela, tudo vira uma categoria só. */
   categoryOf?: (productId: string) => string | undefined;
-  now?: number;
 }): Analysis {
-  const now = input.now ?? Date.now();
   const { sheet } = input;
-  const current = period(input.current, now);
-  const previous = period(input.previous, now);
+  const current = period(input.current);
+  const previous = period(input.previous);
 
   const rows = new Map<string, { name: string; quantity: number; revenue: number; fees: number }>();
   const byHour = Array.from({ length: 24 }, () => 0);
   const byWeekday = Array.from({ length: 7 }, () => 0);
 
-  for (const { day, orders } of input.current) {
-    const weekday = new Date(`${day}T12:00:00Z`).getUTCDay();
-    for (const o of orders) {
-      if (!isSale(o, now)) continue;
-      byHour[Number(hourSP.format(new Date(o.createdAt))) % 24]++;
-      byWeekday[weekday]++;
-      const rate = (sheet.fees[o.payment.method as PaymentMethod] ?? 0) / 10_000;
-      const revenues = lineRevenues(o);
-      o.lines.forEach((l, i) => {
-        const row = rows.get(l.productId) ?? { name: l.name, quantity: 0, revenue: 0, fees: 0 };
-        row.name = l.name;
-        row.quantity += l.quantity;
-        row.revenue += revenues[i];
-        row.fees += Math.round(revenues[i] * rate);
-        rows.set(l.productId, row);
-      });
+  for (const d of input.current) {
+    byWeekday[new Date(`${d.day}T12:00:00Z`).getUTCDay()] += d.orders;
+    d.byHour.forEach((n, h) => (byHour[h] += n));
+    for (const [productId, p] of Object.entries(d.products)) {
+      const row = rows.get(productId) ?? { name: p.name, quantity: 0, revenue: 0, fees: 0 };
+      row.name = p.name;
+      row.quantity += p.quantity;
+      for (const method of PAYMENT_METHODS) {
+        const revenue = p.revenue[method] ?? 0;
+        row.revenue += revenue;
+        row.fees += Math.round((revenue * (sheet.fees[method] ?? 0)) / 10_000);
+      }
+      rows.set(productId, row);
     }
   }
 

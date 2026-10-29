@@ -30,6 +30,12 @@ Aba **Inteligência** do painel (`/painel/inteligencia`). Só a equipe da Growli
 
 - `inteligencia/<slug>/custos.json`: ficha de custos.
 - `inteligencia/<slug>/decisoes.json`: decisão sobre cada recomendação (id estável = regra + produto).
+- `inteligencia/<slug>/resumo/<AAAA-MM>.json`: resumo de cada dia fechado do mês (até anteontem): totais, itens por
+  meio de pagamento, pedidos por hora e um código por cliente (HMAC do telefone com chave derivada do `SESSION_SECRET`
+  e da loja; sem nome nem telefone, mas ainda é dado pessoal). A análise de 90 dias lê
+  uns 7 resumos em vez de 180 arquivos de pedidos; hoje e ontem vêm sempre dos pedidos. Os custos não ficam no resumo,
+  então mudar um custo vale na hora. Se um pedido de um dia fechado muda (devolução, status), `orders.ts` esvazia o
+  resumo daquele mês e ele é refeito na próxima abertura. A demonstração já é criada com os resumos prontos.
 
 ## Próximas fases (não feitas)
 

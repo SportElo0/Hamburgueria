@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -10,6 +10,7 @@ import { ActionError, OrderError, applyAction, getOperation, getOrder, listOrder
 import { authenticateOperator, removeOperator, upsertOperator } from '@/lib/operators';
 import { listCustomers, setOptOut } from '@/lib/customers';
 import { addSubscriber } from '@/lib/subscribers';
+import { summariesForDays } from '@/lib/inteligencia/dados';
 
 const SLUG = 'el-patron-burger';
 const ORIGIN = 'https://painel.example';
@@ -351,5 +352,32 @@ describe('lista de ofertas pelo site', () => {
     await setOptOut(SLUG, '11966665555', true);
     await addSubscriber(SLUG, { name: 'Duda', phone: '11966665555', consent: true });
     expect((await listCustomers(SLUG))[0]).toMatchObject({ optIn: false, optedOut: true });
+  });
+});
+
+describe('resumo mensal da análise', () => {
+  afterEach(() => vi.useRealTimers());
+
+  it('guarda os dias fechados e refaz o mês quando um pedido antigo muda', async () => {
+    const now = new Date();
+    await publishStore(elPatron());
+    await setOpen(SLUG, true, 'teste');
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date(now.getTime() - 3 * 86_400_000));
+    const { order } = await placeOrder(SLUG, base({ payment: 'dinheiro' }), ORIGIN);
+    vi.useRealTimers();
+
+    const before = await summariesForDays(SLUG, 7, now);
+    expect(before.map((d) => d.orders)).toEqual([0, 0, 0, 0, 0, 0, 0]); // ainda não aceito: não é venda
+    const day = before[3].day;
+    const monthKey = `inteligencia/${SLUG}/resumo/${day.slice(0, 7)}.json`;
+    expect((await storage().readJSON<{ days: Record<string, unknown> }>(monthKey))!.data.days[day]).toBeTruthy();
+
+    await applyAction(SLUG, order.id, 'aceitar', 'caixa');
+    expect((await storage().readJSON<{ days: Record<string, unknown> }>(monthKey))!.data.days).toEqual({});
+    const after = await summariesForDays(SLUG, 7, now);
+    expect(after[3]).toMatchObject({ day, orders: 1, revenue: order.total });
+    // O resumo não guarda nome nem telefone do cliente.
+    expect(JSON.stringify(await storage().readJSON(monthKey))).not.toMatch(/Ana|98888/);
   });
 });

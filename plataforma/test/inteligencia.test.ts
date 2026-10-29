@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { analyze, simulatePrice } from '@/lib/inteligencia/analise';
+import { analyze as analyzeSummaries, simulatePrice } from '@/lib/inteligencia/analise';
+import { summarize, type DayOrders } from '@/lib/inteligencia/resumo';
 import { costSheetSchema, EMPTY_COST_SHEET, unitCostOf, type CostSheet } from '@/lib/inteligencia/custos';
 import { recommend } from '@/lib/inteligencia/recomendacoes';
 import { demoCostSheet, demoOrders, demoStore } from '@/lib/inteligencia/demo';
 import type { Order } from '@/lib/ordering';
 
 const NOW = Date.parse('2026-10-28T20:00:00Z');
+
+/** A análise lê resumos diários; os testes montam pedidos e resumem como o painel faz. */
+const analyze = ({ current, previous, now, ...rest }: Omit<Parameters<typeof analyzeSummaries>[0], 'current' | 'previous'> & { current: DayOrders[]; previous: DayOrders[]; now: number }) =>
+  analyzeSummaries({ ...rest, current: summarize(current, now, 'teste'), previous: summarize(previous, now, 'teste') });
 
 function order(partial: Partial<Order> & { lines: Order['lines'] }): Order {
   const subtotal = partial.lines.reduce((s, l) => s + l.total, 0);

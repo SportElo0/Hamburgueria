@@ -3,6 +3,7 @@ import { take } from './limits';
 import { ZodError } from 'zod';
 import { storage, ConflictError } from './storage';
 import { getPublished } from './stores';
+import { SUMMARY_VERSION, monthSummaryKey, type MonthSummary } from './inteligencia/resumo';
 import { checkCharge, createCharge, lookupMercadoPago, PixError, refundCharge, type PaymentCheck } from './pix';
 import {
   OPEN_STATUSES,
@@ -23,12 +24,14 @@ import {
  * Layout in storage:
  *   pedidos/<slug>/<YYYY-MM-DD>.json   that day's orders (Order[]), São Paulo calendar day
  *   lojas/<slug>/operacao.json         live switches the store flips during service (open/closed)
+ *   inteligencia/<slug>/resumo/<YYYY-MM>.json  closed days already summarised for the analysis;
+ *                                      a write to a day older than yesterday empties that month's copy
  * One document per day keeps the store's polling to a single read; every write carries the etag
  * it read and retries on a conflict, so two orders arriving together both land.
  */
 
 const TZ = 'America/Sao_Paulo';
-const dayOf = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+export const dayOf = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 const dayKey = (slug: string, day: string) => `pedidos/${slug}/${day}.json`;
 const opKey = (slug: string) => `lojas/${slug}/operacao.json`;
 const ORDER_ID = /^(\d{4})(\d{2})(\d{2})-[a-z0-9]{10}$/;
@@ -109,6 +112,17 @@ async function writeDay<R>(slug: string, day: string, fn: (orders: Order[]) => {
     const { orders, result } = fn(doc?.data ?? []);
     try {
       await storage().writeJSON(dayKey(slug, day), orders, doc ? doc.etag : null);
+      // A late change (refund, status) to a closed day: empty that month's summary so the next read rebuilds it.
+      // Overwriting (not deleting) also makes a rebuild already in flight fail its etag check instead of saving old numbers.
+      // The order is already saved, so a failure here must not fail the action.
+      if (day < dayOf(new Date(Date.now() - 86_400_000))) {
+        const key = monthSummaryKey(slug, day.slice(0, 7));
+        const empty: MonthSummary = { version: SUMMARY_VERSION, days: {} };
+        await storage()
+          .writeJSON(key, empty)
+          .catch(() => storage().writeJSON(key, empty))
+          .catch((err) => console.error('resumo da inteligência não esvaziado', slug, day, err));
+      }
       return result;
     } catch (err) {
       if (!(err instanceof ConflictError) || attempt === 5) throw err;
@@ -249,7 +263,11 @@ export async function listOrders(slug: string, now = new Date()): Promise<Order[
 
 /** The last `count` days of orders, oldest first, for the sales report. */
 export async function ordersForDays(slug: string, count: number, now = new Date()) {
-  const days = Array.from({ length: count }, (_, i) => dayOf(new Date(now.getTime() - (count - 1 - i) * 86_400_000)));
+  return ordersOfDays(slug, Array.from({ length: count }, (_, i) => dayOf(new Date(now.getTime() - (count - 1 - i) * 86_400_000))));
+}
+
+/** The orders of each given day (YYYY-MM-DD), in the order given. */
+export async function ordersOfDays(slug: string, days: string[]) {
   return Promise.all(days.map(async (day) => ({ day, orders: (await readDay(slug, day))?.data ?? [] })));
 }
 
