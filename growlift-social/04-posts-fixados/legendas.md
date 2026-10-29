@@ -52,28 +52,36 @@ Quer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.
 
 **Texto alternativo da 1ª imagem**: Capa com a tela de um site conceito de hamburgueria e o texto "Ideias que viram experiências digitais".
 
-## 3 · Serviços (6 imagens)
+## 3 · Serviços (7 imagens)
+
+**Não postar ainda.** A revisão legal de 29/10/2026 só libera o post quando o Scale estiver:
+1. **funcionando**, testado com um restaurante-piloto: fechamento do dia, importação dos relatórios e a IA respondendo com os números da loja;
+2. **no site** (seção Planos), com preço final, o que inclui, fidelidade, desistência em 7 dias e o aviso de que a IA pode errar;
+3. **no contrato** e na **política de privacidade** (dados importados e o provedor de IA).
+
+Depois disso, rodar de novo o `revisor-legal` no texto final. Até lá, os planos ficam no site e no destaque Serviços. Se quiserem postar antes, a saída é a versão só com Start, Grow e Lift.
 
 **Legenda**
 
 ```
 Sua marca merece mais. 🚀
 
-São três planos, com mensalidade fixa e nenhuma comissão por pedido:
+São quatro planos, com mensalidade fixa e nenhuma comissão por pedido:
 • Start: seu site no ar, com domínio e hospedagem por nossa conta.
 • Grow: tudo do Start e o seu negócio preparado para ser achado no Google.
 • Lift: tudo do Grow e pedido com Pix direto no seu site.
+• Scale: tudo do Lift, fechamento do dia com balcão, delivery e telefone, perguntas respondidas por IA com os números da sua loja e uma revisão por mês com a gente.
 
-Valores, fidelidade e condições estão no site e no contrato, apresentados antes de você assinar.
+Valores, fidelidade e condições estão no site e no contrato, apresentados antes de você assinar. SEO e Perfil no Google ajudam quem procura a achar você, mas ninguém garante posição no Google.
 
 Conte como está o seu negócio e a gente indica o plano que faz sentido. Link na bio.
 
 #growlift #criacaodesites #marketingdigital #googlemeunegocio #cardapiodigital #pequenosnegocios
 ```
 
-**Texto alternativo da 1ª imagem**: Capa com o texto "Sua marca merece mais" e os três planos da Growlift: Start, Grow e Lift.
+**Texto alternativo da 1ª imagem**: Capa com o texto "Sua marca merece mais" e os quatro planos da Growlift: Start, Grow, Lift e Scale.
 
-Refeito em 29/10/2026 no mesmo estilo de Quem somos e Portfólio (cartões grandes, logo de vidro no fim). Cada linha confere com os planos do site.
+Refeito em 29/10/2026 no mesmo estilo de Quem somos e Portfólio (cartões grandes, logo de vidro no fim). Start, Grow e Lift conferem com os planos do site; o Scale segue o modelo da Intelligence aprovado em 29/10/2026 e precisa entrar no site antes do post.
 
 ## O que foi evitado de propósito
 

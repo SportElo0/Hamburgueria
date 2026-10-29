@@ -22,6 +22,8 @@ export const MARK = `<svg viewBox="50 40 530 415" xmlns="http://www.w3.org/2000/
 
 // Line icons on a 24 grid, drawn for this set so stroke and corners match.
 export const ICONS = {
+  grafico: '<path d="M3 20.5h18"/><path d="M6 16.5v-4M10.5 16.5v-8M15 16.5v-6M19.5 16.5V4.5"/>',
+  calendario: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="m9 15 2 2 4-4"/>',
   projetos: '<rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/><path d="M6 7.5h5.5v5.5H6z"/><path d="M14 8h4M14 10.75h4M14 13.5h2.5"/>',
   servicos: '<path d="M12 3 2.5 8 12 13l9.5-5L12 3z"/><path d="m2.5 12.5 9.5 5 9.5-5"/><path d="m2.5 16.5 9.5 5 9.5-5"/>',
   clientes: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.3-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="m17.5 4 .9 1.9 2.1.3-1.5 1.5.4 2.1-1.9-1-1.9 1 .4-2.1-1.5-1.5 2.1-.3z"/>',
@@ -491,9 +493,9 @@ export const slidePlansCoverV2 = ({ n, total, title, sub, plans }) =>
     <h1 class="t-title" style="font-size:108px">${title}</h1>
     <p class="t-lead" style="font-size:40px;margin-top:26px">${sub}</p>
     <ol style="position:absolute;left:0;right:0;bottom:118px;list-style:none;display:grid;gap:20px">
-      ${plans.map(([name, tag], i) => `<li style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px 36px;border-radius:34px;background:${i === 2 ? 'rgba(8,101,254,.26)' : 'rgba(15,21,32,.78)'};border:1.5px solid ${i === 2 ? 'rgba(77,141,255,.75)' : 'rgba(255,255,255,.13)'};box-shadow:${i === 2 ? '0 30px 80px -30px rgba(8,101,254,.95)' : 'none'}">
+      ${plans.map(([name, tag], i) => `<li style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px 36px;border-radius:34px;background:${i === plans.length - 1 ? 'rgba(8,101,254,.26)' : 'rgba(15,21,32,.78)'};border:1.5px solid ${i === plans.length - 1 ? 'rgba(77,141,255,.75)' : 'rgba(255,255,255,.13)'};box-shadow:${i === plans.length - 1 ? '0 30px 80px -30px rgba(8,101,254,.95)' : 'none'}">
         <span style="font-size:54px;font-weight:800;letter-spacing:-.02em;color:#fff">${name}</span>
-        <span style="font-size:36px;font-weight:600;color:${i === 2 ? '#e8efff' : TOKENS.blueSoft}">${tag}</span>
+        <span style="font-size:36px;font-weight:600;color:${i === plans.length - 1 ? '#e8efff' : TOKENS.blueSoft}">${tag}</span>
       </li>`).join('')}
     </ol>
     <span class="pill blue" style="position:absolute;left:0;bottom:0">Arraste para o lado →</span>`, { n, total });
