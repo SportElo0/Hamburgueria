@@ -193,6 +193,8 @@
 
   // Phone mask: (11) 90000-0000
   const phone = document.getElementById('f-zap');
+  // The English page has no form: everything below is the diagnosis form.
+  if (!phone) return;
   phone.addEventListener('input', () => {
     const d = phone.value.replace(/\D/g, '').slice(0, 11);
     phone.value =

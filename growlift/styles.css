@@ -71,6 +71,9 @@ section { position: relative; }
 @media (max-width: 480px) { .top .logo-word { display: none; } }
 @media (max-width: 420px) { .nav .btn { padding: 0 16px; font-size: 14px; } .logo { font-size: 18px; } }
 @media (max-width: 860px) { .nav a:not(.btn) { display: none; } }
+/* Language switch: a small pill, kept on phones too (international leads open the site on a phone). */
+.nav a.lang { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text); font-size: 13px; font-weight: 700; letter-spacing: .06em; }
+.nav a.lang:hover { border-color: rgba(255,255,255,.4); }
 
 /* Hero */
 .hero { min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 120px 0 80px; }
