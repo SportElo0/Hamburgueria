@@ -247,6 +247,34 @@ export function OnlineOrdersPanel(props: {
       </section>
 
       <section className="card space-y-4 p-5">
+        <h2 className="text-lg font-bold">Pedido na mesa (QR)</h2>
+        <p className="text-sm text-ink-mute">
+          Cada mesa ganha um QR Code: o cliente pede pelo celular, chama o garçom e pede a conta. O garçom confirma o primeiro pedido de cada mesa no celular dele (tela Salão). Salve e <strong>publique</strong> para valer.
+        </p>
+        <Check id="mesas" label="Receber pedidos pela mesa" checked={o.tables.enabled} onChange={(v) => set('tables', { ...o.tables, enabled: v })} help="Precisa de “Receber pedidos pelo site” ligado." />
+        <div>
+          <label htmlFor="mesas-n" className="label">
+            Quantas mesas
+          </label>
+          <input
+            id="mesas-n"
+            className="field w-32"
+            inputMode="numeric"
+            value={o.tables.count}
+            onChange={(e) => set('tables', { ...o.tables, count: Math.max(1, Math.min(200, Number(e.target.value.replace(/\D/g, '')) || 1)) })}
+          />
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <a href={`${props.ordersUrl}/salao`} className="btn-primary w-full" target="_blank" rel="noreferrer">
+            Tela do salão (garçom)
+          </a>
+          <a href={`${props.ordersUrl}/mesas`} className="btn-ghost w-full" target="_blank" rel="noreferrer">
+            QR Codes para imprimir
+          </a>
+        </div>
+      </section>
+
+      <section className="card space-y-4 p-5">
         <h2 className="text-lg font-bold">Bairros e taxa de entrega</h2>
         <p className="text-sm text-ink-mute">Sem bairros cadastrados, a taxa fica “a combinar” e o Pix pelo site não aparece para entrega.</p>
         <ul className="divide-y divide-line rounded-lg border border-line">

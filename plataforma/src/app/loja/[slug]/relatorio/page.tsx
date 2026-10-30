@@ -15,7 +15,7 @@ const PERIODS = [
 ];
 
 const PAYMENT_LABEL = { pix: 'Pix', cartao: 'Cartão', dinheiro: 'Dinheiro' } as const;
-const MODE_LABEL = { entrega: 'Entrega', retirada: 'Retirada' } as const;
+const MODE_LABEL = { entrega: 'Entrega', retirada: 'Retirada', mesa: 'Mesa' } as const;
 const pct = (part: number, whole: number) => (whole ? `${Math.round((part / whole) * 100)}%` : '–');
 const shortDay = (day: string) => {
   const [, m, d] = day.split('-');
@@ -92,7 +92,7 @@ export default async function ReportPage({ params, searchParams }: { params: Pro
               </section>
               <div className="space-y-4">
                 <Split title="Forma de pagamento" rows={Object.entries(r.byPayment).map(([k, t]) => ({ label: PAYMENT_LABEL[k as keyof typeof PAYMENT_LABEL], ...t }))} total={r.orders} />
-                <Split title="Entrega ou retirada" rows={Object.entries(r.byMode).map(([k, t]) => ({ label: MODE_LABEL[k as keyof typeof MODE_LABEL], ...t }))} total={r.orders} />
+                <Split title="Entrega, retirada ou mesa" rows={Object.entries(r.byMode).map(([k, t]) => ({ label: MODE_LABEL[k as keyof typeof MODE_LABEL], ...t }))} total={r.orders} />
                 <HoursChart r={r} />
                 <section className="card p-5">
                   <h2 className="font-bold">Cupons</h2>

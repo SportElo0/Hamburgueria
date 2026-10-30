@@ -54,7 +54,8 @@ export function customersFrom(days: { orders: Order[] }[], optOuts: readonly str
   for (const { orders } of days) {
     for (const o of [...orders].sort((a, b) => a.createdAt.localeCompare(b.createdAt))) {
       const status = effectiveStatus(o, now);
-      if (status === 'expirado') continue;
+      // Expired Pix and table orders (no phone) are not customers to contact.
+      if (status === 'expirado' || !o.customer.phone) continue;
       const c = byPhone.get(o.customer.phone) ?? {
         phone: o.customer.phone,
         name: o.customer.name,

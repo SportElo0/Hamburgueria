@@ -26,6 +26,7 @@ export default async function StoreOrdersPage({ params }: { params: Promise<{ sl
       enabled={ordering.enabled}
       userName={user.name || user.email}
       team={isTeam(user)}
+      tables={ordering.enabled && ordering.tables.enabled}
       menu={menu}
       logout={logout}
     />

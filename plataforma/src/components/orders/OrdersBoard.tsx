@@ -18,11 +18,12 @@ const COLUMNS: { id: Column; label: string; statuses: OrderStatus[] }[] = [
   { id: 'finalizados', label: 'Finalizados', statuses: ['concluido', 'recusado', 'expirado'] },
 ];
 
+const MODE_CHIP = { entrega: 'Entrega', retirada: 'Retirada', mesa: 'Salão' } as const;
 const time = (iso: string) => new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
 const phoneLabel = (p: string) => (p.length === 11 ? `(${p.slice(0, 2)}) ${p.slice(2, 7)}-${p.slice(7)}` : `(${p.slice(0, 2)}) ${p.slice(2, 6)}-${p.slice(6)}`);
 
-/** Two short tones; an AudioContext needs one tap on the page before it may play. */
-function useBell() {
+/** Two short tones; an AudioContext needs one tap on the page before it may play. The floor screen uses it too. */
+export function useBell() {
   const ctx = useRef<AudioContext | null>(null);
   const [armed, setArmed] = useState(false);
   const arm = useCallback(() => {
@@ -60,6 +61,8 @@ export function OrdersBoard(props: {
   enabled: boolean;
   userName: string;
   team: boolean;
+  /** Ordering at the table is on: link to the waiter's floor screen. */
+  tables: boolean;
   menu: MenuForStaff[];
   logout: () => Promise<void>;
 }) {
@@ -174,6 +177,11 @@ export function OrdersBoard(props: {
             <button type="button" onClick={() => setMenuOpen(true)} className="btn-ghost min-h-11">
               Esgotados{operation?.soldOut.length ? ` (${operation.soldOut.length})` : ''}
             </button>
+            {props.tables && (
+              <a href={`/loja/${props.slug}/salao`} className="btn-ghost min-h-11">
+                Salão
+              </a>
+            )}
             <a href={`/loja/${props.slug}/relatorio`} className="btn-ghost min-h-11">
               Relatório
             </a>
@@ -251,8 +259,13 @@ export function OrdersBoard(props: {
   );
 }
 
+const METHOD_LABEL = { pix: 'Pix', cartao: 'Cartão', dinheiro: 'Dinheiro' } as const;
+
 function PaymentBadge({ o }: { o: StaffOrder }) {
   const { method, status, changeFor } = o.payment;
+  if (o.mode === 'mesa') {
+    return <span className="chip bg-accent-soft text-accent">{status === 'pago' ? `Pago na mesa · ${METHOD_LABEL[method]}` : 'Paga ao fechar a mesa'}</span>;
+  }
   if (method === 'pix') {
     const map = {
       pago: ['Pix pago', 'bg-ok text-white'],
@@ -260,6 +273,7 @@ function PaymentBadge({ o }: { o: StaffOrder }) {
       devolver: ['Pix: devolver valor', 'bg-bad text-white'],
       devolvido: ['Pix devolvido', 'bg-line text-ink'],
       'na-entrega': ['Pix', 'bg-line text-ink'],
+      'na-mesa': ['Pix', 'bg-line text-ink'],
     } as const;
     const [label, cls] = map[status];
     return <span className={`chip ${cls}`}>{label}{o.payment.pixProvider === 'demo' ? ' (teste)' : ''}</span>;
@@ -314,6 +328,7 @@ function SoldOutSheet({ menu, soldOut, onToggle, onClose }: { menu: MenuForStaff
 
 /** Pre-written WhatsApp message for the order's current step. */
 function notifyText(o: StaffOrder, storeName: string) {
+  if (!o.customer.phone) return null;
   const first = o.customer.name.split(' ')[0];
   const by = {
     preparo: `seu pedido #${o.number} foi aceito e já está sendo preparado. 🔥`,
@@ -344,6 +359,9 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
       </div>
       <div className="space-y-3 px-4 py-3 text-sm">
         {o.status === 'aguardando-pix' && <p className="rounded-lg bg-line px-3 py-2 font-semibold">Não prepare ainda: o cliente não pagou o Pix. Ele entra em Novos quando o pagamento cair.</p>}
+        {o.mode === 'mesa' ? (
+          <p className="text-2xl font-black tracking-tight">Mesa {o.table?.number}</p>
+        ) : (
         <div>
           <p className="text-[15px] font-bold">{o.customer.name}</p>
           <p className="flex flex-wrap gap-x-3">
@@ -355,8 +373,9 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
             </a>
           </p>
         </div>
+        )}
         <div className="flex flex-wrap gap-1.5">
-          <span className={`chip ${o.mode === 'entrega' ? 'bg-ink text-white' : 'bg-line text-ink'}`}>{o.mode === 'entrega' ? 'Entrega' : 'Retirada'}</span>
+          <span className={`chip ${o.mode === 'entrega' ? 'bg-ink text-white' : o.mode === 'mesa' ? 'bg-accent text-white' : 'bg-line text-ink'}`}>{MODE_CHIP[o.mode]}</span>
           <PaymentBadge o={o} />
         </div>
         {o.address && (
@@ -447,12 +466,12 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
             )}
             {o.status === 'preparo' && (
               <button type="button" className="btn-primary min-h-12 basis-full text-base" onClick={() => onAction(o, 'despachar')}>
-                {o.mode === 'entrega' ? 'Saiu para entrega' : 'Pronto para retirada'}
+                {o.mode === 'entrega' ? 'Saiu para entrega' : o.mode === 'mesa' ? 'Pronto para levar à mesa' : 'Pronto para retirada'}
               </button>
             )}
             {(o.status === 'saiu' || o.status === 'pronto') && (
               <button type="button" className="btn-primary min-h-12 basis-full text-base" onClick={() => onAction(o, 'concluir')}>
-                {o.mode === 'entrega' ? 'Entregue' : 'Retirado'}
+                {o.mode === 'entrega' ? 'Entregue' : o.mode === 'mesa' ? 'Entregue na mesa' : 'Retirado'}
               </button>
             )}
             {['novo', 'preparo', 'aguardando-pix'].includes(o.status) && (
@@ -478,12 +497,18 @@ function Ticket({ order: o, storeName }: { order: StaffOrder; storeName: string 
       <p style={{ textAlign: 'center', fontSize: '20px', fontWeight: 800 }}>PEDIDO #{o.number}</p>
       <p style={{ textAlign: 'center' }}>{new Date(o.createdAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}</p>
       <hr />
-      <p>
-        <strong>{o.customer.name}</strong> · {phoneLabel(o.customer.phone)}
-      </p>
-      <p>
-        <strong>{o.mode === 'entrega' ? 'ENTREGA' : 'RETIRADA'}</strong>
-      </p>
+      {o.mode === 'mesa' ? (
+        <p style={{ fontSize: '20px', fontWeight: 800 }}>MESA {o.table?.number}</p>
+      ) : (
+        <>
+          <p>
+            <strong>{o.customer.name}</strong> · {phoneLabel(o.customer.phone)}
+          </p>
+          <p>
+            <strong>{o.mode === 'entrega' ? 'ENTREGA' : 'RETIRADA'}</strong>
+          </p>
+        </>
+      )}
       {o.address && (
         <p>
           {o.address.area && `${o.address.area}: `}
@@ -513,7 +538,9 @@ function Ticket({ order: o, storeName }: { order: StaffOrder; storeName: string 
       <p style={{ fontSize: '16px', fontWeight: 800 }}>TOTAL: {brl(o.total)}</p>
       <p>
         Pagamento:{' '}
-        {o.payment.method === 'pix'
+        {o.mode === 'mesa'
+          ? 'NA MESA'
+          : o.payment.method === 'pix'
           ? o.payment.status === 'pago'
             ? 'PIX PAGO'
             : 'PIX (não confirmado)'

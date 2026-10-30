@@ -12,7 +12,9 @@ import {
   nextStatus,
   orderInputSchema,
   orderingOf,
+  priceLines,
   priceOrder,
+  tableOrderInputSchema,
   withSoldOut,
   publicOrder,
   type OperatorAction,
@@ -247,6 +249,91 @@ export async function placeOrder(slug: string, raw: unknown, origin: string, now
     return { orders: [...orders, created], result: created };
   });
   return { order, token };
+}
+
+/**
+ * A table's order. Who may send it (a phone that joined the table) is checked in mesas.ts. The first
+ * order of a seating the waiter has not confirmed yet waits as `aguardando-garcom`, out of the kitchen.
+ */
+export async function placeTableOrder(
+  slug: string,
+  table: { number: number; session: string; confirmed: boolean },
+  raw: unknown,
+  device: string,
+  now = new Date(),
+): Promise<Order> {
+  const record = await getPublished(slug);
+  if (!record) throw new OrderError('Loja não encontrada.');
+  const operation = await getOperation(slug);
+  const store = withSoldOut(record.store, operation.soldOut);
+  const ordering = orderingOf(store);
+  if (!ordering.enabled || !ordering.tables.enabled) throw new OrderError('Este restaurante não está recebendo pedidos pela mesa.');
+  if (!operation.open) throw new OrderError('A cozinha está fechada agora. Chame o garçom.');
+  const parsed = tableOrderInputSchema.safeParse(raw);
+  if (!parsed.success) throw new OrderError(messageOf(parsed.error));
+  const lines = priceLines(store, parsed.data.items);
+  const subtotal = lines.reduce((sum, l) => sum + l.total, 0);
+
+  const day = dayOf(now);
+  if (!(await take(`mesa-pedidos-${slug}`, device, 40, day))) throw new OrderError('Muitos pedidos deste celular hoje. Chame o garçom.');
+  const at = now.toISOString();
+  const status: OrderStatus = table.confirmed ? 'novo' : 'aguardando-garcom';
+  const base: Omit<Order, 'number'> = {
+    id: `${day.replace(/-/g, '')}-${random(10)}`,
+    tokenHash: '',
+    createdAt: at,
+    updatedAt: at,
+    status,
+    history: [{ status, at, by: `mesa ${table.number}` }],
+    customer: { name: `Mesa ${table.number}`, phone: '', email: '' },
+    mode: 'mesa',
+    address: null,
+    table: { number: table.number, session: table.session },
+    payment: { method: 'cartao', status: 'na-mesa', changeFor: null, pix: null, paidAt: null },
+    lines,
+    subtotal,
+    deliveryFee: 0,
+    feePending: false,
+    discount: 0,
+    coupon: '',
+    total: subtotal,
+    note: '',
+    reason: '',
+  };
+  return writeDay(slug, day, (orders) => {
+    if (orders.length >= MAX_PER_DAY) throw new OrderError('A cozinha não está aceitando mais pedidos hoje. Chame o garçom.');
+    const created: Order = { ...base, number: orders.length + 1 };
+    return { orders: [...orders, created], result: created };
+  });
+}
+
+/** The days a seating can span: today and yesterday (service runs past midnight). */
+export const tableDays = (now: Date) => [dayOf(new Date(now.getTime() - 86_400_000)), dayOf(now)];
+
+/** Every order of one seating, oldest first. */
+export async function tableOrders(slug: string, session: string, now = new Date()): Promise<Order[]> {
+  const docs = await Promise.all(tableDays(now).map((day) => readDay(slug, day)));
+  return docs.flatMap((d) => (d?.data ?? []).filter((o) => o.table?.session === session));
+}
+
+/** Applies `fn` to every order of a seating; `fn` returns null to leave one untouched. Returns the seating's orders after. */
+export async function updateTableOrders(slug: string, session: string, fn: (o: Order) => Order | null, now = new Date()): Promise<Order[]> {
+  const out: Order[] = [];
+  for (const day of tableDays(now)) {
+    const doc = await readDay(slug, day);
+    if (!doc?.data.some((o) => o.table?.session === session)) continue;
+    const at = new Date().toISOString();
+    const result = await writeDay(slug, day, (orders) => {
+      const next = orders.map((o) => {
+        if (o.table?.session !== session) return o;
+        const changed = fn(o);
+        return changed ? { ...changed, updatedAt: at } : o;
+      });
+      return { orders: next, result: next.filter((o) => o.table?.session === session) };
+    });
+    out.push(...result);
+  }
+  return out;
 }
 
 /** Today's orders plus yesterday's still-open ones (service runs past midnight). Newest first. */

@@ -36,6 +36,9 @@
   html, body { background: #fff; }
   .ticket { width: 74mm; font: 12px/1.35 ui-monospace, Menlo, Consolas, monospace; color: #000; }
   .ticket hr { border: 0; border-top: 1px dashed #000; margin: 6px 0; }
+  /* The tables' QR sheet prints on A4, not on the ticket printer's roll. */
+  @page qr-sheet { size: A4; margin: 10mm; }
+  .qr-sheet { page: qr-sheet; }
 }
 
 /* Conteúdos: docs rendered from growlift-social's Markdown (scripts/conteudos.mjs). */

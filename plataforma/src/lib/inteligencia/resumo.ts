@@ -106,8 +106,11 @@ export function summarizeDay(day: string, orders: Order[], now: number, key: str
     s.deliveryFees += o.deliveryFee;
     s.discounts += o.discount ?? 0;
     s.itemsRevenue += o.total - o.deliveryFee;
-    const code = customerCode(o.customer.phone, key);
-    s.customers[code] = (s.customers[code] ?? 0) + 1;
+    // Table orders have no phone: they count as sales, not as a customer.
+    if (o.customer.phone) {
+      const code = customerCode(o.customer.phone, key);
+      s.customers[code] = (s.customers[code] ?? 0) + 1;
+    }
     s.byHour[Number(hourSP.format(new Date(o.createdAt))) % 24]++;
     const method: PaymentMethod = PAYMENT_METHODS.includes(o.payment.method) ? o.payment.method : 'dinheiro';
     const revenues = lineRevenues(o);

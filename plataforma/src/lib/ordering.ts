@@ -57,6 +57,8 @@ export const orderingSchema = z.object({
   /** `demo` makes a practice Pix that the tracking page can mark as paid; nothing is charged. */
   pixMode: z.enum(PIX_MODES),
   coupons: z.array(couponSchema).max(50).default([]),
+  /** Ordering at the table: each table has a QR code; the waiter confirms each table's first order. */
+  tables: z.object({ enabled: z.boolean(), count: z.number().int().min(1).max(200) }).default({ enabled: false, count: 10 }),
 });
 export type Ordering = z.infer<typeof orderingSchema>;
 
@@ -72,6 +74,7 @@ export const DEFAULT_ORDERING: Ordering = {
   cash: true,
   pixMode: 'demo',
   coupons: [],
+  tables: { enabled: false, count: 10 },
 };
 
 /** Stores saved before online ordering existed have no settings yet. */
@@ -146,11 +149,13 @@ export type ParsedOrderInput = z.output<typeof orderInputSchema>;
 
 // ───────────────────────────── The order as kept ─────────────────────────────
 
-export const ORDER_STATUSES = ['aguardando-pix', 'novo', 'preparo', 'saiu', 'pronto', 'concluido', 'recusado', 'expirado'] as const;
+/** `aguardando-garcom`: a table's first order waits until the waiter sees someone is really sitting there. */
+export const ORDER_STATUSES = ['aguardando-pix', 'aguardando-garcom', 'novo', 'preparo', 'saiu', 'pronto', 'concluido', 'recusado', 'expirado'] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 export const STATUS_LABEL: Record<OrderStatus, string> = {
   'aguardando-pix': 'Aguardando Pix',
+  'aguardando-garcom': 'Aguardando o garçom',
   novo: 'Novo',
   preparo: 'Em preparo',
   saiu: 'Saiu para entrega',
@@ -180,6 +185,9 @@ export interface PixCharge {
   expiresAt: string;
 }
 
+export const ORDER_MODES = ['entrega', 'retirada', 'mesa'] as const;
+export type OrderMode = (typeof ORDER_MODES)[number];
+
 export interface Order {
   id: string;
   /** Per-day sequence the kitchen calls out: #1, #2… */
@@ -190,12 +198,17 @@ export interface Order {
   updatedAt: string;
   status: OrderStatus;
   history: { status: OrderStatus; at: string; by: string }[];
+  /** A table order has no customer contact: name is "Mesa N" and phone is empty. */
   customer: { name: string; phone: string; email: string };
-  mode: 'entrega' | 'retirada';
+  mode: OrderMode;
   address: { area: string; street: string; reference: string } | null;
+  /** Table orders only: the table and the seating (one seating = from opening the table to closing the bill). */
+  table?: { number: number; session: string };
   payment: {
+    /** Table orders: `cartao` until the bill is closed, then how it was actually paid. */
     method: PaymentMethod;
-    status: 'pendente' | 'pago' | 'na-entrega' | 'devolvido' | 'devolver';
+    /** `na-mesa`: a table order not paid yet (paid when the waiter closes the table). */
+    status: 'pendente' | 'pago' | 'na-entrega' | 'na-mesa' | 'devolvido' | 'devolver';
     changeFor: number | null;
     pix: PixCharge | null;
     paidAt: string | null;
@@ -267,10 +280,9 @@ export function applyCoupon(
   return { code: c.code, discount, freeDelivery: false };
 }
 
-/** Prices a parsed order against the published catalogue and the store's ordering rules. Throws OrderError with a message for the customer. */
-export function priceOrder(store: Store, input: ParsedOrderInput): Priced {
-  const o = orderingOf(store);
-  const lines: OrderLine[] = input.items.map((line) => {
+/** The items picked, priced from the published catalogue (options and add-ons included). Throws OrderError. */
+export function priceLines(store: Store, items: ParsedOrderInput['items']): OrderLine[] {
+  return items.map((line) => {
     const item = findItem(store, line.productId);
     if (!item || item.price === null) throw new OrderError('Um item da sacola não está mais no cardápio. Atualize a página.');
     if (!item.available) throw new OrderError(`${item.name} está esgotado no momento.`);
@@ -295,6 +307,15 @@ export function priceOrder(store: Store, input: ParsedOrderInput): Priced {
     const unit = item.price + options.reduce((s, x) => s + x.price, 0);
     return { productId: item.id, name: item.name, quantity: line.quantity, unit, total: unit * line.quantity, options, notes: line.notes };
   });
+}
+
+/** What a table sends: only the items. Who orders is the table itself (see mesas.ts). */
+export const tableOrderInputSchema = z.object({ items: orderInputSchema.shape.items });
+
+/** Prices a parsed order against the published catalogue and the store's ordering rules. Throws OrderError with a message for the customer. */
+export function priceOrder(store: Store, input: ParsedOrderInput): Priced {
+  const o = orderingOf(store);
+  const lines = priceLines(store, input.items);
   const subtotal = lines.reduce((s, l) => s + l.total, 0);
   if (subtotal < o.minOrder) throw new OrderError(`O pedido mínimo é de ${brl(o.minOrder)} (sem a entrega).`);
 
@@ -336,6 +357,7 @@ export function brl(cents: number) {
 // ───────────────────────────── Status rules ─────────────────────────────
 
 export const OPERATOR_ACTIONS = ['aceitar', 'recusar', 'despachar', 'concluir'] as const;
+/** Table orders go to `pronto` (ready to take to the table) like pickups. */
 export type OperatorAction = (typeof OPERATOR_ACTIONS)[number];
 
 /** Where an operator action takes an order from its current status, or null when it does not apply. */
@@ -348,7 +370,7 @@ export function nextStatus(order: Pick<Order, 'status' | 'mode'>, action: Operat
     case 'concluir':
       return order.status === 'saiu' || order.status === 'pronto' ? 'concluido' : null;
     case 'recusar':
-      return ['aguardando-pix', 'novo', 'preparo'].includes(order.status) ? 'recusado' : null;
+      return ['aguardando-pix', 'aguardando-garcom', 'novo', 'preparo'].includes(order.status) ? 'recusado' : null;
   }
 }
 
@@ -358,7 +380,7 @@ export function effectiveStatus(order: Order, now = Date.now()): OrderStatus {
   return order.status;
 }
 
-export const OPEN_STATUSES: OrderStatus[] = ['aguardando-pix', 'novo', 'preparo', 'saiu', 'pronto'];
+export const OPEN_STATUSES: OrderStatus[] = ['aguardando-pix', 'aguardando-garcom', 'novo', 'preparo', 'saiu', 'pronto'];
 
 /** What the customer's tracking page may see: no token hash, no internal ids. */
 export function publicOrder(order: Order, now = Date.now()) {
@@ -425,7 +447,7 @@ export interface SalesReport {
   discounts: number;
   deliveryFees: number;
   byPayment: Record<PaymentMethod, Tally>;
-  byMode: Record<Order['mode'], Tally>;
+  byMode: Record<OrderMode, Tally>;
   /** Orders per hour of the day (São Paulo), 0–23. */
   byHour: number[];
   topItems: { name: string; quantity: number; revenue: number }[];
@@ -449,7 +471,7 @@ export function salesReport(days: { day: string; orders: Order[] }[], now = Date
     discounts: 0,
     deliveryFees: 0,
     byPayment: { pix: tally(), cartao: tally(), dinheiro: tally() },
-    byMode: { entrega: tally(), retirada: tally() },
+    byMode: { entrega: tally(), retirada: tally(), mesa: tally() },
     byHour: Array.from({ length: 24 }, () => 0),
     topItems: [],
     coupons: [],
@@ -477,7 +499,7 @@ export function salesReport(days: { day: string; orders: Order[] }[], now = Date
       r.byMode[o.mode].orders++;
       r.byMode[o.mode].revenue += o.total;
       r.byHour[Number(hourSP.format(new Date(o.createdAt))) % 24]++;
-      phones.set(o.customer.phone, (phones.get(o.customer.phone) ?? 0) + 1);
+      if (o.customer.phone) phones.set(o.customer.phone, (phones.get(o.customer.phone) ?? 0) + 1);
       for (const l of o.lines) {
         const it = items.get(l.productId) ?? { name: l.name, quantity: 0, revenue: 0 };
         it.quantity += l.quantity;
