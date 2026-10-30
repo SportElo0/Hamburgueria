@@ -158,7 +158,7 @@ Para incluir outro segmento, acrescente uma linha em `SEGMENTOS`, em `src/lib/op
 - `src/lib/oportunidades/regras.ts`: categorias, segmentos, tabela de preços, estimativa, leitura do link, CSV.
 - `src/lib/oportunidades/places.ts`: chamadas à Places API (New) com máscara de campos mínima (só servidor).
 - `src/lib/oportunidades/site.ts`: checagem da página inicial, com proteção contra endereços internos.
-- `src/lib/oportunidades/dados.ts`: aprovação, limite do mês, pesquisa, remoção de repetidos, revisão. Os dados ficam no Blob, em `oportunidades/lugares.json` e `oportunidades/pesquisas.json`; os contadores em `limites/places/<AAAA-MM>.json`.
+- `src/lib/oportunidades/dados.ts`: aprovação, limite do mês, pesquisa, remoção de repetidos, revisão. Os dados ficam no banco do painel, em `oportunidades/lugares.json` e `oportunidades/pesquisas.json`; os contadores em `limites/places/<AAAA-MM>.json`.
 - `src/app/painel/oportunidades/`: página, ações e `exportar/route.ts` (CSV).
 - `test/oportunidades.test.ts`: 17 testes com o Google e os sites simulados. Nenhum teste chama a API de verdade.
 

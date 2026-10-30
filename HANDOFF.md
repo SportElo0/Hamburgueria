@@ -28,8 +28,21 @@ Vercel (time `team_YoPHQ4Hb11W9RPG1cwvdMC3G`):
 - Bacchi (teste): projeto `prj_UVUjMXxWuY4y3p8k0hGGgWhsuPJm` (diretório raiz `bacchi`; publicar com `create_deployment` target production e o sha)
 - publicação: deploy a partir do GitHub `SportElo0/Hamburgueria`, branch `claude/downtown-burger-site`.
 
-Os segredos (SESSION_SECRET, ADMIN_USERS, token do Vercel Blob) ficam nas variáveis de
+Os segredos (SESSION_SECRET, ADMIN_USERS, POSTGRES_URL do Supabase) ficam nas variáveis de
 ambiente dos projetos no Vercel, não no repositório.
+
+## Onde o painel guarda os dados
+
+- Banco Postgres no Supabase (`POSTGRES_URL`, posta pela integração Supabase da Vercel), uma tabela só:
+  `painel.documentos` (chave, dados JSON ou arquivo, etag). O schema `painel` fica fora da API pública do
+  Supabase, com RLS ligado e sem acesso para `anon`/`authenticated`. A tabela se cria sozinha no primeiro acesso.
+- Antes era o Vercel Blob, que foi suspenso em 10/2026 por passar da cota grátis (cada leitura conta).
+  Enquanto `BLOB_READ_WRITE_TOKEN` e `POSTGRES_URL` existirem juntos e a cópia não tiver terminado, a página
+  `/painel` mostra "Copiar dados": copia tudo do Blob para o banco, nunca sobrescreve, pode clicar de novo.
+  Depois que terminar, apagar `BLOB_READ_WRITE_TOKEN` da Vercel.
+- `POSTGRES_URL` só no ambiente Production (preview não pode mexer nos dados reais).
+- Local e testes: arquivos em `.data/`. Testar no Postgres: `TEST_POSTGRES_URL='postgres://…?sslmode=disable' npm test`.
+- Pendente: verificar o certificado do Supabase (hoje TLS sem checar o certificado, `ssl: 'require'`).
 
 ## Sistema de pedidos (substituto do MenuDino)
 
@@ -46,7 +59,7 @@ ambiente dos projetos no Vercel, não no repositório.
 
 ## Conteúdos da Growlift no painel
 
-- `/painel/conteudos` mostra `growlift-social/`: imagens em galeria (abrir, baixar, .zip por grupo), `.md` com botão de copiar, e a situação de cada peça (Para aprovar, Aprovado, Postado), guardada no Blob em `conteudos/status.json`.
+- `/painel/conteudos` mostra `growlift-social/`: imagens em galeria (abrir, baixar, .zip por grupo), `.md` com botão de copiar, e a situação de cada peça (Para aprovar, Aprovado, Postado), guardada no banco em `conteudos/status.json`.
 - O build do painel roda `scripts/conteudos.mjs`, que copia `../growlift-social` para `conteudos-gerados/` (fora do git) com miniaturas WebP. Só arquivos listados no manifesto podem ser lidos.
 - **Todo conteúdo novo** (story, carrossel, roteiro, legenda, prompt) vai em `growlift-social/NN-pasta/`; depois commit, push e novo deploy do painel. Se for uma pasta nova, dar nome e descrição em `FOLDERS`, no script.
 

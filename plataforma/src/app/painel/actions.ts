@@ -21,6 +21,7 @@ import {
 } from '@/lib/stores';
 import { createReferral, updateReferral, type ReferralPatch } from '@/lib/referrals';
 import { seedStores } from '@/lib/seeds';
+import { migrateFromBlob, migrationPending } from '@/lib/migracao';
 import { setMercadoPagoToken } from '@/lib/pix';
 import { OperatorError, removeOperator, upsertOperator } from '@/lib/operators';
 import { DiagnosisError, setDiagnosisStatus, type DiagnosisStatus } from '@/lib/diagnostics';
@@ -40,7 +41,10 @@ function message(err: unknown): string {
     return `Campo inválido (${issue.path.join(' › ') || 'loja'}): ${issue.message}`;
   }
   if (err instanceof ConflictError) return err.message;
-  return err instanceof Error ? err.message : 'Algo deu errado. Tente de novo.';
+  // Our own errors carry a message for people; database and network errors carry a `code` and internals.
+  if (err instanceof Error && !('code' in err)) return err.message;
+  console.error('painel', err);
+  return 'Algo deu errado. Tente de novo.';
 }
 
 export async function createStoreAction(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
@@ -218,6 +222,23 @@ export async function importSeedsAction(): Promise<ActionResult & { created?: st
   }
   revalidatePath('/painel');
   return { ok: true, created };
+}
+
+/** Copies the old Vercel Blob data into Postgres. Safe to click again: it never overwrites. */
+export async function migrateBlobAction(): Promise<ActionResult & { copied?: number; skipped?: number; finished?: boolean }> {
+  const user = await requireUser();
+  if (!(await migrationPending())) return { ok: true, copied: 0, finished: true };
+  try {
+    const res = await migrateFromBlob(user.email);
+    revalidatePath('/painel');
+    if (res.failed.length > 0 && res.copied === 0) {
+      return { ok: false, error: `Não consegui ler o armazenamento antigo (${res.failed.length} itens). Ele pode ainda estar bloqueado pela Vercel.` };
+    }
+    return { ok: true, copied: res.copied, skipped: res.skipped, finished: res.finished };
+  } catch (err) {
+    console.error('migracao', err);
+    return { ok: false, error: 'Não consegui ler o armazenamento antigo. Ele pode ainda estar bloqueado pela Vercel; tente de novo mais tarde.' };
+  }
 }
 
 // ───────────── Online ordering: payment token and store logins ─────────────

@@ -6,6 +6,11 @@ import { changeLimit, partnerStatus, PLAN_LABEL, type PartnerStatus } from '@/li
 import { UsageBadge } from '@/components/UsageBadge';
 import { ImportSeeds } from '@/components/ImportSeeds';
 import { seedStores } from '@/lib/seeds';
+import { MigrateBlob } from '@/components/MigrateBlob';
+import { migrationPending } from '@/lib/migracao';
+
+// The one-time copy from the old store runs from this page and can take up to ~50 s.
+export const maxDuration = 60;
 
 const SEGMENT_LABEL = { restaurante: 'Restaurante', loja: 'Loja', servico: 'Serviço' } as const;
 const PARTNER_CHIP: Partial<Record<PartnerStatus, { label: string; tone: string }>> = {
@@ -32,7 +37,8 @@ export default async function PainelPage() {
     }),
   );
   const extras = rows.reduce((n, r) => n + r.usage.extras, 0);
-  const missingSeeds = seedStores().filter((s) => !stores.some((x) => x.slug === s.slug)).map((s) => s.name);
+  const pendingMigration = await migrationPending();
+  const missingSeeds = pendingMigration ? [] : seedStores().filter((s) => !stores.some((x) => x.slug === s.slug)).map((s) => s.name);
 
   return (
     <>
@@ -49,6 +55,7 @@ export default async function PainelPage() {
         </Link>
       </div>
 
+      {pendingMigration && <MigrateBlob />}
       {missingSeeds.length > 0 && <ImportSeeds names={missingSeeds} />}
 
       {rows.length === 0 ? (
