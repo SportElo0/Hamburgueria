@@ -1,16 +1,19 @@
 import 'server-only';
 import { storage, ConflictError } from './storage';
 import { monthKey, nextIsExtra } from './changes';
+import { hourWindow, take } from './limits';
 import {
   changeEntrySchema,
   changeLimit,
   emptyPayment,
   emptyStore,
+  itemSchema,
   newId,
   paymentSchema,
   pedidoEntrySchema,
   storeSchema,
   type ChangeEntry,
+  type Item,
   type PedidoEntry,
   type PedidoStatus,
   type Payment,
@@ -109,6 +112,79 @@ export async function publish(slug: string, input: PublishInput, by: string) {
     if (!(err instanceof ConflictError)) throw err;
   }
   return { publishedAt, entry };
+}
+
+/** What a store's own staff may change on an item, without going through the agency. */
+export interface StoreItemEdit {
+  name: string;
+  description: string;
+  /** Centavos. */
+  price: number;
+}
+
+export class ItemEditError extends Error {}
+
+/** Applies the staff edit to one item of a record; `null` when the item is not in it. Throws ItemEditError on bad input. */
+function editItemIn(store: Store, itemId: string, edit: StoreItemEdit): { store: Store; before: Item } | null {
+  for (const c of store.catalog.categories) {
+    const at = c.items.findIndex((i) => i.id === itemId);
+    if (at < 0) continue;
+    const before = c.items[at];
+    const parsed = itemSchema.safeParse({ ...before, name: edit.name, description: edit.description, price: edit.price });
+    if (!parsed.success) throw new ItemEditError('Confira o nome, a descrição e o preço.');
+    const categories = store.catalog.categories.map((cat) => (cat === c ? { ...cat, items: cat.items.map((i, n) => (n === at ? parsed.data : i)) } : cat));
+    return { store: { ...store, catalog: { categories } }, before };
+  }
+  return null;
+}
+
+/**
+ * The store's staff edits an item's name, description or price. It goes live at once (published copy) and is
+ * mirrored into the draft, so the next publish by the team does not undo it. Logged, not counted.
+ */
+export async function editItemByStore(slug: string, itemId: string, input: StoreItemEdit, by: string): Promise<Item> {
+  const edit: StoreItemEdit = { name: input.name.trim(), description: input.description.trim(), price: input.price };
+  if (!edit.name || edit.name.length > 120) throw new ItemEditError('O nome precisa ter de 1 a 120 letras.');
+  if (edit.description.length > 600) throw new ItemEditError('A descrição pode ter até 600 letras.');
+  if (!Number.isInteger(edit.price) || edit.price < 1 || edit.price > 10_000_000) throw new ItemEditError('Preço inválido.');
+  if (!(await take('cardapio-loja', slug, 60, hourWindow()))) throw new ItemEditError('Muitas mudanças nesta hora. Espere um pouco ou fale com a Growlift.');
+
+  let before: Item | null = null;
+  let after: Item | null = null;
+  for (let attempt = 0; ; attempt++) {
+    const doc = await storage().readJSON<StoreRecord>(publishedKey(slug));
+    if (!doc) throw new ItemEditError('O cardápio ainda não foi publicado.');
+    const result = editItemIn(doc.data.store, itemId, edit);
+    if (!result) throw new ItemEditError('Esse item não está mais no cardápio. Atualize a página.');
+    try {
+      await storage().writeJSON(publishedKey(slug), { ...doc.data, store: result.store }, doc.etag);
+      before = result.before;
+      after = result.store.catalog.categories.flatMap((c) => c.items).find((i) => i.id === itemId)!;
+      break;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 3) throw err;
+    }
+  }
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const doc = await getDraft(slug);
+    const result = doc && editItemIn(doc.data.store, itemId, edit);
+    if (!doc || !result) break; // removed from the draft: the team's next publish drops it anyway
+    try {
+      await storage().writeJSON(draftKey(slug), { ...doc.data, store: result.store }, doc.etag);
+      break;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 3) throw err;
+    }
+  }
+
+  const changes: string[] = [];
+  if (before.name !== after.name) changes.push(`nome "${before.name}" → "${after.name}"`);
+  if (before.price !== after.price) changes.push(`preço ${before.price === null ? 'sem preço' : (before.price / 100).toFixed(2)} → ${(after.price! / 100).toFixed(2)}`);
+  if (before.description !== after.description) changes.push('descrição');
+  if (changes.length) {
+    await logChange(slug, { description: `Feita pela loja: ${after.name}: ${changes.join(', ')}`.slice(0, 500), counted: false, reason: 'Feita pela loja' }, by);
+  }
+  return after;
 }
 
 export async function getChanges(slug: string, month = monthKey()) {

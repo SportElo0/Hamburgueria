@@ -241,6 +241,23 @@ export function OnlineOrdersPanel(props: {
           </label>
           <input id="eta" className="field" placeholder="Ex.: 40 a 60 min" value={o.eta} maxLength={40} onChange={(e) => set('eta', e.target.value)} />
         </div>
+        <div>
+          <label htmlFor="avaliacao" className="label">
+            Link de avaliação do Google
+          </label>
+          <input
+            id="avaliacao"
+            className="field"
+            inputMode="url"
+            placeholder="https://g.page/r/…/review"
+            value={o.reviewUrl ?? ''}
+            maxLength={300}
+            onChange={(e) => set('reviewUrl', e.target.value.trim())}
+          />
+          <p className="mt-1 text-xs text-ink-mute">
+            No Perfil da Empresa: Pedir avaliações → copiar link. Aparece para todo cliente no fim do pedido e quando a mesa pede a conta. Nunca dê brinde por avaliação.
+          </p>
+        </div>
         <a href={props.ordersUrl} className="btn-primary w-full" target="_blank" rel="noreferrer">
           Abrir a tela de pedidos da loja
         </a>

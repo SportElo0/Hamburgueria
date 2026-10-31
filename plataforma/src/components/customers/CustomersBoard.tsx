@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
+import { CAMPAIGN_TEMPLATES, campaignMessage, suggestedTemplate, type CampaignTemplate } from '@/lib/campanhas';
 import { setOptOutAction } from '@/app/loja/[slug]/actions';
 import { brl, type Coupon } from '@/lib/ordering';
 import type { Customer } from '@/lib/customers';
@@ -20,10 +21,9 @@ function offerOf(c: Coupon) {
 }
 
 /** The suggested message: honest (no fake prize), with the coupon, the link and how to stop. */
-function draftMessage(storeName: string, siteUrl: string, c: Coupon | undefined) {
-  const offer = c ? ` ${offerOf(c).charAt(0).toUpperCase()}${offerOf(c).slice(1)} com o cupom ${c.code}.` : '';
-  const link = siteUrl ? ` Peça pelo site: ${siteUrl}` : '';
-  return `Bateu saudade do Chefão? 🍔 Aqui é do ${storeName}.${offer}${link}\n\nPara não receber mais promoções, responda SAIR.`;
+function draftMessage(storeName: string, siteUrl: string, c: Coupon | undefined, t: CampaignTemplate) {
+  const offer = c ? `${offerOf(c).charAt(0).toUpperCase()}${offerOf(c).slice(1)} com o cupom ${c.code}.` : '';
+  return campaignMessage(t, storeName, offer, siteUrl);
 }
 
 function vcard(list: Customer[]) {
@@ -34,7 +34,9 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
   const [customers, setCustomers] = useState(props.customers);
   const [couponCode, setCouponCode] = useState(props.coupons[0]?.code ?? '');
   const coupon = props.coupons.find((c) => c.code === couponCode);
-  const [message, setMessage] = useState(() => draftMessage(props.storeName, props.siteUrl, props.coupons[0]));
+  const [templateId, setTemplateId] = useState(() => suggestedTemplate().id);
+  const template = CAMPAIGN_TEMPLATES.find((t) => t.id === templateId) ?? CAMPAIGN_TEMPLATES[0];
+  const [message, setMessage] = useState(() => draftMessage(props.storeName, props.siteUrl, props.coupons[0], suggestedTemplate()));
   const [copied, setCopied] = useState('');
   const [error, setError] = useState('');
   const [, start] = useTransition();
@@ -106,7 +108,30 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
             <p className="mt-1 text-sm text-ink-mute">Vai só para quem marcou “quero receber promoções” no pedido. No máximo uma por mês, sempre com um motivo real para voltar.</p>
           </div>
           <div className="grid gap-3 md:grid-cols-[16rem_1fr]">
-            <div>
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="camp-modelo" className="label">
+                  Modelo
+                </label>
+                <select
+                  id="camp-modelo"
+                  className="field"
+                  value={templateId}
+                  onChange={(e) => {
+                    const t = CAMPAIGN_TEMPLATES.find((x) => x.id === e.target.value) ?? CAMPAIGN_TEMPLATES[0];
+                    setTemplateId(t.id);
+                    setMessage(draftMessage(props.storeName, props.siteUrl, coupon, t));
+                  }}
+                >
+                  {CAMPAIGN_TEMPLATES.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.label}
+                    </option>
+                  ))}
+                </select>
+                {template.hint && <p className="mt-1 text-xs text-ink-mute">{template.hint}</p>}
+              </div>
+              <div>
               <label htmlFor="camp-cupom" className="label">
                 Cupom da campanha
               </label>
@@ -116,13 +141,7 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
                 value={couponCode}
                 onChange={(e) => {
                   setCouponCode(e.target.value);
-                  setMessage(
-                    draftMessage(
-                      props.storeName,
-                      props.siteUrl,
-                      props.coupons.find((c) => c.code === e.target.value),
-                    ),
-                  );
+                  setMessage(draftMessage(props.storeName, props.siteUrl, props.coupons.find((c) => c.code === e.target.value), template));
                 }}
               >
                 <option value="">Sem cupom</option>
@@ -134,6 +153,7 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
               </select>
               {props.coupons.length === 0 && <p className="mt-1 text-xs text-ink-mute">Nenhum cupom ativo. A equipe cria em Configurar → Cupons.</p>}
               {coupon?.type === 'frete' && <p className="mt-1 text-xs text-ink-mute">Entrega grátis: vale só para entrega.</p>}
+              </div>
             </div>
             <div>
               <label htmlFor="camp-msg" className="label">

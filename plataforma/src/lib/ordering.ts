@@ -40,6 +40,27 @@ export const couponSchema = z.object({
 }).refine((c) => c.type === 'frete' || c.value >= 1, 'Informe o valor do desconto.');
 export type Coupon = z.infer<typeof couponSchema>;
 
+// Short links Google hands out for reviews; any path is fine there.
+const REVIEW_SHORT_HOSTS = ['g.page', 'maps.app.goo.gl', 'g.co'];
+// Big Google hosts: only their review and Maps pages, so nothing like google.com/url?q=… gets through.
+const REVIEW_PAGES: Record<string, RegExp> = {
+  'search.google.com': /^\/local\/writereview$/,
+  'www.google.com': /^\/(maps|search)(\/|$)/,
+  'google.com': /^\/(maps|search)(\/|$)/,
+  'maps.google.com': /^\//,
+};
+
+/** The store's own Google review link (from its Business Profile: "Pedir avaliações"). Only Google addresses. */
+export function isReviewUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== 'https:' || u.username || u.password) return false;
+    return REVIEW_SHORT_HOSTS.includes(u.hostname) || Boolean(REVIEW_PAGES[u.hostname]?.test(u.pathname));
+  } catch {
+    return false;
+  }
+}
+
 export const orderingSchema = z.object({
   /** Orders go to the panel instead of WhatsApp. */
   enabled: z.boolean(),
@@ -59,6 +80,8 @@ export const orderingSchema = z.object({
   coupons: z.array(couponSchema).max(50).default([]),
   /** Ordering at the table: each table has a QR code; the waiter confirms each table's first order. */
   tables: z.object({ enabled: z.boolean(), count: z.number().int().min(1).max(200) }).default({ enabled: false, count: 10 }),
+  /** Shown to every customer once the order is done or the bill is asked for. Empty = not shown. */
+  reviewUrl: z.string().trim().max(300).refine((v) => v === '' || isReviewUrl(v), 'Use o link de avaliação do Google (começa com https://g.page/ ou https://search.google.com/).').default(''),
 });
 export type Ordering = z.infer<typeof orderingSchema>;
 
@@ -75,6 +98,7 @@ export const DEFAULT_ORDERING: Ordering = {
   pixMode: 'demo',
   coupons: [],
   tables: { enabled: false, count: 10 },
+  reviewUrl: '',
 };
 
 /** Stores saved before online ordering existed have no settings yet. */
@@ -96,6 +120,7 @@ export function publicOrdering(o: Ordering, open: boolean) {
     pixDemo: o.pixMode === 'demo',
     /** Only whether a coupon field is worth showing; the codes stay on the server. */
     coupons: o.coupons.some((c) => c.active),
+    reviewUrl: isReviewUrl(o.reviewUrl) ? o.reviewUrl : '',
   };
 }
 

@@ -9,6 +9,7 @@ import {
   OPEN_STATUSES,
   OrderError,
   effectiveStatus,
+  isReviewUrl,
   nextStatus,
   orderInputSchema,
   orderingOf,
@@ -391,7 +392,14 @@ export async function trackOrder(slug: string, id: string, token: string) {
     const check = await checkCharge(slug, order.payment.pix).catch(() => null);
     if (check?.paid) order = (await markPaid(slug, id, check)) ?? order;
   }
-  return publicOrder(order);
+  // A finished order asks for a Google review: every customer, no reward, no filter by how it went.
+  let review = '';
+  if (effectiveStatus(order) === 'concluido') {
+    const record = await getPublished(slug);
+    const url = record ? orderingOf(record.store).reviewUrl : '';
+    if (isReviewUrl(url)) review = url;
+  }
+  return { ...publicOrder(order), review };
 }
 
 /** Practice Pix only: the customer taps "simular pagamento" to see the rest of the flow. */

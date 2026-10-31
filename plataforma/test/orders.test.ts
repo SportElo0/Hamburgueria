@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import { storage, useFileStorage } from '@/lib/storage';
 import { seedStores } from '@/lib/seeds';
 import { storeSchema, toPublic, type Store, type StoreRecord } from '@/lib/schema';
-import { DEFAULT_ORDERING, applyCoupon, nextStatus, orderInputSchema, orderingSchema, priceOrder, publicOrdering, salesReport, type OrderInput } from '@/lib/ordering';
+import { DEFAULT_ORDERING, applyCoupon, isReviewUrl, nextStatus, orderInputSchema, orderingSchema, priceOrder, publicOrdering, salesReport, type OrderInput } from '@/lib/ordering';
 import { ActionError, OrderError, applyAction, getOperation, getOrder, listOrders, ordersForDays, placeOrder, setOpen, setSoldOut, simulateDemoPayment, trackOrder } from '@/lib/orders';
 import { authenticateOperator, removeOperator, upsertOperator } from '@/lib/operators';
 import { listCustomers, setOptOut } from '@/lib/customers';
@@ -379,5 +379,35 @@ describe('resumo mensal da análise', () => {
     expect(after[3]).toMatchObject({ day, orders: 1, revenue: order.total });
     // O resumo não guarda nome nem telefone do cliente.
     expect(JSON.stringify(await storage().readJSON(monthKey))).not.toMatch(/Ana|98888/);
+  });
+});
+
+describe('pedido de avaliação no Google', () => {
+  const REVIEW = 'https://g.page/r/abc123/review';
+
+  it('só aceita link do Google', () => {
+    expect(isReviewUrl(REVIEW)).toBe(true);
+    expect(isReviewUrl('https://search.google.com/local/writereview?placeid=X')).toBe(true);
+    expect(isReviewUrl('http://g.page/r/abc/review')).toBe(false);
+    expect(isReviewUrl('https://g.page.golpe.com/r/abc')).toBe(false);
+    expect(isReviewUrl('https://user:pw@g.page/r/abc')).toBe(false);
+    expect(isReviewUrl('javascript:alert(1)')).toBe(false);
+    expect(isReviewUrl('https://www.google.com/url?q=https://golpe.com')).toBe(false);
+    expect(isReviewUrl('https://search.google.com/outra-coisa')).toBe(false);
+    expect(isReviewUrl('https://www.google.com/maps/place/Casa')).toBe(true);
+    expect(orderingSchema.safeParse({ ...DEFAULT_ORDERING, reviewUrl: 'https://exemplo.com' }).success).toBe(false);
+    expect(orderingSchema.parse({ ...DEFAULT_ORDERING, reviewUrl: '' }).reviewUrl).toBe('');
+  });
+
+  it('aparece só depois que o pedido é concluído', async () => {
+    await publishStore(elPatron({ reviewUrl: REVIEW }));
+    await setOpen(SLUG, true, 'teste');
+    const a = await placeOrder(SLUG, base(), ORIGIN);
+    expect((await trackOrder(SLUG, a.order.id, a.token))!.review).toBe('');
+    await applyAction(SLUG, a.order.id, 'aceitar', 'caixa');
+    await applyAction(SLUG, a.order.id, 'despachar', 'caixa');
+    await applyAction(SLUG, a.order.id, 'concluir', 'caixa');
+    expect((await trackOrder(SLUG, a.order.id, a.token))!.review).toBe(REVIEW);
+    expect(publicOrdering(elPatron({ reviewUrl: REVIEW }).ordering, true).reviewUrl).toBe(REVIEW);
   });
 });

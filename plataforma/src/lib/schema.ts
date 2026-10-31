@@ -218,7 +218,7 @@ export function toPublic(store: Store, publishedAt: string | null, mediaBase: st
 }
 export type PublicStore = ReturnType<typeof toPublic>;
 
-export const PEDIDO_CANAIS = ['WhatsApp', 'Telefone', 'E-mail', 'Presencial'] as const;
+export const PEDIDO_CANAIS = ['WhatsApp', 'Telefone', 'E-mail', 'Presencial', 'Painel da loja'] as const;
 
 /** A client request logged before it's done, so it isn't tracked only in someone's head. */
 export const pedidoEntrySchema = z.object({

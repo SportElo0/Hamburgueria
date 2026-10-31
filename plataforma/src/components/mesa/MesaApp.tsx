@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { brl, type OrderStatus } from '@/lib/ordering';
 import type { TableState } from '@/lib/mesas';
 
@@ -62,7 +62,7 @@ function Bell() {
   );
 }
 
-export function MesaApp(props: { slug: string; number: number; tableKey: string; storeName: string; menu: MesaCategory[]; kitchenOpen: boolean }) {
+export function MesaApp(props: { slug: string; number: number; tableKey: string; storeName: string; menu: MesaCategory[]; kitchenOpen: boolean; reviewUrl?: string }) {
   const api = `/api/public/lojas/${props.slug}/mesas/${props.number}`;
   const [state, setState] = useState<TableState | null>(null);
   const [error, setError] = useState('');
@@ -72,16 +72,27 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
   const [picking, setPicking] = useState<MesaItem | null>(null);
   const [reviewing, setReviewing] = useState(false);
   const [toast, setToast] = useState('');
+  // This phone was at the table with a bill, and the table is gone: the bill was paid. Say thanks (and ask for a review).
+  const hadBill = useRef(false);
+  const [thanked, setThanked] = useState(false);
+  const apply = useCallback((next: TableState) => {
+    if (next.member && next.orders.length > 0) hadBill.current = true;
+    else if (!next.member && hadBill.current) {
+      hadBill.current = false;
+      setThanked(true);
+    }
+    setState(next);
+  }, []);
 
   const load = useCallback(async () => {
     try {
       const res = await fetch(`${api}?k=${encodeURIComponent(props.tableKey)}`, { cache: 'no-store' });
       if (!res.ok) throw new Error(String(res.status));
-      setState((await res.json()) as TableState);
+      apply((await res.json()) as TableState);
     } catch {
       setError('Sem conexão. Tentando de novo…');
     }
-  }, [api, props.tableKey]);
+  }, [api, props.tableKey, apply]);
 
   useEffect(() => {
     const first = window.setTimeout(load, 0);
@@ -108,7 +119,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
         setError(data.error ?? 'Não foi possível agora. Tente de novo.');
         return false;
       }
-      setState(data);
+      apply(data);
       return true;
     } catch {
       setError('Sem conexão. Tente de novo.');
@@ -149,6 +160,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
     );
   }
 
+  if (!state.member && thanked) return <Obrigado storeName={props.storeName} reviewUrl={props.reviewUrl} onBack={() => setThanked(false)} />;
   if (!state.member) return <Entrada storeName={props.storeName} number={props.number} open={state.open} busy={busy} error={error} onOpen={() => send({ action: 'abrir' })} onJoin={(code) => send({ action: 'entrar', code })} />;
 
   const pendingCalls = new Set(state.calls);
@@ -196,7 +208,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
       {view === 'cardapio' ? (
         <Cardapio menu={props.menu} kitchenOpen={props.kitchenOpen} onPick={(item) => (item.options.length ? setPicking(item) : addLine({ itemId: item.id, name: item.name, quantity: 1, unit: item.price, selections: {}, detail: '', notes: '' }))} cart={cart} />
       ) : (
-        <Conta state={state} busy={busy} onBill={async () => (await send({ action: 'chamar', kind: 'conta' })) && setToast('O garçom já vem com a conta.')} />
+        <Conta state={state} busy={busy} reviewUrl={props.reviewUrl} onBill={async () => (await send({ action: 'chamar', kind: 'conta' })) && setToast('O garçom já vem com a conta.')} />
       )}
 
       {view === 'cardapio' && cartCount > 0 && (
@@ -465,7 +477,7 @@ function Revisao(props: { cart: CartLine[]; total: number; busy: boolean; error:
   );
 }
 
-function Conta({ state, busy, onBill }: { state: Extract<TableState, { member: true }>; busy: boolean; onBill: () => void }) {
+function Conta({ state, busy, onBill, reviewUrl }: { state: Extract<TableState, { member: true }>; busy: boolean; onBill: () => void; reviewUrl?: string }) {
   const askedBill = state.calls.includes('conta');
   return (
     <div className="space-y-3 px-4 pt-4">
@@ -526,8 +538,42 @@ function Conta({ state, busy, onBill }: { state: Extract<TableState, { member: t
       >
         {askedBill ? 'Conta pedida: o garçom já vem' : 'Pedir a conta'}
       </button>
+      {askedBill && reviewUrl && <ReviewCard url={reviewUrl} />}
       <p className="pb-4 text-center text-xs text-[#a8977a]">Quando a conta for paga, o código {state.code} deixa de valer.</p>
     </div>
+  );
+}
+
+/** Asked of everyone who asks for the bill, whatever they thought of it; nothing is offered in return. */
+function ReviewCard({ url }: { url: string }) {
+  return (
+    <section className="rounded-3xl border border-[#3a2e1d] bg-[#16110b] p-5 text-center">
+      <h2 className="text-base font-bold">Conta pra gente como foi?</h2>
+      <p className="mt-1.5 text-[13px] leading-relaxed text-[#cbbfa8]">Sua avaliação no Google ajuda outras pessoas a conhecer a casa.</p>
+      <a href={url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-full border border-[#e8b04a] text-base font-extrabold text-[#e8b04a]">
+        Avaliar no Google
+      </a>
+    </section>
+  );
+}
+
+function Obrigado({ storeName, reviewUrl, onBack }: { storeName: string; reviewUrl?: string; onBack: () => void }) {
+  return (
+    <Shell>
+      <main className="px-5 pt-[max(24px,env(safe-area-inset-top))] pb-10">
+        <p className="text-xl font-black tracking-tight text-[#e8b04a] uppercase">{storeName}</p>
+        <h1 className="mt-10 text-5xl leading-[0.95] font-black tracking-tight uppercase">Conta fechada. Obrigado!</h1>
+        <p className="mt-4 text-[15px] leading-relaxed text-[#cbbfa8]">Volte sempre. O código da mesa já não vale mais.</p>
+        {reviewUrl && (
+          <div className="mt-8">
+            <ReviewCard url={reviewUrl} />
+          </div>
+        )}
+        <button type="button" onClick={onBack} className="mt-6 min-h-12 w-full rounded-full border border-[#3a2e1d] text-sm font-bold text-[#cbbfa8]">
+          Voltar ao início da mesa
+        </button>
+      </main>
+    </Shell>
   );
 }
 

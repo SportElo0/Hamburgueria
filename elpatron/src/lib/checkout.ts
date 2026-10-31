@@ -43,6 +43,8 @@ export interface TrackedOrder {
   discount: number;
   coupon: string;
   total: number;
+  /** The store's Google review link, sent once the order is done (empty otherwise). */
+  review?: string;
   note: string;
   reason: string;
 }

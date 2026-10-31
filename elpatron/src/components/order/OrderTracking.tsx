@@ -171,6 +171,18 @@ export function OrderTracking() {
 
             {!['aguardando-pix', 'expirado', 'recusado'].includes(order.status) && <Progress order={order} />}
 
+            {order.status === 'concluido' && order.review && /^https:\/\/(g\.page|maps\.app\.goo\.gl|g\.co|search\.google\.com|(www\.|maps\.)?google\.com)\//.test(order.review) && (
+              <section aria-labelledby="avaliar" className="mt-8 rounded-[24px] border border-mustard/50 bg-paper p-5 text-center md:p-7">
+                <h2 id="avaliar" className="display text-[1.4rem]">
+                  Conta pra gente como foi?
+                </h2>
+                <p className="mt-2 text-ink-soft">Sua avaliação no Google ajuda outras pessoas a conhecer o El Patron.</p>
+                <a href={order.review} target="_blank" rel="noopener noreferrer" className="cond mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full border border-mustard px-6 font-bold tracking-[0.12em] text-mustard uppercase md:w-auto">
+                  Avaliar no Google
+                </a>
+              </section>
+            )}
+
             <section aria-labelledby="resumo" className="mt-8 rounded-[24px] border border-brand/25 bg-paper p-5 md:p-7">
               <h2 id="resumo" className="display text-[1.4rem]">
                 Resumo

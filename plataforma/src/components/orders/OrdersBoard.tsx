@@ -182,6 +182,9 @@ export function OrdersBoard(props: {
                 Salão
               </a>
             )}
+            <a href={`/loja/${props.slug}/cardapio`} className="btn-ghost min-h-11">
+              Cardápio
+            </a>
             <a href={`/loja/${props.slug}/relatorio`} className="btn-ghost min-h-11">
               Relatório
             </a>

@@ -57,6 +57,15 @@ ambiente dos projetos no Vercel, não no repositório.
 - Testes: `cd plataforma && npx vitest run` (95 testes). Ponta a ponta local:
   `plataforma/scripts/e2e/README.md`.
 
+## Planos enxutos (31/10/2026)
+
+Base: `reports/Enxugar os planos 2026-10-31.md`; rotina em `marketing/rotina-mensal/`.
+- Planos no site: Start R$ 247, Grow R$ 597, Scale "em breve" (sem preço até o piloto). O Grow não promete mais posts nem fotos mensais.
+- **Cardápio pela loja:** `/loja/<slug>/cardapio`. O lojista muda nome, descrição e preço; vai direto ao `publicado.json` e ao rascunho, registra "Feita pela loja" (não conta alteração), limite de 60 por hora. Foto, item novo e o resto viram pedido (canal "Painel da loja") na aba Pedidos da equipe.
+- **Avaliação no Google:** Configurar → Pedidos pelo site → "Link de avaliação do Google" (só links do Google). Aparece no rastreio do pedido concluído (campo `review`, hoje usado pelo site do El Patron) e na mesa quando pede a conta e quando a conta fecha. Para todos os clientes, sem brinde.
+- **Campanha:** 12 modelos em `plataforma/src/lib/campanhas.ts`, escolhidos na aba Clientes (sugere o do mês).
+- **Scale:** plano B na tela do salão; `/api/saude` para um monitor gratuito (ex.: UptimeRobot) avisar se o painel cair. O monitor ainda precisa ser criado por vocês.
+
 ## Conteúdos da Growlift no painel
 
 - `/painel/conteudos` mostra `growlift-social/`: imagens em galeria (abrir, baixar, .zip por grupo), `.md` com botão de copiar, e a situação de cada peça (Para aprovar, Aprovado, Postado), guardada no banco em `conteudos/status.json`.

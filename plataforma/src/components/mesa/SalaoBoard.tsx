@@ -230,6 +230,16 @@ export function SalaoBoard(props: { slug: string; storeName: string; count: numb
             QR Codes das mesas
           </a>
         </p>
+        <details className="card px-4 py-3 text-sm">
+          <summary className="cursor-pointer font-semibold">Se o sistema cair, faça isto</summary>
+          <ol className="mt-2 list-decimal space-y-1 pl-5 text-ink-soft">
+            <li>Avise as mesas que o pedido pelo celular parou e anote os pedidos no papel, como antes.</li>
+            <li>Os pedidos já feitos continuam valendo: confira esta tela ou a tela da cozinha quando voltar.</li>
+            <li>Feche as contas pela maquininha normalmente. Anote o número da mesa e o valor.</li>
+            <li>Mande uma mensagem para a Growlift pelo WhatsApp dizendo a hora em que parou.</li>
+            <li>Quando a tela voltar a atualizar, siga pelo sistema. Mesas abertas no papel continuam no papel até fechar.</li>
+          </ol>
+        </details>
       </main>
 
       {selected && <TableSheet table={selected} now={now} pending={pending} onClose={() => setOpen(null)} onRun={(a, m) => run(selected.number, a, m)} />}
