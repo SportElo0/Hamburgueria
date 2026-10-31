@@ -70,11 +70,11 @@ Claro! Pra te mandar algo que faça sentido, me conta três coisas:
 
 **/servicos**
 ```
-A gente trabalha com três planos, todos com mensalidade fixa e sem comissão por pedido:
-• Start: site feito do zero, com domínio e hospedagem.
-• Grow: tudo do Start, mais preparo para o Google e o Perfil da Empresa no Google.
-• Lift: tudo do Grow, mais pedido e Pix direto no seu site.
-Todos têm contrato com fidelidade (6 meses no Start e no Grow, 4 no Lift) e 7 dias para desistir sem multa.
+A gente trabalha com mensalidade fixa e sem comissão por pedido:
+• Start (R$ 247/mês): site feito do zero, com domínio e hospedagem, botão de WhatsApp e o Perfil no Google Maps configurado e conferido todo mês.
+• Grow (R$ 597/mês): tudo do Start, mais pedido e Pix direto no seu site, rotina mensal do Google e uma campanha por mês para quem aceitou receber ofertas.
+• Scale: pedido na mesa para restaurantes com salão. Ainda não está à venda.
+Start e Grow têm contrato com fidelidade (6 meses no Start, 4 no Grow) e 7 dias para desistir sem multa.
 Valores e detalhes: growlift.com.br/#planos
 Qual desses parece mais perto do que você precisa?
 ```
@@ -86,7 +86,7 @@ Depois do diagnóstico, a prévia do seu site chega em até 2 dias úteis. Fecha
 
 **/manutencao**
 ```
-Depois que o site vai ao ar, a gente segue cuidando dele: domínio, hospedagem e alterações todo mês. São 1 por mês no Start, 2 no Grow e 4 no Lift, e cada uma fica pronta em até 2 dias úteis.
+Depois que o site vai ao ar, a gente segue cuidando dele: domínio, hospedagem e alterações todo mês. São 2 por mês no Start e 4 no Grow, e cada uma fica pronta em até 2 dias úteis.
 ```
 
 **/portfolio**
