@@ -230,13 +230,13 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 ```
 
 ## 10. Pedido na mesa (plano Scale)
-- **Formato:** passo a passo com as telas do sistema funcionando, com animação: salão desenhado, QR escaneado, itens indo para a sacola, código passando de um celular para o outro e avisos saltando do celular do garçom.
-- **Gancho, 0 a 4,2 s:** "Salão cheio. Garçom correndo." com o salão desenhado e o garçom correndo entre as mesas. / "E se a mesa pedisse pelo celular, sem app?"
-- **QR, 4,2 a 7 s:** o celular escaneia o QR da Mesa 5. "Mesa 5 aberta."
-- **Cliente, 7 a 16,2 s:** pede um Brasa Duplo e uma batata ("Sem app", "Sem cadastro"); o pedido voa para a cozinha.
-- **Amigo, 16,2 a 22 s:** o código de 4 números passa de um celular para o outro: "Mesma conta".
-- **Garçom, 22 a 31,2 s:** confirma a mesa, recebe "Mesa 5 chamou" e "Pediu a conta", registra como a mesa pagou e libera a mesa.
-- **Fecho, 31,2 a 35,5 s:** "Plano Scale · em breve" / "Pedido na mesa, sem app." / "Manda um oi. Link na bio."
+- **Formato:** um restaurante em 3D, desenhado do zero pela Growlift (piso de madeira, sofás azuis, velas, clientes e garçom), com a câmera passeando pelo salão. Os celulares flutuam por cima com as telas reais do sistema e as legendas em português aparecem palavra por palavra. Nada foi copiado de outro vídeo: cena, personagens, textos e telas são nossos. Fonte: `tools/mesa-scene/` (3D) e `_fonte/reels/gerar-reels.mjs` (Reel 10).
+- **Gancho, 0 a 4,2 s:** visão de cima do salão cheio, o garçom correndo entre as mesas e clientes levantando a mão com o sininho. "Salão cheio. Garçom correndo." / "E se a mesa pedisse pelo celular, sem app?"
+- **QR, 4,2 a 7 s:** a câmera desce até a Mesa 5; a cliente pega o celular e escaneia o QR da mesa. "Mesa 5 aberta."
+- **Cliente, 7 a 16,2 s:** o celular com o pedido real flutua ao lado da mesa; "Sem app", "Sem cadastro", os itens voam para a sacola e o pedido vai para a cozinha. "Pede pelo celular, sem app."
+- **Amigo, 16,2 a 22 s:** a câmera passa para o outro lado da mesa; o amigo pega o celular, o código vai de um celular para o outro e um anel azul marca a mesa. "O amigo entra com o código. Mesma conta."
+- **Garçom, 22 a 31,2 s:** o garçom no balcão da cozinha olha o celular, a Mesa 5 chama e pede a conta, ele vai até a mesa e a libera (anel verde). "O garçom confirma, atende e libera a mesa."
+- **Fecho, 31,2 a 35,5 s:** a câmera sobe e mostra o salão inteiro. "Plano Scale · em breve" / "Pedido na mesa, sem app." / "Manda um oi. Link na bio."
 - **Marcação:** "Projeto conceito · loja de demonstração · nome fictício" em todas as telas, e o aviso no fecho. Nenhum pedido real.
 - **O que não existe ainda (não mostrar nem prometer):** pagar pelo celular na mesa, dividir a conta e jogo entre as mesas. Se perguntarem, digam que ainda não tem.
 - **Antes de postar:** no preview do app, confira se a faixa "Projeto conceito" não fica atrás da legenda. Procurem "Brasa Burger" no Instagram e no Google Maps; se existir um em São Paulo, avisem para trocar o nome.

@@ -338,6 +338,101 @@ function mesaReelHtml({ recA, recB, recS }) {
   });
 }
 
+// Reel 10, versão 3D: o salão de tools/mesa-scene por baixo (quadros já renderizados),
+// celulares com as telas reais e legendas por cima.
+const MESA3D = process.env.MESA3D_FRAMES || path.join(ROOT, 'tools/mesa-scene/out/frames');
+
+const MESA3D_CSS = `
+.w{display:inline-block;opacity:0;will-change:transform}
+#bg{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:0}
+.shade{position:absolute;left:0;right:0;pointer-events:none;z-index:1}
+.scene{z-index:2}.brand{z-index:30}
+.cap{position:absolute;left:60px;right:60px;top:1372px;text-align:center;font-size:66px;font-weight:800;letter-spacing:-.03em;line-height:1.08;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.65)}
+.top{position:absolute;left:96px;top:236px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;z-index:20}
+.pill{display:inline-block;font-size:24px;font-weight:700;letter-spacing:.14em;color:#fff;background:${TOKENS.blue};border-radius:999px;padding:10px 22px;box-shadow:0 12px 30px -10px rgba(8,101,254,.9)}
+.chip{position:absolute;display:flex;align-items:center;gap:16px;padding:18px 28px;border-radius:999px;background:rgba(15,21,32,.94);border:1.5px solid rgba(77,141,255,.5);font-size:34px;font-weight:700;color:${TOKENS.text};box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 40px -10px rgba(8,101,254,.6);opacity:0;z-index:10;white-space:nowrap}
+.chip .ic{width:54px;height:54px;border-radius:50%;background:rgba(8,101,254,.2);display:grid;place-items:center}
+.flyer{position:absolute;left:0;top:0;opacity:0;z-index:12}
+.plus{background:${TOKENS.blue};color:#fff;font-weight:800;font-size:40px;padding:12px 26px;border-radius:999px;box-shadow:0 18px 40px -10px rgba(8,101,254,.95)}
+.note-card{position:absolute;width:430px;padding:22px 26px;border-radius:30px;background:#fff;color:#111827;box-shadow:0 40px 80px -20px rgba(0,0,0,.85);display:flex;gap:18px;align-items:center;opacity:0;z-index:10}
+.note-card b{display:block;font-size:34px;letter-spacing:-.01em}
+.note-card span{font-size:26px;color:#4b5563}
+.note-card .ic{flex:none;width:74px;height:74px;border-radius:22px;display:grid;place-items:center}
+.ring{transform-box:fill-box;transform-origin:50% 10%}
+.phone{transform-origin:50% 0}
+.phone .screen img.still{display:block;width:100%;height:100%;object-fit:cover}
+`;
+
+function mesa3dReelHtml({ recA, recB, recS }) {
+  const count = fs.readdirSync(MESA3D).filter((f) => f.endsWith('.jpg')).length;
+  if (count < 1060) throw new Error(`Faltam os quadros 3D em ${MESA3D} (rode tools/mesa-scene/render.mjs frames).`);
+  const rec = (r) => `<img class="rec" data-seq="${pathToFileURL(r.dir).href}" data-count="${r.count}" src="${pathToFileURL(path.join(r.dir, '00000.jpg')).href}" alt="">`;
+  const phoneAt = (cx, top, scale, inner, cls = '') => `<div class="phone ${cls}" style="left:${cx}px;top:${top}px;scale:${scale}">\n<div class="screen">${inner}</div></div>`;
+  const ws = (text, t0, step = 0.1, cls = '') => text.split(' ').map((w, i) => `<span class="w ${cls}" data-t="${(t0 + i * step).toFixed(2)}">${w}</span>`).join(' ');
+  const cap = (a, b, t0 = 0.25) => `<div class="cap">${ws(a, t0)} ${ws(b, t0 + a.split(' ').length * 0.1, 0.1, 'blue')}</div>`;
+  const top = `<div class="top"><span class="pill">PLANO SCALE · EM BREVE</span><span class="tag">Projeto conceito · loja de demonstração · nome fictício</span></div>`;
+  const chip = (cls, ic, text, pos) => `<div class="chip ${cls}" style="${pos}"><span class="ic">${svgI(ic, 32)}</span>${text}</div>`;
+
+  const s0 = `<div class="title" style="position:absolute;left:96px;right:96px;top:250px"><h1 class="h1" style="font-size:112px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Salão cheio.', 0.05, 0.12)}<br>${ws('Garçom correndo.', 0.4, 0.14, 'blue')}</h1></div>
+    ${cap('E se a mesa pedisse', 'pelo celular, sem app?', 1.9)}`;
+  const s1 = `${top}${cap('O cliente lê', 'o QR da mesa.')}
+    <div class="chip ok" style="left:96px;top:400px;background:${TOKENS.blue};border-color:${TOKENS.blue}"><span class="ic" style="background:rgba(255,255,255,.22)">${svgI(I.check, 34, '#fff', 2.6)}</span>Mesa 5 aberta</div>`;
+  const s2 = `${top}
+    ${phoneAt(735, 560, 0.72, rec(recA))}
+    ${chip('chip-a', I.check, 'Sem app', 'left:60px;top:400px')}
+    ${chip('chip-b', I.check, 'Sem cadastro', 'left:60px;top:500px')}
+    <div class="bag" style="position:absolute;left:890px;top:382px;width:116px;height:116px;border-radius:50%;background:${TOKENS.surface};border:2px solid rgba(77,141,255,.55);display:grid;place-items:center;opacity:0;z-index:11;box-shadow:0 0 50px -10px rgba(8,101,254,.8)">${svgI(I.bag, 58)}<span class="bag-n" style="position:absolute;right:-6px;top:-6px;width:46px;height:46px;border-radius:50%;background:${TOKENS.blue};color:#fff;font-size:28px;font-weight:800;display:grid;place-items:center">0</span></div>
+    <div class="flyer plus1"><span class="plus">+1</span></div><div class="flyer plus2"><span class="plus">+1</span></div>
+    <div class="flyer ticket"><div style="display:flex;gap:14px;align-items:center;background:#fff;color:#111;border-radius:22px;padding:16px 22px;font-size:30px;font-weight:700;box-shadow:0 30px 60px -15px rgba(0,0,0,.8)">${svgI(I.ticket, 38, TOKENS.blue)}Pedido · Mesa 5</div></div>
+    <div class="chip kitchen" style="right:40px;top:400px"><span class="ic flame" style="background:rgba(255,140,40,.2)">${svgI(I.flame, 34, '#ff9a3c')}</span>Cozinha</div>
+    ${cap('Pede pelo celular,', 'sem app.')}`;
+  const last = `<img class="still" src="${pathToFileURL(path.join(recA.dir, String(recA.count - 1).padStart(5, '0') + '.jpg')).href}" alt="">`;
+  const linkPath = 'M 300 815 C 400 700, 680 700, 780 815';
+  const s3 = `${top}
+    ${phoneAt(300, 820, 0.52, last, 'ph-a')}
+    ${phoneAt(780, 820, 0.52, rec(recB), 'ph-b')}
+    <svg width="1080" height="1920" style="position:absolute;inset:0;z-index:8;pointer-events:none"><path class="link" d="${linkPath}" fill="none" stroke="${TOKENS.blueBright}" stroke-width="6" stroke-linecap="round" stroke-dasharray="900" stroke-dashoffset="900" opacity="0"/></svg>
+    ${[0, 1, 2].map(() => `<div class="pulse" style="position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 0 20px 6px rgba(77,141,255,.9);offset-path:path('${linkPath}');opacity:0;z-index:9"></div>`).join('')}
+    ${'0000'.split('').map(() => `<div class="flyer digit"><span class="plus" style="font-size:50px;padding:8px 24px">•</span></div>`).join('')}
+    ${chip('same', I.link, 'Mesma conta', 'left:375px;top:620px')}
+    ${cap('O amigo entra com o código.', 'Mesma conta.')}`;
+  const sparks = Array.from({ length: 14 }, (_, i) => `<div class="spark" style="position:absolute;left:${735 - 10}px;top:${930 - 10}px;width:20px;height:20px;border-radius:${i % 2 ? '50%' : '4px'};background:${i % 3 ? TOKENS.blueBright : '#22c55e'};opacity:0;z-index:11"></div>`).join('');
+  const note = (cls, ic, bg, color, a, b, pos) => `<div class="note-card ${cls}" style="${pos}"><span class="ic" style="background:${bg}"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g class="ring">${ic}</g></svg></span><div><b>${a}</b><span>${b}</span></div></div>`;
+  const s4 = `${top}
+    ${phoneAt(735, 560, 0.72, rec(recS))}
+    ${chip('n-ok', I.check, 'Mesa confirmada', 'right:40px;top:400px')}
+    ${note('n-call', I.bell, '#fff1e6', '#ea580c', 'Mesa 5 chamou', 'agora', 'left:40px;top:400px')}
+    ${note('n-bill', I.receipt, '#e8f7ee', '#16a34a', 'Pediu a conta', 'Mesa 5', 'left:40px;top:540px')}
+    ${sparks}
+    <div class="chip free" style="left:60px;top:420px;background:#16a34a;border-color:#16a34a"><span class="ic" style="background:rgba(255,255,255,.22)">${svgI(I.check, 34, '#fff', 2.6)}</span>Mesa livre</div>
+    ${cap('O garçom confirma, atende', 'e libera a mesa.')}`;
+  const [p1, p2] = MARK.match(/<path[^>]*\/>/g);
+  const markSvg = (p, cls) => `<svg class="${cls}" viewBox="50 40 530 415" style="position:absolute;inset:0;width:100%;height:100%;opacity:0">${p}</svg>`;
+  const s5 = `<div style="position:absolute;left:96px;right:96px;top:300px">
+      <div style="position:relative;width:180px;height:142px;margin-bottom:44px">${markSvg(p1, 'm1')}${markSvg(p2, 'm2')}</div>
+      <div class="plan" style="position:relative;overflow:hidden;display:inline-flex;padding:14px 28px;border-radius:999px;border:2px solid ${TOKENS.blueBright};font-size:30px;font-weight:800;letter-spacing:.14em;color:${TOKENS.blueSoft};background:rgba(6,8,13,.6);opacity:0;transform-origin:0 50%">PLANO SCALE · EM BREVE<span class="shine" style="position:absolute;top:-20px;bottom:-20px;width:70px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)"></span></div>
+      <h1 class="h1" style="font-size:100px;margin-top:34px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Pedido na mesa,', 0.7, 0.1)} ${ws('sem app.', 1.0, 0.1, 'blue')}</h1>
+      <div style="position:relative;display:inline-block;margin-top:46px"><span class="cta-ring" style="position:absolute;inset:-6px;border-radius:999px;border:3px solid ${TOKENS.blueBright};opacity:0"></span><span class="btn cta" style="font-size:40px;padding:26px 50px;opacity:0;transform-origin:0 50%">Manda um oi. Link na bio.</span></div>
+    </div>
+    <p class="muted note" style="position:absolute;left:96px;right:96px;top:1400px;font-size:28px;line-height:1.35;opacity:0;text-align:center">Telas do sistema funcionando numa loja de demonstração com nome fictício. Nenhum pedido real.</p>`;
+
+  const bgDir = pathToFileURL(MESA3D).href;
+  const script = `document.body.insertAdjacentHTML('afterbegin','<img id="bg" data-seq="${bgDir}" data-count="${count}" src="${bgDir}/00000.jpg" alt=""><div class="shade" style="top:0;height:620px;background:linear-gradient(#06080dd9,#06080d00)"></div><div class="shade" style="bottom:0;height:720px;background:linear-gradient(#06080d00,#06080de6 60%)"></div>');\n`
+    + fs.readFileSync(path.join(HERE, 'mesa3d-motion.js'), 'utf8');
+  return reelPage({
+    css: MESA3D_CSS,
+    scenes: [
+      { start: 0, end: 4.2, html: s0 },
+      { start: 4.2, end: 7.0, html: s1 },
+      { start: 7.0, end: 16.2, html: s2 },
+      { start: 16.2, end: 22.0, html: s3 },
+      { start: 22.0, end: 31.2, html: s4 },
+      { start: 31.2, end: 35.5, html: s5 },
+    ],
+    script,
+  });
+}
+
 // ---------------------------------------------------------------------------------------
 // Os Reels
 
@@ -708,7 +803,7 @@ const REELS = {
         },
       });
 
-      const html = mesaReelHtml({ recA, recB, recS });
+      const html = mesa3dReelHtml({ recA, recB, recS });
       return { html, duration: 35.5, cover: 1.6 };
     } finally {
       await demo.stop();
