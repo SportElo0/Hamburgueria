@@ -416,16 +416,16 @@ function mesa3dReelHtml({ recA, recB, recS }) {
     </div>
     <div class="endB" style="position:absolute;left:80px;right:80px;top:330px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0">
       <p class="h1 q" style="font-size:60px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Quer isso no seu restaurante quando abrir?</p>
-      <div style="display:flex;align-items:center;gap:30px;margin-top:46px">
-        <span class="h1 com" style="font-size:118px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Comenta</span>
-        <span class="kw" style="position:relative;display:inline-block;font-size:128px;font-weight:900;letter-spacing:-.02em;color:#fff;background:${TOKENS.blue};border-radius:34px;padding:6px 38px 14px;box-shadow:0 30px 70px -20px rgba(8,101,254,1)">MESA<span class="kw-ring" style="position:absolute;inset:-10px;border-radius:44px;border:5px solid ${TOKENS.blueBright};opacity:0"></span></span>
+      <div style="display:flex;align-items:center;gap:26px;margin-top:46px">
+        <span class="h1 com" style="font-size:100px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Comenta</span>
+        <span class="kw" style="position:relative;display:inline-block;font-size:108px;font-weight:900;letter-spacing:-.02em;color:#fff;background:${TOKENS.blue};border-radius:34px;padding:6px 38px 14px;box-shadow:0 30px 70px -20px rgba(8,101,254,1)">MESA<span class="kw-ring" style="position:absolute;inset:-10px;border-radius:44px;border:5px solid ${TOKENS.blueBright};opacity:0"></span></span>
       </div>
       <div class="field" style="margin-top:64px;width:840px;display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:999px;background:rgba(15,21,32,.95);border:2px solid rgba(255,255,255,.18);box-shadow:0 30px 60px -20px rgba(0,0,0,.9)">
         <span style="flex:none;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ff9a3c,#e85d75)"></span>
         <span class="typed" style="flex:1;text-align:left;font-size:40px;font-weight:600;color:#fff">&nbsp;</span>
         <span class="send" style="flex:none;font-size:34px;font-weight:800;color:${TOKENS.blueBright}">Publicar</span>
       </div>
-      <p class="dm" style="margin-top:40px;font-size:38px;line-height:1.3;color:${TOKENS.soft};opacity:0">Você recebe no direct, por mensagem automática, como funciona. 📩</p>
+      <p class="dm" style="margin-top:40px;font-size:36px;line-height:1.3;color:#fff;background:rgba(6,8,13,.82);border-radius:24px;padding:16px 26px;opacity:0">Você recebe no direct, por mensagem automática, como funciona. 📩</p>
     </div>
     <p class="muted note" style="position:absolute;left:96px;right:96px;top:1400px;font-size:28px;line-height:1.35;opacity:0;text-align:center">Plano Scale em breve, ainda não está à venda. Telas do sistema numa loja de demonstração com nome fictício.</p>`;
 
@@ -440,7 +440,7 @@ function mesa3dReelHtml({ recA, recB, recS }) {
       { start: 7.0, end: 16.2, html: s2 },
       { start: 16.2, end: 22.0, html: s3 },
       { start: 22.0, end: 31.2, html: s4 },
-      { start: 31.2, end: 40.5, html: s5 },
+      { start: 31.2, end: 43.5, html: s5 },
     ],
     script,
   });
@@ -817,7 +817,7 @@ const REELS = {
       });
 
       const html = mesa3dReelHtml({ recA, recB, recS });
-      return { html, duration: 40.5, cover: 1.6 };
+      return { html, duration: 43.5, cover: 1.6 };
     } finally {
       await demo.stop();
     }
