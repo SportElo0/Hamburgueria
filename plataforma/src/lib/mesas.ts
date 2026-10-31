@@ -417,3 +417,16 @@ export async function seatTable(
     return s;
   });
 }
+
+/**
+ * The staff frees a table from the map: an unconfirmed one is dismissed, a seated one with nothing ordered by
+ * QR is closed (the time still goes into the analysis). A table with QR orders must be closed in the floor screen,
+ * where the payment is chosen.
+ */
+export async function freeTable(slug: string, number: number, by: string, now = new Date()) {
+  const t = (await floor(slug, now)).find((x) => x.number === number);
+  if (!t) throw new TableError('Essa mesa já está livre.');
+  if (!t.confirmed) return dismissTable(slug, number, by);
+  if (t.orders.some((o) => o.status !== 'recusado')) throw new TableError('Essa mesa tem pedidos pelo QR: feche a conta na tela do salão.');
+  await closeTable(slug, number, 'dinheiro', by, now);
+}

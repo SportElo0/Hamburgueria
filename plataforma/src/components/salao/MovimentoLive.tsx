@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import type { PublicFloor } from '@/lib/movimento';
-import { FloorGrid, Legend } from './FloorGrid';
+import { SalaoDesenho } from './SalaoDesenho';
 
 const POLL_MS = 20_000;
 const LEVEL = {
@@ -55,8 +55,9 @@ export function MovimentoLive({ slug, initial }: { slug: string; initial: Public
 
       <section className="mt-5 space-y-3">
         <h2 className="text-sm font-bold">Mapa do salão</h2>
-        <FloorGrid label="Mesas do salão" spots={floor.tables.map((t) => ({ ...t, state: t.taken ? 'ocupada' : 'livre' }))} />
-        <Legend states={['livre', 'ocupada']} />
+        <div className="card overflow-hidden p-3">
+          <SalaoDesenho label="Mesas do salão agora" mesas={floor.tables.map((t) => ({ ...t, state: t.taken ? 'ocupada' : 'livre' }))} />
+        </div>
       </section>
 
       <p className="mt-6 text-xs text-ink-mute">

@@ -25,7 +25,7 @@ import {
   slotTimes,
 } from '@/lib/reservas';
 import { setMercadoPagoToken } from '@/lib/pix';
-import { closeTable, floor, seatTable, seatingHistory } from '@/lib/mesas';
+import { closeTable, floor, freeTable, seatTable, seatingHistory } from '@/lib/mesas';
 import { publicFloor } from '@/lib/movimento';
 import { occupancy, stayStats } from '@/lib/salao';
 import type { SeatingRecord } from '@/lib/mesas';
@@ -203,6 +203,14 @@ describe('no salão', () => {
     expect(hist).toHaveLength(1);
     expect(hist[0]).toMatchObject({ number: 3, minutes: 90, people: 2, credit: 4000, reserved: true });
     expect((await getReservation(SLUG, r.id))!.status).toBe('concluida');
+  });
+
+  it('liberar a mesa pelo mapa: fica livre e o tempo entra no histórico', async () => {
+    await seatTable(SLUG, 4, { people: 3 }, at('19:00'));
+    await freeTable(SLUG, 4, 'caixa', at('19:50'));
+    expect((await floor(SLUG, at('19:51'))).some((t) => t.number === 4)).toBe(false);
+    expect((await seatingHistory(SLUG, 30, at('20:00'))).find((r) => r.number === 4)).toMatchObject({ minutes: 50, people: 3, orders: 0 });
+    await expect(freeTable(SLUG, 4, 'caixa', at('19:52'))).rejects.toThrow(/já está livre/);
   });
 
   it('o garçom senta sem QR, e a página pública mostra só livre/ocupada', async () => {

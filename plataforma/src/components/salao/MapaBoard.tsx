@@ -3,11 +3,11 @@
 import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import type { MapForStaff } from '@/app/api/loja/[slug]/mapa/route';
-import { reservationAction, seatAction } from '@/app/loja/[slug]/actions';
+import { freeTableAction, reservationAction, seatAction } from '@/app/loja/[slug]/actions';
 import { RESERVATION_LABEL } from '@/lib/reservas-labels';
 import { brl } from '@/lib/ordering';
 import { duration } from '@/lib/salao';
-import { FloorGrid, Legend, type Spot, type SpotState } from './FloorGrid';
+import { SalaoDesenho, type DesenhoMesa, type DesenhoState } from './SalaoDesenho';
 
 const POLL_MS = 5000;
 type Table = MapForStaff['tables'][number];
@@ -17,7 +17,7 @@ const minutesSince = (iso: string, now: number) => Math.max(0, Math.round((now -
 const startOf = (b: Booking) => Date.parse(`${b.date}T${b.time}:00-03:00`);
 const fone = (p: string) => (p.length === 11 ? `(${p.slice(0, 2)}) ${p.slice(2, 7)}-${p.slice(7)}` : `(${p.slice(0, 2)}) ${p.slice(2, 6)}-${p.slice(6)}`);
 
-function stateOf(t: Table | undefined): SpotState {
+function stateOf(t: Table | undefined): DesenhoState {
   if (!t) return 'livre';
   if (!t.confirmed) return 'aguardando';
   if (t.calls.includes('conta')) return 'conta';
@@ -67,7 +67,7 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
 
   const now = Date.parse(data.now);
   const byNumber = new Map(data.tables.map((t) => [t.number, t]));
-  const spots: Spot[] = data.layout.map((s) => {
+  const spots: DesenhoMesa[] = data.layout.map((s) => {
     const t = byNumber.get(s.number);
     return { ...s, state: stateOf(t), note: t ? duration(minutesSince(t.openedAt, now)) : undefined };
   });
@@ -124,8 +124,10 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
 
       <div className="grid gap-5 lg:grid-cols-[1fr_22rem]">
         <section className="space-y-3">
-          <FloorGrid label="Mapa do salão" spots={spots} onSelect={pick} selected={selected} />
-          <Legend states={['livre', 'ocupada', 'aguardando', 'conta']} />
+          <div className="card overflow-hidden p-3 sm:p-4">
+            <SalaoDesenho label="Mapa do salão: toque numa mesa" mesas={spots} onSelect={pick} selected={selected} />
+          </div>
+          <p className="text-xs text-ink-mute">Toque numa mesa para sentar clientes ou liberar. O site do restaurante mostra a mudança em poucos segundos.</p>
         </section>
 
         <aside className="space-y-4">
@@ -157,9 +159,15 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
                     )}
                   </dl>
                   <PeopleEditor key={`ocupada-${selected}`} value={table.people ?? people} disabled={pending} onSave={(n) => run(() => seatAction(slug, selected, n))} label="Atualizar pessoas" />
-                  <a href={`/loja/${slug}/salao`} className="btn-ghost w-full">
-                    Abrir no salão para fechar a conta
-                  </a>
+                  {table.orders === 0 ? (
+                    <button type="button" className="btn-ghost w-full" disabled={pending} onClick={() => run(() => freeTableAction(slug, selected), () => setSelected(null))}>
+                      Liberar mesa
+                    </button>
+                  ) : (
+                    <a href={`/loja/${slug}/salao`} className="btn-ghost w-full">
+                      Fechar a conta no salão
+                    </a>
+                  )}
                 </>
               ) : (
                 <>

@@ -9,13 +9,23 @@ const nextConfig: NextConfig = {
     '/painel/conteudos': ['./conteudos-gerados/manifest.json'],
     '/painel/conteudos/**': ['./conteudos-gerados/**/*'],
   },
-  // The panel is never framed by another site; files keep their declared type.
+  // The panel is never framed by another site (except the live-floor widget); files keep their declared type.
   async headers() {
     return [
       {
-        source: '/:path*',
+        // Everything except the live-floor widget, which restaurants embed in their own sites.
+        source: '/:path((?!movimento/[^/]+/embed$).*)',
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+      {
+        // Read-only and public (tables free or taken, nothing personal): any site may frame it.
+        source: '/movimento/:slug/embed',
+        headers: [
+          { key: 'Content-Security-Policy', value: 'frame-ancestors *' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         ],

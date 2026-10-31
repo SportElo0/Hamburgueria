@@ -6,7 +6,7 @@ import { OPERATOR_ACTIONS, PAYMENT_METHODS, type OperatorAction, type PaymentMet
 import { isSlug } from '@/lib/slug';
 import { setOptOut } from '@/lib/customers';
 import { ItemEditError, addPedido, editItemByStore, listPedidos } from '@/lib/stores';
-import { TableError, answerCall, closeTable, confirmTable, dismissTable, seatTable } from '@/lib/mesas';
+import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, seatTable } from '@/lib/mesas';
 import { ReservationError, cancelByStore, markArrived, markFinished, markNoShow, undoArrived } from '@/lib/reservas';
 
 export interface OrderActionResult {
@@ -141,5 +141,19 @@ export async function reservationAction(slug: string, id: string, action: Reserv
     if (err instanceof ReservationError || err instanceof TableError) return { ok: false, error: err.message };
     console.error('reservationAction', err);
     return { ok: false, error: 'Não foi possível atualizar a reserva. Tente de novo.' };
+  }
+}
+
+/** Frees a table from the floor map (no QR orders on it). */
+export async function freeTableAction(slug: string, number: number): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !Number.isInteger(number) || number < 1 || number > 200) return { ok: false, error: 'Mesa inválida.' };
+  const user = await requireStoreAccess(slug);
+  try {
+    await freeTable(slug, number, user.name || user.email);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof TableError) return { ok: false, error: err.message };
+    console.error('freeTableAction', err);
+    return { ok: false, error: 'Não foi possível liberar a mesa. Tente de novo.' };
   }
 }

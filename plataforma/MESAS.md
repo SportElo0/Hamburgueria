@@ -50,6 +50,13 @@ mesma tela da cozinha dos pedidos do site e entra nos mesmos relatórios (modo "
 - **Movimento público** (`/movimento/<loja>`, sem login; JSON em `/api/public/lojas/<loja>/movimento`): nível
   (tranquilo, movimentado, cheio), mesas livres e o mapa só com livre/ocupada. Reserva que chega nos próximos 30 min
   conta como mesa ocupada. Dá para pôr um botão "Ver movimento" no site do restaurante.
+- **Salão desenhado:** o mapa do dono, a página de movimento e o site do restaurante mostram o salão em perspectiva,
+  com mesas, cadeiras e pessoinhas nas mesas ocupadas (`src/components/salao/SalaoDesenho.tsx`, SVG puro). No mapa,
+  tocar numa mesa abre **Sentar clientes** ou **Liberar mesa** (sem pedidos pelo QR); o site muda em até ~15 s.
+- **No site do restaurante:** `/movimento/<loja>/embed` é a única página do painel que pode ir dentro de outro site
+  (iframe; `frame-ancestors *` só nela, ver `next.config.ts`). Ela avisa a altura para o site ajustar o quadro
+  (`postMessage` tipo `growlift-movimento`). No El Patron: `elpatron/src/components/sections/MovimentoAoVivo.tsx`,
+  que só aparece quando a loja tem mesas ligadas no painel.
 - **Reservas** (`/reservar/<loja>`, sem login): o cliente escolhe dia, horário e pessoas, aceita as regras e paga o
   sinal pelo Pix (padrão: R$ 15 fixo por reserva, só para ninguém reservar à toa; dá para cobrar por pessoa; 0 = sem sinal). Página da reserva com o link secreto
   (`/reservar/<loja>/<id>?t=…`): Pix, confirmação e cancelamento.

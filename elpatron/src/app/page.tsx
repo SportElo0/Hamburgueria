@@ -2,6 +2,7 @@ import { MenuSection } from '@/components/menu/MenuSection';
 import { MobileCartBar, SiteHeader } from '@/components/nav/SiteHeader';
 import { SiteFooter, StorySection } from '@/components/sections/InfoSections';
 import { LocationSection } from '@/components/sections/LocationSection';
+import { MovimentoAoVivo } from '@/components/sections/MovimentoAoVivo';
 import { CinematicStory } from '@/components/story/CinematicStory';
 import { StaticStory } from '@/components/story/StaticStory';
 import { products } from '@/content/menu';
@@ -40,6 +41,7 @@ export default function Home() {
         <StaticStory />
         <MenuSection />
         <StorySection />
+        <MovimentoAoVivo />
         <LocationSection />
       </main>
       <SiteFooter />
