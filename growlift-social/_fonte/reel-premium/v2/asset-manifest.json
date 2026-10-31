@@ -1,0 +1,1145 @@
+{
+  "regra": "Só capturas reais e arquivos dos próprios sites. Nenhuma interface gerada por IA, nenhum logo inventado. Os quatro sites aparecem como projetos conceito com nome fictício (CLAUDE.md, marcas de terceiros).",
+  "como_refazer": [
+    "node growlift-social/_fonte/reel-premium/v2/source/capturar.mjs",
+    "SO_HERO4=1 node …/capturar.mjs",
+    "python3 …/recortar.py",
+    "node …/keyframes.mjs",
+    "node …/pranchas.mjs",
+    "python3 …/manifesto.py"
+  ],
+  "assets": [
+    {
+      "arquivo": "assets/salinho/cel-hero-peca-2.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero depois de clicar na peça 2 (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/cel-hero-peca-3.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero depois de clicar na peça 3 (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/cel-hero-peca-4.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero depois de clicar na peça 4 (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/cel-hero.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no celular, 390×844 a 3×",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/cel-look.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"look\" inteira (celular 3×)",
+      "tamanho_px": [
+        1020,
+        3204
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/cel-rodape.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        1131
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/cel-roleta.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"roleta\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        4122
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/cel-selecao.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"selecao\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        11124
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-hero-peca-2.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero depois de clicar na peça 2 (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-hero-peca-3.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero depois de clicar na peça 3 (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-hero-peca-4.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero depois de clicar na peça 4 (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-hero.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 2×",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-look.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"look\" inteira (computador 2×)",
+      "tamanho_px": [
+        2532,
+        1450
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-rodape.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1172
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-rolagem.mp4",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "gravação da rolagem no computador (referência do movimento)"
+    },
+    {
+      "arquivo": "assets/salinho/pc-roleta.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"roleta\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1898
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc-selecao.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"selecao\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        3758
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pc4x-hero.png",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 4× (para recortes)",
+      "tamanho_px": [
+        5760,
+        3600
+      ]
+    },
+    {
+      "arquivo": "assets/salinho/pecas/linen-long.webp",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/assets/linen-long.webp",
+      "como": "arquivo de imagem do próprio site (peça com fundo transparente), baixado sem alteração",
+      "o_que_e": "peça de linho"
+    },
+    {
+      "arquivo": "assets/salinho/pecas/linen-pants.webp",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/assets/linen-pants.webp",
+      "como": "arquivo de imagem do próprio site (peça com fundo transparente), baixado sem alteração",
+      "o_que_e": "peça de linho"
+    },
+    {
+      "arquivo": "assets/salinho/pecas/linen-short.webp",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/assets/linen-short.webp",
+      "como": "arquivo de imagem do próprio site (peça com fundo transparente), baixado sem alteração",
+      "o_que_e": "peça de linho"
+    },
+    {
+      "arquivo": "assets/salinho/pecas/linen-shorts.webp",
+      "projeto": "Salinho",
+      "origem": "https://semvo-juquehy.pages.dev/assets/linen-shorts.webp",
+      "como": "arquivo de imagem do próprio site (peça com fundo transparente), baixado sem alteração",
+      "o_que_e": "peça de linho"
+    },
+    {
+      "arquivo": "assets/chapa77/cel-cardapio.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"cardapio\" inteira (celular 3×)",
+      "tamanho_px": [
+        1140,
+        19368
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-hero.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no celular, 390×844 a 3×",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-historia-1.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-historia-2.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-historia-3.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-historia-4.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 4 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-historia-5.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 5 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-historia-6.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 6 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-historia.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"historia\" inteira (celular 3×)",
+      "tamanho_px": [
+        1140,
+        2910
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/cel-rodape.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (celular 3×)",
+      "tamanho_px": [
+        1140,
+        3141
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-cardapio.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"cardapio\" inteira (computador 2×)",
+      "tamanho_px": [
+        2860,
+        7544
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-hero.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 2×",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-historia-1.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-historia-2.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-historia-3.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-historia-4.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 4 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-historia-5.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 5 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-historia-6.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 6 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-historia.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"historia\" inteira (computador 2×)",
+      "tamanho_px": [
+        2860,
+        2434
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-rodape.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (computador 2×)",
+      "tamanho_px": [
+        2860,
+        1372
+      ]
+    },
+    {
+      "arquivo": "assets/chapa77/pc-rolagem.mp4",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "gravação da rolagem no computador (referência do movimento)"
+    },
+    {
+      "arquivo": "assets/chapa77/pc4x-hero.png",
+      "projeto": "Chapa 77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 4× (para recortes)",
+      "tamanho_px": [
+        5760,
+        3600
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-aluguel.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"aluguel\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        3171
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-historia-1.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-historia-2.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-historia-3.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-pranchas.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"pranchas\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        3570
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-rodape.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        1011
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/cel-session.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"session\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        5274
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/foto-generica/surfista-generico.png",
+      "projeto": "Swell Club",
+      "origem": "imagem gerada por IA, pessoa que não existe",
+      "como": "gerada no Higgsfield (gpt_image_2_5, 2k, qualidade alta, 2,75 créditos); prompt em growlift-social/08-prompts/prompts.md",
+      "o_que_e": "surfista genérico que substitui, só na captura, a foto do dono da loja",
+      "tamanho_px": [
+        1360,
+        2048
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-aluguel.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"aluguel\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1444
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-historia-1.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-historia-2.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-historia-3.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-pranchas.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"pranchas\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1840
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-rodape.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1184
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc-rolagem.mp4",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "gravação da rolagem no computador (referência do movimento)"
+    },
+    {
+      "arquivo": "assets/swellclub/pc-session.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"session\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        2574
+      ]
+    },
+    {
+      "arquivo": "assets/swellclub/pc4x-hero.png",
+      "projeto": "Swell Club",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 4× (para recortes)",
+      "tamanho_px": [
+        5760,
+        3600
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-cafe.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"cafe\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        8097
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-hero.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no celular, 390×844 a 3×",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-historia-1.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-historia-2.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-historia-3.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-historia-4.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 4 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-historia-5.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 5 da história contada na rolagem (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-rodape.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        1287
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-visite.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"visite\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        1647
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/cel-vitrine.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"vitrine\" inteira (celular 3×)",
+      "tamanho_px": [
+        1170,
+        2886
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-cafe-selecao.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"cafe-selecao\" inteira (computador 2×)",
+      "tamanho_px": [
+        994,
+        1472
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-cafe.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"cafe\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        4644
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-hero.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 2×",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-historia-1.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 1 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-historia-2.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 2 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-historia-3.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 3 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-historia-4.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 4 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-historia-5.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "momento 5 da história contada na rolagem (computador 2×)",
+      "tamanho_px": [
+        2880,
+        1800
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-rodape.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"rodape\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        836
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-rolagem.mp4",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "gravação da rolagem no computador (referência do movimento)"
+    },
+    {
+      "arquivo": "assets/fornada/pc-visite.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"visite\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        890
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc-vitrine.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "seção \"vitrine\" inteira (computador 2×)",
+      "tamanho_px": [
+        2880,
+        2510
+      ]
+    },
+    {
+      "arquivo": "assets/fornada/pc4x-hero.png",
+      "projeto": "Fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "como": "captura com Playwright, nome, logo e lugares trocados na página antes da foto (anonimizar.mjs)",
+      "o_que_e": "hero no computador, 1440×900 a 4× (para recortes)",
+      "tamanho_px": [
+        5760,
+        3600
+      ]
+    },
+    {
+      "arquivo": "assets/growlift/marca.svg",
+      "projeto": "Growlift",
+      "origem": "growlift/favicon.svg do repositório (o mesmo vetor do logotipo do site)",
+      "o_que_e": "símbolo oficial da Growlift"
+    },
+    {
+      "arquivo": "assets/growlift/pc-hero.png",
+      "projeto": "Growlift",
+      "origem": "https://growlift.com.br, captura 1440×900 a 2×",
+      "o_que_e": "hero do site da Growlift"
+    },
+    {
+      "arquivo": "assets/growlift/cel-hero.png",
+      "projeto": "Growlift",
+      "origem": "https://growlift.com.br, captura 390×844 a 3×",
+      "o_que_e": "hero do site da Growlift no celular"
+    },
+    {
+      "arquivo": "assets/growlift/marca-vidro-vertical.png",
+      "projeto": "Growlift",
+      "origem": "growlift-social/_fonte/assets/hd (gerada no Higgsfield a partir do logotipo; ver 08-prompts)",
+      "o_que_e": "marca de vidro vertical"
+    },
+    {
+      "arquivo": "assets/growlift/hero-video-quadro.png",
+      "projeto": "Growlift",
+      "origem": "quadro em 3,5 s de growlift/img/hero.mp4 (vídeo do site)",
+      "o_que_e": "marca de vidro do vídeo do site"
+    },
+    {
+      "arquivo": "assets/fontes/",
+      "projeto": "Growlift",
+      "origem": "growlift/fonts (Inter, licença OFL, a mesma do site)",
+      "o_que_e": "fonte da marca"
+    },
+    {
+      "arquivo": "assets/_gravacoes/rec-chapa77/",
+      "projeto": "chapa77",
+      "origem": "https://downtown-burger-gilt.vercel.app",
+      "o_que_e": "gravação quadro a quadro do site (78 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
+      "arquivo": "assets/_gravacoes/rec-fornada/",
+      "projeto": "fornada",
+      "origem": "https://feito-a-mao-juquehy.pages.dev",
+      "o_que_e": "gravação quadro a quadro do site (96 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
+      "arquivo": "assets/_gravacoes/rec-salinho/",
+      "projeto": "salinho",
+      "origem": "https://semvo-juquehy.pages.dev/pt/?loja=juquehy",
+      "o_que_e": "gravação quadro a quadro do site (69 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
+      "arquivo": "assets/_gravacoes/rec-swellclub/",
+      "projeto": "swellclub",
+      "origem": "https://surflife-juquehy.pages.dev/",
+      "o_que_e": "gravação quadro a quadro do site (66 quadros, 30 por segundo), para o vídeo final",
+      "como": "source/gravacoes.mjs: navegador de verdade, anonimizado como na captura; não vai para o git (refazer com o script)"
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-titulo.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/pc4x-hero.png",
+      "o_que_e": "título do hero \"Leve por natureza.\"",
+      "como": "recorte da captura (caixa CSS [58, 284, 388, 466], 4×), sem alteração",
+      "tamanho_px": [
+        1320,
+        728
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-painel.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/pc4x-hero.png",
+      "o_que_e": "painel da peça com tamanho e reserva",
+      "como": "recorte da captura (caixa CSS [1108, 182, 1388, 716], 4×), sem alteração",
+      "tamanho_px": [
+        1120,
+        2136
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-botao.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/pc4x-hero.png",
+      "o_que_e": "botão \"Reserve minha peça\"",
+      "como": "recorte da captura (caixa CSS [1120, 463, 1379, 530], 4×), sem alteração",
+      "tamanho_px": [
+        1036,
+        268
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-miniaturas.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/pc4x-hero.png",
+      "o_que_e": "seletor das 4 peças",
+      "como": "recorte da captura (caixa CSS [1118, 624, 1382, 714], 4×), sem alteração",
+      "tamanho_px": [
+        1056,
+        360
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-cartao.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/pc4x-hero.png",
+      "o_que_e": "hero inteiro, sem a margem creme da página",
+      "como": "recorte da captura (caixa CSS [16, 16, 1424, 884], 4×), sem alteração",
+      "tamanho_px": [
+        2900,
+        1788
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-look-topo.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/cel-look.png",
+      "o_que_e": "topo da página \"Branco para novos começos\" no celular",
+      "como": "recorte da captura (caixa CSS [0, 0, 340, 736], 3×), sem alteração",
+      "tamanho_px": [
+        1020,
+        2208
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/salinho-selecao-topo.png",
+      "projeto": "salinho",
+      "origem": "assets/salinho/cel-selecao.png",
+      "o_que_e": "topo da página \"A virada pede leveza\" no celular",
+      "como": "recorte da captura (caixa CSS [0, 0, 390, 844], 3×), sem alteração",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/chapa77-burger.png",
+      "projeto": "chapa77",
+      "origem": "assets/chapa77/pc4x-hero.png",
+      "o_que_e": "lanche do hero sobre o vermelho (render 3D da Growlift)",
+      "como": "recorte da captura (caixa CSS [430, 280, 990, 728], 4×), sem alteração",
+      "tamanho_px": [
+        2240,
+        1792
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/swellclub-letras.png",
+      "projeto": "swellclub",
+      "origem": "assets/swellclub/pc-rodape.png",
+      "o_que_e": "nome gigante do rodapé",
+      "como": "recorte da captura (caixa CSS [95, 205, 1440, 492], 2×), sem alteração",
+      "tamanho_px": [
+        2690,
+        574
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-bebida.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/pc-historia-4.png",
+      "o_que_e": "cena ilustrativa de chocolate quente (hero)",
+      "como": "recorte da captura (caixa CSS [900, 40, 1420, 820], 2×), sem alteração",
+      "tamanho_px": [
+        1040,
+        1560
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-reserva-titulo.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/pc-cafe.png",
+      "o_que_e": "título \"Reserve seu café da manhã.\"",
+      "como": "recorte da captura (caixa CSS [100, 115, 600, 310], 2×), sem alteração",
+      "tamanho_px": [
+        1000,
+        390
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-reserva-cel.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/cel-cafe.png",
+      "o_que_e": "topo da reserva do café no celular",
+      "como": "recorte da captura (caixa CSS [0, 0, 390, 844], 3×), sem alteração",
+      "tamanho_px": [
+        1170,
+        2532
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-titulo.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/pc-vitrine.png",
+      "o_que_e": "título \"O simples. Extraordinário.\"",
+      "como": "recorte da captura (caixa CSS [108, 108, 604, 296], 2×), sem alteração",
+      "tamanho_px": [
+        992,
+        376
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-folhado.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/pc-vitrine.png",
+      "o_que_e": "foto \"Camada por camada.\"",
+      "como": "recorte da captura (caixa CSS [546, 467, 998, 1071], 2×), sem alteração",
+      "tamanho_px": [
+        904,
+        1208
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-folhado-legenda.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/pc-vitrine.png",
+      "o_que_e": "legenda da foto",
+      "como": "recorte da captura (caixa CSS [540, 1086, 770, 1144], 2×), sem alteração",
+      "tamanho_px": [
+        460,
+        116
+      ]
+    },
+    {
+      "arquivo": "assets/_recortes/fornada-paes.png",
+      "projeto": "fornada",
+      "origem": "assets/fornada/pc-vitrine.png",
+      "o_que_e": "foto \"Pães com personalidade.\"",
+      "como": "recorte da captura (caixa CSS [115, 362, 516, 896], 2×), sem alteração",
+      "tamanho_px": [
+        802,
+        1068
+      ]
+    }
+  ]
+}

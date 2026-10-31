@@ -1,0 +1,110 @@
+# Bacchi: site institucional e catálogo digital
+
+Novo site da Bacchi Indústria e Comércio de Artefatos de Ferro Ltda. (desde 1937), feito a partir do site atual
+(clipsbacchi.com.br) e do PDF "Catálogo Bacchi (novo)". Publicado só como **versão de teste** (bacchi-teste.vercel.app, fora do Google, com faixa "Versão de teste").
+O site atual da Bacchi não foi alterado.
+
+Next.js 16 (App Router) · TypeScript · Tailwind 4 · GSAP + ScrollTrigger · zod · vitest.
+
+## Páginas
+
+| Rota | O que tem |
+| --- | --- |
+| `/` | Abertura com o vídeo real do clip, os 13 clips desenhados em escala, capítulo 1937 (preto e branco → cor), as 4 famílias em rolagem lateral, fábrica, mapa de representantes, fechamento |
+| `/produtos` | Catálogo com busca (nome ou número: 2/0, 26/6, colchete 9…), filtro por família e acabamento; o filtro fica no endereço (dá para compartilhar) |
+| `/produtos/[linha]` | As 13 linhas, cada uma com fotos, especificações, ficha técnica do PDF e o botão "Adicionar" por modelo |
+| `/cotacao` | Lista de orçamento (fica salva no navegador) e botão que abre o WhatsApp da Bacchi com a mensagem pronta |
+| `/representantes` | 34 representações em 27 estados: mapa por estado, lista e busca |
+| `/sobre` | História, com os textos e as fotos históricas do site atual |
+| `/contato` | Endereço, telefone, WhatsApp, e-mail e formulário |
+| `/catalogo-bacchi.pdf` | O PDF do catálogo para baixar |
+
+Também: `sitemap.xml`, `robots.txt`, imagem de compartilhamento (`/og.jpg`), dados estruturados (Organization,
+Product sem preço, BreadcrumbList), página 404.
+
+## Rodar
+
+```bash
+cd bacchi
+npm install
+npm run dev          # http://localhost:3000
+npm test             # 14 testes: números do catálogo, representantes, cotação
+npm run typecheck
+npm run lint
+npm run build && npm start
+```
+
+As imagens já estão em `public/`. Para refazer a partir do site atual: `npm run imagens` (Python 3 com Pillow
+e ffmpeg). O script baixa as fotos e o vídeo publicados em clipsbacchi.com.br, converte para WebP/MP4/WebM e
+copia `assets/catalogo-bacchi.pdf` para `public/`.
+
+## Cotação e contato
+
+A cotação vai **pelo WhatsApp** da Bacchi, (11) 95089-2731, o número do botão do site atual. O botão abre a
+conversa com uma mensagem curta já escrita (saudação, um bloco por item com acabamento, embalagem e
+quantidade, agradecimento). Sem formulário nem e-mail, e nenhum dado passa pelo servidor do site.
+
+O formulário da página Contato envia por e-mail com o Resend. **Sem as variáveis abaixo o site não finge que
+enviou:** o botão mostra "Envio pelo site ainda não configurado" e oferece telefone, WhatsApp e e-mail.
+
+| Variável (na Vercel) | Exemplo |
+| --- | --- |
+| `RESEND_API_KEY` | chave criada no Resend (nunca no repositório) |
+| `COTACAO_REMETENTE` | `Site Bacchi <site@dominio-da-bacchi>` (domínio verificado no Resend) |
+| `COTACAO_DESTINO` | `bacchivendas@uol.com.br` (vários: separar por vírgula) |
+| `NEXT_PUBLIC_SITE_URL` | endereço final do site, para sitemap e compartilhamento (sem ela, na Vercel usa o endereço do próprio projeto) |
+| `INDEXAR` | `sim` só na versão final aprovada. Sem ela o site fica fora do Google (noindex) e mostra a faixa "Versão de teste" |
+
+Proteções do formulário de contato: mesma origem, limite de 5 envios a cada 10 minutos por IP,
+campo-armadilha para robôs, tempo mínimo de preenchimento, aceite obrigatório. Nada é guardado no servidor.
+
+## Publicar na Vercel (só com autorização)
+
+1. Novo projeto na Vercel, repositório `SportElo0/Hamburgueria`, **Root Directory `bacchi`**, framework Next.js.
+2. Variáveis da tabela acima (pode publicar sem o Resend; o site avisa que o envio é pelo WhatsApp/e-mail).
+3. Antes de apontar o domínio: rodar os revisores `revisor-seguranca` e `revisor-legal` e ter a aprovação da
+   Bacchi nos itens abaixo.
+4. Domínio: só quando a Bacchi decidir trocar o site atual. Não mexer no DNS de clipsbacchi.com.br sem ordem.
+
+## Precisa de aprovação da Bacchi
+
+Frases do site atual que **tirei** por recomendação da revisão legal (só voltam se a Bacchi tiver como provar):
+- "Sendo a mais antiga e tradicional empresa do setor…" (trocada por "Com mais de 85 anos de história…")
+- "…é hoje a empresa escolhida por todos os mais importantes distribuidores…" (trocada por "Atende distribuidores… em todo o Brasil")
+- "Nossos produtos são homologados nas principais empresas e órgãos públicos…" (removida)
+- "pioneira na produção de clips…" (removida) e "para garantir a inviolabilidade" (ficou "lacradas")
+
+Para a versão final (revisão legal):
+- Autorização por escrito (pode ser e-mail) de um sócio ou administrador da Bacchi para usar marca, fotos, vídeo, catálogo e contatos.
+- CNPJ no rodapé e página de política de privacidade (Vercel e Resend como operadores, direitos do titular).
+- Confirmar que cada representante está ativo e aceita aparecer; telefones suspeitos: MG (31) 8929-5459 e (31) 8600-4556, RN (84) 9808-3774, RS (51) 3361-4335 marcado como WhatsApp.
+- Contrato ou cessão das fotos e vídeos (Eduardo Sardinha) e autor das demais fotos; o crédito no rodapé hoje generaliza.
+- Documento que comprove 1937 e a origem das fotos históricas (há um operário identificável em `historica-02`).
+
+Dados de contato:
+- WhatsApp (11) 95089-2731: tirado do botão do site atual. Confirmar se é o número comercial.
+- E-mail bacchivendas@uol.com.br: tirado do PDF (o site atual não mostra e-mail).
+- Representantes: os 34 contatos foram copiados do site atual. Corrigi a grafia de algumas cidades (ex.:
+  acentos). Só marquei WhatsApp onde o site atual diz que é WhatsApp (DF/GO, ES e RS); os outros números
+  aparecem só como telefone.
+- Crédito das fotos e vídeos: "Eduardo Sardinha", tirado do nome do arquivo do vídeo no site atual.
+
+Dados de produto:
+- Encadernador plástico estendido: o PDF não diz as cores. Aparece "A confirmar".
+- Cores dos alfinetes para mapas e dos percevejos coloridos: tiradas da ilustração do PDF.
+- Nomes de algumas fotos do site atual dizem 2250 e 1800 unidades; a tabela do PDF diz 2.200 e 1.750. O site usa
+  o PDF.
+
+## Fotos que faltam
+
+- Pranchetas: uma foto de cada tamanho (memorando, ofício, meio ofício). Hoje há uma foto das três juntas.
+- Embalagens de grampos e alfinetes, e a caixa master (o PDF não traz).
+- Legendas e anos das fotos históricas (hoje dizem só "Acervo Bacchi").
+- Fábrica atual em Cotia: o site não afirma que as fotos de máquinas são de Cotia, só "fábrica Bacchi".
+
+## Higgsfield (nenhum crédito gasto)
+
+O vídeo da abertura e todas as fotos são reais, do site atual. Se a Bacchi quiser, propostas para aprovar antes de
+gastar crédito: (1) vídeo macro de um clip girando em fundo escuro, feito a partir de uma foto real do produto,
+para a abertura; (2) passagem de câmera lenta sobre uma caixa de clips aberta. Nada gerado seria apresentado como
+foto da fábrica.
