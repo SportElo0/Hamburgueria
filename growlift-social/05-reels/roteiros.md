@@ -230,30 +230,34 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 ```
 
 ## 10. Pedido na mesa (plano Scale)
-- **Inspiração:** o formato dos vídeos de sistema de pedido na mesa que o Antônio mandou (passo a passo com a tela de verdade). Texto, telas e marca são nossos.
-- **Gancho, 0 a 3,4 s:** "Salão cheio. Garçom correndo." / "E se a mesa pedisse pelo celular, sem app?"
-- **Cliente, 3,4 a 13,8 s:** lê o QR, abre a Mesa 5, pede um Brasa Duplo e uma batata e envia. A tela mostra o código da mesa.
-- **Amigo, 13,8 a 19,6 s:** digita o código de 4 números e entra na mesma conta.
-- **Garçom, 19,6 a 29 s:** no celular dele, confirma a mesa, recebe "Mesa 5 chamou" e "pediu a conta", toca em "Estou indo" e fecha a conta (Pix, cartão ou dinheiro).
-- **Fecho, 29 a 33,5 s:** "Pedido na mesa, sem app. Plano Scale, em breve." / "Manda um oi. Link na bio."
-- **Marcação:** "Loja de demonstração · nome fictício" em todas as telas e no fecho. As telas são do sistema real, gravadas numa loja de teste (Brasa Burger), sem nenhum pedido real.
-- **O que o vídeo não mostra (porque ainda não existe):** pagar pelo celular na mesa e jogo entre as mesas. Se perguntarem, digam que ainda não tem.
-- **Música:** só faixas liberadas para conta comercial. Uma batida de 100 a 110 BPM combina com as trocas (3,4 / 13,8 / 19,6 / 29 s).
+- **Formato:** passo a passo com as telas do sistema funcionando, com animação: salão desenhado, QR escaneado, itens indo para a sacola, código passando de um celular para o outro e avisos saltando do celular do garçom.
+- **Gancho, 0 a 4,2 s:** "Salão cheio. Garçom correndo." com o salão desenhado e o garçom correndo entre as mesas. / "E se a mesa pedisse pelo celular, sem app?"
+- **QR, 4,2 a 7 s:** o celular escaneia o QR da Mesa 5. "Mesa 5 aberta."
+- **Cliente, 7 a 16,2 s:** pede um Brasa Duplo e uma batata ("Sem app", "Sem cadastro"); o pedido voa para a cozinha.
+- **Amigo, 16,2 a 22 s:** o código de 4 números passa de um celular para o outro: "Mesma conta".
+- **Garçom, 22 a 31,2 s:** confirma a mesa, recebe "Mesa 5 chamou" e "Pediu a conta", registra como a mesa pagou e libera a mesa.
+- **Fecho, 31,2 a 35,5 s:** "Plano Scale · em breve" / "Pedido na mesa, sem app." / "Manda um oi. Link na bio."
+- **Marcação:** "Projeto conceito · loja de demonstração · nome fictício" em todas as telas, e o aviso no fecho. Nenhum pedido real.
+- **O que não existe ainda (não mostrar nem prometer):** pagar pelo celular na mesa, dividir a conta e jogo entre as mesas. Se perguntarem, digam que ainda não tem.
+- **Antes de postar:** no preview do app, confira se a faixa "Projeto conceito" não fica atrás da legenda. Procurem "Brasa Burger" no Instagram e no Google Maps; se existir um em São Paulo, avisem para trocar o nome.
+- **Música:** só faixas liberadas para conta comercial (não usem áudio de outro perfil). Uma batida de 100 a 110 BPM casa com as trocas (4,2 / 7 / 16,2 / 22 / 31,2 s). Anotem o nome da faixa.
+- **Quem responder:** "Oi! O Scale ainda não está à venda e não tem preço nem data. Se quiser, aviso você quando abrir. Posso avisar? (Responda SAIR a qualquer momento para parar.)" Não aceitem sinal nem reserva.
 
-**Vídeo pronto:** `10-pedido-na-mesa.mp4` (33,5 s) e capa `10-pedido-na-mesa-capa.png`.
+**Vídeo pronto:** `10-pedido-na-mesa.mp4` (35,5 s) e capa `10-pedido-na-mesa-capa.png`.
 
 **Legenda**
 ```
 Salão cheio, garçom correndo e mesa esperando para pedir. 🍔
+Plano Scale: em breve. Ainda não está à venda e ainda não tem restaurante usando.
 
 Estamos preparando o pedido na mesa pelo QR Code:
 1. O cliente lê o QR e pede pelo celular, sem baixar app e sem cadastro.
 2. O amigo entra com o código da mesa e tudo cai na mesma conta.
-3. O garçom confirma a mesa, recebe os chamados e fecha a conta pelo celular dele.
+3. O garçom confirma a mesa, atende os chamados e registra como a mesa pagou (Pix, cartão ou dinheiro). Ainda não dá para pagar pelo celular na mesa.
 
-Vai fazer parte do plano Scale, que ainda não está à venda. No vídeo, as telas são do sistema de verdade, numa loja de demonstração com nome fictício, sem pedido real.
+Brasa Burger é um nome fictício. As telas são do nosso sistema funcionando numa loja de demonstração, sem pedido real. Ainda não temos preço nem data de lançamento.
 
-Tem restaurante e quer saber antes? Manda um oi pelo link na bio.
+Tem restaurante e quer saber antes? Manda um oi pelo link na bio. Não estamos vendendo o Scale ainda.
 
 #growlift #restaurante #qrcode #cardapiodigital #hamburgueria
 ```

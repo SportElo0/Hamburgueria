@@ -185,6 +185,160 @@ async function startDemoStore(opts = {}) {
 }
 
 // ---------------------------------------------------------------------------------------
+// Reel 10: cenas com motion (o movimento está em mesa-motion.js)
+
+const svgI = (paths, size = 44, color = TOKENS.blueBright, width = 1.8) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
+const I = {
+  bell: '<path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  bag: '<path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
+  flame: '<path d="M12 3c2 3 5 5 5 9.5a5 5 0 0 1-10 0C7 10 8.5 8.5 9.5 7c.3 1.5 1.2 2.5 2.5 3 0-2.5-.5-4.5 0-7z"/>',
+  receipt: '<path d="M6 3h12v18l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5-2 1.5z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  ticket: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+};
+
+/** A small fake QR (decorative): three finder squares and seeded modules. */
+function qrSvg(size) {
+  const n = 25;
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const finder = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="#0b0f17"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="#0b0f17"/>`;
+  const inFinder = (x, y) => (x < 8 && y < 8) || (x > n - 9 && y < 8) || (x < 8 && y > n - 9);
+  let cells = '';
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!inFinder(x, y) && rnd() > 0.52) cells += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  return `<svg width="${size}" height="${size}" viewBox="-1 -1 ${n + 2} ${n + 2}" shape-rendering="crispEdges"><rect x="-1" y="-1" width="${n + 2}" height="${n + 2}" fill="#fff"/><g fill="#0b0f17">${cells}</g>${finder(0, 0)}${finder(n - 7, 0)}${finder(0, n - 7)}</svg>`;
+}
+
+const MOTION_CSS = `
+.w{display:inline-block;opacity:0;will-change:transform}
+.title{position:absolute;left:96px;right:96px;top:250px}
+.step{display:flex;align-items:center;gap:20px;margin-bottom:22px}
+.badge{width:68px;height:68px;border-radius:50%;background:${TOKENS.blue};color:#fff;display:grid;place-items:center;font-size:38px;font-weight:800;box-shadow:0 0 0 10px rgba(8,101,254,.18),0 20px 40px -12px rgba(8,101,254,.9);opacity:0}
+.chip{position:absolute;display:flex;align-items:center;gap:16px;padding:20px 30px;border-radius:999px;background:rgba(15,21,32,.92);border:1.5px solid rgba(77,141,255,.45);font-size:36px;font-weight:700;color:${TOKENS.text};box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 40px -10px rgba(8,101,254,.6);opacity:0;z-index:10;white-space:nowrap}
+.chip .ic{width:58px;height:58px;border-radius:50%;background:rgba(8,101,254,.18);display:grid;place-items:center}
+.flyer{position:absolute;left:0;top:0;opacity:0;z-index:12}
+.plus{background:${TOKENS.blue};color:#fff;font-weight:800;font-size:40px;padding:12px 26px;border-radius:999px;box-shadow:0 18px 40px -10px rgba(8,101,254,.95)}
+.note-card{position:absolute;width:420px;padding:24px 28px;border-radius:30px;background:#fff;color:#111827;box-shadow:0 40px 80px -20px rgba(0,0,0,.85);display:flex;gap:20px;align-items:center;opacity:0;z-index:10}
+.note-card b{display:block;font-size:34px;letter-spacing:-.01em}
+.note-card span{font-size:26px;color:#4b5563}
+.note-card .ic{flex:none;width:76px;height:76px;border-radius:22px;display:grid;place-items:center}
+.ring{transform-box:fill-box;transform-origin:50% 10%}
+.demo-tag{position:absolute;left:0;right:0;top:1548px;text-align:center;z-index:9}
+.phone .screen img.still{display:block;width:100%;height:100%;object-fit:cover}
+`;
+
+function mesaReelHtml({ recA, recB, recS }) {
+  const rec = (r, cls = 'rec') => `<img class="${cls}" data-seq="${pathToFileURL(r.dir).href}" data-count="${r.count}" src="${pathToFileURL(path.join(r.dir, '00000.jpg')).href}" alt="">`;
+  const phoneAt = (top, inner, cls = '', style = '') => `<div class="phone ${cls}" style="top:${top}px;${style}"><div class="screen">${inner}</div></div>`;
+  const ws = (text, t0, step = 0.09, cls = '') => text.split(' ').map((w, i) => `<span class="w ${cls}" data-t="${(t0 + i * step).toFixed(2)}">${w}</span>`).join(' ');
+  const title = (n, eyebrow, a, b, size = 66) => `<div class="title"><div class="step"><div class="badge">${n}</div><p class="eyebrow">${eyebrow}</p></div><h2 class="h1" style="font-size:${size}px;line-height:1.06">${ws(a, 0.15)} ${ws(b, 0.15 + a.split(' ').length * 0.09, 0.09, 'blue')}</h2></div>`;
+  const tag = '<div class="demo-tag"><span class="tag">Projeto conceito · loja de demonstração · nome fictício</span></div>';
+  const chip = (cls, ic, text, pos) => `<div class="chip ${cls}" style="${pos}"><span class="ic">${svgI(ic, 34)}</span>${text}</div>`;
+
+  // 0. Salão
+  const tables = [[230, 930], [540, 890], [850, 950], [230, 1310], [540, 1370], [850, 1300]];
+  const tableSvg = tables.map(([x, y], i) => `<g class="tbl" style="transform-box:fill-box;transform-origin:center;opacity:0"><g transform="translate(${x},${y})">
+      ${[[0, -112], [0, 112], [-112, 0], [112, 0]].map(([cx, cy]) => `<rect x="${cx - 26}" y="${cy - 18}" width="52" height="36" rx="12" fill="#121a28" stroke="#2b3a55" stroke-width="3"/>`).join('')}
+      <circle r="82" fill="#0f1520" stroke="${i === 4 ? TOKENS.blueBright : '#33476b'}" stroke-width="${i === 4 ? 5 : 3}"/>
+      <circle r="18" cx="-28" cy="-14" fill="none" stroke="#2b3a55" stroke-width="3"/><circle r="18" cx="26" cy="18" fill="none" stroke="#2b3a55" stroke-width="3"/>
+      <text y="${i === 4 ? 10 : 8}" text-anchor="middle" font-size="${i === 4 ? 40 : 30}" font-weight="800" fill="${i === 4 ? TOKENS.blueBright : '#5b6b88'}" font-family="Inter">${i + 1}</text></g></g>`).join('');
+  const asks = [[230, 780], [850, 800], [540, 1220]].map(([x, y]) => `<g class="ask" style="transform-box:fill-box;transform-origin:50% 100%;opacity:0"><g transform="translate(${x - 52},${y - 104})">
+      <path d="M14 0h76a14 14 0 0 1 14 14v52a14 14 0 0 1-14 14H62l-10 14-10-14H14A14 14 0 0 1 0 66V14A14 14 0 0 1 14 0z" fill="${TOKENS.blue}"/>
+      <g transform="translate(28,16) scale(2)"><g class="ring" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${I.bell}</g></g></g></g>`).join('');
+  const path0 = [[60, 1120], [385, 1110], [540, 1140], [700, 1110], [1010, 1120], [700, 1530], [385, 1530], [540, 1170]];
+  const trail = Array.from({ length: 8 }, () => `<circle class="trail" r="13" fill="${TOKENS.blueBright}" opacity="0"/>`).join('');
+  const s0 = `<div class="glow" style="width:1400px;height:1400px;left:-420px;top:-300px;opacity:.5"></div><div class="grid"></div>
+    <div class="title"><h1 class="h1" style="font-size:108px">${ws('Salão cheio.', 0.05, 0.12)}<br>${ws('Garçom correndo.', 0.35, 0.14, 'blue')}</h1>
+      <p class="lead" style="font-size:42px;margin-top:30px">${ws('E se a mesa pedisse pelo celular, sem app?', 2.1, 0.08)}</p></div>
+    <div class="floor" data-path='${JSON.stringify(path0)}' style="position:absolute;inset:0;transform-origin:540px 1370px">
+      <svg width="1080" height="1920" viewBox="0 0 1080 1920" style="position:absolute;inset:0">${tableSvg}${trail}<circle class="waiter" r="22" fill="${TOKENS.blue}" stroke="#fff" stroke-width="5" opacity="0"/>${asks}</svg></div>`;
+
+  // 1. QR na mesa
+  const s1 = `<div class="glow" style="width:1300px;height:1300px;left:-110px;top:600px;opacity:.5"></div>
+    ${title(1, 'Plano Scale · em breve', 'O cliente lê', 'o QR da mesa.')}
+    <div class="stage" style="position:absolute;inset:0;transform-origin:540px 1100px">
+      <div class="tent" style="position:absolute;left:300px;top:720px;width:480px;height:660px;border-radius:36px;background:#f6f3ee;box-shadow:0 60px 120px -30px rgba(0,0,0,.9);display:flex;flex-direction:column;align-items:center;padding-top:40px;opacity:0">
+        <p style="font-size:30px;font-weight:700;letter-spacing:.2em;color:#8a6a3b">BRASA BURGER</p>
+        <p style="font-size:92px;font-weight:800;letter-spacing:-.04em;color:#111;line-height:1;margin-top:6px">MESA 5</p>
+        <div style="margin-top:26px;padding:14px;background:#fff;border-radius:18px">${qrSvg(300)}</div>
+        <p style="font-size:26px;color:#6b5a44;margin-top:20px">Aponte a câmera do celular</p>
+      </div>
+      <div style="position:absolute;left:376px;top:928px;width:328px;height:328px">
+        <div class="scanline" style="position:absolute;left:-14px;right:-14px;height:8px;margin-top:-4px;border-radius:8px;background:${TOKENS.blueBright};box-shadow:0 0 30px 8px rgba(77,141,255,.85);opacity:0"></div>
+        ${['top:-20px;left:-20px;border-width:8px 0 0 8px', 'top:-20px;right:-20px;border-width:8px 8px 0 0', 'bottom:-20px;left:-20px;border-width:0 0 8px 8px', 'bottom:-20px;right:-20px;border-width:0 8px 8px 0'].map((p) => `<div class="corner" style="position:absolute;width:70px;height:70px;border:solid ${TOKENS.blueBright};border-radius:10px;opacity:0;${p}"></div>`).join('')}
+      </div>
+      <div class="cam" style="position:absolute;left:50%;top:600px;width:640px;height:980px;border-radius:80px;border:10px solid #1a2130;box-shadow:0 0 0 2px rgba(255,255,255,.08),0 60px 120px -30px rgba(8,101,254,.6);opacity:0">
+        <div style="position:absolute;left:50%;top:18px;width:150px;height:34px;margin-left:-75px;border-radius:20px;background:#1a2130"></div></div>
+      <div class="chip ok" style="left:300px;top:1440px;background:${TOKENS.blue};border-color:${TOKENS.blue}"><span class="ic" style="background:rgba(255,255,255,.2)">${svgI(I.check, 36, '#fff', 2.6)}</span>Mesa 5 aberta</div>
+    </div>`;
+
+  // 2. Pedido
+  const s2 = `<div class="glow" style="width:1300px;height:1300px;left:-110px;top:620px;opacity:.55"></div>
+    ${title(1, 'Plano Scale · em breve', 'Pede pelo celular,', 'sem app.')}
+    ${phoneAt(560, rec(recA))}
+    ${chip('chip-a', I.check, 'Sem app', 'left:40px;top:700px')}
+    ${chip('chip-b', I.check, 'Sem cadastro', 'right:40px;top:860px')}
+    <div class="bag" style="position:absolute;left:888px;top:700px;width:120px;height:120px;border-radius:50%;background:${TOKENS.surface};border:2px solid rgba(77,141,255,.5);display:grid;place-items:center;opacity:0;z-index:11;box-shadow:0 0 50px -10px rgba(8,101,254,.8)">${svgI(I.bag, 60)}<span class="bag-n" style="position:absolute;right:-6px;top:-6px;width:48px;height:48px;border-radius:50%;background:${TOKENS.blue};color:#fff;font-size:28px;font-weight:800;display:grid;place-items:center">0</span></div>
+    <div class="flyer plus1"><span class="plus">+1</span></div><div class="flyer plus2"><span class="plus">+1</span></div>
+    <div class="flyer ticket"><div style="display:flex;gap:14px;align-items:center;background:#fff;color:#111;border-radius:22px;padding:18px 24px;font-size:30px;font-weight:700;box-shadow:0 30px 60px -15px rgba(0,0,0,.8)">${svgI(I.ticket, 40, TOKENS.blue)}Pedido · Mesa 5</div></div>
+    <div class="chip kitchen" style="right:40px;top:1410px"><span class="ic flame" style="background:rgba(255,140,40,.18)">${svgI(I.flame, 36, '#ff9a3c')}</span>Cozinha</div>
+    ${tag}`;
+
+  // 3. Amigo entra
+  const last = `<img class="still" src="${pathToFileURL(path.join(recA.dir, String(recA.count - 1).padStart(5, '0') + '.jpg')).href}" alt="">`;
+  const linkPath = 'M 300 640 C 400 520, 680 520, 780 640';
+  const digits = '0000'.split('').map(() => `<div class="flyer digit"><span class="plus" style="font-size:52px;padding:10px 26px">•</span></div>`).join('');
+  const s3 = `<div class="glow" style="width:1300px;height:1300px;left:-110px;top:620px;opacity:.5"></div>
+    ${title(2, 'Plano Scale · em breve', 'O amigo entra com o código.', 'Mesma conta.')}
+    ${phoneAt(640, last, 'ph-a', 'left:285px;scale:.62;transform-origin:50% 0')}
+    ${phoneAt(640, rec(recB), 'ph-b', 'left:795px;scale:.62;transform-origin:50% 0')}
+    <svg width="1080" height="1920" style="position:absolute;inset:0;z-index:8;pointer-events:none"><path class="link" d="${linkPath}" fill="none" stroke="${TOKENS.blueBright}" stroke-width="6" stroke-linecap="round" stroke-dasharray="900" stroke-dashoffset="900" opacity="0"/></svg>
+    ${[0, 1, 2].map(() => `<div class="pulse" style="position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 0 20px 6px rgba(77,141,255,.9);offset-path:path('${linkPath}');opacity:0;z-index:9"></div>`).join('')}
+    ${digits}
+    ${chip('same', I.link, 'Mesma conta', 'left:345px;top:470px')}
+    ${tag}`;
+
+  // 4. Garçom
+  const sparks = Array.from({ length: 14 }, (_, i) => `<div class="spark" style="position:absolute;left:${540 - 10}px;top:${1090 - 10}px;width:20px;height:20px;border-radius:${i % 2 ? '50%' : '4px'};background:${i % 3 ? TOKENS.blueBright : '#22c55e'};opacity:0;z-index:11"></div>`).join('');
+  const note = (cls, ic, bg, color, a, b, pos) => `<div class="note-card ${cls}" style="${pos}"><span class="ic" style="background:${bg}"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g class="ring">${ic}</g></svg></span><div><b>${a}</b><span>${b}</span></div></div>`;
+  const s4 = `<div class="glow" style="width:1300px;height:1300px;left:-110px;top:620px;opacity:.55"></div>
+    ${title(3, 'Plano Scale · em breve', 'O garçom confirma, atende', 'e libera a mesa.')}
+    ${phoneAt(560, rec(recS))}
+    ${chip('n-ok', I.check, 'Mesa confirmada', 'left:40px;top:690px')}
+    ${note('n-call', I.bell, '#fff1e6', '#ea580c', 'Mesa 5 chamou', 'agora', 'right:36px;top:820px')}
+    ${note('n-bill', I.receipt, '#e8f7ee', '#16a34a', 'Pediu a conta', 'Mesa 5', 'right:36px;top:990px')}
+    ${sparks}
+    <div class="chip free" style="left:390px;top:1420px;background:#16a34a;border-color:#16a34a"><span class="ic" style="background:rgba(255,255,255,.2)">${svgI(I.check, 36, '#fff', 2.6)}</span>Mesa livre</div>
+    ${tag}`;
+
+  // 5. Fecho
+  const [p1, p2] = MARK.match(/<path[^>]*\/>/g);
+  const markSvg = (p, cls) => `<svg class="${cls}" viewBox="50 40 530 415" style="position:absolute;inset:0;width:100%;height:100%;opacity:0">${p}</svg>`;
+  const s5 = `<div class="glow" style="width:1500px;height:1500px;left:-210px;top:260px;opacity:.6"></div>
+    <div class="safe" style="justify-content:center;align-items:flex-start">
+      <div style="position:relative;width:210px;height:166px;margin-bottom:56px">${markSvg(p1, 'm1')}${markSvg(p2, 'm2')}</div>
+      <div class="plan" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:999px;border:2px solid ${TOKENS.blueBright};font-size:30px;font-weight:800;letter-spacing:.14em;color:${TOKENS.blueSoft};opacity:0;transform-origin:0 50%">PLANO SCALE · EM BREVE<span class="shine" style="position:absolute;top:-20px;bottom:-20px;width:70px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)"></span></div>
+      <h1 class="h1" style="font-size:104px;margin-top:40px">${ws('Pedido na mesa,', 0.7, 0.1)} ${ws('sem app.', 1.0, 0.1, 'blue')}</h1>
+      <div style="position:relative;margin-top:56px"><span class="cta-ring" style="position:absolute;inset:-6px;border-radius:999px;border:3px solid ${TOKENS.blueBright};opacity:0"></span><span class="btn cta" style="font-size:40px;padding:28px 52px;opacity:0;transform-origin:0 50%">Manda um oi. Link na bio.</span></div>
+      <p class="muted note" style="font-size:26px;margin-top:64px;max-width:780px;line-height:1.35;opacity:0">Telas do sistema funcionando numa loja de demonstração com nome fictício. Nenhum pedido real.</p>
+    </div>`;
+
+  return reelPage({
+    css: MOTION_CSS,
+    scenes: [
+      { start: 0, end: 4.2, html: s0 },
+      { start: 4.2, end: 7.0, html: s1 },
+      { start: 7.0, end: 16.2, html: s2 },
+      { start: 16.2, end: 22.0, html: s3 },
+      { start: 22.0, end: 31.2, html: s4 },
+      { start: 31.2, end: 35.5, html: s5 },
+    ],
+    script: fs.readFileSync(path.join(HERE, 'mesa-motion.js'), 'utf8'),
+  });
+}
+
+// ---------------------------------------------------------------------------------------
 // Os Reels
 
 const REELS = {
@@ -554,30 +708,8 @@ const REELS = {
         },
       });
 
-      const tag = '<span class="tag">Loja de demonstração · nome fictício</span>';
-      const shot = (title, rec, offset, { eyebrow = 'Plano Scale · em breve', size = 66 } = {}) => ({
-        html: `<div class="glow" style="width:1300px;height:1300px;left:-110px;top:620px;opacity:.55"></div>
-          <div style="position:absolute;left:96px;right:110px;top:250px">
-            <p class="eyebrow" style="margin-bottom:18px">${eyebrow}</p>
-            <h2 class="h1" style="font-size:${size}px;line-height:1.04">${title}</h2>
-          </div>
-          ${phone(560, rec.dir)}
-          <div style="position:absolute;left:0;right:0;top:1548px;text-align:center;z-index:5">${tag}</div>`,
-        update: playSeq(rec.count, offset),
-      });
-      const A = shot('O cliente lê o QR da mesa e <span class="blue">pede pelo celular.</span>', recA, 0.2);
-      const B = shot('O amigo entra com o código. <span class="blue">Tudo na mesma conta.</span>', recB, 0.2);
-      const S = shot('O garçom confirma, atende os chamados e <span class="blue">fecha a conta.</span>', recS, 0.2);
-      const html = reelPage({
-        scenes: [
-          { start: 0, end: 3.4, html: hook('Salão cheio. <span class="blue">Garçom correndo.</span>', { lead: 'E se a mesa pedisse pelo celular, sem app?' }) },
-          { start: 3.4, end: 13.8, ...A },
-          { start: 13.8, end: 19.6, ...B },
-          { start: 19.6, end: 29, ...S },
-          { start: 29, end: 33.5, html: end('Pedido na mesa, <span class="blue">sem app.</span> Plano Scale, em breve.', { lead: 'Manda um oi. Link na bio.', note: 'Telas reais do sistema, numa loja de demonstração com nome fictício. Nenhum pedido real.' }) },
-        ],
-      });
-      return { html, duration: 33.5, cover: 1.4 };
+      const html = mesaReelHtml({ recA, recB, recS });
+      return { html, duration: 35.5, cover: 1.6 };
     } finally {
       await demo.stop();
     }
