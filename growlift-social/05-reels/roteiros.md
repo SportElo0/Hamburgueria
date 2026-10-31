@@ -244,13 +244,12 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - **Quem responder:** "Oi! O Scale ainda não está à venda e não tem preço nem data. Se quiser, aviso você quando abrir. Posso avisar? (Responda SAIR a qualquer momento para parar.)" Não aceitem sinal nem reserva.
 
 **Vídeos prontos:**
-- `10-pedido-na-mesa-narrado.mp4`: com narração (voz 1). É o recomendado.
-- `10-pedido-na-mesa-narrado-voz2.mp4`: a mesma narração com outra voz, para escolher.
+- `10-pedido-na-mesa-narrado.mp4`: com narração. É o recomendado.
 - `10-pedido-na-mesa.mp4`: sem voz, só para música.
 - Capa: `10-pedido-na-mesa-capa.png`.
 
-**Narração** (voz sintética em português, feita no computador; fonte em `_fonte/reels/narracao-10.py`):
-"Salão cheio, garçom correndo, e a mesa esperando para pedir. / Agora, o cliente lê o QR da mesa. / E pede pelo celular. Sem baixar aplicativo, sem cadastro. / O pedido vai direto para a cozinha. / O amigo entra com o código da mesa, e tudo cai na mesma conta. / O garçom confirma a mesa e atende os chamados. / Depois, libera a mesa. / Pedido na mesa, sem aplicativo. Plano Scale, em breve."
+**Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", 1,84 crédito em 31/10; o áudio original está em `_fonte/reels/narracao-10-eleven.mp3`, cortado nas pausas para cada frase cair na sua cena):
+"Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve!"
 
 **Ao postar com narração:**
 - A voz é gerada por computador e soa como pessoa. Em "Configurações avançadas", ativem o "Rótulo de IA".

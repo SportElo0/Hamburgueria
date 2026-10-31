@@ -79,3 +79,8 @@ Higgsfield, `gpt_image_2_5`, 2:3, 2k, qualidade alta. Custo: 2,75 créditos (con
 ```
 Editorial surf action photograph, vertical 2:3. Turquoise-blue ocean on a sunny day, shot from the water with a long telephoto lens. A generic adult surfer, not a real person, seen from behind in three-quarter view with the face turned away and not identifiable, wearing a plain black wetsuit with no logos, launches off the lip of a wave on a bright yellow shortboard. The surfer and board sit right of center and slightly above the middle of the frame. A large burst of white spray and foam fills the lower 40 percent of the image. The top third is calm deep-blue open sea, clean and uncluttered. Natural colours, crisp detail, high shutter speed frozen droplets, no text, no logos, no watermark.
 ```
+
+
+## Reel 10, narração (31/10/2026)
+- Higgsfield, modelo `elevenlabs_v4`, voz preset "Andre" (`f1e8226e-2248-4d5f-b43c-0a79e9949dbf`), stability 0,35, similarity 0,8. Custo: 1,84 crédito (conferido antes).
+- Texto: "Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve!"
