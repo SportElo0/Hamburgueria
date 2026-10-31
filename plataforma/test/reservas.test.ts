@@ -49,7 +49,7 @@ function store(r: Partial<ReservationSettings> = {}, demoStore = true): Store {
       ...DEFAULT_ORDERING,
       enabled: true,
       tables: { enabled: true, count: 6 },
-      reservations: { ...DEFAULT_RESERVATIONS, enabled: true, days: [0, 1, 2, 3, 4, 5, 6], from: '19:00', to: '21:00', perSlot: 1, depositPerPerson: 2000, seller: SELLER, ...r },
+      reservations: { ...DEFAULT_RESERVATIONS, enabled: true, days: [0, 1, 2, 3, 4, 5, 6], from: '19:00', to: '21:00', perSlot: 1, depositPerPerson: 2000, depositMode: 'pessoa', seller: SELLER, ...r },
     },
   });
 }
@@ -118,6 +118,12 @@ describe('reserva com sinal', () => {
     await expect(createReservation(SLUG, input(), '', ORIGIN, NOON)).rejects.toThrow(/ainda não está recebendo/);
     await publish(store({ depositPerPerson: 0 }, false));
     expect((await createReservation(SLUG, input(), '', ORIGIN, NOON)).reservation.status).toBe('confirmada');
+  });
+
+  it('padrão: sinal fixo de R$ 15 por reserva, qualquer que seja o número de pessoas', async () => {
+    await publish(store({ depositPerPerson: DEFAULT_RESERVATIONS.depositPerPerson, depositMode: DEFAULT_RESERVATIONS.depositMode }));
+    const r = await createReservation(SLUG, input({ people: 6 }), '', ORIGIN, NOON);
+    expect(r.reservation.deposit).toBe(1500);
   });
 
   it('o sinal tem teto de R$ 100 por pessoa', () => {

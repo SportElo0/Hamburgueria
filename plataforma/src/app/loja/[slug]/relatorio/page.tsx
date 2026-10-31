@@ -47,7 +47,7 @@ export default async function ReportPage({ params, searchParams }: { params: Pro
                   key={p.days}
                   href={`?dias=${p.days}`}
                   aria-current={p === period ? 'page' : undefined}
-                  className={`rounded-md px-3 py-2 text-sm font-semibold ${p === period ? 'bg-ink text-white' : 'text-ink-soft hover:text-ink'}`}
+                  className={`rounded-md px-3 py-2 text-sm font-semibold ${p === period ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'}`}
                 >
                   {p.label}
                 </Link>
@@ -194,7 +194,7 @@ function HoursChart({ r }: { r: SalesReport }) {
           <li key={h} className="flex items-center gap-3 text-sm tabular-nums">
             <span className="w-10 shrink-0 text-ink-mute">{String(h).padStart(2, '0')}h</span>
             <span className="flex-1">
-              <span className="block h-2 rounded-full bg-ink/80" style={{ width: `${(n / max) * 100}%` }} />
+              <span className="block h-2 rounded-full bg-accent/80" style={{ width: `${(n / max) * 100}%` }} />
             </span>
             <span className="w-6 text-right">{n}</span>
           </li>

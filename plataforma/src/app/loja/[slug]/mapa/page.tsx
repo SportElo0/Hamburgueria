@@ -35,10 +35,10 @@ export default async function MapaPage({ params, searchParams }: { params: Promi
           </div>
           <nav aria-label="Seções" className="flex flex-wrap items-center gap-2">
             <div className="flex rounded-lg border border-line bg-white p-0.5">
-              <Link href="?aba=ao-vivo" aria-current={tab === 'ao-vivo' ? 'page' : undefined} className={`rounded-md px-3 py-2 text-sm font-semibold ${tab === 'ao-vivo' ? 'bg-ink text-white' : 'text-ink-soft'}`}>
+              <Link href="?aba=ao-vivo" aria-current={tab === 'ao-vivo' ? 'page' : undefined} className={`rounded-md px-3 py-2 text-sm font-semibold ${tab === 'ao-vivo' ? 'bg-accent text-white' : 'text-ink-soft'}`}>
                 Ao vivo
               </Link>
-              <Link href="?aba=tempo" aria-current={tab === 'tempo' ? 'page' : undefined} className={`rounded-md px-3 py-2 text-sm font-semibold ${tab === 'tempo' ? 'bg-ink text-white' : 'text-ink-soft'}`}>
+              <Link href="?aba=tempo" aria-current={tab === 'tempo' ? 'page' : undefined} className={`rounded-md px-3 py-2 text-sm font-semibold ${tab === 'tempo' ? 'bg-accent text-white' : 'text-ink-soft'}`}>
                 Tempo nas mesas
               </Link>
             </div>
@@ -71,7 +71,7 @@ async function Tempo({ slug, days }: { slug: string; days: number }) {
     <div className="space-y-4">
       <nav aria-label="Período" className="flex w-fit rounded-lg border border-line bg-white p-0.5">
         {PERIODS.map((p) => (
-          <Link key={p} href={`?aba=tempo&dias=${p}`} aria-current={p === days ? 'page' : undefined} className={`rounded-md px-3 py-2 text-sm font-semibold ${p === days ? 'bg-ink text-white' : 'text-ink-soft'}`}>
+          <Link key={p} href={`?aba=tempo&dias=${p}`} aria-current={p === days ? 'page' : undefined} className={`rounded-md px-3 py-2 text-sm font-semibold ${p === days ? 'bg-accent text-white' : 'text-ink-soft'}`}>
             {p} dias
           </Link>
         ))}

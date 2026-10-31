@@ -15,6 +15,7 @@ export function ReservaForm(props: {
   days: string[];
   maxPeople: number;
   depositPerPerson: number;
+  perPerson: boolean;
   cancelHours: number;
   toleranceMinutes: number;
   emailRequired: boolean;
@@ -31,7 +32,7 @@ export function ReservaForm(props: {
   const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState('');
   const [pending, startTransition] = useTransition();
-  const deposit = props.depositPerPerson * people;
+  const deposit = props.perPerson ? props.depositPerPerson * people : props.depositPerPerson;
 
   useEffect(() => {
     if (!date) return;
@@ -81,7 +82,7 @@ export function ReservaForm(props: {
           <legend className="label">Dia</legend>
           <div className="flex gap-2 overflow-x-auto pb-1">
             {props.days.map((d) => (
-              <button key={d} type="button" onClick={() => setDate(d)} aria-pressed={d === date} className={`min-h-11 shrink-0 rounded-lg border px-3 text-sm font-semibold capitalize ${d === date ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}>
+              <button key={d} type="button" onClick={() => setDate(d)} aria-pressed={d === date} className={`min-h-11 shrink-0 rounded-lg border px-3 text-sm font-semibold capitalize ${d === date ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`}>
                 {dayLabel(d)}
               </button>
             ))}
@@ -119,7 +120,7 @@ export function ReservaForm(props: {
                   disabled={s.left === 0}
                   onClick={() => setTime(s.time)}
                   aria-pressed={s.time === time}
-                  className={`min-h-11 rounded-lg border text-sm font-semibold tabular-nums disabled:cursor-not-allowed disabled:opacity-40 ${s.time === time ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}
+                  className={`min-h-11 rounded-lg border text-sm font-semibold tabular-nums disabled:cursor-not-allowed disabled:opacity-40 ${s.time === time ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`}
                 >
                   {s.time}
                   {s.left === 0 && <span className="sr-only"> (lotado)</span>}
@@ -158,7 +159,7 @@ export function ReservaForm(props: {
             {deposit > 0 ? `Sinal de ${brl(deposit)} pelo Pix` : 'Reserva sem sinal'}
           </h2>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-ink-soft">
-            {deposit > 0 && <li>O sinal ({brl(props.depositPerPerson)} por pessoa) é descontado da sua conta no dia. Se a conta der menos que o sinal, devolvemos a diferença no fechamento da conta, no mesmo dia.</li>}
+            {deposit > 0 && <li>O sinal{props.perPerson ? ` (${brl(props.depositPerPerson)} por pessoa)` : ''} é só para garantir a mesa e é descontado da sua conta no dia. Se a conta der menos que o sinal, devolvemos a diferença no fechamento da conta, no mesmo dia.</li>}
             {deposit > 0 && <li>Você reservou pela internet: pode desistir em até 7 dias depois de pagar o sinal e receber tudo de volta, desde que o horário da reserva ainda não tenha passado. Use o botão &quot;Cancelar reserva&quot; da página da reserva.</li>}
             {deposit > 0 && <li>Fora desses 7 dias, cancelou {props.cancelHours ? `até ${props.cancelHours} ${props.cancelHours === 1 ? 'hora' : 'horas'} antes do horário` : 'até o horário da reserva'}: também devolvemos o sinal inteiro, pelo próprio Pix.</li>}
             {deposit > 0 && <li>Fora desses casos, ou se não chegar até {props.toleranceMinutes} minutos depois do horário, o sinal fica com o restaurante. Se achar que houve engano, fale com o restaurante em até 7 dias e analisamos.</li>}
@@ -172,7 +173,7 @@ export function ReservaForm(props: {
             </li>
           </ul>
           <label className="mt-3 flex cursor-pointer items-start gap-2">
-            <input type="checkbox" className="mt-0.5 h-5 w-5 accent-ink" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
+            <input type="checkbox" className="mt-0.5 h-5 w-5 accent-accent" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
             <span>Li e aceito as regras {deposit > 0 ? 'do sinal' : 'da reserva'}.</span>
           </label>
         </section>

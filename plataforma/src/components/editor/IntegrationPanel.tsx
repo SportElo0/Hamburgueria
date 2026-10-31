@@ -37,7 +37,7 @@ export function IntegrationPanel({ apiUrl, publishedAt }: { apiUrl: string; publ
       <section className="card space-y-3 p-5">
         <h2 className="text-lg font-bold">Código para o site</h2>
         <p className="text-sm text-ink-mute">Para sites feitos à mão: cole antes do fechamento do &lt;body&gt; e use o evento <code>loja:dados</code> para desenhar o cardápio.</p>
-        <pre className="overflow-x-auto rounded-lg bg-ink p-4 text-[13px] leading-relaxed text-white">{snippet}</pre>
+        <pre className="overflow-x-auto rounded-lg bg-accent p-4 text-[13px] leading-relaxed text-white">{snippet}</pre>
         <button type="button" className="btn-ghost" onClick={() => copy('code', snippet)}>
           {copied === 'code' ? 'Copiado' : 'Copiar código'}
         </button>

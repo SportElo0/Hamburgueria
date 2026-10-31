@@ -7,15 +7,15 @@ import { validKey } from '@/lib/mesas';
 import { MesaApp, type MesaCategory } from '@/components/mesa/MesaApp';
 
 export const metadata: Metadata = { title: 'Pedido na mesa' };
-export const viewport: Viewport = { themeColor: '#0b0907' };
+export const viewport: Viewport = { themeColor: '#F4F6FA' };
 
 const media = (src: string) => (!src || /^https?:\/\//.test(src) ? src : `/api/midia/${src.replace(/^midia\//, '')}`);
 
 function Notice({ title, text }: { title: string; text: string }) {
   return (
-    <main className="flex min-h-dvh flex-col justify-center bg-[#0b0907] px-6 text-[#f4ead8]">
+    <main className="flex min-h-dvh flex-col justify-center bg-[#F4F6FA] px-6 text-[#121826]">
       <h1 className="text-3xl font-black tracking-tight uppercase">{title}</h1>
-      <p className="mt-3 text-base leading-relaxed text-[#cbbfa8]">{text}</p>
+      <p className="mt-3 text-base leading-relaxed text-[#4A5568]">{text}</p>
     </main>
   );
 }

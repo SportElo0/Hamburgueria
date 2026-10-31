@@ -136,7 +136,7 @@ export function StoreEditor(props: {
               type="button"
               onClick={() => selectTab(id)}
               aria-current={tab === id ? 'page' : undefined}
-              className="-mb-px shrink-0 cursor-pointer border-b-2 border-transparent px-3 py-2.5 text-sm font-semibold text-ink-mute hover:text-ink aria-[current=page]:border-ink aria-[current=page]:text-ink"
+              className="-mb-px shrink-0 cursor-pointer border-b-2 border-transparent px-3 py-2.5 text-sm font-semibold text-ink-mute hover:text-ink aria-[current=page]:border-accent aria-[current=page]:text-ink"
             >
               {label}
               {pendentes > 0 && <span className="chip ml-1.5 bg-warn/10 px-1.5 py-0 text-xs text-warn">{pendentes}</span>}

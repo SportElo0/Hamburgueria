@@ -72,10 +72,10 @@ export default async function PastaPage({ params }: { params: Promise<{ pasta: s
                           poster={fileUrl(f, 'mini')}
                           src={fileUrl(f)}
                           aria-label={`${g.title}, ${f.name}`}
-                          className="block aspect-[9/16] w-full rounded-lg border border-line bg-ink object-cover"
+                          className="block aspect-[9/16] w-full rounded-lg border border-line bg-accent object-cover"
                         />
                       ) : (
-                        <a href={fileUrl(f)} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-lg border border-line bg-ink">
+                        <a href={fileUrl(f)} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-lg border border-line bg-accent">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={fileUrl(f, 'mini')}

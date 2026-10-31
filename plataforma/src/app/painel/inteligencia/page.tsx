@@ -47,7 +47,7 @@ export default async function InteligenciaIndex() {
         <ul className="mt-3 grid gap-3 md:grid-cols-2">
           {real.map((s) => (
             <li key={s.slug}>
-              <Link href={`/painel/inteligencia/${s.slug}`} className="card block p-5 transition-colors hover:border-ink">
+              <Link href={`/painel/inteligencia/${s.slug}`} className="card block p-5 transition-colors hover:border-accent">
                 <p className="text-lg font-bold">{s.name}</p>
                 <p className="text-sm text-ink-mute">Ver vendas, margens e recomendações</p>
               </Link>

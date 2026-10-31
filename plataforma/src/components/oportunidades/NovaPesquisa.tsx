@@ -79,7 +79,7 @@ export function NovaPesquisa({ chave, usadas, limite }: Props) {
               type="button"
               aria-pressed={ativo}
               onClick={() => mudar({ cidade: l.cidade, uf: l.uf, bairro: l.bairro })}
-              className={`chip min-h-8 border ${ativo ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}
+              className={`chip min-h-8 border ${ativo ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`}
             >
               {l.nome}
               {l.bairro && <span className={ativo ? 'text-white/70' : 'text-ink-mute'}> · {l.cidade}</span>}

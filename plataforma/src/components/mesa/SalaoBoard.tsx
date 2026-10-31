@@ -158,7 +158,7 @@ export function SalaoBoard(props: { slug: string; storeName: string; count: numb
       <main className="mx-auto max-w-3xl space-y-6 px-4 pt-4">
         <section aria-labelledby="agora">
           <h2 id="agora" className="mb-2 text-xs font-extrabold tracking-[0.1em] text-ink-mute uppercase">
-            Agora {alerts.length > 0 && <span className="chip ml-1 bg-ink text-white">{alerts.length}</span>}
+            Agora {alerts.length > 0 && <span className="chip ml-1 bg-accent text-white">{alerts.length}</span>}
           </h2>
           {tables === null ? (
             <p className="card p-4 text-sm text-ink-mute">Carregando…</p>
@@ -334,7 +334,7 @@ function TableSheet({ table: t, now, pending, onClose, onRun }: { table: Table; 
               </button>
             </>
           ) : (
-            <button type="button" disabled={pending} onClick={() => setClosing(true)} className="btn min-h-12 w-full bg-ink text-[15px] text-white">
+            <button type="button" disabled={pending} onClick={() => setClosing(true)} className="btn min-h-12 w-full bg-accent text-[15px] text-white">
               Fechar a conta e liberar a mesa
             </button>
           )}

@@ -30,6 +30,7 @@ export default async function ReservarPage({ params }: { params: Promise<{ slug:
       days={bookableDays(s)}
       maxPeople={s.maxPeople}
       depositPerPerson={s.depositPerPerson}
+      perPerson={s.depositMode === 'pessoa'}
       cancelHours={s.cancelHours}
       toleranceMinutes={s.toleranceMinutes}
       emailRequired={ordering.pixMode === 'mercadopago' && s.depositPerPerson > 0}

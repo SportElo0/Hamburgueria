@@ -35,14 +35,14 @@ export default async function ConteudosPage() {
             const preview = f.groups.flatMap((g) => g.files.filter((x) => !x.doNotPublish)).slice(0, 3);
             return (
               <li key={f.slug}>
-                <Link href={`/painel/conteudos/${f.slug}`} className="card flex h-full flex-col p-5 transition-colors hover:border-ink">
+                <Link href={`/painel/conteudos/${f.slug}`} className="card flex h-full flex-col p-5 transition-colors hover:border-accent">
                   <div className="flex items-start justify-between gap-3">
                     <h2 className="text-lg font-bold">{f.title}</h2>
                     {preview.length > 0 && (
                       <div className="flex shrink-0 -space-x-3" aria-hidden="true">
                         {preview.map((p) => (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img key={p.path} src={fileUrl(p, 'mini')} alt="" className="h-12 w-auto rounded-md border-2 border-white bg-ink shadow-sm" loading="lazy" />
+                          <img key={p.path} src={fileUrl(p, 'mini')} alt="" className="h-12 w-auto rounded-md border-2 border-white bg-accent shadow-sm" loading="lazy" />
                         ))}
                       </div>
                     )}

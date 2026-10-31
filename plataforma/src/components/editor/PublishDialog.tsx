@@ -22,7 +22,7 @@ export function CountChoice(props: {
     <fieldset className="space-y-2">
       <legend className="label">Tipo de mudança</legend>
       {options.map(([value, title, hint]) => (
-        <label key={value} className="flex cursor-pointer items-start gap-3 rounded-lg border border-line p-3 has-[:checked]:border-ink">
+        <label key={value} className="flex cursor-pointer items-start gap-3 rounded-lg border border-line p-3 has-[:checked]:border-accent">
           <input type="radio" name="tipo" className="mt-1" checked={props.mode === value} onChange={() => props.setMode(value)} />
           <span>
             <span className="block text-sm font-semibold">{title}</span>

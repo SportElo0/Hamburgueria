@@ -53,7 +53,7 @@ export function DecisionControls({ slug, id, decision }: { slug: string; id: str
             disabled={pending}
             onClick={() => save(n.status)}
             aria-pressed={decision?.status === n.status}
-            className={`btn min-h-9 border px-3 text-[13px] ${decision?.status === n.status ? 'border-ink bg-ink text-white' : 'border-line bg-white hover:border-ink'}`}
+            className={`btn min-h-9 border px-3 text-[13px] ${decision?.status === n.status ? 'border-accent bg-accent text-white' : 'border-line bg-white hover:border-accent'}`}
           >
             {n.label}
           </button>

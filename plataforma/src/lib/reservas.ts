@@ -5,7 +5,7 @@ import { storage, ConflictError } from './storage';
 import { getPublished } from './stores';
 import { take } from './limits';
 import { cancelCharge, createCharge, checkCharge, lookupMercadoPago, PixError, refundCharge, type PaymentCheck } from './pix';
-import { PIX_MINUTES, orderingOf, sellerReady, type PixCharge, type ReservationSettings } from './ordering';
+import { PIX_MINUTES, depositFor, orderingOf, sellerReady, type PixCharge, type ReservationSettings } from './ordering';
 
 /**
  * Booking a table from the site. To hold the table the customer pays a deposit by Pix (per person, set
@@ -39,7 +39,7 @@ export interface Reservation {
   refunded: boolean;
   table: number | null;
   /** The rules the customer accepted, as numbers, so a later settings change doesn't rewrite them. */
-  rules: { cancelHours: number; toleranceMinutes: number; depositPerPerson?: number; withdrawalDays?: number; version?: string };
+  rules: { cancelHours: number; toleranceMinutes: number; depositPerPerson?: number; depositMode?: 'reserva' | 'pessoa'; withdrawalDays?: number; version?: string };
   /** When the customer ticked "li e aceito". */
   acceptedAt?: string;
   history: { status: ReservationStatus; at: string; by: string }[];
@@ -208,7 +208,7 @@ export async function createReservation(slug: string, raw: unknown, ip: string, 
   if (!bookableDays(settings, now).includes(input.date) || !slotTimes(settings, input.date, now).includes(input.time)) {
     throw new ReservationError('Esse horário não está disponível para reserva. Escolha outro.');
   }
-  const deposit = settings.depositPerPerson * input.people;
+  const deposit = depositFor(settings, input.people);
   // A practice Pix can't hold a real table on a live site: the customer would be told about a deposit nobody paid.
   if (deposit > 0 && ordering.pixMode === 'demo' && store.extra.demo !== true && process.env.RESERVAS_PIX_DEMO !== '1') {
     throw new ReservationError('Este restaurante ainda não está recebendo reservas pelo site.');
@@ -258,7 +258,7 @@ export async function createReservation(slug: string, raw: unknown, ip: string, 
     paidAt: null,
     refunded: false,
     table: null,
-    rules: { cancelHours: settings.cancelHours, toleranceMinutes: settings.toleranceMinutes, depositPerPerson: settings.depositPerPerson, withdrawalDays: WITHDRAWAL_DAYS, version: RULES_VERSION },
+    rules: { cancelHours: settings.cancelHours, toleranceMinutes: settings.toleranceMinutes, depositPerPerson: settings.depositPerPerson, depositMode: settings.depositMode, withdrawalDays: WITHDRAWAL_DAYS, version: RULES_VERSION },
     acceptedAt: at,
     history: [{ status: deposit > 0 ? 'aguardando-pix' : 'confirmada', at, by: 'cliente' }],
   };

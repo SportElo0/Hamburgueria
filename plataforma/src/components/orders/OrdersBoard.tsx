@@ -212,7 +212,7 @@ export function OrdersBoard(props: {
           <p className="bg-warn px-4 py-2 text-center text-sm font-semibold text-white">Os pedidos pelo site estão desligados para esta loja. A equipe liga em Configurar.</p>
         )}
         {props.enabled && operation && !operation.open && (
-          <p className="bg-ink px-4 py-2 text-center text-sm text-white">A loja está fechada: o site não aceita pedidos. Toque em “Loja fechada” para abrir.</p>
+          <p className="bg-accent px-4 py-2 text-center text-sm text-white">A loja está fechada: o site não aceita pedidos. Toque em “Loja fechada” para abrir.</p>
         )}
         {error && <p className="bg-bad px-4 py-2 text-center text-sm font-semibold text-white">{error}</p>}
       </header>
@@ -232,7 +232,7 @@ export function OrdersBoard(props: {
               type="button"
               aria-current={tab === c.id ? 'true' : undefined}
               onClick={() => setTab(c.id)}
-              className="btn min-h-10 shrink-0 border border-line bg-white aria-[current=true]:border-ink aria-[current=true]:bg-ink aria-[current=true]:text-white"
+              className="btn min-h-10 shrink-0 border border-line bg-white aria-[current=true]:border-accent aria-[current=true]:bg-accent aria-[current=true]:text-white"
             >
               {c.label} <span className="tabular-nums">{byColumn(c.id).length}</span>
             </button>
@@ -383,7 +383,7 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
         </div>
         )}
         <div className="flex flex-wrap gap-1.5">
-          <span className={`chip ${o.mode === 'entrega' ? 'bg-ink text-white' : o.mode === 'mesa' ? 'bg-accent text-white' : 'bg-line text-ink'}`}>{MODE_CHIP[o.mode]}</span>
+          <span className={`chip ${o.mode === 'entrega' ? 'bg-accent text-white' : o.mode === 'mesa' ? 'bg-accent text-white' : 'bg-line text-ink'}`}>{MODE_CHIP[o.mode]}</span>
           <PaymentBadge o={o} />
         </div>
         {o.address && (
@@ -468,7 +468,7 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
         ) : (
           <>
             {o.status === 'novo' && (
-              <button type="button" className="btn min-h-12 basis-full bg-ok text-base text-white hover:bg-ink" onClick={() => onAction(o, 'aceitar')}>
+              <button type="button" className="btn min-h-12 basis-full bg-ok text-base text-white hover:bg-accent" onClick={() => onAction(o, 'aceitar')}>
                 Aceitar pedido
               </button>
             )}

@@ -188,7 +188,7 @@ export function IconButton(props: { label: string; onClick: () => void; disabled
       title={props.label}
       onClick={props.onClick}
       disabled={props.disabled}
-      className={`grid h-9 w-9 cursor-pointer place-items-center rounded-lg border border-line bg-white text-sm disabled:cursor-not-allowed disabled:opacity-40 ${props.danger ? 'text-bad hover:border-bad' : 'hover:border-ink'}`}
+      className={`grid h-9 w-9 cursor-pointer place-items-center rounded-lg border border-line bg-white text-sm disabled:cursor-not-allowed disabled:opacity-40 ${props.danger ? 'text-bad hover:border-bad' : 'hover:border-accent'}`}
     >
       {props.children}
     </button>

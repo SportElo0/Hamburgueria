@@ -30,7 +30,7 @@ export function ChangesPanel(props: { slug: string; month: string; currentMonth:
               key={m}
               href={`?aba=mudancas&mes=${m}`}
               aria-current={m === props.month ? 'page' : undefined}
-              className="chip border border-line bg-white text-ink-soft aria-[current=page]:border-ink aria-[current=page]:text-ink"
+              className="chip border border-line bg-white text-ink-soft aria-[current=page]:border-accent aria-[current=page]:text-ink"
             >
               {m}
             </Link>

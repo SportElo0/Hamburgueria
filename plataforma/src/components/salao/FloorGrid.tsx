@@ -14,10 +14,10 @@ export interface Spot {
 
 const STYLE: Record<SpotState, string> = {
   livre: 'border-line bg-white text-ink',
-  ocupada: 'border-ink bg-ink text-white',
+  ocupada: 'border-accent bg-accent text-white',
   conta: 'border-warn bg-warn text-white',
-  reservada: 'border-accent border-dashed bg-accent-soft text-accent',
-  aguardando: 'border-accent bg-accent-soft text-accent',
+  reservada: 'border-accent bg-accent-soft text-accent',
+  aguardando: 'border-accent border-dashed bg-white text-accent',
 };
 
 export const STATE_LABEL: Record<SpotState, string> = {
@@ -35,7 +35,7 @@ export function FloorGrid({ spots, onSelect, selected, label }: { spots: Spot[];
     <div
       role="group"
       aria-label={label}
-      className="grid gap-1.5 rounded-2xl border border-line bg-[repeating-linear-gradient(0deg,transparent,transparent_23px,#efe9df_23px,#efe9df_24px)] p-2 sm:gap-2 sm:p-3"
+      className="grid gap-1.5 rounded-2xl border border-line bg-[repeating-linear-gradient(0deg,transparent,transparent_23px,#e9eef5_23px,#e9eef5_24px)] p-2 sm:gap-2 sm:p-3"
       style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${rows}, auto)` }}
     >
       {spots.map((s) => {

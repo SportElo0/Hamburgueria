@@ -60,7 +60,7 @@ export function SalaoSettings(props: {
                   onClick={() => clickCell(x, y)}
                   aria-label={s ? `Mesa ${s.number}` : `Espaço vazio, linha ${y + 1}, coluna ${x + 1}`}
                   aria-pressed={s ? s.number === picked : undefined}
-                  className={`aspect-square rounded-md text-xs font-bold tabular-nums ${s ? (s.number === picked ? 'bg-accent text-white' : 'bg-ink text-white') : 'border border-dashed border-line hover:border-ink'}`}
+                  className={`aspect-square rounded-md text-xs font-bold tabular-nums ${s ? (s.number === picked ? 'bg-accent text-white' : 'bg-accent text-white') : 'border border-dashed border-line hover:border-accent'}`}
                 >
                   {s?.number ?? ''}
                 </button>
@@ -93,7 +93,7 @@ export function SalaoSettings(props: {
           {props.categories.map((c) => {
             const on = o.salao.drinkCategories.includes(c.id);
             return (
-              <label key={c.id} className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm ${on ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}>
+              <label key={c.id} className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border px-3 text-sm ${on ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`}>
                 <input
                   type="checkbox"
                   className="sr-only"
@@ -113,7 +113,7 @@ export function SalaoSettings(props: {
           <p className="text-sm text-ink-mute">O cliente reserva em /reservar e paga um sinal pelo Pix, descontado da conta. As regras aparecem antes de pagar e ficam gravadas em cada reserva.</p>
         </div>
         <label className="flex cursor-pointer items-start gap-3">
-          <input type="checkbox" className="mt-1 h-4 w-4 accent-ink" checked={r.enabled} onChange={(e) => setR('enabled', e.target.checked)} />
+          <input type="checkbox" className="mt-1 h-4 w-4 accent-accent" checked={r.enabled} onChange={(e) => setR('enabled', e.target.checked)} />
           <span className="text-[15px] font-semibold">Receber reservas pelo site</span>
         </label>
         {r.enabled && o.pixMode === 'mercadopago' && !props.hasMercadoPago && <p className="text-sm font-semibold text-warn">O Pix real está ligado, mas falta o token do Mercado Pago: o sinal não vai funcionar.</p>}
@@ -145,10 +145,14 @@ export function SalaoSettings(props: {
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
             <label htmlFor="sinal" className="label">
-              Sinal por pessoa (R$)
+              Sinal (R$)
             </label>
             <input id="sinal" className="field" inputMode="decimal" defaultValue={(r.depositPerPerson / 100).toFixed(2).replace('.', ',')} onBlur={(e) => setR('depositPerPerson', Math.max(0, Math.min(10_000, Math.round(Number(e.target.value.replace(/[^\d,]/g, '').replace(',', '.')) * 100) || 0)))} />
-            <p className="mt-1 text-xs text-ink-mute">Hoje: {r.depositPerPerson ? brl(r.depositPerPerson) : 'sem sinal'}. Máximo R$ 100 por pessoa.</p>
+            <select aria-label="Como cobrar o sinal" className="field mt-2" value={r.depositMode ?? 'reserva'} onChange={(e) => setR('depositMode', e.target.value === 'pessoa' ? 'pessoa' : 'reserva')}>
+              <option value="reserva">Por reserva (valor fixo)</option>
+              <option value="pessoa">Por pessoa</option>
+            </select>
+            <p className="mt-1 text-xs text-ink-mute">Hoje: {r.depositPerPerson ? `${brl(r.depositPerPerson)} ${r.depositMode === 'pessoa' ? 'por pessoa' : 'por reserva'}` : 'sem sinal'}. Máximo R$ 100.</p>
           </div>
           <div>
             <label htmlFor="por-horario" className="label">
@@ -208,7 +212,7 @@ export function SalaoSettings(props: {
             {WEEKDAYS.map((d, i) => {
               const on = r.days.includes(i);
               return (
-                <label key={d} className={`flex min-h-10 cursor-pointer items-center rounded-lg border px-3 text-sm font-semibold ${on ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}>
+                <label key={d} className={`flex min-h-10 cursor-pointer items-center rounded-lg border px-3 text-sm font-semibold ${on ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`}>
                   <input type="checkbox" className="sr-only" checked={on} onChange={(e) => setR('days', e.target.checked ? [...r.days, i].sort() : r.days.filter((x) => x !== i))} />
                   {d}
                 </label>

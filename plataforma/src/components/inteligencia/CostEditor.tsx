@@ -189,7 +189,7 @@ export function CostEditor({ slug, initial, etag: initialEtag, categories }: { s
                             role="radio"
                             aria-checked={(p?.mode ?? 'ficha') === mode}
                             onClick={() => setProduct(item.id, (cur) => ({ ...cur, mode }))}
-                            className={`btn min-h-9 border px-3 text-[13px] ${(p?.mode ?? 'ficha') === mode ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}
+                            className={`btn min-h-9 border px-3 text-[13px] ${(p?.mode ?? 'ficha') === mode ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`}
                           >
                             {mode === 'ficha' ? 'Ficha técnica' : 'Custo direto'}
                           </button>

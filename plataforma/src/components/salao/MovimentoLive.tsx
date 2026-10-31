@@ -47,7 +47,7 @@ export function MovimentoLive({ slug, initial }: { slug: string; initial: Public
         </div>
         <p className="mt-2 text-ink-soft">{level.text}</p>
         {floor.reservations && (
-          <a href={`/reservar/${slug}`} className={`mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl text-base font-bold sm:w-auto sm:px-6 ${floor.level === 'cheio' ? 'bg-ink text-white hover:bg-accent' : 'border border-line bg-white text-ink hover:border-ink'}`}>
+          <a href={`/reservar/${slug}`} className={`mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl text-base font-bold sm:w-auto sm:px-6 ${floor.level === 'cheio' ? 'bg-accent text-white hover:bg-accent' : 'border border-line bg-white text-ink hover:border-accent'}`}>
             Reservar uma mesa
           </a>
         )}

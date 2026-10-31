@@ -5,7 +5,7 @@ import { setContentStatusAction } from '@/app/painel/actions';
 import type { ContentStatus } from '@/lib/conteudos';
 
 const OPTIONS: { id: ContentStatus; label: string; on: string }[] = [
-  { id: 'rascunho', label: 'Para aprovar', on: 'bg-ink text-white' },
+  { id: 'rascunho', label: 'Para aprovar', on: 'bg-accent text-white' },
   { id: 'aprovado', label: 'Aprovado', on: 'bg-ok text-white' },
   { id: 'postado', label: 'Postado', on: 'bg-accent text-white' },
 ];

@@ -18,7 +18,7 @@ const toReais = (c: number) => (c / 100).toFixed(2).replace('.', ',');
 function Check(props: { id: string; label: string; checked: boolean; onChange: (v: boolean) => void; help?: string }) {
   return (
     <label htmlFor={props.id} className="flex cursor-pointer items-start gap-3">
-      <input id={props.id} type="checkbox" className="mt-1 h-4 w-4 accent-ink" checked={props.checked} onChange={(e) => props.onChange(e.target.checked)} />
+      <input id={props.id} type="checkbox" className="mt-1 h-4 w-4 accent-accent" checked={props.checked} onChange={(e) => props.onChange(e.target.checked)} />
       <span>
         <span className="text-[15px] font-semibold">{props.label}</span>
         {props.help && <span className="block text-xs text-ink-mute">{props.help}</span>}
@@ -86,7 +86,7 @@ function Coupons({ coupons, onChange }: { coupons: Coupon[]; onChange: (c: Coupo
               </span>
               <span className="flex items-center gap-3 text-sm">
                 <label className="flex cursor-pointer items-center gap-1.5">
-                  <input type="checkbox" className="h-4 w-4 accent-ink" checked={c.active} onChange={(e) => patch(i, { active: e.target.checked })} />
+                  <input type="checkbox" className="h-4 w-4 accent-accent" checked={c.active} onChange={(e) => patch(i, { active: e.target.checked })} />
                   Ativo
                 </label>
                 <button type="button" className="text-bad underline" onClick={() => onChange(coupons.filter((_, j) => j !== i))}>
@@ -210,7 +210,7 @@ export function OnlineOrdersPanel(props: {
                 else setMsg({ tone: 'bad', text: res.error ?? 'Erro.' });
               })
             }
-            className={`btn min-h-12 border px-5 text-base ${open ? 'border-line bg-white text-ink hover:border-bad hover:text-bad' : 'border-ok bg-ok text-white hover:bg-ink'}`}
+            className={`btn min-h-12 border px-5 text-base ${open ? 'border-line bg-white text-ink hover:border-bad hover:text-bad' : 'border-ok bg-ok text-white hover:bg-accent'}`}
           >
             {open ? 'Fechar a loja' : 'Abrir a loja agora'}
           </button>

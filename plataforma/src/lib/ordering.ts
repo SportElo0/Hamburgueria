@@ -75,8 +75,10 @@ export type TableSpot = z.infer<typeof tableSpotSchema>;
 /** Booking a table from the site, holding it with a deposit (Pix) that is deducted from the bill. */
 export const reservationSettingsSchema = z.object({
   enabled: z.boolean(),
-  /** Centavos per person. 0 = free booking, confirmed at once. Capped at R$ 100 (a deposit, not a prepayment). */
+  /** Centavos (per booking, or per person when depositMode is 'pessoa'). 0 = free booking, confirmed at once. Capped at R$ 100. */
   depositPerPerson: z.number().int().min(0).max(10_000),
+  /** 'reserva': one fixed deposit per booking (default, just so nobody books for nothing); 'pessoa': per person. */
+  depositMode: z.enum(['reserva', 'pessoa']).default('reserva'),
   /** Weekdays that take bookings (0 = Sunday). */
   days: z.array(z.number().int().min(0).max(6)).max(7),
   from: hhmm,
@@ -105,6 +107,11 @@ export const reservationSettingsSchema = z.object({
 });
 
 /** Bookings only go live with the seller identified (Decreto 7.962/2013) and a privacy contact. */
+/** The deposit for a booking of `people`, in centavos. */
+export function depositFor(s: Pick<ReservationSettings, 'depositPerPerson' | 'depositMode'>, people: number) {
+  return s.depositMode === 'pessoa' ? s.depositPerPerson * people : s.depositPerPerson;
+}
+
 export function sellerReady(s: Pick<ReservationSettings, 'seller'>) {
   const v = s.seller;
   return Boolean(v && v.name && v.cnpj.replace(/\D/g, '').length === 14 && v.address && v.privacyContact);
@@ -113,7 +120,8 @@ export type ReservationSettings = z.infer<typeof reservationSettingsSchema>;
 
 export const DEFAULT_RESERVATIONS: ReservationSettings = {
   enabled: false,
-  depositPerPerson: 2000,
+  depositPerPerson: 1500,
+  depositMode: 'reserva',
   days: [4, 5, 6],
   from: '19:00',
   to: '22:00',

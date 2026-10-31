@@ -63,7 +63,7 @@ export default async function InteligenciaLoja({ params, searchParams }: { param
                 key={p}
                 href={`?dias=${p}`}
                 aria-current={p === days ? 'page' : undefined}
-                className={`rounded-md px-3 py-2 text-sm font-semibold ${p === days ? 'bg-ink text-white' : 'text-ink-soft hover:text-ink'}`}
+                className={`rounded-md px-3 py-2 text-sm font-semibold ${p === days ? 'bg-accent text-white' : 'text-ink-soft hover:text-ink'}`}
               >
                 {p} dias
               </Link>
@@ -297,7 +297,7 @@ function Rhythm({ a }: { a: Analysis }) {
           {a.byWeekday.map((n, i) => (
             <li key={i} className="flex items-center gap-2 text-sm">
               <span className="w-9 text-ink-mute">{WEEKDAYS[i]}</span>
-              <span className="h-2.5 rounded-full bg-ink/70" style={{ width: `${(n / maxW) * 100}%` }} />
+              <span className="h-2.5 rounded-full bg-accent/70" style={{ width: `${(n / maxW) * 100}%` }} />
               <span className="tabular-nums text-ink-soft">{n}</span>
             </li>
           ))}

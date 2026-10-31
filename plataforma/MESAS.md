@@ -51,7 +51,7 @@ mesma tela da cozinha dos pedidos do site e entra nos mesmos relatórios (modo "
   (tranquilo, movimentado, cheio), mesas livres e o mapa só com livre/ocupada. Reserva que chega nos próximos 30 min
   conta como mesa ocupada. Dá para pôr um botão "Ver movimento" no site do restaurante.
 - **Reservas** (`/reservar/<loja>`, sem login): o cliente escolhe dia, horário e pessoas, aceita as regras e paga o
-  sinal pelo Pix (por pessoa, configurável; 0 = reserva sem sinal). Página da reserva com o link secreto
+  sinal pelo Pix (padrão: R$ 15 fixo por reserva, só para ninguém reservar à toa; dá para cobrar por pessoa; 0 = sem sinal). Página da reserva com o link secreto
   (`/reservar/<loja>/<id>?t=…`): Pix, confirmação e cancelamento.
   - Regras gravadas em cada reserva: cancelou até N horas antes → devolve; depois, ou não chegou até a tolerância →
     o sinal fica. O restaurante pode cancelar e sempre devolve.

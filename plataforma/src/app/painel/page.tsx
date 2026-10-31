@@ -67,7 +67,7 @@ export default async function PainelPage() {
         <ul className="mt-6 grid gap-3 md:grid-cols-2">
           {rows.map((r) => (
             <li key={r.slug}>
-              <Link href={`/painel/lojas/${r.slug}`} className="card block p-5 transition-colors hover:border-ink">
+              <Link href={`/painel/lojas/${r.slug}`} className="card block p-5 transition-colors hover:border-accent">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate text-lg font-bold">{r.name}</p>

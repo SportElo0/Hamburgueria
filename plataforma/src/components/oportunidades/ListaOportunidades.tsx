@@ -60,7 +60,7 @@ export function ListaOportunidades({ leads, limiteDetalhes, usadasDetalhes }: { 
       </div>
 
       <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoria">
-        <button type="button" className={`chip min-h-8 border ${!filtro.categoria ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`} onClick={() => setFiltro({ ...filtro, categoria: '' })} aria-pressed={!filtro.categoria}>
+        <button type="button" className={`chip min-h-8 border ${!filtro.categoria ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`} onClick={() => setFiltro({ ...filtro, categoria: '' })} aria-pressed={!filtro.categoria}>
           Todas · {items.length}
         </button>
         {CATEGORIAS.map((c) => (
@@ -69,7 +69,7 @@ export function ListaOportunidades({ leads, limiteDetalhes, usadasDetalhes }: { 
             type="button"
             title={c.explica}
             aria-pressed={filtro.categoria === c.id}
-            className={`chip min-h-8 border ${filtro.categoria === c.id ? 'border-ink bg-ink text-white' : 'border-line bg-white'}`}
+            className={`chip min-h-8 border ${filtro.categoria === c.id ? 'border-accent bg-accent text-white' : 'border-line bg-white'}`}
             onClick={() => setFiltro({ ...filtro, categoria: filtro.categoria === c.id ? '' : c.id })}
           >
             {c.nome} · {contagem(c.id)}
