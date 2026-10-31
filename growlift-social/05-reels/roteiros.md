@@ -243,7 +243,18 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - **Música:** só faixas liberadas para conta comercial (não usem áudio de outro perfil). Uma batida de 100 a 110 BPM casa com as trocas (4,2 / 7 / 16,2 / 22 / 31,2 s). Anotem o nome da faixa.
 - **Quem responder:** "Oi! O Scale ainda não está à venda e não tem preço nem data. Se quiser, aviso você quando abrir. Posso avisar? (Responda SAIR a qualquer momento para parar.)" Não aceitem sinal nem reserva.
 
-**Vídeo pronto:** `10-pedido-na-mesa.mp4` (35,5 s) e capa `10-pedido-na-mesa-capa.png`.
+**Vídeos prontos:**
+- `10-pedido-na-mesa-narrado.mp4`: com narração (voz 1). É o recomendado.
+- `10-pedido-na-mesa-narrado-voz2.mp4`: a mesma narração com outra voz, para escolher.
+- `10-pedido-na-mesa.mp4`: sem voz, só para música.
+- Capa: `10-pedido-na-mesa-capa.png`.
+
+**Narração** (voz sintética em português, feita no computador; fonte em `_fonte/reels/narracao-10.py`):
+"Salão cheio, garçom correndo, e a mesa esperando para pedir. / Agora, o cliente lê o QR da mesa. / E pede pelo celular. Sem baixar aplicativo, sem cadastro. / O pedido vai direto para a cozinha. / O amigo entra com o código da mesa, e tudo cai na mesma conta. / O garçom confirma a mesa e atende os chamados. / Depois, libera a mesa. / Pedido na mesa, sem aplicativo. Plano Scale, em breve."
+
+**Ao postar com narração:**
+- A voz é gerada por computador e soa como pessoa. Em "Configurações avançadas", ativem o "Rótulo de IA".
+- Se colocarem música no app, deixem a música baixa (uns 15 a 20%) e o "áudio original" alto, para a voz ficar por cima.
 
 **Legenda**
 ```
