@@ -438,7 +438,7 @@ function update(t) {
   guestB.armR.rotation.x = lerp(-0.9, -1.55, bUp);
   guestB.head.rotation.x = 0.3 * bUp;
   // Ring of "mesma conta" under table 5 while both are in.
-  const ringK = t > 19 && t < 22 ? smooth((t - 19) / 0.5) * (1 - smooth((t - 21.5) / 0.5)) : t > 30.2 ? smooth((t - 30.2) / 0.5) : 0;
+  const ringK = t > 19 && t < 22 ? smooth((t - 19) / 0.5) * (1 - smooth((t - 21.5) / 0.5)) : 0;
   ringMat.opacity = ringK * (0.6 + 0.3 * Math.sin(t * 6));
   ringMat.color.set(t > 30 ? '#22c55e' : '#4d8dff');
 

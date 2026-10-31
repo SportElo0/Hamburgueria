@@ -235,8 +235,8 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - **QR, 4,2 a 7 s:** a câmera desce até a Mesa 5; a cliente pega o celular e escaneia o QR da mesa. "Mesa 5 aberta."
 - **Cliente, 7 a 16,2 s:** o celular com o pedido real flutua ao lado da mesa; "Sem app", "Sem cadastro", os itens voam para a sacola e o pedido vai para a cozinha. "Pede pelo celular, sem app."
 - **Amigo, 16,2 a 22 s:** a câmera passa para o outro lado da mesa; o amigo pega o celular, o código vai de um celular para o outro e um anel azul marca a mesa. "O amigo entra com o código. Mesma conta."
-- **Garçom, 22 a 31,2 s:** o garçom no balcão da cozinha olha o celular, a Mesa 5 chama e pede a conta, ele vai até a mesa e a libera (anel verde). "O garçom confirma, atende e libera a mesa."
-- **Fecho, 31,2 a 40,5 s:** a câmera sobe e mostra o salão inteiro. "Plano Scale · em breve" / "Pedido na mesa, sem app." e depois "Quer isso no seu restaurante? Comenta MESA".
+- **Garçom, 18,3 a 22 s:** o garçom no balcão da cozinha olha o celular, confirma a mesa e recebe "Mesa 5 chamou" e "Pediu a conta". "O garçom confirma e atende na hora."
+- **Fecho, 22 a 33,5 s:** a câmera sobe e mostra o salão inteiro. "Plano Scale · em breve" / "Pedido na mesa, sem app." e depois "Quer isso no seu restaurante? Comenta MESA".
 - **Marcação:** "Projeto conceito · loja de demonstração · nome fictício" em todas as telas, e o aviso no fecho. Nenhum pedido real.
 - **O que não existe ainda (não mostrar nem prometer):** pagar pelo celular na mesa, dividir a conta e jogo entre as mesas. Se perguntarem, digam que ainda não tem.
 - **Antes de postar:** no preview do app, confira se a faixa "Projeto conceito" não fica atrás da legenda. Procurem "Brasa Burger" no Instagram e no Google Maps; se existir um em São Paulo, avisem para trocar o nome.
@@ -248,10 +248,10 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - `10-pedido-na-mesa.mp4`: sem voz, só para música.
 - Capa: `10-pedido-na-mesa-capa.png`.
 
-**Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", 1,84 crédito em 31/10; o áudio original está em `_fonte/reels/narracao-10-eleven.mp3`, cortado nas pausas para cada frase cair na sua cena):
-"Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve! Quer isso no seu restaurante quando abrir? Comenta MESA e recebe no direct, por mensagem automática, como funciona!" (a última frase foi gerada à parte, depois da revisão legal: `_fonte/reels/narracao-10-fecho.mp3`, 0,69 crédito)
+**Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", uma fala só e corrida, 2,07 créditos em 31/10; o áudio está em `_fonte/reels/narracao-10-eleven.mp3`). O vídeo segue o ritmo da voz: cada cena acelera ou desacelera um pouco para caber na fala (tabela `WARP` em `gerar-reels.mjs`), sem pausas entre as frases:
+"Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular: sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha, o amigo entra com o código da mesa e tudo cai na mesma conta. E o garçom confirma a mesa e atende os chamados na hora. Pedido na mesa, sem aplicativo: plano Scale, em breve! Quer isso no seu restaurante? Quer entender como funciona? Comenta MESA!"
 
-**Comenta MESA:** no fim (35,5 a 40,5 s) a palavra MESA aparece grande, alguém digita "MESA" num campo de comentário e "Você recebe no direct, por mensagem automática, como funciona". A automação do direct está em `automacao-comenta-mesa.md`; montem antes de postar.
+**Fim (26,7 a 33,5 s):** "Quer isso no seu restaurante?", "Quer entender como funciona?", "Comenta MESA" grande, pulsando, e alguém digita "MESA" num campo de comentário. A explicação (mensagem automática, Scale não está à venda) fica na mensagem do direct e na legenda, conforme `automacao-comenta-mesa.md`.
 
 **Ao postar com narração:**
 - A voz é gerada por computador e soa como pessoa. Em "Configurações avançadas", ativem o "Rótulo de IA".

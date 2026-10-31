@@ -54,12 +54,18 @@
   const bg = document.getElementById('bg');
   const render = window.render;
   window.render = async (t) => {
-    await frame(bg, Math.round(t * FPS));
-    bg.style.transform = t > 35.5 ? `scale(${1 + 0.012 * (t - 35.5)})` : '';
+    const w = (window.WARP || [[0, 1e9, 0, 1]]).find(([ns, ne]) => t >= ns && t < ne) || window.WARP[window.WARP.length - 1];
+    const ot = w[2] + (t - w[0]) * w[3];
+    await frame(bg, Math.round(ot * FPS));
+    bg.style.transform = ot > 35.5 ? `scale(${1 + 0.012 * (ot - 35.5)})` : '';
     await render(t);
   };
 
   window.updates = window.updates || {};
+  const warp = (id, fn) => {
+    const i = +id.slice(1), w = (window.WARP || [])[i];
+    return w ? (local, dur, el) => fn(local * w[3], dur * w[3], el) : fn;
+  };
   window.updates.s0 = async (local, dur, el) => { words(el, local); };
   window.updates.s1 = async (local, dur, el) => { words(el, local); pop($(el, '.ok'), local, 1.7); };
   window.updates.s2 = async (local, dur, el) => {
@@ -132,7 +138,7 @@
     m1.style.opacity = clamp(local / 0.2); m2.style.opacity = clamp((local - 0.12) / 0.2);
     pop($(el, '.plan'), local, 0.35, 0.55);
     $(el, '.shine').style.transform = `translateX(${lerp(-160, 560, clamp((local - 0.8) / 0.7))}px) skewX(-20deg)`;
-    const swap = 4.2;
+    const swap = 4.45;
     const out = easeInOut((local - swap) / 0.35);
     const A = $(el, '.endA');
     A.style.opacity = 1 - out;
@@ -141,30 +147,31 @@
     const B = $(el, '.endB');
     B.style.opacity = clamp((local - swap - 0.15) / 0.3);
     const lb = local - swap;
-    pop($(el, '.q'), lb, 0.2, 0.5);
-    pop($(el, '.com'), lb, 1.2, 0.5);
+    pop($(el, '.q'), lb, 0.0, 0.5);
+    pop($(el, '.ent'), lb, 1.45, 0.5);
+    pop($(el, '.com'), lb, 3.1, 0.45);
     const kw = $(el, '.kw');
-    const kk = back((lb - 1.5) / 0.6);
-    const beat = lb > 2.2 ? 1 + 0.05 * Math.max(0, Math.sin((lb - 2.2) * Math.PI * 2 / 0.9)) : 1;
-    kw.style.opacity = clamp((lb - 1.5) / 0.2);
-    kw.style.transform = `scale(${Math.max(0, kk) * beat}) rotate(${(1 - clamp((lb - 1.5) / 0.6)) * -10}deg)`;
+    const kk = back((lb - 3.4) / 0.6);
+    const beat = lb > 4.1 ? 1 + 0.05 * Math.max(0, Math.sin((lb - 4.1) * Math.PI * 2 / 0.9)) : 1;
+    kw.style.opacity = clamp((lb - 3.4) / 0.2);
+    kw.style.transform = `scale(${Math.max(0, kk) * beat}) rotate(${(1 - clamp((lb - 3.4) / 0.6)) * -10}deg)`;
     const ring = $(el, '.kw-ring');
-    const f = lb > 2.2 ? ((lb - 2.2) % 0.9) / 0.9 : 0;
-    ring.style.opacity = lb > 2.2 ? 0.8 * (1 - f) : 0;
+    const f = lb > 4.1 ? ((lb - 4.1) % 0.9) / 0.9 : 0;
+    ring.style.opacity = lb > 4.1 ? 0.8 * (1 - f) : 0;
     ring.style.transform = `scale(${1 + f * 0.18})`;
     const field = $(el, '.field');
-    const fk = back((lb - 2.4) / 0.5);
-    field.style.opacity = clamp((lb - 2.4) / 0.2);
+    const fk = back((lb - 4.0) / 0.5);
+    field.style.opacity = clamp((lb - 4.0) / 0.2);
     field.style.transform = `translateY(${(1 - Math.min(1, fk)) * 80}px)`;
     const word = 'MESA';
-    const n = Math.max(0, Math.min(4, Math.floor((lb - 2.9) / 0.18) + 1));
+    const n = Math.max(0, Math.min(4, Math.floor((lb - 4.5) / 0.18) + 1));
     const caret = Math.floor(lb * 2) % 2 ? '|' : '';
     const typed = $(el, '.typed');
-    typed.textContent = lb < 2.9 ? 'Adicione um comentário…' : word.slice(0, n) + (n < 4 ? caret : '');
-    typed.style.color = lb < 2.9 ? '#8790a6' : '#fff';
+    typed.textContent = lb < 4.5 ? 'Adicione um comentário…' : word.slice(0, n) + (n < 4 ? caret : '');
+    typed.style.color = lb < 4.5 ? '#8790a6' : '#fff';
     const send = $(el, '.send');
-    send.style.transform = `scale(${lb > 3.75 && lb < 4.15 ? 1.2 : 1})`;
-    pop($(el, '.dm'), lb, 3.9, 0.5);
+    send.style.transform = `scale(${lb > 5.35 && lb < 5.75 ? 1.2 : 1})`;
     $(el, '.note').style.opacity = clamp((local - 1.2) / 0.4);
   };
+  for (const id of Object.keys(window.updates)) window.updates[id] = warp(id, window.updates[id]);
 })();

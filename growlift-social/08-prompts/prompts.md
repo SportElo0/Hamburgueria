@@ -84,3 +84,4 @@ Editorial surf action photograph, vertical 2:3. Turquoise-blue ocean on a sunny 
 ## Reel 10, narração (31/10/2026)
 - Higgsfield, modelo `elevenlabs_v4`, voz preset "Andre" (`f1e8226e-2248-4d5f-b43c-0a79e9949dbf`), stability 0,35, similarity 0,8. Custo: 1,84 crédito (conferido antes).
 - Texto: "Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve!"
+- 31/10, versão final: uma fala só, corrida (2,07 créditos), com "Quer isso no seu restaurante? Quer entender como funciona? Comenta MESA!" no fim, sem o "libera a mesa". As falas finais anteriores (0,46 e 0,69) foram descartadas.

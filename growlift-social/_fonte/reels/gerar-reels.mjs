@@ -374,7 +374,7 @@ function mesa3dReelHtml({ recA, recB, recS }) {
   const chip = (cls, ic, text, pos) => `<div class="chip ${cls}" style="${pos}"><span class="ic">${svgI(ic, 32)}</span>${text}</div>`;
 
   const s0 = `<div class="title" style="position:absolute;left:96px;right:96px;top:250px"><h1 class="h1" style="font-size:112px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Salão cheio.', 0.05, 0.12)}<br>${ws('Garçom correndo.', 0.4, 0.14, 'blue')}</h1></div>
-    ${cap('E se a mesa pedisse', 'pelo celular, sem app?', 1.9)}`;
+    ${cap('E a mesa', 'esperando pra pedir?', 1.9)}`;
   const s1 = `${top}${cap('O cliente lê', 'o QR da mesa.')}
     <div class="chip ok" style="left:96px;top:400px;background:${TOKENS.blue};border-color:${TOKENS.blue}"><span class="ic" style="background:rgba(255,255,255,.22)">${svgI(I.check, 34, '#fff', 2.6)}</span>Mesa 5 aberta</div>`;
   const s2 = `${top}
@@ -405,7 +405,7 @@ function mesa3dReelHtml({ recA, recB, recS }) {
     ${note('n-bill', I.receipt, '#e8f7ee', '#16a34a', 'Pediu a conta', 'Mesa 5', 'left:40px;top:540px')}
     ${sparks}
     <div class="chip free" style="left:60px;top:420px;background:#16a34a;border-color:#16a34a"><span class="ic" style="background:rgba(255,255,255,.22)">${svgI(I.check, 34, '#fff', 2.6)}</span>Mesa livre</div>
-    ${cap('O garçom confirma, atende', 'e libera a mesa.')}`;
+    ${cap('O garçom confirma', 'e atende na hora.')}`;
   const [p1, p2] = MARK.match(/<path[^>]*\/>/g);
   const markSvg = (p, cls) => `<svg class="${cls}" viewBox="50 40 530 415" style="position:absolute;inset:0;width:100%;height:100%;opacity:0">${p}</svg>`;
   const s5 = `<div style="position:absolute;left:0;right:0;top:0;height:1150px;background:linear-gradient(#06080df2 55%,#06080d00)"></div>
@@ -415,8 +415,9 @@ function mesa3dReelHtml({ recA, recB, recS }) {
       <h1 class="h1" style="font-size:100px;margin-top:34px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Pedido na mesa,', 0.3, 0.1)} ${ws('sem app.', 0.8, 0.1, 'blue')}</h1>
     </div>
     <div class="endB" style="position:absolute;left:80px;right:80px;top:330px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0">
-      <p class="h1 q" style="font-size:60px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Quer isso no seu restaurante quando abrir?</p>
-      <div style="display:flex;align-items:center;gap:26px;margin-top:46px">
+      <p class="h1 q" style="font-size:60px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Quer isso no seu restaurante?</p>
+      <p class="ent" style="margin-top:18px;font-size:48px;font-weight:700;color:${TOKENS.blueSoft};text-shadow:0 4px 24px rgba(0,0,0,.7);opacity:0">Quer entender como funciona?</p>
+      <div style="display:flex;align-items:center;gap:26px;margin-top:40px">
         <span class="h1 com" style="font-size:100px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Comenta</span>
         <span class="kw" style="position:relative;display:inline-block;font-size:108px;font-weight:900;letter-spacing:-.02em;color:#fff;background:${TOKENS.blue};border-radius:34px;padding:6px 38px 14px;box-shadow:0 30px 70px -20px rgba(8,101,254,1)">MESA<span class="kw-ring" style="position:absolute;inset:-10px;border-radius:44px;border:5px solid ${TOKENS.blueBright};opacity:0"></span></span>
       </div>
@@ -425,23 +426,25 @@ function mesa3dReelHtml({ recA, recB, recS }) {
         <span class="typed" style="flex:1;text-align:left;font-size:40px;font-weight:600;color:#fff">&nbsp;</span>
         <span class="send" style="flex:none;font-size:34px;font-weight:800;color:${TOKENS.blueBright}">Publicar</span>
       </div>
-      <p class="dm" style="margin-top:40px;font-size:36px;line-height:1.3;color:#fff;background:rgba(6,8,13,.82);border-radius:24px;padding:16px 26px;opacity:0">Você recebe no direct, por mensagem automática, como funciona. 📩</p>
     </div>
     <p class="muted note" style="position:absolute;left:96px;right:96px;top:1400px;font-size:28px;line-height:1.35;opacity:0;text-align:center">Plano Scale em breve, ainda não está à venda. Telas do sistema numa loja de demonstração com nome fictício.</p>`;
 
   const bgDir = pathToFileURL(MESA3D).href;
-  const script = `document.body.insertAdjacentHTML('afterbegin','<img id="bg" data-seq="${bgDir}" data-count="${count}" src="${bgDir}/00000.jpg" alt=""><div class="shade" style="top:0;height:620px;background:linear-gradient(#06080dd9,#06080d00)"></div><div class="shade" style="bottom:0;height:720px;background:linear-gradient(#06080d00,#06080de6 60%)"></div>');\n`
+  // [início novo, fim novo, início original, velocidade]: a narração manda no tempo; cada cena
+  // toca a sua ação original (3D, gravação e animações) na velocidade que cabe na fala.
+  const WARP = [
+    [0, 4.25, 0, 0.99],
+    [4.25, 7.0, 4.2, 1.02],
+    [7.0, 14.1, 7.0, 1.3],
+    [14.1, 18.3, 16.2, 1.38],
+    [18.3, 22.15, 22.0, 1.3],
+    [22.15, 33.5, 31.2, 1],
+  ];
+  const script = `window.WARP=${JSON.stringify(WARP)};document.body.insertAdjacentHTML('afterbegin','<img id="bg" data-seq="${bgDir}" data-count="${count}" src="${bgDir}/00000.jpg" alt=""><div class="shade" style="top:0;height:620px;background:linear-gradient(#06080dd9,#06080d00)"></div><div class="shade" style="bottom:0;height:720px;background:linear-gradient(#06080d00,#06080de6 60%)"></div>');\n`
     + fs.readFileSync(path.join(HERE, 'mesa3d-motion.js'), 'utf8');
   return reelPage({
     css: MESA3D_CSS,
-    scenes: [
-      { start: 0, end: 4.2, html: s0 },
-      { start: 4.2, end: 7.0, html: s1 },
-      { start: 7.0, end: 16.2, html: s2 },
-      { start: 16.2, end: 22.0, html: s3 },
-      { start: 22.0, end: 31.2, html: s4 },
-      { start: 31.2, end: 43.5, html: s5 },
-    ],
+    scenes: WARP.map(([ns, ne], i) => ({ start: ns, end: ne, html: [s0, s1, s2, s3, s4, s5][i] })),
     script,
   });
 }
@@ -817,7 +820,7 @@ const REELS = {
       });
 
       const html = mesa3dReelHtml({ recA, recB, recS });
-      return { html, duration: 43.5, cover: 1.6 };
+      return { html, duration: 33.5, cover: 1.6 };
     } finally {
       await demo.stop();
     }
