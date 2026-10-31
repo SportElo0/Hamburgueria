@@ -295,6 +295,18 @@ function TableSheet({ table: t, now, pending, onClose, onRun }: { table: Table; 
             <span>Total</span>
             <span>{brl(t.total)}</span>
           </p>
+          {(t.credit ?? 0) > 0 && (
+            <>
+              <p className="flex justify-between text-sm text-ink-soft tabular-nums">
+                <span>Sinal pago na reserva</span>
+                <span>− {brl(t.credit ?? 0)}</span>
+              </p>
+              <p className="flex justify-between font-bold tabular-nums">
+                <span>{t.total >= (t.credit ?? 0) ? 'Falta pagar' : 'Devolver ao cliente'}</span>
+                <span>{brl(Math.abs(t.total - (t.credit ?? 0)))}</span>
+              </p>
+            </>
+          )}
         </div>
 
         <div className="space-y-2 border-t border-line px-5 pt-3 pb-[max(16px,env(safe-area-inset-bottom))]">

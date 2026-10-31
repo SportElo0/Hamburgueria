@@ -35,8 +35,36 @@ mesma tela da cozinha dos pedidos do site e entra nos mesmos relatórios (modo "
 - Os pedidos ficam no mesmo lugar dos pedidos do site (`pedidos/<loja>/<dia>.json`), com `mode: 'mesa'` e
   `table: { number, session }`. Não têm nome nem telefone de cliente: não entram na lista de clientes nem nas campanhas.
 
+## Mapa do salão, tempo nas mesas e reservas
+
+- **Mapa ao vivo** (`/loja/<loja>/mapa`, login da loja): cada mesa livre, ocupada, esperando o garçom ou com a conta
+  pedida, há quanto tempo está sentada e quantas pessoas. Tocar numa mesa livre → **Sentar clientes aqui** abre a mesa
+  sem QR (já confirmada); o código da mesa continua valendo para os celulares.
+- **Tempo nas mesas** (aba do mapa): tempo médio, mediana, mais rápida e mais longa, conta média (e por pessoa quando o
+  garçom anotou), **quem pediu drink x quem não pediu**, por dia da semana, horário e mesa. Contas com menos de 5 min ou
+  mais de 6 h ficam de fora (mesa esquecida aberta). Abaixo de 10 contas, aparece o aviso de que ainda varia muito.
+  Vem de `mesas/<loja>/historico/<AAAA-MM>.json`, gravado quando a conta é fechada (sem dado de cliente). Só conta o
+  que foi pedido pelo QR.
+- **Bebidas:** Configurar → Pedido na mesa → "Quais categorias são bebida". Sem marcar, vale o nome da categoria.
+- **Posição das mesas:** no mesmo lugar, quadro 12 × 8; sem configurar, as mesas ficam em fileiras de 6.
+- **Movimento público** (`/movimento/<loja>`, sem login; JSON em `/api/public/lojas/<loja>/movimento`): nível
+  (tranquilo, movimentado, cheio), mesas livres e o mapa só com livre/ocupada. Reserva que chega nos próximos 30 min
+  conta como mesa ocupada. Dá para pôr um botão "Ver movimento" no site do restaurante.
+- **Reservas** (`/reservar/<loja>`, sem login): o cliente escolhe dia, horário e pessoas, aceita as regras e paga o
+  sinal pelo Pix (por pessoa, configurável; 0 = reserva sem sinal). Página da reserva com o link secreto
+  (`/reservar/<loja>/<id>?t=…`): Pix, confirmação e cancelamento.
+  - Regras gravadas em cada reserva: cancelou até N horas antes → devolve; depois, ou não chegou até a tolerância →
+    o sinal fica. O restaurante pode cancelar e sempre devolve.
+  - No mapa: **Chegou** → tocar na mesa livre: a mesa abre com o sinal como crédito (o salão mostra "Falta pagar" ou
+    "Devolver ao cliente"). **Não veio** só depois da tolerância. Fechar a conta conclui a reserva.
+  - Capacidade: "reservas por horário" (quantas mesas ficam para reserva em cada horário). Reserva pelo site fecha
+    1 hora antes do horário. Pix não pago expira em 30 minutos e libera o horário.
+  - Dados: `reservas/<loja>/<AAAA-MM-DD>.json` (nome, telefone, e-mail). O restaurante é o controlador.
+
 ## Ainda não feito
 
 - Pagar a conta pelo celular (Pix ou cartão na mesa) e dividir a conta.
+- Apagar sozinho os dados das reservas antigas.
+- Devolver só a diferença do sinal pelo Pix (hoje o garçom devolve no caixa).
 - Quiz entre as mesas.
 - Cupom em pedido da mesa.

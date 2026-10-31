@@ -66,6 +66,12 @@ Base: `reports/Enxugar os planos 2026-10-31.md`; rotina em `marketing/rotina-men
 - **Campanha:** 12 modelos em `plataforma/src/lib/campanhas.ts`, escolhidos na aba Clientes (sugere o do mês).
 - **Scale:** plano B na tela do salão; `/api/saude` para um monitor gratuito (ex.: UptimeRobot) avisar se o painel cair. O monitor ainda precisa ser criado por vocês.
 
+## Mapa do salão e reservas (31/10/2026)
+
+Detalhes em `plataforma/MESAS.md`. Mapa ao vivo e tempo nas mesas em `/loja/<loja>/mapa`; movimento público em
+`/movimento/<loja>`; reservas com sinal em `/reservar/<loja>`. A equipe liga e configura em Configurar → Pedido na mesa.
+Reservas com Pix real precisam do token do Mercado Pago da loja.
+
 ## Conteúdos da Growlift no painel
 
 - `/painel/conteudos` mostra `growlift-social/`: imagens em galeria (abrir, baixar, .zip por grupo), `.md` com botão de copiar, e a situação de cada peça (Para aprovar, Aprovado, Postado), guardada no banco em `conteudos/status.json`.

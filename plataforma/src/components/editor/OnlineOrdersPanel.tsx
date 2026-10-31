@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { SalaoSettings } from './SalaoSettings';
 import { newId, type Store } from '@/lib/schema';
 import { brl, orderingOf, todaySP, type Coupon } from '@/lib/ordering';
 import type { OperatorSummary } from '@/lib/operators';
@@ -290,6 +291,16 @@ export function OnlineOrdersPanel(props: {
           </a>
         </div>
       </section>
+
+      {o.tables.enabled && (
+        <SalaoSettings
+          o={o}
+          categories={props.store.catalog.categories.map((c) => ({ id: c.id, name: c.name }))}
+          setSalao={(v) => set('salao', v)}
+          setReservations={(v) => set('reservations', v)}
+          hasMercadoPago={hasMp}
+        />
+      )}
 
       <section className="card space-y-4 p-5">
         <h2 className="text-lg font-bold">Bairros e taxa de entrega</h2>

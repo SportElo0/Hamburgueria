@@ -6,7 +6,8 @@ import { OPERATOR_ACTIONS, PAYMENT_METHODS, type OperatorAction, type PaymentMet
 import { isSlug } from '@/lib/slug';
 import { setOptOut } from '@/lib/customers';
 import { ItemEditError, addPedido, editItemByStore, listPedidos } from '@/lib/stores';
-import { TableError, answerCall, closeTable, confirmTable, dismissTable } from '@/lib/mesas';
+import { TableError, answerCall, closeTable, confirmTable, dismissTable, seatTable } from '@/lib/mesas';
+import { ReservationError, cancelByStore, markArrived, markFinished, markNoShow, undoArrived } from '@/lib/reservas';
 
 export interface OrderActionResult {
   ok: boolean;
@@ -59,7 +60,10 @@ export async function tableAction(slug: string, number: number, action: TableAct
     else if (action === 'dispensar') await dismissTable(slug, number, by);
     else if (action === 'atender-garcom') await answerCall(slug, number, 'garcom');
     else if (action === 'atender-conta') await answerCall(slug, number, 'conta');
-    else if (action === 'fechar' && method && PAYMENT_METHODS.includes(method)) await closeTable(slug, number, method, by);
+    else if (action === 'fechar' && method && PAYMENT_METHODS.includes(method)) {
+      const closed = await closeTable(slug, number, method, by);
+      if (closed.reservationId) await markFinished(slug, closed.reservationId).catch((err) => console.error('reserva concluida', err));
+    }
     else return { ok: false, error: 'Ação inválida.' };
     return { ok: true };
   } catch (err) {
@@ -94,4 +98,48 @@ export async function requestChangeAction(slug: string, text: string): Promise<O
   if (open >= 20) return { ok: false, error: 'Já há 20 pedidos esperando. Fale com a Growlift pelo WhatsApp.' };
   await addPedido(slug, { texto, canal: 'Painel da loja' }, user.name || user.email);
   return { ok: true };
+}
+
+/** The waiter seats people at a free table (no QR needed), optionally saying how many. */
+export async function seatAction(slug: string, number: number, people: number | null): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !Number.isInteger(number) || number < 1 || number > 200) return { ok: false, error: 'Mesa inválida.' };
+  if (people !== null && (!Number.isInteger(people) || people < 1 || people > 40)) return { ok: false, error: 'Número de pessoas inválido.' };
+  await requireStoreAccess(slug);
+  try {
+    await seatTable(slug, number, { people });
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof TableError) return { ok: false, error: err.message };
+    console.error('seatAction', err);
+    return { ok: false, error: 'Não foi possível ocupar a mesa. Tente de novo.' };
+  }
+}
+
+export type ReservationAction = 'chegou' | 'nao-veio' | 'cancelar';
+const RES_ID = /^r\d{8}-[a-z0-9]{10}$/;
+
+/** Bookings on the floor map: the party arrived (goes to a table with its deposit on the bill), didn't come, or the restaurant cancels (refund). */
+export async function reservationAction(slug: string, id: string, action: ReservationAction, table?: number): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !RES_ID.test(id)) return { ok: false, error: 'Reserva inválida.' };
+  const user = await requireStoreAccess(slug);
+  const by = user.name || user.email;
+  try {
+    if (action === 'chegou') {
+      if (!Number.isInteger(table) || table! < 1 || table! > 200) return { ok: false, error: 'Escolha a mesa.' };
+      const { reservation, credit } = await markArrived(slug, id, table!, by);
+      try {
+        await seatTable(slug, table!, { people: reservation.people, reservationId: id, credit });
+      } catch (err) {
+        await undoArrived(slug, id);
+        throw err;
+      }
+    } else if (action === 'nao-veio') await markNoShow(slug, id, by);
+    else if (action === 'cancelar') await cancelByStore(slug, id, by);
+    else return { ok: false, error: 'Ação inválida.' };
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof ReservationError || err instanceof TableError) return { ok: false, error: err.message };
+    console.error('reservationAction', err);
+    return { ok: false, error: 'Não foi possível atualizar a reserva. Tente de novo.' };
+  }
 }

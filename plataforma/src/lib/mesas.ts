@@ -2,6 +2,8 @@ import 'server-only';
 import { createHmac, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { storage, ConflictError } from './storage';
 import { getPublished } from './stores';
+import { monthKey } from './changes';
+import type { Store } from './schema';
 import { count, hourWindow, record, take } from './limits';
 import { OrderError, orderingOf, type Order, type PaymentMethod } from './ordering';
 import { ordersOfDays, placeTableOrder, tableDays, tableOrders, updateTableOrders } from './orders';
@@ -15,6 +17,7 @@ import { ordersOfDays, placeTableOrder, tableDays, tableOrders, updateTableOrder
  *
  * Layout in storage:
  *   mesas/<slug>/abertas.json   the open seatings ({ [table number]: Seating })
+ *   mesas/<slug>/historico/<YYYY-MM>.json   one SeatingRecord per closed bill (time at the table, drinks, ticket)
  */
 
 export interface Seating {
@@ -29,7 +32,32 @@ export interface Seating {
   devices: string[];
   /** Waiting calls: the waiter, or the bill. */
   calls: { kind: CallKind; at: string }[];
+  /** How many people sat down, when the waiter said so. */
+  people?: number | null;
+  /** The booking this table is holding, and the deposit already paid for it (centavos, deducted from the bill). */
+  reservationId?: string;
+  credit?: number;
 }
+
+/** What is kept of a closed bill, for the time-at-table analysis. No customer data. */
+export interface SeatingRecord {
+  id: string;
+  number: number;
+  openedAt: string;
+  closedAt: string;
+  minutes: number;
+  people: number | null;
+  orders: number;
+  /** Centavos, the bill without the deposit taken off. */
+  total: number;
+  /** Units of items from the drink categories. */
+  drinks: number;
+  credit: number;
+  reserved: boolean;
+}
+
+const historyKey = (slug: string, month: string) => `mesas/${slug}/historico/${month}.json`;
+const DRINK_NAME = /bebida|drink|chop|cerveja|vinho|coquetel|caipirinha|suco|refri|soda|dose|bar/i;
 
 export type CallKind = 'garcom' | 'conta';
 type Doc = { seatings: Record<string, Seating> };
@@ -277,7 +305,7 @@ export async function answerCall(slug: string, number: number, kind: CallKind) {
  * sales report and the margins use), food already taken to the table counts as delivered, and the
  * seating ends, so its code and phones stop working.
  */
-export async function closeTable(slug: string, number: number, method: PaymentMethod, by: string) {
+export async function closeTable(slug: string, number: number, method: PaymentMethod, by: string, now = new Date()): Promise<Seating> {
   const seating = await change(slug, (doc) => {
     const s = doc.seatings[number];
     if (!s) throw new TableError('Essa mesa já foi fechada.');
@@ -285,8 +313,8 @@ export async function closeTable(slug: string, number: number, method: PaymentMe
     delete doc.seatings[number];
     return s;
   });
-  const at = new Date().toISOString();
-  await updateTableOrders(slug, seating.id, (o) => {
+  const at = now.toISOString();
+  const closed = await updateTableOrders(slug, seating.id, (o) => {
     if (o.status === 'recusado') return null;
     const delivered = o.status === 'pronto';
     return {
@@ -295,5 +323,97 @@ export async function closeTable(slug: string, number: number, method: PaymentMe
       history: delivered ? [...o.history, { status: 'concluido', at, by }] : o.history,
       payment: { ...o.payment, method, status: 'pago', paidAt: at },
     };
+  });
+  await recordSeating(slug, seating, closed, now).catch((err) => console.error('historico da mesa', err));
+  return seating;
+}
+
+/** Which categories count as drinks: the ones the team picked, or the ones whose name says so. */
+export function drinkCategoryIds(store: Store): Set<string> {
+  const picked = orderingOf(store).salao.drinkCategories;
+  const cats = store.catalog.categories;
+  return new Set(picked.length ? picked : cats.filter((c) => DRINK_NAME.test(c.name)).map((c) => c.id));
+}
+
+/** Keeps a closed bill's numbers (never who sat there) for the analysis of time at the table. */
+async function recordSeating(slug: string, seating: Seating, orders: Order[], now: Date) {
+  const record = await getPublished(slug);
+  const drinkCats = record ? drinkCategoryIds(record.store) : new Set<string>();
+  const categoryOf = new Map<string, string>();
+  for (const c of record?.store.catalog.categories ?? []) for (const i of c.items) categoryOf.set(i.id, c.id);
+  const kept = orders.filter((o) => o.status !== 'recusado');
+  const entry: SeatingRecord = {
+    id: seating.id,
+    number: seating.number,
+    openedAt: seating.openedAt,
+    closedAt: now.toISOString(),
+    minutes: Math.max(0, Math.round((now.getTime() - Date.parse(seating.openedAt)) / 60_000)),
+    people: seating.people ?? null,
+    orders: kept.length,
+    total: billTotal(kept),
+    drinks: kept.flatMap((o) => o.lines).reduce((n, l) => n + (drinkCats.has(categoryOf.get(l.productId) ?? '') ? l.quantity : 0), 0),
+    credit: seating.credit ?? 0,
+    reserved: Boolean(seating.reservationId),
+  };
+  const key = historyKey(slug, monthKey(now));
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const doc = await storage().readJSON<SeatingRecord[]>(key);
+    const list = doc?.data ?? [];
+    if (list.some((r) => r.id === entry.id)) return;
+    try {
+      await storage().writeJSON(key, [...list, entry], doc ? doc.etag : null);
+      return;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 4) throw err;
+    }
+  }
+}
+
+/** Closed bills of the last `days` days (by month files), newest last. */
+export async function seatingHistory(slug: string, days: number, now = new Date()): Promise<SeatingRecord[]> {
+  const since = now.getTime() - days * 86_400_000;
+  const months = new Set<string>();
+  for (let t = since; t <= now.getTime() + 86_400_000; t += 86_400_000) months.add(monthKey(new Date(t)));
+  const docs = await Promise.all([...months].map((m) => storage().readJSON<SeatingRecord[]>(historyKey(slug, m))));
+  return docs.flatMap((d) => d?.data ?? []).filter((r) => Date.parse(r.closedAt) >= since).sort((a, b) => a.closedAt.localeCompare(b.closedAt));
+}
+
+/**
+ * The waiter seats people at a table (with or without the QR): opens the seating already confirmed, or,
+ * if a phone opened it first, just notes the people and the booking. The table code still works for phones.
+ */
+export async function seatTable(
+  slug: string,
+  number: number,
+  input: { people: number | null; reservationId?: string; credit?: number },
+  now = new Date(),
+): Promise<Seating> {
+  await tableSettings(slug, number);
+  if (input.people !== null && (!Number.isInteger(input.people) || input.people < 1 || input.people > 40)) throw new TableError('Número de pessoas inválido.');
+  return change(slug, (doc) => {
+    const current = doc.seatings[number];
+    if (current) {
+      if (input.reservationId && current.reservationId && current.reservationId !== input.reservationId) throw new TableError('Essa mesa já está com outra reserva.');
+      current.confirmed = true;
+      if (input.people !== null) current.people = input.people;
+      if (input.reservationId) {
+        current.reservationId = input.reservationId;
+        current.credit = input.credit ?? 0;
+      }
+      return current;
+    }
+    const s: Seating = {
+      id: `${now.getTime().toString(36)}${randomBytes(4).toString('hex')}`,
+      number,
+      code: String(randomInt(0, 10_000)).padStart(4, '0'),
+      openedAt: now.toISOString(),
+      confirmed: true,
+      devices: [],
+      calls: [],
+      people: input.people,
+      ...(input.reservationId ? { reservationId: input.reservationId, credit: input.credit ?? 0 } : {}),
+    };
+    doc.seatings[number] = s;
+    return s;
   });
 }

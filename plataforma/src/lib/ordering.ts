@@ -61,6 +61,52 @@ export function isReviewUrl(url: string): boolean {
   }
 }
 
+const hhmm = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use o formato 19:30.');
+
+/** Where a table sits on the floor map (a grid of 12 × 8 cells) and how many people it seats. */
+export const tableSpotSchema = z.object({
+  number: z.number().int().min(1).max(200),
+  x: z.number().int().min(0).max(11),
+  y: z.number().int().min(0).max(7),
+  seats: z.number().int().min(1).max(20),
+});
+export type TableSpot = z.infer<typeof tableSpotSchema>;
+
+/** Booking a table from the site, holding it with a deposit (Pix) that is deducted from the bill. */
+export const reservationSettingsSchema = z.object({
+  enabled: z.boolean(),
+  /** Centavos per person. 0 = free booking, confirmed at once. */
+  depositPerPerson: z.number().int().min(0).max(100_000),
+  /** Weekdays that take bookings (0 = Sunday). */
+  days: z.array(z.number().int().min(0).max(6)).max(7),
+  from: hhmm,
+  to: hhmm,
+  slotMinutes: z.union([z.literal(30), z.literal(60)]),
+  /** Bookings accepted per time slot (how many tables are held for them). */
+  perSlot: z.number().int().min(1).max(50),
+  maxPeople: z.number().int().min(1).max(30),
+  /** Cancelled at least this many hours before: full refund. */
+  cancelHours: z.number().int().min(0).max(72),
+  /** Not here this many minutes after the time: no-show, the deposit stays with the restaurant. */
+  toleranceMinutes: z.number().int().min(5).max(60),
+  daysAhead: z.number().int().min(1).max(60),
+});
+export type ReservationSettings = z.infer<typeof reservationSettingsSchema>;
+
+export const DEFAULT_RESERVATIONS: ReservationSettings = {
+  enabled: false,
+  depositPerPerson: 2000,
+  days: [4, 5, 6],
+  from: '19:00',
+  to: '22:00',
+  slotMinutes: 30,
+  perSlot: 2,
+  maxPeople: 8,
+  cancelHours: 3,
+  toleranceMinutes: 15,
+  daysAhead: 14,
+};
+
 export const orderingSchema = z.object({
   /** Orders go to the panel instead of WhatsApp. */
   enabled: z.boolean(),
@@ -80,6 +126,9 @@ export const orderingSchema = z.object({
   coupons: z.array(couponSchema).max(50).default([]),
   /** Ordering at the table: each table has a QR code; the waiter confirms each table's first order. */
   tables: z.object({ enabled: z.boolean(), count: z.number().int().min(1).max(200) }).default({ enabled: false, count: 10 }),
+  /** Floor map and which categories count as drinks in the time-at-table analysis. */
+  salao: z.object({ layout: z.array(tableSpotSchema).max(200), drinkCategories: z.array(z.string().min(1).max(40)).max(40) }).default({ layout: [], drinkCategories: [] }),
+  reservations: reservationSettingsSchema.default(DEFAULT_RESERVATIONS),
   /** Shown to every customer once the order is done or the bill is asked for. Empty = not shown. */
   reviewUrl: z.string().trim().max(300).refine((v) => v === '' || isReviewUrl(v), 'Use o link de avaliação do Google (começa com https://g.page/ ou https://search.google.com/).').default(''),
 });
@@ -98,6 +147,8 @@ export const DEFAULT_ORDERING: Ordering = {
   pixMode: 'demo',
   coupons: [],
   tables: { enabled: false, count: 10 },
+  salao: { layout: [], drinkCategories: [] },
+  reservations: DEFAULT_RESERVATIONS,
   reviewUrl: '',
 };
 
