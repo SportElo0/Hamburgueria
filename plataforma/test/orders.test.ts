@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import { storage, useFileStorage } from '@/lib/storage';
 import { seedStores } from '@/lib/seeds';
 import { storeSchema, toPublic, type Store, type StoreRecord } from '@/lib/schema';
-import { DEFAULT_ORDERING, applyCoupon, isReviewUrl, nextStatus, orderInputSchema, orderingSchema, priceOrder, publicOrdering, salesReport, type OrderInput } from '@/lib/ordering';
+import { DEFAULT_ORDERING, PRICE_CHANGED, applyCoupon, isReviewUrl, nextStatus, orderInputSchema, orderingSchema, priceOrder, publicOrdering, salesReport, type OrderInput } from '@/lib/ordering';
 import { ActionError, OrderError, applyAction, getOperation, getOrder, listOrders, ordersForDays, placeOrder, setOpen, setSoldOut, simulateDemoPayment, trackOrder } from '@/lib/orders';
 import { authenticateOperator, removeOperator, upsertOperator } from '@/lib/operators';
 import { listCustomers, setOptOut } from '@/lib/customers';
@@ -409,5 +409,18 @@ describe('pedido de avaliação no Google', () => {
     await applyAction(SLUG, a.order.id, 'concluir', 'caixa');
     expect((await trackOrder(SLUG, a.order.id, a.token))!.review).toBe(REVIEW);
     expect(publicOrdering(elPatron({ reviewUrl: REVIEW }).ordering, true).reviewUrl).toBe(REVIEW);
+  });
+});
+
+describe('preço mudou com a sacola aberta', () => {
+  it('recusa o pedido quando o total visto é diferente, e aceita quando é igual', async () => {
+    await publishStore(elPatron());
+    await setOpen(SLUG, true, 'teste');
+    const real = priceOrder(elPatron(), orderInputSchema.parse(base())).subtotal;
+    await expect(placeOrder(SLUG, { ...base(), expectedSubtotal: real - 100 }, ORIGIN)).rejects.toThrow(PRICE_CHANGED);
+    const ok = await placeOrder(SLUG, { ...base(), expectedSubtotal: real }, ORIGIN);
+    expect(ok.order.subtotal).toBe(real);
+    // Sites that don't send it keep working.
+    expect((await placeOrder(SLUG, base(), ORIGIN)).order.subtotal).toBe(real);
   });
 });

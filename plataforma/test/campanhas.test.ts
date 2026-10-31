@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CAMPAIGN_TEMPLATES, campaignMessage, suggestedTemplate } from '@/lib/campanhas';
+import { CAMPAIGN_TEMPLATES, campaignMessage, campaignProblem, suggestedTemplate } from '@/lib/campanhas';
 
 describe('modelos de campanha', () => {
   it('são 12, com ids únicos, e toda mensagem diz como sair', () => {
@@ -14,8 +14,19 @@ describe('modelos de campanha', () => {
   });
 
   it('sugere o modelo do mês, ou o de cliente que sumiu', () => {
-    expect(suggestedTemplate(5).id).toBe('maes');
-    expect(suggestedTemplate(11).id).toBe('black-friday');
-    expect(suggestedTemplate(1).id).toBe('saudade');
+    expect(suggestedTemplate(new Date(2026, 4, 3)).id).toBe('maes');
+    expect(suggestedTemplate(new Date(2026, 9, 31)).id).toBe('saudade'); // Dia das Crianças já passou
+    expect(suggestedTemplate(new Date(2026, 10, 20)).id).toBe('black-friday');
+    expect(suggestedTemplate(new Date(2026, 0, 10)).id).toBe('saudade');
+  });
+
+  it('não deixa enviar promessa sem cupom, texto entre colchetes nem sem o SAIR', () => {
+    const bf = CAMPAIGN_TEMPLATES.find((t) => t.id === 'black-friday')!;
+    const nov = CAMPAIGN_TEMPLATES.find((t) => t.id === 'novidade')!;
+    const ok = campaignMessage(bf, 'Casa', '20% de desconto com o cupom BF.', '');
+    expect(campaignProblem(bf, ok, false)).toMatch(/cupom/);
+    expect(campaignProblem(bf, ok, true)).toBe('');
+    expect(campaignProblem(nov, campaignMessage(nov, 'Casa', '', ''), false)).toMatch(/colchetes/);
+    expect(campaignProblem(CAMPAIGN_TEMPLATES[0], 'Oi!', false)).toMatch(/SAIR/);
   });
 });

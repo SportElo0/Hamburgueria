@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
-import { CAMPAIGN_TEMPLATES, campaignMessage, suggestedTemplate, type CampaignTemplate } from '@/lib/campanhas';
+import { CAMPAIGN_TEMPLATES, campaignMessage, campaignProblem, suggestedTemplate, type CampaignTemplate } from '@/lib/campanhas';
 import { setOptOutAction } from '@/app/loja/[slug]/actions';
 import { brl, type Coupon } from '@/lib/ordering';
 import type { Customer } from '@/lib/customers';
@@ -37,6 +37,7 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
   const [templateId, setTemplateId] = useState(() => suggestedTemplate().id);
   const template = CAMPAIGN_TEMPLATES.find((t) => t.id === templateId) ?? CAMPAIGN_TEMPLATES[0];
   const [message, setMessage] = useState(() => draftMessage(props.storeName, props.siteUrl, props.coupons[0], suggestedTemplate()));
+  const problem = campaignProblem(template, message, Boolean(coupon));
   const [copied, setCopied] = useState('');
   const [error, setError] = useState('');
   const [, start] = useTransition();
@@ -162,8 +163,13 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
               <textarea id="camp-msg" className="field min-h-36 resize-y" value={message} onChange={(e) => setMessage(e.target.value)} maxLength={700} />
             </div>
           </div>
+          {problem && (
+            <p role="status" className="text-sm font-semibold text-warn">
+              {problem}
+            </p>
+          )}
           <div className="flex flex-wrap gap-2">
-            <button type="button" className="btn-primary" onClick={() => copy(message, 'mensagem')}>
+            <button type="button" className="btn-primary" onClick={() => copy(message, 'mensagem')} disabled={Boolean(problem)}>
               {copied === 'mensagem' ? 'Mensagem copiada' : 'Copiar mensagem'}
             </button>
             <button type="button" className="btn-ghost" onClick={download} disabled={!opted.length}>
@@ -214,7 +220,7 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    {c.optIn && (
+                    {c.optIn && !problem && (
                       <a
                         className="btn min-h-10 border border-ok/40 bg-ok/5 text-ok hover:bg-ok hover:text-white"
                         href={`https://wa.me/55${c.phone}?text=${encodeURIComponent(message)}`}

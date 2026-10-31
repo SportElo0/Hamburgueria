@@ -134,6 +134,12 @@ const phone = z
   .transform((v) => v.replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, ''))
   .refine((v) => /^\d{10,11}$/.test(v), 'Informe um telefone com DDD.');
 
+/** Sent back when the items' total the customer saw is not today's: they must see the new total before ordering. */
+export const PRICE_CHANGED = 'O preço de alguns itens mudou. Confira o novo total antes de fechar.';
+
+/** The items' subtotal the customer saw (centavos). Optional so older sites keep working. */
+const expectedSubtotal = z.number().int().min(0).max(100_000_000).nullable().default(null);
+
 export const orderInputSchema = z.object({
   items: z
     .array(
@@ -166,6 +172,7 @@ export const orderInputSchema = z.object({
   coupon: text(20).default(''),
   /** The customer ticked "receive promotions on WhatsApp" (never pre-ticked). */
   optIn: z.boolean().default(false),
+  expectedSubtotal,
   /** Honeypot: people never see it, bots fill it. */
   website: z.string().max(0).optional(),
 });
@@ -335,13 +342,19 @@ export function priceLines(store: Store, items: ParsedOrderInput['items']): Orde
 }
 
 /** What a table sends: only the items. Who orders is the table itself (see mesas.ts). */
-export const tableOrderInputSchema = z.object({ items: orderInputSchema.shape.items });
+export const tableOrderInputSchema = z.object({ items: orderInputSchema.shape.items, expectedSubtotal });
+
+/** Throws PRICE_CHANGED when the customer saw a different items' total than the server's. */
+export function assertSeenSubtotal(expected: number | null, subtotal: number) {
+  if (expected !== null && expected !== subtotal) throw new OrderError(PRICE_CHANGED);
+}
 
 /** Prices a parsed order against the published catalogue and the store's ordering rules. Throws OrderError with a message for the customer. */
 export function priceOrder(store: Store, input: ParsedOrderInput): Priced {
   const o = orderingOf(store);
   const lines = priceLines(store, input.items);
   const subtotal = lines.reduce((s, l) => s + l.total, 0);
+  assertSeenSubtotal(input.expectedSubtotal, subtotal);
   if (subtotal < o.minOrder) throw new OrderError(`O pedido mínimo é de ${brl(o.minOrder)} (sem a entrega).`);
 
   let deliveryFee = 0;

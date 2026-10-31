@@ -28,6 +28,7 @@ interface Body {
   code?: string;
   kind?: 'garcom' | 'conta';
   items?: unknown;
+  expectedSubtotal?: unknown;
 }
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ slug: string; numero: string }> }) {
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     let newToken: string | null = null;
     if (body.action === 'abrir') newToken = await openTable(slug, number, ip);
     else if (body.action === 'entrar') newToken = await joinTable(slug, number, String(body.code ?? ''), ip);
-    else if (body.action === 'pedir') await orderAtTable(slug, number, token, { items: body.items });
+    else if (body.action === 'pedir') await orderAtTable(slug, number, token, { items: body.items, expectedSubtotal: body.expectedSubtotal ?? null });
     else if (body.action === 'chamar' && (body.kind === 'garcom' || body.kind === 'conta')) await callFromTable(slug, number, token, body.kind);
     else return NextResponse.json({ error: 'Ação inválida.' }, { status: 400, headers: NO_STORE });
 

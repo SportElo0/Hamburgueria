@@ -8,6 +8,7 @@ import { checkCharge, createCharge, lookupMercadoPago, PixError, refundCharge, t
 import {
   OPEN_STATUSES,
   OrderError,
+  assertSeenSubtotal,
   effectiveStatus,
   isReviewUrl,
   nextStatus,
@@ -274,6 +275,7 @@ export async function placeTableOrder(
   if (!parsed.success) throw new OrderError(messageOf(parsed.error));
   const lines = priceLines(store, parsed.data.items);
   const subtotal = lines.reduce((sum, l) => sum + l.total, 0);
+  assertSeenSubtotal(parsed.data.expectedSubtotal, subtotal);
 
   const day = dayOf(now);
   if (!(await take(`mesa-pedidos-${slug}`, device, 40, day))) throw new OrderError('Muitos pedidos deste celular hoje. Chame o garçom.');

@@ -4,7 +4,7 @@ Como cuidar de cada cliente gastando o mínimo de tempo. Base: `reports/Enxugar 
 
 ## Toda semana (Grow e Scale)
 
-- **Segunda e quinta, 15 minutos por cliente:** responder as avaliações novas do Google com os modelos de `respostas-de-avaliacao.md`. Prazo prometido: até 2 dias úteis.
+- **Segunda, quarta e sexta, 10 minutos por cliente:** responder as avaliações novas do Google com os modelos de `respostas-de-avaliacao.md`. Prazo prometido: até 2 dias úteis.
 - **Pedidos de mudança:** chegam na aba Pedidos da loja, no painel (canal "Painel da loja"), ou pelo WhatsApp. Anote todos ali.
 
 ## Todo mês
@@ -32,6 +32,9 @@ Como cuidar de cada cliente gastando o mínimo de tempo. Base: `reports/Enxugar 
 
 ## Regras que não mudam
 
-- Avaliação: pedir para todos os clientes, nunca só para quem gostou, nunca com brinde ou desconto em troca, e nunca escrever avaliação pelo cliente.
+- Avaliação: pedir para todos os clientes, nunca só para quem gostou (nada de tablet ou QR só para quem elogiou), nunca com brinde ou desconto em troca, e nunca escrever avaliação pelo cliente. Dono, funcionário e parente não avaliam a casa.
+- Acesso ao Perfil do Google sempre por convite de gerente, nunca com a senha do cliente. Responder em nome da casa só com autorização escrita no contrato.
+- Quem responder SAIR sai da lista no mesmo dia.
+- O preço mudado no painel não muda o cardápio do Google, o QR impresso nem o PDF: avise o dono para atualizar (ou peça a alteração).
 - Campanha: só para quem aceitou, no máximo uma por mês, sempre com a opção SAIR. Black Friday só com desconto de verdade.
 - Resposta de avaliação nunca expõe dado do cliente nem detalhe do pedido (endereço, telefone, valor).

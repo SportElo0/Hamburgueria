@@ -15,6 +15,8 @@ export interface CheckoutInput {
   note: string;
   coupon: string;
   optIn: boolean;
+  /** The items' subtotal on screen; the panel refuses the order if its prices changed since. */
+  expectedSubtotal: number;
 }
 
 export type OrderStatus = 'aguardando-pix' | 'novo' | 'preparo' | 'saiu' | 'pronto' | 'concluido' | 'recusado' | 'expirado';
@@ -51,6 +53,9 @@ export interface TrackedOrder {
 
 export class CheckoutError extends Error {}
 
+/** The panel's answer when a price changed while the cart was open (same text as the panel's). */
+export const PRICE_CHANGED = 'O preço de alguns itens mudou. Confira o novo total antes de fechar.';
+
 const LAST_ORDER_KEY = 'elpatron-last-order';
 
 async function call<T>(url: string, init?: RequestInit): Promise<T> {
@@ -76,6 +81,7 @@ export async function placeOrder(input: CheckoutInput): Promise<{ id: string; to
     note: input.note,
     coupon: input.coupon,
     optIn: input.optIn,
+    expectedSubtotal: input.expectedSubtotal,
   };
   const placed = await call<{ id: string; token: string; order: TrackedOrder }>(ORDERS_URL, {
     method: 'POST',

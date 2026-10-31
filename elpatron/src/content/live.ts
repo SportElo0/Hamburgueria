@@ -155,6 +155,21 @@ export function loadLiveCatalog(url = CATALOG_URL) {
     });
 }
 
+/** Fetches the catalog again, past every cache (a price changed while the cart was open). */
+export function refreshLiveCatalog(url = CATALOG_URL) {
+  if (!url) return;
+  const sep = url.includes('?') ? '&' : '?';
+  fetch(`${url}${sep}t=${Date.now()}`, { cache: 'no-store', signal: AbortSignal.timeout(6000) })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      const next = mergeLive(data);
+      if (!next) return;
+      current = next;
+      listeners.forEach((fn) => fn());
+    })
+    .catch(() => {});
+}
+
 /** Static data during prerender and hydration, live data once it arrives. */
 export function useCatalog() {
   return useSyncExternalStore(subscribe, () => current, () => staticCatalog);

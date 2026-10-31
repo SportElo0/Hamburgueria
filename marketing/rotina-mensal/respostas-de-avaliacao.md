@@ -2,7 +2,11 @@
 
 Use como ponto de partida e **mude sempre uma frase com algo que a pessoa escreveu** (o prato, o atendente, o dia). A pesquisa de 2026 mostra que resposta de copiar e colar tira confiança. Assine com o nome da casa, nunca com o nome de alguém da Growlift.
 
-Troque `[...]` antes de publicar. Nunca cite telefone, endereço, valor ou número do pedido do cliente.
+Troque `[...]` antes de publicar. Nunca cite telefone, endereço, valor ou número do pedido do cliente, nem o nome de um funcionário sem a autorização dele.
+
+**Sem modelo, avise o dono na hora:** avaliação que fala de alergia, intoxicação, mal-estar ou objeto estranho na comida.
+
+**Nunca** ofereça brinde, desconto ou dinheiro para a pessoa apagar ou mudar a avaliação (o Google proíbe).
 
 ## 5 estrelas, com texto
 
@@ -36,7 +40,9 @@ Troque `[...]` antes de publicar. Nunca cite telefone, endereço, valor ou núme
 
 ## Reclamação de preço
 
-> Obrigado pelo retorno, [nome]. Trabalhamos com [ingrediente/qualidade que é verdade] e revisamos os preços com cuidado. Esperamos te ver de novo. Equipe [casa]
+> Obrigado pelo retorno, [nome]. Seu comentário vai direto para o dono da casa. Esperamos te ver de novo. Equipe [casa]
+
+Se a queixa for de **cobrança diferente do preço anunciado**, não use modelo: avise o dono, resolva no privado e devolva a diferença.
 
 ## 1 ou 2 estrelas, só estrelas
 
@@ -46,7 +52,7 @@ Troque `[...]` antes de publicar. Nunca cite telefone, endereço, valor ou núme
 
 Não responda no calor. Avise o dono e, se violar as regras do Google (ofensa, conflito de interesse, spam), denuncie pelo Perfil da Empresa. Resposta, se houver, curta e educada:
 
-> Não encontramos seu pedido no nosso sistema. Se puder, chame a gente no WhatsApp da casa para entendermos. Equipe [casa]
+> Não conseguimos identificar o seu atendimento. Se puder, chame a gente no WhatsApp da casa para entendermos. Equipe [casa]
 
 ## Quando o Google oferecer "Responder com IA"
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { brl, type OrderStatus } from '@/lib/ordering';
 import type { TableState } from '@/lib/mesas';
 
@@ -43,6 +44,15 @@ interface CartLine {
 }
 
 const POLL_MS = 8000;
+const PRICE_CHANGED = 'O preço de alguns itens mudou. Confira o novo total antes de fechar.';
+
+/** A cart line priced from the menu on screen, so a price changed on the panel shows before ordering. */
+function priceOf(menu: MesaCategory[], l: CartLine): number {
+  const item = menu.flatMap((c) => c.items).find((i) => i.id === l.itemId);
+  if (!item) return l.unit;
+  const extras = item.options.flatMap((g) => (l.selections[g.id] ?? []).map((id) => g.choices.find((c) => c.id === id)?.price ?? 0));
+  return item.price + extras.reduce((s, p) => s + p, 0);
+}
 
 const STATUS: Partial<Record<OrderStatus, { label: string; tone: string }>> = {
   'aguardando-garcom': { label: 'Esperando o garçom', tone: 'bg-[#e8b04a]/15 text-[#f0c877]' },
@@ -64,6 +74,7 @@ function Bell() {
 
 export function MesaApp(props: { slug: string; number: number; tableKey: string; storeName: string; menu: MesaCategory[]; kitchenOpen: boolean; reviewUrl?: string }) {
   const api = `/api/public/lojas/${props.slug}/mesas/${props.number}`;
+  const router = useRouter();
   const [state, setState] = useState<TableState | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -117,6 +128,8 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
       const data = (await res.json()) as TableState & { error?: string };
       if (!res.ok) {
         setError(data.error ?? 'Não foi possível agora. Tente de novo.');
+        // New prices: reload the menu from the server; the cart reprices itself and the customer sends again.
+        if (data.error === PRICE_CHANGED) router.refresh();
         return false;
       }
       apply(data);
@@ -129,8 +142,9 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
     }
   };
 
-  const cartCount = cart.reduce((s, l) => s + l.quantity, 0);
-  const cartTotal = cart.reduce((s, l) => s + l.unit * l.quantity, 0);
+  const priced = useMemo(() => cart.map((l) => ({ ...l, unit: priceOf(props.menu, l) })), [cart, props.menu]);
+  const cartCount = priced.reduce((s, l) => s + l.quantity, 0);
+  const cartTotal = priced.reduce((s, l) => s + l.unit * l.quantity, 0);
 
   const addLine = (line: Omit<CartLine, 'key'>) =>
     setCart((c) => {
@@ -141,7 +155,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
   const setQty = (key: string, q: number) => setCart((c) => (q <= 0 ? c.filter((l) => l.key !== key) : c.map((l) => (l.key === key ? { ...l, quantity: Math.min(20, q) } : l))));
 
   const placeOrder = async () => {
-    const ok = await send({ action: 'pedir', items: cart.map((l) => ({ productId: l.itemId, quantity: l.quantity, selections: l.selections, notes: l.notes })) });
+    const ok = await send({ action: 'pedir', expectedSubtotal: cartTotal, items: priced.map((l) => ({ productId: l.itemId, quantity: l.quantity, selections: l.selections, notes: l.notes })) });
     if (ok) {
       setCart([]);
       setReviewing(false);
@@ -223,7 +237,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
       {picking && <OpcoesSheet item={picking} onClose={() => setPicking(null)} onAdd={(line) => (addLine(line), setPicking(null))} />}
       {reviewing && (
         <Revisao
-          cart={cart}
+          cart={priced}
           total={cartTotal}
           busy={busy}
           error={error}

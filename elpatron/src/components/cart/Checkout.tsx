@@ -2,9 +2,9 @@
 
 import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCatalog, type OnlineOrdering } from '@/content/live';
+import { refreshLiveCatalog, useCatalog, type OnlineOrdering } from '@/content/live';
 import { formatBRL } from '@/lib/money';
-import { CheckoutError, placeOrder, previewCoupon, trackingPath, type PaymentMethod } from '@/lib/checkout';
+import { CheckoutError, PRICE_CHANGED, placeOrder, previewCoupon, trackingPath, type PaymentMethod } from '@/lib/checkout';
 import { useCart } from '../Providers';
 import { ArrowRightIcon } from '../ui/Icons';
 
@@ -106,12 +106,15 @@ export function Checkout({ ordering, onBack, onPlaced }: { ordering: OnlineOrder
         note: note.trim(),
         coupon: coupon?.code ?? '',
         optIn,
+        expectedSubtotal: cart.total,
       });
       cart.clear();
       onPlaced();
       router.push(trackingPath(placed.id, placed.token));
     } catch (err) {
       setError(err instanceof CheckoutError ? err.message : 'Não foi possível enviar o pedido. Tente de novo.');
+      // New prices on the panel: fetch them; the cart's total updates on screen before the customer sends again.
+      if (err instanceof CheckoutError && err.message === PRICE_CHANGED) refreshLiveCatalog();
       setSending(false);
     }
   };
