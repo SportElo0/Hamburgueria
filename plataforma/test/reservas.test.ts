@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -21,8 +21,10 @@ import {
   markNoShow,
   reservationsOfDay,
   simulateDeposit,
+  settleReservationFromMercadoPago,
   slotTimes,
 } from '@/lib/reservas';
+import { setMercadoPagoToken } from '@/lib/pix';
 import { closeTable, floor, seatTable, seatingHistory } from '@/lib/mesas';
 import { publicFloor } from '@/lib/movimento';
 import { occupancy, stayStats } from '@/lib/salao';
@@ -35,15 +37,19 @@ const NOON = new Date('2026-11-05T12:00:00-03:00');
 const DAY = '2026-11-05';
 const at = (hhmm: string) => new Date(`${DAY}T${hhmm}:00-03:00`);
 
-function store(r: Partial<ReservationSettings> = {}): Store {
+const SELLER = { name: 'Restaurante Teste Ltda', cnpj: '12.345.678/0001-90', address: 'Rua Teste, 1, São Paulo/SP', privacyContact: 'privacidade@teste.local', keepMonths: 6 };
+
+function store(r: Partial<ReservationSettings> = {}, demoStore = true): Store {
   const seed = seedStores().find((s) => s.slug === SLUG)!;
   return storeSchema.parse({
     ...seed,
+    // Practice Pix only holds tables on a demonstration store.
+    extra: { ...seed.extra, demo: demoStore },
     ordering: {
       ...DEFAULT_ORDERING,
       enabled: true,
       tables: { enabled: true, count: 6 },
-      reservations: { ...DEFAULT_RESERVATIONS, enabled: true, days: [0, 1, 2, 3, 4, 5, 6], from: '19:00', to: '21:00', perSlot: 1, depositPerPerson: 2000, ...r },
+      reservations: { ...DEFAULT_RESERVATIONS, enabled: true, days: [0, 1, 2, 3, 4, 5, 6], from: '19:00', to: '21:00', perSlot: 1, depositPerPerson: 2000, seller: SELLER, ...r },
     },
   });
 }
@@ -105,6 +111,26 @@ describe('reserva com sinal', () => {
     await expect(createReservation(SLUG, input(), '', ORIGIN, NOON)).rejects.toThrow(/não está recebendo/);
   });
 
+  it('não liga sem os dados do restaurante, nem com Pix de mentira numa loja de verdade', async () => {
+    await publish(store({ seller: { ...SELLER, cnpj: '' } }));
+    await expect(createReservation(SLUG, input(), '', ORIGIN, NOON)).rejects.toThrow(/não está recebendo/);
+    await publish(store({}, false));
+    await expect(createReservation(SLUG, input(), '', ORIGIN, NOON)).rejects.toThrow(/ainda não está recebendo/);
+    await publish(store({ depositPerPerson: 0 }, false));
+    expect((await createReservation(SLUG, input(), '', ORIGIN, NOON)).reservation.status).toBe('confirmada');
+  });
+
+  it('o sinal tem teto de R$ 100 por pessoa', () => {
+    expect(() => store({ depositPerPerson: 20_000 })).toThrow();
+  });
+
+  it('guarda o aceite e as regras daquele momento', async () => {
+    const r = await createReservation(SLUG, input(), '', ORIGIN, NOON);
+    const saved = (await getReservation(SLUG, r.id))!;
+    expect(saved.acceptedAt).toBe(NOON.toISOString());
+    expect(saved.rules).toMatchObject({ cancelHours: 3, toleranceMinutes: 15, depositPerPerson: 2000, withdrawalDays: 7 });
+  });
+
   it('não deixa abrir com o token errado', async () => {
     const r = await createReservation(SLUG, input(), '', ORIGIN, NOON);
     expect(await simulateDeposit(SLUG, r.id, 'x'.repeat(32), NOON)).toBeNull();
@@ -113,16 +139,30 @@ describe('reserva com sinal', () => {
 });
 
 describe('cancelar', () => {
-  it('no prazo devolve o sinal; depois do prazo o sinal fica', async () => {
+  it('dentro dos 7 dias do pagamento devolve até o horário (arrependimento)', async () => {
     const a = await createReservation(SLUG, input(), '', ORIGIN, NOON);
     await simulateDeposit(SLUG, a.id, a.token, NOON);
-    const early = await cancelByCustomer(SLUG, a.id, a.token, at('15:00'));
-    expect(early).toMatchObject({ status: 'cancelada', refunded: true });
+    expect(await cancelByCustomer(SLUG, a.id, a.token, at('18:50'))).toMatchObject({ status: 'cancelada', refunded: true });
+  });
 
-    const b = await createReservation(SLUG, input({ time: '20:00' }), '', ORIGIN, NOON);
+  it('reserva feita há mais de 7 dias: no prazo devolve, depois do prazo o sinal fica', async () => {
+    const day = '2026-11-20';
+    await publish(store({ daysAhead: 30 }));
+    const a = await createReservation(SLUG, input({ date: day }), '', ORIGIN, NOON);
+    await simulateDeposit(SLUG, a.id, a.token, NOON);
+    expect(await cancelByCustomer(SLUG, a.id, a.token, new Date(`${day}T15:00:00-03:00`))).toMatchObject({ refunded: true });
+    const b = await createReservation(SLUG, input({ date: day, time: '20:00' }), '', ORIGIN, NOON);
     await simulateDeposit(SLUG, b.id, b.token, NOON);
-    const late = await cancelByCustomer(SLUG, b.id, b.token, at('18:30'));
-    expect(late).toMatchObject({ status: 'cancelada', refunded: false });
+    // The screen still said "you get it back", but the deadline passed: ask again.
+    await expect(cancelByCustomer(SLUG, b.id, b.token, new Date(`${day}T18:30:00-03:00`), true)).rejects.toThrow(/acabou enquanto/);
+    expect(await cancelByCustomer(SLUG, b.id, b.token, new Date(`${day}T18:30:00-03:00`), false)).toMatchObject({ status: 'cancelada', refunded: false });
+  });
+
+  it('cancelar não deixa "chegou" depois', async () => {
+    const a = await createReservation(SLUG, input(), '', ORIGIN, NOON);
+    await simulateDeposit(SLUG, a.id, a.token, NOON);
+    await cancelByStore(SLUG, a.id, 'caixa', at('18:00'));
+    await expect(markArrived(SLUG, a.id, 2, 'caixa', at('19:00'))).rejects.toThrow(/confirmada/);
   });
 
   it('o restaurante cancela e sempre devolve', async () => {
@@ -203,5 +243,61 @@ describe('contas do tempo', () => {
     expect(occupancy(10, 4, 1).level).toBe('movimentado');
     expect(occupancy(10, 8, 1)).toMatchObject({ level: 'cheio', free: 1 });
     expect(occupancy(4, 3, 3)).toMatchObject({ busy: 4, free: 0, level: 'cheio' });
+  });
+});
+
+describe('Pix real (Mercado Pago simulado)', () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  function mercadoPago(paidAmount: number) {
+    const calls: { method: string; url: string }[] = [];
+    let reference = '';
+    vi.stubGlobal('fetch', async (url: string, init: RequestInit = {}) => {
+      const method = init.method ?? 'GET';
+      calls.push({ method, url });
+      const json = (b: unknown) => new Response(JSON.stringify(b), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (method === 'POST' && url.endsWith('/v1/payments')) {
+        reference = JSON.parse(String(init.body)).external_reference;
+        return json({ id: 555, point_of_interaction: { transaction_data: { qr_code: 'PIX-REAL', qr_code_base64: 'AAAA' } } });
+      }
+      if (method === 'GET') return json({ status: 'approved', transaction_amount: paidAmount / 100, external_reference: reference });
+      return json({});
+    });
+    return calls;
+  }
+
+  async function realStore() {
+    const s = store();
+    s.ordering.pixMode = 'mercadopago';
+    await publish(s);
+    await setMercadoPagoToken(SLUG, 'TOKEN-DE-TESTE');
+  }
+
+  it('Pix pago depois de cancelar é devolvido sozinho', async () => {
+    await realStore();
+    const calls = mercadoPago(4000);
+    const r = await createReservation(SLUG, input({ email: 'ana@teste.local' }), '', ORIGIN, NOON);
+    await cancelByCustomer(SLUG, r.id, r.token, NOON);
+    expect(calls.some((c) => c.method === 'PUT')).toBe(true); // the open Pix is cancelled at the provider
+    expect(await settleReservationFromMercadoPago(SLUG, '555')).toBe(false);
+    const saved = (await getReservation(SLUG, r.id))!;
+    expect(saved).toMatchObject({ status: 'cancelada', refunded: true });
+    expect(calls.some((c) => c.method === 'POST' && c.url.endsWith('/refunds'))).toBe(true);
+  });
+
+  it('Pix pago com valor menor que o sinal é devolvido e não confirma', async () => {
+    await realStore();
+    mercadoPago(1000);
+    const r = await createReservation(SLUG, input({ email: 'ana@teste.local' }), '', ORIGIN, NOON);
+    expect(await settleReservationFromMercadoPago(SLUG, '555')).toBe(false);
+    expect((await getReservation(SLUG, r.id))!).toMatchObject({ status: 'cancelada', refunded: true });
+  });
+
+  it('Pix certo confirma', async () => {
+    await realStore();
+    mercadoPago(4000);
+    const r = await createReservation(SLUG, input({ email: 'ana@teste.local' }), '', ORIGIN, NOON);
+    expect(await settleReservationFromMercadoPago(SLUG, '555')).toBe(true);
+    expect((await getReservation(SLUG, r.id))!.status).toBe('confirmada');
   });
 });

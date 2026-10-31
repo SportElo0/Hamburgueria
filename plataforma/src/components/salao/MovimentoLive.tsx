@@ -6,7 +6,7 @@ import { FloorGrid, Legend } from './FloorGrid';
 
 const POLL_MS = 20_000;
 const LEVEL = {
-  tranquilo: { label: 'Tranquilo', text: 'Tem mesa livre. Pode vir!', cls: 'bg-ok text-white' },
+  tranquilo: { label: 'Tranquilo', text: 'Tem mesa livre agora. A situação muda a todo momento.', cls: 'bg-ok text-white' },
   movimentado: { label: 'Movimentado', text: 'O salão está enchendo.', cls: 'bg-warn text-white' },
   cheio: { label: 'Cheio', text: 'Todas as mesas estão ocupadas ou reservadas agora.', cls: 'bg-bad text-white' },
 } as const;

@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { storage, ConflictError } from './storage';
 import { getPublished } from './stores';
 import { take } from './limits';
-import { createCharge, checkCharge, lookupMercadoPago, PixError, refundCharge, type PaymentCheck } from './pix';
-import { PIX_MINUTES, orderingOf, type PixCharge, type ReservationSettings } from './ordering';
+import { cancelCharge, createCharge, checkCharge, lookupMercadoPago, PixError, refundCharge, type PaymentCheck } from './pix';
+import { PIX_MINUTES, orderingOf, sellerReady, type PixCharge, type ReservationSettings } from './ordering';
 
 /**
  * Booking a table from the site. To hold the table the customer pays a deposit by Pix (per person, set
@@ -39,7 +39,9 @@ export interface Reservation {
   refunded: boolean;
   table: number | null;
   /** The rules the customer accepted, as numbers, so a later settings change doesn't rewrite them. */
-  rules: { cancelHours: number; toleranceMinutes: number };
+  rules: { cancelHours: number; toleranceMinutes: number; depositPerPerson?: number; withdrawalDays?: number; version?: string };
+  /** When the customer ticked "li e aceito". */
+  acceptedAt?: string;
   history: { status: ReservationStatus; at: string; by: string }[];
 }
 
@@ -52,8 +54,17 @@ const dayOf = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year
 /** Brazil has had no daylight saving since 2019: São Paulo is UTC−3 all year. */
 export const startOf = (r: Pick<Reservation, 'date' | 'time'>) => new Date(`${r.date}T${r.time}:00-03:00`);
 const MAX_PER_SENDER = 5;
+/** All bookings a store takes from the site in a day, whoever sends them. */
+const MAX_PER_STORE_DAY = 80;
+
+/** IPv6 addresses change inside a /64: count the network, not the address. */
+const senderOf = (ip: string) => (ip.includes(':') ? ip.split(':').slice(0, 4).join(':') : ip);
 /** Online bookings close this long before the time (the floor has to know in advance). */
 const LEAD_MINUTES = 60;
+/** Booked online = contract made away from the premises (CDC art. 49): 7 days to withdraw with a full refund, while the time hasn't come. */
+export const WITHDRAWAL_DAYS = 7;
+/** Bump when the wording of the rules shown before paying changes (kept on each booking). */
+export const RULES_VERSION = '2026-10-31';
 
 function random(chars: number) {
   const bytes = randomBytes(chars);
@@ -108,7 +119,7 @@ async function settingsOf(slug: string) {
   const record = await getPublished(slug);
   if (!record) throw new ReservationError('Restaurante não encontrado.');
   const ordering = orderingOf(record.store);
-  if (!ordering.enabled || !ordering.tables.enabled || !ordering.reservations.enabled) throw new ReservationError('Este restaurante não está recebendo reservas pelo site.');
+  if (!ordering.enabled || !ordering.tables.enabled || !ordering.reservations.enabled || !sellerReady(ordering.reservations)) throw new ReservationError('Este restaurante não está recebendo reservas pelo site.');
   return { store: record.store, ordering, settings: ordering.reservations };
 }
 
@@ -157,6 +168,8 @@ export const reservationInputSchema = z.object({
   email: z.union([z.literal(''), z.string().trim().email('E-mail inválido.').max(120)]).default(''),
   /** Ticked "li e aceito as regras do sinal". Required. */
   accepted: z.literal(true, { message: 'Para reservar, aceite as regras do sinal.' }),
+  /** Honeypot: people never see it, bots fill it. */
+  website: z.string().max(0).optional(),
 });
 export type ReservationInput = z.input<typeof reservationInputSchema>;
 
@@ -178,6 +191,9 @@ export function publicReservation(r: Reservation, now = new Date()) {
     rules: r.rules,
     /** Until when cancelling gives the deposit back. */
     refundUntil: new Date(start.getTime() - r.rules.cancelHours * 3_600_000).toISOString(),
+    /** Withdrawal (CDC art. 49): full refund until this moment too, whichever is later. */
+    withdrawUntil: r.paidAt ? new Date(Math.min(start.getTime(), Date.parse(r.paidAt) + (r.rules.withdrawalDays ?? WITHDRAWAL_DAYS) * 86_400_000)).toISOString() : null,
+    paid: Boolean(r.paidAt),
     canCancel: status === 'aguardando-pix' || (status === 'confirmada' && now < start),
   };
 }
@@ -193,8 +209,14 @@ export async function createReservation(slug: string, raw: unknown, ip: string, 
     throw new ReservationError('Esse horário não está disponível para reserva. Escolha outro.');
   }
   const deposit = settings.depositPerPerson * input.people;
+  // A practice Pix can't hold a real table on a live site: the customer would be told about a deposit nobody paid.
+  if (deposit > 0 && ordering.pixMode === 'demo' && store.extra.demo !== true && process.env.RESERVAS_PIX_DEMO !== '1') {
+    throw new ReservationError('Este restaurante ainda não está recebendo reservas pelo site.');
+  }
   if (deposit > 0 && ordering.pixMode === 'mercadopago' && !input.email) throw new ReservationError('Informe seu e-mail para o comprovante do Pix.');
-  if (ip && !(await take(`reservas-${slug}`, ip, MAX_PER_SENDER, dayOf(now)))) throw new ReservationError('Muitas reservas deste aparelho hoje. Fale direto com o restaurante.');
+  if (ip && !(await take(`reservas-${slug}`, senderOf(ip), MAX_PER_SENDER, dayOf(now)))) throw new ReservationError('Muitas reservas deste aparelho hoje. Fale direto com o restaurante.');
+  if (!(await take(`reservas-loja-${slug}`, 'site', MAX_PER_STORE_DAY, dayOf(now)))) throw new ReservationError('O restaurante não está aceitando mais reservas pelo site hoje. Fale direto com a casa.');
+  await purgeOld(slug, settings.seller.keepMonths, now).catch((err) => console.error('reservas antigas', err));
 
   const id = `r${input.date.replace(/-/g, '')}-${random(10)}`;
   const token = random(32);
@@ -215,7 +237,8 @@ export async function createReservation(slug: string, raw: unknown, ip: string, 
         now,
       );
     } catch (err) {
-      throw new ReservationError(err instanceof PixError ? err.message : 'Não foi possível gerar o Pix agora. Tente de novo.');
+      console.error('reserva: Pix', slug, err instanceof PixError ? err.message : err);
+      throw new ReservationError('Não foi possível gerar o Pix agora. Tente de novo em instantes ou fale com o restaurante.');
     }
   }
   const at = now.toISOString();
@@ -235,7 +258,8 @@ export async function createReservation(slug: string, raw: unknown, ip: string, 
     paidAt: null,
     refunded: false,
     table: null,
-    rules: { cancelHours: settings.cancelHours, toleranceMinutes: settings.toleranceMinutes },
+    rules: { cancelHours: settings.cancelHours, toleranceMinutes: settings.toleranceMinutes, depositPerPerson: settings.depositPerPerson, withdrawalDays: WITHDRAWAL_DAYS, version: RULES_VERSION },
+    acceptedAt: at,
     history: [{ status: deposit > 0 ? 'aguardando-pix' : 'confirmada', at, by: 'cliente' }],
   };
   await writeDay(slug, input.date, (list) => {
@@ -278,14 +302,35 @@ async function update(slug: string, id: string, fn: (r: Reservation) => Reservat
   });
 }
 
-/** The deposit arrived (checked with the provider, never from what a webhook body says). */
+/**
+ * The deposit arrived (checked with the provider, never from what a webhook body says). A payment that lands
+ * after the booking was cancelled or its Pix expired (the slot may be someone else's) is given back at once.
+ */
 async function markPaid(slug: string, id: string, check: PaymentCheck | 'demo', now = new Date()) {
-  return update(slug, id, (r) => {
-    if (r.status !== 'aguardando-pix') return null;
-    if (check !== 'demo' && (!check.paid || check.amount < r.deposit || check.reference !== r.id)) return null;
-    const at = now.toISOString();
-    return { ...r, status: 'confirmada', paidAt: at, history: [...r.history, { status: 'confirmada', at, by: check === 'demo' ? 'demonstração' : 'pix' }] };
+  if (check !== 'demo' && (!check.paid || check.reference !== id)) return null;
+  let late: Reservation | null = null;
+  const confirmed = await update(slug, id, (x) => {
+    const short = check !== 'demo' && check.amount < x.deposit;
+    if (!short && x.status === 'aguardando-pix' && effectiveStatus(x, now) === 'aguardando-pix') {
+      const at = now.toISOString();
+      return { ...x, status: 'confirmada', paidAt: at, history: [...x.history, { status: 'confirmada', at, by: check === 'demo' ? 'demonstração' : 'pix' }] };
+    }
+    if (check !== 'demo' && !x.refunded && !x.paidAt && ['aguardando-pix', 'cancelada', 'expirada'].includes(x.status)) late = x;
+    if (short) console.error('reserva: Pix pago com valor menor que o sinal', slug, x.id);
+    return null;
   });
+  if (late) await refundLate(slug, late, now);
+  return confirmed;
+}
+
+/** Paid after cancelling or after the Pix expired: refund, and keep the booking cancelled. */
+async function refundLate(slug: string, r: Reservation, now: Date) {
+  if (!r.pix || !(await refundCharge(slug, r.pix))) {
+    console.error('reserva: pagamento depois do cancelamento sem devolução automática', slug, r.id);
+    return;
+  }
+  const at = now.toISOString();
+  await update(slug, r.id, (x) => ({ ...x, status: 'cancelada', paidAt: at, refunded: true, history: [...x.history, { status: 'cancelada', at, by: 'pago fora do prazo ou com valor diferente: devolvido' }] }));
 }
 
 /** The customer's page polls this; it also nudges a pending Mercado Pago charge. */
@@ -312,22 +357,65 @@ export async function settleReservationFromMercadoPago(slug: string, paymentId: 
   return Boolean(await markPaid(slug, check.reference, check));
 }
 
-/** The customer cancels. In time: the deposit comes back. Late: it stays (they were told before paying). */
-export async function cancelByCustomer(slug: string, id: string, token: string, now = new Date()) {
+/**
+ * Cancels in three steps so nothing can slip in between: mark it cancelled (only from "aguardando-pix" or
+ * "confirmada", inside the day's lock, so "chegou" can't happen at the same time), give the deposit back if
+ * due, and undo the cancel if the provider refuses the refund.
+ */
+async function cancel(slug: string, id: string, by: string, refundDue: (r: Reservation) => boolean, now: Date) {
+  let before: Reservation | null = null;
+  const claimed = await update(slug, id, (x) => {
+    if (!['aguardando-pix', 'confirmada'].includes(effectiveStatus(x, now))) throw new ReservationError('Esta reserva já foi encerrada.');
+    before = x;
+    const at = now.toISOString();
+    return { ...x, status: 'cancelada', history: [...x.history, { status: 'cancelada', at, by }] };
+  });
+  if (!claimed || !before) throw new ReservationError('Reserva não encontrada.');
+  const prev: Reservation = before;
+  if (prev.status === 'aguardando-pix' && prev.pix) await cancelCharge(slug, prev.pix).catch(() => undefined);
+  if (prev.status === 'confirmada' && prev.paidAt && prev.pix && refundDue(prev)) {
+    if (!(await refundCharge(slug, prev.pix))) {
+      await update(slug, id, () => prev);
+      throw new ReservationError('Não foi possível devolver o sinal agora. Tente de novo ou fale com o restaurante.');
+    }
+    return update(slug, id, (x) => ({ ...x, refunded: true }));
+  }
+  return claimed;
+}
+
+/** Whether cancelling now gives the deposit back: before the cancel deadline, or within the 7-day withdrawal. */
+export function refundDueNow(view: Pick<PublicReservation, 'refundUntil' | 'withdrawUntil'>, now = new Date()) {
+  return now.getTime() <= Date.parse(view.refundUntil) || (view.withdrawUntil !== null && now.getTime() <= Date.parse(view.withdrawUntil));
+}
+
+export class RefundChangedError extends ReservationError {}
+
+/**
+ * The customer cancels. In time (or within the withdrawal days): the deposit comes back. Late: it stays (they
+ * were told before paying). `expectRefund` is what their screen said; if the deadline passed meanwhile, ask again.
+ */
+export async function cancelByCustomer(slug: string, id: string, token: string, now = new Date(), expectRefund?: boolean) {
   const r = await authorised(slug, id, token);
   if (!r) return null;
-  const status = effectiveStatus(r, now);
   const view = publicReservation(r, now);
   if (!view.canCancel) throw new ReservationError('Esta reserva não pode mais ser cancelada pelo site. Fale com o restaurante.');
-  const inTime = now.getTime() <= Date.parse(view.refundUntil);
-  let refunded = false;
-  if (status === 'confirmada' && r.deposit > 0 && r.pix && inTime) {
-    refunded = await refundCharge(slug, r.pix);
-    if (!refunded) throw new ReservationError('Não foi possível devolver o sinal agora. Tente de novo ou fale com o restaurante.');
+  const due = refundDueNow(view, now);
+  if (expectRefund !== undefined && view.paid && r.deposit > 0 && expectRefund !== due) {
+    throw new RefundChangedError('O prazo para devolução acabou enquanto você decidia. Se cancelar agora, o sinal fica com o restaurante. Quer cancelar mesmo assim?');
   }
-  const at = now.toISOString();
-  const updated = await update(slug, id, (x) => ({ ...x, status: 'cancelada', refunded, history: [...x.history, { status: 'cancelada', at, by: 'cliente' }] }));
+  const updated = await cancel(slug, id, 'cliente', () => due, now);
   return updated ? publicReservation(updated, now) : null;
+}
+
+/** Personal data (name, phone, e-mail) of bookings older than the store's retention are erased; the money record stays. */
+async function purgeOld(slug: string, keepMonths: number, now: Date) {
+  const limit = dayOf(new Date(now.getTime() - keepMonths * 30 * 86_400_000));
+  const keys = (await storage().list(`reservas/${slug}/`)).filter((k) => (/(\d{4}-\d{2}-\d{2})\.json$/.exec(k)?.[1] ?? '9999') < limit);
+  for (const key of keys) {
+    const doc = await storage().readJSON<Reservation[]>(key);
+    if (!doc || doc.data.every((x) => !x.phone && !x.email && x.name === 'Dados apagados')) continue;
+    await storage().writeJSON(key, doc.data.map((x) => ({ ...x, name: 'Dados apagados', phone: '', email: '' })), doc.etag);
+  }
 }
 
 // ───────────────────────────── The restaurant ─────────────────────────────
@@ -384,17 +472,7 @@ export async function markNoShow(slug: string, id: string, by: string, now = new
 
 /** The restaurant cancels: whatever was paid always goes back. */
 export async function cancelByStore(slug: string, id: string, by: string, now = new Date()) {
-  const r = await getReservation(slug, id);
-  if (!r) throw new ReservationError('Reserva não encontrada.');
-  const status = effectiveStatus(r, now);
-  if (!['aguardando-pix', 'confirmada'].includes(status)) throw new ReservationError('Esta reserva já foi encerrada.');
-  let refunded = false;
-  if (status === 'confirmada' && r.paidAt && r.pix) {
-    refunded = await refundCharge(slug, r.pix);
-    if (!refunded) throw new ReservationError('Não foi possível devolver o sinal pelo Mercado Pago. Tente de novo.');
-  }
-  const at = now.toISOString();
-  return update(slug, id, (x) => ({ ...x, status: 'cancelada', refunded, history: [...x.history, { status: 'cancelada', at, by }] }));
+  return cancel(slug, id, by, () => true, now);
 }
 
 export { PIX_MINUTES };

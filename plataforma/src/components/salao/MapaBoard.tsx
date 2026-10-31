@@ -193,7 +193,7 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
                           </p>
                           <p className="text-sm text-ink-mute">
                             {b.people} {b.people === 1 ? 'pessoa' : 'pessoas'}
-                            {b.deposit > 0 && ` · sinal ${brl(b.deposit)} ${b.refunded ? '(devolvido)' : b.paid ? '(pago)' : '(não pago)'}`}
+                            {b.deposit > 0 && ` · sinal ${brl(b.deposit)} ${b.refunded ? '(devolvido)' : b.demo ? '(teste, nada cobrado)' : b.paid ? '(pago)' : '(não pago)'}`}
                             {b.table && ` · mesa ${b.table}`}
                           </p>
                           <a className="text-sm text-accent underline" href={`tel:+55${b.phone}`}>

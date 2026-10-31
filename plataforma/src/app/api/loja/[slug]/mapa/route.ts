@@ -39,6 +39,7 @@ async function mapForStaff(slug: string, date: string) {
       status: r.status,
       deposit: r.deposit,
       paid: Boolean(r.paidAt),
+      demo: r.pix?.provider === 'demo',
       refunded: r.refunded,
       table: r.table,
       toleranceMinutes: r.rules.toleranceMinutes,

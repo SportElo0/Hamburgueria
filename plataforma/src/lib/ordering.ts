@@ -75,8 +75,8 @@ export type TableSpot = z.infer<typeof tableSpotSchema>;
 /** Booking a table from the site, holding it with a deposit (Pix) that is deducted from the bill. */
 export const reservationSettingsSchema = z.object({
   enabled: z.boolean(),
-  /** Centavos per person. 0 = free booking, confirmed at once. */
-  depositPerPerson: z.number().int().min(0).max(100_000),
+  /** Centavos per person. 0 = free booking, confirmed at once. Capped at R$ 100 (a deposit, not a prepayment). */
+  depositPerPerson: z.number().int().min(0).max(10_000),
   /** Weekdays that take bookings (0 = Sunday). */
   days: z.array(z.number().int().min(0).max(6)).max(7),
   from: hhmm,
@@ -86,11 +86,29 @@ export const reservationSettingsSchema = z.object({
   perSlot: z.number().int().min(1).max(50),
   maxPeople: z.number().int().min(1).max(30),
   /** Cancelled at least this many hours before: full refund. */
-  cancelHours: z.number().int().min(0).max(72),
+  cancelHours: z.number().int().min(0).max(24),
   /** Not here this many minutes after the time: no-show, the deposit stays with the restaurant. */
   toleranceMinutes: z.number().int().min(5).max(60),
   daysAhead: z.number().int().min(1).max(60),
+  /** Who sells (shown on the booking pages; required to take bookings). CNPJ only: a CPF is never stored. */
+  seller: z
+    .object({
+      name: z.string().trim().max(120),
+      cnpj: z.string().trim().max(18).refine((v) => v === '' || v.replace(/\D/g, '').length === 14, 'CNPJ com 14 números.'),
+      address: z.string().trim().max(200),
+      /** Where a customer asks about their data (e-mail or WhatsApp). */
+      privacyContact: z.string().trim().max(120),
+      /** Months the booking's personal data are kept after its date. */
+      keepMonths: z.number().int().min(1).max(24),
+    })
+    .default({ name: '', cnpj: '', address: '', privacyContact: '', keepMonths: 6 }),
 });
+
+/** Bookings only go live with the seller identified (Decreto 7.962/2013) and a privacy contact. */
+export function sellerReady(s: Pick<ReservationSettings, 'seller'>) {
+  const v = s.seller;
+  return Boolean(v && v.name && v.cnpj.replace(/\D/g, '').length === 14 && v.address && v.privacyContact);
+}
 export type ReservationSettings = z.infer<typeof reservationSettingsSchema>;
 
 export const DEFAULT_RESERVATIONS: ReservationSettings = {
@@ -105,6 +123,7 @@ export const DEFAULT_RESERVATIONS: ReservationSettings = {
   cancelHours: 3,
   toleranceMinutes: 15,
   daysAhead: 14,
+  seller: { name: '', cnpj: '', address: '', privacyContact: '', keepMonths: 6 },
 };
 
 export const orderingSchema = z.object({

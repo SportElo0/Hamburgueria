@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DEFAULT_RESERVATIONS, brl, type Ordering, type ReservationSettings, type TableSpot } from '@/lib/ordering';
+import { DEFAULT_RESERVATIONS, brl, sellerReady, type Ordering, type ReservationSettings, type TableSpot } from '@/lib/ordering';
 
 /**
  * The team's settings for the floor: where each table sits on the map (12 × 8 grid), which categories are
@@ -117,14 +117,38 @@ export function SalaoSettings(props: {
           <span className="text-[15px] font-semibold">Receber reservas pelo site</span>
         </label>
         {r.enabled && o.pixMode === 'mercadopago' && !props.hasMercadoPago && <p className="text-sm font-semibold text-warn">O Pix real está ligado, mas falta o token do Mercado Pago: o sinal não vai funcionar.</p>}
-        {r.enabled && o.pixMode === 'demo' && r.depositPerPerson > 0 && <p className="text-sm text-ink-mute">Pix em modo demonstração: o sinal é de mentira, nada é cobrado.</p>}
+        {r.enabled && o.pixMode === 'demo' && r.depositPerPerson > 0 && <p className="text-sm font-semibold text-warn">Pix em modo demonstração: com sinal, a página de reserva fica desligada no site até ligar o Pix real (ou deixe o sinal em R$ 0).</p>}
+        {r.enabled && !sellerReady(r) && <p className="text-sm font-semibold text-warn">Falta preencher os dados do restaurante abaixo: sem eles, a página de reserva fica desligada.</p>}
+        <div className="grid gap-4 rounded-lg border border-line p-4 sm:grid-cols-2">
+          <p className="text-sm font-semibold sm:col-span-2">Dados do restaurante (aparecem nas páginas de reserva; vêm do dono, nunca invente)</p>
+          <div>
+            <label htmlFor="razao" className="label">Razão social</label>
+            <input id="razao" className="field" value={r.seller.name} maxLength={120} onChange={(e) => setR('seller', { ...r.seller, name: e.target.value })} />
+          </div>
+          <div>
+            <label htmlFor="cnpj" className="label">CNPJ (nunca CPF)</label>
+            <input id="cnpj" className="field" inputMode="numeric" value={r.seller.cnpj} maxLength={18} onChange={(e) => setR('seller', { ...r.seller, cnpj: e.target.value.replace(/[^\d./-]/g, '') })} />
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="endereco" className="label">Endereço completo</label>
+            <input id="endereco" className="field" value={r.seller.address} maxLength={200} onChange={(e) => setR('seller', { ...r.seller, address: e.target.value })} />
+          </div>
+          <div>
+            <label htmlFor="privacidade" className="label">Contato para dúvidas de dados (e-mail ou WhatsApp)</label>
+            <input id="privacidade" className="field" value={r.seller.privacyContact} maxLength={120} onChange={(e) => setR('seller', { ...r.seller, privacyContact: e.target.value })} />
+          </div>
+          <div>
+            <label htmlFor="guarda" className="label">Apagar nome e telefone depois de (meses)</label>
+            <input id="guarda" className="field w-24" inputMode="numeric" value={r.seller.keepMonths} onChange={(e) => setR('seller', { ...r.seller, keepMonths: num(e.target.value, 1, 24) })} />
+          </div>
+        </div>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
             <label htmlFor="sinal" className="label">
               Sinal por pessoa (R$)
             </label>
-            <input id="sinal" className="field" inputMode="decimal" defaultValue={(r.depositPerPerson / 100).toFixed(2).replace('.', ',')} onBlur={(e) => setR('depositPerPerson', Math.max(0, Math.min(100_000, Math.round(Number(e.target.value.replace(/[^\d,]/g, '').replace(',', '.')) * 100) || 0)))} />
-            <p className="mt-1 text-xs text-ink-mute">Hoje: {r.depositPerPerson ? brl(r.depositPerPerson) : 'sem sinal'}.</p>
+            <input id="sinal" className="field" inputMode="decimal" defaultValue={(r.depositPerPerson / 100).toFixed(2).replace('.', ',')} onBlur={(e) => setR('depositPerPerson', Math.max(0, Math.min(10_000, Math.round(Number(e.target.value.replace(/[^\d,]/g, '').replace(',', '.')) * 100) || 0)))} />
+            <p className="mt-1 text-xs text-ink-mute">Hoje: {r.depositPerPerson ? brl(r.depositPerPerson) : 'sem sinal'}. Máximo R$ 100 por pessoa.</p>
           </div>
           <div>
             <label htmlFor="por-horario" className="label">
@@ -163,7 +187,7 @@ export function SalaoSettings(props: {
             <label htmlFor="cancela" className="label">
               Devolve o sinal se cancelar até (horas antes)
             </label>
-            <input id="cancela" className="field" inputMode="numeric" value={r.cancelHours} onChange={(e) => setR('cancelHours', num(e.target.value, 0, 72))} />
+            <input id="cancela" className="field" inputMode="numeric" value={r.cancelHours} onChange={(e) => setR('cancelHours', num(e.target.value, 0, 24))} />
           </div>
           <div>
             <label htmlFor="tolerancia" className="label">

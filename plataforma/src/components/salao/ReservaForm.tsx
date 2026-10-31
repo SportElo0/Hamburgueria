@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { availabilityAction, createReservationAction } from '@/app/reservar/[slug]/actions';
 import { brl } from '@/lib/ordering';
+import { SellerFooter, type Seller } from './SellerFooter';
 
 const dayLabel = (date: string) =>
   new Intl.DateTimeFormat('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'America/Sao_Paulo' }).format(new Date(`${date}T12:00:00-03:00`)).replace('.', '');
@@ -17,6 +18,7 @@ export function ReservaForm(props: {
   cancelHours: number;
   toleranceMinutes: number;
   emailRequired: boolean;
+  seller: Seller;
 }) {
   const router = useRouter();
   const [date, setDate] = useState(props.days[0] ?? '');
@@ -136,9 +138,12 @@ export function ReservaForm(props: {
           </div>
           <div>
             <label htmlFor="tel" className="label">
-              WhatsApp
+              Telefone (WhatsApp)
             </label>
-            <input id="tel" className="field" type="tel" autoComplete="tel" inputMode="tel" placeholder="(11) 90000-0000" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <input id="tel" className="field" type="tel" autoComplete="tel" inputMode="tel" placeholder="(11) 90000-0000" value={phone} onChange={(e) => setPhone(e.target.value)} aria-describedby="tel-ajuda" />
+            <p id="tel-ajuda" className="mt-1 text-xs text-ink-mute">
+              Usamos só para falar da sua reserva.
+            </p>
           </div>
           <div className="sm:col-span-2">
             <label htmlFor="email" className="label">
@@ -153,11 +158,18 @@ export function ReservaForm(props: {
             {deposit > 0 ? `Sinal de ${brl(deposit)} pelo Pix` : 'Reserva sem sinal'}
           </h2>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-ink-soft">
-            {deposit > 0 && <li>O sinal ({brl(props.depositPerPerson)} por pessoa) é descontado da sua conta no dia. Se a conta der menos que o sinal, devolvemos a diferença.</li>}
-            {deposit > 0 && <li>Cancelou até {props.cancelHours} {props.cancelHours === 1 ? 'hora' : 'horas'} antes do horário: devolvemos o sinal inteiro, pelo próprio Pix.</li>}
-            {deposit > 0 && <li>Cancelou depois disso, ou não chegou até {props.toleranceMinutes} minutos depois do horário: o sinal fica com o restaurante.</li>}
+            {deposit > 0 && <li>O sinal ({brl(props.depositPerPerson)} por pessoa) é descontado da sua conta no dia. Se a conta der menos que o sinal, devolvemos a diferença no fechamento da conta, no mesmo dia.</li>}
+            {deposit > 0 && <li>Você reservou pela internet: pode desistir em até 7 dias depois de pagar o sinal e receber tudo de volta, desde que o horário da reserva ainda não tenha passado. Use o botão &quot;Cancelar reserva&quot; da página da reserva.</li>}
+            {deposit > 0 && <li>Fora desses 7 dias, cancelou {props.cancelHours ? `até ${props.cancelHours} ${props.cancelHours === 1 ? 'hora' : 'horas'} antes do horário` : 'até o horário da reserva'}: também devolvemos o sinal inteiro, pelo próprio Pix.</li>}
+            {deposit > 0 && <li>Fora desses casos, ou se não chegar até {props.toleranceMinutes} minutos depois do horário, o sinal fica com o restaurante. Se achar que houve engano, fale com o restaurante em até 7 dias e analisamos.</li>}
+            {deposit > 0 && <li>Se o restaurante cancelar a reserva, ou se você chegar no horário e não conseguirmos receber, devolvemos o sinal inteiro. Isso não limita os seus direitos pelo Código de Defesa do Consumidor.</li>}
             <li>Depois de {props.toleranceMinutes} minutos de atraso, a mesa pode ser liberada.</li>
-            <li>Seu nome e telefone ficam só com o restaurante, para a reserva.</li>
+            <li>
+              Usamos seu nome, telefone e e-mail só para esta reserva{deposit > 0 ? ' (nome e e-mail vão ao Mercado Pago para gerar o Pix)' : ''}. Nada de propaganda.{' '}
+              <a href={`/reservar/${props.slug}/privacidade`} className="underline" target="_blank" rel="noreferrer">
+                Aviso de privacidade
+              </a>
+            </li>
           </ul>
           <label className="mt-3 flex cursor-pointer items-start gap-2">
             <input type="checkbox" className="mt-0.5 h-5 w-5 accent-ink" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
@@ -174,6 +186,7 @@ export function ReservaForm(props: {
           {pending ? 'Reservando…' : deposit > 0 ? `Reservar e pagar o sinal de ${brl(deposit)}` : 'Reservar'}
         </button>
       </form>
+      <SellerFooter seller={props.seller} slug={props.slug} />
     </main>
   );
 }

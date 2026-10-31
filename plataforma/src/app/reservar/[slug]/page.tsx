@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { isSlug } from '@/lib/slug';
 import { getPublished } from '@/lib/stores';
-import { orderingOf } from '@/lib/ordering';
+import { orderingOf, sellerReady } from '@/lib/ordering';
+import { sellerOf } from '@/lib/vendedor';
 import { bookableDays } from '@/lib/reservas';
 import { ReservaForm } from '@/components/salao/ReservaForm';
 
@@ -12,7 +13,8 @@ export default async function ReservarPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const record = isSlug(slug) ? await getPublished(slug) : null;
   const ordering = record ? orderingOf(record.store) : null;
-  if (!record || !ordering?.enabled || !ordering.tables.enabled || !ordering.reservations.enabled) {
+  const demoBlocked = ordering ? ordering.reservations.depositPerPerson > 0 && ordering.pixMode === 'demo' && record?.store.extra.demo !== true && process.env.RESERVAS_PIX_DEMO !== '1' : true;
+  if (!record || !ordering?.enabled || !ordering.tables.enabled || !ordering.reservations.enabled || !sellerReady(ordering.reservations) || demoBlocked) {
     return (
       <main className="mx-auto max-w-xl px-5 py-16">
         <h1 className="text-2xl font-bold">Reservas pelo site desligadas</h1>
@@ -31,6 +33,7 @@ export default async function ReservarPage({ params }: { params: Promise<{ slug:
       cancelHours={s.cancelHours}
       toleranceMinutes={s.toleranceMinutes}
       emailRequired={ordering.pixMode === 'mercadopago' && s.depositPerPerson > 0}
+      seller={sellerOf(record.store)}
     />
   );
 }

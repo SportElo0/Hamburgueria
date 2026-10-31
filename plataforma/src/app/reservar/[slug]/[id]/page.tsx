@@ -3,6 +3,7 @@ import { isSlug } from '@/lib/slug';
 import { getPublished } from '@/lib/stores';
 import { trackReservation } from '@/lib/reservas';
 import { ReservaStatus } from '@/components/salao/ReservaStatus';
+import { sellerOf } from '@/lib/vendedor';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Sua reserva', robots: { index: false } };
@@ -20,6 +21,6 @@ export default async function ReservaPage({ params, searchParams }: { params: Pr
       </main>
     );
   }
-  const store = (await getPublished(slug))?.store.name ?? '';
-  return <ReservaStatus slug={slug} token={t} storeName={store} initial={reservation} />;
+  const store = (await getPublished(slug))?.store;
+  return <ReservaStatus slug={slug} token={t} storeName={store?.name ?? ''} initial={reservation} seller={store ? sellerOf(store) : null} />;
 }

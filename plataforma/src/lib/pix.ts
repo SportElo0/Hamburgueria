@@ -139,3 +139,11 @@ export async function refundCharge(slug: string, charge: PixCharge): Promise<boo
     return false;
   }
 }
+
+/** Cancels a Pix not yet paid (the booking was cancelled), so the QR stops working. Demo: nothing to do. */
+export async function cancelCharge(slug: string, charge: PixCharge): Promise<void> {
+  if (charge.provider === 'demo') return;
+  const { mercadoPagoToken } = await getSecrets(slug);
+  if (!mercadoPagoToken) return;
+  await mpFetch(mercadoPagoToken, `${MP}/${encodeURIComponent(charge.id)}`, { method: 'PUT', body: JSON.stringify({ status: 'cancelled' }) });
+}

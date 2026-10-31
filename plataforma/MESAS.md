@@ -59,7 +59,19 @@ mesma tela da cozinha dos pedidos do site e entra nos mesmos relatórios (modo "
     "Devolver ao cliente"). **Não veio** só depois da tolerância. Fechar a conta conclui a reserva.
   - Capacidade: "reservas por horário" (quantas mesas ficam para reserva em cada horário). Reserva pelo site fecha
     1 hora antes do horário. Pix não pago expira em 30 minutos e libera o horário.
-  - Dados: `reservas/<loja>/<AAAA-MM-DD>.json` (nome, telefone, e-mail). O restaurante é o controlador.
+  - Arrependimento (CDC art. 49): até 7 dias depois de pagar o sinal, cancelar devolve tudo, enquanto o horário não
+    chegou. Fora disso vale o prazo de horas. Na prática, o sinal só fica em "não veio" ou cancelamento tardio de
+    reserva feita com mais de 7 dias de antecedência. Confirmar com advogado antes de mudar.
+  - Só liga com **razão social, CNPJ (nunca CPF), endereço e contato de privacidade** preenchidos (aparecem no rodapé e
+    no aviso de privacidade `/reservar/<loja>/privacidade`). Sinal até R$ 100 por pessoa; prazo de devolução até 24 h.
+  - Com Pix em demonstração e sinal maior que zero, a página fica desligada numa loja de verdade (só funciona em loja
+    de demonstração ou com `RESERVAS_PIX_DEMO=1` no ambiente local).
+  - Pix pago depois de cancelar, depois de expirar ou com valor menor é devolvido sozinho. Ao cancelar, o Pix aberto
+    é cancelado no Mercado Pago. Cancelar trava a reserva antes de devolver, então "Chegou" não acontece junto.
+  - Cada reserva guarda o momento do aceite e as regras daquele momento (valor por pessoa, prazos, versão do texto).
+  - Dados: `reservas/<loja>/<AAAA-MM-DD>.json`. Nome, telefone e e-mail são apagados depois dos meses configurados
+    (padrão 6); fica só o registro do valor. O restaurante é o controlador; a Growlift, operadora.
+  - Limites: 5 reservas por aparelho (rede IPv6 /64) por dia e 80 por loja por dia.
 
 ## Ainda não feito
 
