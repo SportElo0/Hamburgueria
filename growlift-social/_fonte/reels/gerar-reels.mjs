@@ -415,7 +415,7 @@ function mesa3dReelHtml({ recA, recB, recS }) {
       <h1 class="h1" style="font-size:100px;margin-top:34px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Pedido na mesa,', 0.3, 0.1)} ${ws('sem app.', 0.8, 0.1, 'blue')}</h1>
     </div>
     <div class="endB" style="position:absolute;left:80px;right:80px;top:330px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0">
-      <p class="h1 q" style="font-size:66px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Quer isso no seu restaurante?</p>
+      <p class="h1 q" style="font-size:60px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Quer isso no seu restaurante quando abrir?</p>
       <div style="display:flex;align-items:center;gap:30px;margin-top:46px">
         <span class="h1 com" style="font-size:118px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Comenta</span>
         <span class="kw" style="position:relative;display:inline-block;font-size:128px;font-weight:900;letter-spacing:-.02em;color:#fff;background:${TOKENS.blue};border-radius:34px;padding:6px 38px 14px;box-shadow:0 30px 70px -20px rgba(8,101,254,1)">MESA<span class="kw-ring" style="position:absolute;inset:-10px;border-radius:44px;border:5px solid ${TOKENS.blueBright};opacity:0"></span></span>
@@ -425,7 +425,7 @@ function mesa3dReelHtml({ recA, recB, recS }) {
         <span class="typed" style="flex:1;text-align:left;font-size:40px;font-weight:600;color:#fff">&nbsp;</span>
         <span class="send" style="flex:none;font-size:34px;font-weight:800;color:${TOKENS.blueBright}">Publicar</span>
       </div>
-      <p class="dm" style="margin-top:40px;font-size:38px;line-height:1.3;color:${TOKENS.soft};opacity:0">A gente te manda no direct como funciona. 📩</p>
+      <p class="dm" style="margin-top:40px;font-size:38px;line-height:1.3;color:${TOKENS.soft};opacity:0">Você recebe no direct, por mensagem automática, como funciona. 📩</p>
     </div>
     <p class="muted note" style="position:absolute;left:96px;right:96px;top:1400px;font-size:28px;line-height:1.35;opacity:0;text-align:center">Plano Scale em breve, ainda não está à venda. Telas do sistema numa loja de demonstração com nome fictício.</p>`;
 

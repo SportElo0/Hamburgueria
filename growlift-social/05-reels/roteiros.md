@@ -249,9 +249,9 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - Capa: `10-pedido-na-mesa-capa.png`.
 
 **Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", 1,84 crédito em 31/10; o áudio original está em `_fonte/reels/narracao-10-eleven.mp3`, cortado nas pausas para cada frase cair na sua cena):
-"Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve! Quer isso no seu restaurante? Comenta MESA, que eu te mando como funciona!" (a última frase foi gerada à parte: `_fonte/reels/narracao-10-fecho.mp3`, 0,46 crédito)
+"Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve! Quer isso no seu restaurante quando abrir? Comenta MESA e recebe no direct, por mensagem automática, como funciona!" (a última frase foi gerada à parte, depois da revisão legal: `_fonte/reels/narracao-10-fecho.mp3`, 0,69 crédito)
 
-**Comenta MESA:** no fim (35,5 a 40,5 s) a palavra MESA aparece grande, alguém digita "MESA" num campo de comentário e "A gente te manda no direct como funciona". A automação do direct está em `automacao-comenta-mesa.md`; montem antes de postar.
+**Comenta MESA:** no fim (35,5 a 40,5 s) a palavra MESA aparece grande, alguém digita "MESA" num campo de comentário e "Você recebe no direct, por mensagem automática, como funciona". A automação do direct está em `automacao-comenta-mesa.md`; montem antes de postar.
 
 **Ao postar com narração:**
 - A voz é gerada por computador e soa como pessoa. Em "Configurações avançadas", ativem o "Rótulo de IA".
@@ -259,7 +259,7 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 
 **Legenda**
 ```
-Comenta MESA que a gente te manda no direct como funciona 📩
+Comenta MESA e receba no direct, por mensagem automática, como funciona 📩
 Plano Scale: em breve. Ainda não está à venda e ainda não tem restaurante usando.
 
 Salão cheio, garçom correndo e mesa esperando para pedir? Estamos preparando o pedido na mesa pelo QR Code:
