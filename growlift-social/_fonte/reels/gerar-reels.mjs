@@ -409,13 +409,25 @@ function mesa3dReelHtml({ recA, recB, recS }) {
   const [p1, p2] = MARK.match(/<path[^>]*\/>/g);
   const markSvg = (p, cls) => `<svg class="${cls}" viewBox="50 40 530 415" style="position:absolute;inset:0;width:100%;height:100%;opacity:0">${p}</svg>`;
   const s5 = `<div style="position:absolute;left:0;right:0;top:0;height:1150px;background:linear-gradient(#06080df2 55%,#06080d00)"></div>
-    <div style="position:absolute;left:96px;right:96px;top:300px">
+    <div class="endA" style="position:absolute;left:96px;right:96px;top:300px">
       <div style="position:relative;width:180px;height:142px;margin-bottom:44px">${markSvg(p1, 'm1')}${markSvg(p2, 'm2')}</div>
       <div class="plan" style="position:relative;overflow:hidden;display:inline-flex;padding:14px 28px;border-radius:999px;border:2px solid ${TOKENS.blueBright};font-size:30px;font-weight:800;letter-spacing:.14em;color:${TOKENS.blueSoft};background:rgba(6,8,13,.6);opacity:0;transform-origin:0 50%">PLANO SCALE · EM BREVE<span class="shine" style="position:absolute;top:-20px;bottom:-20px;width:70px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)"></span></div>
-      <h1 class="h1" style="font-size:100px;margin-top:34px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Pedido na mesa,', 0.7, 0.1)} ${ws('sem app.', 1.0, 0.1, 'blue')}</h1>
-      <div style="position:relative;display:inline-block;margin-top:46px"><span class="cta-ring" style="position:absolute;inset:-6px;border-radius:999px;border:3px solid ${TOKENS.blueBright};opacity:0"></span><span class="btn cta" style="font-size:40px;padding:26px 50px;opacity:0;transform-origin:0 50%">Manda um oi. Link na bio.</span></div>
+      <h1 class="h1" style="font-size:100px;margin-top:34px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Pedido na mesa,', 0.3, 0.1)} ${ws('sem app.', 0.8, 0.1, 'blue')}</h1>
     </div>
-    <p class="muted note" style="position:absolute;left:96px;right:96px;top:1400px;font-size:28px;line-height:1.35;opacity:0;text-align:center">Telas do sistema funcionando numa loja de demonstração com nome fictício. Nenhum pedido real.</p>`;
+    <div class="endB" style="position:absolute;left:80px;right:80px;top:330px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0">
+      <p class="h1 q" style="font-size:66px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Quer isso no seu restaurante?</p>
+      <div style="display:flex;align-items:center;gap:30px;margin-top:46px">
+        <span class="h1 com" style="font-size:118px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)">Comenta</span>
+        <span class="kw" style="position:relative;display:inline-block;font-size:128px;font-weight:900;letter-spacing:-.02em;color:#fff;background:${TOKENS.blue};border-radius:34px;padding:6px 38px 14px;box-shadow:0 30px 70px -20px rgba(8,101,254,1)">MESA<span class="kw-ring" style="position:absolute;inset:-10px;border-radius:44px;border:5px solid ${TOKENS.blueBright};opacity:0"></span></span>
+      </div>
+      <div class="field" style="margin-top:64px;width:840px;display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:999px;background:rgba(15,21,32,.95);border:2px solid rgba(255,255,255,.18);box-shadow:0 30px 60px -20px rgba(0,0,0,.9)">
+        <span style="flex:none;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ff9a3c,#e85d75)"></span>
+        <span class="typed" style="flex:1;text-align:left;font-size:40px;font-weight:600;color:#fff">&nbsp;</span>
+        <span class="send" style="flex:none;font-size:34px;font-weight:800;color:${TOKENS.blueBright}">Publicar</span>
+      </div>
+      <p class="dm" style="margin-top:40px;font-size:38px;line-height:1.3;color:${TOKENS.soft};opacity:0">A gente te manda no direct como funciona. 📩</p>
+    </div>
+    <p class="muted note" style="position:absolute;left:96px;right:96px;top:1400px;font-size:28px;line-height:1.35;opacity:0;text-align:center">Plano Scale em breve, ainda não está à venda. Telas do sistema numa loja de demonstração com nome fictício.</p>`;
 
   const bgDir = pathToFileURL(MESA3D).href;
   const script = `document.body.insertAdjacentHTML('afterbegin','<img id="bg" data-seq="${bgDir}" data-count="${count}" src="${bgDir}/00000.jpg" alt=""><div class="shade" style="top:0;height:620px;background:linear-gradient(#06080dd9,#06080d00)"></div><div class="shade" style="bottom:0;height:720px;background:linear-gradient(#06080d00,#06080de6 60%)"></div>');\n`
@@ -428,7 +440,7 @@ function mesa3dReelHtml({ recA, recB, recS }) {
       { start: 7.0, end: 16.2, html: s2 },
       { start: 16.2, end: 22.0, html: s3 },
       { start: 22.0, end: 31.2, html: s4 },
-      { start: 31.2, end: 35.5, html: s5 },
+      { start: 31.2, end: 40.5, html: s5 },
     ],
     script,
   });
@@ -805,7 +817,7 @@ const REELS = {
       });
 
       const html = mesa3dReelHtml({ recA, recB, recS });
-      return { html, duration: 35.5, cover: 1.6 };
+      return { html, duration: 40.5, cover: 1.6 };
     } finally {
       await demo.stop();
     }

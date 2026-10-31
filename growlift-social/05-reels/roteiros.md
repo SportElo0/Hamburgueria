@@ -236,7 +236,7 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - **Cliente, 7 a 16,2 s:** o celular com o pedido real flutua ao lado da mesa; "Sem app", "Sem cadastro", os itens voam para a sacola e o pedido vai para a cozinha. "Pede pelo celular, sem app."
 - **Amigo, 16,2 a 22 s:** a câmera passa para o outro lado da mesa; o amigo pega o celular, o código vai de um celular para o outro e um anel azul marca a mesa. "O amigo entra com o código. Mesma conta."
 - **Garçom, 22 a 31,2 s:** o garçom no balcão da cozinha olha o celular, a Mesa 5 chama e pede a conta, ele vai até a mesa e a libera (anel verde). "O garçom confirma, atende e libera a mesa."
-- **Fecho, 31,2 a 35,5 s:** a câmera sobe e mostra o salão inteiro. "Plano Scale · em breve" / "Pedido na mesa, sem app." / "Manda um oi. Link na bio."
+- **Fecho, 31,2 a 40,5 s:** a câmera sobe e mostra o salão inteiro. "Plano Scale · em breve" / "Pedido na mesa, sem app." e depois "Quer isso no seu restaurante? Comenta MESA".
 - **Marcação:** "Projeto conceito · loja de demonstração · nome fictício" em todas as telas, e o aviso no fecho. Nenhum pedido real.
 - **O que não existe ainda (não mostrar nem prometer):** pagar pelo celular na mesa, dividir a conta e jogo entre as mesas. Se perguntarem, digam que ainda não tem.
 - **Antes de postar:** no preview do app, confira se a faixa "Projeto conceito" não fica atrás da legenda. Procurem "Brasa Burger" no Instagram e no Google Maps; se existir um em São Paulo, avisem para trocar o nome.
@@ -249,7 +249,9 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - Capa: `10-pedido-na-mesa-capa.png`.
 
 **Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", 1,84 crédito em 31/10; o áudio original está em `_fonte/reels/narracao-10-eleven.mp3`, cortado nas pausas para cada frase cair na sua cena):
-"Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve!"
+"Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular! Sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha. O amigo entra com o código da mesa, e tudo cai na mesma conta. O garçom confirma a mesa, atende os chamados, e depois libera a mesa. Pedido na mesa, sem aplicativo. Plano Scale: em breve! Quer isso no seu restaurante? Comenta MESA, que eu te mando como funciona!" (a última frase foi gerada à parte: `_fonte/reels/narracao-10-fecho.mp3`, 0,46 crédito)
+
+**Comenta MESA:** no fim (35,5 a 40,5 s) a palavra MESA aparece grande, alguém digita "MESA" num campo de comentário e "A gente te manda no direct como funciona". A automação do direct está em `automacao-comenta-mesa.md`; montem antes de postar.
 
 **Ao postar com narração:**
 - A voz é gerada por computador e soa como pessoa. Em "Configurações avançadas", ativem o "Rótulo de IA".
@@ -257,17 +259,15 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 
 **Legenda**
 ```
-Salão cheio, garçom correndo e mesa esperando para pedir. 🍔
+Comenta MESA que a gente te manda no direct como funciona 📩
 Plano Scale: em breve. Ainda não está à venda e ainda não tem restaurante usando.
 
-Estamos preparando o pedido na mesa pelo QR Code:
+Salão cheio, garçom correndo e mesa esperando para pedir? Estamos preparando o pedido na mesa pelo QR Code:
 1. O cliente lê o QR e pede pelo celular, sem baixar app e sem cadastro.
 2. O amigo entra com o código da mesa e tudo cai na mesma conta.
 3. O garçom confirma a mesa, atende os chamados e registra como a mesa pagou (Pix, cartão ou dinheiro). Ainda não dá para pagar pelo celular na mesa.
 
 Brasa Burger é um nome fictício. As telas são do nosso sistema funcionando numa loja de demonstração, sem pedido real. Ainda não temos preço nem data de lançamento.
-
-Tem restaurante e quer saber antes? Manda um oi pelo link na bio. Não estamos vendendo o Scale ainda.
 
 #growlift #restaurante #qrcode #cardapiodigital #hamburgueria
 ```

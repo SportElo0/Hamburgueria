@@ -55,6 +55,7 @@
   const render = window.render;
   window.render = async (t) => {
     await frame(bg, Math.round(t * FPS));
+    bg.style.transform = t > 35.5 ? `scale(${1 + 0.012 * (t - 35.5)})` : '';
     await render(t);
   };
 
@@ -123,18 +124,47 @@
   };
   window.updates.s5 = async (local, dur, el) => {
     words(el, local);
+    // Part A: the mark, the plan badge and the line (31.2 to 35.5).
     const m1 = $(el, '.m1'), m2 = $(el, '.m2');
     const k1 = back(local / 0.55), k2 = back((local - 0.12) / 0.55);
     m1.style.transform = `translate(${(1 - k1) * -160}px,${(1 - k1) * 120}px)`;
     m2.style.transform = `translate(${(1 - k2) * 160}px,${(1 - k2) * 120}px)`;
     m1.style.opacity = clamp(local / 0.2); m2.style.opacity = clamp((local - 0.12) / 0.2);
-    pop($(el, '.plan'), local, 0.45, 0.55);
-    $(el, '.shine').style.transform = `translateX(${lerp(-160, 560, clamp((local - 0.9) / 0.7))}px) skewX(-20deg)`;
-    pop($(el, '.cta'), local, 1.6, 0.55);
-    const r = $(el, '.cta-ring');
-    const f = local > 2.0 ? ((local - 2.0) % 1.2) / 1.2 : 0;
-    r.style.opacity = local > 2.0 ? 0.7 * (1 - f) : 0;
-    r.style.transform = `scale(${1 + f * 0.35})`;
-    $(el, '.note').style.opacity = clamp((local - 2.1) / 0.4);
+    pop($(el, '.plan'), local, 0.35, 0.55);
+    $(el, '.shine').style.transform = `translateX(${lerp(-160, 560, clamp((local - 0.8) / 0.7))}px) skewX(-20deg)`;
+    const swap = 4.2;
+    const out = easeInOut((local - swap) / 0.35);
+    const A = $(el, '.endA');
+    A.style.opacity = 1 - out;
+    A.style.transform = `translateY(${-80 * out}px)`;
+    // Part B: "Comenta MESA" (from 35.5): the keyword pops and pulses, someone types it.
+    const B = $(el, '.endB');
+    B.style.opacity = clamp((local - swap - 0.15) / 0.3);
+    const lb = local - swap;
+    pop($(el, '.q'), lb, 0.2, 0.5);
+    pop($(el, '.com'), lb, 1.2, 0.5);
+    const kw = $(el, '.kw');
+    const kk = back((lb - 1.5) / 0.6);
+    const beat = lb > 2.2 ? 1 + 0.05 * Math.max(0, Math.sin((lb - 2.2) * Math.PI * 2 / 0.9)) : 1;
+    kw.style.opacity = clamp((lb - 1.5) / 0.2);
+    kw.style.transform = `scale(${Math.max(0, kk) * beat}) rotate(${(1 - clamp((lb - 1.5) / 0.6)) * -10}deg)`;
+    const ring = $(el, '.kw-ring');
+    const f = lb > 2.2 ? ((lb - 2.2) % 0.9) / 0.9 : 0;
+    ring.style.opacity = lb > 2.2 ? 0.8 * (1 - f) : 0;
+    ring.style.transform = `scale(${1 + f * 0.18})`;
+    const field = $(el, '.field');
+    const fk = back((lb - 2.4) / 0.5);
+    field.style.opacity = clamp((lb - 2.4) / 0.2);
+    field.style.transform = `translateY(${(1 - Math.min(1, fk)) * 80}px)`;
+    const word = 'MESA';
+    const n = Math.max(0, Math.min(4, Math.floor((lb - 2.9) / 0.18) + 1));
+    const caret = Math.floor(lb * 2) % 2 ? '|' : '';
+    const typed = $(el, '.typed');
+    typed.textContent = lb < 2.9 ? 'Adicione um comentário…' : word.slice(0, n) + (n < 4 ? caret : '');
+    typed.style.color = lb < 2.9 ? '#8790a6' : '#fff';
+    const send = $(el, '.send');
+    send.style.transform = `scale(${lb > 3.75 && lb < 4.15 ? 1.2 : 1})`;
+    pop($(el, '.dm'), lb, 3.9, 0.5);
+    $(el, '.note').style.opacity = clamp((local - 1.2) / 0.4);
   };
 })();
