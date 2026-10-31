@@ -228,3 +228,32 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 
 #growlift #criacaodesites #webdesign #sitesprofissionais #presencadigital
 ```
+
+## 10. Pedido na mesa (plano Scale)
+- **Inspiração:** o formato dos vídeos de sistema de pedido na mesa que o Antônio mandou (passo a passo com a tela de verdade). Texto, telas e marca são nossos.
+- **Gancho, 0 a 3,4 s:** "Salão cheio. Garçom correndo." / "E se a mesa pedisse pelo celular, sem app?"
+- **Cliente, 3,4 a 13,8 s:** lê o QR, abre a Mesa 5, pede um Brasa Duplo e uma batata e envia. A tela mostra o código da mesa.
+- **Amigo, 13,8 a 19,6 s:** digita o código de 4 números e entra na mesma conta.
+- **Garçom, 19,6 a 29 s:** no celular dele, confirma a mesa, recebe "Mesa 5 chamou" e "pediu a conta", toca em "Estou indo" e fecha a conta (Pix, cartão ou dinheiro).
+- **Fecho, 29 a 33,5 s:** "Pedido na mesa, sem app. Plano Scale, em breve." / "Manda um oi. Link na bio."
+- **Marcação:** "Loja de demonstração · nome fictício" em todas as telas e no fecho. As telas são do sistema real, gravadas numa loja de teste (Brasa Burger), sem nenhum pedido real.
+- **O que o vídeo não mostra (porque ainda não existe):** pagar pelo celular na mesa e jogo entre as mesas. Se perguntarem, digam que ainda não tem.
+- **Música:** só faixas liberadas para conta comercial. Uma batida de 100 a 110 BPM combina com as trocas (3,4 / 13,8 / 19,6 / 29 s).
+
+**Vídeo pronto:** `10-pedido-na-mesa.mp4` (33,5 s) e capa `10-pedido-na-mesa-capa.png`.
+
+**Legenda**
+```
+Salão cheio, garçom correndo e mesa esperando para pedir. 🍔
+
+Estamos preparando o pedido na mesa pelo QR Code:
+1. O cliente lê o QR e pede pelo celular, sem baixar app e sem cadastro.
+2. O amigo entra com o código da mesa e tudo cai na mesma conta.
+3. O garçom confirma a mesa, recebe os chamados e fecha a conta pelo celular dele.
+
+Vai fazer parte do plano Scale, que ainda não está à venda. No vídeo, as telas são do sistema de verdade, numa loja de demonstração com nome fictício, sem pedido real.
+
+Tem restaurante e quer saber antes? Manda um oi pelo link na bio.
+
+#growlift #restaurante #qrcode #cardapiodigital #hamburgueria
+```

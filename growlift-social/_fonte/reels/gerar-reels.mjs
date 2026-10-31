@@ -117,7 +117,7 @@ async function modelStages(file) {
 const DEMO_SLUG = 'brasa-burger';
 const DEMO_PORT = 3119;
 
-function demoStore() {
+function demoStore({ tables = false } = {}) {
   const item = (id, name, description, price, options = []) => ({ id, name, description, price, priceLabel: '', image: '', imageAlt: '', available: true, featured: false, tags: [], options });
   return {
     slug: DEMO_SLUG, name: 'Brasa Burger', segment: 'restaurante', siteUrl: '',
@@ -132,17 +132,17 @@ function demoStore() {
     ] },
     extra: {},
     account: { plan: 'parceiro', changeLimit: null, partnerUntil: '', monthlyFee: null, notes: 'Loja de demonstração para o Reel do plano Lift. Nome fictício.' },
-    ordering: { enabled: true, delivery: true, pickup: true, minOrder: 0, eta: '40 a 60 min', pix: true, card: true, cash: true, pixMode: 'demo', coupons: [], areas: [{ id: 'centro', name: 'Centro', fee: 600 }] },
+    ordering: { enabled: true, delivery: true, pickup: true, minOrder: 0, eta: '40 a 60 min', pix: true, card: true, cash: true, pixMode: 'demo', coupons: [], areas: [{ id: 'centro', name: 'Centro', fee: 600 }], ...(tables ? { tables: { enabled: true, count: 12 } } : {}) },
   };
 }
 
-async function startDemoStore() {
+async function startDemoStore(opts = {}) {
   const app = path.join(ROOT, 'plataforma');
   if (!fs.existsSync(path.join(app, '.next', 'BUILD_ID'))) throw new Error('Rode "npm run build" em plataforma/ antes do Reel 8.');
   const data = tmpDir('loja-demo');
   const w = (key, v) => { const f = path.join(data, key); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v)); };
   const now = new Date().toISOString();
-  const rec = { store: demoStore(), updatedAt: now, updatedBy: 'reel', publishedAt: now };
+  const rec = { store: demoStore(opts), updatedAt: now, updatedBy: 'reel', publishedAt: now };
   w(`lojas/${DEMO_SLUG}/rascunho.json`, rec);
   w(`lojas/${DEMO_SLUG}/publicado.json`, rec);
   w(`lojas/${DEMO_SLUG}/operacao.json`, { open: true, updatedAt: null, updatedBy: '' });
@@ -164,6 +164,8 @@ async function startDemoStore() {
   const api = `${url}/api/public/lojas/${DEMO_SLUG}/pedidos`;
   return {
     url, cookie,
+    /** The QR key of a table (src/lib/mesas.ts tableKey), with this run's secret. */
+    tableKey: (n) => crypto.createHmac('sha256', secret).update(`mesa:${DEMO_SLUG}:${n}`).digest('base64url').slice(0, 16),
     async placeOrder() {
       const res = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
         items: [{ productId: 'brasa-duplo', quantity: 1 }, { productId: 'brasa-classico', quantity: 1 }, { productId: 'batata-rustica', quantity: 1 }],
@@ -473,6 +475,114 @@ const REELS = {
     }
   },
 
+  // 10. Pedido na mesa (plano Scale): QR da mesa, código para o amigo, salão do garçom.
+  // Loja de demonstração local, nome fictício; nenhum pedido real.
+  async 10() {
+    const demo = await startDemoStore({ tables: true });
+    const mesa = `${demo.url}/mesa/${DEMO_SLUG}/5?k=${demo.tableKey(5)}`;
+    // A tap: the dot shows where the finger goes, then the real click happens.
+    const tapper = () => {
+      let until = -1, at = null;
+      return {
+        async tap(t, page, loc) {
+          await loc.scrollIntoViewIfNeeded();
+          const b = await loc.boundingBox();
+          at = [b.x + b.width / 2, b.y + b.height / 2];
+          until = t + 0.45;
+          await page.evaluate(([x, y]) => window.__tap(x, y, 1), at);
+          await page.waitForTimeout(60);
+          await loc.click();
+        },
+        async frame(t, page) {
+          if (!at) return;
+          const k = until > t ? (until - t) / 0.45 : 0;
+          await page.evaluate(([x, y, k]) => window.__tap(x, y, k), [...at, k]);
+          if (k <= 0) at = null;
+        },
+      };
+    };
+    let code = '', device = null;
+    try {
+      // 1. Cliente: abre a mesa pelo QR e pede.
+      const a = tapper(), da = {};
+      const recA = await captureSite({
+        id: '10a', url: mesa, duration: 10,
+        steps: async (t, page) => {
+          await a.frame(t, page);
+          if (t >= 1.0 && !da.open) { da.open = 1; await a.tap(t, page, page.getByRole('button', { name: 'Abrir a Mesa 5' })); await page.getByRole('button', { name: /^Adicionar / }).first().waitFor(); }
+          if (t >= 3.0 && !da.add1) { da.add1 = 1; await a.tap(t, page, page.getByRole('button', { name: 'Adicionar Brasa Duplo' })); }
+          if (t >= 4.2 && !da.add2) { da.add2 = 1; await a.tap(t, page, page.getByRole('button', { name: 'Adicionar Batata rústica' })); }
+          if (t >= 5.6 && !da.see) { da.see = 1; await a.tap(t, page, page.getByRole('button', { name: /Ver pedido/ })); }
+          if (t >= 7.0 && !da.send) {
+            da.send = 1;
+            await a.tap(t, page, page.getByRole('button', { name: /Enviar para a cozinha/ }));
+            await page.getByText('Pedido enviado!').waitFor();
+            code = (await page.getByText(/código \d{4}/).first().textContent()).match(/\d{4}/)[0];
+            device = (await page.context().cookies()).find((c) => c.name !== 'plataforma_sessao');
+          }
+        },
+      });
+      // 2. O amigo entra com o código.
+      const b = tapper(), db = {};
+      const recB = await captureSite({
+        id: '10b', url: mesa, duration: 5.5,
+        steps: async (t, page) => {
+          await b.frame(t, page);
+          if (t >= 0.6 && !db.type) { db.type = 1; const f = page.getByLabel(/Digite o código/); await f.scrollIntoViewIfNeeded(); await f.click(); }
+          for (let i = 0; i < 4; i++) {
+            if (t >= 1.0 + i * 0.35 && !db['d' + i]) { db['d' + i] = 1; await page.keyboard.type(code[i]); }
+          }
+          if (t >= 2.8 && !db.go) { db.go = 1; await b.tap(t, page, page.getByRole('button', { name: 'Entrar na mesa' })); await page.getByText(/código \d{4}/).first().waitFor(); }
+        },
+      });
+      // 3. Salão: o garçom confirma a mesa, atende o chamado e fecha a conta.
+      const call = (kind) => fetch(`${demo.url}/api/public/lojas/${DEMO_SLUG}/mesas/5`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Cookie: `${device.name}=${device.value}` },
+        body: JSON.stringify({ k: demo.tableKey(5), action: 'chamar', kind }),
+      });
+      const s = tapper(), ds = {};
+      const recS = await captureSite({
+        id: '10s', url: `${demo.url}/loja/${DEMO_SLUG}/salao`, duration: 9,
+        setup: async (page, ctx) => { await ctx.addCookies([{ name: 'plataforma_sessao', value: demo.cookie, url: demo.url }]); },
+        steps: async (t, page) => {
+          await s.frame(t, page);
+          if (t >= 1.2 && !ds.ok) { ds.ok = 1; await s.tap(t, page, page.getByRole('button', { name: 'Confirmar mesa' })); }
+          if (t >= 2.6 && !ds.call) { ds.call = 1; await call('garcom'); await call('conta'); await page.getByText('Mesa 5 pediu a conta').waitFor({ timeout: 15000 }); }
+          if (t >= 4.4 && !ds.go) { ds.go = 1; await s.tap(t, page, page.getByRole('button', { name: 'Estou indo' })); }
+          if (t >= 5.8 && !ds.bill) { ds.bill = 1; await s.tap(t, page, page.getByRole('button', { name: 'Fechar a conta', exact: true })); await page.getByRole('dialog').waitFor(); }
+          if (t >= 7.4 && !ds.close) { ds.close = 1; await s.tap(t, page, page.getByRole('button', { name: 'Fechar a conta e liberar a mesa' })); }
+        },
+      });
+
+      const tag = '<span class="tag">Loja de demonstração · nome fictício</span>';
+      const shot = (title, rec, offset, { eyebrow = 'Plano Scale · em breve', size = 66 } = {}) => ({
+        html: `<div class="glow" style="width:1300px;height:1300px;left:-110px;top:620px;opacity:.55"></div>
+          <div style="position:absolute;left:96px;right:110px;top:250px">
+            <p class="eyebrow" style="margin-bottom:18px">${eyebrow}</p>
+            <h2 class="h1" style="font-size:${size}px;line-height:1.04">${title}</h2>
+          </div>
+          ${phone(560, rec.dir)}
+          <div style="position:absolute;left:0;right:0;top:1548px;text-align:center;z-index:5">${tag}</div>`,
+        update: playSeq(rec.count, offset),
+      });
+      const A = shot('O cliente lê o QR da mesa e <span class="blue">pede pelo celular.</span>', recA, 0.2);
+      const B = shot('O amigo entra com o código. <span class="blue">Tudo na mesma conta.</span>', recB, 0.2);
+      const S = shot('O garçom confirma, atende os chamados e <span class="blue">fecha a conta.</span>', recS, 0.2);
+      const html = reelPage({
+        scenes: [
+          { start: 0, end: 3.4, html: hook('Salão cheio. <span class="blue">Garçom correndo.</span>', { lead: 'E se a mesa pedisse pelo celular, sem app?' }) },
+          { start: 3.4, end: 13.8, ...A },
+          { start: 13.8, end: 19.6, ...B },
+          { start: 19.6, end: 29, ...S },
+          { start: 29, end: 33.5, html: end('Pedido na mesa, <span class="blue">sem app.</span> Plano Scale, em breve.', { lead: 'Manda um oi. Link na bio.', note: 'Telas reais do sistema, numa loja de demonstração com nome fictício. Nenhum pedido real.' }) },
+        ],
+      });
+      return { html, duration: 33.5, cover: 1.4 };
+    } finally {
+      await demo.stop();
+    }
+  },
+
 };
 
 function valueFor(name, s) {
@@ -487,7 +597,7 @@ function valueFor(name, s) {
 
 // ---------------------------------------------------------------------------------------
 
-const NAMES = { 1: '01-site-que-passa-de-lado', 2: '02-a-marca-se-monta', 3: '03-do-celular-ao-diagnostico', 4: '04-tres-sinais', 5: '05-perfil-no-google', 6: '06-bastidores', 7: '07-quem-somos', 8: '08-pedido-e-pix' };
+const NAMES = { 1: '01-site-que-passa-de-lado', 2: '02-a-marca-se-monta', 3: '03-do-celular-ao-diagnostico', 4: '04-tres-sinais', 5: '05-perfil-no-google', 6: '06-bastidores', 7: '07-quem-somos', 8: '08-pedido-e-pix', 10: '10-pedido-na-mesa' };
 const pick = process.argv.slice(2).filter((a) => REELS[a]);
 const which = pick.length ? pick : Object.keys(REELS);
 const server = await serve(path.join(ROOT, 'growlift'), SITE_PORT);
