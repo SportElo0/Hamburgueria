@@ -42,8 +42,15 @@ Daí em diante fica só US$ 47/mês.
 - **Quer ficar com o site:** remover o produto de US$ 47 e deixar o de US$ 40 até completar as 12 parcelas;
   depois cancelar. Mandar os arquivos do site.
 - **Não quer ficar com o site:** cancelar a assinatura no fim do período atual, sem reembolso, e tirar o site do ar.
+- **Não respondeu qual opção quer:** pausar a cobrança da assinatura (Pausar cobrança) e manter o site no ar.
+  Depois de 15 dias, mandar o lembrete por e-mail e WhatsApp com a data-limite (cláusula 5.4).
+  Se escolher ficar com o site, voltar a cobrar: as parcelas de US$ 40 desse período entram juntas na próxima data.
+  Se não responder em 10 dias depois do lembrete, cancelar e tirar o site do ar.
+- **A Growlift encerrar sem motivo (cláusula 5.6):** cancelar a assinatura, não cobrar as parcelas restantes,
+  entregar os arquivos em até 10 dias úteis. Se o site ainda não estava no ar, reembolsar tudo.
 
 ## 6. Pagamento recusado (cláusula 3.4)
 
 Em Configurações > Cobrança > Assinaturas e e-mails, ligar as novas tentativas automáticas e o e-mail
-avisando o cliente do cartão recusado. Se continuar sem pagar 15 dias depois do vencimento, pode pausar a hospedagem.
+avisando o cliente do cartão recusado. Se continuar sem pagar 15 dias depois do vencimento, mandar aviso por e-mail; 5 dias depois do aviso,
+pode pausar a hospedagem até pagar. Sem juros nem multa.
