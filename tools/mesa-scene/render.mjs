@@ -1,6 +1,6 @@
 // Renders the 3D restaurant of the "pedido na mesa" Reel.
 //   node tools/mesa-scene/render.mjs preview <outDir> 0,4,10     → PNG stills (540×960) for review
-//   node tools/mesa-scene/render.mjs frames <outDir> [seconds=35.5] → 1080×1920 JPEG per frame at 30 fps
+//   node tools/mesa-scene/render.mjs frames <outDir> [seconds=35.5] [from to] → 1080×1920 JPEG per frame at 30 fps
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -42,8 +42,10 @@ if (mode === 'preview') {
   for (const t of (arg || '0,2,5,8,17,20,24,28,30,34').split(',').map(Number)) await shot(t, 540, 960, path.join(out, `p-${t}.jpg`));
 } else if (mode === 'frames') {
   const n = Math.round(Number(arg || 35.5) * FPS);
+  // Optional range in seconds, to redo only part of the frames: frames <dir> 35.5 16 22.5
+  const [from, to] = [process.argv[5], process.argv[6]].map((v, k) => (v === undefined ? (k ? n : 0) : Math.round(Number(v) * FPS)));
   const t0 = Date.now();
-  for (let i = 0; i < n; i++) {
+  for (let i = from; i < Math.min(n, to); i++) {
     await shot(i / FPS, 1080, 1920, path.join(out, `${String(i).padStart(5, '0')}.jpg`));
     if (i % 60 === 0) console.log(`quadro ${i}/${n} · ${((Date.now() - t0) / 1000).toFixed(0)} s`);
   }

@@ -408,7 +408,8 @@ function mesa3dReelHtml({ recA, recB, recS }) {
     ${cap('O garçom confirma, atende', 'e libera a mesa.')}`;
   const [p1, p2] = MARK.match(/<path[^>]*\/>/g);
   const markSvg = (p, cls) => `<svg class="${cls}" viewBox="50 40 530 415" style="position:absolute;inset:0;width:100%;height:100%;opacity:0">${p}</svg>`;
-  const s5 = `<div style="position:absolute;left:96px;right:96px;top:300px">
+  const s5 = `<div style="position:absolute;left:0;right:0;top:0;height:1150px;background:linear-gradient(#06080df2 55%,#06080d00)"></div>
+    <div style="position:absolute;left:96px;right:96px;top:300px">
       <div style="position:relative;width:180px;height:142px;margin-bottom:44px">${markSvg(p1, 'm1')}${markSvg(p2, 'm2')}</div>
       <div class="plan" style="position:relative;overflow:hidden;display:inline-flex;padding:14px 28px;border-radius:999px;border:2px solid ${TOKENS.blueBright};font-size:30px;font-weight:800;letter-spacing:.14em;color:${TOKENS.blueSoft};background:rgba(6,8,13,.6);opacity:0;transform-origin:0 50%">PLANO SCALE · EM BREVE<span class="shine" style="position:absolute;top:-20px;bottom:-20px;width:70px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent)"></span></div>
       <h1 class="h1" style="font-size:100px;margin-top:34px;text-shadow:0 6px 30px rgba(0,0,0,.6)">${ws('Pedido na mesa,', 0.7, 0.1)} ${ws('sem app.', 1.0, 0.1, 'blue')}</h1>
