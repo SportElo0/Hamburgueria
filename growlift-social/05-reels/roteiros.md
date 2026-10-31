@@ -259,15 +259,17 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 
 **Legenda**
 ```
-Comenta MESA e receba no direct, por mensagem automática, como funciona 📩
-Plano Scale: em breve. Ainda não está à venda e ainda não tem restaurante usando.
+Comenta MESA que a gente te manda como funciona 📩
 
-Salão cheio, garçom correndo e mesa esperando para pedir? Estamos preparando o pedido na mesa pelo QR Code:
-1. O cliente lê o QR e pede pelo celular, sem baixar app e sem cadastro.
-2. O amigo entra com o código da mesa e tudo cai na mesma conta.
-3. O garçom confirma a mesa, atende os chamados e registra como a mesa pagou (Pix, cartão ou dinheiro). Ainda não dá para pagar pelo celular na mesa.
+Salão cheio, garçom correndo e mesa esperando pra pedir? 😅
+Com o pedido na mesa da Growlift:
+✅ O cliente lê o QR Code e pede pelo celular, sem baixar app e sem cadastro
+✅ A mesa toda pede na mesma conta, com um código que só quem está sentado vê
+✅ O pedido vai direto pra cozinha depois que o garçom confirma a mesa
+✅ "Chamar garçom" e "pedir a conta" chegam na hora no celular da equipe
 
-Brasa Burger é um nome fictício. As telas são do nosso sistema funcionando numa loja de demonstração, sem pedido real. Ainda não temos preço nem data de lançamento.
+Plano Scale: em breve. Ainda não está à venda, sem preço nem data.
+No vídeo, as telas são do nosso sistema numa loja de demonstração (Brasa Burger é nome fictício), sem pedido real.
 
-#growlift #restaurante #qrcode #cardapiodigital #hamburgueria
+#growlift #restaurante #hamburgueria #qrcode #cardapiodigital #pedidonamesa
 ```

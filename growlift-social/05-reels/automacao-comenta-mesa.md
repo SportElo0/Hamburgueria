@@ -51,19 +51,22 @@ Resposta automática enviada no seu direct 📲
 Confira seu direct: enviamos como funciona (mensagem automática) 📩
 ```
 
-Mensagem 1 (direct, automática), com os botões "Quero ser avisado" e "Não, obrigado":
+Mensagem 1 (direct), com os botões "Quero acompanhar" (link do canal do WhatsApp) e "Falar com a gente" (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20do%20pedido%20na%20mesa%20(MESA)`):
 
 ```
-Oi! Esta é uma mensagem automática (robô) da Growlift 🤖. Você comentou MESA no nosso Reel.
+Opa! 👋 Que bom que você curtiu o pedido na mesa!
 
-Assim estamos preparando o pedido na mesa (plano Scale):
-1. O cliente lê o QR Code da mesa e pede pelo celular, sem baixar app e sem cadastro.
-2. O amigo entra com o código da mesa e tudo cai na mesma conta.
-3. O garçom confirma a mesa, atende os chamados e libera a mesa, tudo pelo celular dele. Pagar pelo celular na mesa ainda não existe.
+Olha o que ele resolve no salão:
+✅ O cliente pede pelo celular, sem baixar app e sem cadastro
+✅ A mesa toda pede na mesma conta, com um código que só quem está sentado vê
+✅ O garçom confirma a mesa com um toque e os pedidos vão direto pra cozinha
+✅ "Chamar garçom" e "pedir a conta" chegam na hora no celular da equipe
 
-O Scale ainda não está à venda: não tem preço nem data, ainda não tem restaurante usando e o que mostramos pode mudar. Nada é vendido nem cobrado por aqui.
+É o plano Scale, e ele está chegando: ainda não está à venda, sem preço nem data.
 
-Quer ser avisado quando abrir? Se tocar em "Quero ser avisado", guardamos seu perfil do Instagram numa lista só para esse aviso. Como tratamos seus dados: growlift.com.br/privacidade.html
+Quer acompanhar de perto e ser dos primeiros a saber? Toca aqui embaixo 👇
+
+Seus dados: growlift.com.br/privacidade.html
 ```
 
 Mensagem 2 (se tocar em "Quero ser avisado"):
