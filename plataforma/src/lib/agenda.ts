@@ -180,6 +180,9 @@ export interface RunResult {
 export async function runAgenda(origin: string, now = new Date()): Promise<RunResult> {
   const result: RunResult = { started: [], posted: [], failed: [] };
   if (!instagramConfigured()) return { ...result, skipped: 'instagram-nao-conectado' };
+  // Only production publishes: a preview or local copy sharing the database must never claim posts.
+  if (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production') return { ...result, skipped: 'nao-e-producao' };
+  if (process.env.VERCEL_ENV === 'production' && !process.env.PAINEL_URL) return { ...result, skipped: 'falta-painel-url' };
   await refreshTokenIfDue(now);
   const drafts = new Map((await agendaDrafts()).map((d) => [d.id, d]));
   const state = (await readState())?.data ?? {};
@@ -226,10 +229,17 @@ export async function runAgenda(origin: string, now = new Date()): Promise<RunRe
         if (st.code === 'FINISHED') {
           // Claim the publish step too: mark it before calling, so a parallel run sees it taken.
           const go = await update(id, (cur) => (cur?.status === 'processando' && cur.containerId === s.containerId && !cur.postedAt ? { ...cur, postedAt: now.toISOString() } : undefined));
-          if (!go) continue;
+          if (!go) {
+            // Another run took the publish step and never finished it: after a while, hand it to a person.
+            if (s.postedAt && now.getTime() - Date.parse(s.postedAt) > STUCK_MS)
+              await update(id, (cur) => (cur?.status === 'processando' && cur.postedAt ? fail({ ...cur, postedAt: undefined }, 'O envio parou na hora de publicar. Confira no Instagram se o post saiu antes de tentar de novo.') : undefined));
+            continue;
+          }
           const mediaId = await publishContainer(s.containerId);
+          // Saved at once: from here on it is live, whatever happens next.
+          await update(id, (cur) => (cur ? { ...cur, status: 'postado', mediaId, error: undefined } : undefined));
           const permalink = await permalinkOf(mediaId);
-          await update(id, (cur) => (cur ? { ...cur, status: 'postado', mediaId, permalink, error: undefined } : undefined));
+          if (permalink) await update(id, (cur) => (cur ? { ...cur, permalink } : undefined));
           if (d.chave) await setContentStatus(d.chave, 'postado', 'Instagram (automático)', now).catch(() => undefined);
           result.posted.push(id);
         } else if (st.code === 'PUBLISHED') {

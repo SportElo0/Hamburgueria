@@ -244,7 +244,8 @@ fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({ generatedAt: 
 // manifest, so the public link for Instagram can only ever serve listed files.
 const agendaSrc = path.join(SRC, 'agenda.json');
 if (fs.existsSync(agendaSrc)) {
-  const listed = new Set(folders.flatMap((f) => f.groups.flatMap((g) => g.files.flatMap((x) => [x.path, x.cover].filter(Boolean)))));
+  // Files marked not to publish (names starting with _) never go to Instagram.
+  const listed = new Set(folders.flatMap((f) => f.groups.flatMap((g) => g.files.filter((x) => !x.doNotPublish).flatMap((x) => [x.path, x.cover].filter(Boolean)))));
   const agenda = JSON.parse(fs.readFileSync(agendaSrc, 'utf8'));
   const itens = (agenda.itens ?? []).filter((it) => {
     const missing = [...it.arquivos, ...(it.capa ? [it.capa] : [])].filter((f) => !listed.has(f));

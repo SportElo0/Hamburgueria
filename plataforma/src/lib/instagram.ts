@@ -88,9 +88,10 @@ async function auth() {
 /** The connected account (cached after the first call). */
 export async function account(): Promise<{ userId: string; username: string }> {
   const { doc, etag } = await auth();
-  if (doc.userId) return { userId: doc.userId, username: doc.username ?? '' };
+  if (doc.userId && /^\d+$/.test(doc.userId)) return { userId: doc.userId, username: doc.username ?? '' };
   const me = await call<{ id: string; user_id?: string; username?: string }>('GET', '/me', { fields: 'user_id,username' }, doc.token);
   const userId = String(me.user_id ?? me.id);
+  if (!/^\d+$/.test(userId)) throw new InstagramError('O Instagram devolveu uma conta inválida.');
   await saveToken({ ...doc, userId, username: me.username ?? '' }, etag);
   return { userId, username: me.username ?? '' };
 }

@@ -164,6 +164,33 @@ describe('agenda do Instagram', () => {
     expect(calls).toEqual([]);
   });
 
+  it('preview ou cópia fora da produção nunca publica', async () => {
+    const calls = fakeInstagram();
+    vi.stubEnv('VERCEL_ENV', 'preview');
+    await approve('2026-11-02-reel-11', { legenda: 'ok', quando: '2026-11-02T12:10:00-03:00', ia: false }, 'L', T0);
+    expect((await runAgenda(ORIGIN, at(11))).skipped).toBe('nao-e-producao');
+    vi.stubEnv('VERCEL_ENV', 'production');
+    expect((await runAgenda(ORIGIN, at(11))).skipped).toBe('falta-painel-url');
+    expect(calls.filter((c) => c.method === 'POST')).toEqual([]);
+  });
+
+  it('publicação que parou no meio vira erro para conferir, sem publicar de novo sozinha', async () => {
+    const calls = fakeInstagram();
+    await approve('2026-11-02-reel-11', { legenda: 'ok', quando: '2026-11-02T12:10:00-03:00', ia: false }, 'L', T0);
+    await runAgenda(ORIGIN, at(11));
+    // Simulate a run that took the publish step and died.
+    const doc = await storage().readJSON<Record<string, { postedAt?: string }>>('instagram/agenda.json');
+    doc!.data['2026-11-02-reel-11'].postedAt = at(12).toISOString();
+    await storage().writeJSON('instagram/agenda.json', doc!.data, doc!.etag);
+    await runAgenda(ORIGIN, at(13));
+    expect((await agendaView()).find((i) => i.id === '2026-11-02-reel-11')!.status).toBe('processando');
+    await runAgenda(ORIGIN, at(30));
+    const item = (await agendaView()).find((i) => i.id === '2026-11-02-reel-11')!;
+    expect(item.status).toBe('erro');
+    expect(item.state?.error).toContain('Confira no Instagram');
+    expect(calls.filter((c) => c.path.endsWith('/media_publish')).length).toBe(0);
+  });
+
   it('renova o token uma vez por semana e guarda o novo', async () => {
     const calls = fakeInstagram();
     await runAgenda(ORIGIN, T0);

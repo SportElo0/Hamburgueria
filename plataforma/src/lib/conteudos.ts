@@ -104,6 +104,18 @@ export async function readContentFile(rel: string, kind: 'arquivo' | 'miniatura'
   return null;
 }
 
+/** Where a listed file is on disk (for streaming big videos), with its declared type; null when not listed. */
+export async function contentFilePath(rel: string): Promise<{ abs: string; type: string } | null> {
+  const m = await getManifest();
+  for (const f of m.folders)
+    for (const g of f.groups)
+      for (const file of g.files) {
+        if (file.path === rel) return { abs: path.join(root(), 'arquivos', file.path), type: file.type };
+        if (file.cover && file.cover === rel) return { abs: path.join(root(), 'arquivos', file.cover), type: 'image/png' };
+      }
+  return null;
+}
+
 export async function findGroup(id: string) {
   const m = await getManifest();
   for (const f of m.folders) for (const g of f.groups) if (g.id === id) return g;
