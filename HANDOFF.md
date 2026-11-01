@@ -83,6 +83,11 @@ variáveis de ambiente da Vercel) e com o código da loja no Saipos.
 a cláusula de operador de dados (quem é controlador, o que vai ao Saipos, Pix direto na conta do restaurante).
 Vale uma passada de advogado.
 
+## Agenda automática do Instagram (01/11/2026)
+
+`/painel/conteudos/agenda`: os posts preparados em `growlift-social/agenda.json` aparecem como "Para aprovar"; a equipe aprova e o painel publica sozinho no Instagram na hora marcada (API oficial com login do Instagram). Código em `plataforma/src/lib/instagram.ts`, `agenda.ts`, `link-publico.ts` e `src/app/api/instagram/tick`. Passo a passo para conectar em `growlift-social/07-planejamento/agenda-automatica.md`.
+**Pendente (vocês):** gerar o token na Meta e pôr `INSTAGRAM_TOKEN` e `CRON_SECRET` na Vercel, e criar o despertador de 5 minutos no cron-job.org. `PAINEL_URL` já está configurado. O carrossel fixado "Serviços" ainda mostra o plano Lift e não deve ser postado até ser refeito.
+
 ## Conteúdos da Growlift no painel
 
 - `/painel/conteudos` mostra `growlift-social/`: imagens em galeria (abrir, baixar, .zip por grupo), `.md` com botão de copiar, e a situação de cada peça (Para aprovar, Aprovado, Postado), guardada no banco em `conteudos/status.json`.

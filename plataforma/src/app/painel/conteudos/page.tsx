@@ -18,10 +18,18 @@ export default async function ConteudosPage() {
         <h1 className="text-3xl font-bold">Conteúdos</h1>
         <p className="mt-1 max-w-2xl text-sm text-ink-mute">
           Tudo o que foi feito para o Instagram e o WhatsApp da Growlift: stories, carrosséis, roteiros de Reels, textos prontos para copiar e prompts. Nada daqui é
-          publicado sozinho: vocês aprovam, postam e marcam aqui.
+          publicado sem aprovação: vocês aprovam na Agenda e o painel publica na hora marcada.
           {manifest.generatedAt && <> Atualizado em {fmtDate(manifest.generatedAt)}.</>}
         </p>
       </div>
+
+      <Link href="/painel/conteudos/agenda" className="card mt-6 flex flex-wrap items-center justify-between gap-3 border-accent/40 p-5 transition-colors hover:border-accent">
+        <span>
+          <span className="block text-lg font-bold">Agenda do Instagram</span>
+          <span className="text-sm text-ink-mute">Os posts da semana prontos: aprovar, agendar e o painel publica sozinho na hora marcada.</span>
+        </span>
+        <span className="btn-primary min-h-11">Abrir a agenda</span>
+      </Link>
 
       {manifest.folders.length === 0 ? (
         <p className="card mt-6 px-5 py-10 text-center text-ink-mute">Nenhum conteúdo nesta versão do painel.</p>

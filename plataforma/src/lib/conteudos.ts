@@ -56,6 +56,14 @@ export interface StatusEntry {
 export class ContentError extends Error {}
 
 const root = () => path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.CONTEUDOS_GERADOS_DIR || 'conteudos-gerados');
+/** A file the build script wrote next to the manifest (agenda.json), or null. */
+export async function readGenerated<T>(name: 'agenda.json'): Promise<T | null> {
+  try {
+    return JSON.parse(await fs.readFile(path.join(root(), name), 'utf8')) as T;
+  } catch {
+    return null;
+  }
+}
 
 let cached: Manifest | null = null;
 export async function getManifest(): Promise<Manifest> {

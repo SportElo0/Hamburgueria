@@ -30,6 +30,9 @@ O chefe do Instagram (Adam Mosseri) repete que não existe número mágico: o vo
 
 ## Como a gente dá conta (fluxo da semana)
 
+> Com a **Agenda automática** (`agenda-automatica.md`), o passo 3 vira só aprovar: o painel publica sozinho na hora marcada.
+
+
 1. **Quinta e sexta:** o Claude prepara a semana seguinte inteira (5 Reels, 2 carrosséis, legendas e stories), feita em código, sem gastar crédito à toa. A voz da narração custa uns 2 créditos por Reel no Higgsfield, conferindo o custo antes.
 2. **Sábado ou domingo:** vocês assistem e aprovam na aba Conteúdos do painel (Para aprovar → Aprovado). Nada vai ao ar sem aprovação.
 3. **Segunda a sexta:** postam no horário, ligam a palavra no ManyChat e respondem os comentários na primeira hora.
@@ -58,7 +61,7 @@ Antes do primeiro post: perfil, destaques e link da bio prontos (`calendario.md`
 
 | Dia | 10h | 15h |
 | --- | --- | --- |
-| Seg 02 | Carrossel fixado: Serviços | Reel 1 · O site que passa de lado |
+| Seg 02 | (Serviços fica para depois: precisa ser refeito com os planos atuais) | Reel 1 · O site que passa de lado |
 | Ter 03 | Carrossel fixado: Portfólio | Reel 11 · Dois amigos (Comenta GOOGLE) |
 | Qua 04 | | Reel 5 · Perfil da Empresa no Google |
 | Qui 05 | Carrossel fixado: Quem somos | Reel 12 · Cardápio completo (Comenta CARDÁPIO) |

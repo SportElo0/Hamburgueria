@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/painel/conteudos': ['./conteudos-gerados/manifest.json'],
     '/painel/conteudos/**': ['./conteudos-gerados/**/*'],
+    // The Instagram agenda: the public file links and the publisher read the same copy.
+    '/api/conteudos/**': ['./conteudos-gerados/**/*'],
+    '/api/instagram/**': ['./conteudos-gerados/agenda.json', './conteudos-gerados/manifest.json'],
   },
   // The panel is never framed by another site (except the live-floor widget); files keep their declared type.
   async headers() {

@@ -239,4 +239,19 @@ for (const name of folderNames) {
 }
 
 fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({ generatedAt: new Date().toISOString(), folders }, null, 1));
+
+// The Instagram agenda: posts the team prepares (growlift-social/agenda.json). Every file it names must be in the
+// manifest, so the public link for Instagram can only ever serve listed files.
+const agendaSrc = path.join(SRC, 'agenda.json');
+if (fs.existsSync(agendaSrc)) {
+  const listed = new Set(folders.flatMap((f) => f.groups.flatMap((g) => g.files.flatMap((x) => [x.path, x.cover].filter(Boolean)))));
+  const agenda = JSON.parse(fs.readFileSync(agendaSrc, 'utf8'));
+  const itens = (agenda.itens ?? []).filter((it) => {
+    const missing = [...it.arquivos, ...(it.capa ? [it.capa] : [])].filter((f) => !listed.has(f));
+    if (missing.length) console.warn(`conteudos: agenda "${it.id}" ignorado, arquivo fora dos conteúdos: ${missing.join(', ')}`);
+    return missing.length === 0;
+  });
+  fs.writeFileSync(path.join(OUT, 'agenda.json'), JSON.stringify({ itens }, null, 1));
+  console.log(`conteudos: agenda com ${itens.length} posts.`);
+}
 console.log(`conteudos: ${folders.length} pastas, ${fileCount} imagens e vídeos, ${folders.reduce((n, f) => n + f.docs.length, 0)} textos.`);

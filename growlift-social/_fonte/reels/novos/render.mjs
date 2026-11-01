@@ -40,7 +40,7 @@ if (stillArg > 0) {
   await close();
   const voice = path.resolve(HERE, `../narracao-${id}-eleven.mp3`);
   // Narration on top, a short fade at the end; the silent version stays for posting with music.
-  const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}-mudo.mp4`, '-i', voice, '-filter_complex', `[1:a]apad,atrim=0:${reel.DURATION},afade=t=out:st=${reel.DURATION - 0.6}:d=0.6,loudnorm=I=-14:TP=-1.5:LRA=11[a]`, '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-movflags', '+faststart', '-shortest', `${base}.mp4`], { stdio: 'inherit' });
+  const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}-mudo.mp4`, '-i', voice, '-filter_complex', `[1:a]apad,atrim=0:${reel.DURATION},afade=t=out:st=${reel.DURATION - 0.6}:d=0.6,loudnorm=I=-14:TP=-1.5:LRA=11[a]`, '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000', '-movflags', '+faststart', '-shortest', `${base}.mp4`], { stdio: 'inherit' });
   if (r.status !== 0) throw new Error('ffmpeg (áudio) falhou');
   fs.renameSync(`${base}-mudo-capa.png`, `${base}-capa.png`);
   console.log(`${base}.mp4`);
