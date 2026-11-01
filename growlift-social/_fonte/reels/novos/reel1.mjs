@@ -28,10 +28,10 @@ const CAPS = [
 ];
 
 const SHOPS = [
-  { id: 'a', label: 'BURGER', name: 'Hamburgueria', color: '#ff8a3d', x: 110, y: 430, at: 3.2, site: 'burger.png', site_at: 16.65 },
-  { id: 'b', label: 'BISTRÔ', name: 'Restaurante', color: '#2fae78', x: 640, y: 430, at: 4.39, site: 'restaurante.png', site_at: 18.33 },
-  { id: 'c', label: 'DOCES', name: 'Confeitaria', color: '#e86a9a', x: 110, y: 840, at: 5.5, site: 'confeitaria.png', site_at: 19.76 },
-  { id: 'd', label: 'ADVOCACIA', name: 'Escritório', color: '#c8a14a', x: 640, y: 840, at: 6.79, site: 'advocacia.png', site_at: 21.47 },
+  { id: 'a', label: 'BURGER', name: 'Hamburgueria', color: '#ff8a3d', x: 110, y: 470, at: 3.2, site: 'burger.png', site_at: 16.65 },
+  { id: 'b', label: 'BISTRÔ', name: 'Restaurante', color: '#2fae78', x: 640, y: 470, at: 4.39, site: 'restaurante.png', site_at: 18.33 },
+  { id: 'c', label: 'DOCES', name: 'Confeitaria', color: '#e86a9a', x: 110, y: 860, at: 5.5, site: 'confeitaria.png', site_at: 19.76 },
+  { id: 'd', label: 'ADVOCACIA', name: 'Escritório', color: '#c8a14a', x: 640, y: 860, at: 6.79, site: 'advocacia.png', site_at: 21.47 },
 ];
 
 const css = `
@@ -52,7 +52,7 @@ body{background:#06080d;color:#f3f5f9}
 .thumb{position:absolute;width:440px;height:275px;border-radius:22px;overflow:hidden;border:2px solid rgba(255,255,255,.14);box-shadow:0 30px 60px -30px rgba(0,0,0,.9)}
 .thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
 .thumb b{position:absolute;left:14px;bottom:14px;padding:8px 16px;border-radius:999px;background:rgba(6,8,13,.85);font-size:24px;font-weight:800}
-.disc{position:absolute;left:0;right:0;top:214px;text-align:center;font-size:22px;font-weight:600;color:#8790a6;z-index:45;line-height:1.35}
+.disc{position:absolute;left:70px;right:70px;top:250px;text-align:center;font-size:30px;font-weight:700;color:#c6cede;z-index:45;line-height:1.3}
 `;
 
 const sun = `<svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#ffc94d" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.5" fill="#ffc94d"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>`;
@@ -61,18 +61,18 @@ const body = `
 <div class="dots"></div>
 <div class="glowY" style="left:40px;top:120px"></div>
 <div class="glowB" style="right:-600px;top:520px"></div>
-<div class="disc">História fictícia · os sites são projetos conceito, com nomes fictícios.<br>Não garantimos clientes nem posição no Google.</div>
+<div class="disc">História fictícia. Sites de projetos conceito, nomes fictícios.<br>Não garantimos clientes nem posição no Google.</div>
 
 <!-- Scene 1: four shops open -->
-<div id="pillA" class="pill" style="top:300px"><i style="background:#ffc94d"></i>Hoje cedo</div>
-<div id="sun" class="abs" style="left:880px;top:280px">${sun}</div>
+<div id="pillA" class="pill" style="top:400px;display:none"><i style="background:#ffc94d"></i>Hoje cedo</div>
+<div id="sun" class="abs" style="left:900px;top:380px">${sun}</div>
 ${SHOPS.map(
   (s) => `<div id="shop${s.id}" class="abs" style="left:${s.x}px;top:${s.y}px">${store(`st${s.id}`, s.label, s.color, { w: 330 })}</div>
   <div id="chip${s.id}" class="chip" style="left:${s.x + 30}px;top:${s.y + 300}px;border-color:${s.color}">${s.name}</div>`,
 ).join('')}
 
 <!-- Scene 2: across town, someone looks on the phone -->
-<div id="pillB" class="pill" style="top:300px"><i></i>Do outro lado da cidade</div>
+<div id="pillB" class="pill" style="top:400px"><i></i>Do outro lado da cidade</div>
 <div id="city" class="abs" style="left:0;right:0;top:0;bottom:0">
   <svg class="abs" style="left:0;top:980px" width="1080" height="260" viewBox="0 0 1080 260">
     ${[[0, 120, 90], [100, 60, 150], [210, 140, 110], [330, 30, 160], [450, 100, 120], [580, 50, 150], [720, 130, 100], [830, 70, 140], [960, 110, 120]]
@@ -81,7 +81,7 @@ ${SHOPS.map(
   </svg>
   <div class="abs" style="left:90px;top:600px">${person('pc', '#0865fe', { size: 380, hair: '#3a2a1e' })}</div>
 </div>
-<div id="phone" class="abs" style="left:560px;top:420px;width:420px;height:760px;border-radius:60px;background:#1a2130;padding:14px;box-shadow:0 60px 120px -40px rgba(8,101,254,.7),0 0 0 2px rgba(255,255,255,.08)">
+<div id="phone" class="abs" style="left:560px;top:480px;width:420px;height:760px;border-radius:60px;background:#1a2130;padding:14px;box-shadow:0 60px 120px -40px rgba(8,101,254,.7),0 0 0 2px rgba(255,255,255,.08)">
   <div style="position:relative;width:392px;height:732px;border-radius:48px;overflow:hidden;background:#f4f6fa;color:#121826">
     <div style="margin:70px 22px 0;height:66px;border-radius:999px;background:#fff;border:1px solid #dce2ec;display:flex;align-items:center;gap:12px;padding:0 22px;font-size:24px;font-weight:600;color:#4a5568">${svgIcon(ICON.search, 28, '#6a7385')}<span id="q"></span><span id="caret" style="width:2px;height:28px;background:#0865fe;display:inline-block"></span></div>
     ${[0, 1, 2, 3].map((i) => `<div id="sk${i}" style="margin:22px 22px 0;height:112px;border-radius:22px;background:#fff;border:1px solid #e3e8f0;padding:20px;display:flex;gap:16px"><div style="width:72px;height:72px;border-radius:16px;background:#e3e8f0"></div><div style="flex:1"><div style="height:18px;width:70%;border-radius:9px;background:#dfe5ee"></div><div style="height:14px;width:45%;border-radius:7px;background:#eef1f6;margin-top:14px"></div></div></div>`).join('')}
@@ -90,24 +90,24 @@ ${SHOPS.map(
 
 <!-- Scene 3: who will he find? -->
 <div id="ask" class="big" style="top:640px;font-size:120px">Quem ele vai<br><span style="color:#4d8dff">encontrar?</span></div>
-<div id="askI" class="abs" style="left:470px;top:440px">${svgIcon(ICON.search, 140, '#4d8dff', 2.2)}</div>
+<div id="askI" class="abs" style="left:470px;top:460px">${svgIcon(ICON.search, 140, '#4d8dff', 2.2)}</div>
 
 <!-- Scene 4: the ones who show up, with the face of the business -->
-<div id="pillC" class="pill" style="top:300px"><i></i>Quem aparece, com a cara do negócio</div>
+<div id="pillC" class="pill" style="top:400px"><i></i>Quem aparece, com a cara do negócio</div>
 <div id="grid">${SHOPS.map(
-  (s, i) => `<div id="th${s.id}" class="thumb" style="left:${i % 2 ? 580 : 60}px;top:${i < 2 ? 450 : 790}px;border-color:${s.color}"><img src="${img(s.site)}"><b>${s.name}</b></div>`,
+  (s, i) => `<div id="th${s.id}" class="thumb" style="left:${i % 2 ? 580 : 60}px;top:${i < 2 ? 490 : 830}px;border-color:${s.color}"><img src="${img(s.site)}"><b>${s.name}</b></div>`,
 ).join('')}</div>
-<div id="win" class="browser" style="top:440px;height:640px">
+<div id="win" class="browser" style="top:490px;height:620px">
   <div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div>
   ${SHOPS.map((s) => `<img id="shot${s.id}" class="shot" src="${img(s.site)}">`).join('')}
 </div>
-${SHOPS.map((s) => `<div id="lbl${s.id}" class="chip" style="left:90px;top:1110px;border-color:${s.color};color:#fff"><span style="color:${s.color}">●</span> ${s.name}</div>`).join('')}
-<div id="tagC" class="tag" style="left:560px;top:1120px">Projeto conceito · nome fictício</div>
+${SHOPS.map((s) => `<div id="lbl${s.id}" class="chip" style="left:90px;top:1135px;border-color:${s.color};color:#fff"><span style="color:${s.color}">●</span> ${s.name}</div>`).join('')}
+<div id="tagC" class="tag" style="left:560px;top:1145px">Projeto conceito · nome fictício</div>
 
 <!-- Scene 5: each business, a different site -->
-<div id="diff" class="big" style="top:420px;font-size:96px">Cada negócio,<br><span style="color:#4d8dff">um site diferente.</span></div>
+<div id="diff" class="big" style="top:480px;font-size:96px">Cada negócio,<br><span style="color:#4d8dff">um site diferente.</span></div>
 <div id="row">${SHOPS.map(
-  (s, i) => `<div id="rw${s.id}" class="thumb" style="width:230px;height:144px;left:${60 + i * 245}px;top:800px;border-color:${s.color}"><img src="${img(s.site)}"></div>`,
+  (s, i) => `<div id="rw${s.id}" class="thumb" style="width:230px;height:144px;left:${60 + i * 245}px;top:840px;border-color:${s.color}"><img src="${img(s.site)}"></div>`,
 ).join('')}</div>
 
 ${comentaBlock('Quer ver como ficaria o seu?', 'SITE')}

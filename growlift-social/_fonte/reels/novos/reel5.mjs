@@ -35,9 +35,9 @@ body{background:#06080d;color:#f3f5f9}
 .card{position:absolute;background:#0f1520;border:1px solid rgba(255,255,255,.10);border-radius:36px}
 .bubble{position:absolute;background:#f3f5f9;color:#121826;font-weight:800;font-size:34px;padding:20px 30px;border-radius:28px;white-space:nowrap}
 .bubble:after{content:"";position:absolute;left:40px;bottom:-18px;border:12px solid transparent;border-top:18px solid #f3f5f9}
-.hook{position:absolute;left:60px;right:60px;top:300px;text-align:center;font-weight:900;letter-spacing:-.04em;line-height:1.02;font-size:88px}
+.hook{position:absolute;left:60px;right:60px;top:385px;text-align:center;font-weight:900;letter-spacing:-.04em;line-height:1.02;font-size:88px}
 .big{position:absolute;left:60px;right:60px;text-align:center;font-weight:900;letter-spacing:-.04em;line-height:1.04}
-.disc{position:absolute;left:0;right:0;top:214px;text-align:center;font-size:22px;font-weight:600;color:#8790a6;z-index:45}
+.disc{position:absolute;left:70px;right:70px;top:250px;text-align:center;font-size:30px;font-weight:700;color:#c6cede;z-index:45;line-height:1.3}
 .row{display:flex;align-items:center;gap:22px;padding:24px 0;border-top:1px solid rgba(255,255,255,.08);font-size:40px;font-weight:800}
 .row .ok{flex:none;width:64px;height:64px;border-radius:50%;background:${GREEN};display:grid;place-items:center}
 `;
@@ -49,26 +49,26 @@ const body = `
 <div class="dots"></div>
 <div class="glowB" style="left:-560px;top:380px"></div>
 <div class="glowR" style="right:-520px;top:200px"></div>
-<div class="disc">História fictícia. Não garantimos clientes nem posição no Google.</div>
+<div class="disc">História fictícia. Tela ilustrativa, não é do Google.<br>Não garantimos clientes nem posição no Google.</div>
 
 <!-- Hook on screen from frame 1 -->
 <div id="hook" class="hook">Aberto no Google.<br><span style="color:${RED}">Fechado na porta.</span></div>
 
 <!-- Scene 1: Friday night, Carlos -->
-<div id="moon" class="abs" style="left:860px;top:520px">${moon}</div>
-<div id="clock" class="card" style="left:110px;top:560px;width:430px;padding:26px 34px">
+<div id="moon" class="abs" style="left:860px;top:610px">${moon}</div>
+<div id="clock" class="card" style="left:110px;top:610px;width:430px;padding:26px 34px">
   <div style="font-size:30px;font-weight:800;color:#8790a6;letter-spacing:.12em">SEXTA</div>
   <div id="clockT" style="font-size:120px;font-weight:900;letter-spacing:-.04em;line-height:1">22:00</div>
 </div>
-<div id="carlos" class="abs" style="left:110px;top:830px">${person('pk', '#2fae78', { size: 330, hair: '#2b2118' })}</div>
-<div id="kName" class="chip" style="left:160px;top:1200px">Carlos</div>
+<div id="carlos" class="abs" style="left:110px;top:860px">${person('pk', '#2fae78', { size: 330, hair: '#2b2118' })}</div>
+<div id="kName" class="chip" style="left:160px;top:1225px">Carlos</div>
 
 <!-- Scene 2: the phone says open -->
-<div id="phone" class="abs" style="left:560px;top:620px;width:420px;height:640px;border-radius:60px;background:#1a2130;padding:14px;box-shadow:0 60px 120px -40px rgba(8,101,254,.7),0 0 0 2px rgba(255,255,255,.08)">
+<div id="phone" class="abs" style="left:560px;top:640px;width:420px;height:640px;border-radius:60px;background:#1a2130;padding:14px;box-shadow:0 60px 120px -40px rgba(8,101,254,.7),0 0 0 2px rgba(255,255,255,.08)">
   <div style="position:relative;width:392px;height:612px;border-radius:48px;overflow:hidden;background:#f4f6fa;color:#121826">
     <div style="margin:56px 22px 0;height:62px;border-radius:999px;background:#fff;border:1px solid #dce2ec;display:flex;align-items:center;gap:12px;padding:0 20px;font-size:23px;font-weight:600;color:#4a5568">${svgIcon(ICON.search, 26, '#6a7385')}<span id="q"></span><span id="caret" style="width:2px;height:26px;background:#0865fe;display:inline-block"></span></div>
     <div id="res" style="margin:22px 22px 0;background:#fff;border:1px solid #dce2ec;border-radius:26px;padding:22px">
-      <div style="font-size:28px;font-weight:800">Pizzaria do Bairro</div>
+      <div style="font-size:28px;font-weight:800">Pizzaria Exemplo</div>
       <div style="font-size:21px;color:#6a7385;margin-top:4px">Pizzaria · 600 m</div>
       <div style="display:flex;gap:8px;margin-top:16px">${pizza('#ffe8cc')}${pizza('#fff1c2')}${pizza('#fde2e2')}</div>
       <div id="resOpen" style="display:flex;align-items:center;gap:10px;margin-top:18px;font-size:24px;font-weight:800;color:#15803d;background:#dcfce7;padding:10px 16px;border-radius:14px">${svgIcon(ICON.clock, 28, '#15803d')}Aberto · fecha às 23h</div>
@@ -77,7 +77,7 @@ const body = `
 </div>
 
 <!-- Scene 3: the door is shut -->
-<div id="door" class="abs" style="left:280px;top:420px">
+<div id="door" class="abs" style="left:280px;top:440px">
   ${store('stP', 'PIZZARIA', RED, { w: 520 })}
   <div id="shutter" class="abs" style="left:43px;top:180px;width:434px;height:0;background:repeating-linear-gradient(#5b6475 0 16px,#4a5262 16px 20px);border-bottom:6px solid #2a3040"></div>
   <div id="closed" class="abs" style="left:150px;top:250px;padding:14px 30px;border-radius:14px;background:${RED};color:#fff;font-size:44px;font-weight:900;letter-spacing:.08em;transform:rotate(-6deg)">FECHADO</div>
@@ -91,7 +91,7 @@ const body = `
 
 <!-- Scene 4: he goes elsewhere; the owner never knows -->
 <div id="away" class="abs" style="left:0;top:0;width:1080px;height:1300px">
-  <div class="abs" style="left:110px;top:430px;font-size:40px;font-weight:900;color:#8790a6;letter-spacing:.06em">FOI PRA OUTRO LUGAR</div>
+  <div class="abs" style="left:110px;top:440px;font-size:40px;font-weight:900;color:#8790a6;letter-spacing:.06em">FOI PRA OUTRO LUGAR</div>
   <svg class="abs" style="left:110px;top:510px" width="860" height="60" viewBox="0 0 860 60"><line x1="0" y1="30" x2="810" y2="30" stroke="#8790a6" stroke-width="8" stroke-linecap="round" stroke-dasharray="26 20"/><path d="M800 8l40 22-40 22" fill="none" stroke="#8790a6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <div class="card" style="left:110px;top:660px;width:860px;height:560px;padding:40px">
     <div style="font-size:30px;font-weight:900;letter-spacing:.1em;color:${RED}">ENQUANTO ISSO, O DONO</div>
@@ -101,8 +101,8 @@ const body = `
 <div id="bubO" class="bubble" style="left:470px;top:860px">Tudo tranquilo hoje…</div>
 
 <!-- Scene 5: the basics -->
-<div id="pillC" class="pill" style="top:300px"><i></i>Perfil da Empresa no Google</div>
-<div id="list" class="card" style="left:90px;top:420px;width:900px;padding:20px 44px 10px">
+<div id="pillC" class="pill" style="top:400px"><i></i>Perfil da Empresa no Google</div>
+<div id="list" class="card" style="left:90px;top:480px;width:900px;padding:20px 44px 10px">
   ${[
     ['li1', 'Horário certo, inclusive no feriado'],
     ['li2', 'Fotos reais'],
@@ -111,8 +111,8 @@ const body = `
     .map(([id, txt]) => `<div id="${id}" class="row"><span class="ok">${svgIcon(ICON.check, 40, '#06210f', 3)}</span>${txt}</div>`)
     .join('')}
 </div>
-<div id="detail" class="big" style="top:880px;font-size:84px">Parece detalhe.</div>
-<div id="detail2" class="big" style="top:990px;font-size:60px;color:#8db8ff">É o que o cliente vê<br>antes de sair de casa.</div>
+<div id="detail" class="big" style="top:930px;font-size:84px">Parece detalhe.</div>
+<div id="detail2" class="big" style="top:1040px;font-size:60px;color:#8db8ff">É o que o cliente vê<br>antes de sair de casa.</div>
 
 ${comentaBlock('Quer saber como está o seu perfil?', 'GOOGLE')}
 `;
@@ -122,7 +122,7 @@ window.draw=(t)=>{
   const B={base:'translateX(-50%)'};
   show('hook',t,0,4.4,{dy:0,fi:.01});
   // Scene 1
-  show('moon',t,0.1,7.95,{pop:true,sc:.4});
+  show('moon',t,0.1,2.4,{pop:true,sc:.4});
   show('clock',t,0.05,4.45,{pop:true,sc:.3,dy:0});
   show('carlos',t,1.9,7.95,{dy:80}); show('kName',t,2.3,7.95,{pop:true,sc:.4});
   // Scene 2
