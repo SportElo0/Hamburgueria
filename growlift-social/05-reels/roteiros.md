@@ -273,3 +273,70 @@ No vídeo, as telas são do nosso sistema numa loja de demonstração (Brasa Bur
 
 #growlift #restaurante #hamburgueria #qrcode #cardapiodigital #pedidonamesa
 ```
+
+---
+
+## 11. Dois amigos, duas hamburguerias (história)
+- **Formato:** desenho animado escuro com bonequinhos e lojinhas desenhadas pela Growlift (sem fotos, sem marca de ninguém). Começa com "Era uma vez…": é uma história ilustrativa, não um caso real. Inspirado no formato de um Reel de referência, com roteiro, desenho e textos nossos. Fonte: `_fonte/reels/novos/reel11.mjs`.
+- **Vídeos:** `11-dois-amigos.mp4` (com narração, recomendado), `11-dois-amigos-mudo.mp4` (para usar com música), capa `11-dois-amigos-capa.png`. 32,6 s.
+- **Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", 2,07 créditos em 01/11; `_fonte/reels/narracao-11-eleven.mp3`):
+"Era uma vez dois amigos, cada um com uma hamburgueria na mesma rua. Mesmo lanche, mesmo preço, mesmo capricho. Seis meses depois, um pensava em fechar. O outro estava contratando. A diferença? O primeiro abria a porta e esperava alguém passar na frente. Já o segundo aparecia no celular de quem procurava onde comer: no Google, com foto, horário e cardápio. Enquanto um espera o cliente, o outro é encontrado. Quer ser encontrado? Segue a Growlift!"
+- **Cenas:** duas lojas iguais (=) · calendário "6 meses depois" · um triste com "FECHAR?", o outro com "CONTRATA-SE" · "A diferença?" · o primeiro esperando com o relógio girando · o segundo no celular (busca "hamburgueria perto de mim", ficha com fotos, horário e "Ver cardápio") · "Um espera" x "O outro é encontrado" · fim "Quer ser encontrado?" com o botão Seguir.
+
+**Legenda**
+```
+Mesma comida, mesmo preço. Por que um enche e o outro não? 🍔
+
+Muita gente decide onde comer pelo celular: procura no Google, olha as fotos, confere o horário e o cardápio.
+Quem aparece ali com tudo certinho é encontrado. Quem não aparece fica esperando alguém passar na frente.
+
+A Growlift faz o site do seu restaurante e deixa o seu perfil no Google em dia.
+Segue a gente pra mais dicas 👉 @growlift.ai
+
+(História ilustrativa: os personagens e as lojas são fictícios.)
+
+#restaurante #hamburgueria #delivery #marketingpararestaurantes #googlemeunegocio
+```
+
+## 12. O seu cardápio, completo
+- **Formato:** claro, com um mascote nosso (um chefinho de chapéu e lenço azul), desenhado pela Growlift. O cardápio de papel vira um celular com o site. Inspirado no formato de um Reel de referência, sem copiar personagem nem texto. Fonte: `_fonte/reels/novos/reel12.mjs`.
+- **Vídeos:** `12-cardapio-completo.mp4` (com narração), `12-cardapio-completo-mudo.mp4`, capa `12-cardapio-completo-capa.png`. 27,2 s.
+- **Narração** (voz "Andre", 2,07 créditos em 01/11; `_fonte/reels/narracao-12-eleven.mp3`):
+"O cardápio de papel fica no balcão. Mas o seu cliente quer saber muito mais. Tem entrega? Quanto custa? Onde fica? Tá aberto agora? E se ele visse tudo isso antes de sair de casa? Fotos dos pratos. Endereço e horário. E um botão pra pedir na hora. Quem procura encontra tudo num lugar só. Um site é o seu cardápio, completo. Growlift: sites para restaurantes."
+- **O botão "Pedir agora"** no vídeo abre uma mensagem ("Oi! Vi o cardápio de vocês e quero fazer um pedido"): é o botão de WhatsApp do plano Start. O pedido com Pix dentro do site é do plano Grow.
+
+**Legenda**
+```
+O cardápio de papel não responde "tem entrega?" às 11 da noite 😅
+
+Com um site, quem procura vê tudo antes de sair de casa:
+📸 Fotos dos pratos
+📍 Endereço e horário
+💬 Um botão pra pedir na hora
+
+Growlift: sites para restaurantes. Link na bio.
+#restaurante #cardapiodigital #delivery #hamburgueria #pizzaria
+```
+
+## 13. A porta que fica aberta
+- **Formato:** escuro, preto e branco com o azul da Growlift. A porta de aço desce, o relógio corre pela madrugada e o site continua no ar. O título aparece palavra por palavra junto com a voz. Inspirado no formato de um Reel de referência, com roteiro e desenho nossos. Fonte: `_fonte/reels/novos/reel13.mjs`.
+- **Vídeos:** `13-porta-aberta.mp4` (com narração), `13-porta-aberta-mudo.mp4`, capa `13-porta-aberta-capa.png`. 26,4 s.
+- **Narração** (voz "Andre", 2,07 créditos em 01/11; `_fonte/reels/narracao-13-eleven.mp3`):
+"Todo restaurante tem hora pra fechar. A porta desce, mas a fome continua. Que horas abre amanhã? Tem cardápio? Faz entrega? Um site é a porta que fica aberta. O cliente vê o cardápio com foto, o horário e onde fica. E quando vocês abrem, o pedido cai direto na tela da loja, com Pix na hora. Sua vitrine aberta, o tempo todo. Growlift. Link na bio!"
+- **Cuidado com a promessa:** com a loja fechada, o site mostra cardápio, horário e endereço (não recebe pedido). Pedidos com Pix chegam na tela da loja **quando ela está aberta** (plano Grow). Não digam que o site "vende de madrugada".
+
+**Legenda**
+```
+A porta fecha. A fome não 🌙
+
+Com a loja fechada, quem procura ainda encontra o seu cardápio com foto, o horário e o endereço.
+E quando vocês abrem, o pedido do site cai direto na tela da loja, com Pix na hora (plano Grow).
+
+Sua vitrine aberta, o tempo todo. Link na bio.
+#restaurante #delivery #cardapiodigital #hamburgueria #lanchonete
+```
+
+### Ao postar os Reels 11, 12 e 13
+- A voz é gerada por computador e soa como pessoa: em "Configurações avançadas", ativem o **Rótulo de IA**.
+- Com música do app: deixem a música em 15 a 20% e o áudio original alto. Ou usem a versão `-mudo` com a música que quiserem (só faixas liberadas para conta comercial).
+- Postem um por vez, com alguns dias entre eles. Nada vai sem a aprovação de vocês.

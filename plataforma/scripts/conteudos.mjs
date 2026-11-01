@@ -24,7 +24,7 @@ const FOLDERS = {
   '02-instagram-perfil': { title: 'Perfil do Instagram', blurb: 'Foto, nome, bio e botões de contato.' },
   '03-destaques': { title: 'Stories e destaques', blurb: 'Capas e stories de cada destaque, na ordem de postar.' },
   '04-posts-fixados': { title: 'Posts e carrosséis', blurb: 'Os carrosséis fixados, com legenda pronta.' },
-  '05-reels': { title: 'Reels', blurb: 'Os 9 Reels prontos em vídeo, com capa, legenda e roteiro.', sectionStatus: true },
+  '05-reels': { title: 'Reels', blurb: 'Os Reels prontos em vídeo, com capa, legenda e roteiro (os 11 a 13 com narração e versão sem voz).', sectionStatus: true },
   '06-whatsapp-business': { title: 'WhatsApp Business', blurb: 'Perfil, mensagens automáticas, respostas rápidas e etiquetas.' },
   '07-planejamento': { title: 'Planejamento', blurb: 'Pilares, ritmo e calendário das primeiras semanas.' },
   '08-prompts': { title: 'Prompts', blurb: 'Os prompts das imagens e do vídeo do site, e um modelo para pedir conteúdo novo.' },
@@ -178,7 +178,8 @@ for (const name of folderNames) {
   const outGroups = [];
   for (const [dir, all] of groups) {
     // A video's cover (name-capa.png) travels with the video instead of showing up on its own.
-    const coverOf = (rel) => rel.replace(VIDEO, '-capa.png');
+    // The version without voice (name-mudo.mp4) and the narrated one (name-narrado.mp4) share name-capa.png.
+    const coverOf = (rel) => [rel.replace(VIDEO, '-capa.png'), rel.replace(/-(mudo|narrado)\.mp4$/i, '-capa.png')].find((c) => all.includes(c)) ?? rel.replace(VIDEO, '-capa.png');
     const covers = new Set(all.filter((r) => VIDEO.test(r)).map(coverOf).filter((c) => all.includes(c)));
     const files = all.filter((r) => !covers.has(r));
     const videos = files.every((r) => VIDEO.test(r));

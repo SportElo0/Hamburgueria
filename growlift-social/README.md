@@ -12,13 +12,13 @@ Material para o Instagram e o WhatsApp Business da Growlift. Segue a mesma ident
 | `02-instagram-perfil/` | Foto de perfil e textos do perfil: nome, @, bio conferida, categoria, link e contato |
 | `03-destaques/` | Capas (direção A escolhida, B de registro) e stories de Projetos (6), Serviços (6) e Contato (2), mais o modelo de Clientes **sem publicar** |
 | `04-posts-fixados/` | Três carrosséis prontos (Quem somos, Portfólio, Serviços), com legendas e ordem para fixar |
-| `05-reels/` | Os 8 Reels prontos em vídeo (MP4 vertical, com capa), com roteiro e legenda de cada um |
+| `05-reels/` | Os Reels prontos em vídeo (MP4 vertical, com capa), com roteiro e legenda de cada um; os 11 a 13 têm narração e versão `-mudo` |
 | `06-whatsapp-business/` | Perfil, saudação, ausência, 8 respostas rápidas, etiquetas e guia de conversa (Chris Voss) |
 | `07-planejamento/` | Pilares, ritmo, calendário de 4 semanas e o que medir |
 | `08-prompts/` | Prompts das imagens e do vídeo do site, e um modelo para pedir conteúdo novo |
 | `_fonte/` | Gerador das peças, modelos editáveis em HTML e imagens de origem |
 
-São 58 imagens em PNG no tamanho do Instagram e 8 Reels em MP4.
+São 58 imagens em PNG no tamanho do Instagram e os Reels em MP4 (do 1 ao 13).
 
 ## No painel
 
