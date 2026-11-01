@@ -62,6 +62,8 @@ Start, Grow e Lift: veja o que cada um inclui no link da bio.
 ```
 
 ## 3. Do celular ao diagnóstico
+> **Substituído em 01/11** pela versão em história "Dois minutos" (`03-dois-minutos.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-03-do-celular-ao-diagnostico.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho:** "Pedir o diagnóstico do seu site leva menos de 2 minutos."
 - **Demonstração:** no celular, tocar em "Diagnóstico grátis", preencher e mostrar a tela de confirmação.
 - **Dados de exemplo, nada enviado:** o formulário foi preenchido com "Padaria Exemplo" e o envio foi interceptado na gravação, então nada chegou ao painel. O vídeo traz a etiqueta "Dados de exemplo · nada foi enviado".
@@ -84,6 +86,8 @@ Faça o seu pelo link na bio.
 ```
 
 ## 4. Três sinais de que o seu negócio precisa de site (educativo)
+> **Substituído em 01/11** pela versão em história "Ela procurou e não achou" (`04-ela-procurou.mp4`, com voz, Comenta GOOGLE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-04-tres-sinais.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho:** "O seu cliente procurou você no Google e não achou?"
 - **Pontos, um por tela:**
   1. O cardápio e os preços só existem em foto no Instagram.

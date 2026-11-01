@@ -32,13 +32,13 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - **Gancho:** dono de restaurante entre um pedido e outro, cozinha apertada, olhando o celular. "Dois minutos. É o que ele tinha."
 - **História:** ele preenche o diagnóstico grátis no celular (a tela real, com dados de exemplo), toca em enviar e volta pra chapa. Depois, a prévia do site chega no WhatsApp dele (em até 2 dias úteis).
 - **Fecho:** "Diagnóstico grátis, direto do celular. Comenta SITE."
-- **Palavra:** SITE.
+- **Palavra:** SITE. **Pronto em 01/11:** `03-dois-minutos.mp4` (voz 1,05 crédito).
 
 ### 4 · "Ele procurou e não achou" (era: Três sinais)
 - **Gancho:** um cliente com fome, na rua, digitando "hamburgueria perto de mim". Fecha a câmera na tela: a lojinha do nosso personagem não aparece. "Ele procurou. Não achou."
 - **História:** três sinais viram três "placas" na calçada do dono: cardápio só em foto no Instagram, horário errado no Google, só dá pra pedir mandando mensagem. O cliente vai embora e o dono nem sabe que ele passou.
-- **Fecho:** "Reconhece algum sinal? Comenta GOOGLE."
-- **Palavra:** GOOGLE.
+- **Fecho:** "Reconheceu algum desses sinais? Comenta GOOGLE."
+- **Palavra:** GOOGLE. **Pronto em 01/11:** `04-ela-procurou.mp4` (voz 1,20 crédito; a personagem que procura virou a Ana).
 
 ### 5 · "A porta fechada que o Google dizia estar aberta" (era: Perfil da Empresa no Google)
 - **Gancho:** cliente chega faminto na porta de uma pizzaria fechada, olha o celular: "Aberto até 23h". "Aberto no Google. Fechado na porta."
