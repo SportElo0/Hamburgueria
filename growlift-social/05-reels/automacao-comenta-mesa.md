@@ -51,7 +51,7 @@ Mandamos no seu direct 📲
 Confira seu direct: enviamos como funciona 📩
 ```
 
-Mensagem 1 (direct), com os botões "Quero acompanhar" (link do canal do WhatsApp) e "Falar com a gente" (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20do%20pedido%20na%20mesa%20(MESA)`):
+Mensagem 1 (direct), com os botões "Quero acompanhar" (link do canal do WhatsApp) e "Falar com a gente" (`https://wa.me/5511942279336?text=Oi!%20Vi%20o%20v%C3%ADdeo%20do%20pedido%20na%20mesa%20e%20quero%20saber%20quando%20o%20plano%20Scale%20abre.%20Meu%20restaurante%20%C3%A9%20o%20`):
 
 ```
 Opa! 👋 Que bom que você curtiu o pedido na mesa!

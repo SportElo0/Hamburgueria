@@ -38,7 +38,7 @@ Confira seu direct: mandamos lá 📩
 
 ## Reel 11 · GOOGLE
 
-Botões: **"Quero o diagnóstico grátis"** (`https://growlift.com.br/#diagnostico`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20(GOOGLE)`).
+Botões: **"Quero o diagnóstico grátis"** (`https://growlift.com.br/#diagnostico`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vi%20o%20v%C3%ADdeo%20de%20voc%C3%AAs%20sobre%20aparecer%20no%20Google%20e%20quero%20saber%20como%20o%20meu%20restaurante%20est%C3%A1.%20Meu%20restaurante%20%C3%A9%20o%20`).
 
 ```
 Opa! 👋 Aqui é a Growlift, com o que o vídeo prometeu.
@@ -58,7 +58,7 @@ Seus dados: growlift.com.br/privacidade.html
 
 ## Reel 12 · CARDÁPIO
 
-Botões: **"Ver os modelos"** (`https://growlift.com.br/#modelos`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20(CARD%C3%81PIO)`).
+Botões: **"Ver os modelos"** (`https://growlift.com.br/#modelos`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vi%20o%20v%C3%ADdeo%20do%20card%C3%A1pio%20e%20quero%20ver%20um%20exemplo%20de%20site%20para%20o%20meu%20restaurante.%20Meu%20restaurante%20%C3%A9%20o%20`).
 
 ```
 Opa! 👋 Aqui é a Growlift, com o que o vídeo prometeu.
@@ -74,7 +74,7 @@ Seus dados: growlift.com.br/privacidade.html
 
 ## Reel 13 · PEDIDO
 
-Botões: **"Ver o plano Grow"** (`https://growlift.com.br/#planos`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20(PEDIDO)`).
+Botões: **"Ver o plano Grow"** (`https://growlift.com.br/#planos`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vi%20o%20v%C3%ADdeo%20do%20pedido%20pelo%20site%20e%20quero%20entender%20como%20funciona.%20Meu%20restaurante%20%C3%A9%20o%20`).
 
 ```
 Opa! 👋 Aqui é a Growlift, com o que o vídeo prometeu.

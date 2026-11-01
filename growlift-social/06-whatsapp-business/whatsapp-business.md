@@ -39,7 +39,7 @@ Recebemos a sua mensagem e uma pessoa da equipe vai te responder por aqui.
 Pra agilizar, conta pra gente: qual é o seu negócio e em que cidade ele fica?
 ```
 
-Para quem chega pelos Reels (a mensagem já vem com "Vim pelo Reel (GOOGLE)", "(CARDÁPIO)" ou "(PEDIDO)"), uma pessoa da equipe responde com este texto, trocando o assunto. Escrevam com o nome de quem está digitando:
+Para quem chega pelos Reels (o direct manda a pessoa para o WhatsApp com a mensagem já escrita, por exemplo "Oi! Vi o vídeo de vocês sobre aparecer no Google e quero saber como o meu restaurante está. Meu restaurante é o…"), uma pessoa da equipe responde com este texto, trocando o assunto. Escrevam com o nome de quem está digitando:
 
 ```
 Oi! Aqui é o [seu nome], da Growlift. Que bom que você veio pelo vídeo 😊
