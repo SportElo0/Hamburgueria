@@ -24,6 +24,8 @@ No app do Instagram do @growlift.ai: **Configurações → Tipo de conta e ferra
 
 (Os nomes dos menus da Meta mudam de vez em quando. Se algo estiver diferente, peçam ao Claude para conferir o caminho atual.)
 
+**Dois tipos de token.** Se o token que a Meta der **começar com IG**, vale como está. Se **começar com EAA** (é o caso de apps novos, com "login unificado"), também funciona: o painel usa o endereço do Facebook e acha a conta do Instagram pela Página do Facebook ligada a ela. Nesse caso a conta do Instagram precisa estar ligada a uma Página do Facebook. O token EAA o painel não renova sozinho: guardem a data e gerem outro antes de 60 dias (a Agenda avisa quando der erro).
+
 ### 3. Variáveis na Vercel
 No projeto **painel-lojas** → **Settings → Environment Variables**, em Production, criem:
 
@@ -31,6 +33,7 @@ No projeto **painel-lojas** → **Settings → Environment Variables**, em Produ
 | --- | --- |
 | `INSTAGRAM_TOKEN` | o token do passo 2 (marquem como *Sensitive*) |
 | `CRON_SECRET` | uma senha longa inventada na hora, só para isso (por exemplo, 40 letras e números aleatórios). Não usem senha pessoal |
+| `INSTAGRAM_USER_ID` | **Só se precisar:** o número da conta do Instagram, se a Agenda disser que não achou a conta (aparece na página do app, no passo "Gerar tokens de acesso", ao lado da conta). Não é segredo |
 | `PAINEL_URL` | `https://painel-lojas-sportelo.vercel.app` (já configurado pelo Claude) |
 
 Depois, **Deployments → ⋯ → Redeploy** no último deploy, para o painel ler as variáveis.

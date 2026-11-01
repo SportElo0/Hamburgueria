@@ -3,18 +3,23 @@ import { createHash } from 'node:crypto';
 import { storage } from './storage';
 
 /**
- * Publishing to the Growlift Instagram (@growlift.ai) with the official Instagram API with Instagram Login
- * (graph.instagram.com, permissions instagram_business_basic + instagram_business_content_publish).
+ * Publishing to the Growlift Instagram (@growlift.ai) with the official Instagram API. Two kinds of token work:
+ *   - starts with "IG": Instagram Login, host graph.instagram.com (the panel refreshes it every week);
+ *   - starts with "EAA": Facebook / unified login (what newer Meta apps give), host graph.facebook.com. The account is
+ *     found by its number: INSTAGRAM_USER_ID when set, else looked up through the token (/me, then /me/accounts).
  *
  * The access token is a secret: it is set in Vercel as INSTAGRAM_TOKEN and never committed. Long-lived tokens last
- * 60 days; the panel refreshes it before that and keeps the refreshed one in the store (instagram/token.json). If the
- * team puts a new token in Vercel, that one wins again.
+ * 60 days; for IG tokens the panel refreshes it before that and keeps the refreshed one in the store
+ * (instagram/token.json). If the team puts a new token in Vercel, that one wins again.
  *
  * Publishing is two steps: create a media container (Instagram downloads the file from a public link), wait until it
  * is FINISHED, then publish it. See agenda.ts for the schedule around it.
  */
 
-const API = () => (process.env.INSTAGRAM_API_URL || 'https://graph.instagram.com/v26.0').replace(/\/$/, '');
+const isFacebookToken = (token: string) => token.startsWith('EAA');
+/** The API host for this token (INSTAGRAM_API_URL overrides it, for tests). */
+const API = (token: string) =>
+  (process.env.INSTAGRAM_API_URL || (isFacebookToken(token) ? 'https://graph.facebook.com/v26.0' : 'https://graph.instagram.com/v26.0')).replace(/\/$/, '');
 const REFRESH_URL = () => process.env.INSTAGRAM_REFRESH_URL || 'https://graph.instagram.com/refresh_access_token';
 const TOKEN_KEY = 'instagram/token.json';
 /** Refresh once a week: a refreshed token is good for 60 days, so a missed week or two never lets it lapse. */
@@ -60,7 +65,7 @@ async function saveToken(doc: TokenDoc, etag: string | null) {
 
 /** One Graph API call. The token goes in the body or query, never in an error message or log. */
 async function call<T>(method: 'GET' | 'POST', where: string, params: Record<string, string | undefined>, token: string): Promise<T> {
-  const url = new URL(where.startsWith('http') ? where : API() + where);
+  const url = new URL(where.startsWith('http') ? where : API(token) + where);
   const body = new URLSearchParams();
   for (const [k, v] of Object.entries({ ...params, access_token: token })) if (v !== undefined) (method === 'GET' ? url.searchParams : body).set(k, v);
   let res: Response;
@@ -85,21 +90,56 @@ async function auth() {
   return t;
 }
 
+const ID = /^\d{5,25}$/;
+
 /** The connected account (cached after the first call). */
 export async function account(): Promise<{ userId: string; username: string }> {
   const { doc, etag } = await auth();
-  if (doc.userId && /^\d+$/.test(doc.userId)) return { userId: doc.userId, username: doc.username ?? '' };
-  const me = await call<{ id: string; user_id?: string; username?: string }>('GET', '/me', { fields: 'user_id,username' }, doc.token);
-  const userId = String(me.user_id ?? me.id);
-  if (!/^\d+$/.test(userId)) throw new InstagramError('O Instagram devolveu uma conta inválida.');
-  await saveToken({ ...doc, userId, username: me.username ?? '' }, etag);
-  return { userId, username: me.username ?? '' };
+  const fixed = process.env.INSTAGRAM_USER_ID?.trim() ?? '';
+  if (fixed && !ID.test(fixed)) throw new InstagramError('INSTAGRAM_USER_ID inválido: deve ser só o número da conta do Instagram.');
+  const wanted = fixed || doc.userId || '';
+  if (wanted && doc.userId === wanted && doc.username !== undefined) return { userId: wanted, username: doc.username };
+
+  let userId = wanted;
+  let username = '';
+  if (userId) {
+    // Known number: this call also proves the token works.
+    const u = await call<{ username?: string }>('GET', `/${userId}`, { fields: 'username' }, doc.token);
+    username = u.username ?? '';
+  } else {
+    const found = await findAccount(doc.token);
+    userId = found.userId;
+    username = found.username;
+  }
+  if (!ID.test(userId)) throw new InstagramError('O Instagram devolveu uma conta inválida.');
+  await saveToken({ ...doc, userId, username }, etag);
+  return { userId, username };
+}
+
+/** Finds the Instagram professional account behind a token that came without its number. */
+async function findAccount(token: string): Promise<{ userId: string; username: string }> {
+  // Instagram Login tokens answer /me with the account itself.
+  const me = await call<{ id?: string; user_id?: string; username?: string }>('GET', '/me', { fields: 'user_id,username' }, token);
+  if (me.user_id && ID.test(String(me.user_id))) return { userId: String(me.user_id), username: me.username ?? '' };
+  // Facebook tokens: the account hangs off the Page it is linked to.
+  const pages = await call<{ data?: { instagram_business_account?: { id: string; username?: string } }[] }>(
+    'GET',
+    '/me/accounts',
+    { fields: 'instagram_business_account{id,username}' },
+    token,
+  ).catch(() => ({ data: [] as { instagram_business_account?: { id: string; username?: string } }[] }));
+  const accounts = (pages.data ?? []).map((p) => p.instagram_business_account).filter((a): a is { id: string; username?: string } => Boolean(a?.id));
+  const pick = accounts.find((a) => a.username === 'growlift.ai') ?? accounts[0];
+  if (pick) return { userId: String(pick.id), username: pick.username ?? '' };
+  throw new InstagramError('Não achei a conta do Instagram por este token. Coloque o número da conta na variável INSTAGRAM_USER_ID da Vercel (ele aparece na página do app, no passo "Gerar tokens de acesso").');
 }
 
 /** Keeps the long-lived token alive. Safe to call often: it only refreshes once a week. */
 export async function refreshTokenIfDue(now = new Date()) {
   const t = await tokenDoc();
   if (!t) return;
+  // The weekly refresh is an Instagram Login feature; Facebook (EAA) tokens are replaced by hand when they expire.
+  if (isFacebookToken(t.doc.token)) return;
   const last = t.doc.refreshedAt ? Date.parse(t.doc.refreshedAt) : 0;
   if (last && now.getTime() - last < REFRESH_EVERY_MS) return;
   try {

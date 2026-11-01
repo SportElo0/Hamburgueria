@@ -48,14 +48,14 @@ function fakeInstagram(opts: { ticks?: number; fail?: string } = {}) {
     calls.push({ method, path: url.pathname, body });
     const json = (b: unknown, status = 200) => new Response(JSON.stringify(b), { status });
     if (url.pathname === '/refresh_access_token') return json({ access_token: 'novo-token', expires_in: 5_184_000 });
-    if (url.pathname.endsWith('/me')) return json({ id: 'app-1', user_id: '1789', username: 'growlift.ai' });
-    if (method === 'POST' && url.pathname.endsWith('/1789/media')) {
+    if (url.pathname.endsWith('/me')) return json({ id: 'app-1', user_id: '17841400000000', username: 'growlift.ai' });
+    if (method === 'POST' && url.pathname.endsWith('/17841400000000/media')) {
       if (opts.fail) return json({ error: { message: opts.fail, code: 9004 } }, 400);
       const id = `c${n++}`;
       containers.set(id, 0);
       return json({ id });
     }
-    if (method === 'POST' && url.pathname.endsWith('/1789/media_publish')) return json({ id: `m${body.creation_id}` });
+    if (method === 'POST' && url.pathname.endsWith('/17841400000000/media_publish')) return json({ id: `m${body.creation_id}` });
     const id = url.pathname.split('/').pop()!;
     if (url.searchParams.get('fields') === 'status_code,status') {
       const seen = (containers.get(id) ?? 0) + 1;
@@ -95,7 +95,7 @@ describe('agenda do Instagram', () => {
     await approve('2026-11-02-reel-11', { legenda: 'Comenta GOOGLE', quando: '2026-11-02T15:00:00-03:00', ia: true }, 'Lucas', T0);
     expect((await runAgenda(ORIGIN, at(60))).started).toEqual([]); // 13h: not yet
     expect((await runAgenda(ORIGIN, at(180))).started).toEqual(['2026-11-02-reel-11']);
-    const create = calls.find((c) => c.method === 'POST' && c.path.endsWith('/1789/media'))!;
+    const create = calls.find((c) => c.method === 'POST' && c.path.endsWith('/17841400000000/media'))!;
     expect(create.body).toMatchObject({ media_type: 'REELS', caption: 'Comenta GOOGLE', share_to_feed: 'true', is_ai_generated: 'true' });
     expect(create.body.video_url).toContain('/api/conteudos/publico/05-reels/11-dois-amigos.mp4?e=');
     expect(create.body.cover_url).toContain('jpg=1');
@@ -114,7 +114,7 @@ describe('agenda do Instagram', () => {
     const calls = fakeInstagram();
     await approve('2026-11-02-carrossel-servicos', { legenda: 'Serviços', quando: '2026-11-02T12:30:00-03:00', ia: false }, 'Lucas', T0);
     await runAgenda(ORIGIN, at(31));
-    const creates = calls.filter((c) => c.method === 'POST' && c.path.endsWith('/1789/media'));
+    const creates = calls.filter((c) => c.method === 'POST' && c.path.endsWith('/17841400000000/media'));
     expect(creates.length).toBe(3);
     expect(creates[0].body).toMatchObject({ is_carousel_item: 'true' });
     expect(creates[0].body.caption).toBeUndefined();
@@ -199,6 +199,62 @@ describe('agenda do Instagram', () => {
     expect((await storage().readJSON<{ token: string }>('instagram/token.json'))?.data.token).toBe('novo-token');
     await runAgenda(ORIGIN, at(8 * 24 * 60));
     expect(calls.filter((c) => c.path === '/refresh_access_token').length).toBe(2);
+  });
+});
+
+describe('token do Facebook (EAA)', () => {
+  /** Fake of graph.facebook.com for a token that only knows its Page: /me has no user_id, /me/accounts has the account. */
+  function fakeFacebook(opts: { pages?: boolean } = {}) {
+    const hosts = new Set<string>();
+    const paths: string[] = [];
+    vi.stubGlobal('fetch', async (input: string | URL, init: RequestInit = {}) => {
+      const url = new URL(String(input));
+      hosts.add(url.host);
+      paths.push(`${init.method ?? 'GET'} ${url.pathname}`);
+      const json = (b: unknown, status = 200) => new Response(JSON.stringify(b), { status });
+      if (url.pathname.endsWith('/me/accounts')) return json({ data: opts.pages === false ? [] : [{ id: 'pg1', instagram_business_account: { id: '17841400000001', username: 'growlift.ai' } }] });
+      if (url.pathname.endsWith('/me')) return json({ id: '99', name: 'Automação Growlift' });
+      if (url.pathname.endsWith('/17841400000002')) return json({ username: 'growlift.ai' });
+      if (url.pathname.endsWith('/content_publishing_limit')) return json({ data: [{ quota_usage: 2, config: { quota_total: 100 } }] });
+      return json({ error: { message: 'Invalid OAuth access token - Cannot parse access token' } }, 400);
+    });
+    return { hosts, paths };
+  }
+
+  beforeEach(() => {
+    vi.stubEnv('INSTAGRAM_TOKEN', 'EAAtokendeteste');
+    vi.stubEnv('INSTAGRAM_API_URL', '');
+  });
+
+  it('usa o endereço do Facebook e acha a conta pela Página, sem tentar renovar', async () => {
+    const { hosts, paths } = fakeFacebook();
+    const { account, publishingUsage } = await import('@/lib/instagram');
+    expect(await account()).toEqual({ userId: '17841400000001', username: 'growlift.ai' });
+    expect([...hosts]).toEqual(['graph.facebook.com']);
+    expect(await publishingUsage()).toEqual({ used: 2, total: 100 });
+    await runAgenda(ORIGIN, T0);
+    expect(paths.some((p) => p.includes('refresh'))).toBe(false);
+  });
+
+  it('com o número da conta na Vercel (INSTAGRAM_USER_ID), usa ele e confere o token', async () => {
+    vi.stubEnv('INSTAGRAM_USER_ID', '17841400000002');
+    const { paths } = fakeFacebook({ pages: false });
+    const { account } = await import('@/lib/instagram');
+    expect(await account()).toEqual({ userId: '17841400000002', username: 'growlift.ai' });
+    expect(paths).toEqual(['GET /v26.0/17841400000002']);
+  });
+
+  it('sem Página e sem número da conta, explica o que fazer', async () => {
+    fakeFacebook({ pages: false });
+    const { account } = await import('@/lib/instagram');
+    await expect(account()).rejects.toThrow('INSTAGRAM_USER_ID');
+  });
+
+  it('número da conta inválido é recusado', async () => {
+    vi.stubEnv('INSTAGRAM_USER_ID', 'abc');
+    fakeFacebook();
+    const { account } = await import('@/lib/instagram');
+    await expect(account()).rejects.toThrow('inválido');
   });
 });
 
