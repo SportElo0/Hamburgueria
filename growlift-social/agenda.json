@@ -3,16 +3,16 @@
  "itens": [
   {
    "id": "2026-11-02-reel-01",
-   "titulo": "Reel 1 · O site que passa de lado",
+   "titulo": "Reel 1 · Quatro negócios (Comenta SITE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/01-site-que-passa-de-lado.mp4"
+    "05-reels/01-quatro-negocios.mp4"
    ],
-   "capa": "05-reels/01-site-que-passa-de-lado-capa.png",
-   "legenda": "Hamburgueria, restaurante, confeitaria e escritório não podem ter o mesmo site. 👀\n\nCada ramo pede um visual diferente. Os quatro do vídeo são projetos conceito, com nomes fictícios, que criamos para mostrar o que dá para fazer. Nenhum é cliente nosso.\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\nQuer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.\n\n#growlift #criacaodesites #webdesign #negocioslocais #saopaulo",
+   "capa": "05-reels/01-quatro-negocios-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nQuatro negócios abriram as portas hoje cedo. Do outro lado da cidade, alguém pega o celular pra procurar. Quem aparece, e com a cara do negócio, tem mais chance de ser encontrado.\n\n(História fictícia. Os quatro sites do vídeo são projetos conceito, com nomes fictícios: não são clientes. Não garantimos clientes nem posição no Google.)\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #criacaodesites #sitepararestaurante #negocioslocais #saopaulo",
    "quando": "2026-11-03T15:00:00-03:00",
-   "ia": false,
-   "palavra": "",
+   "ia": true,
+   "palavra": "SITE",
    "chave": "05-reels/roteiros.md#1-o-site-que-passa-de-lado"
   },
   {
@@ -52,16 +52,16 @@
   },
   {
    "id": "2026-11-04-reel-05",
-   "titulo": "Reel 5 · Perfil da Empresa no Google",
+   "titulo": "Reel 5 · Aberto no Google, fechado na porta (Comenta GOOGLE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/05-perfil-no-google.mp4"
+    "05-reels/05-aberto-no-google.mp4"
    ],
-   "capa": "05-reels/05-perfil-no-google-capa.png",
-   "legenda": "O seu negócio aparece no Google Maps quando alguém busca \"perto de mim\"? 📍\n\nConfira o básico do seu Perfil da Empresa no Google (o antigo Google Meu Negócio):\n✔ Nome igual ao da fachada\n✔ Horário certo, inclusive nos feriados\n✔ Fotos reais\n✔ Categoria correta\n✔ Resposta para as avaliações\n\nSalve este Reel e confira o seu perfil hoje.\n\nNo plano Grow, a gente configura e acompanha o seu perfil no Google (a verificação é feita pelo Google). Valores e condições dos planos: link na bio.\n\n#growlift #perfildaempresanogoogle #googlemaps #marketinglocal #pequenosnegocios",
+   "capa": "05-reels/05-aberto-no-google-capa.png",
+   "legenda": "Comenta GOOGLE que a gente te mostra como deixar o seu perfil em dia 📩\n\nSexta, dez da noite. O Google dizia \"aberto até as 23h\". A porta estava fechada. O cliente foi pra outro lugar, e o dono nem ficou sabendo.\n\n(História fictícia. Não garantimos clientes nem posição no Google.)\n\nO básico do Perfil da Empresa no Google (o antigo Google Meu Negócio):\n✔ Horário certo, inclusive nos feriados\n✔ Fotos reais\n✔ Nome igual ao da fachada\n\nNo plano Grow, a gente configura e acompanha o seu perfil no Google (a verificação é feita pelo Google). Valores e condições dos planos: link na bio.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #perfildaempresanogoogle #googlemaps #marketinglocal #pizzaria",
    "quando": "2026-11-04T15:00:00-03:00",
-   "ia": false,
-   "palavra": "",
+   "ia": true,
+   "palavra": "GOOGLE",
    "chave": "05-reels/roteiros.md#5-perfil-da-empresa-no-google-o-basico-educativo"
   },
   {

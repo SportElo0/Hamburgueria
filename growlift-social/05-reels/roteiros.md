@@ -19,6 +19,8 @@
 ---
 
 ## 1. O site que passa de lado
+> **Substituído em 01/11** pela versão em história "Quatro negócios" (`01-quatro-negocios.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-01-site-que-passa-de-lado.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho, 0 a 2 s:** "Um site para cada tipo de negócio." Já começa com a seção dos sites passando.
 - **Demonstração, 2 a 15 s:** rolar devagar a seção "Um site que vende de verdade para…", mostrando os quatro modelos.
 - **Explicação na tela:** "Cada site é feito do zero, com as fotos e as cores do negócio."
@@ -106,6 +108,8 @@ Se você se viu em algum deles, peça o diagnóstico grátis pelo link na bio.
 ```
 
 ## 5. Perfil da Empresa no Google: o básico (educativo)
+> **Substituído em 01/11** pela versão em história "Aberto no Google, fechado na porta" (`05-aberto-no-google.mp4`, com voz, Comenta GOOGLE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-05-perfil-no-google.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho:** "O seu negócio aparece no Google Maps?"
 - **Pontos:** nome igual ao da fachada, horário certo, fotos reais, categoria correta, responder às avaliações.
 - **Chamada final:** "No plano Grow, a gente configura e acompanha o seu perfil no Google."

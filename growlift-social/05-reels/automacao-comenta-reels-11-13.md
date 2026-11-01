@@ -8,6 +8,14 @@ Cada Reel termina pedindo uma palavra: quem comenta recebe no direct o que foi p
 | 12 · Cardápio completo | **CARDÁPIO** | "a gente te manda um exemplo" | Modelos de site (projetos conceito) + planos |
 | 13 · Porta aberta | **PEDIDO** | "a gente te mostra" | Como o pedido com Pix chega na tela da loja (plano Grow) |
 
+## As 4 vagas do ManyChat (decisão de 01/11)
+
+O plano grátis do ManyChat tem 4 automações. Fica assim:
+
+- **SITE: fixa, sempre ligada**, para "qualquer post ou Reel". Serve para todo Reel que não tem uma palavra própria.
+- **3 vagas que vão trocando** conforme o Reel da semana: hoje são **GOOGLE** (Reels 11, 4 e 5), **CARDÁPIO** (Reel 12) e **PEDIDO** (Reels 13 e 8). Quando o Reel 10 for ao ar, **MESA** entra no lugar da que estiver parada há mais tempo.
+- Antes de trocar uma palavra, vejam se o Reel antigo ainda recebe comentário com ela. Se receber, esperem uma semana.
+
 ## No ManyChat (para cada Reel, depois de postar)
 
 1. **Automation → New → Comment**, escolham o Reel.
@@ -34,6 +42,22 @@ Mandamos no seu direct 📲
 
 ```
 Confira seu direct: mandamos lá 📩
+```
+
+## SITE (fixa: Reels 1, 2, 3, 6, 7 e 9)
+
+Botões: **"Quero o diagnóstico grátis"** (`https://growlift.com.br/#diagnostico`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vi%20o%20v%C3%ADdeo%20de%20voc%C3%AAs%20e%20quero%20ver%20como%20ficaria%20o%20site%20do%20meu%20neg%C3%B3cio.%20Meu%20neg%C3%B3cio%20%C3%A9%20o%20`).
+
+Palavras: `SITE`, `Site`, `site`, `SITES`, `sites`.
+
+```
+Opa! 👋 Aqui é a Growlift, com o que o vídeo prometeu.
+
+Cada negócio pede um site com a cara dele. A gente fez exemplos para quatro ramos: hamburgueria, restaurante, confeitaria e escritório. São projetos conceito, com nomes fictícios, pra você ver o estilo; o seu é feito do zero, com as suas fotos e os seus serviços.
+
+Quer ver como ficaria o seu? O diagnóstico é grátis e a prévia chega no seu WhatsApp em até 2 dias úteis 👇
+
+Seus dados: growlift.com.br/privacidade.html
 ```
 
 ## Reel 11 · GOOGLE

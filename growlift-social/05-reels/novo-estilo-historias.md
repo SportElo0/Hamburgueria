@@ -1,4 +1,4 @@
-# Reels no estilo história (proposta de 01/11, aguardando aprovação)
+# Reels no estilo história (aprovado em 01/11)
 
 Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de dono de negócio**, no estilo do Reel 10 (cena, personagens, voz contando) e dos personagens do Reel 11. Ficam como estão os Reels 10, 11, 12 e 13.
 
@@ -10,7 +10,7 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - Sem resultado nem prazo na história (nada de "um fechou, o outro contratou", "em 3 meses", "vendeu mais"). O contraste é: um **espera**, o outro **aparece**.
 - Sem marca real, sem nome de pessoa ou loja real. Personagens e lojas desenhados pela Growlift.
 - Voz gerada por IA avisada na legenda e rótulo de IA ligado na Agenda.
-- Texto sem "mensagem automática"; a palavra de comentário é sempre uma das 4 do ManyChat (GOOGLE, CARDÁPIO, PEDIDO, MESA), senão "link na bio".
+- Texto sem "mensagem automática". Palavra de comentário: **SITE** (fixa no ManyChat) ou uma das 3 vagas que vão trocando (hoje GOOGLE, CARDÁPIO e PEDIDO). Ver `automacao-comenta-reels-11-13.md`.
 - Gancho: nos 2 primeiros segundos já tem personagem, situação e algo em jogo. Nada de "Era uma vez" parado nem pergunta vaga.
 - Duração de 25 a 30 segundos, imagem mudando a cada 3 a 4 segundos, texto grande na tela (até 6 palavras) e voz "Andre" (ElevenLabs pelo Higgsfield, uns 2 créditos por Reel, com custo conferido antes).
 
@@ -19,20 +19,20 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 ### 1 · "Quatro portas, quatro cartões de visita" (era: O site que passa de lado)
 - **Gancho:** quatro donos abrindo a porta do seu negócio ao mesmo tempo: hamburgueria, restaurante, confeitaria e escritório. "Quatro negócios. Quatro jeitos de ser visto."
 - **História:** cada dono tem um celular na mão; do outro lado, um cliente procurando. Cada negócio aparece com um site que tem a cara dele (os quatro projetos conceito: Brasa Burger, Varanda Bistrô, Doce Ateliê, Aurora Advocacia).
-- **Fecho:** "Cada negócio pede um site com a cara dele. Quer ver o seu? Comenta CARDÁPIO."
-- **Palavra:** CARDÁPIO.
+- **Fecho:** "Quer ver como ficaria o seu? Comenta SITE."
+- **Palavra:** SITE. **Pronto em 01/11:** `01-quatro-negocios.mp4` (voz 1,35 crédito).
 
 ### 2 · "A confeitaria que ninguém achava" (era: A marca se monta)
 - **Gancho:** uma confeiteira com um bolo lindo e a vitrine vazia, o celular parado. "O bolo é lindo. Quase ninguém viu."
 - **História:** a marca da confeitaria (cores, nome, fotos) se monta peça por peça num site; no celular do cliente, o bolo aparece, com botão para encomendar. Nada de preço nem resultado.
-- **Fecho:** "Marca e site com a cara do seu negócio. Comenta CARDÁPIO."
-- **Palavra:** CARDÁPIO. **Antes de postar:** conferir se cita só o que está nos planos atuais (Start, Grow, Scale).
+- **Fecho:** "Marca e site com a cara do seu negócio. Comenta SITE."
+- **Palavra:** SITE. **Antes de postar:** conferir se cita só o que está nos planos atuais (Start, Grow, Scale).
 
 ### 3 · "Dois minutos no intervalo do almoço" (era: Do celular ao diagnóstico)
 - **Gancho:** dono de restaurante entre um pedido e outro, cozinha apertada, olhando o celular. "Dois minutos. É o que ele tinha."
 - **História:** ele preenche o diagnóstico grátis no celular (a tela real, com dados de exemplo), toca em enviar e volta pra chapa. Depois, a prévia do site chega no WhatsApp dele (em até 2 dias úteis).
-- **Fecho:** "Diagnóstico grátis, direto do celular. Link na bio."
-- **Palavra:** link na bio.
+- **Fecho:** "Diagnóstico grátis, direto do celular. Comenta SITE."
+- **Palavra:** SITE.
 
 ### 4 · "Ele procurou e não achou" (era: Três sinais)
 - **Gancho:** um cliente com fome, na rua, digitando "hamburgueria perto de mim". Fecha a câmera na tela: a lojinha do nosso personagem não aparece. "Ele procurou. Não achou."
@@ -44,19 +44,19 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - **Gancho:** cliente chega faminto na porta de uma pizzaria fechada, olha o celular: "Aberto até 23h". "Aberto no Google. Fechado na porta."
 - **História:** o dono confere os 5 itens do perfil (nome igual ao da fachada, horário certo inclusive nos feriados, fotos reais, categoria, resposta às avaliações) e o Google passa a mostrar o certo. Sem promessa de posição.
 - **Fecho:** "Perfil em dia é o básico pra ser encontrado. Comenta GOOGLE."
-- **Palavra:** GOOGLE.
+- **Palavra:** GOOGLE. **Pronto em 01/11:** `05-aberto-no-google.mp4` (voz 1,20 crédito).
 
 ### 6 · "Do zero, linha por linha" (era: Bastidores)
 - **Gancho:** a dona da confeitaria explicando o que quer para um dos nossos, um caderno cheio de ideias. "Ela só tinha um caderno."
 - **História:** o caderno vira código, o código vira site, as fotos entram e o site aparece no celular dela (Doce Ateliê, projeto conceito). Mostra que é feito do zero, sem modelo pronto.
-- **Fecho:** "Seu site, feito do zero. Peça o diagnóstico grátis: link na bio."
-- **Palavra:** link na bio.
+- **Fecho:** "Seu site, feito do zero. Comenta SITE."
+- **Palavra:** SITE.
 
 ### 7 · "Quem atende é quem faz" (era: Quem somos)
-- **Gancho:** um dono de restaurante manda mensagem a uma empresa e imagina um call center. Corta: quem responde é o Lucas e o Antônio, com as fotos autorizadas. "Quem responde é quem faz."
+- **Gancho:** um dono de restaurante manda mensagem a uma empresa e imagina um call center. Corta: quem responde são dois bonequinhos desenhados (os dois da Growlift, **sem foto**: decisão de 01/11). "Quem responde é quem faz."
 - **História:** a mensagem vai e volta, a prévia do site chega no WhatsApp. Sem fala de bastidor inventada, sem história de fundação, sem número.
-- **Fecho:** "Growlift: sites, Google e pedido pelo site, de São Paulo. Link na bio."
-- **Palavra:** link na bio. **Atenção:** as fotos do Antônio estão autorizadas pela mãe, por e-mail; só entram as que já usamos.
+- **Fecho:** "Growlift: sites, Google e pedido pelo site, de São Paulo. Comenta SITE."
+- **Palavra:** SITE. **Sem foto do Lucas e do Antônio** por enquanto (decisão de 01/11).
 
 ### 8 · "A noite de sábado" (era: Pedido e Pix no site)
 - **Gancho:** sábado à noite, a cozinha lotada, os pedidos chegando de todo lado no balcão. "Sábado à noite. Pedido chegando de tudo que é lado."
@@ -67,8 +67,8 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 ### 9 · "O lanche é bom. O site, nem tanto." (era: Sua marca merece mais)
 - **Gancho:** o dono segura o melhor lanche da cidade (história, não fato) e o celular mostra um site velho e torto. "O lanche é bom. O site... nem tanto."
 - **História:** o site velho vira um site novo com a cara do lanche, em três batidas (as três da arte original). Sem promessa; só o contraste do antes e depois do **visual**.
-- **Fecho:** "Sua marca merece mais. Diagnóstico grátis: link na bio."
-- **Palavra:** link na bio.
+- **Fecho:** "Sua marca merece mais. Comenta SITE."
+- **Palavra:** SITE.
 
 ## Ordem de produção (pela data na Agenda)
 
