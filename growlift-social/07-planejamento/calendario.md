@@ -14,6 +14,8 @@ Nada de comprar seguidores, sorteio para ganhar seguidor nem engajamento combina
 
 ## Ritmo
 
+> **Atualizado em 01/11/2026:** o ritmo agora é o do `plano-crescimento.md` (1 Reel por dia útil + 2 carrosséis por semana, com calendário de novembro). O texto abaixo fica como registro do plano inicial.
+
 - **Feed:** 3 por semana, na segunda, na quarta e na sexta.
 - **Stories:** em pelo menos 4 dias da semana, com bastidores, enquetes e repostagem do feed.
 - **Reels:** 1 por semana, a partir da semana 2.
