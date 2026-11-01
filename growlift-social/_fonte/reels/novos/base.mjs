@@ -23,6 +23,17 @@ function show(id,t,a,b,o={}){
   el.style.transform=(o.base||'')+' translate('+((1-kin)*x)+'px,'+((1-kin)*dy)+'px) scale('+s+')';
   return vis?kin:0;
 }
+// "Comenta PALAVRA" ending: card in at a, "Comenta" spoken at w; the word pulses and gets typed in a comment field.
+function comenta(t,a,w,word){
+  show('cmt',t,a,undefined,{dy:40,fi:.5});
+  show('cmtC',t,w,undefined,{pop:true,sc:.4,dy:0});
+  const k=show('cmtK',t,w+.25,undefined,{pop:true,sc:.5,dy:0});
+  if(t>w+.8) $('cmtK').style.transform='scale('+(1+.035*Math.sin((t-w)*6))+')';
+  const rk=t>w+.8?((t-w-.8)%1.2)/1.2:0; const r=$('cmtR'); r.style.opacity=t>w+.8?String(1-rk):'0'; r.style.transform='scale('+(1+rk*.18)+')';
+  show('cmtF',t,w+.5,undefined,{dy:30});
+  const n=Math.floor(clamp((t-(w+1.0))/.7)*word.length); $('cmtT').textContent=n?word.slice(0,n):'\u00a0';
+  $('cmtS').style.opacity=n>=word.length?1:.35;
+}
 // Captions: [start,end,text,highlight]; the highlighted words get the accent box.
 function captions(t,list){
   const el=$('cap'); const c=list.find(x=>t>=x[0]&&t<x[1]);
@@ -130,4 +141,23 @@ export function food(kind, size = 120) {
     salad: '<path d="M20 60h80c0 22-18 36-40 36S20 82 20 60z" fill="#ffffff"/><circle cx="44" cy="54" r="12" fill="#5ac46a"/><circle cx="62" cy="50" r="13" fill="#4dbb5c"/><circle cx="78" cy="56" r="10" fill="#e8483b"/>',
   }[kind];
   return `<svg width="${size}" height="${size}" viewBox="0 0 120 120"><rect width="120" height="120" rx="18" fill="${bg}"/>${art}</svg>`;
+}
+
+/** The "Comenta PALAVRA" end block (see comenta() in the runtime). theme: dark | blue. */
+export function comentaBlock(question, word, theme = 'dark', top = 520) {
+  const blue = theme === 'blue';
+  const chip = blue ? 'background:#ffffff;color:#0865fe;box-shadow:0 30px 70px -24px rgba(0,0,0,.45)' : 'background:#0865fe;color:#ffffff;box-shadow:0 30px 70px -20px rgba(8,101,254,1)';
+  const ring = blue ? '#ffffff' : '#4d8dff';
+  const field = blue ? 'background:rgba(6,40,110,.55);border:2px solid rgba(255,255,255,.35)' : 'background:rgba(15,21,32,.95);border:2px solid rgba(255,255,255,.18)';
+  return `<div id="cmt" class="abs" style="left:60px;right:60px;top:${top}px;text-align:center;z-index:46;visibility:hidden">
+  <div style="width:150px;margin:0 auto 46px;${blue ? 'filter:brightness(0) invert(1)' : ''}">${MARK}</div>
+  <p style="font-size:68px;font-weight:900;letter-spacing:-.03em;line-height:1.05;color:#ffffff">${question}</p>
+  <p id="cmtC" style="font-size:64px;font-weight:800;margin-top:44px;color:${blue ? '#dbe8ff' : '#c6cede'}">Comenta</p>
+  <div style="margin-top:18px"><span id="cmtK" style="position:relative;display:inline-block;font-size:118px;font-weight:900;letter-spacing:-.02em;border-radius:36px;padding:6px 44px 16px;${chip}">${word}<span id="cmtR" style="position:absolute;inset:-12px;border-radius:46px;border:5px solid ${ring};opacity:0"></span></span></div>
+  <div id="cmtF" style="margin:60px auto 0;width:840px;display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:999px;${field};box-shadow:0 30px 60px -20px rgba(0,0,0,.6)">
+    <span style="flex:none;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ff9a3c,#e85d75)"></span>
+    <span id="cmtT" style="flex:1;text-align:left;font-size:42px;font-weight:700;color:#ffffff">&nbsp;</span>
+    <span id="cmtS" style="flex:none;font-size:34px;font-weight:800;color:${blue ? '#ffffff' : '#4d8dff'}">Publicar</span>
+  </div>
+</div>`;
 }

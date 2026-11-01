@@ -3,9 +3,9 @@
 // opens, orders land on the store screen with Pix. Timed to narracao-13-eleven.mp3. Nothing claims orders while
 // closed: during closed hours the site shows the menu and the hours.
 import { MARK } from '../../pecas.mjs';
-import { page, svgIcon, ICON, food } from './base.mjs';
+import { page, svgIcon, ICON, food, comentaBlock } from './base.mjs';
 
-export const DURATION = 26.4;
+export const DURATION = 27.8;
 export const COVER = 12.6;
 
 const BLUE = '#0865fe';
@@ -95,15 +95,8 @@ ${shop}
   <div id="bell" class="abs" style="right:40px;bottom:36px">${svgIcon('<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>', 64, '#ffc94d', 2.2)}</div>
 </div>
 
-<div id="end" class="abs" style="inset:0;background:#0c0c0e;z-index:45">
-  <div class="abs" style="left:84px;right:84px;top:560px">
-    <div style="width:170px">${MARK}</div>
-    <div style="font-size:104px;font-weight:900;letter-spacing:-.04em;line-height:1.02;margin-top:56px">Sua vitrine aberta,<br><span style="color:#4d8dff">o tempo todo.</span></div>
-    <div style="font-size:38px;font-weight:600;color:#bdbdbd;margin-top:30px">Site, Google e pedidos para restaurantes · Growlift</div>
-    <div style="display:inline-flex;margin-top:60px;padding:26px 50px;border-radius:999px;background:${BLUE};color:#fff;font-size:44px;font-weight:800;box-shadow:0 26px 60px -20px rgba(8,101,254,.9)">Link na bio</div>
-    <div style="font-size:32px;font-weight:600;color:#9a9aa3;margin-top:34px">@growlift.ai · growlift.com.br</div>
-  </div>
-</div>
+<div id="end" class="abs" style="inset:0;background:#0c0c0e;z-index:45"></div>
+${comentaBlock('Quer ver como funciona?', 'PEDIDO')}
 `;
 
 const script = `
@@ -149,6 +142,7 @@ window.draw=(t)=>{
     for(const id of ['sMenu','sInfo']){const e=$(id);e.style.opacity=1;e.style.visibility='visible';e.style.transform='none';}
   }
   const ke=eio((t-23.55)/.55); $('end').style.clipPath='inset('+((1-ke)*100)+'% 0 0 0)'; $('end').style.visibility=t>=23.55?'visible':'hidden';
+  comenta(t,23.6,24.83,'PEDIDO');
 };
 `;
 

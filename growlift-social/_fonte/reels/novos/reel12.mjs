@@ -2,9 +2,9 @@
 // customer wants to know more; a site shows photos, address and hours, and a button to order. Timed to
 // narracao-12-eleven.mp3. Headings carry the words (no bottom captions).
 import { MARK } from '../../pecas.mjs';
-import { page, svgIcon, ICON, food } from './base.mjs';
+import { page, svgIcon, ICON, food, comentaBlock } from './base.mjs';
 
-export const DURATION = 28.8;
+export const DURATION = 28.2;
 export const COVER = 16.2;
 
 const INK = '#121826';
@@ -102,15 +102,8 @@ const body = `
 <div id="ilus" class="abs" style="right:90px;top:1290px;font-size:24px;font-weight:600;color:#6a7385">Exemplo ilustrativo</div>
 <div id="spk" class="abs" style="left:900px;top:470px">${svgIcon('<path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="#ffc94d" stroke="none"/>', 70)}</div>
 
-<div id="end">
-  <div class="abs" style="left:0;right:0;top:600px;text-align:center">
-    <div style="width:200px;margin:0 auto;filter:brightness(0) invert(1)">${MARK}</div>
-    <div style="font-size:120px;font-weight:900;letter-spacing:-.04em;margin-top:50px">Growlift</div>
-    <div style="font-size:56px;font-weight:700;margin-top:18px;opacity:.92">Site, Google e pedidos<br>para o seu restaurante</div>
-    <div style="display:inline-block;margin-top:60px;padding:24px 46px;border-radius:999px;background:#fff;color:${BLUE};font-size:40px;font-weight:800">Link na bio</div>
-    <div style="font-size:32px;font-weight:600;margin-top:34px;opacity:.85">@growlift.ai · growlift.com.br</div>
-  </div>
-</div>
+<div id="end"></div>
+${comentaBlock('Quer um site assim?', 'CARDÁPIO', 'blue')}
 `;
 
 const script = `
@@ -138,6 +131,7 @@ window.draw=(t)=>{
   show('spk',t,22.6,23.55,{pop:true,sc:.6,dy:0}); $('spk').style.transform+=' rotate('+(t*90)+'deg)';
   // End card: wipes in as a growing circle
   const ke=eio((t-23.55)/.6); $('end').style.clipPath='circle('+(ke*150)+'% at 50% 60%)'; $('end').style.visibility=t>=23.55?'visible':'hidden';
+  comenta(t,23.6,24.65,'CARDÁPIO');
 };
 `;
 

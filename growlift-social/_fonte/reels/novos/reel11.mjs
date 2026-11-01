@@ -2,9 +2,9 @@
 // food, same price; one waits for people to walk by, the other also shows up on the phone of whoever is looking. No
 // outcome is promised (no "closing" or "hiring", no time frame). Timed to narracao-11-eleven.mp3 (v2, 01/11).
 import { MARK } from '../../pecas.mjs';
-import { page, person, store, svgIcon, ICON, food } from './base.mjs';
+import { page, person, store, svgIcon, ICON, food, comentaBlock } from './base.mjs';
 
-export const DURATION = 26.2;
+export const DURATION = 27.4;
 export const COVER = 17.4;
 
 const CAPS = [
@@ -16,8 +16,7 @@ const CAPS = [
   [11.1, 15.3, 'O outro aparecia no celular de quem procurava', 'celular'],
   [15.3, 18.7, 'no Google, com foto, horário e cardápio', 'Google'],
   [18.7, 22.55, 'Quem aparece em dia tem mais chance de ser encontrado', 'mais chance'],
-  [22.55, 23.9, 'Quer ser encontrado?', 'encontrado'],
-  [23.9, 26.2, 'Segue a Growlift!', 'Growlift'],
+
 ];
 
 const RED = '#ff6b5b';
@@ -123,13 +122,7 @@ const body = `
 
 <div id="disc" class="abs" style="left:0;right:0;top:1500px;text-align:center;font-size:24px;font-weight:600;color:#8790a6;z-index:30">História fictícia. Não garantimos clientes, vendas nem posição no Google.</div>
 <!-- Scene 9: end -->
-<div id="endc" class="abs" style="left:0;right:0;top:470px;text-align:center">
-  <div style="width:180px;margin:0 auto">${MARK}</div>
-  <div style="font-size:104px;font-weight:900;letter-spacing:-.04em;line-height:1.02;margin-top:56px">Quer ser<br><span style="color:#4d8dff">encontrado?</span></div>
-  <div id="follow" style="display:inline-flex;align-items:center;justify-content:center;gap:16px;margin-top:60px;min-width:420px;height:110px;border-radius:999px;background:#0865fe;color:#fff;font-size:44px;font-weight:800;box-shadow:0 26px 60px -20px rgba(8,101,254,.9)"><span id="fIcon" style="display:none">${svgIcon(ICON.check, 44, '#fff', 3)}</span><span id="fTxt">Seguir</span></div>
-  <div style="margin-top:36px;font-size:36px;font-weight:700;color:#c6cede">@growlift.ai · site, Google e pedidos para restaurantes</div>
-</div>
-<div id="tap" class="abs" style="width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.5);border:3px solid #fff;left:640px;top:880px"></div>
+${comentaBlock('Quer ser encontrado?', 'GOOGLE')}
 `;
 
 const script = `
@@ -160,11 +153,8 @@ window.draw=(t)=>{
   // Scene 5: wait vs show up
   show('cmpA',t,18.8,22.6,{dy:60}); show('cmpB',t,19.9,22.6,{dy:60});
   const ka=eo((t-20.2)/.5); $('arrow').style.clipPath='inset(0 '+((1-ka)*100)+'% 0 0)';
-  // Scene 6: end
-  show('endc',t,22.6,undefined,{dy:50,fi:.5});
-  const tapK=t>=24.1&&t<24.75?1-Math.abs((t-24.4)/.3):0; $('tap').style.opacity=Math.max(0,tapK); $('tap').style.transform='scale('+(.7+.3*Math.max(0,tapK))+')';
-  const followed=t>=24.35; $('fTxt').textContent=followed?'Seguindo':'Seguir'; $('fIcon').style.display=followed?'inline-flex':'none';
-  $('follow').style.background=followed?'#0f1520':'#0865fe'; $('follow').style.border=followed?'3px solid #4d8dff':'0';
+  // Scene 6: Comenta GOOGLE
+  comenta(t,22.5,23.9,'GOOGLE');
 };
 `;
 

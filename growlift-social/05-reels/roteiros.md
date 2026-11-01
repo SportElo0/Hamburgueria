@@ -279,13 +279,15 @@ No vídeo, as telas são do nosso sistema numa loja de demonstração (Brasa Bur
 ## 11. Dois amigos, duas hamburguerias (história)
 - **Formato:** desenho animado escuro com bonequinhos e lojinhas desenhadas pela Growlift (sem fotos, sem marca de ninguém). Começa com "Era uma vez…" e tem o aviso fixo na tela o vídeo todo: "História fictícia. Não garantimos clientes, vendas nem posição no Google." Roteiro, desenho e textos nossos. Fonte: `_fonte/reels/novos/reel11.mjs`.
 - **Revisão legal (01/11):** a primeira versão ("seis meses depois, um pensava em fechar, o outro estava contratando") foi trocada porque sugeria resultado garantido e prazo. A narração foi refeita (1,84 crédito) sem resultado nem prazo; os selos agora são "ESPERANDO…" e "ENCONTRADO".
-- **Vídeos:** `11-dois-amigos.mp4` (com narração, recomendado), `11-dois-amigos-mudo.mp4` (para usar com música), capa `11-dois-amigos-capa.png`. 26,2 s.
+- **Vídeos:** `11-dois-amigos.mp4` (com narração, recomendado), `11-dois-amigos-mudo.mp4` (para usar com música), capa `11-dois-amigos-capa.png`. 27,4 s.
 - **Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre"; `_fonte/reels/narracao-11-eleven.mp3`):
-"Era uma vez dois amigos, cada um com uma hamburgueria na mesma rua. Mesmo lanche, mesmo preço, mesmo capricho. Um deles esperava alguém passar na frente. O outro também aparecia no celular de quem procurava onde comer: no Google, com foto, horário e cardápio. Quem aparece com tudo em dia tem mais chance de ser encontrado. Quer ser encontrado? Segue a Growlift!"
-- **Cenas:** duas lojas iguais (=) e "mesmo lanche · mesmo preço · mesmo capricho" · um deles esperando atrás do balcão, relógio girando, "ESPERANDO…" · o outro no celular (busca "hamburgueria perto de mim", ficha com fotos, horário e "Ver cardápio", pessoas chegando) · "Um espera" x "O outro aparece" · fim "Quer ser encontrado?" com o botão Seguir.
+"Era uma vez dois amigos, cada um com uma hamburgueria na mesma rua. Mesmo lanche, mesmo preço, mesmo capricho. Um deles esperava alguém passar na frente. O outro também aparecia no celular de quem procurava onde comer: no Google, com foto, horário e cardápio. Quem aparece com tudo em dia tem mais chance de ser encontrado. Quer ser encontrado? Comenta Google que a gente te mostra como!" (Fim regravado em 01/11 para o "Comenta GOOGLE", 0,46 crédito.)
+- **Cenas:** duas lojas iguais (=) e "mesmo lanche · mesmo preço · mesmo capricho" · um deles esperando atrás do balcão, relógio girando, "ESPERANDO…" · o outro no celular (busca "hamburgueria perto de mim", ficha com fotos, horário e "Ver cardápio", pessoas chegando) · "Um espera" x "O outro aparece" · fim "Quer ser encontrado? Comenta GOOGLE", com a palavra digitada no campo de comentário.
 
 **Legenda**
 ```
+Comenta GOOGLE que a gente te mostra como o seu restaurante aparece 📩
+
 Duas hamburguerias na mesma rua, mesmo lanche, mesmo preço. Só que uma aparece no celular de quem procura onde comer 🍔
 
 (História ilustrativa: personagens e lojas fictícios. Não é caso real e não garantimos clientes, vendas nem posição no Google.)
@@ -301,13 +303,15 @@ Narração com voz gerada por inteligência artificial.
 
 ## 12. O seu cardápio, completo
 - **Formato:** claro, com um mascote nosso (um chefinho de chapéu e lenço azul), desenhado pela Growlift. O cardápio de papel vira um celular com o site, com o selo "Exemplo ilustrativo". Personagem, roteiro e textos nossos. Fonte: `_fonte/reels/novos/reel12.mjs`.
-- **Vídeos:** `12-cardapio-completo.mp4` (com narração), `12-cardapio-completo-mudo.mp4`, capa `12-cardapio-completo-capa.png`. 28,8 s.
+- **Vídeos:** `12-cardapio-completo.mp4` (com narração), `12-cardapio-completo-mudo.mp4`, capa `12-cardapio-completo-capa.png`. 28,2 s.
 - **Narração** (voz "Andre", 2,07 créditos em 01/11; `_fonte/reels/narracao-12-eleven.mp3`):
-"O cardápio de papel fica no balcão. Mas o seu cliente quer saber muito mais. Tem entrega? Quanto custa? Onde fica? Tá aberto agora? E se ele visse tudo isso antes de sair de casa? Fotos dos pratos. Endereço e horário. E um botão pra pedir na hora. Quem procura encontra tudo num lugar só. Um site é o seu cardápio, completo. Growlift: site, Google e pedidos para o seu restaurante." (A frase final foi regravada em 01/11, 0,46 crédito, e emendada no lugar de "sites para restaurantes": a Growlift entrega mais que o site.)
+"O cardápio de papel fica no balcão. Mas o seu cliente quer saber muito mais. Tem entrega? Quanto custa? Onde fica? Tá aberto agora? E se ele visse tudo isso antes de sair de casa? Fotos dos pratos. Endereço e horário. E um botão pra pedir na hora. Quem procura encontra tudo num lugar só. Um site é o seu cardápio, completo. Quer um assim? Comenta cardápio que a gente te manda um exemplo!" (Fim regravado em 01/11 para o "Comenta CARDÁPIO", 0,46 crédito; na tela: "Quer um site assim?".)
 - **O botão "Pedir agora"** no vídeo abre uma mensagem ("Oi! Vi o cardápio de vocês e quero fazer um pedido"): é o botão de WhatsApp do plano Start. O pedido com Pix dentro do site é do plano Grow.
 
 **Legenda**
 ```
+Comenta CARDÁPIO que a gente te manda um exemplo de site 📩
+
 O cardápio de papel não responde "tem entrega?" às 11 da noite 😅
 
 Com um site, quem procura vê tudo antes de sair de casa:
@@ -323,13 +327,15 @@ Narração com voz gerada por inteligência artificial.
 
 ## 13. A porta que fica aberta
 - **Formato:** escuro, preto e branco com o azul da Growlift. A porta de aço desce, o relógio corre pela madrugada e o site continua no ar ("SITE NO AR", endereço fictício `seurestaurante.exemplo`, selo "Exemplo ilustrativo"). A tela da loja tem o selo "PLANO GROW". O título aparece palavra por palavra junto com a voz. Roteiro e desenho nossos. Fonte: `_fonte/reels/novos/reel13.mjs`.
-- **Vídeos:** `13-porta-aberta.mp4` (com narração), `13-porta-aberta-mudo.mp4`, capa `13-porta-aberta-capa.png`. 26,4 s.
+- **Vídeos:** `13-porta-aberta.mp4` (com narração), `13-porta-aberta-mudo.mp4`, capa `13-porta-aberta-capa.png`. 27,8 s.
 - **Narração** (voz "Andre", 2,07 créditos em 01/11; `_fonte/reels/narracao-13-eleven.mp3`):
-"Todo restaurante tem hora pra fechar. A porta desce, mas a fome continua. Que horas abre amanhã? Tem cardápio? Faz entrega? Um site é a porta que fica aberta. O cliente vê o cardápio com foto, o horário e onde fica. E quando vocês abrem, o pedido cai direto na tela da loja, com Pix na hora. Sua vitrine aberta, o tempo todo. Growlift. Link na bio!"
+"Todo restaurante tem hora pra fechar. A porta desce, mas a fome continua. Que horas abre amanhã? Tem cardápio? Faz entrega? Um site é a porta que fica aberta. O cliente vê o cardápio com foto, o horário e onde fica. E quando vocês abrem, o pedido cai direto na tela da loja, com Pix na hora. Sua vitrine aberta, o tempo todo. Quer ver como funciona? Comenta pedido que a gente te mostra!" (Fim regravado em 01/11 para o "Comenta PEDIDO", 0,46 crédito.)
 - **Cuidado com a promessa:** com a loja fechada, o site mostra cardápio, horário e endereço e recusa pedido (conferido no código: "A loja está fechada agora"). Pedidos com Pix chegam na tela da loja **quando ela está aberta** (plano Grow). Não digam que o site "vende de madrugada".
 
 **Legenda**
 ```
+Comenta PEDIDO que a gente te mostra como funciona 📩
+
 A porta fecha. A fome não 🌙
 
 Com a loja fechada, o site continua mostrando o cardápio com foto, o horário e o endereço. Pedido não entra enquanto a loja está fechada.
@@ -342,6 +348,7 @@ Narração com voz gerada por inteligência artificial.
 ```
 
 ### Ao postar os Reels 11, 12 e 13
+- Antes de cada post, liguem a palavra no ManyChat: textos e passo a passo em `automacao-comenta-reels-11-13.md`. Melhores horários: `07-planejamento/horarios.md`.
 - A voz é gerada por computador e soa como pessoa: em "Configurações avançadas", ativem o **Rótulo de IA**.
 - Com música do app: deixem a música em 15 a 20% e o áudio original alto. Ou usem a versão `-mudo` com a música que quiserem (só faixas liberadas para conta comercial).
 - Postem um por vez, com alguns dias entre eles. Nada vai sem a aprovação de vocês.
