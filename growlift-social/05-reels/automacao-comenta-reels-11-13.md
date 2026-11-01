@@ -1,6 +1,6 @@
 # Automação "Comenta GOOGLE / CARDÁPIO / PEDIDO" (Reels 11, 12 e 13)
 
-Cada Reel termina pedindo uma palavra: quem comenta recebe no direct, por mensagem automática, o que foi prometido no vídeo. A montagem no ManyChat é igual à do "Comenta MESA" (`automacao-comenta-mesa.md`), só muda o Reel, a palavra e o texto.
+Cada Reel termina pedindo uma palavra: quem comenta recebe no direct o que foi prometido no vídeo. A montagem no ManyChat é igual à do "Comenta MESA" (`automacao-comenta-mesa.md`), só muda o Reel, a palavra e o texto.
 
 | Reel | Palavra | O que o vídeo promete | O que a mensagem entrega |
 | --- | --- | --- | --- |
@@ -20,20 +20,20 @@ Cada Reel termina pedindo uma palavra: quem comenta recebe no direct, por mensag
 5. Palavra **SAIR** em qualquer momento → "Pronto, não vamos mais te mandar mensagem por aqui." Texto livre → a automação para e um de vocês responde.
 6. **Antes de cada post:** comentem a palavra de outra conta e vejam se a mensagem chega.
 
-Lembrete das regras da Meta (o ManyChat já segue): uma mensagem automática por comentário, em até 7 dias; mais mensagens só se a pessoa responder, dentro de 24 horas. A mensagem automática não vende nem cobra: quem quiser contratar fala com uma pessoa.
+Lembrete das regras da Meta (o ManyChat já segue): uma mensagem por comentário, em até 7 dias; mais mensagens só se a pessoa responder, dentro de 24 horas. A mensagem não vende nem cobra: quem quiser contratar fala com uma pessoa.
 
 ## Resposta pública no comentário (as mesmas para os três)
 
 ```
-Enviamos no seu direct (mensagem automática)! 📩
+Enviamos no seu direct! 📩
 ```
 
 ```
-Resposta automática enviada no seu direct 📲
+Mandamos no seu direct 📲
 ```
 
 ```
-Confira seu direct: mandamos lá (mensagem automática) 📩
+Confira seu direct: mandamos lá 📩
 ```
 
 ## Reel 11 · GOOGLE
@@ -41,7 +41,7 @@ Confira seu direct: mandamos lá (mensagem automática) 📩
 Botões: **"Quero o diagnóstico grátis"** (`https://growlift.com.br/#diagnostico`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20(GOOGLE)`).
 
 ```
-Opa! 👋 Esta é uma mensagem automática da Growlift.
+Opa! 👋 Aqui é a Growlift, com o que o vídeo prometeu.
 
 Pra aparecer bem pra quem procura onde comer, o básico é:
 ✅ Perfil no Google completo: horário certo, fotos, cardápio e telefone
@@ -50,8 +50,9 @@ Pra aparecer bem pra quem procura onde comer, o básico é:
 
 Ninguém consegue garantir posição no Google, mas dá pra deixar tudo em dia pra ter mais chance de ser encontrado.
 
-Quer saber como está o seu restaurante hoje? O diagnóstico é grátis e você recebe no WhatsApp 👇
+Quer saber como está o seu restaurante hoje? O diagnóstico é grátis e a prévia chega no seu WhatsApp em até 2 dias úteis 👇
 
+Pra não receber mais mensagens por aqui, responda SAIR.
 Seus dados: growlift.com.br/privacidade.html
 ```
 
@@ -60,7 +61,7 @@ Seus dados: growlift.com.br/privacidade.html
 Botões: **"Ver os modelos"** (`https://growlift.com.br/#modelos`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20(CARD%C3%81PIO)`).
 
 ```
-Opa! 👋 Esta é uma mensagem automática da Growlift.
+Opa! 👋 Aqui é a Growlift, com o que o vídeo prometeu.
 
 Aqui estão exemplos de site para restaurante que a gente faz: cardápio com fotos, endereço, horário e um botão pra pedir pelo WhatsApp. São projetos conceito, com nomes fictícios, pra você ver o estilo; o seu é feito do zero com as suas fotos e o seu cardápio.
 
@@ -76,7 +77,7 @@ Seus dados: growlift.com.br/privacidade.html
 Botões: **"Ver o plano Grow"** (`https://growlift.com.br/#planos`) e **"Falar com a gente"** (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20(PEDIDO)`).
 
 ```
-Opa! 👋 Esta é uma mensagem automática da Growlift.
+Opa! 👋 Aqui é a Growlift, com o que o vídeo prometeu.
 
 Como funciona o pedido pelo seu site (plano Grow):
 ✅ O cliente escolhe no cardápio e paga no Pix na hora (ou cartão e dinheiro na entrega)

@@ -37,7 +37,7 @@ O painel lê esta pasta toda vez que é publicado. Para entrar uma peça nova, b
 - Instagram **@growlift.ai**.
 - Alterações por mês: Grow 2 e Lift 4.
 - Site no ar em até 7 dias úteis depois do material, como no contrato.
-- WhatsApp sempre aberto, com mensagem automática que se identifica como automática.
+- WhatsApp sempre aberto, com mensagem de ausência fora do horário (sem dizer "automática"; também sem fingir ser uma pessoa).
 
 ## Regras que seguimos
 

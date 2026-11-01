@@ -1,6 +1,6 @@
 # Automação "Comenta MESA" (Reel 10)
 
-Quem comentar **MESA** no Reel do pedido na mesa recebe no direct, por mensagem automática, como o sistema está sendo preparado, e pode entrar numa lista para o aviso de abertura do Scale.
+Quem comentar **MESA** no Reel do pedido na mesa recebe no direct como o sistema está sendo preparado, e pode entrar numa lista para o aviso de abertura do Scale.
 
 ## Por que "MESA"
 
@@ -40,15 +40,15 @@ Regras da Meta que a ferramenta já segue:
 Resposta pública no comentário (3 variações, o ManyChat sorteia):
 
 ```
-Enviamos no seu direct (mensagem automática)! 📩
+Enviamos no seu direct! 📩
 ```
 
 ```
-Resposta automática enviada no seu direct 📲
+Mandamos no seu direct 📲
 ```
 
 ```
-Confira seu direct: enviamos como funciona (mensagem automática) 📩
+Confira seu direct: enviamos como funciona 📩
 ```
 
 Mensagem 1 (direct), com os botões "Quero acompanhar" (link do canal do WhatsApp) e "Falar com a gente" (`https://wa.me/5511942279336?text=Oi!%20Vim%20pelo%20Reel%20do%20pedido%20na%20mesa%20(MESA)`):
@@ -72,7 +72,7 @@ Seus dados: growlift.com.br/privacidade.html
 Mensagem 2 (se tocar em "Quero ser avisado"):
 
 ```
-Anotado! Guardamos seu perfil do Instagram numa lista só para o aviso de abertura do Scale. Como o Instagram só deixa a gente mandar mensagem automática até 24 horas depois da sua última resposta, o aviso pode não chegar por aqui: vamos anunciar no perfil @growlift.ai quando abrir. Para sair da lista e apagar seus dados, responda SAIR ou escreva para contato@growlift.com.br.
+Anotado! Guardamos seu perfil do Instagram numa lista só para o aviso de abertura do Scale. Como o Instagram só deixa a gente mandar mensagem por aqui até 24 horas depois da sua última resposta, o aviso pode não chegar por aqui: vamos anunciar no perfil @growlift.ai quando abrir. Para sair da lista e apagar seus dados, responda SAIR ou escreva para contato@growlift.com.br.
 
 Tem restaurante e quer conversar antes? Escreva aqui que uma pessoa da equipe Growlift responde.
 ```
@@ -85,7 +85,7 @@ Tranquilo! Se quiser saber mais, é só escrever aqui que uma pessoa da equipe r
 
 ## Regras (não negociáveis)
 
-- A mensagem diz que é automática. Nada de fingir que é uma pessoa digitando.
+- A mensagem não diz "automática" (decisão da Growlift), mas também não finge ser uma pessoa digitando: fala como a marca ("Growlift", "a gente"), sem nome de pessoa, e quem quiser conversar vai para alguém da equipe.
 - Só entra na lista quem tocou em "Quero ser avisado". O aviso de abertura sai no perfil; pelo direct, só dentro da janela de 24 horas que o Instagram permite.
 - Limpeza todo mês no ManyChat: quem tocou "Não, obrigado" ou não respondeu tem o contato apagado em até 30 dias; a lista do Scale fica no máximo 12 meses (ou até 30 dias depois do aviso).
 - Antes de postar, confiram o limite do plano grátis (25 contatos). Se estourar, a resposta pública "enviamos no direct" vira mentira: pausem a resposta pública ou assinem o plano pago.

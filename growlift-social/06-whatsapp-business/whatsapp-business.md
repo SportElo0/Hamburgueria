@@ -32,7 +32,7 @@ Nada foi configurado. O número comercial é o (11) 94227-9336; o botão do site
 Enviada uma vez a quem escreve pela primeira vez:
 
 ```
-Olá! 👋 Seja bem-vindo à Growlift. Esta é a nossa mensagem automática de boas-vindas; uma pessoa da equipe já vai responder.
+Olá! 👋 Seja bem-vindo à Growlift. Uma pessoa da equipe já vai responder.
 
 🚀 Desenvolvemos websites e soluções digitais para empresas que querem fortalecer sua presença online.
 
@@ -49,7 +49,7 @@ Vocês querem o WhatsApp respondendo a qualquer hora, com um robô quando vocês
 **Até ter um robô de verdade:** o app WhatsApp Business não tem robô que conversa. O que ele tem é a mensagem de ausência, que cobre a madrugada e o fim de semana. Ao configurar, em "Agendar", escolham **Horário personalizado** (noites, fins de semana e feriados): com o horário do perfil em "Sempre aberto", a opção "Fora do horário comercial" nunca dispararia. Use esta:
 
 ```
-Oi! 👋 Aqui é o assistente automático da Growlift. Recebemos a sua mensagem e uma pessoa da equipe responde no próximo dia útil.
+Oi! 👋 Recebemos a sua mensagem e uma pessoa da equipe responde no próximo dia útil.
 
 Se quiser adiantar, peça o diagnóstico grátis do seu site: growlift.com.br/#diagnostico
 ```
