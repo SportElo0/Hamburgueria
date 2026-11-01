@@ -79,7 +79,7 @@ ${BG}
 
 <!-- look, then photos -->
 <div id="win" class="abs" style="left:60px;right:60px;top:430px;height:640px;border-radius:30px;overflow:hidden;background:#0f1520;border:1px solid rgba(255,255,255,.12);box-shadow:0 60px 120px -50px rgba(232,106,154,.6)">
-  <div style="height:58px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.08)"><span style="font-size:22px;color:#8790a6;background:#151c29;border-radius:999px;padding:6px 18px">doceatelie.com.br</span></div>
+  <div style="height:58px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.08)"><span style="font-size:22px;color:#8790a6;background:#151c29;border-radius:999px;padding:6px 18px">exemplo.com.br</span></div>
   <img id="look" src="${img('confeitaria.png')}" style="position:absolute;inset:58px 0 0 0;width:100%;height:calc(100% - 58px);object-fit:cover;object-position:top;filter:grayscale(1) contrast(.8) brightness(1.15) blur(1.5px)">
   <img id="full" src="${img('confeitaria.png')}" style="position:absolute;inset:58px 0 0 0;width:100%;height:calc(100% - 58px);object-fit:cover;object-position:top">
 </div>

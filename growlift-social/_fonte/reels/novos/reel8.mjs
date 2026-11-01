@@ -24,7 +24,7 @@ const CAPS = [
 ];
 
 const menu = `
-  <div style="height:150px;background:#111;color:#ffc94d;padding:56px 24px 0;font-size:30px;font-weight:900;letter-spacing:.04em">BRASA BURGER<div style="font-size:16px;color:#c6cede;font-weight:600;letter-spacing:0;margin-top:4px">Loja de demonstração · nome fictício</div></div>
+  <div style="height:150px;background:#111;color:#ffc94d;padding:56px 24px 0;font-size:30px;font-weight:900;letter-spacing:.04em">BRASA BURGER<div style="font-size:20px;color:#c6cede;font-weight:600;letter-spacing:0;margin-top:4px">Loja de demonstração · nome fictício</div></div>
   ${[
     ['i1', 'burger', 'Brasa Duplo'],
     ['i2', 'fries', 'Batata média'],

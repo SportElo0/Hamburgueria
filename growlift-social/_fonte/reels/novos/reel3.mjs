@@ -36,7 +36,7 @@ const grill = (id) => `<div id="${id}" class="abs" style="left:90px;top:1000px;w
 
 const form = `
   <div style="margin:46px 26px 0;font-size:30px;font-weight:900">Diagnóstico grátis</div>
-  <div style="margin:6px 26px 0;font-size:19px;color:#6a7385">Leva menos de 2 minutos · dados de exemplo</div>
+  <div style="margin:6px 26px 0;font-size:19px;color:#6a7385">Leva 2 minutos · dados de exemplo</div>
   ${[
     ['f1', 'Seu negócio', 'Lanchonete Exemplo'],
     ['f2', 'Cidade', 'São Paulo'],
@@ -62,7 +62,7 @@ const chat = `
   <div id="msg" style="margin:26px 22px 0 60px;background:#fff;border-radius:22px 22px 22px 6px;padding:14px;box-shadow:0 10px 30px -14px rgba(0,0,0,.3)">
     <div style="border-radius:14px;overflow:hidden;height:210px"><img src="${img('burger.png')}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div>
     <div style="font-size:22px;font-weight:800;margin-top:12px">Prévia do seu site</div>
-    <div style="font-size:18px;color:#6a7385;margin-top:4px">Feita para o seu negócio</div><div style="font-size:16px;font-weight:700;color:#8790a6;margin-top:6px">Exemplo · projeto conceito, nome fictício</div>
+    <div style="font-size:18px;color:#6a7385;margin-top:4px">Feita para o seu negócio</div><div style="font-size:20px;font-weight:700;color:#6a7385;margin-top:6px">Exemplo · projeto conceito, nome fictício</div>
   </div>`;
 
 const body = `

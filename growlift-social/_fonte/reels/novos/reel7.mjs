@@ -36,7 +36,7 @@ const chat = `
   ${bub('m1', 'r', 'Oi! Tenho um restaurante e preciso de um site.')}
   ${bub('m2', 'l', 'Oi, Rafael! Sou eu que vou fazer o seu site. Me conta do restaurante?')}
   ${bub('m3', 'r', 'Comida caseira, almoço e jantar.')}
-  ${bub('m4', 'l', `<div style="border-radius:12px;overflow:hidden;height:150px"><img src="${img('restaurante.png')}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div><div style="margin-top:8px;font-weight:800">Prévia do seu site</div><div style="font-size:15px;color:#8790a6;font-weight:700">Exemplo · projeto conceito, nome fictício</div>`)}
+  ${bub('m4', 'l', `<div style="border-radius:12px;overflow:hidden;height:150px"><img src="${img('restaurante.png')}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div><div style="margin-top:8px;font-weight:800">Prévia do seu site</div><div style="font-size:20px;color:#6a7385;font-weight:700">Exemplo · projeto conceito, nome fictício</div>`)}
   </div>`;
 
 const body = `

@@ -43,13 +43,13 @@ const results = ['Confeitaria A', 'Confeitaria B', 'Confeitaria C']
   .join('');
 
 const browser = (id, imgId, top, h) => `<div id="${id}" class="abs" style="left:60px;right:60px;top:${top}px;height:${h}px;border-radius:30px;overflow:hidden;background:#0f1520;border:1px solid rgba(255,255,255,.12);box-shadow:0 60px 120px -50px rgba(232,106,154,.6)">
-  <div style="height:58px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.08)"><span style="font-size:22px;color:#8790a6;background:#151c29;border-radius:999px;padding:6px 18px">doceatelie.com.br</span></div>
+  <div style="height:58px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid rgba(255,255,255,.08)"><span style="font-size:22px;color:#8790a6;background:#151c29;border-radius:999px;padding:6px 18px">exemplo.com.br</span></div>
   <img id="${imgId}" src="${img('confeitaria.png')}" style="position:absolute;inset:58px 0 0 0;width:100%;height:calc(100% - 58px);object-fit:cover;object-position:top">
 </div>`;
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · projeto conceito, nome fictício.<br>Não garantimos clientes nem posição no Google.</div>
+<div class="disc">História fictícia · projeto conceito. Tela ilustrativa, não é do Google.<br>Não garantimos clientes nem posição no Google.</div>
 
 <div id="hook" class="hook">O bolo é lindo.<br><span style="color:${PINK}">Quase ninguém viu.</span></div>
 <div id="bia" class="abs" style="left:110px;top:700px">${person('pb', PINK, { size: 360, hair: '#3a2a1e' })}</div>
