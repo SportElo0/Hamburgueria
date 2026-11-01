@@ -213,7 +213,8 @@ describe('token do Facebook (EAA)', () => {
       paths.push(`${init.method ?? 'GET'} ${url.pathname}`);
       const json = (b: unknown, status = 200) => new Response(JSON.stringify(b), { status });
       if (url.pathname.endsWith('/me/accounts')) return json({ data: opts.pages === false ? [] : [{ id: 'pg1', instagram_business_account: { id: '17841400000001', username: 'growlift.ai' } }] });
-      if (url.pathname.endsWith('/me')) return json({ id: '99', name: 'Automação Growlift' });
+      // The Facebook API has no user_id field on /me (that is the error the first version hit).
+      if (url.pathname.endsWith('/me')) return url.searchParams.get('fields')?.includes('user_id') ? json({ error: { message: '(#100) Tried accessing nonexisting field (user_id)' } }, 400) : json({ id: '99', name: 'Automação Growlift' });
       if (url.pathname.endsWith('/17841400000002')) return json({ username: 'growlift.ai' });
       if (url.pathname.endsWith('/content_publishing_limit')) return json({ data: [{ quota_usage: 2, config: { quota_total: 100 } }] });
       return json({ error: { message: 'Invalid OAuth access token - Cannot parse access token' } }, 400);
@@ -231,6 +232,7 @@ describe('token do Facebook (EAA)', () => {
     const { account, publishingUsage } = await import('@/lib/instagram');
     expect(await account()).toEqual({ userId: '17841400000001', username: 'growlift.ai' });
     expect([...hosts]).toEqual(['graph.facebook.com']);
+    expect(paths).not.toContain('GET /v26.0/me');
     expect(await publishingUsage()).toEqual({ used: 2, total: 100 });
     await runAgenda(ORIGIN, T0);
     expect(paths.some((p) => p.includes('refresh'))).toBe(false);
@@ -248,6 +250,12 @@ describe('token do Facebook (EAA)', () => {
     fakeFacebook({ pages: false });
     const { account } = await import('@/lib/instagram');
     await expect(account()).rejects.toThrow('INSTAGRAM_USER_ID');
+  });
+
+  it('quando o Facebook recusa a busca, a mensagem traz o motivo', async () => {
+    vi.stubGlobal('fetch', async () => new Response(JSON.stringify({ error: { message: '(#200) Requires pages_show_list permission' } }), { status: 403 }));
+    const { account } = await import('@/lib/instagram');
+    await expect(account()).rejects.toThrow('pages_show_list');
   });
 
   it('número da conta inválido é recusado', async () => {

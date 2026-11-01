@@ -118,20 +118,24 @@ export async function account(): Promise<{ userId: string; username: string }> {
 
 /** Finds the Instagram professional account behind a token that came without its number. */
 async function findAccount(token: string): Promise<{ userId: string; username: string }> {
-  // Instagram Login tokens answer /me with the account itself.
-  const me = await call<{ id?: string; user_id?: string; username?: string }>('GET', '/me', { fields: 'user_id,username' }, token);
-  if (me.user_id && ID.test(String(me.user_id))) return { userId: String(me.user_id), username: me.username ?? '' };
+  type Acc = { id: string; username?: string };
+  // Instagram Login tokens answer /me with the account itself. (Facebook tokens have no user_id field: skip this.)
+  if (!isFacebookToken(token)) {
+    const me = await call<{ id?: string; user_id?: string; username?: string }>('GET', '/me', { fields: 'user_id,username' }, token);
+    if (me.user_id && ID.test(String(me.user_id))) return { userId: String(me.user_id), username: me.username ?? '' };
+  }
   // Facebook tokens: the account hangs off the Page it is linked to.
-  const pages = await call<{ data?: { instagram_business_account?: { id: string; username?: string } }[] }>(
-    'GET',
-    '/me/accounts',
-    { fields: 'instagram_business_account{id,username}' },
-    token,
-  ).catch(() => ({ data: [] as { instagram_business_account?: { id: string; username?: string } }[] }));
-  const accounts = (pages.data ?? []).map((p) => p.instagram_business_account).filter((a): a is { id: string; username?: string } => Boolean(a?.id));
+  let detail = '';
+  const pages = await call<{ data?: { instagram_business_account?: Acc }[] }>('GET', '/me/accounts', { fields: 'instagram_business_account{id,username}' }, token).catch((err) => {
+    detail = err instanceof InstagramError ? err.message : '';
+    return { data: [] as { instagram_business_account?: Acc }[] };
+  });
+  const accounts = (pages.data ?? []).map((p) => p.instagram_business_account).filter((a): a is Acc => Boolean(a?.id));
   const pick = accounts.find((a) => a.username === 'growlift.ai') ?? accounts[0];
   if (pick) return { userId: String(pick.id), username: pick.username ?? '' };
-  throw new InstagramError('Não achei a conta do Instagram por este token. Coloque o número da conta na variável INSTAGRAM_USER_ID da Vercel (ele aparece na página do app, no passo "Gerar tokens de acesso").');
+  throw new InstagramError(
+    `Não achei a conta do Instagram por este token${detail ? ` (${detail})` : ''}. Coloque o número da conta na variável INSTAGRAM_USER_ID da Vercel (ele aparece na página do app, no passo "Gerar tokens de acesso").`,
+  );
 }
 
 /** Keeps the long-lived token alive. Safe to call often: it only refreshes once a week. */
