@@ -651,7 +651,7 @@ const REELS = {
     const stage = (src, label, at) => `<img src="${src}" data-in="${at}" data-dy="0" data-dur=".5" style="position:absolute;inset:0;width:100%;height:100%;opacity:0"><span class="tag" data-in="${at}" data-dy="0" data-dur=".4" style="position:absolute;left:24px;bottom:24px;opacity:0;background:rgba(6,8,13,.85)">${label}</span>`;
     const html = reelPage({
       scenes: [
-        { start: 0, end: 3, html: hook('De uma folha em branco a <span class="blue">um site.</span>', { lead: 'Bastidores de um dos nossos modelos.' }) },
+        { start: 0, end: 3, html: hook('Veja um site nascer, <span class="blue">linha por linha.</span>', { lead: 'Bastidores de um dos nossos modelos.' }) },
         {
           start: 3, end: 9.4,
           html: `<div style="position:absolute;left:96px;right:120px;top:250px"><p class="eyebrow">Primeiro, o código</p><h2 class="h1" style="font-size:64px;margin-top:18px">Escrito do zero, sem modelo pronto.</h2></div>

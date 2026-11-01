@@ -17,15 +17,15 @@ Três carrosséis no formato 4:5 do feed, em alta definição (2160×2700), pron
 **Legenda**
 
 ```
-Prazer, somos a Growlift. 👋
+Quem atende você é quem faz o seu site.
 
-Somos de São Paulo e a gente cria sites para negócios locais, cuida da presença no Google e coloca o pedido e o pagamento no próprio site do cliente.
+Somos a Growlift, de São Paulo: criamos sites para negócios locais, cuidamos da presença no Google e colocamos o pedido e o pagamento no próprio site do cliente.
 
-Quem conversa com você é quem faz o seu site.
+Como funciona: diagnóstico grátis pelo site, prévia no seu WhatsApp em até 2 dias úteis e, se você gostar, é só escolher o plano para o site ir ao ar com o seu domínio. Planos, valores e condições: link na bio.
 
-Quer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link na bio. Em até 2 dias úteis você recebe uma prévia no WhatsApp.
+Quer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link na bio.
 
-#growlift #criacaodesites #negocioslocais #sitesprofissionais #presencadigital #saopaulo
+#growlift #criacaodesites #negocioslocais #sitesprofissionais #saopaulo
 ```
 
 **Texto alternativo da 1ª imagem**: Capa com a marca da Growlift em vidro azul e o texto "Presença digital que vende".
@@ -39,15 +39,15 @@ Sem fotos e sem o slide do Lucas e do Antônio (decisão de 26/10/2026). A image
 **Legenda**
 
 ```
-Ideias que viram experiências digitais. ✨
+4 sites para 4 ramos: hamburgueria, restaurante, confeitaria e escritório.
 
-Os quatro primeiros são projetos conceito, com nomes fictícios, que criamos para mostrar o que dá para fazer em cada ramo: hamburgueria, restaurante, confeitaria e escritório. O último é o nosso próprio site.
+Os quatro primeiros são projetos conceito, com nomes fictícios, que criamos para mostrar o que dá para fazer em cada ramo. O último é o nosso próprio site.
 
 Cada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.
 
 Quer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.
 
-#growlift #webdesign #criacaodesites #designdigital #restaurantes #confeitaria
+#growlift #criacaodesites #sitepararestaurante #webdesign #saopaulo
 ```
 
 **Texto alternativo da 1ª imagem**: Capa com a tela de um site conceito de hamburgueria e o texto "Ideias que viram experiências digitais".

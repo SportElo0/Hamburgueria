@@ -29,9 +29,11 @@
 
 **Legenda**
 ```
-Um site para cada tipo de negócio. 👀
+Hamburgueria, restaurante, confeitaria e escritório não podem ter o mesmo site. 👀
 
-Hamburgueria, restaurante, confeitaria, escritório: cada um pede um visual diferente. Os quatro do vídeo são projetos conceito, com nomes fictícios, que criamos para mostrar o que dá para fazer.
+Cada ramo pede um visual diferente. Os quatro do vídeo são projetos conceito, com nomes fictícios, que criamos para mostrar o que dá para fazer. Nenhum é cliente nosso.
+
+Cada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.
 
 Quer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.
 
@@ -68,7 +70,7 @@ Start, Grow e Lift: veja o que cada um inclui no link da bio.
 
 **Legenda**
 ```
-Menos de 2 minutos, direto do celular. 📱
+Pedir o diagnóstico do seu site leva menos de 2 minutos, direto do celular. 📱
 
 Você conta sobre o seu negócio, autoriza o contato e pronto: em até 2 dias úteis a prévia do seu site chega no seu WhatsApp. Sem compromisso.
 
@@ -92,13 +94,13 @@ Faça o seu pelo link na bio.
 
 **Legenda**
 ```
-Três sinais de que o seu negócio precisa de site:
+O seu cliente procurou você no Google e não achou? Veja 3 sinais de que o seu negócio precisa de site 👇
 
 1. O cardápio e os preços só existem em foto no Instagram.
 2. O endereço e o horário estão desatualizados no Google.
 3. O único jeito de pedir é mandando mensagem.
 
-Se você se viu em algum deles, a gente pode ajudar. Diagnóstico grátis no link da bio.
+Se você se viu em algum deles, peça o diagnóstico grátis pelo link na bio.
 
 #growlift #dicasdenegocio #criacaodesites #googlemeunegocio #pequenosnegocios
 ```
@@ -113,22 +115,24 @@ Se você se viu em algum deles, a gente pode ajudar. Diagnóstico grátis no lin
 
 **Legenda**
 ```
-O seu negócio aparece no Google Maps? 📍
+O seu negócio aparece no Google Maps quando alguém busca "perto de mim"? 📍
 
-Confira o básico do seu Perfil da Empresa no Google:
+Confira o básico do seu Perfil da Empresa no Google (o antigo Google Meu Negócio):
 ✔ Nome igual ao da fachada
 ✔ Horário certo, inclusive nos feriados
 ✔ Fotos reais
 ✔ Categoria correta
 ✔ Resposta para as avaliações
 
-No plano Grow, a gente configura e acompanha o seu perfil no Google. Link na bio.
+Salve este Reel e confira o seu perfil hoje.
 
-#growlift #googlemeunegocio #googlemaps #marketinglocal #pequenosnegocios
+No plano Grow, a gente configura e acompanha o seu perfil no Google (a verificação é feita pelo Google). Valores e condições dos planos: link na bio.
+
+#growlift #perfildaempresanogoogle #googlemaps #marketinglocal #pequenosnegocios
 ```
 
 ## 6. Bastidores: como nasce um modelo
-- **Gancho:** "De uma folha em branco a um site."
+- **Gancho:** "Veja um site nascer, linha por linha." (revisado em 01/11; antes: "De uma folha em branco a um site.")
 - **Demonstração:** o código de verdade do modelo Doce Ateliê aparecendo acelerado, linha por linha. Depois, o mesmo modelo em três etapas: só o conteúdo, com o visual e com as fotos.
 - **Explicação:** "Cada detalhe pensado para o tipo de negócio."
 - **Chamada final:** "Quer um site assim para o seu negócio? Link na bio."
@@ -138,11 +142,11 @@ No plano Grow, a gente configura e acompanha o seu perfil no Google. Link na bio
 
 **Legenda**
 ```
-De uma folha em branco a um site. 🛠️
+Veja um site nascer, linha por linha. 🛠️
 
-Os bastidores de um dos nossos modelos: primeiro o código, escrito do zero, depois o visual e as fotos. O Doce Ateliê é um projeto conceito, com nome fictício.
+Os bastidores de um dos nossos modelos: primeiro o código, escrito do zero e sem modelo pronto, depois o visual e as fotos. O Doce Ateliê é um projeto conceito, com nome fictício.
 
-Quer um site feito do zero para o seu negócio? Link na bio.
+Quer um site feito do zero para o seu negócio? Peça o diagnóstico grátis pelo link na bio.
 
 #growlift #bastidores #webdesign #criacaodesites #confeitaria
 ```
@@ -220,9 +224,11 @@ Conheça o plano Lift no link da bio.
 
 **Legenda**
 ```
-Quatro projetos conceito, com nomes fictícios. Não são clientes. Sua marca merece mais. 💙
+Sua marca merece mais. 💙
 
-Moda, hamburgueria, surf shop e padaria: sites de demonstração que a gente criou para mostrar como cada negócio pode ter um site com a cara dele. As telas foram gravadas dos sites funcionando no navegador; os lanches são ilustrações 3D e o surfista foi gerado com IA.
+Quatro projetos conceito, com nomes fictícios. Não são clientes: moda, hamburgueria, surf shop e padaria, sites de demonstração que a gente criou para mostrar como cada negócio pode ter um site com a cara dele.
+
+As telas foram gravadas dos sites funcionando no navegador; os lanches são ilustrações 3D e o surfista foi gerado com IA.
 
 Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo link na bio. O que cada plano inclui está em growlift.com.br.
 
@@ -312,17 +318,17 @@ Narração com voz gerada por inteligência artificial.
 ```
 Comenta CARDÁPIO que a gente te manda um exemplo de site 📩
 
-O cardápio de papel não responde "tem entrega?" às 11 da noite 😅
+Cardápio de papel não responde "tem entrega?" às 11 da noite 😅
 
 Com um site, quem procura vê tudo antes de sair de casa:
 📸 Fotos dos pratos
 📍 Endereço e horário
 💬 Um botão que abre o WhatsApp do restaurante para pedir (pedido com Pix dentro do site é do plano Grow)
 
-Growlift: site, Google e pedidos para o seu restaurante. Valores e condições dos planos: link na bio.
+A Growlift faz o site do seu restaurante e configura o seu perfil no Google. Valores e condições dos planos: link na bio.
 
 Narração com voz gerada por inteligência artificial.
-#restaurante #cardapiodigital #delivery #hamburgueria #pizzaria
+#cardapiodigital #sitepararestaurante #restaurante #delivery #hamburgueria
 ```
 
 ## 13. A porta que fica aberta
@@ -339,12 +345,11 @@ Comenta PEDIDO que a gente te mostra como funciona 📩
 A porta fecha. A fome não 🌙
 
 Com a loja fechada, o site continua mostrando o cardápio com foto, o horário e o endereço. Pedido não entra enquanto a loja está fechada.
-E quando vocês abrem, o pedido do site cai direto na tela da loja, com Pix na hora (plano Grow). Valores e condições: link na bio.
 
-Sua vitrine aberta, o tempo todo.
+Quando você abre, o pedido do site cai direto na tela da loja, com Pix na hora (plano Grow). Valores e condições: link na bio.
 
 Narração com voz gerada por inteligência artificial.
-#restaurante #delivery #cardapiodigital #hamburgueria #lanchonete
+#cardapiodigital #sitepararestaurante #delivery #restaurante #lanchonete
 ```
 
 ### Ao postar os Reels 11, 12 e 13
