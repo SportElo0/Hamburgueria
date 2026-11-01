@@ -32,11 +32,19 @@ Nada foi configurado. O número comercial é o (11) 94227-9336; o botão do site
 Enviada uma vez a quem escreve pela primeira vez:
 
 ```
-Olá! 👋 Seja bem-vindo à Growlift. Uma pessoa da equipe já vai responder.
+Oi! 👋 Aqui é a Growlift, que cria sites para negócios locais.
 
-🚀 Desenvolvemos websites e soluções digitais para empresas que querem fortalecer sua presença online.
+Recebemos a sua mensagem e uma pessoa da equipe vai te responder por aqui.
 
-Como podemos ajudar seu negócio hoje?
+Pra agilizar, conta pra gente: qual é o seu negócio e em que cidade ele fica?
+```
+
+Para quem chega pelos Reels (a mensagem já vem com "Vim pelo Reel (GOOGLE)", "(CARDÁPIO)" ou "(PEDIDO)"), uma pessoa da equipe responde com este texto, trocando o assunto. Escrevam com o nome de quem está digitando:
+
+```
+Oi! Aqui é o [seu nome], da Growlift. Que bom que você veio pelo vídeo 😊
+
+Me conta: qual é o nome do seu restaurante e em que cidade fica? Assim eu olho o seu caso e te mostro o que dá pra melhorar, sem compromisso.
 ```
 
 ## Atendimento 24 horas: como fazer sem enganar ninguém
@@ -49,9 +57,9 @@ Vocês querem o WhatsApp respondendo a qualquer hora, com um robô quando vocês
 **Até ter um robô de verdade:** o app WhatsApp Business não tem robô que conversa. O que ele tem é a mensagem de ausência, que cobre a madrugada e o fim de semana. Ao configurar, em "Agendar", escolham **Horário personalizado** (noites, fins de semana e feriados): com o horário do perfil em "Sempre aberto", a opção "Fora do horário comercial" nunca dispararia. Use esta:
 
 ```
-Oi! 👋 Recebemos a sua mensagem e uma pessoa da equipe responde no próximo dia útil.
+Oi! 👋 Aqui é a Growlift. Recebemos a sua mensagem e uma pessoa da equipe responde no próximo dia útil.
 
-Se quiser adiantar, peça o diagnóstico grátis do seu site: growlift.com.br/#diagnostico
+Se quiser adiantar, peça o diagnóstico grátis do seu site (a prévia chega aqui no WhatsApp em até 2 dias úteis): growlift.com.br/#diagnostico
 ```
 
 Um robô que conversa precisa da API oficial do WhatsApp (WhatsApp Business Platform), com um número próprio e custo por conversa. Fica para a fase "mais robusta" que vocês deixaram para depois.
