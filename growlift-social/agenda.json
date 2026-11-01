@@ -2,18 +2,18 @@
  "sobre": "Posts preparados para a agenda do painel (Conteúdos > Agenda). Só vão ao ar depois de aprovados lá. Horários de São Paulo.",
  "itens": [
   {
-   "id": "2026-11-02-reel-01",
-   "titulo": "Reel 1 · Quatro negócios (Comenta SITE)",
+   "id": "2026-11-03-reel-11",
+   "titulo": "Reel 11 · Dois amigos (Comenta GOOGLE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/01-quatro-negocios.mp4"
+    "05-reels/11-dois-amigos.mp4"
    ],
-   "capa": "05-reels/01-quatro-negocios-capa.png",
-   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nQuatro negócios abriram as portas hoje cedo. Do outro lado da cidade, alguém pega o celular pra procurar. Quem aparece, e com a cara do negócio, tem mais chance de ser encontrado.\n\n(História fictícia. Os quatro sites do vídeo são projetos conceito, com nomes fictícios: não são clientes. Não garantimos clientes nem posição no Google.)\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #criacaodesites #sitepararestaurante #negocioslocais #saopaulo",
-   "quando": "2026-11-03T15:00:00-03:00",
+   "capa": "05-reels/11-dois-amigos-capa.png",
+   "legenda": "Comenta GOOGLE que a gente te mostra como o seu restaurante aparece 📩\n\nDuas hamburguerias na mesma rua, mesmo lanche, mesmo preço. Só que uma aparece no celular de quem procura onde comer 🍔\n\n(História ilustrativa: personagens e lojas fictícios. Não é caso real e não garantimos clientes, vendas nem posição no Google.)\n\nMuita gente pesquisa no celular antes de escolher onde comer: olha fotos, horário e cardápio. Quem aparece com tudo em dia tem mais chance de ser encontrado.\n\nA Growlift faz o site do seu restaurante e configura o seu perfil no Google (a verificação é feita pelo Google). Valores e condições dos planos: link na bio.\nSegue a gente pra mais dicas 👉 @growlift.ai\n\nNarração com voz gerada por inteligência artificial.\n#restaurante #hamburgueria #delivery #marketingpararestaurantes #perfildaempresanogoogle",
+   "quando": "2026-11-01T15:00:00-03:00",
    "ia": true,
-   "palavra": "SITE",
-   "chave": "05-reels/roteiros.md#1-o-site-que-passa-de-lado"
+   "palavra": "GOOGLE",
+   "chave": "05-reels/roteiros.md#11-dois-amigos-duas-hamburguerias-historia"
   },
   {
    "id": "2026-11-03-carrossel-portfolio",
@@ -37,18 +37,18 @@
    "fixar": true
   },
   {
-   "id": "2026-11-03-reel-11",
-   "titulo": "Reel 11 · Dois amigos (Comenta GOOGLE)",
+   "id": "2026-11-02-reel-01",
+   "titulo": "Reel 1 · Quatro negócios (Comenta SITE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/11-dois-amigos.mp4"
+    "05-reels/01-quatro-negocios.mp4"
    ],
-   "capa": "05-reels/11-dois-amigos-capa.png",
-   "legenda": "Comenta GOOGLE que a gente te mostra como o seu restaurante aparece 📩\n\nDuas hamburguerias na mesma rua, mesmo lanche, mesmo preço. Só que uma aparece no celular de quem procura onde comer 🍔\n\n(História ilustrativa: personagens e lojas fictícios. Não é caso real e não garantimos clientes, vendas nem posição no Google.)\n\nMuita gente pesquisa no celular antes de escolher onde comer: olha fotos, horário e cardápio. Quem aparece com tudo em dia tem mais chance de ser encontrado.\n\nA Growlift faz o site do seu restaurante e configura o seu perfil no Google (a verificação é feita pelo Google). Valores e condições dos planos: link na bio.\nSegue a gente pra mais dicas 👉 @growlift.ai\n\nNarração com voz gerada por inteligência artificial.\n#restaurante #hamburgueria #delivery #marketingpararestaurantes #perfildaempresanogoogle",
-   "quando": "2026-11-01T15:00:00-03:00",
+   "capa": "05-reels/01-quatro-negocios-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nQuatro negócios abriram as portas hoje cedo. Do outro lado da cidade, alguém pega o celular pra procurar. Quem aparece, e com a cara do negócio, tem mais chance de ser encontrado.\n\n(História fictícia. Os quatro sites do vídeo são projetos conceito, com nomes fictícios: não são clientes. Não garantimos clientes nem posição no Google.)\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #criacaodesites #sitepararestaurante #negocioslocais #saopaulo",
+   "quando": "2026-11-03T15:00:00-03:00",
    "ia": true,
-   "palavra": "GOOGLE",
-   "chave": "05-reels/roteiros.md#11-dois-amigos-duas-hamburguerias-historia"
+   "palavra": "SITE",
+   "chave": "05-reels/roteiros.md#1-o-site-que-passa-de-lado"
   },
   {
    "id": "2026-11-04-reel-05",
@@ -99,16 +99,16 @@
   },
   {
    "id": "2026-11-06-reel-04",
-   "titulo": "Reel 4 · Três sinais",
+   "titulo": "Reel 4 · Ela procurou e não achou (Comenta GOOGLE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/04-tres-sinais.mp4"
+    "05-reels/04-ela-procurou.mp4"
    ],
-   "capa": "05-reels/04-tres-sinais-capa.png",
-   "legenda": "O seu cliente procurou você no Google e não achou? Veja 3 sinais de que o seu negócio precisa de site 👇\n\n1. O cardápio e os preços só existem em foto no Instagram.\n2. O endereço e o horário estão desatualizados no Google.\n3. O único jeito de pedir é mandando mensagem.\n\nSe você se viu em algum deles, peça o diagnóstico grátis pelo link na bio.\n\n#growlift #dicasdenegocio #criacaodesites #googlemeunegocio #pequenosnegocios",
+   "capa": "05-reels/04-ela-procurou-capa.png",
+   "legenda": "Comenta GOOGLE que a gente te mostra como o seu restaurante aparece 📩\n\nSábado, meio-dia. A Ana procurou \"hamburgueria perto de mim\". A lanchonete do seu João fica a duas quadras, mas não apareceu. Ela foi pra outro lugar, e ele nem soube que ela procurou.\n\n(História fictícia. Tela ilustrativa, não é do Google. Não garantimos clientes nem posição no Google.)\n\nTrês sinais de que o seu negócio pode não estar aparecendo pra quem procura:\n1. O cardápio só existe em foto no Instagram.\n2. O horário no Google está errado.\n3. Pra pedir, só mandando mensagem.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #sitepararestaurante #googlemeunegocio #hamburgueria #pequenosnegocios",
    "quando": "2026-11-06T15:00:00-03:00",
-   "ia": false,
-   "palavra": "",
+   "ia": true,
+   "palavra": "GOOGLE",
    "chave": "05-reels/roteiros.md#4-tres-sinais-de-que-o-seu-negocio-precisa-de-site-educativo"
   },
   {
@@ -127,45 +127,84 @@
   },
   {
    "id": "2026-11-10-reel-03",
-   "titulo": "Reel 3 · Do celular ao diagnóstico",
+   "titulo": "Reel 3 · Dois minutos (Comenta SITE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/03-do-celular-ao-diagnostico.mp4"
+    "05-reels/03-dois-minutos.mp4"
    ],
-   "capa": "05-reels/03-do-celular-ao-diagnostico-capa.png",
-   "legenda": "Pedir o diagnóstico do seu site leva menos de 2 minutos, direto do celular. 📱\n\nVocê conta sobre o seu negócio, autoriza o contato e pronto: em até 2 dias úteis a prévia do seu site chega no seu WhatsApp. Sem compromisso.\n\nNo vídeo, usamos dados de exemplo.\n\nFaça o seu pelo link na bio.\n\n#growlift #diagnosticogratis #criacaodesites #negocioslocais #pequenosnegocios",
+   "capa": "05-reels/03-dois-minutos-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como funciona 📩\n\nOnze e meia, a chapa já quente. O Marcos tinha dois minutos entre um pedido e outro: pediu o diagnóstico grátis pelo celular e voltou pra chapa. Em até 2 dias úteis, a prévia do site chega no WhatsApp. Sem compromisso.\n\n(História fictícia. As telas usam dados de exemplo e a prévia mostrada é de um projeto conceito, com nome fictício.)\n\nNarração com voz gerada por inteligência artificial.\n#growlift #diagnosticogratis #sitepararestaurante #negocioslocais #pequenosnegocios",
    "quando": "2026-11-10T15:00:00-03:00",
-   "ia": false,
-   "palavra": "",
+   "ia": true,
+   "palavra": "SITE",
    "chave": "05-reels/roteiros.md#3-do-celular-ao-diagnostico"
   },
   {
    "id": "2026-11-11-reel-09",
-   "titulo": "Reel 9 · Sua marca merece mais",
+   "titulo": "Reel 9 · O lanche é bom, o site nem tanto (Comenta SITE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/09-sua-marca-merece-mais.mp4"
+    "05-reels/09-o-lanche-e-bom.mp4"
    ],
-   "capa": "05-reels/09-sua-marca-merece-mais-capa.png",
-   "legenda": "Sua marca merece mais. 💙\n\nQuatro projetos conceito, com nomes fictícios. Não são clientes: moda, hamburgueria, surf shop e padaria, sites de demonstração que a gente criou para mostrar como cada negócio pode ter um site com a cara dele.\n\nAs telas foram gravadas dos sites funcionando no navegador; os lanches são ilustrações 3D e o surfista foi gerado com IA.\n\nQuer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo link na bio. O que cada plano inclui está em growlift.com.br.\n\n#growlift #criacaodesites #webdesign #sitesprofissionais #presencadigital",
+   "capa": "05-reels/09-o-lanche-e-bom-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nO lanche do seu Toninho é caprichado. Mas quem procura a lanchonete no celular encontra um site velho, torto e sem foto do lanche. E quem não conhece julga pelo que vê.\n\n(História fictícia. O site novo do vídeo é um projeto conceito, com nome fictício: não é cliente. Não garantimos clientes nem posição no Google.)\n\nUm site com a cara do negócio mostra o capricho antes da primeira mordida. Sua marca merece mais.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #criacaodesites #sitepararestaurante #hamburgueria #negocioslocais",
    "quando": "2026-11-11T15:00:00-03:00",
-   "ia": false,
-   "palavra": "",
+   "ia": true,
+   "palavra": "SITE",
    "chave": "05-reels/roteiros.md#9-sua-marca-merece-mais-reel-premium"
   },
   {
    "id": "2026-11-12-reel-06",
-   "titulo": "Reel 6 · Bastidores",
+   "titulo": "Reel 6 · Do zero, linha por linha (Comenta SITE)",
    "tipo": "reel",
    "arquivos": [
-    "05-reels/06-bastidores.mp4"
+    "05-reels/06-do-zero.mp4"
    ],
-   "capa": "05-reels/06-bastidores-capa.png",
-   "legenda": "Veja um site nascer, linha por linha. 🛠️\n\nOs bastidores de um dos nossos modelos: primeiro o código, escrito do zero e sem modelo pronto, depois o visual e as fotos. O Doce Ateliê é um projeto conceito, com nome fictício.\n\nQuer um site feito do zero para o seu negócio? Peça o diagnóstico grátis pelo link na bio.\n\n#growlift #bastidores #webdesign #criacaodesites #confeitaria",
+   "capa": "05-reels/06-do-zero-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como funciona 📩\n\nA Júlia faz bolos lindos e chegou com um caderno cheio de ideias: as cores, os sabores, as fotos dos bolos. Do caderno nasce o código, escrito do zero, sem modelo pronto. Depois vem o visual, depois as fotos.\n\n(História fictícia. Doce Ateliê é um projeto conceito, com nome fictício: não é cliente. Não garantimos clientes nem posição no Google.)\n\nNarração com voz gerada por inteligência artificial.\n#growlift #bastidores #criacaodesites #confeitaria #webdesign",
    "quando": "2026-11-12T15:00:00-03:00",
-   "ia": false,
-   "palavra": "",
+   "ia": true,
+   "palavra": "SITE",
    "chave": "05-reels/roteiros.md#6-bastidores-como-nasce-um-modelo"
+  },
+  {
+   "id": "2026-11-13-reel-07",
+   "titulo": "Reel 7 · Quem atende é quem faz (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/07-quem-atende.mp4"
+   ],
+   "capa": "05-reels/07-quem-atende-capa.png",
+   "legenda": "Comenta SITE que a gente te chama pra conversar 📩\n\nO Rafael precisava de um site pro restaurante. Mandou mensagem e já imaginou protocolo, fila e espera. Do outro lado, quem respondeu foi quem ia fazer o site dele.\n\n(História fictícia. As telas e a prévia são de exemplo, de um projeto conceito com nome fictício.)\n\nNa Growlift, quem atende é quem faz. Somos de São Paulo e criamos sites, cuidamos do Google e colocamos o pedido no site de negócios locais.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #criacaodesites #sitepararestaurante #negocioslocais #saopaulo",
+   "quando": "2026-11-13T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-16-reel-08",
+   "titulo": "Reel 8 · Sábado à noite (Comenta PEDIDO)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/08-sabado-a-noite.mp4"
+   ],
+   "capa": "05-reels/08-sabado-a-noite-capa.png",
+   "legenda": "Comenta PEDIDO que a gente te mostra funcionando 📩\n\nSábado à noite, a cozinha a mil. Uma parte dos pedidos chega direto pelo site da própria loja: o cliente escolhe, paga no Pix na hora e o pedido aparece na tela da cozinha, com alerta. O Pix cai direto na conta da loja e a Growlift não cobra nada sobre o pedido.\n\n(História fictícia. Telas de uma loja de demonstração, com nome fictício. Não garantimos clientes nem vendas.)\n\nPedido no site com Pix é do plano Grow. Valores e condições dos planos: link na bio.\n\nNarração com voz gerada por inteligência artificial.\n#growlift #pedidoonline #sitepararestaurante #delivery #hamburgueria",
+   "quando": "2026-11-16T10:00:00-03:00",
+   "ia": true,
+   "palavra": "PEDIDO"
+  },
+  {
+   "id": "2026-11-18-reel-02",
+   "titulo": "Reel 2 · A confeitaria que ninguém achava (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/02-a-confeitaria.mp4"
+   ],
+   "capa": "05-reels/02-a-confeitaria-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nA Bia faz o bolo mais bonito do bairro. Mas a vitrine fica vazia, e quem procura confeitaria por perto não acha a dela. Então a marca ganha forma: as cores, o nome, as fotos dos bolos, num site com um botão pra encomendar.\n\n(História fictícia. Doce Ateliê é um projeto conceito, com nome fictício: não é cliente. Não garantimos clientes nem posição no Google.)\n\nNarração com voz gerada por inteligência artificial.\n#growlift #confeitaria #criacaodesites #docesartesanais #negocioslocais",
+   "quando": "2026-11-18T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE"
   }
  ]
 }

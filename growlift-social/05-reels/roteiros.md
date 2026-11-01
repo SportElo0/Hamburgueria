@@ -43,6 +43,8 @@ Quer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.
 ```
 
 ## 2. A marca se monta
+> **Substituído em 01/11** pela versão em história "A confeitaria que ninguém achava" (`02-a-confeitaria.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-02-a-marca-se-monta.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho:** "Detalhe que ninguém esquece."
 - **Demonstração:** rolar a seção "Do site às vendas", com a marca se montando, e mostrar Start, Grow e Lift acendendo.
 - **Explicação:** "Animação com propósito: guia o olhar até o que importa."
@@ -140,6 +142,8 @@ No plano Grow, a gente configura e acompanha o seu perfil no Google (a verifica�
 ```
 
 ## 6. Bastidores: como nasce um modelo
+> **Substituído em 01/11** pela versão em história "Do zero, linha por linha" (`06-do-zero.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-06-bastidores.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho:** "Veja um site nascer, linha por linha." (revisado em 01/11; antes: "De uma folha em branco a um site.")
 - **Demonstração:** o código de verdade do modelo Doce Ateliê aparecendo acelerado, linha por linha. Depois, o mesmo modelo em três etapas: só o conteúdo, com o visual e com as fotos.
 - **Explicação:** "Cada detalhe pensado para o tipo de negócio."
@@ -160,6 +164,8 @@ Quer um site feito do zero para o seu negócio? Peça o diagnóstico grátis pel
 ```
 
 ## 7. Quem somos
+> **Substituído em 01/11** pela versão em história "Quem atende é quem faz" (`07-quem-atende.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-07-quem-somos.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho:** "Quem é a Growlift?"
 - **Formato pronto (com fotos):** as fotos do Lucas e do Antônio, o texto "Somos jovens, de São Paulo" e "Quem conversa com você é quem faz o seu site".
 - **Versão falando para a câmera (opcional):** se quiserem, gravem também, com 10 segundos cada:
@@ -185,6 +191,8 @@ Manda um oi pelo link na bio.
 ```
 
 ## 8. Pedido e Pix no site (plano Lift)
+> **Substituído em 01/11** pela versão em história "A noite de sábado" (`08-sabado-a-noite.mp4`, com voz, Comenta PEDIDO). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-08-pedido-e-pix.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho:** "E se o seu cliente pedisse direto no seu site, sem comissão?"
 - **Demonstração:** a tela da loja do sistema de pedidos de verdade:
   - o pedido chega;
@@ -209,6 +217,8 @@ Conheça o plano Lift no link da bio.
 ```
 
 ## 9. Sua marca merece mais. (Reel premium)
+> **Substituído em 01/11** pela versão em história "O lanche é bom, o site nem tanto" (`09-o-lanche-e-bom.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-09-sua-marca-merece-mais.mp4` e aparece no painel com a etiqueta "Não publicar".
+
 - **Gancho, 0 a 2 s:** "SUA MARCA MERECE MAIS." em três batidas. O ponto azul vira a tela do primeiro site.
 - **Demonstração, 2 a 21 s:** quatro projetos conceito, gravados de sites que a Growlift criou, funcionando no navegador:
   - Salinho, moda de linho: o destaque, com 6 segundos;

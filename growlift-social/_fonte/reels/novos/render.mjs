@@ -9,7 +9,7 @@ import { launch, close, renderReel } from '../motor.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(HERE, '../../../05-reels');
-const NAMES = { 1: '01-quatro-negocios', 3: '03-dois-minutos', 4: '04-ela-procurou', 5: '05-aberto-no-google', 6: '06-do-zero', 9: '09-o-lanche-e-bom', 11: '11-dois-amigos', 12: '12-cardapio-completo', 13: '13-porta-aberta' };
+const NAMES = { 1: '01-quatro-negocios', 2: '02-a-confeitaria', 7: '07-quem-atende', 8: '08-sabado-a-noite', 3: '03-dois-minutos', 4: '04-ela-procurou', 5: '05-aberto-no-google', 6: '06-do-zero', 9: '09-o-lanche-e-bom', 11: '11-dois-amigos', 12: '12-cardapio-completo', 13: '13-porta-aberta' };
 
 const id = process.argv[2];
 const stillArg = process.argv.indexOf('--still');

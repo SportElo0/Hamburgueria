@@ -27,6 +27,7 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - **História:** a marca da confeitaria (cores, nome, fotos) se monta peça por peça num site; no celular do cliente, o bolo aparece, com botão para encomendar. Nada de preço nem resultado.
 - **Fecho:** "Marca e site com a cara do seu negócio. Comenta SITE."
 - **Palavra:** SITE. **Antes de postar:** conferir se cita só o que está nos planos atuais (Start, Grow, Scale).
+- **Pronto em 01/11:** `02-a-confeitaria.mp4 (voz 1,20 crédito; Agenda 18/11 15h)`.
 
 ### 3 · "Dois minutos no intervalo do almoço" (era: Do celular ao diagnóstico)
 - **Gancho:** dono de restaurante entre um pedido e outro, cozinha apertada, olhando o celular. "Dois minutos. É o que ele tinha."
@@ -51,24 +52,28 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - **História:** o caderno vira código, o código vira site, as fotos entram e o site aparece no celular dela (Doce Ateliê, projeto conceito). Mostra que é feito do zero, sem modelo pronto.
 - **Fecho:** "Seu site, feito do zero. Comenta SITE."
 - **Palavra:** SITE.
+- **Pronto em 01/11:** `06-do-zero.mp4 (voz 1,05 crédito)`.
 
 ### 7 · "Quem atende é quem faz" (era: Quem somos)
 - **Gancho:** um dono de restaurante manda mensagem a uma empresa e imagina um call center. Corta: quem responde são dois bonequinhos desenhados (os dois da Growlift, **sem foto**: decisão de 01/11). "Quem responde é quem faz."
 - **História:** a mensagem vai e volta, a prévia do site chega no WhatsApp. Sem fala de bastidor inventada, sem história de fundação, sem número.
 - **Fecho:** "Growlift: sites, Google e pedido pelo site, de São Paulo. Comenta SITE."
 - **Palavra:** SITE. **Sem foto do Lucas e do Antônio** por enquanto (decisão de 01/11).
+- **Pronto em 01/11:** `07-quem-atende.mp4 (voz 1,20 crédito; Agenda 13/11 15h; dois bonequinhos, sem foto)`.
 
 ### 8 · "A noite de sábado" (era: Pedido e Pix no site)
 - **Gancho:** sábado à noite, a cozinha lotada, os pedidos chegando de todo lado no balcão. "Sábado à noite. Pedido chegando de tudo que é lado."
 - **História:** uma parte dos pedidos entra direto pelo site da própria loja, com Pix, e aparece na tela da cozinha com alerta; o Pix cai direto na conta do dono e a Growlift não cobra nada sobre o pedido. Mostra o fluxo (tela real do sistema, loja de demonstração).
 - **Fecho:** "O seu cliente pode pedir direto de você. Comenta PEDIDO."
 - **Palavra:** PEDIDO. **Atenção:** plano Grow (não "Lift"), sem citar nenhum aplicativo de delivery por nome.
+- **Pronto em 01/11:** `08-sabado-a-noite.mp4 (voz 1,20 crédito; Agenda 16/11 10h)`.
 
 ### 9 · "O lanche é bom. O site, nem tanto." (era: Sua marca merece mais)
 - **Gancho:** o dono segura o melhor lanche da cidade (história, não fato) e o celular mostra um site velho e torto. "O lanche é bom. O site... nem tanto."
 - **História:** o site velho vira um site novo com a cara do lanche, em três batidas (as três da arte original). Sem promessa; só o contraste do antes e depois do **visual**.
 - **Fecho:** "Sua marca merece mais. Comenta SITE."
 - **Palavra:** SITE.
+- **Pronto em 01/11:** `09-o-lanche-e-bom.mp4 (voz 1,20 crédito)`.
 
 ## Ordem de produção (pela data na Agenda)
 
