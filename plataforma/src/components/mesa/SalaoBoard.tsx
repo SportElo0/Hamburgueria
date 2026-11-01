@@ -13,6 +13,7 @@ import { useBell } from '@/components/orders/OrdersBoard';
  */
 
 type Table = FloorForStaff[number];
+const pixPaid = (t: Table) => (t.payments ?? []).filter((p) => p.status === 'pago').reduce((n, p) => n + p.amount, 0);
 const POLL_MS = 5000;
 const RING_MS = 10000;
 
@@ -295,15 +296,23 @@ function TableSheet({ table: t, now, pending, onClose, onRun }: { table: Table; 
             <span>Total</span>
             <span>{brl(t.total)}</span>
           </p>
-          {(t.credit ?? 0) > 0 && (
+          {((t.credit ?? 0) > 0 || pixPaid(t) > 0) && (
             <>
-              <p className="flex justify-between text-sm text-ink-soft tabular-nums">
-                <span>Sinal pago na reserva</span>
-                <span>− {brl(t.credit ?? 0)}</span>
-              </p>
+              {(t.credit ?? 0) > 0 && (
+                <p className="flex justify-between text-sm text-ink-soft tabular-nums">
+                  <span>Sinal pago na reserva</span>
+                  <span>− {brl(t.credit ?? 0)}</span>
+                </p>
+              )}
+              {pixPaid(t) > 0 && (
+                <p className="flex justify-between text-sm text-ok tabular-nums">
+                  <span>Pago pelo Pix na mesa</span>
+                  <span>− {brl(pixPaid(t))}</span>
+                </p>
+              )}
               <p className="flex justify-between font-bold tabular-nums">
-                <span>{t.total >= (t.credit ?? 0) ? 'Falta pagar' : 'Devolver ao cliente'}</span>
-                <span>{brl(Math.abs(t.total - (t.credit ?? 0)))}</span>
+                <span>{t.total >= (t.credit ?? 0) + pixPaid(t) ? 'Falta pagar' : 'Devolver ao cliente'}</span>
+                <span>{brl(Math.abs(t.total - (t.credit ?? 0) - pixPaid(t)))}</span>
               </p>
             </>
           )}

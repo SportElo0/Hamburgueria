@@ -63,13 +63,18 @@ export function MovimentoEmbed({ slug, initial }: { slug: string; initial: Publi
         <SalaoDesenho minWidth={480} label={`Mesas do ${floor.store} agora`} mesas={floor.tables.map((t) => ({ ...t, state: t.taken ? 'ocupada' : 'livre' }))} />
       </div>
       <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-        {floor.reservations ? (
-          <a href={`/reservar/${slug}`} target="_blank" rel="noopener" className="btn-primary min-h-11">
-            Reservar uma mesa
-          </a>
-        ) : (
-          <span />
-        )}
+        <div className="flex flex-wrap gap-2">
+          {floor.waitlist && (
+            <a href={`/fila/${slug}`} target="_blank" rel="noopener" className="btn-primary min-h-11">
+              Entrar na fila{floor.waiting ? ` · ${floor.waiting} na frente` : ''}
+            </a>
+          )}
+          {floor.reservations && (
+            <a href={`/reservar/${slug}`} target="_blank" rel="noopener" className={floor.waitlist ? 'btn-ghost min-h-11' : 'btn-primary min-h-11'}>
+              Reservar uma mesa
+            </a>
+          )}
+        </div>
         <a href="https://growlift.com.br" target="_blank" rel="noopener" className="text-[11px] text-ink-mute hover:text-accent">
           Atualiza sozinho · Growlift
         </a>

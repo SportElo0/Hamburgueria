@@ -156,6 +156,23 @@ export const orderingSchema = z.object({
   /** Floor map and which categories count as drinks in the time-at-table analysis. */
   salao: z.object({ layout: z.array(tableSpotSchema).max(200), drinkCategories: z.array(z.string().min(1).max(40)).max(40) }).default({ layout: [], drinkCategories: [] }),
   reservations: reservationSettingsSchema.default(DEFAULT_RESERVATIONS),
+  /** Walk-in waiting list: QR at the door, the customer's phone is told when the table is ready. */
+  waitlist: z.object({ enabled: z.boolean(), maxParties: z.number().int().min(5).max(200) }).default({ enabled: false, maxParties: 60 }),
+  /** Sending orders to the store's POS (Saipos). Partner credentials live in env vars, never here. */
+  pdv: z
+    .object({
+      provider: z.enum(['nenhum', 'saipos']),
+      /** The store's code in Saipos (cod_store). */
+      codStore: z.string().trim().max(40),
+      /** Our item id → the POS item code (integration_code). Unmapped items go by our id. */
+      codes: z.record(z.string().max(40), z.string().trim().max(40)),
+      /** Saipos checks the city and state of delivery orders. */
+      city: z.string().trim().max(60).default(''),
+      state: z.string().trim().toUpperCase().max(2).default(''),
+    })
+    .default({ provider: 'nenhum', codStore: '', codes: {}, city: '', state: '' }),
+  /** Customers pay the table's bill by Pix from their phone (whole or split). */
+  tablePay: z.boolean().default(false),
   /** Shown to every customer once the order is done or the bill is asked for. Empty = not shown. */
   reviewUrl: z.string().trim().max(300).refine((v) => v === '' || isReviewUrl(v), 'Use o link de avaliação do Google (começa com https://g.page/ ou https://search.google.com/).').default(''),
 });
@@ -176,6 +193,9 @@ export const DEFAULT_ORDERING: Ordering = {
   tables: { enabled: false, count: 10 },
   salao: { layout: [], drinkCategories: [] },
   reservations: DEFAULT_RESERVATIONS,
+  waitlist: { enabled: false, maxParties: 60 },
+  pdv: { provider: 'nenhum', codStore: '', codes: {}, city: '', state: '' },
+  tablePay: false,
   reviewUrl: '',
 };
 

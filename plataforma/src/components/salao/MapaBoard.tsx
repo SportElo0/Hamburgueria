@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import type { MapForStaff } from '@/app/api/loja/[slug]/mapa/route';
-import { freeTableAction, reservationAction, seatAction } from '@/app/loja/[slug]/actions';
+import { addToQueueAction, freeTableAction, queueAction, refundDoneAction, reservationAction, seatAction } from '@/app/loja/[slug]/actions';
 import { RESERVATION_LABEL } from '@/lib/reservas-labels';
 import { brl } from '@/lib/ordering';
 import { duration } from '@/lib/salao';
@@ -12,6 +12,7 @@ import { SalaoDesenho, type DesenhoMesa, type DesenhoState } from './SalaoDesenh
 const POLL_MS = 5000;
 type Table = MapForStaff['tables'][number];
 type Booking = MapForStaff['bookings'][number];
+type QueueItem = MapForStaff['queue'][number];
 
 const minutesSince = (iso: string, now: number) => Math.max(0, Math.round((now - Date.parse(iso)) / 60_000));
 const startOf = (b: Booking) => Date.parse(`${b.date}T${b.time}:00-03:00`);
@@ -30,6 +31,7 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
   const [date, setDate] = useState(today);
   const [selected, setSelected] = useState<number | null>(null);
   const [arriving, setArriving] = useState<Booking | null>(null);
+  const [seatingQueue, setSeatingQueue] = useState<QueueItem | null>(null);
   const [people, setPeople] = useState(2);
   const [error, setError] = useState('');
   const [pending, startTransition] = useTransition();
@@ -77,6 +79,14 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
   const isToday = date === today;
 
   const pick = (n: number) => {
+    if (seatingQueue) {
+      if (byNumber.has(n)) return setError(`A mesa ${n} está ocupada. Escolha uma livre.`);
+      const q = seatingQueue;
+      return run(() => queueAction(slug, q.id, 'sentou', n, q.people), () => {
+        setSeatingQueue(null);
+        setSelected(n);
+      });
+    }
     if (arriving) {
       if (byNumber.has(n)) return setError(`A mesa ${n} está ocupada. Escolha uma livre.`);
       const b = arriving;
@@ -108,6 +118,14 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
         </div>
       </section>
 
+      {seatingQueue && (
+        <p role="status" className="rounded-xl bg-accent-soft px-4 py-3 text-sm font-semibold text-accent">
+          Toque numa mesa livre para sentar {seatingQueue.name} ({seatingQueue.people} {seatingQueue.people === 1 ? 'pessoa' : 'pessoas'}), da fila.{' '}
+          <button type="button" className="underline" onClick={() => setSeatingQueue(null)}>
+            Cancelar
+          </button>
+        </p>
+      )}
       {arriving && (
         <p role="status" className="rounded-xl bg-accent-soft px-4 py-3 text-sm font-semibold text-accent">
           Toque numa mesa livre para sentar a reserva de {arriving.name} ({arriving.people} {arriving.people === 1 ? 'pessoa' : 'pessoas'}).{' '}
@@ -131,7 +149,7 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
         </section>
 
         <aside className="space-y-4">
-          {selected !== null && !arriving && (
+          {selected !== null && !arriving && !seatingQueue && (
             <section className="card space-y-3 p-4" aria-labelledby="mesa-sel">
               <h2 id="mesa-sel" className="text-lg font-bold">
                 Mesa {selected}
@@ -177,6 +195,26 @@ export function MapaBoard({ slug, today }: { slug: string; today: string }) {
               )}
             </section>
           )}
+
+          {data.refunds.length > 0 && (
+            <section className="card space-y-2 border-bad/40 p-4" aria-label="Devolver no caixa">
+              <h2 className="text-base font-bold text-bad">Devolver no caixa</h2>
+              <p className="text-sm text-ink-soft">O Mercado Pago não devolveu sozinho estes Pix pagos a mais. Devolva ao cliente e marque.</p>
+              <ul className="divide-y divide-line text-sm">
+                {data.refunds.map((r) => (
+                  <li key={r.id} className="flex items-center justify-between gap-3 py-2">
+                    <span>
+                      {r.table ? `Mesa ${r.table}` : 'Mesa já fechada'} · <strong>{brl(r.amount)}</strong>
+                    </span>
+                    <button type="button" className="btn-ghost min-h-10" disabled={pending} onClick={() => run(() => refundDoneAction(slug, r.id))}>
+                      Já devolvi
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {data.queueOn && <Fila slug={slug} store={data.storeName} queue={data.queue} now={now} pending={pending} run={run} onSeat={(q) => (setSeatingQueue(q), setArriving(null), setSelected(null))} />}
 
           <section className="card space-y-3 p-4" aria-labelledby="reservas-titulo">
             <div className="flex items-center justify-between gap-2">
@@ -277,5 +315,99 @@ function CancelButton({ onConfirm, disabled, paid, deposit }: { onConfirm: () =>
         Voltar
       </button>
     </span>
+  );
+}
+
+function Fila({
+  slug,
+  store,
+  queue,
+  now,
+  pending,
+  run,
+  onSeat,
+}: {
+  slug: string;
+  store: string;
+  queue: QueueItem[];
+  now: number;
+  pending: boolean;
+  run: (fn: () => Promise<{ ok: boolean; error?: string }>, after?: () => void) => void;
+  onSeat: (q: QueueItem) => void;
+}) {
+  const [name, setName] = useState('');
+  const [people, setPeople] = useState(2);
+  const wa = (q: QueueItem) => `https://wa.me/55${q.phone}?text=${encodeURIComponent(`Olá, ${q.name}! Sua mesa no ${store} está pronta. Pode vir até a recepção.`)}`;
+  return (
+    <section className="card space-y-3 p-4" aria-labelledby="fila-titulo">
+      <div className="flex items-center justify-between gap-2">
+        <h2 id="fila-titulo" className="text-lg font-bold">
+          Fila <span className="text-ink-mute tabular-nums">· {queue.length}</span>
+        </h2>
+        <a href={`/loja/${slug}/fila`} className="text-sm font-semibold text-accent underline">
+          QR da porta
+        </a>
+      </div>
+      {queue.length === 0 ? (
+        <p className="text-sm text-ink-mute">Ninguém esperando.</p>
+      ) : (
+        <ol className="divide-y divide-line">
+          {queue.map((q, i) => (
+            <li key={q.id} className="space-y-2 py-3">
+              <div className="flex items-start justify-between gap-2">
+                <p className="font-semibold">
+                  <span className="text-ink-mute tabular-nums">{i + 1}º</span> {q.name} · {q.people} {q.people === 1 ? 'pessoa' : 'pessoas'}
+                </p>
+                <span className={`chip ${q.status === 'chamado' ? 'bg-ok/10 text-ok' : 'bg-line text-ink-mute'}`}>
+                  {q.status === 'chamado' ? `Chamado há ${minutesSince(q.calledAt!, now)} min` : `${minutesSince(q.createdAt, now)} min`}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {q.status === 'aguardando' ? (
+                  <button type="button" className="btn-primary min-h-10" disabled={pending} onClick={() => run(() => queueAction(slug, q.id, 'chamar'))}>
+                    Chamar
+                  </button>
+                ) : (
+                  <button type="button" className="btn-ghost min-h-10" disabled={pending} onClick={() => run(() => queueAction(slug, q.id, 'voltar'))}>
+                    Desfazer chamada
+                  </button>
+                )}
+                <button type="button" className="btn-ghost min-h-10" disabled={pending} onClick={() => onSeat(q)}>
+                  Sentou
+                </button>
+                <button type="button" className="btn-ghost min-h-10" disabled={pending} onClick={() => run(() => queueAction(slug, q.id, 'nao-veio'))}>
+                  Não veio
+                </button>
+                {q.status === 'chamado' && q.phone && (
+                  <a href={wa(q)} target="_blank" rel="noreferrer" className="btn min-h-10 border border-ok/40 bg-ok/5 text-ok">
+                    Avisar no WhatsApp
+                  </a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+      <form
+        className="flex flex-wrap items-end gap-2 border-t border-line pt-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!name.trim()) return;
+          run(() => addToQueueAction(slug, name, people), () => (setName(''), setPeople(2)));
+        }}
+      >
+        <label className="min-w-0 flex-1">
+          <span className="label">Chegou sem o QR</span>
+          <input className="field" placeholder="Nome" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
+        </label>
+        <label className="w-20">
+          <span className="label">Pessoas</span>
+          <input className="field tabular-nums" inputMode="numeric" value={people} onChange={(e) => setPeople(Math.max(1, Math.min(30, Number(e.target.value.replace(/\D/g, '')) || 1)))} />
+        </label>
+        <button type="submit" className="btn-ghost min-h-10" disabled={pending || !name.trim()}>
+          Pôr na fila
+        </button>
+      </form>
+    </section>
   );
 }

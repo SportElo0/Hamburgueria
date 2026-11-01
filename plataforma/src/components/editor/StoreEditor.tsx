@@ -16,6 +16,7 @@ import type { OperatorSummary } from '@/lib/operators';
 import { PagamentosPanel } from './PagamentosPanel';
 import { PublishDialog } from './PublishDialog';
 import { UsageBadge } from '../UsageBadge';
+import type { PdvSend } from '@/lib/pdv';
 
 const TABS = [
   ['catalogo', 'Cardápio / catálogo'],
@@ -45,6 +46,8 @@ export function StoreEditor(props: {
   apiUrl: string;
   operators: OperatorSummary[];
   hasMercadoPago: boolean;
+  saiposReady: boolean;
+  pdvSends: PdvSend[];
   ordersUrl: string;
   webhookUrl: string;
   storeOpen: boolean;
@@ -149,7 +152,7 @@ export function StoreEditor(props: {
         {tab === 'catalogo' && <CatalogEditor store={store} update={update} />}
         {tab === 'info' && <InfoEditor store={store} update={update} />}
         {tab === 'online' && (
-          <OnlineOrdersPanel store={store} update={update} operators={props.operators} hasMercadoPago={props.hasMercadoPago} ordersUrl={props.ordersUrl} webhookUrl={props.webhookUrl} open={props.storeOpen} />
+          <OnlineOrdersPanel store={store} update={update} operators={props.operators} hasMercadoPago={props.hasMercadoPago} ordersUrl={props.ordersUrl} webhookUrl={props.webhookUrl} open={props.storeOpen} saiposReady={props.saiposReady} pdvSends={props.pdvSends} />
         )}
         {tab === 'pedidos' && <PedidosPanel slug={store.slug} pedidos={props.pedidos} />}
         {tab === 'mudancas' && (

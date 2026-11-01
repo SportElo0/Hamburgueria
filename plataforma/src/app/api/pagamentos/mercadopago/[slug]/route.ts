@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { settleFromMercadoPago } from '@/lib/orders';
 import { settleReservationFromMercadoPago } from '@/lib/reservas';
+import { settleTablePaymentFromMercadoPago } from '@/lib/mesa-pagamento';
 import { isSlug } from '@/lib/slug';
 
 /**
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   if (type === 'payment' && paymentId) {
     try {
       // An order's or a booking's deposit: each looks the payment up and only settles its own reference.
-      if (!(await settleFromMercadoPago(slug, paymentId))) await settleReservationFromMercadoPago(slug, paymentId);
+      if (!(await settleFromMercadoPago(slug, paymentId)) && !(await settleReservationFromMercadoPago(slug, paymentId))) await settleTablePaymentFromMercadoPago(slug, paymentId);
     } catch (err) {
       // Answer with an error so Mercado Pago retries later.
       console.error('mercadopago webhook', err);

@@ -3,6 +3,8 @@ import { take } from './limits';
 import { ZodError } from 'zod';
 import { storage, ConflictError } from './storage';
 import { getPublished } from './stores';
+import { after } from 'next/server';
+import { pushOrder } from './pdv';
 import { SUMMARY_VERSION, monthSummaryKey, type MonthSummary } from './inteligencia/resumo';
 import { checkCharge, createCharge, lookupMercadoPago, PixError, refundCharge, type PaymentCheck } from './pix';
 import {
@@ -438,6 +440,16 @@ export async function applyAction(slug: string, id: string, action: OperatorActi
     };
   });
   if (!updated) throw new ActionError('Pedido não encontrado.');
+  // Accepted = going to the kitchen: send it to the store's POS too (logged; never blocks the kitchen).
+  if (action === 'aceitar') {
+    // The POS send runs after the reply, so a slow Saipos never holds up "Aceitar". Outside a request (tests,
+    // scripts) there is no `after`, so it simply runs now.
+    try {
+      after(() => pushOrder(slug, updated));
+    } catch {
+      await pushOrder(slug, updated);
+    }
+  }
   if (refund && updated.payment.pix) {
     const ok = await refundCharge(slug, updated.payment.pix);
     if (ok) return (await updateOrder(slug, id, (o) => ({ ...o, payment: { ...o.payment, status: 'devolvido' } }))) ?? updated;

@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from 'react';
 import { SalaoSettings } from './SalaoSettings';
+import { SalaoExtras } from './SalaoExtras';
+import type { PdvSend } from '@/lib/pdv';
 import { newId, type Store } from '@/lib/schema';
 import { brl, orderingOf, todaySP, type Coupon } from '@/lib/ordering';
 import type { OperatorSummary } from '@/lib/operators';
@@ -171,6 +173,8 @@ export function OnlineOrdersPanel(props: {
   ordersUrl: string;
   webhookUrl: string;
   open: boolean;
+  saiposReady: boolean;
+  pdvSends: PdvSend[];
 }) {
   const o = orderingOf(props.store);
   const set = <K extends keyof typeof o>(key: K, value: (typeof o)[K]) =>
@@ -301,6 +305,7 @@ export function OnlineOrdersPanel(props: {
           hasMercadoPago={hasMp}
         />
       )}
+      {o.tables.enabled && <SalaoExtras slug={props.store.slug} o={o} set={set} hasMercadoPago={hasMp} saiposReady={props.saiposReady} sends={props.pdvSends} />}
 
       <section className="card space-y-4 p-5">
         <h2 className="text-lg font-bold">Bairros e taxa de entrega</h2>

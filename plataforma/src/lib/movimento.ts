@@ -2,6 +2,7 @@ import 'server-only';
 import { getPublished } from './stores';
 import { openSeatings } from './mesas';
 import { heldNow, reservationsOfDay } from './reservas';
+import { waitingCount } from './fila';
 import { orderingOf, type TableSpot } from './ordering';
 import { occupancy } from './salao';
 
@@ -22,7 +23,11 @@ export async function publicFloor(slug: string, now = new Date()) {
   if (!record) return null;
   const ordering = orderingOf(record.store);
   if (!ordering.enabled || !ordering.tables.enabled) return null;
-  const [seatings, bookings] = await Promise.all([openSeatings(slug), ordering.reservations.enabled ? reservationsOfDay(slug, today(now), now) : Promise.resolve([])]);
+  const [seatings, bookings, waiting] = await Promise.all([
+    openSeatings(slug),
+    ordering.reservations.enabled ? reservationsOfDay(slug, today(now), now) : Promise.resolve([]),
+    ordering.waitlist.enabled ? waitingCount(slug, now) : Promise.resolve(0),
+  ]);
   const taken = new Set(seatings.filter((s) => s.confirmed || s.devices.length).map((s) => s.number));
   const held = heldNow(bookings, now);
   return {
@@ -30,6 +35,8 @@ export async function publicFloor(slug: string, now = new Date()) {
     ...occupancy(ordering.tables.count, taken.size, held),
     tables: layoutOf(ordering.salao.layout, ordering.tables.count).map((s) => ({ number: s.number, x: s.x, y: s.y, seats: s.seats, taken: taken.has(s.number) })),
     reservations: ordering.reservations.enabled,
+    waitlist: ordering.waitlist.enabled,
+    waiting,
     updatedAt: now.toISOString(),
   };
 }

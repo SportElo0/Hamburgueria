@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { storeAccess } from '@/lib/auth';
 import { floor } from '@/lib/mesas';
 import { reservationsOfDay } from '@/lib/reservas';
+import { queueOfDay } from '@/lib/fila';
+import { refundsToDo } from '@/lib/mesa-pagamento';
 import { getDraft } from '@/lib/stores';
 import { orderingOf } from '@/lib/ordering';
 import { layoutOf } from '@/lib/movimento';
@@ -14,7 +16,7 @@ const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'nume
 async function mapForStaff(slug: string, date: string) {
   const draft = await getDraft(slug);
   const ordering = draft ? orderingOf(draft.data.store) : null;
-  const [tables, bookings] = await Promise.all([floor(slug), reservationsOfDay(slug, date)]);
+  const [tables, bookings, queue, refunds] = await Promise.all([floor(slug), reservationsOfDay(slug, date), queueOfDay(slug), refundsToDo(slug)]);
   return {
     count: ordering?.tables.count ?? 0,
     layout: layoutOf(ordering?.salao.layout ?? [], ordering?.tables.count ?? 0),
@@ -45,6 +47,13 @@ async function mapForStaff(slug: string, date: string) {
       toleranceMinutes: r.rules.toleranceMinutes,
       date: r.date,
     })),
+    queue: queue
+      .filter((q) => q.status === 'aguardando' || q.status === 'chamado')
+      .map((q) => ({ id: q.id, name: q.name, phone: q.phone, people: q.people, status: q.status, createdAt: q.createdAt, calledAt: q.calledAt })),
+    queueOn: Boolean(ordering?.waitlist.enabled),
+    /** Pix the provider would not give back: the till pays these and ticks them off. */
+    refunds,
+    storeName: draft?.data.store.name ?? '',
     reservationsOn: Boolean(ordering?.reservations.enabled),
     date,
     now: new Date().toISOString(),

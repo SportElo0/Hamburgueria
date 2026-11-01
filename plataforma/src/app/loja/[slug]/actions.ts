@@ -7,6 +7,8 @@ import { isSlug } from '@/lib/slug';
 import { setOptOut } from '@/lib/customers';
 import { ItemEditError, addPedido, editItemByStore, listPedidos } from '@/lib/stores';
 import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, seatTable } from '@/lib/mesas';
+import { QueueError, addByStaff, queueOfDay, updateQueue, type QueueAction } from '@/lib/fila';
+import { markRefundDone } from '@/lib/mesa-pagamento';
 import { ReservationError, cancelByStore, markArrived, markFinished, markNoShow, undoArrived } from '@/lib/reservas';
 
 export interface OrderActionResult {
@@ -155,5 +157,50 @@ export async function freeTableAction(slug: string, number: number): Promise<Ord
     if (err instanceof TableError) return { ok: false, error: err.message };
     console.error('freeTableAction', err);
     return { ok: false, error: 'Não foi possível liberar a mesa. Tente de novo.' };
+  }
+}
+
+const Q_ID = /^f\d{8}-[a-z0-9]{10}$/;
+
+/** Waiting list on the floor map: call, seat at a table, didn't come, or undo a call. */
+export async function queueAction(slug: string, id: string, action: QueueAction, table?: number, people?: number): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !Q_ID.test(id) || !['chamar', 'sentou', 'nao-veio', 'voltar'].includes(action)) return { ok: false, error: 'Ação inválida.' };
+  await requireStoreAccess(slug);
+  try {
+    if (action === 'sentou') {
+      if (!Number.isInteger(table) || table! < 1 || table! > 200) return { ok: false, error: 'Escolha a mesa.' };
+      // Still waiting? (They may have left the queue a second ago.) Only then open the table.
+      const entry = (await queueOfDay(slug)).find((e) => e.id === id);
+      if (!entry || (entry.status !== 'aguardando' && entry.status !== 'chamado')) return { ok: false, error: 'Essa pessoa já saiu da fila.' };
+      await seatTable(slug, table!, { people: Number.isInteger(people) && people! > 0 && people! <= 40 ? people! : null });
+      await updateQueue(slug, id, 'sentou', table!);
+    } else await updateQueue(slug, id, action, null);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof QueueError || err instanceof TableError) return { ok: false, error: err.message };
+    console.error('queueAction', err);
+    return { ok: false, error: 'Não foi possível atualizar a fila. Tente de novo.' };
+  }
+}
+
+/** The till gave back a Pix the provider refused to refund: tick it off the list. */
+export async function refundDoneAction(slug: string, id: string): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !/^m\d{8}-[a-z0-9]{10}$/.test(id)) return { ok: false, error: 'Dados inválidos.' };
+  await requireStoreAccess(slug);
+  await markRefundDone(slug, id);
+  return { ok: true };
+}
+
+/** The host adds someone who arrived without the QR. */
+export async function addToQueueAction(slug: string, name: string, people: number): Promise<OrderActionResult> {
+  if (!isSlug(slug) || typeof name !== 'string') return { ok: false, error: 'Dados inválidos.' };
+  await requireStoreAccess(slug);
+  try {
+    await addByStaff(slug, { name, people });
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof QueueError) return { ok: false, error: err.message };
+    console.error('addToQueueAction', err);
+    return { ok: false, error: 'Não foi possível adicionar. Tente de novo.' };
   }
 }

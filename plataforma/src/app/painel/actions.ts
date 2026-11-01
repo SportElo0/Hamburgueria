@@ -23,6 +23,8 @@ import { createReferral, updateReferral, type ReferralPatch } from '@/lib/referr
 import { seedStores } from '@/lib/seeds';
 import { migrateFromBlob, migrationPending } from '@/lib/migracao';
 import { setMercadoPagoToken } from '@/lib/pix';
+import { pushOrder, recentSends } from '@/lib/pdv';
+import { getOrder } from '@/lib/orders';
 import { OperatorError, removeOperator, upsertOperator } from '@/lib/operators';
 import { DiagnosisError, setDiagnosisStatus, type DiagnosisStatus } from '@/lib/diagnostics';
 import { ContentError, setContentStatus, type ContentStatus } from '@/lib/conteudos';
@@ -289,4 +291,15 @@ export async function setContentStatusAction(key: string, status: ContentStatus)
   } catch (err) {
     return { ok: false, error: err instanceof ContentError ? err.message : 'Não foi possível salvar. Recarregue a página e tente de novo.' };
   }
+}
+
+/** Resends one order to the store's POS (Saipos). Team only. */
+export async function resendToPdvAction(slug: string, orderId: string): Promise<{ ok: boolean; error?: string }> {
+  await requireUser();
+  if (!isSlug(slug) || !/^[\w-]{1,40}$/.test(orderId)) return { ok: false, error: 'Pedido inválido.' };
+  const order = await getOrder(slug, orderId);
+  if (!order) return { ok: false, error: 'Pedido não encontrado (pedidos com mais de alguns dias saem da lista).' };
+  await pushOrder(slug, order, { force: true });
+  const last = (await recentSends(slug, 300)).find((e) => e.orderId === orderId);
+  return last?.status === 'enviado' ? { ok: true } : { ok: false, error: last?.error || 'Não foi enviado.' };
 }

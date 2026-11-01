@@ -4,6 +4,7 @@ import { getPublished } from '@/lib/stores';
 import { getOperation } from '@/lib/orders';
 import { isReviewUrl, orderingOf, withSoldOut } from '@/lib/ordering';
 import { validKey } from '@/lib/mesas';
+import { tablePayReady } from '@/lib/mesa-pagamento';
 import { MesaApp, type MesaCategory } from '@/components/mesa/MesaApp';
 
 export const metadata: Metadata = { title: 'Pedido na mesa' };
@@ -65,5 +66,5 @@ export default async function MesaPage({ params, searchParams }: { params: Promi
     }))
     .filter((c) => c.items.length);
 
-  return <MesaApp slug={slug} number={number} tableKey={k} storeName={store.name} menu={menu} kitchenOpen={operation.open} reviewUrl={isReviewUrl(ordering.reviewUrl) ? ordering.reviewUrl : undefined} />;
+  return <MesaApp slug={slug} number={number} tableKey={k} storeName={store.name} menu={menu} kitchenOpen={operation.open} reviewUrl={isReviewUrl(ordering.reviewUrl) ? ordering.reviewUrl : undefined} pay={{ on: tablePayReady(store), needsEmail: ordering.pixMode === 'mercadopago' }} />;
 }

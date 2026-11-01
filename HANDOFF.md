@@ -72,6 +72,17 @@ Detalhes em `plataforma/MESAS.md`. Mapa ao vivo e tempo nas mesas em `/loja/<loj
 `/movimento/<loja>`; reservas com sinal em `/reservar/<loja>`. A equipe liga e configura em Configurar → Pedido na mesa.
 Reservas com Pix real precisam do token do Mercado Pago da loja.
 
+## Fila de espera, pagar na mesa e PDV Saipos (01/11/2026)
+
+Detalhes em `plataforma/MESAS.md`. Fila pelo QR da porta (`/fila/<loja>`), pagar a conta da mesa pelo Pix (inteira ou
+dividida, fecha a mesa sozinha) e envio dos pedidos aceitos ao Saipos. Tudo desligado por padrão em cada loja.
+**Pendente:** o Saipos só funciona depois da parceria (eles dão `SAIPOS_PARTNER_ID` e `SAIPOS_SECRET`, que vão nas
+variáveis de ambiente da Vercel) e com o código da loja no Saipos.
+**Antes de vender o Scale** (revisão legal de 01/11): atualizar `growlift/privacidade.html` e `growlift/termos.html`
+(hoje dizem que o Scale não está à venda e não citam Mercado Pago nem Saipos) e pôr no contrato com cada restaurante
+a cláusula de operador de dados (quem é controlador, o que vai ao Saipos, Pix direto na conta do restaurante).
+Vale uma passada de advogado.
+
 ## Conteúdos da Growlift no painel
 
 - `/painel/conteudos` mostra `growlift-social/`: imagens em galeria (abrir, baixar, .zip por grupo), `.md` com botão de copiar, e a situação de cada peça (Para aprovar, Aprovado, Postado), guardada no banco em `conteudos/status.json`.

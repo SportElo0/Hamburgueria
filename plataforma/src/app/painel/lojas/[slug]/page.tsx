@@ -11,6 +11,7 @@ import { listOperators } from '@/lib/operators';
 import { getSecrets } from '@/lib/pix';
 import { orderingOf } from '@/lib/ordering';
 import { getOperation } from '@/lib/orders';
+import { recentSends, saiposReady } from '@/lib/pdv';
 
 const PAYMENT_HISTORY_MONTHS = 6;
 
@@ -78,6 +79,8 @@ export default async function LojaPage({
         apiUrl={`${origin}/api/public/lojas/${slug}`}
         operators={operators}
         hasMercadoPago={Boolean(secrets.mercadoPagoToken)}
+        saiposReady={saiposReady()}
+        pdvSends={await recentSends(slug)}
         ordersUrl={`/loja/${slug}`}
         webhookUrl={`${origin}/api/pagamentos/mercadopago/${slug}`}
         storeOpen={operation.open}

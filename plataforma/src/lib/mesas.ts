@@ -5,7 +5,7 @@ import { getPublished } from './stores';
 import { monthKey } from './changes';
 import type { Store } from './schema';
 import { count, hourWindow, record, take } from './limits';
-import { OrderError, orderingOf, type Order, type PaymentMethod } from './ordering';
+import { OrderError, orderingOf, type Order, type PaymentMethod, type PixCharge } from './ordering';
 import { ordersOfDays, placeTableOrder, tableDays, tableOrders, updateTableOrders } from './orders';
 
 /**
@@ -37,6 +37,22 @@ export interface Seating {
   /** The booking this table is holding, and the deposit already paid for it (centavos, deducted from the bill). */
   reservationId?: string;
   credit?: number;
+  /** Pix payments made from the phones at the table (see mesa-pagamento.ts). */
+  payments?: TablePayment[];
+}
+
+export interface TablePayment {
+  id: string;
+  amount: number;
+  /** `amount` is what counts toward the bill; `charged` what the Pix was for, when part of it went back. */
+  status: 'aguardando' | 'pago' | 'devolvido';
+  charged?: number;
+  /** Money given back (the bill was already covered, or less than asked was paid). */
+  refund?: { amount: number; status: 'pendente' | 'feito' | 'falhou' };
+  pix: PixCharge;
+  createdAt: string;
+  paidAt: string | null;
+  checkedAt?: string;
 }
 
 /** What is kept of a closed bill, for the time-at-table analysis. No customer data. */
@@ -99,13 +115,13 @@ export const tablePath = (slug: string, number: number) => `/mesa/${slug}/${numb
 /** Cookie that holds this phone's token for one table. */
 export const deviceCookie = (slug: string, number: number) => `mesa-${slug}-${number}`;
 
-async function readDoc(slug: string) {
+export async function readDoc(slug: string) {
   const doc = await storage().readJSON<Doc>(docKey(slug));
   return { data: doc?.data ?? { seatings: {} }, etag: doc ? doc.etag : null };
 }
 
 /** Read-modify-write of the open seatings, retried when two phones (or a phone and the waiter) write together. */
-async function change<R>(slug: string, fn: (doc: Doc) => R): Promise<R> {
+export async function change<R>(slug: string, fn: (doc: Doc) => R): Promise<R> {
   for (let attempt = 0; attempt < 6; attempt++) {
     const { data, etag } = await readDoc(slug);
     const copy: Doc = structuredClone(data);
@@ -124,7 +140,7 @@ export async function openSeatings(slug: string): Promise<Seating[]> {
   return Object.values((await readDoc(slug)).data.seatings).sort((a, b) => a.number - b.number);
 }
 
-async function tableSettings(slug: string, number: number) {
+export async function tableSettings(slug: string, number: number) {
   const record = await getPublished(slug);
   if (!record) throw new TableError('Restaurante não encontrado.');
   const ordering = orderingOf(record.store);
@@ -134,7 +150,7 @@ async function tableSettings(slug: string, number: number) {
 }
 
 const newToken = () => randomBytes(24).toString('base64url');
-const isMember = (s: Seating | undefined, token: string | undefined) => Boolean(s && token && s.devices.includes(hashDevice(token)));
+export const isMember = (s: Seating | undefined, token: string | undefined) => Boolean(s && token && s.devices.includes(hashDevice(token)));
 
 /**
  * What one phone at the table sees, polled every few seconds: so it reads only the seatings and, for a
@@ -153,8 +169,19 @@ export async function tableState(slug: string, number: number, token: string | u
     calls: seating.calls.map((c) => c.kind),
     orders: orders.map(publicTableOrder),
     total: billTotal(orders),
+    credit: seating.credit ?? 0,
+    paid: paidOf(seating),
+    due: dueOf(seating, orders),
+    payments: (seating.payments ?? [])
+      .filter((p) => p.status !== 'aguardando' || Date.parse(p.pix.expiresAt) > now.getTime())
+      .map((p) => ({ id: p.id, amount: p.amount, status: p.status, refund: p.refund ?? null, pix: p.status === 'aguardando' ? { copyPaste: p.pix.copyPaste, qrBase64: p.pix.qrBase64, expiresAt: p.pix.expiresAt, demo: p.pix.provider === 'demo' } : null })),
   };
 }
+
+/** Paid by Pix from the table's phones so far (centavos). */
+export const paidOf = (s: Seating) => (s.payments ?? []).filter((p) => p.status === 'pago').reduce((n, p) => n + p.amount, 0);
+/** What is left to pay: the bill, minus the booking deposit, minus Pix already paid. */
+export const dueOf = (s: Seating, orders: Order[]) => Math.max(0, billTotal(orders) - (s.credit ?? 0) - paidOf(s));
 export type TableState = Awaited<ReturnType<typeof tableState>>;
 
 /** A seating's bill: every order the kitchen did not refuse. */
@@ -305,10 +332,12 @@ export async function answerCall(slug: string, number: number, kind: CallKind) {
  * sales report and the margins use), food already taken to the table counts as delivered, and the
  * seating ends, so its code and phones stop working.
  */
-export async function closeTable(slug: string, number: number, method: PaymentMethod, by: string, now = new Date()): Promise<Seating> {
+export async function closeTable(slug: string, number: number, method: PaymentMethod, by: string, now = new Date(), session?: string): Promise<Seating> {
   const seating = await change(slug, (doc) => {
     const s = doc.seatings[number];
     if (!s) throw new TableError('Essa mesa já foi fechada.');
+    // Closing on behalf of a payment: only that seating, never a group that sat down after it.
+    if (session && s.id !== session) throw new TableError('A mesa já é de outro grupo.');
     if (!s.confirmed) throw new TableError('Confirme a mesa antes de fechar a conta.');
     delete doc.seatings[number];
     return s;

@@ -72,7 +72,7 @@ function Bell() {
   );
 }
 
-export function MesaApp(props: { slug: string; number: number; tableKey: string; storeName: string; menu: MesaCategory[]; kitchenOpen: boolean; reviewUrl?: string }) {
+export function MesaApp(props: { slug: string; number: number; tableKey: string; storeName: string; menu: MesaCategory[]; kitchenOpen: boolean; reviewUrl?: string; pay?: { on: boolean; needsEmail: boolean } }) {
   const api = `/api/public/lojas/${props.slug}/mesas/${props.number}`;
   const router = useRouter();
   const [state, setState] = useState<TableState | null>(null);
@@ -86,6 +86,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
   // This phone was at the table with a bill, and the table is gone: the bill was paid. Say thanks (and ask for a review).
   const hadBill = useRef(false);
   const [thanked, setThanked] = useState(false);
+  const [refundNote, setRefundNote] = useState<{ amount: number; status: 'feito' | 'falhou' } | null>(null);
   const apply = useCallback((next: TableState) => {
     if (next.member && next.orders.length > 0) hadBill.current = true;
     else if (!next.member && hadBill.current) {
@@ -125,7 +126,8 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
     setError('');
     try {
       const res = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ k: props.tableKey, ...body }) });
-      const data = (await res.json()) as TableState & { error?: string };
+      const data = (await res.json()) as TableState & { error?: string; refund?: { amount: number; status: 'feito' | 'falhou' } };
+      if (data.refund) setRefundNote(data.refund);
       if (!res.ok) {
         setError(data.error ?? 'Não foi possível agora. Tente de novo.');
         // New prices: reload the menu from the server; the cart reprices itself and the customer sends again.
@@ -174,7 +176,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
     );
   }
 
-  if (!state.member && thanked) return <Obrigado storeName={props.storeName} reviewUrl={props.reviewUrl} onBack={() => setThanked(false)} />;
+  if (!state.member && thanked) return <Obrigado storeName={props.storeName} reviewUrl={props.reviewUrl} refund={refundNote} onBack={() => setThanked(false)} />;
   if (!state.member) return <Entrada storeName={props.storeName} number={props.number} open={state.open} busy={busy} error={error} onOpen={() => send({ action: 'abrir' })} onJoin={(code) => send({ action: 'entrar', code })} />;
 
   const pendingCalls = new Set(state.calls);
@@ -222,7 +224,7 @@ export function MesaApp(props: { slug: string; number: number; tableKey: string;
       {view === 'cardapio' ? (
         <Cardapio menu={props.menu} kitchenOpen={props.kitchenOpen} onPick={(item) => (item.options.length ? setPicking(item) : addLine({ itemId: item.id, name: item.name, quantity: 1, unit: item.price, selections: {}, detail: '', notes: '' }))} cart={cart} />
       ) : (
-        <Conta state={state} busy={busy} reviewUrl={props.reviewUrl} onBill={async () => (await send({ action: 'chamar', kind: 'conta' })) && setToast('O garçom já vem com a conta.')} />
+        <Conta state={state} busy={busy} reviewUrl={props.reviewUrl} pay={props.pay} slug={props.slug} storeName={props.storeName} send={send} error={error} onBill={async () => (await send({ action: 'chamar', kind: 'conta' })) && setToast('O garçom já vem com a conta.')} />
       )}
 
       {view === 'cardapio' && cartCount > 0 && (
@@ -491,8 +493,29 @@ function Revisao(props: { cart: CartLine[]; total: number; busy: boolean; error:
   );
 }
 
-function Conta({ state, busy, onBill, reviewUrl }: { state: Extract<TableState, { member: true }>; busy: boolean; onBill: () => void; reviewUrl?: string }) {
+function Conta({
+  state,
+  busy,
+  onBill,
+  reviewUrl,
+  pay,
+  send,
+  error,
+  slug,
+  storeName,
+}: {
+  state: Extract<TableState, { member: true }>;
+  busy: boolean;
+  onBill: () => void;
+  reviewUrl?: string;
+  pay?: { on: boolean; needsEmail: boolean };
+  slug: string;
+  storeName: string;
+  send: (body: Record<string, unknown>) => Promise<boolean>;
+  error: string;
+}) {
   const askedBill = state.calls.includes('conta');
+  const canPay = Boolean(pay?.on) && state.confirmed && state.due > 0;
   return (
     <div className="space-y-3 px-4 pt-4">
       <section className="flex items-center justify-between gap-3 rounded-[20px] border border-[#DCE2EC] bg-[#FFFFFF] px-4 py-3.5">
@@ -540,10 +563,40 @@ function Conta({ state, busy, onBill, reviewUrl }: { state: Extract<TableState, 
         </ol>
       )}
 
-      <p className="flex justify-between px-1 pt-1 text-lg font-extrabold tabular-nums">
-        <span>Total da mesa</span>
-        <span>{brl(state.total)}</span>
-      </p>
+      <div className="space-y-1 px-1 pt-1 tabular-nums">
+        <p className="flex justify-between text-lg font-extrabold">
+          <span>Total da mesa</span>
+          <span>{brl(state.total)}</span>
+        </p>
+        {state.credit > 0 && (
+          <p className="flex justify-between text-sm text-[#4A5568]">
+            <span>Sinal da reserva</span>
+            <span>− {brl(Math.min(state.credit, state.total))}</span>
+          </p>
+        )}
+        {state.paid > 0 && (
+          <p className="flex justify-between text-sm text-[#15803D]">
+            <span>Já pago pelo Pix</span>
+            <span>− {brl(state.paid)}</span>
+          </p>
+        )}
+        {(state.credit > 0 || state.paid > 0) && (
+          <p className="flex justify-between font-bold">
+            <span>Falta pagar</span>
+            <span>{brl(state.due)}</span>
+          </p>
+        )}
+      </div>
+      {state.payments
+        .filter((p) => p.refund)
+        .map((p) => (
+          <p key={p.id} role="status" className="rounded-2xl bg-[#F4F6FA] px-4 py-3 text-sm text-[#4A5568]">
+            {p.refund!.status === 'falhou'
+              ? `Seu Pix pagou ${brl(p.refund!.amount)} a mais e a devolução automática não funcionou. Fale com o garçom: o restaurante devolve no caixa.`
+              : `${brl(p.refund!.amount)} do seu Pix ${p.refund!.status === 'feito' ? 'foram devolvidos' : 'estão sendo devolvidos'}: a conta já estava paga nesse valor. O dinheiro volta pela conta de onde saiu o Pix.`}
+          </p>
+        ))}
+      {canPay && <PagarPix state={state} busy={busy} send={send} needsEmail={Boolean(pay?.needsEmail)} error={error} slug={slug} storeName={storeName} />}
       <button
         type="button"
         disabled={busy || askedBill || state.orders.length === 0}
@@ -555,6 +608,126 @@ function Conta({ state, busy, onBill, reviewUrl }: { state: Extract<TableState, 
       {askedBill && reviewUrl && <ReviewCard url={reviewUrl} />}
       <p className="pb-4 text-center text-xs text-[#6A7385]">Quando a conta for paga, o código {state.code} deixa de valer.</p>
     </div>
+  );
+}
+
+/** Pay the bill (or one share) by Pix from the phone. The amount is worked out on the server. */
+function PagarPix({
+  state,
+  busy,
+  send,
+  needsEmail,
+  error,
+  slug,
+  storeName,
+}: {
+  state: Extract<TableState, { member: true }>;
+  busy: boolean;
+  send: (body: Record<string, unknown>) => Promise<boolean>;
+  needsEmail: boolean;
+  error: string;
+  slug: string;
+  storeName: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [parts, setParts] = useState(1);
+  const [email, setEmail] = useState('');
+  const [copied, setCopied] = useState('');
+  const pending = state.payments.filter((p) => p.status === 'aguardando');
+  // Same rule as the server: a share of the whole bill, never more than what is left.
+  const even = Math.ceil(Math.max(0, state.total - state.credit) / parts);
+  const share = Math.min(state.due, even);
+  const last = parts > 1 && share < even;
+  const pendingIds = pending.map((p) => p.id).join(',');
+
+  // While a real Pix is open, ask the server to check it every few seconds (the provider is asked at most every 10 s).
+  // `send` changes on every render; keep the latest in a ref so the timer isn't reset by each poll.
+  const sendRef = useRef(send);
+  useEffect(() => {
+    sendRef.current = send;
+  });
+  useEffect(() => {
+    if (!pendingIds) return;
+    const ids = pendingIds.split(',');
+    const t = window.setInterval(() => ids.forEach((id) => void sendRef.current({ action: 'pagamento', payment: id })), 10_000);
+    return () => window.clearInterval(t);
+  }, [pendingIds]);
+
+  return (
+    <section className="space-y-3 rounded-3xl border border-[#DCE2EC] bg-[#FFFFFF] p-4">
+      {pending.map((p) => (
+        <div key={p.id} className="space-y-2 rounded-2xl bg-[#F4F6FA] p-3 text-center">
+          <p className="text-sm font-bold">Pix de {brl(p.amount)} aguardando pagamento</p>
+          {p.pix && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`data:image/png;base64,${p.pix.qrBase64}`} alt={`QR Code do Pix de ${brl(p.amount)}`} width={180} height={180} className="mx-auto rounded-lg bg-white" />
+              <button
+                type="button"
+                className="min-h-11 w-full rounded-full bg-[#0865FE] text-sm font-bold text-white"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(p.pix!.copyPaste);
+                    setCopied(p.id);
+                    window.setTimeout(() => setCopied(''), 2500);
+                  } catch {}
+                }}
+              >
+                {copied === p.id ? 'Código copiado' : 'Copiar código Pix'}
+              </button>
+              {p.pix.demo && (
+                <button type="button" disabled={busy} className="min-h-11 w-full rounded-full border border-[#C9D3E1] text-sm font-bold" onClick={() => send({ action: 'simular-pix', payment: p.id })}>
+                  Simular pagamento (demonstração)
+                </button>
+              )}
+              <p className="text-xs text-[#6A7385]">Esta tela confirma sozinha quando o Pix cair.</p>
+            </>
+          )}
+        </div>
+      ))}
+      {!open ? (
+        <button type="button" onClick={() => setOpen(true)} className="min-h-14 w-full rounded-full border-2 border-[#0865FE] text-base font-extrabold text-[#0865FE]">
+          Pagar pelo Pix
+        </button>
+      ) : (
+        <div className="space-y-3">
+          <p className="text-sm font-bold">Dividir a conta?</p>
+          <div className="flex items-center justify-between gap-3">
+            <Stepper value={parts} onChange={(v) => setParts(Math.max(1, Math.min(20, v)))} label="pessoas" />
+            <p className="text-right text-sm text-[#4A5568]">
+              {parts === 1 ? (state.paid > 0 ? 'O que falta' : 'Conta inteira') : last ? 'Sua parte (o que falta)' : `Conta ÷ ${parts} pessoas`}
+              <br />
+              <span className="text-xl font-extrabold text-[#121826] tabular-nums">{brl(share)}</span>
+              {parts > 1 && !last && <span className="text-[#4A5568]"> cada</span>}
+            </p>
+          </div>
+          {needsEmail && (
+            <label className="block text-left">
+              <span className="text-[13px] font-semibold text-[#4A5568]">Seu e-mail (o Mercado Pago pede para processar o Pix)</span>
+              <input type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 h-12 w-full rounded-xl border border-[#DCE2EC] px-3" />
+            </label>
+          )}
+          {error && <p role="alert" className="text-sm font-semibold text-[#B91C1C]">{error}</p>}
+          <button
+            type="button"
+            disabled={busy || share < 100}
+            onClick={async () => (await send({ action: 'pagar', parts, email })) && setOpen(false)}
+            className="min-h-14 w-full rounded-full bg-[#0865FE] text-base font-extrabold text-white disabled:opacity-50"
+          >
+            {parts === 1 ? `Gerar Pix de ${brl(share)}` : `Gerar o meu Pix de ${brl(share)}`}
+          </button>
+          <p className="text-xs text-[#6A7385]">
+            Divisão em partes iguais da conta: cada pessoa gera o seu Pix no próprio celular, e o último paga o que faltar. Ninguém é obrigado a pagar a parte de outro. Quando a conta toda estiver paga, a mesa fecha sozinha. Se pagarem a mais, ou se a mesa já estiver fechada, o valor é devolvido pelo Mercado Pago na conta de origem.
+          </p>
+          <p className="text-xs text-[#6A7385]">
+            Você paga a {storeName}: o Pix vai direto para a conta do restaurante. O comprovante do Pix não é nota fiscal; peça ao garçom se precisar.{' '}
+            <a href={`/privacidade/${slug}`} className="underline">
+              Privacidade
+            </a>
+          </p>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -571,13 +744,20 @@ function ReviewCard({ url }: { url: string }) {
   );
 }
 
-function Obrigado({ storeName, reviewUrl, onBack }: { storeName: string; reviewUrl?: string; onBack: () => void }) {
+function Obrigado({ storeName, reviewUrl, refund, onBack }: { storeName: string; reviewUrl?: string; refund?: { amount: number; status: 'feito' | 'falhou' } | null; onBack: () => void }) {
   return (
     <Shell>
       <main className="px-5 pt-[max(24px,env(safe-area-inset-top))] pb-10">
         <p className="text-xl font-black tracking-tight text-[#0865FE] uppercase">{storeName}</p>
         <h1 className="mt-10 text-5xl leading-[0.95] font-black tracking-tight uppercase">Conta fechada. Obrigado!</h1>
         <p className="mt-4 text-[15px] leading-relaxed text-[#4A5568]">Volte sempre. O código da mesa já não vale mais.</p>
+        {refund && (
+          <p role="status" className="mt-4 rounded-2xl bg-[#F4F6FA] px-4 py-3 text-sm text-[#4A5568]">
+            {refund.status === 'feito'
+              ? `${brl(refund.amount)} do seu Pix foram devolvidos: a conta já estava paga nesse valor. O dinheiro volta pela conta de onde saiu o Pix.`
+              : `Seu Pix pagou ${brl(refund.amount)} a mais e a devolução automática não funcionou. Fale com o caixa: o restaurante devolve.`}
+          </p>
+        )}
         {reviewUrl && (
           <div className="mt-8">
             <ReviewCard url={reviewUrl} />

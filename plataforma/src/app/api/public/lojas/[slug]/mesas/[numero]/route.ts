@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { isSlug } from '@/lib/slug';
 import { clientIp } from '@/lib/limits';
 import { TableError, callFromTable, deviceCookie, joinTable, openTable, orderAtTable, tableState, validKey } from '@/lib/mesas';
+import { checkTablePayment, paymentOutcome, simulateTablePayment, startTablePayment } from '@/lib/mesa-pagamento';
 
 // Public: the phones at a table. Every call carries the table's QR key; a phone's seat is its cookie.
 const NO_STORE = { 'Cache-Control': 'no-store' };
@@ -24,7 +25,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 interface Body {
   k?: string;
-  action?: 'abrir' | 'entrar' | 'pedir' | 'chamar';
+  action?: 'abrir' | 'entrar' | 'pedir' | 'chamar' | 'pagar' | 'pagamento' | 'simular-pix';
+  parts?: unknown;
+  email?: unknown;
+  payment?: unknown;
   code?: string;
   kind?: 'garcom' | 'conta';
   items?: unknown;
@@ -57,10 +61,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     else if (body.action === 'entrar') newToken = await joinTable(slug, number, String(body.code ?? ''), ip);
     else if (body.action === 'pedir') await orderAtTable(slug, number, token, { items: body.items, expectedSubtotal: body.expectedSubtotal ?? null });
     else if (body.action === 'chamar' && (body.kind === 'garcom' || body.kind === 'conta')) await callFromTable(slug, number, token, body.kind);
+    else if (body.action === 'pagar') {
+      // A new Pix for the whole bill or one share; the state below carries it (payments).
+      await startTablePayment(slug, number, token, Number(body.parts), String(body.email ?? ''), request.nextUrl.origin);
+    } else if (body.action === 'pagamento' && typeof body.payment === 'string') await checkTablePayment(slug, number, token, body.payment);
+    else if (body.action === 'simular-pix' && typeof body.payment === 'string') await simulateTablePayment(slug, number, token, body.payment);
     else return NextResponse.json({ error: 'Ação inválida.' }, { status: 400, headers: NO_STORE });
 
     const state = await tableState(slug, number, newToken ?? token);
-    const res = NextResponse.json(state, { headers: NO_STORE });
+    // After a payment check, tell this phone whether part of its Pix went back (also once the table has closed).
+    const refund = (body.action === 'pagamento' || body.action === 'simular-pix') && typeof body.payment === 'string' ? await paymentOutcome(slug, body.payment) : null;
+    const res = NextResponse.json(refund ? { ...state, refund } : state, { headers: NO_STORE });
     if (newToken) {
       res.cookies.set(cookie, newToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', path: '/', maxAge: HOURS_4 });
     }

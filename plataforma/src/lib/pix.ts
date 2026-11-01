@@ -124,15 +124,16 @@ export async function lookupMercadoPago(slug: string, paymentId: string): Promis
 }
 
 /** Full refund of a paid charge (store refused the order). Demo charges need nothing. */
-export async function refundCharge(slug: string, charge: PixCharge): Promise<boolean> {
+/** Gives a paid Pix back: all of it, or only `amount` centavos (what was paid over the bill). */
+export async function refundCharge(slug: string, charge: PixCharge, amount?: number): Promise<boolean> {
   if (charge.provider === 'demo') return true;
   const { mercadoPagoToken } = await getSecrets(slug);
   if (!mercadoPagoToken) return false;
   try {
     await mpFetch(mercadoPagoToken, `${MP}/${encodeURIComponent(charge.id)}/refunds`, {
       method: 'POST',
-      headers: { 'X-Idempotency-Key': `refund-${charge.id}` },
-      body: '{}',
+      headers: { 'X-Idempotency-Key': amount ? `refund-${charge.id}-${amount}` : `refund-${charge.id}` },
+      body: amount ? JSON.stringify({ amount: Math.round(amount) / 100 }) : '{}',
     });
     return true;
   } catch {

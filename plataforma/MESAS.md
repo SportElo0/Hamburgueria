@@ -80,9 +80,46 @@ mesma tela da cozinha dos pedidos do site e entra nos mesmos relatórios (modo "
     (padrão 6); fica só o registro do valor. O restaurante é o controlador; a Growlift, operadora.
   - Limites: 5 reservas por aparelho (rede IPv6 /64) por dia e 80 por loja por dia.
 
+## Fila de espera, pagar na mesa e PDV (01/11/2026)
+
+Os três ficam desligados por padrão. A equipe liga em Configurar → Pedido na mesa (com mesas ligadas).
+Os três só funcionam com os **dados do restaurante preenchidos** (razão social, CNPJ, endereço e contato de
+privacidade, na parte de Reservas), porque o aviso de privacidade `/privacidade/<loja>` precisa deles.
+
+- **Fila de espera** (`/fila/<loja>`, sem login): o cliente lê o QR da porta (cartaz para imprimir em
+  `/loja/<loja>/fila`), deixa nome, número de pessoas e, se quiser, telefone. A página fica aberta mostrando a posição e
+  vibra/toca quando a recepção chama. No mapa (`/loja/<loja>/mapa`), seção Fila: Chamar, Desfazer chamada, Sentou
+  (escolhe a mesa e ela já abre), Não veio, "Chegou sem o QR" e "Avisar no WhatsApp" (abre o WhatsApp da pessoa da
+  equipe com o texto pronto; nada é enviado sozinho). O movimento público mostra "Entrar na fila · N na frente".
+  - Dados: `fila/<loja>/<AAAA-MM-DD>.json`: fica só a lista de hoje e de ontem (até 2 dias). O telefone é apagado
+    assim que a pessoa sai da fila (sentou, saiu ou não veio). Link do cliente com token (só o SHA-256 fica
+    salvo). Limite: 4 entradas por aparelho (rede IPv6 /64) por dia e o tamanho máximo da fila configurado.
+- **Pagar na mesa pelo Pix:** na aba Conta do celular, "Pagar pelo Pix": conta inteira ou dividida (1 a 20 pessoas).
+  A parte é sempre da conta inteira (menos o sinal da reserva): com 3 pessoas cada uma paga um terço, e a última paga
+  só o que falta. O valor é calculado no servidor. Quando nada falta, a mesa fecha sozinha ("pago pelo Pix na mesa") e
+  a reserva é concluída. Pix pago a mais (conta já paga), a menos ou de mesa já fechada é devolvido sozinho.
+  - Só depois do garçom confirmar a mesa. Com Mercado Pago, pede e-mail (exigência deles). No máximo 8 Pix abertos e
+    20 tentativas por hora em cada mesa. Índice para devoluções: `mesas/<loja>/pix-da-mesa.json` (2 dias).
+  - O salão mostra "Pago pelo Pix na mesa" e "Falta pagar".
+  - Precisa do Pix real (Mercado Pago). Com Pix em demonstração o botão some numa loja de verdade (o cliente poderia
+    "pagar" sem pagar); só aparece em loja de demonstração ou com `RESERVAS_PIX_DEMO=1` no ambiente local.
+  - Dois celulares pagando juntos: a decisão é tomada na gravação, com a conta daquele momento. Só o que falta conta;
+    o que passar volta (devolução parcial no Mercado Pago). O celular que pagou vê quanto voltou. Se o Mercado Pago
+    recusar a devolução, aparece "Devolver no caixa" no mapa para a equipe devolver e marcar "Já devolvi".
+  - Taxa de serviço, couvert e gorjeta precisam ser itens da conta: o Pix cobra só o total da mesa.
+- **PDV Saipos:** pedido aceito pela loja vai para o Saipos do restaurante (mesa, retirada ou entrega; nunca CPF).
+  Precisa de: (1) parceria da Growlift com o Saipos, que dá `SAIPOS_PARTNER_ID` e `SAIPOS_SECRET`, colocados só nas
+  variáveis de ambiente da Vercel; (2) o código da loja no Saipos (`cod_store`) e, de preferência, os códigos dos itens
+  ("id-do-item = código"; adicional: "id-do-item:Nome = código"); (3) cidade e UF para entregas.
+  - O envio roda depois da resposta do "Aceitar" (não trava a tela da loja).
+  - Antes de ligar numa loja: confirmar com o Saipos que a autorização é por loja e que o código é daquele
+    restaurante, e citar o envio ao PDV no contrato com o restaurante.
+  - Cada envio fica em `pdv/<loja>/envios.json` (últimos 300). No editor da equipe aparecem os últimos envios com
+    "Reenviar" para os que falharam. Opcional: `SAIPOS_API_URL` para o ambiente de testes do Saipos.
+
 ## Ainda não feito
 
-- Pagar a conta pelo celular (Pix ou cartão na mesa) e dividir a conta.
+- Pagar com cartão pelo celular na mesa.
 - Apagar sozinho os dados das reservas antigas.
 - Devolver só a diferença do sinal pelo Pix (hoje o garçom devolve no caixa).
 - Quiz entre as mesas.
