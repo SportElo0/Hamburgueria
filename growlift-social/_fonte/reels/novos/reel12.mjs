@@ -4,7 +4,7 @@
 import { MARK } from '../../pecas.mjs';
 import { page, svgIcon, ICON, food } from './base.mjs';
 
-export const DURATION = 27.2;
+export const DURATION = 28.8;
 export const COVER = 16.2;
 
 const INK = '#121826';
@@ -106,7 +106,7 @@ const body = `
   <div class="abs" style="left:0;right:0;top:600px;text-align:center">
     <div style="width:200px;margin:0 auto;filter:brightness(0) invert(1)">${MARK}</div>
     <div style="font-size:120px;font-weight:900;letter-spacing:-.04em;margin-top:50px">Growlift</div>
-    <div style="font-size:56px;font-weight:700;margin-top:18px;opacity:.92">Sites para restaurantes</div>
+    <div style="font-size:56px;font-weight:700;margin-top:18px;opacity:.92">Site, Google e pedidos<br>para o seu restaurante</div>
     <div style="display:inline-block;margin-top:60px;padding:24px 46px;border-radius:999px;background:#fff;color:${BLUE};font-size:40px;font-weight:800">Link na bio</div>
     <div style="font-size:32px;font-weight:600;margin-top:34px;opacity:.85">@growlift.ai · growlift.com.br</div>
   </div>

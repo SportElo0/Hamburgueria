@@ -301,9 +301,9 @@ Narração com voz gerada por inteligência artificial.
 
 ## 12. O seu cardápio, completo
 - **Formato:** claro, com um mascote nosso (um chefinho de chapéu e lenço azul), desenhado pela Growlift. O cardápio de papel vira um celular com o site, com o selo "Exemplo ilustrativo". Personagem, roteiro e textos nossos. Fonte: `_fonte/reels/novos/reel12.mjs`.
-- **Vídeos:** `12-cardapio-completo.mp4` (com narração), `12-cardapio-completo-mudo.mp4`, capa `12-cardapio-completo-capa.png`. 27,2 s.
+- **Vídeos:** `12-cardapio-completo.mp4` (com narração), `12-cardapio-completo-mudo.mp4`, capa `12-cardapio-completo-capa.png`. 28,8 s.
 - **Narração** (voz "Andre", 2,07 créditos em 01/11; `_fonte/reels/narracao-12-eleven.mp3`):
-"O cardápio de papel fica no balcão. Mas o seu cliente quer saber muito mais. Tem entrega? Quanto custa? Onde fica? Tá aberto agora? E se ele visse tudo isso antes de sair de casa? Fotos dos pratos. Endereço e horário. E um botão pra pedir na hora. Quem procura encontra tudo num lugar só. Um site é o seu cardápio, completo. Growlift: sites para restaurantes."
+"O cardápio de papel fica no balcão. Mas o seu cliente quer saber muito mais. Tem entrega? Quanto custa? Onde fica? Tá aberto agora? E se ele visse tudo isso antes de sair de casa? Fotos dos pratos. Endereço e horário. E um botão pra pedir na hora. Quem procura encontra tudo num lugar só. Um site é o seu cardápio, completo. Growlift: site, Google e pedidos para o seu restaurante." (A frase final foi regravada em 01/11, 0,46 crédito, e emendada no lugar de "sites para restaurantes": a Growlift entrega mais que o site.)
 - **O botão "Pedir agora"** no vídeo abre uma mensagem ("Oi! Vi o cardápio de vocês e quero fazer um pedido"): é o botão de WhatsApp do plano Start. O pedido com Pix dentro do site é do plano Grow.
 
 **Legenda**
@@ -315,7 +315,7 @@ Com um site, quem procura vê tudo antes de sair de casa:
 📍 Endereço e horário
 💬 Um botão que abre o WhatsApp do restaurante para pedir (pedido com Pix dentro do site é do plano Grow)
 
-Growlift: sites para restaurantes. Valores e condições dos planos: link na bio.
+Growlift: site, Google e pedidos para o seu restaurante. Valores e condições dos planos: link na bio.
 
 Narração com voz gerada por inteligência artificial.
 #restaurante #cardapiodigital #delivery #hamburgueria #pizzaria

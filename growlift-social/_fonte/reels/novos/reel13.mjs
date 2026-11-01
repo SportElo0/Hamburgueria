@@ -99,7 +99,7 @@ ${shop}
   <div class="abs" style="left:84px;right:84px;top:560px">
     <div style="width:170px">${MARK}</div>
     <div style="font-size:104px;font-weight:900;letter-spacing:-.04em;line-height:1.02;margin-top:56px">Sua vitrine aberta,<br><span style="color:#4d8dff">o tempo todo.</span></div>
-    <div style="font-size:38px;font-weight:600;color:#bdbdbd;margin-top:30px">Sites para restaurantes · Growlift</div>
+    <div style="font-size:38px;font-weight:600;color:#bdbdbd;margin-top:30px">Site, Google e pedidos para restaurantes · Growlift</div>
     <div style="display:inline-flex;margin-top:60px;padding:26px 50px;border-radius:999px;background:${BLUE};color:#fff;font-size:44px;font-weight:800;box-shadow:0 26px 60px -20px rgba(8,101,254,.9)">Link na bio</div>
     <div style="font-size:32px;font-weight:600;color:#9a9aa3;margin-top:34px">@growlift.ai · growlift.com.br</div>
   </div>

@@ -127,7 +127,7 @@ const body = `
   <div style="width:180px;margin:0 auto">${MARK}</div>
   <div style="font-size:104px;font-weight:900;letter-spacing:-.04em;line-height:1.02;margin-top:56px">Quer ser<br><span style="color:#4d8dff">encontrado?</span></div>
   <div id="follow" style="display:inline-flex;align-items:center;justify-content:center;gap:16px;margin-top:60px;min-width:420px;height:110px;border-radius:999px;background:#0865fe;color:#fff;font-size:44px;font-weight:800;box-shadow:0 26px 60px -20px rgba(8,101,254,.9)"><span id="fIcon" style="display:none">${svgIcon(ICON.check, 44, '#fff', 3)}</span><span id="fTxt">Seguir</span></div>
-  <div style="margin-top:36px;font-size:36px;font-weight:700;color:#c6cede">@growlift.ai · sites para restaurantes</div>
+  <div style="margin-top:36px;font-size:36px;font-weight:700;color:#c6cede">@growlift.ai · site, Google e pedidos para restaurantes</div>
 </div>
 <div id="tap" class="abs" style="width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.5);border:3px solid #fff;left:640px;top:880px"></div>
 `;
