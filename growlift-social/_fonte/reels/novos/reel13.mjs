@@ -64,6 +64,7 @@ const shop = `
 const body = `
 <div class="vig"></div>
 <div id="title" class="title"></div>
+<div id="ilus" class="abs" style="left:84px;bottom:420px;font-size:24px;font-weight:600;color:#77777f;letter-spacing:.02em">Exemplo ilustrativo · nome e endereço fictícios</div>
 <div id="clock" class="clock">18:00</div>
 ${shop}
 <div id="q1" class="q" style="left:90px;top:900px">Que horas abre amanhã?</div>
@@ -71,9 +72,9 @@ ${shop}
 <div id="q3" class="q" style="left:140px;top:1160px">Faz entrega?</div>
 
 <div id="site" class="br">
-  <div class="bar"><i></i><i></i><i></i><div class="url">${svgIcon('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>', 26, '#16a34a')}seurestaurante.com.br</div></div>
+  <div class="bar"><i></i><i></i><i></i><div class="url">${svgIcon('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>', 26, '#16a34a')}seurestaurante.exemplo</div></div>
   <div style="padding:30px 34px 34px">
-    <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:44px;font-weight:900;letter-spacing:-.02em">Seu Restaurante</div><div style="font-size:22px;font-weight:800;letter-spacing:.08em;color:#fff;background:${BLUE};padding:10px 16px;border-radius:999px">SITE NO AR 24H</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:44px;font-weight:900;letter-spacing:-.02em">Seu Restaurante</div><div style="font-size:22px;font-weight:800;letter-spacing:.08em;color:#fff;background:${BLUE};padding:10px 16px;border-radius:999px">SITE NO AR</div></div>
     <div id="sMenu" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px">
       <div class="dish">${food('burger', 300).replace('width="300" height="300"', 'width="100%" height="200" preserveAspectRatio="xMidYMid slice"')}Burger da casa<small>Pão, carne e queijo</small></div>
       <div class="dish">${food('fries', 300).replace('width="300" height="300"', 'width="100%" height="200" preserveAspectRatio="xMidYMid slice"')}Batata<small>Porção para dois</small></div>
@@ -87,7 +88,7 @@ ${shop}
 
 <div id="panel" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:40px;font-weight:900">Pedidos</div><div style="display:flex;align-items:center;gap:10px;font-size:26px;font-weight:700;color:#4ade80"><span style="width:14px;height:14px;border-radius:50%;background:#4ade80;display:inline-block"></span>Loja aberta</div></div>
-  <div style="font-size:24px;color:#9a9aa3;margin-top:6px">Tela da loja · os pedidos do site chegam aqui</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><div style="font-size:24px;color:#9a9aa3">Tela da loja · os pedidos do site chegam aqui</div><div style="font-size:20px;font-weight:800;letter-spacing:.08em;color:#fff;background:${BLUE};padding:8px 14px;border-radius:999px">PLANO GROW</div></div>
   <div id="o1" class="ord"><span>#27 · Combo da casa</span><span class="paid">${svgIcon(ICON.check, 24, '#06210f', 3)}Pix pago</span></div>
   <div id="o2" class="ord"><span>#28 · 2× Burger</span><span class="paid">${svgIcon(ICON.check, 24, '#06210f', 3)}Pix pago</span></div>
   <div id="o3" class="ord"><span>#29 · Batata + refri</span><span class="paid">${svgIcon(ICON.check, 24, '#06210f', 3)}Pix pago</span></div>

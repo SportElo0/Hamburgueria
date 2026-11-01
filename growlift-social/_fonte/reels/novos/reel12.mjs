@@ -1,6 +1,6 @@
 // Reel 12: "O seu cardápio, completo". Light, with an original chef mascot: the paper menu answers little; the
 // customer wants to know more; a site shows photos, address and hours, and a button to order. Timed to
-// narracao-12-eleven.mp3. Headings carry the words (no bottom captions), like the reference format.
+// narracao-12-eleven.mp3. Headings carry the words (no bottom captions).
 import { MARK } from '../../pecas.mjs';
 import { page, svgIcon, ICON, food } from './base.mjs';
 
@@ -99,6 +99,7 @@ const body = `
 <div id="tap" class="tap"></div>
 <div id="toast" class="toast">Oi! Vi o cardápio de vocês<br>e quero fazer um pedido.</div>
 <div id="chefW" class="abs" style="left:50px;top:930px">${chef}</div>
+<div id="ilus" class="abs" style="right:90px;top:1290px;font-size:24px;font-weight:600;color:#6a7385">Exemplo ilustrativo</div>
 <div id="spk" class="abs" style="left:900px;top:470px">${svgIcon('<path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="#ffc94d" stroke="none"/>', 70)}</div>
 
 <div id="end">
@@ -122,11 +123,11 @@ window.draw=(t)=>{
   show('menu',t,0.1,9.6,{pop:true,sc:.3,fi:.55,base:'rotate(-3deg)'});
   show('b1',t,5.08,9.3,{pop:true,sc:.5,base:'rotate(-5deg)'}); show('b2',t,6.04,9.3,{pop:true,sc:.5,base:'rotate(4deg)'});
   show('b3',t,7.0,9.3,{pop:true,sc:.5,base:'rotate(3deg)'}); show('b4',t,7.97,9.3,{pop:true,sc:.5,base:'rotate(-4deg)'});
-  show('phone',t,9.5,23.55,{pop:true,sc:.25,fi:.6,dy:0});
+  show('phone',t,9.5,23.55,{pop:true,sc:.25,fi:.6,dy:0}); show('ilus',t,9.8,23.55,{dy:0});
   show('pPh',t,12.27,23.55,{dy:30}); show('pMap',t,13.69,23.55,{dy:30}); show('pCta',t,15.28,23.55,{pop:true,sc:.4});
   // A tap on "Pedir agora" and the message it opens
   const tapK=(t>=16.2&&t<16.9)?1-Math.abs((t-16.55)/.35):0; const tp=$('tap'); tp.style.left='630px'; tp.style.top='1110px'; tp.style.opacity=Math.max(0,tapK); tp.style.transform='scale('+(.7+.3*Math.max(0,tapK))+')';
-  show('toast',t,16.6,17.45,{pop:true,sc:.4});
+  show('toast',t,16.6,18.15,{pop:true,sc:.4});
   // "Tudo num lugar só": highlight each part in turn
   show('r1',t,17.9,18.7,{pop:true,sc:.1,dy:0,fi:.2}); show('r2',t,18.7,19.5,{pop:true,sc:.1,dy:0,fi:.2}); show('r3',t,19.5,20.4,{pop:true,sc:.1,dy:0,fi:.2});
   // Chef: holds the menu, then walks left and points at the phone

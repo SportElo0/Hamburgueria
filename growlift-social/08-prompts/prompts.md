@@ -87,6 +87,6 @@ Editorial surf action photograph, vertical 2:3. Turquoise-blue ocean on a sunny 
 - 31/10, versão final: uma fala só, corrida (2,07 créditos), com "Quer isso no seu restaurante? Quer entender como funciona? Comenta MESA!" no fim, sem o "libera a mesa". As falas finais anteriores (0,46 e 0,69) foram descartadas.
 
 ## Reels 11, 12 e 13, narração (01/11/2026)
-- Higgsfield, modelo `elevenlabs_v4`, voz preset "Andre" (`f1e8226e-2248-4d5f-b43c-0a79e9949dbf`), stability 0,35, similarity 0,8, como no Reel 10. Custo conferido antes: 2,07 créditos cada (6,21 no total). Textos em `05-reels/roteiros.md`.
+- Higgsfield, modelo `elevenlabs_v4`, voz preset "Andre" (`f1e8226e-2248-4d5f-b43c-0a79e9949dbf`), stability 0,35, similarity 0,8, como no Reel 10. Custo conferido antes: 2,07 créditos cada (6,21 no total). O Reel 11 foi refeito depois da revisão legal (texto novo, 1,84 crédito). Textos em `05-reels/roteiros.md`.
 - O vídeo é feito em código (HTML + Playwright + ffmpeg, `_fonte/reels/novos/`), sem gerar imagem nem vídeo no Higgsfield. Para refazer: `cd _fonte/reels/novos && node render.mjs 11` (ou 12, 13); `node render.mjs 11 --still 3,9` gera quadros para conferir.
 
