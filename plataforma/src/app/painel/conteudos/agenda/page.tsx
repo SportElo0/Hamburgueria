@@ -47,6 +47,7 @@ export default async function AgendaPage() {
     slides: it.arquivos.length,
     thumb: it.capa ? fileUrl({ path: it.capa, thumb: it.capa }) : fileUrl({ path: it.arquivos[0], thumb: it.arquivos[0] }),
     video: it.tipo === 'reel' ? fileUrl({ path: it.arquivos[0], thumb: it.arquivos[0] }) : '',
+    images: it.tipo === 'reel' ? [] : it.arquivos.map((p) => fileUrl({ path: p, thumb: p })),
   }));
 
   return (

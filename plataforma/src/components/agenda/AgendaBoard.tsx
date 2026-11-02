@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { approveAction, checkNowAction, publishNowAction, unscheduleAction } from '@/app/painel/conteudos/agenda/actions';
 
 export interface AgendaCard {
@@ -19,6 +19,8 @@ export interface AgendaCard {
   slides: number;
   thumb: string;
   video: string;
+  /** Every slide of a carousel (empty for Reels), for the full-screen viewer. */
+  images: string[];
 }
 
 const TZ = 'America/Sao_Paulo';
@@ -95,6 +97,7 @@ function Post({ card }: { card: AgendaCard }) {
   const [time, setTime] = useState(start0.time);
   const [ia, setIa] = useState(card.ia);
   const [play, setPlay] = useState(false);
+  const [viewer, setViewer] = useState(false);
   const [error, setError] = useState('');
   const [pending, start] = useTransition();
   const editable = card.status !== 'processando' && card.status !== 'postado';
@@ -109,6 +112,7 @@ function Post({ card }: { card: AgendaCard }) {
 
   return (
     <article className="card grid gap-5 p-4 sm:grid-cols-[180px_1fr] sm:p-5">
+      {viewer && <SlideViewer title={card.titulo} images={card.images} onClose={() => setViewer(false)} />}
       <div className="relative mx-auto w-[180px] overflow-hidden rounded-xl bg-paper" style={{ aspectRatio: card.tipo === 'reel' ? '9 / 16' : '4 / 5' }}>
         {play && card.video ? (
           <video src={card.video} poster={card.thumb} controls autoPlay playsInline className="h-full w-full object-cover" />
@@ -121,7 +125,12 @@ function Post({ card }: { card: AgendaCard }) {
                 <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 text-2xl text-ink">▶</span>
               </button>
             )}
-            {card.tipo === 'carrossel' && <span className="absolute top-2 right-2 rounded-full bg-ink/70 px-2 py-0.5 text-xs font-semibold text-white">{card.slides} fotos</span>}
+            {card.images.length > 1 && (
+              <button type="button" onClick={() => setViewer(true)} className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-ink/60 via-transparent p-3 text-white" aria-label={`Ver as ${card.images.length} imagens de ${card.titulo}`}>
+                <span className="rounded-full bg-white/90 px-3 py-1.5 text-sm font-bold text-ink">Ver as {card.images.length} imagens</span>
+              </button>
+            )}
+            {card.tipo === 'carrossel' && <span className="pointer-events-none absolute top-2 right-2 rounded-full bg-ink/70 px-2 py-0.5 text-xs font-semibold text-white">{card.slides} fotos</span>}
           </>
         )}
       </div>
@@ -225,5 +234,74 @@ function Post({ card }: { card: AgendaCard }) {
         </div>
       </div>
     </article>
+  );
+}
+
+/** Full-screen carousel viewer: swipe (or arrows / keyboard) through every slide, like on Instagram. */
+function SlideViewer({ title, images, onClose }: { title: string; images: string[]; onClose: () => void }) {
+  const [i, setI] = useState(0);
+  const track = useRef<HTMLDivElement>(null);
+  const closeBtn = useRef<HTMLButtonElement>(null);
+  const go = (n: number) => {
+    const k = Math.max(0, Math.min(images.length - 1, n));
+    track.current?.children[k]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  };
+  useEffect(() => {
+    closeBtn.current?.focus();
+  }, []);
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') go(i + 1);
+      if (e.key === 'ArrowLeft') go(i - 1);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  });
+  return (
+    <div role="dialog" aria-modal="true" aria-label={`Imagens: ${title}`} className="fixed inset-0 z-50 flex flex-col bg-ink/95 text-white">
+      <div className="flex items-center gap-3 px-4 py-3">
+        <p className="mr-auto truncate text-sm font-semibold">{title}</p>
+        <span className="text-sm tabular-nums" aria-live="polite">
+          {i + 1} / {images.length}
+        </span>
+        <button ref={closeBtn} type="button" onClick={onClose} className="min-h-11 rounded-full bg-white/15 px-4 text-sm font-bold hover:bg-white/25">
+          Fechar
+        </button>
+      </div>
+      <div
+        ref={track}
+        className="flex min-h-0 flex-1 snap-x snap-mandatory overflow-x-auto"
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          setI(Math.round(el.scrollLeft / el.clientWidth));
+        }}
+      >
+        {images.map((src, k) => (
+          <div key={src} className="flex w-full shrink-0 snap-center items-center justify-center p-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={src} alt={`Imagem ${k + 1} de ${images.length}`} className="max-h-full max-w-full rounded-xl object-contain" loading={k < 2 ? 'eager' : 'lazy'} />
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center justify-center gap-4 px-4 py-4">
+        <button type="button" onClick={() => go(i - 1)} disabled={i === 0} className="min-h-11 min-w-11 rounded-full bg-white/15 px-4 text-lg font-bold hover:bg-white/25 disabled:opacity-30" aria-label="Imagem anterior">
+          ←
+        </button>
+        <div className="flex gap-1.5" aria-hidden="true">
+          {images.map((src, k) => (
+            <span key={src} className={`h-1.5 rounded-full transition-all ${k === i ? 'w-6 bg-white' : 'w-1.5 bg-white/40'}`} />
+          ))}
+        </div>
+        <button type="button" onClick={() => go(i + 1)} disabled={i === images.length - 1} className="min-h-11 min-w-11 rounded-full bg-white/15 px-4 text-lg font-bold hover:bg-white/25 disabled:opacity-30" aria-label="Próxima imagem">
+          →
+        </button>
+      </div>
+    </div>
   );
 }
