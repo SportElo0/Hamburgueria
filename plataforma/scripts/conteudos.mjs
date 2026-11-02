@@ -28,6 +28,7 @@ const FOLDERS = {
   '06-whatsapp-business': { title: 'WhatsApp Business', blurb: 'Perfil, mensagens automáticas, respostas rápidas e etiquetas.' },
   '07-planejamento': { title: 'Planejamento', blurb: 'Pilares, ritmo e calendário das primeiras semanas.' },
   '08-prompts': { title: 'Prompts', blurb: 'Os prompts das imagens e do vídeo do site, e um modelo para pedir conteúdo novo.' },
+  '09-carrosseis': { title: 'Carrosséis do dia', blurb: 'Um carrossel por dia, com legenda, texto alternativo e o dia na Agenda.' },
 };
 
 const WORDS = {
