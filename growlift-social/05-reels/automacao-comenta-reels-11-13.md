@@ -13,7 +13,7 @@ Cada Reel termina pedindo uma palavra: quem comenta recebe no direct o que foi p
 O plano grátis do ManyChat tem 4 automações. Fica assim:
 
 - **SITE: fixa, sempre ligada**, para "qualquer post ou Reel". Serve para todo Reel que não tem uma palavra própria.
-- **3 vagas que vão trocando** conforme o Reel da semana: hoje são **GOOGLE** (Reels 11, 4 e 5), **CARDÁPIO** (Reel 12) e **PEDIDO** (Reels 13 e 8). Quando o Reel 10 for ao ar, **MESA** entra no lugar da que estiver parada há mais tempo.
+- **3 vagas que vão trocando** conforme o Reel da semana: hoje são **GOOGLE** (Reels 11, 4, 5 e 14 e os carrosséis de Google), **CARDÁPIO** (Reels 12 e 16 e o carrossel do cardápio) e **PEDIDO** (Reels 13 e 8 e o carrossel "faça a conta"). Montem cada uma para "qualquer post ou Reel", assim um Reel novo já fica coberto. Quando o Reel 10 for ao ar, **MESA** entra no lugar da que estiver parada há mais tempo.
 - Antes de trocar uma palavra, vejam se o Reel antigo ainda recebe comentário com ela. Se receber, esperem uma semana.
 
 ## No ManyChat (para cada Reel, depois de postar)
@@ -74,8 +74,10 @@ Pra aparecer bem pra quem procura onde comer, o básico é:
 
 Ninguém consegue garantir posição no Google, mas dá pra deixar tudo em dia pra ter mais chance de ser encontrado.
 
-E se precisar responder uma avaliação ruim, um modelo pra adaptar:
-"Sentimos muito, [nome]. Não é o que queremos pra você. Pode nos chamar no WhatsApp [número]? Queremos entender o que aconteceu e resolver."
+E se precisar responder uma avaliação ruim, dois modelos pra adaptar:
+1. "Sentimos muito, [nome]. Não é o que queremos pra você. Pode nos chamar no WhatsApp [número]? Queremos entender o que aconteceu e resolver."
+2. "Sentimos muito pela demora, [nome]. Pode nos chamar no WhatsApp [número]? Queremos entender o que houve e resolver."
+Na resposta pública, não cite pedido, endereço nem dados da pessoa: o detalhe vai pro WhatsApp.
 
 Quer saber como está o seu restaurante hoje? O diagnóstico é grátis e a prévia chega no seu WhatsApp em até 2 dias úteis 👇
 
