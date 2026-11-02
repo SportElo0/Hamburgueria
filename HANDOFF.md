@@ -136,6 +136,13 @@ registrada pela equipe. Sem IA: todos os números são calculados pelo painel, e
 - Gerar PDF: `node marketing/apresentacao/render.mjs <html absoluto> <pdf> <pasta>`.
 - Evitar texto com degradê (background-clip) nos títulos: o leitor de PDF do iPad mostra blocos.
 
+## Estado em 02/11/2026 (para continuar em outra sessão ou conta)
+
+- Painel: botão "Adicionar à tela inicial" (manifesto + ícones em `plataforma/public/icons`) e telas de carregamento instantâneas (`loading.tsx`); a Agenda carrega o status do Instagram depois dos posts. Último deploy de produção: commit 08919c4.
+- Instagram: Reel 11 postou sozinho em 02/11 (cron-job.org chama `/api/instagram/tick` a cada 5 min). Agenda de 02 a 15/11 pronta (carrossel 10h + Reel 15h por dia); posts já aprovados precisam ser cancelados e aprovados de novo para pegar as legendas novas, sem avisos.
+- Reels no estilo história: `growlift-social/_fonte/reels/novos/` (ver `growlift-social/05-reels/novo-estilo-historias.md`). Carrosséis: `growlift-social/_fonte/carrosseis.mjs`.
+- Ainda abertos: decidir sobre o "responda SAIR" nos directs; limite de hashtags ainda é 30 no painel (o Instagram aceita 5); antes de 16/11, tirar vídeos e imagens do pacote da função (Blob) para não estourar o limite da Vercel Hobby.
+
 ## Pendências
 
 El Patron (aguardando o dono):
