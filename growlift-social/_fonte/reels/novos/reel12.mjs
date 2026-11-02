@@ -99,7 +99,7 @@ const body = `
 <div id="tap" class="tap"></div>
 <div id="toast" class="toast">Oi! Vi o cardápio de vocês<br>e quero fazer um pedido.</div>
 <div id="chefW" class="abs" style="left:50px;top:930px">${chef}</div>
-<div id="ilus" class="abs" style="right:90px;top:1290px;font-size:24px;font-weight:600;color:#6a7385">Exemplo ilustrativo</div>
+
 <div id="spk" class="abs" style="left:900px;top:470px">${svgIcon('<path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z" fill="#ffc94d" stroke="none"/>', 70)}</div>
 
 <div id="end"></div>

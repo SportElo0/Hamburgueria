@@ -64,7 +64,7 @@ const shop = `
 const body = `
 <div class="vig"></div>
 <div id="title" class="title"></div>
-<div id="ilus" class="abs" style="left:84px;bottom:420px;font-size:24px;font-weight:600;color:#77777f;letter-spacing:.02em">Exemplo ilustrativo · nome e endereço fictícios</div>
+
 <div id="clock" class="clock">18:00</div>
 ${shop}
 <div id="q1" class="q" style="left:90px;top:900px">Que horas abre amanhã?</div>

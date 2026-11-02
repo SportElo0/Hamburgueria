@@ -22,7 +22,7 @@ const CAPS = [
 ];
 
 const pizza = (s = 70) => `<svg width="${s}" height="${s}" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#e8a54b"/><circle cx="50" cy="50" r="36" fill="#e8483b"/><circle cx="50" cy="50" r="33" fill="#ffd27a"/><circle cx="38" cy="40" r="6" fill="#b3261e"/><circle cx="62" cy="46" r="6" fill="#b3261e"/><circle cx="48" cy="64" r="6" fill="#b3261e"/></svg>`;
-const insta = `<div style="padding:56px 22px 0;text-align:center"><div style="width:110px;height:110px;margin:0 auto;border-radius:50%;background:#fde2e2;display:grid;place-items:center">${pizza(80)}</div><div style="font-size:28px;font-weight:900;margin-top:12px">Pizzaria Exemplo</div><div style="font-size:18px;color:#6a7385">perfil fictício</div><div id="lk" style="margin:22px auto 0;width:max-content;padding:12px 22px;border-radius:999px;background:#eef2f8;font-size:22px;font-weight:800;color:#0865fe">🔗 cardápio aqui</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:22px">${Array.from({ length: 6 }, (_, i) => `<div style="aspect-ratio:1;background:${['#ffe8cc', '#fde2e2', '#fff1c2'][i % 3]}"></div>`).join('')}</div></div>`;
+const insta = `<div style="padding:56px 22px 0;text-align:center"><div style="width:110px;height:110px;margin:0 auto;border-radius:50%;background:#fde2e2;display:grid;place-items:center">${pizza(80)}</div><div style="font-size:28px;font-weight:900;margin-top:12px">Pizzaria Exemplo</div><div id="lk" style="margin:22px auto 0;width:max-content;padding:12px 22px;border-radius:999px;background:#eef2f8;font-size:22px;font-weight:800;color:#0865fe">🔗 cardápio aqui</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:22px">${Array.from({ length: 6 }, (_, i) => `<div style="aspect-ratio:1;background:${['#ffe8cc', '#fde2e2', '#fff1c2'][i % 3]}"></div>`).join('')}</div></div>`;
 const pdf = `<div style="height:100%;background:#525659;padding:50px 14px 0;color:#121826">
   <div style="display:flex;align-items:center;gap:10px;color:#fff;font-size:20px;font-weight:700;margin-bottom:14px">${svgIcon(ICON.menu, 26, '#fff')}cardapio_final_v3.pdf · 18 MB</div>
   <div id="load" style="height:12px;border-radius:6px;background:#3a3d40;overflow:hidden"><div id="bar" style="height:100%;width:0;background:#4d8dff"></div></div>
@@ -31,13 +31,12 @@ const pdf = `<div style="height:100%;background:#525659;padding:50px 14px 0;colo
     ${Array.from({ length: 14 }, () => `<div style="height:7px;border-radius:3px;background:#c9ced6;margin-top:9px;width:${50 + Math.round(Math.random() * 45)}%"></div>`).join('')}
   </div>
 </div>`;
-const good = `<div style="padding:50px 18px 0"><div style="font-size:30px;font-weight:900">Cardápio</div><div style="font-size:18px;color:#6a7385;margin-bottom:10px">Exemplo · nome fictício</div>
+const good = `<div style="padding:50px 18px 0"><div style="font-size:30px;font-weight:900">Cardápio</div>
   ${['Margherita', 'Calabresa', 'Quatro queijos'].map((n) => `<div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e3e8f0;border-radius:18px;padding:12px;margin-top:10px">${pizza(64)}<span style="flex:1;font-size:24px;font-weight:800">${n}</span><span style="font-size:24px;font-weight:800;color:#0865fe">R$ 00,00</span></div>`).join('')}
   <div style="margin-top:16px;height:64px;border-radius:999px;background:#0865fe;color:#fff;display:grid;place-items:center;font-size:24px;font-weight:800">Pedir pelo WhatsApp</div></div>`;
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · telas de exemplo, nome fictício.<br>Não garantimos clientes nem vendas.</div>
 
 <div id="hook" class="hook">O cardápio<br><span style="color:${RED}">que ninguém abriu.</span></div>
 <div id="lu" class="abs" style="left:110px;top:780px">${person('pl', '#8b5cf6', { size: 340, hair: '#2b2118' })}</div>

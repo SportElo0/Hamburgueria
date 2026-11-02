@@ -37,7 +37,6 @@ const oldSite = `
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · projeto conceito, nome fictício.<br>Não garantimos clientes nem posição no Google.</div>
 
 <div id="hook" class="hook">O lanche é bom.<br><span style="color:${RED}">O site… nem tanto.</span></div>
 <div id="toni" class="abs" style="left:110px;top:660px">${person('pt', RED, { size: 380, hair: '#9a9a9a' })}</div>
@@ -60,7 +59,7 @@ ${phone('ph', { left: 300, top: 420, w: 480, h: 820, search: false, inner: oldSi
 </div>
 <div id="antes" class="chip" style="left:90px;top:1100px;color:${RED};border-color:${RED}">Antes</div>
 <div id="depois" class="chip" style="left:90px;top:1100px;color:#8db8ff;border-color:#4d8dff">Com a cara do negócio</div>
-<div id="tagN" class="tag" style="left:620px;top:1110px">Projeto conceito · nome fictício</div>
+<div id="tagN" class="tag" style="left:620px;top:1110px">Projeto conceito</div>
 
 <div id="merece" class="big" style="top:600px;font-size:120px">Sua marca<br><span style="color:#4d8dff">merece mais.</span></div>
 

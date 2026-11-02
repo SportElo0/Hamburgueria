@@ -24,7 +24,7 @@ const CAPS = [
 ];
 
 const menu = `
-  <div style="height:150px;background:#111;color:#ffc94d;padding:56px 24px 0;font-size:30px;font-weight:900;letter-spacing:.04em">BRASA BURGER<div style="font-size:20px;color:#c6cede;font-weight:600;letter-spacing:0;margin-top:4px">Loja de demonstração · nome fictício</div></div>
+  <div style="height:150px;background:#111;color:#ffc94d;padding:56px 24px 0;font-size:30px;font-weight:900;letter-spacing:.04em">BRASA BURGER</div>
   ${[
     ['i1', 'burger', 'Brasa Duplo'],
     ['i2', 'fries', 'Batata média'],
@@ -49,7 +49,6 @@ const menu = `
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · telas de demonstração, nome fictício.<br>Não garantimos clientes nem vendas.</div>
 
 <div id="hook" class="hook">Sábado à noite.<br><span style="color:${ORANGE}">Pedido de todo lado.</span></div>
 <div id="clock" class="card" style="left:110px;top:610px;width:360px;padding:26px 34px">
@@ -71,7 +70,7 @@ ${phone('ph', { left: 330, top: 430, h: 820, search: false, inner: menu })}
   <div id="order" style="margin-top:34px;background:#f3f5f9;color:#121826;border-radius:28px;padding:30px 34px">
     <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:44px;font-weight:900">Novo pedido #128</div><div style="padding:8px 18px;border-radius:999px;background:#dcfce7;color:#15803d;font-size:24px;font-weight:900">Pix pago</div></div>
     <div style="font-size:30px;font-weight:700;margin-top:18px;line-height:1.5">1 Brasa Duplo<br>1 Batata média<br>1 Refrigerante</div>
-    <div style="font-size:22px;color:#6a7385;margin-top:10px">Pedido pelo site · loja de demonstração</div>
+    <div style="font-size:22px;color:#6a7385;margin-top:10px">Pedido pelo site</div>
   </div>
 </div>
 

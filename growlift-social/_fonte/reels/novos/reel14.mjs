@@ -23,12 +23,11 @@ const CAPS = [
 
 const star = (on, s = 46) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="${on ? '#ffc94d' : '#d5dbe5'}"/></svg>`;
 const reviewCard = (id, top) => `<div id="${id}" class="card" style="left:90px;right:90px;top:${top}px;background:#f4f6fa;color:#121826;padding:34px 40px">
-  <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:34px">Cliente fictício</b><span>${star(1)}${star(0)}${star(0)}${star(0)}${star(0)}</span></div>
+  <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:34px">Cliente</b><span>${star(1)}${star(0)}${star(0)}${star(0)}${star(0)}</span></div>
   <p style="font-size:44px;font-weight:600;margin-top:16px;color:#2b3446">“Demorou e chegou frio.”</p></div>`;
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · avaliação de exemplo.<br>Não garantimos clientes nem posição no Google.</div>
 
 <div id="hook" class="hook">Uma estrela.<br><span style="color:${RED}">E agora?</span></div>
 <div id="ze" class="abs" style="left:110px;top:760px">${person('pz', '#2fae78', { size: 360, hair: '#3a2a1e' })}</div>
@@ -54,7 +53,7 @@ ${reviewCard('rev', 430)}
   <div class="lbl" style="left:90px;top:420px;color:#8790a6">DIAS DEPOIS</div>
   <div class="abs" style="left:80px;top:820px">${person('pc', '#e86a9a', { size: 300, hair: '#6b3a1f' })}</div>
   ${phone('ph2', { left: 430, top: 490, w: 560, h: 760, search: false, inner: `<div style="padding:50px 22px 0">
-    <div id="l1" style="background:#fff;border:1px solid #dce2ec;border-radius:22px;padding:20px"><div style="display:flex;justify-content:space-between"><b style="font-size:24px">Cliente fictício</b><span>${star(1, 26)}${star(0, 26)}${star(0, 26)}${star(0, 26)}${star(0, 26)}</span></div><p style="font-size:26px;margin-top:8px">“Demorou e chegou frio.”</p></div>
+    <div id="l1" style="background:#fff;border:1px solid #dce2ec;border-radius:22px;padding:20px"><div style="display:flex;justify-content:space-between"><b style="font-size:24px">Cliente</b><span>${star(1, 26)}${star(0, 26)}${star(0, 26)}${star(0, 26)}${star(0, 26)}</span></div><p style="font-size:26px;margin-top:8px">“Demorou e chegou frio.”</p></div>
     <div id="l2" style="margin:14px 0 0 40px;background:#e8f0ff;border:2px solid #0865fe;border-radius:22px;padding:20px"><b style="font-size:22px;color:#0865fe">Resposta do proprietário</b><p style="font-size:24px;margin-top:8px;line-height:1.35">Sentimos muito. Pode chamar a gente no WhatsApp? Queremos resolver.</p></div>
   </div>` })}
 </div>

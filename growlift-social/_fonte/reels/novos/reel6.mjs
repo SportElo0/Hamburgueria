@@ -51,7 +51,6 @@ const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, 
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · projeto conceito, nome fictício.<br>Não garantimos clientes nem posição no Google.</div>
 
 <div id="hook" class="hook">Ela só tinha<br><span style="color:${PINK}">um caderno.</span></div>
 <div id="julia" class="abs" style="left:110px;top:690px">${person('pj', PINK, { size: 360, hair: '#6b3a1f' })}</div>
@@ -85,7 +84,7 @@ ${BG}
 </div>
 <div id="sVis" class="chip" style="left:90px;top:1100px">O visual</div>
 <div id="sFot" class="chip" style="left:90px;top:1100px;color:#ffc4d8;border-color:${PINK}">As fotos</div>
-<div id="tagD" class="tag" style="left:620px;top:1110px">Projeto conceito · nome fictício</div>
+<div id="tagD" class="tag" style="left:620px;top:1110px">Projeto conceito</div>
 
 <!-- her face -->
 <div id="end" class="abs" style="left:0;top:0;width:1080px;height:1300px">

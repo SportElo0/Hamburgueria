@@ -469,7 +469,7 @@ export const slideCoverWallV2 = ({ n, total, title, sub, imgs, note }) =>
     </div>`, { n, total });
 
 /** One concept project in the feed: its colours behind, the site large, features as chips. */
-export const slideProjectV2 = ({ n, total, name, segment, img, chips, note = 'Projeto conceito · nome fictício' }) =>
+export const slideProjectV2 = ({ n, total, name, segment, img, chips, note = 'Projeto conceito' }) =>
   slideV2(`
     <div style="display:flex;gap:14px;flex-wrap:wrap"><span class="pill">${segment}</span><span class="pill blue">${note}</span></div>
     <h2 class="t-title fit" style="font-size:100px;margin-top:26px;white-space:nowrap">${name}</h2>

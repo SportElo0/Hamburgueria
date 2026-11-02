@@ -36,7 +36,6 @@ const results = ['Hamburgueria A', 'Hamburgueria B', 'Hamburgueria C']
 
 const body = `
 ${BG}
-<div class="disc">História fictícia. Tela ilustrativa, não é do Google.<br>Não garantimos clientes nem posição no Google.</div>
 
 <div id="hook" class="hook">Ela procurou.<br><span style="color:${RED}">Não achou.</span></div>
 <div id="clock" class="card" style="left:110px;top:610px;width:400px;padding:26px 34px">

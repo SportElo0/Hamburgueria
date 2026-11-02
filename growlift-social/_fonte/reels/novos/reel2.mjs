@@ -49,7 +49,6 @@ const browser = (id, imgId, top, h) => `<div id="${id}" class="abs" style="left:
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · projeto conceito. Tela ilustrativa, não é do Google.<br>Não garantimos clientes nem posição no Google.</div>
 
 <div id="hook" class="hook">O bolo é lindo.<br><span style="color:${PINK}">Quase ninguém viu.</span></div>
 <div id="bia" class="abs" style="left:110px;top:700px">${person('pb', PINK, { size: 360, hair: '#3a2a1e' })}</div>
@@ -81,7 +80,7 @@ ${phone('ph', { left: 330, top: 430, h: 700, inner: results })}
 ${browser('win', 'shotA', 430, 640)}
 <div id="ring" class="abs" style="left:792px;top:494px;width:230px;height:76px;border-radius:999px;border:6px solid #ffd27a;box-shadow:0 0 40px rgba(255,210,122,.8)"></div>
 <div id="enc" class="chip" style="left:90px;top:1100px;color:#ffd27a;border-color:#ffd27a">Botão pra encomendar</div>
-<div id="tagD" class="tag" style="left:620px;top:1110px">Projeto conceito · nome fictício</div>
+<div id="tagD" class="tag" style="left:620px;top:1110px">Projeto conceito</div>
 
 <!-- whoever finds her sees the cake first -->
 <div id="find" class="abs" style="left:0;top:0;width:1080px;height:1300px">

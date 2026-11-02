@@ -8,7 +8,7 @@ Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos
 - Capa com uma promessa concreta em poucas palavras; o slide 2 segura sozinho (o Instagram pode mostrar o carrossel de novo a partir dele).
 - Uma ideia por slide, slide de resumo para salvar e um pedido só no fim (Comenta GOOGLE ou SITE, as palavras do ManyChat).
 - Números só de pesquisa com fonte escrita no slide e na legenda: Reclame AQUI e Abrasel (agosto de 2024, mais de 400 consumidores na plataforma do Reclame AQUI) e Abrasel com Harmo (279 mil avaliações de 3.006 bares e restaurantes associados à Abrasel, no Google, jan/2023 a set/2024).
-- Avaliações, telas de busca e nomes são exemplos, marcados como "exemplo" ou "Tela ilustrativa · nome fictício".
+- Sem avisos de "fictício" ou "não garantimos" nas artes (decisão de 02/11). Fica só um "Projeto conceito" pequeno onde aparece um site conceito. O carrossel de 02/11 saiu como estava.
 
 | Dia | Carrossel (10h) | Reel do dia (15h) |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ Recebeu uma avaliação de 1 estrela? Não apaga o app. Salve estas 3 respostas 
 
 Num estudo da Abrasel com a Harmo, só 27% das avaliações de 3.006 bares e restaurantes associados à Abrasel tinham resposta no Google (279 mil avaliações, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes consideram a resposta à crítica um fator fundamental pra decidir.
 
-Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar. As avaliações do carrossel são fictícias, só exemplos: não são de clientes reais.
+Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar.
 
 Comenta GOOGLE que a gente te manda mais dicas no direct.
 
@@ -241,7 +241,7 @@ Quanto cada pedido pelo app de delivery te custa de verdade? Faça a conta com o
 2. Veja quanto você vendeu pelo app no mesmo mês.
 3. Divida o custo pelas vendas: é quanto fica de cada pedido.
 
-Não é pra largar o app: ele traz cliente que ainda não te conhece. A ideia é saber o custo e ter também um canal seu, pra quem já é cliente pedir direto. Os números do carrossel são só um exemplo.
+Não é pra largar o app: ele traz cliente que ainda não te conhece. A ideia é saber o custo e ter também um canal seu, pra quem já é cliente pedir direto.
 
 No pedido pelo próprio site (plano Grow), a Growlift não cobra comissão por pedido: você paga a mensalidade e, se a sua conta cobrar, a tarifa do Pix. Valores e condições: link na bio.
 

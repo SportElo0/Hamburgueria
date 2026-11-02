@@ -91,7 +91,7 @@ const step = ({ n, title, body, visual = '', tag = '' }) =>
    <p class="p" style="margin-top:26px">${body}</p>
    <div style="position:absolute;left:0;right:0;bottom:0">${visual}</div>`;
 
-const review = ({ k, label, text, reply, who = 'Cliente fictício (exemplo)' }) =>
+const review = ({ k, label, text, reply, who = 'Cliente' }) =>
   `<span class="pill">${label}</span>
    <div class="card" style="margin-top:34px;background:#f4f6fa;color:#121826;padding:34px 38px">
      <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:30px">${who}</b>${stars(k, 36, '#d5dbe5')}</div>
@@ -155,7 +155,7 @@ const cta = ({ title, body, word, save = true }) =>
    </div>`;
 
 // Illustrations (drawn, nothing copied).
-const phoneSearch = ({ query, name, rating, meta, chips = [], tag = 'Tela ilustrativa · nome fictício' }) =>
+const phoneSearch = ({ query, name, rating, meta, chips = [], tag = '' }) =>
   `<div style="position:relative;width:340px;margin-left:auto;margin-top:-30px;border-radius:56px;padding:14px;background:#1a2130;box-shadow:0 50px 100px -40px rgba(8,101,254,.7),0 0 0 2px rgba(255,255,255,.08)">
     <div style="border-radius:44px;overflow:hidden;background:#f4f6fa;color:#121826;padding:40px 22px 26px">
       <div style="height:58px;border-radius:999px;background:#fff;border:1px solid #dce2ec;display:flex;align-items:center;gap:12px;padding:0 20px;font-size:22px;font-weight:600;color:#4a5568">${icon('google', { size: 26, color: '#6a7385', width: 2 })}${query}</div>
@@ -165,7 +165,7 @@ const phoneSearch = ({ query, name, rating, meta, chips = [], tag = 'Tela ilustr
         <div style="display:flex;gap:8px;margin-top:14px">${['#ffe8cc', '#fde2e2', '#dbeafe'].map((c) => `<div style="flex:1;height:84px;border-radius:14px;background:${c}"></div>`).join('')}</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">${chips.map((c) => `<span style="padding:8px 14px;border-radius:999px;background:#eef2f8;font-size:19px;font-weight:700;color:#334">${c}</span>`).join('')}</div>
       </div>
-      <div style="margin-top:14px;text-align:center;font-size:21px;font-weight:800;color:#4a5568">${tag}</div>
+      ${tag ? `<div style="margin-top:14px;text-align:center;font-size:21px;font-weight:800;color:#4a5568">${tag}</div>` : ''}
     </div>
   </div>`;
 
@@ -230,7 +230,6 @@ const menuMock = (marks = false) =>
   `<div class="card" style="margin-left:auto;width:520px;padding:26px 30px;background:#fbf7ee;color:#2b2118;transform:rotate(2deg)">
     <div style="font-size:34px;font-weight:900;font-style:italic">Cardápio</div>
     ${['Prato do dia', 'Porção da casa', 'Sobremesa', 'Bebidas'].map((n, i) => `<div style="display:flex;justify-content:space-between;align-items:center;font-size:28px;padding:12px 0;border-top:1.5px dashed #d9cdb4"><span>${n}</span>${marks && i % 2 === 0 ? `<span style="color:${RED};font-weight:900">✕</span>` : '<span style="color:#9a8b70">…</span>'}</div>`).join('')}
-    <div class="ill" style="margin-top:6px;color:#9a8b70">Exemplo</div>
   </div>`;
 
 const badGood = (bad, good) =>
@@ -304,7 +303,7 @@ Comenta GOOGLE que a gente te manda no direct o básico pra deixar o seu perfil 
     slug: '02-avaliacao-ruim',
     kicker: 'Modelos prontos',
     slides: [
-      (o) => slide(cover({ title: `Recebeu 1 estrela. ${B('E agora?')}`, sub: '3 respostas prontas pra copiar e adaptar.', visual: `<div class="card" style="margin-left:auto;width:720px;background:#f4f6fa;color:#121826;padding:30px 34px;transform:rotate(-3deg)"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:28px">Cliente fictício (exemplo)</b>${stars(1, 36, '#d5dbe5')}</div><p style="font-size:32px;line-height:1.4;margin-top:14px;color:#2b3446">“Demorou demais e a comida chegou fria.”</p></div>` }), { ...o, glow: 'tr' }),
+      (o) => slide(cover({ title: `Recebeu 1 estrela. ${B('E agora?')}`, sub: '3 respostas prontas pra copiar e adaptar.', visual: `<div class="card" style="margin-left:auto;width:720px;background:#f4f6fa;color:#121826;padding:30px 34px;transform:rotate(-3deg)"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:28px">Cliente</b>${stars(1, 36, '#d5dbe5')}</div><p style="font-size:32px;line-height:1.4;margin-top:14px;color:#2b3446">“Demorou demais e a comida chegou fria.”</p></div>` }), { ...o, glow: 'tr' }),
       (o) => slide(stat({ number: '27%', label: 'das avaliações de 3.006 bares e restaurantes analisados no Google tiveram resposta.', body: 'E, pra 40% dos clientes, a resposta à crítica é fundamental pra decidir (Reclame AQUI e Abrasel, 2024).', source: SRC_HARMO }), o),
       (o) => slide(step({ n: 1, title: `Antes de ${B('responder.')}`, body: 'Respire, leia de novo e responda o quanto antes. Curto, educado e sem brigar: quem lê é o próximo cliente.', visual: `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">${['Agradeça', 'Reconheça', 'Resolva', 'Convide'].map((t, i) => `<div class="card" style="padding:22px 14px;text-align:center"><div style="font-size:52px;font-weight:900;color:${TOKENS.blueBright}">${i + 1}</div><div style="font-size:28px;font-weight:800;margin-top:6px">${t}</div></div>`).join('')}</div>` }), { ...o, glow: 'br' }),
       (o) => slide(review({ k: 5, label: 'Avaliação boa', text: 'Comida ótima e atendimento rápido. Voltaremos!', reply: 'Que alegria ler isso, [nome]! Obrigado por escolher a gente. O [prato] é feito todo dia aqui na casa. Esperamos vocês de volta!' }), o),
@@ -318,7 +317,7 @@ Comenta GOOGLE que a gente te manda no direct o básico pra deixar o seu perfil 
 
 Num estudo da Abrasel com a Harmo, só 27% das avaliações de 3.006 bares e restaurantes associados à Abrasel tinham resposta no Google (279 mil avaliações, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes consideram a resposta à crítica um fator fundamental pra decidir.
 
-Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar. As avaliações do carrossel são fictícias, só exemplos: não são de clientes reais.
+Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar.
 
 Comenta GOOGLE que a gente te manda mais dicas no direct.
 
@@ -422,7 +421,7 @@ Salve pra lembrar do combo. E se quiser ver exemplos, comenta SITE.
       (o) => slide(step({ n: 3, title: `PDF ${B('pesado.')}`, body: 'Demora pra abrir no celular e obriga a dar zoom. Uma página que se ajusta à tela é mais fácil de ler.', visual: badGood('cardapio_final_v3.pdf · 18 MB', 'Página que cabe na tela') }), { ...o, glow: 'bl' }),
       (o) => slide(step({ n: 4, title: `Cardápio ${B('desatualizado.')}`, body: 'Prato que acabou ou preço antigo frustra na hora do pedido. Atualize junto com o cardápio do balcão.', visual: badGood('Preço de 2024', 'Atualizado com o balcão') }), o),
       (o) => slide(step({ n: 5, title: `Sem jeito ${B('de pedir.')}`, body: 'Viu, gostou e agora? Um botão de WhatsApp ou de pedido logo no cardápio encurta o caminho.', visual: `<div class="card" style="padding:26px 30px;display:flex;align-items:center;justify-content:center;gap:16px;background:${TOKENS.blue};border:none"><span style="font-size:40px;font-weight:800">Pedir pelo WhatsApp</span></div>` }), { ...o, glow: 'tr' }),
-      (o) => slide(step({ n: 6, title: `Sem horário ${B('e endereço.')}`, body: 'O cardápio convence. Mas ele ainda precisa saber se você está aberto e como chegar.', visual: `<div class="card" style="padding:26px 30px;display:grid;gap:14px">${[['google', 'Rua Exemplo, 123'], ['calendario', 'Ter a dom · 11h às 23h']].map(([ic, t]) => `<div style="display:flex;align-items:center;gap:18px;font-size:36px;font-weight:700">${icon(ic, { size: 48, color: TOKENS.blueBright, width: 1.8 })}${t}</div>`).join('')}<div class="ill">Exemplo</div></div>` }), o),
+      (o) => slide(step({ n: 6, title: `Sem horário ${B('e endereço.')}`, body: 'O cardápio convence. Mas ele ainda precisa saber se você está aberto e como chegar.', visual: `<div class="card" style="padding:26px 30px;display:grid;gap:14px">${[['google', 'Rua Exemplo, 123'], ['calendario', 'Ter a dom · 11h às 23h']].map(([ic, t]) => `<div style="display:flex;align-items:center;gap:18px;font-size:36px;font-weight:700">${icon(ic, { size: 48, color: TOKENS.blueBright, width: 1.8 })}${t}</div>`).join('')}</div>` }), o),
       (o) => slide(checklist({ title: `O cardápio ${B('que ajuda.')}`, items: ['Em texto, num link que abre fácil', 'Com preço atualizado', 'Que cabe na tela do celular', 'Com botão de pedido ou WhatsApp', 'Com horário e endereço'] }), { ...o, glow: 'br' }),
       (o) => slide(cta({ title: `Quer ver um ${B('cardápio assim?')}`, body: 'A gente te manda exemplos de site com cardápio pra restaurante.', word: 'CARDÁPIO' }), { ...o, glow: 'bl' }),
     ],
@@ -482,7 +481,7 @@ Comenta SITE que a gente te manda exemplos e explica como funciona.
       (o) => slide(step({ n: 1, title: `Não é pra ${B('largar o app.')}`, body: 'O app traz cliente que ainda não te conhece. A conta serve pra saber quanto custa cada pedido e se vale ter um canal seu também.' }), o),
       (o) => slide(step({ n: 2, title: `Some o que ${B('o app cobra.')}`, body: 'Comissão, taxa de pagamento e mensalidade do plano, se houver. Está no seu contrato ou no extrato do mês.', visual: formula(['Comissão', 'Taxa de pagamento', 'Mensalidade'], 'Custo do app no mês') }), { ...o, glow: 'br' }),
       (o) => slide(step({ n: 3, title: `Veja quanto ${B('vendeu pelo app.')}`, body: 'O total de vendas pelo app no mesmo mês. Também aparece no extrato.', visual: formula(['Pedidos do mês', 'Valor de cada um'], 'Vendas pelo app') }), o),
-      (o) => slide(step({ n: 4, title: `Divida ${B('um pelo outro.')}`, body: 'Custo do app dividido pelas vendas no app. O resultado é quanto fica de cada pedido.', visual: `<div class="card" style="padding:26px 30px"><div style="font-size:36px;font-weight:800">Exemplo com números redondos</div><div class="p" style="font-size:34px;margin-top:10px">Se o app custou R$ 1.000 num mês com R$ 5.000 em vendas: 1.000 ÷ 5.000 = <b style="color:${AMBER}">20% de cada pedido</b>.</div><div class="ill" style="margin-top:8px">Números de exemplo, não são de nenhum app</div></div>` }), { ...o, glow: 'bl' }),
+      (o) => slide(step({ n: 4, title: `Divida ${B('um pelo outro.')}`, body: 'Custo do app dividido pelas vendas no app. O resultado é quanto fica de cada pedido.', visual: `<div class="card" style="padding:26px 30px"><div style="font-size:36px;font-weight:800">Exemplo com números redondos</div><div class="p" style="font-size:34px;margin-top:10px">Se o app custou R$ 1.000 num mês com R$ 5.000 em vendas: 1.000 ÷ 5.000 = <b style="color:${AMBER}">20% de cada pedido</b>.</div></div>` }), { ...o, glow: 'bl' }),
       (o) => slide(step({ n: 5, title: `E no ${B('seu site?')}`, body: 'No pedido pelo próprio site você paga a mensalidade do serviço e, se a sua conta cobrar, a tarifa do Pix. Na Growlift não tem comissão por pedido (plano Grow).' }), o),
       (o) => slide(checklist({ title: `Os dois ${B('juntos.')}`, items: ['App pra ser descoberto por quem não te conhece', 'Seu site pra quem já é cliente pedir direto', 'Divulgue o site no Instagram, no Google e no balcão', 'Refaça a conta todo mês'] }), { ...o, glow: 'tr' }),
       (o) => slide(checklist({ title: `A conta ${B('em 3 linhas.')}`, items: ['Custo do app no mês', 'Vendas pelo app no mês', 'Custo ÷ vendas = % de cada pedido'] }), o),
@@ -494,7 +493,7 @@ Comenta SITE que a gente te manda exemplos e explica como funciona.
 2. Veja quanto você vendeu pelo app no mesmo mês.
 3. Divida o custo pelas vendas: é quanto fica de cada pedido.
 
-Não é pra largar o app: ele traz cliente que ainda não te conhece. A ideia é saber o custo e ter também um canal seu, pra quem já é cliente pedir direto. Os números do carrossel são só um exemplo.
+Não é pra largar o app: ele traz cliente que ainda não te conhece. A ideia é saber o custo e ter também um canal seu, pra quem já é cliente pedir direto.
 
 No pedido pelo próprio site (plano Grow), a Growlift não cobra comissão por pedido: você paga a mensalidade e, se a sua conta cobrar, a tarifa do Pix. Valores e condições: link na bio.
 
@@ -535,7 +534,7 @@ Comenta SITE que a gente te manda exemplos no direct.
     slug: '10-pedir-avaliacao',
     kicker: 'Avaliações',
     slides: [
-      (o) => slide(cover({ title: `Como pedir avaliação ${B('sem parecer chato.')}`, sub: 'A hora certa, a frase pronta e o QR no lugar certo.', visual: `<div style="margin-left:auto;width:360px;height:360px;border-radius:40px;background:#fff;padding:30px;box-shadow:0 50px 100px -40px rgba(8,101,254,.7)">${qr()}</div><div class="ill" style="text-align:right;margin-top:14px">QR ilustrativo</div>` }), { ...o, glow: 'tr' }),
+      (o) => slide(cover({ title: `Como pedir avaliação ${B('sem parecer chato.')}`, sub: 'A hora certa, a frase pronta e o QR no lugar certo.', visual: `<div style="margin-left:auto;width:360px;height:360px;border-radius:40px;background:#fff;padding:30px;box-shadow:0 50px 100px -40px rgba(8,101,254,.7)">${qr()}</div>` }), { ...o, glow: 'tr' }),
       (o) => slide(stat({ number: '63%', label: 'escolhem onde comer pelas avaliações de outros clientes.', body: 'Ter avaliações recentes ajuda quem ainda não te conhece a decidir.', source: SRC_RA }), o),
       (o) => slide(step({ n: 1, title: `Peça ${B('a todos.')}`, body: 'Não escolha só quem elogiou. Peça a todo cliente, do mesmo jeito: é o que as regras do Google pedem e o que é justo com quem lê.' }), { ...o, glow: 'br' }),
       (o) => slide(step({ n: 2, title: `Na ${B('hora certa.')}`, body: 'No fim da refeição, junto com a conta ou na entrega, enquanto a experiência ainda está fresca.' }), o),
@@ -597,7 +596,7 @@ Salve e manda pra quem atende o WhatsApp aí. Se quiser um cardápio com cara de
       (o) => slide(cover({ title: `Feriado chegando. Seu horário no Google ${B('está certo?')}`, sub: 'Os feriados nacionais até o fim do ano e como ajustar.', visual: `<div style="margin-left:auto;width:360px;border-radius:34px;overflow:hidden;background:#fff;color:#121826;text-align:center;box-shadow:0 50px 100px -40px rgba(8,101,254,.7)"><div style="background:${RED};color:#fff;font-size:34px;font-weight:800;padding:16px">NOVEMBRO</div><div style="font-size:150px;font-weight:900;line-height:1.1">20</div><div style="font-size:28px;font-weight:700;padding-bottom:22px">sexta-feira</div></div>` }), { ...o, glow: 'tr' }),
       (o) => slide(step({ n: 1, title: `Aberto no Google, ${B('fechado na porta.')}`, body: 'É a frustração mais fácil de evitar. O Google tem um campo só pra isso: o horário especial.' }), o),
       (o) => slide(checklist({ title: `Feriados ${B('nacionais.')}`, lead: 'Até o começo de 2027. Feriados da sua cidade e do seu estado contam também.', items: ['Dom 15/11 · Proclamação da República', 'Sex 20/11 · Zumbi e Consciência Negra', 'Sex 25/12 · Natal', 'Sex 01/01 · Confraternização Universal'] }), { ...o, glow: 'br' }),
-      (o) => slide(step({ n: 2, title: `Como ${B('ajustar.')}`, body: 'No seu Perfil da Empresa no Google: Editar perfil, Horário, Horário especial. Escolha a data e marque fechado, ou aberto com o horário do dia.', visual: `<div class="card" style="padding:24px 30px;display:flex;justify-content:space-between;align-items:center;font-size:36px;font-weight:700"><span>Sex, 20 de nov.</span><span style="color:${AMBER}">18h às 23h</span></div><div class="ill" style="margin-top:10px">Exemplo · o caminho no Google pode mudar um pouco</div>` }), o),
+      (o) => slide(step({ n: 2, title: `Como ${B('ajustar.')}`, body: 'No seu Perfil da Empresa no Google: Editar perfil, Horário, Horário especial. Escolha a data e marque fechado, ou aberto com o horário do dia.', visual: `<div class="card" style="padding:24px 30px;display:flex;justify-content:space-between;align-items:center;font-size:36px;font-weight:700"><span>Sex, 20 de nov.</span><span style="color:${AMBER}">18h às 23h</span></div><div class="ill" style="margin-top:10px">O caminho no Google pode mudar um pouco</div>` }), o),
       (o) => slide(step({ n: 3, title: `Abrir normal ${B('também conta.')}`, body: 'Se vai abrir no horário de sempre, confirme mesmo assim no horário especial. Assim o Google pode deixar de mostrar o aviso de que o horário pode ser diferente.' }), { ...o, glow: 'bl' }),
       (o) => slide(step({ n: 4, title: `Avise ${B('em todo lugar.')}`, body: 'Story no Instagram, mensagem de ausência no WhatsApp e o horário no site. Quem procura em qualquer canal vê a mesma informação.' }), o),
       (o) => slide(checklist({ title: `Pra fazer ${B('esta semana.')}`, items: ['Horário especial de 15/11 e 20/11', 'Natal e Ano-Novo já cadastrados', 'Feriados da sua cidade', 'Story e WhatsApp avisando'] }), { ...o, glow: 'tr' }),

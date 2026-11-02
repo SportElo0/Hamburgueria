@@ -61,7 +61,6 @@ const body = `
 <div class="dots"></div>
 <div class="glowY" style="left:40px;top:120px"></div>
 <div class="glowB" style="right:-600px;top:520px"></div>
-<div class="disc">História fictícia. Sites de projetos conceito, nomes fictícios.<br>Não garantimos clientes nem posição no Google.</div>
 
 <!-- Scene 1: four shops open -->
 <div id="pillA" class="pill" style="top:400px;display:none"><i style="background:#ffc94d"></i>Hoje cedo</div>
@@ -102,7 +101,7 @@ ${SHOPS.map(
   ${SHOPS.map((s) => `<img id="shot${s.id}" class="shot" src="${img(s.site)}">`).join('')}
 </div>
 ${SHOPS.map((s) => `<div id="lbl${s.id}" class="chip" style="left:90px;top:1135px;border-color:${s.color};color:#fff"><span style="color:${s.color}">●</span> ${s.name}</div>`).join('')}
-<div id="tagC" class="tag" style="left:560px;top:1145px">Projeto conceito · nome fictício</div>
+<div id="tagC" class="tag" style="left:560px;top:1145px">Projeto conceito</div>
 
 <!-- Scene 5: each business, a different site -->
 <div id="diff" class="big" style="top:480px;font-size:96px">Cada negócio,<br><span style="color:#4d8dff">um site diferente.</span></div>

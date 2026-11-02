@@ -49,7 +49,6 @@ const body = `
 <div class="dots"></div>
 <div class="glowB" style="left:-560px;top:380px"></div>
 <div class="glowR" style="right:-520px;top:200px"></div>
-<div class="disc">História fictícia. Tela ilustrativa, não é do Google.<br>Não garantimos clientes nem posição no Google.</div>
 
 <!-- Hook on screen from frame 1 -->
 <div id="hook" class="hook">Aberto no Google.<br><span style="color:${RED}">Fechado na porta.</span></div>

@@ -26,7 +26,6 @@ const menuCard = `<div style="background:#fff;border-radius:18px;overflow:hidden
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · telas de exemplo.<br>Não garantimos clientes nem vendas.</div>
 
 <div id="hook" class="hook">O celular<br><span style="color:#ffb37a">não para.</span></div>
 <div id="clock" class="card" style="left:110px;top:610px;width:360px;padding:26px 34px">
@@ -47,7 +46,7 @@ ${phone('ph2', { left: 300, top: 430, w: 480, h: 820, search: false, inner: chat
 
 <div id="cust" class="abs" style="left:0;top:0;width:1080px;height:1300px">
   <div class="abs" style="left:80px;top:860px">${person('pq', '#2fae78', { size: 300, hair: '#3a2a1e' })}</div>
-  ${phone('ph3', { left: 470, top: 460, w: 520, h: 760, search: false, inner: `<div style="padding:50px 20px 0"><div style="font-size:30px;font-weight:900">Cardápio</div><div style="font-size:18px;color:#6a7385;margin-bottom:8px">Exemplo · nome fictício</div>${menuCard}</div>` })}
+  ${phone('ph3', { left: 470, top: 460, w: 520, h: 760, search: false, inner: `<div style="padding:50px 20px 0"><div style="font-size:30px;font-weight:900">Cardápio</div>${menuCard}</div>` })}
   <div id="pick" class="chip" style="left:90px;top:640px;color:#8db8ff;border-color:#4d8dff">já sabe o que quer</div>
 </div>
 

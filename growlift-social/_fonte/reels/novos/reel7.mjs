@@ -36,12 +36,11 @@ const chat = `
   ${bub('m1', 'r', 'Oi! Tenho um restaurante e preciso de um site.')}
   ${bub('m2', 'l', 'Oi, Rafael! Sou eu que vou fazer o seu site. Me conta do restaurante?')}
   ${bub('m3', 'r', 'Comida caseira, almoço e jantar.')}
-  ${bub('m4', 'l', `<div style="border-radius:12px;overflow:hidden;height:150px"><img src="${img('restaurante.png')}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div><div style="margin-top:8px;font-weight:800">Prévia do seu site</div><div style="font-size:20px;color:#6a7385;font-weight:700">Exemplo · projeto conceito, nome fictício</div>`)}
+  ${bub('m4', 'l', `<div style="border-radius:12px;overflow:hidden;height:150px"><img src="${img('restaurante.png')}" style="width:100%;height:100%;object-fit:cover;object-position:top"></div><div style="margin-top:8px;font-weight:800">Prévia do seu site</div><div style="font-size:20px;color:#6a7385;font-weight:700">Projeto conceito</div>`)}
   </div>`;
 
 const body = `
 ${BG}
-<div class="disc">História fictícia · telas e prévia de exemplo.<br>Não garantimos clientes nem posição no Google.</div>
 
 <div id="hook" class="hook">Quem responde<br><span style="color:#8db8ff">é quem faz.</span></div>
 <div id="rest" class="abs" style="left:600px;top:700px">${store('stR', 'RESTAURANTE', '#2fae78', { w: 380 })}</div>
