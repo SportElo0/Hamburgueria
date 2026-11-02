@@ -4,6 +4,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { BlobNotFoundError, BlobPreconditionFailedError, del, get, head, list, put } from '@vercel/blob';
 import postgres from 'postgres';
+import { SomenteLeituraError, gravacaoPermitida } from './ambiente';
 
 /**
  * Tiny document store. Production: Postgres on Supabase (POSTGRES_URL), one row per document.
@@ -322,22 +323,49 @@ class FileStorage implements Storage {
   }
 }
 
+/**
+ * Reads pass through; every write throws. Wraps the store on Vercel deployments other than Production (see ambiente.ts),
+ * because Preview and Development share the production database today: a preview link must never change real data.
+ */
+class SomenteLeitura implements Storage {
+  constructor(private readonly base: Storage) {}
+  readJSON<T>(key: string) {
+    return this.base.readJSON<T>(key);
+  }
+  readFile(key: string) {
+    return this.base.readFile(key);
+  }
+  list(prefix: string) {
+    return this.base.list(prefix);
+  }
+  async writeJSON(): Promise<string> {
+    throw new SomenteLeituraError();
+  }
+  async writeFile(): Promise<void> {
+    throw new SomenteLeituraError();
+  }
+  async remove(): Promise<void> {
+    throw new SomenteLeituraError();
+  }
+}
+
 let instance: Storage | null = null;
 
 export function storage(): Storage {
   if (!instance) {
-    instance = process.env.POSTGRES_URL
+    const base = process.env.POSTGRES_URL
       ? new PostgresStorage(process.env.POSTGRES_URL)
       : process.env.BLOB_READ_WRITE_TOKEN
         ? new BlobStorage()
         : new FileStorage(path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.PLATAFORMA_DATA_DIR || '.data'));
+    instance = gravacaoPermitida() ? base : new SomenteLeitura(base);
   }
   return instance;
 }
 
-/** The old Vercel Blob store, while its data still has to be copied into Postgres. */
+/** The old Vercel Blob store, while its data still has to be copied into Postgres. Production only. */
 export function legacyBlob(): Storage | null {
-  return process.env.POSTGRES_URL && process.env.BLOB_READ_WRITE_TOKEN ? new BlobStorage() : null;
+  return gravacaoPermitida() && process.env.POSTGRES_URL && process.env.BLOB_READ_WRITE_TOKEN ? new BlobStorage() : null;
 }
 
 /** Tests: a real Postgres (local: add ?sslmode=disable). */
@@ -345,6 +373,11 @@ export function postgresForTests(url: string) {
   const pg = new PostgresStorage(url);
   instance = pg;
   return pg;
+}
+
+/** Tests: forget the store so the next storage() call picks it again from the environment. */
+export function resetStorageForTests() {
+  instance = null;
 }
 
 /** Tests swap in a fresh directory. */

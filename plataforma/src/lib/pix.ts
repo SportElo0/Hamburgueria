@@ -2,6 +2,7 @@ import 'server-only';
 import QRCode from 'qrcode';
 import { storage } from './storage';
 import { PIX_MINUTES, type PixCharge } from './ordering';
+import { gravacaoPermitida } from './ambiente';
 
 /**
  * Pix charges. The money always goes straight to the store's own payment account; the platform
@@ -28,6 +29,11 @@ export async function setMercadoPagoToken(slug: string, token: string) {
 }
 
 export class PixError extends Error {}
+
+/** A preview cannot save the order, so it must not open a real charge that nobody could track. */
+function exigirProducao() {
+  if (!gravacaoPermitida()) throw new PixError('Prévia: o Pix real fica desligado aqui (só a produção cobra).');
+}
 
 export interface ChargeRequest {
   slug: string;
@@ -62,6 +68,7 @@ async function mpFetch(token: string, url: string, init: RequestInit = {}) {
 
 export async function createCharge(mode: PixCharge['provider'], req: ChargeRequest, now = new Date()): Promise<PixCharge> {
   const expiresAt = new Date(now.getTime() + PIX_MINUTES * 60_000);
+  if (mode !== 'demo') exigirProducao();
   if (mode === 'demo') {
     const copyPaste = `PIX DE DEMONSTRACAO - pedido ${req.orderId} - nenhum valor e cobrado`;
     return {
@@ -127,6 +134,7 @@ export async function lookupMercadoPago(slug: string, paymentId: string): Promis
 /** Gives a paid Pix back: all of it, or only `amount` centavos (what was paid over the bill). */
 export async function refundCharge(slug: string, charge: PixCharge, amount?: number): Promise<boolean> {
   if (charge.provider === 'demo') return true;
+  exigirProducao();
   const { mercadoPagoToken } = await getSecrets(slug);
   if (!mercadoPagoToken) return false;
   try {
@@ -144,6 +152,7 @@ export async function refundCharge(slug: string, charge: PixCharge, amount?: num
 /** Cancels a Pix not yet paid (the booking was cancelled), so the QR stops working. Demo: nothing to do. */
 export async function cancelCharge(slug: string, charge: PixCharge): Promise<void> {
   if (charge.provider === 'demo') return;
+  exigirProducao();
   const { mercadoPagoToken } = await getSecrets(slug);
   if (!mercadoPagoToken) return;
   await mpFetch(mercadoPagoToken, `${MP}/${encodeURIComponent(charge.id)}`, { method: 'PUT', body: JSON.stringify({ status: 'cancelled' }) });

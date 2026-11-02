@@ -1,6 +1,9 @@
 # Growlift Sales Agent (fase 1: CRM, sem envio)
 
 Área **Vendas** dentro de Oportunidades (`/painel/oportunidades/vendas`). Só a equipe entra.
+Assinatura dos e-mails (decisão de 02/11): "Equipe Comercial | Growlift", contato@growlift.com.br, https://growlift.com.br;
+sem nome de pessoa.
+
 Aprovado em 02/11/2026 com estas decisões: caixa comercial `contato@growlift.com.br` (Umbler, ainda a confirmar),
 IA econômica primeiro, piloto com **no máximo 5 e-mails por dia e 1 acompanhamento por empresa**, sempre com aprovação humana.
 
@@ -47,7 +50,7 @@ IA econômica primeiro, piloto com **no máximo 5 e-mails por dia e 1 acompanham
 ## Ambientes (importante)
 
 O banco de produção (`POSTGRES_URL`) está hoje configurado também em **Preview** e **Development** na Vercel.
-Por isso a área de vendas **só grava em Production ou localmente** (`gravacaoPermitida` em `src/lib/vendas/dados.ts`):
+Por isso o painel inteiro **só grava em Production ou localmente** (`src/lib/ambiente.ts`):
 numa prévia, tudo aparece mas nada é salvo. Testes e execução local usam arquivos em pasta temporária ou `.data/`.
 A proposta para isolar todos os ambientes do painel está em `ISOLAR-AMBIENTES.md` (aguarda autorização).
 

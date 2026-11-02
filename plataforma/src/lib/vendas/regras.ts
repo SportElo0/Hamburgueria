@@ -330,8 +330,11 @@ export function conferirRascunho(assunto: string, corpo: string): { alertas: str
 export function rodape(linkDescadastro: string, negocio = '{negócio}', fonte = '{fonte}') {
   return [
     '--',
-    'Growlift · sites para negócios locais',
-    `69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP · ${EMAIL_COMERCIAL}`,
+    'Equipe Comercial | Growlift',
+    EMAIL_COMERCIAL,
+    'https://growlift.com.br',
+    '',
+    '69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP',
     `Você recebeu este e-mail porque o endereço está publicado como contato comercial de ${negocio} (${fonte.toLowerCase()}). Para não receber mais: ${linkDescadastro} ou responda SAIR. Como tratamos dados: growlift.com.br/privacidade.html`,
   ].join('\n');
 }

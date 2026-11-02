@@ -1,6 +1,7 @@
 import 'server-only';
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { ConflictError, storage } from '../storage';
+import { gravacaoPermitida } from '../ambiente';
 import { dayWindow } from '../limits';
 import { leadDoLugar, marcarNaoContatar } from '../oportunidades/dados';
 import { escreverRascunho, type Cliente } from './ia';
@@ -43,7 +44,7 @@ export class VendasError extends Error {}
  * Writes are allowed locally (files under .data/) and in Production only. The Preview deployments currently share
  * the production database (POSTGRES_URL is set for Preview too), so a preview link must never change the real CRM.
  */
-export const gravacaoPermitida = () => !process.env.VERCEL || process.env.VERCEL_ENV === 'production';
+export { gravacaoPermitida };
 function exigirGravacao() {
   if (!gravacaoPermitida()) throw new VendasError('Esta é uma versão de prévia: a área de vendas fica só para leitura aqui.');
 }

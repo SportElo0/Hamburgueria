@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { requireUser } from '@/lib/auth';
 import { logout } from '../login/actions';
 import { InstallButton } from '@/components/InstallButton';
+import { AvisoPrevia } from '@/components/AvisoPrevia';
 
 export default async function PainelLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
   return (
     <div className="min-h-dvh">
+      <AvisoPrevia />
       <header className="sticky top-0 z-20 border-b border-line bg-paper/90 backdrop-blur">
         {/* Phones: the section links take a second row instead of pushing the page wider. */}
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-1 px-4 py-2 sm:h-14 sm:flex-nowrap sm:py-0">

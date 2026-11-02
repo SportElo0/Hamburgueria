@@ -1,5 +1,6 @@
 import 'server-only';
 import { ConflictError, storage } from './storage';
+import { SomenteLeituraError } from './ambiente';
 
 /**
  * Counters for abuse limits (orders, coupons, sign-ups, logins). One small doc per scope and
@@ -39,6 +40,8 @@ export async function take(scope: string, key: string, max: number, window: stri
       await storage().writeJSON(docKey(scope, window), { ...counts, [h]: (counts[h] ?? 0) + 1 }, doc ? doc.etag : null);
       return true;
     } catch (err) {
+      // A read-only preview cannot count; it also cannot save whatever the counter protects, so let the hit through.
+      if (err instanceof SomenteLeituraError) return true;
       if (!(err instanceof ConflictError) || attempt === 9) throw err;
     }
   }
