@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { requireUser } from '@/lib/auth';
 import { logout } from '../login/actions';
+import { InstallButton } from '@/components/InstallButton';
 
 export default async function PainelLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
@@ -30,7 +31,8 @@ export default async function PainelLayout({ children }: { children: React.React
             </Link>
           </nav>
           <div className="flex items-center gap-3 text-sm">
-            <span className="hidden text-ink-mute sm:inline">{user.name || user.email}</span>
+            <span className="hidden text-ink-mute lg:inline">{user.name || user.email}</span>
+            <InstallButton />
             <form action={logout}>
               <button type="submit" className="btn-ghost min-h-9 px-3">
                 Sair
