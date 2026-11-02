@@ -162,6 +162,9 @@ for (const name of folderNames) {
   const walk = (dir) => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
       if (e.name.startsWith('.')) continue;
+      // Files starting with _ are kept in the repository only (old versions, "do not publish"): they stay out of the
+      // panel bundle, which has to fit the Vercel function size.
+      if (e.name.startsWith('_') && !e.isDirectory()) continue;
       const full = path.join(dir, e.name);
       if (e.isDirectory()) walk(full);
       else if (IMAGE.test(e.name) || VIDEO.test(e.name)) {
