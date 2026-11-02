@@ -123,8 +123,17 @@ Texto da caixinha: "Quero receber ofertas da <loja> no WhatsApp (no máximo uma 
 `/painel/oportunidades/vendas`: CRM comercial ligado a Oportunidades. Contato com fonte verificável (nunca o Google),
 funil, histórico por empresa, rascunhos de e-mail (simulador sem IA por padrão; IA econômica `claude-haiku-5-5` só com
 `VENDAS_IA=claude` + `ANTHROPIC_API_KEY`, que não existem), fila de aprovação, lista de bloqueio e página pública
-`/descadastro`. **Não envia e-mail nem WhatsApp.** Só grava em Production ou local (a prévia usa o banco real; ver
-`plataforma/ISOLAR-AMBIENTES.md`). Detalhes e fase 2 em `plataforma/VENDAS.md`. Ainda não publicado.
+`/descadastro`. **Não envia e-mail nem WhatsApp.** Assinatura: "Equipe Comercial | Growlift". Detalhes em
+`plataforma/VENDAS.md`; plano da fase 2 (e-mail pela Umbler, ainda não autorizada) em `plataforma/VENDAS-FASE2.md`.
+**No ar em produção desde 02/11/2026** (deploy `dpl_EdHN3ovDkL6DPEy9yTrTtks5vf3S`, commit 70c47b0).
+
+## Prévias só leem (02/11/2026)
+
+As prévias da Vercel usam o banco de produção (`POSTGRES_URL` e chaves do Supabase estão em Preview e Development).
+Desde 02/11 o painel inteiro só grava em Production ou local (`plataforma/src/lib/ambiente.ts`); na prévia nada é salvo,
+Pix real não abre e uma faixa avisa. `/api/saude` mostra `gravacao: true` (produção) ou `false` (prévia).
+Conferido nos ambientes reais em 02/11. Recomendado e ainda pendente (vocês): tirar `POSTGRES_*` e `SUPABASE_*` de
+Preview e Development. Detalhes em `plataforma/ISOLAR-AMBIENTES.md`.
 
 ## Inteligência (Growlift Intelligence, fase 1)
 
@@ -146,6 +155,7 @@ registrada pela equipe. Sem IA: todos os números são calculados pelo painel, e
 
 ## Estado em 02/11/2026 (para continuar em outra sessão ou conta)
 
+- Painel em produção: commit 70c47b0 (02/11, Sales Agent fase 1 + trava de prévia). Build com a agenda de 29 posts e 177 imagens e vídeos em Conteúdos.
 - Painel: botão "Adicionar à tela inicial" (manifesto + ícones em `plataforma/public/icons`) e telas de carregamento instantâneas (`loading.tsx`); a Agenda carrega o status do Instagram depois dos posts. Último deploy de produção: commit 08919c4.
 - Instagram: Reel 11 postou sozinho em 02/11 (cron-job.org chama `/api/instagram/tick` a cada 5 min). Agenda de 02 a 15/11 pronta (carrossel 10h + Reel 15h por dia); posts já aprovados precisam ser cancelados e aprovados de novo para pegar as legendas novas, sem avisos.
 - Reels no estilo história: `growlift-social/_fonte/reels/novos/` (ver `growlift-social/05-reels/novo-estilo-historias.md`). Carrosséis: `growlift-social/_fonte/carrosseis.mjs`.
