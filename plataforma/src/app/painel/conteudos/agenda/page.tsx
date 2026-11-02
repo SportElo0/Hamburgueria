@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { after } from 'next/server';
 import { requireUser } from '@/lib/auth';
 import { agendaView, runAgenda } from '@/lib/agenda';
+import { getManifest } from '@/lib/conteudos';
 import { publicOrigin } from '@/lib/origem';
 import { account, instagramConfigured, publishingUsage } from '@/lib/instagram';
 import { AgendaBoard, type AgendaCard } from '@/components/agenda/AgendaBoard';
@@ -18,19 +20,11 @@ export default async function AgendaPage() {
   const host = h.get('x-forwarded-host') ?? h.get('host') ?? 'localhost:3000';
   const origin = publicOrigin(`${h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https')}://${host}`);
   after(() => runAgenda(origin).catch((err) => console.error('agenda: ao abrir', err)));
-  const items = await agendaView();
+  const [items, manifest] = await Promise.all([agendaView(), getManifest()]);
+  // Small WebP previews for the cards (the full-size slide only opens in the viewer).
+  const thumbs = new Map(manifest.folders.flatMap((f) => f.groups.flatMap((g) => g.files.map((x) => [x.path, x.thumb] as const))));
+  const mini = (p: string) => (thumbs.has(p) ? fileUrl({ path: p, thumb: thumbs.get(p)! }, 'mini') : fileUrl({ path: p, thumb: p }));
   const connected = instagramConfigured();
-  let username = '';
-  let usage: { used: number; total: number } | null = null;
-  let connectError = '';
-  if (connected) {
-    try {
-      username = (await account()).username;
-      usage = await publishingUsage().catch(() => null);
-    } catch (err) {
-      connectError = err instanceof Error ? err.message : 'Não foi possível falar com o Instagram.';
-    }
-  }
   const cards: AgendaCard[] = items.map((it) => ({
     id: it.id,
     titulo: it.titulo,
@@ -45,7 +39,7 @@ export default async function AgendaPage() {
     permalink: it.state?.permalink ?? '',
     by: it.state?.by ?? '',
     slides: it.arquivos.length,
-    thumb: it.capa ? fileUrl({ path: it.capa, thumb: it.capa }) : fileUrl({ path: it.arquivos[0], thumb: it.arquivos[0] }),
+    thumb: it.capa ? fileUrl({ path: it.capa, thumb: it.capa }) : mini(it.arquivos[0]),
     video: it.tipo === 'reel' ? fileUrl({ path: it.arquivos[0], thumb: it.arquivos[0] }) : '',
     images: it.tipo === 'reel' ? [] : it.arquivos.map((p) => fileUrl({ path: p, thumb: p })),
   }));
@@ -64,23 +58,9 @@ export default async function AgendaPage() {
             Os posts da semana, prontos. Confira o vídeo e a legenda e toque em <b>Aprovar e agendar</b>: no dia e na hora marcados o painel publica sozinho no Instagram. Nada sai sem aprovação.
           </p>
         </div>
-        <div className="card px-4 py-3 text-sm">
-          {!connected ? (
-            <p className="font-semibold text-warn">Instagram ainda não conectado</p>
-          ) : connectError ? (
-            <p className="font-semibold text-bad">Erro na conexão: {connectError}</p>
-          ) : (
-            <p>
-              Conectado como <b>@{username || 'growlift.ai'}</b>
-              {usage && (
-                <span className="text-ink-mute">
-                  {' '}
-                  · {usage.used} de {usage.total} posts nas últimas 24 h
-                </span>
-              )}
-            </p>
-          )}
-        </div>
+        <Suspense fallback={<div className="card px-4 py-3 text-sm text-ink-mute">Conferindo o Instagram…</div>}>
+          <Connection connected={connected} />
+        </Suspense>
       </div>
       {!connected && (
         <div className="card mt-4 space-y-2 p-5 text-sm text-ink-soft">
@@ -90,7 +70,44 @@ export default async function AgendaPage() {
           </p>
         </div>
       )}
-      <AgendaBoard cards={cards} connected={connected && !connectError} />
+      <AgendaBoard cards={cards} connected={connected} />
     </>
+  );
+}
+
+// Talks to Instagram, so it streams in after the posts instead of holding the whole page.
+async function Connection({ connected }: { connected: boolean }) {
+  if (!connected) {
+    return (
+      <div className="card px-4 py-3 text-sm">
+        <p className="font-semibold text-warn">Instagram ainda não conectado</p>
+      </div>
+    );
+  }
+  let username = '';
+  let usage: { used: number; total: number } | null = null;
+  let connectError = '';
+  try {
+    username = (await account()).username;
+    usage = await publishingUsage().catch(() => null);
+  } catch (err) {
+    connectError = err instanceof Error ? err.message : 'Não foi possível falar com o Instagram.';
+  }
+  return (
+    <div className="card px-4 py-3 text-sm">
+      {connectError ? (
+        <p className="font-semibold text-bad">Erro na conexão: {connectError}</p>
+      ) : (
+        <p>
+          Conectado como <b>@{username || 'growlift.ai'}</b>
+          {usage && (
+            <span className="text-ink-mute">
+              {' '}
+              · {usage.used} de {usage.total} posts nas últimas 24 h
+            </span>
+          )}
+        </p>
+      )}
+    </div>
   );
 }

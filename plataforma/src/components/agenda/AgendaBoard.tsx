@@ -63,8 +63,8 @@ export function AgendaBoard({ cards, connected }: { cards: AgendaCard[]; connect
           {count('erro') + count('atrasado') > 0 && <b className="text-bad"> · {count('erro') + count('atrasado')} precisam de atenção</b>}
         </span>
         {connected && (
-          <button type="button" className="btn-ghost min-h-10" disabled={pending} onClick={() => start(async () => setMsg((await checkNowAction()).error ?? 'Verificado.'))}>
-            Verificar agora
+          <button type="button" className="btn-ghost min-h-10" disabled={pending} aria-busy={pending} onClick={() => { setMsg(''); start(async () => setMsg((await checkNowAction()).error ?? 'Verificado.')); }}>
+            {pending ? <Busy>Verificando…</Busy> : 'Verificar agora'}
           </button>
         )}
         {msg && (
@@ -100,14 +100,23 @@ function Post({ card }: { card: AgendaCard }) {
   const [viewer, setViewer] = useState(false);
   const [error, setError] = useState('');
   const [pending, start] = useTransition();
+  const [busy, setBusy] = useState('');
+  const [done, setDone] = useState('');
   const editable = card.status !== 'processando' && card.status !== 'postado';
   const hashtags = (legenda.match(/#[\p{L}\p{N}_]+/gu) ?? []).length;
-  const act = (fn: () => Promise<{ ok: boolean; error?: string }>) =>
+  // One tap is enough: the button shows what it is doing right away and stays locked until the answer comes back.
+  const act = (label: string, ok: string, fn: () => Promise<{ ok: boolean; error?: string }>) => {
+    if (pending) return;
+    setError('');
+    setDone('');
+    setBusy(label);
     start(async () => {
-      setError('');
       const r = await fn();
       if (!r.ok) setError(r.error ?? 'Não foi possível agora.');
+      else setDone(ok);
+      setBusy('');
     });
+  };
   const st = STATUS[card.status];
 
   return (
@@ -210,25 +219,31 @@ function Post({ card }: { card: AgendaCard }) {
             <span className="text-sm text-ink-soft">O Instagram está processando. Em poucos minutos aparece como postado.</span>
           ) : (
             <>
-              <button type="button" className="btn-primary min-h-11" disabled={pending} onClick={() => act(() => approveAction(card.id, legenda, `${date}T${time}`, ia))}>
-                {card.status === 'agendado' ? 'Salvar agendamento' : 'Aprovar e agendar'}
+              <button type="button" className="btn-primary min-h-11" disabled={pending} aria-busy={busy === 'salvar'} onClick={() => act('salvar', 'Agendado.', () => approveAction(card.id, legenda, `${date}T${time}`, ia))}>
+                {busy === 'salvar' ? <Busy>Salvando…</Busy> : card.status === 'agendado' ? 'Salvar agendamento' : 'Aprovar e agendar'}
               </button>
               {card.status !== 'rascunho' && (
                 <button
                   type="button"
                   className="btn-ghost min-h-11"
                   disabled={pending}
-                  onClick={() => window.confirm(`Publicar "${card.titulo}" agora no Instagram?`) && act(() => publishNowAction(card.id))}
+                  aria-busy={busy === 'publicar'}
+                  onClick={() => window.confirm(`Publicar "${card.titulo}" agora no Instagram?`) && act('publicar', 'Enviado ao Instagram.', () => publishNowAction(card.id))}
                 >
-                  Publicar agora
+                  {busy === 'publicar' ? <Busy>Publicando…</Busy> : 'Publicar agora'}
                 </button>
               )}
               {card.status === 'agendado' && (
-                <button type="button" className="btn-ghost min-h-11" disabled={pending} onClick={() => act(() => unscheduleAction(card.id))}>
-                  Cancelar agendamento
+                <button type="button" className="btn-ghost min-h-11" disabled={pending} aria-busy={busy === 'cancelar'} onClick={() => act('cancelar', 'Agendamento cancelado.', () => unscheduleAction(card.id))}>
+                  {busy === 'cancelar' ? <Busy>Cancelando…</Busy> : 'Cancelar agendamento'}
                 </button>
               )}
             </>
+          )}
+          {done && !pending && (
+            <span role="status" className="text-sm font-semibold text-ok">
+              {done}
+            </span>
           )}
           {card.by && card.status !== 'rascunho' && <span className="text-xs text-ink-mute">Aprovado por {card.by}</span>}
         </div>
@@ -303,5 +318,14 @@ function SlideViewer({ title, images, onClose }: { title: string; images: string
         </button>
       </div>
     </div>
+  );
+}
+
+function Busy({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <span className="size-4 animate-spin rounded-full border-2 border-current/30 border-t-current" aria-hidden="true" />
+      {children}
+    </>
   );
 }

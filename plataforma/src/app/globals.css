@@ -28,7 +28,7 @@
 
 @utility field { @apply w-full rounded-lg border border-line bg-white px-3 py-2 text-[15px] outline-none focus:border-accent; }
 @utility label { @apply mb-1 block text-[13px] font-semibold text-ink-soft; }
-@utility btn { @apply inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+@utility btn { @apply inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold transition-[color,background-color,border-color,transform] duration-150 select-none active:scale-[.97] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100; }
 @utility btn-primary { @apply btn bg-accent text-white hover:bg-accent-deep; }
 @utility btn-ghost { @apply btn border border-line bg-white text-ink hover:border-accent hover:text-accent; }
 @utility btn-danger { @apply btn border border-line bg-white text-bad hover:border-bad; }
@@ -71,3 +71,9 @@
 }
 .doc .copy-block button:hover { border-color: var(--color-ink); }
 .doc .copy-block button[data-done] { border-color: var(--color-ok); background: var(--color-ok); color: #fff; }
+
+/* Taps answer at once on phones: no double-tap-zoom wait, no grey flash. */
+@layer base {
+  a, button, summary, label, [role="button"] { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+}
+@keyframes carregando { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
