@@ -8,16 +8,20 @@ import {
   aprovarRascunho,
   bloquearContato,
   bloquearManual,
+  completarContato,
   criarContato,
   descartarRascunho,
   desbloquear,
   editarRascunho,
   gerarRascunho,
+  importarLeads,
+  prepararRascunhosEmLote,
   mudarEtapa,
   registrarResposta,
   registrarWhatsapp,
 } from '@/lib/vendas/dados';
 import type { TipoRascunho } from '@/lib/vendas/regras';
+import type { ResumoImportacao } from '@/lib/vendas/dados';
 
 export type Resposta<T = null> = { ok: true; dados: T } | { ok: false; error: string };
 
@@ -41,6 +45,25 @@ const invalido = <T>(): Resposta<T> => ({ ok: false, error: 'Pedido inválido.' 
 
 export async function criarContatoAction(input: unknown): Promise<Resposta<{ id: string }>> {
   return rodar(async (por) => ({ id: (await criarContato(input, por)).id }), [BASE, '/painel/oportunidades']);
+}
+
+/** Oportunidades → CRM, for the selected place IDs or every eligible lead. Nothing is sent. */
+export async function importarAction(alvo: { placeIds: string[] } | 'elegiveis'): Promise<Resposta<ResumoImportacao>> {
+  if (alvo !== 'elegiveis' && (!alvo || !Array.isArray(alvo.placeIds) || alvo.placeIds.some((p) => typeof p !== 'string' || !/^[A-Za-z0-9_-]{10,300}$/.test(p))))
+    return invalido();
+  return rodar((por) => importarLeads(alvo, por), [BASE, '/painel/oportunidades']);
+}
+
+export async function completarAction(id: string, input: unknown): Promise<Resposta> {
+  if (!idOk(id)) return invalido();
+  return rodar(async (por) => (await completarContato(id, input, por), null), [BASE, `${BASE}/${id}`]);
+}
+
+export async function prepararLoteAction(): Promise<Resposta<{ gerados: number; restantes: number; falhas: number }>> {
+  return rodar(async (por) => {
+    const r = await prepararRascunhosEmLote(por);
+    return { gerados: r.gerados, restantes: r.restantes, falhas: r.falhas.length };
+  }, [BASE]);
 }
 
 export async function etapaAction(id: string, etapa: string): Promise<Resposta> {

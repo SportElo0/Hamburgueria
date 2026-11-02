@@ -5,12 +5,13 @@ import { segmento } from '@/lib/oportunidades/regras';
 import { NovaPesquisa } from '@/components/oportunidades/NovaPesquisa';
 import { ListaOportunidades } from '@/components/oportunidades/ListaOportunidades';
 import { dataCurta } from '@/components/oportunidades/estilos';
+import { situacaoNoCrm } from '@/lib/vendas/dados';
 
 export const metadata = { title: 'Oportunidades' };
 
 export default async function OportunidadesPage() {
   await requireUser();
-  const [leads, pesquisas, uso] = await Promise.all([listarLeads(), listarPesquisas(), usoDoMes()]);
+  const [leads, pesquisas, uso, crm] = await Promise.all([listarLeads(), listarPesquisas(), usoDoMes(), situacaoNoCrm()]);
   const lim = limites();
   return (
     <>
@@ -42,7 +43,14 @@ export default async function OportunidadesPage() {
 
       <NovaPesquisa chave={chaveConfigurada()} usadas={uso.busca} limite={lim.busca} />
 
-      <ListaOportunidades key={`${leads.length}-${pesquisas[0]?.id ?? ''}`} leads={leads} usadasDetalhes={uso.detalhes} limiteDetalhes={lim.detalhes} />
+      <ListaOportunidades
+        key={`${leads.length}-${pesquisas[0]?.id ?? ''}`}
+        leads={leads}
+        usadasDetalhes={uso.detalhes}
+        limiteDetalhes={lim.detalhes}
+        noCrm={crm.noCrm}
+        elegiveis={crm.elegiveis.length}
+      />
 
       {pesquisas.length > 0 && (
         <section className="mt-10" aria-labelledby="historico">

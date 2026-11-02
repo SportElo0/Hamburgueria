@@ -5,6 +5,7 @@ import { requireUser } from '@/lib/auth';
 import { LeadError, estimarPesquisa, executarPesquisa, revisar, verAoVivo, type Resultado } from '@/lib/oportunidades/dados';
 import { PlacesError, type LugarAoVivo } from '@/lib/oportunidades/places';
 import type { Estimativa, Lead } from '@/lib/oportunidades/regras';
+import { sincronizarComOportunidade } from '@/lib/vendas/dados';
 
 type Resposta<T> = { ok: true; dados: T } | { ok: false; error: string };
 
@@ -33,8 +34,16 @@ export async function pesquisarAction(input: unknown, aprovadas: number): Promis
 
 export async function revisarAction(placeId: string, input: unknown): Promise<Resposta<Lead>> {
   const user = await requireUser();
-  const res = await rodar(() => revisar(placeId, input, user.email));
-  if (res.ok) revalidatePath('/painel/oportunidades');
+  const res = await rodar(async () => {
+    const lead = await revisar(placeId, input, user.email);
+    // "Não contatar" and "Descartada" here also apply to the CRM (block, or move to Perdido).
+    await sincronizarComOportunidade(placeId, lead.situacao, user.email);
+    return lead;
+  });
+  if (res.ok) {
+    revalidatePath('/painel/oportunidades');
+    revalidatePath('/painel/oportunidades/vendas');
+  }
   return res;
 }
 

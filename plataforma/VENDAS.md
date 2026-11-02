@@ -14,7 +14,7 @@ IA econômica primeiro, piloto com **no máximo 5 e-mails por dia e 1 acompanham
   pessoal). A pessoa declara que o endereço é canal comercial publicado pelo próprio negócio.
   Vindo de Oportunidades ("Abordar por e-mail"), o contato herda cidade, ramo, categoria e o que a checagem viu.
   "Sem website" só chega ao texto se a equipe confirmou em 2 fontes (senão vira "situação incerta").
-- **Funil:** Novo → Em aprovação → Aprovado → Enviado → Respondeu → Quente / Morno / Frio → Virou cliente / Perdido,
+- **Funil:** Aguardando qualificação → Novo → Em aprovação → Aprovado → Enviado → Respondeu → Quente / Morno / Frio → Virou cliente / Perdido,
   e Não contatar. Filtro por etapa e contagem.
 - **Falar hoje:** quem respondeu ou está quente fica em destaque no topo, com o último movimento e o botão de WhatsApp.
 - **Histórico por empresa:** cadastro, rascunhos, edições, aprovações, respostas, mudanças de etapa, anotações, bloqueio.
@@ -36,6 +36,30 @@ IA econômica primeiro, piloto com **no máximo 5 e-mails por dia e 1 acompanham
   negócio (link ou resposta) é para sempre.
 - **Descadastro:** `/descadastro?t=<id>.<assinatura>` (HMAC com chave derivada do `SESSION_SECRET`, sem validade).
   Abrir o link só mostra o botão; o descadastro acontece no clique (robôs de e-mail que abrem links não descadastram ninguém).
+
+## Importar de Oportunidades em lote (02/11/2026)
+
+Em **Oportunidades**, acima da lista: caixas de seleção nos cartões e dois botões.
+- **Importar selecionadas para o CRM (n)** e **Importar oportunidades elegíveis (n)**.
+- Elegível = situação aberta (Nova ou Boa oportunidade), fora do CRM, sem bloqueio, sem site próprio funcionando e não
+  fechado definitivamente. "Descartada" e "Não contatar" nunca entram.
+- Cada empresa importada vira um contato em **"Aguardando qualificação"** com **só** o place ID e o que a equipe já
+  tinha (cidade, ramo, categoria, o que a checagem do site viu). **Nome, endereço, telefone e site do Google não são
+  copiados**: os termos do Google Maps Platform só deixam guardar o place ID (o guia oficial de CRM do Google diz
+  o mesmo: place ID como identificador, o resto consultado na hora ou pelo link do Maps).
+- Repetir a importação, ou duas pessoas importando ao mesmo tempo, não duplica nada: a conferência pelo place ID é
+  feita dentro da mesma gravação.
+- Depois aparece o resumo: importadas, já no CRM, ignoradas (com o motivo) e pendentes de verificação ("sem site"
+  ainda não conferido em 2 fontes; nesse caso o texto não diz "sem site" até a conferência).
+- Em Vendas, a seção **Aguardando qualificação** lista cada uma com prioridade, plano sugerido e o que falta, com os
+  botões **Maps** (grátis) e **Qualificar**. Na ficha, a equipe preenche nome, e-mail comercial e a fonte (site ou
+  rede do próprio negócio); o contato passa para **Novo**.
+- **Preparar abordagens (n)**: um primeiro rascunho para cada contato qualificado ainda sem texto (até 10 por clique),
+  direto para "Para aprovar". Nada é enviado.
+- A **análise do lead** é por regras fixas sobre os dados da equipe (prioridade, plano Start ou Grow, motivos e o que
+  falta). A IA (quando ligada) só escreve rascunhos de quem já está completo.
+- Marcar "Não contatar" em Oportunidades bloqueia o contato no CRM; "Descartada" move para Perdido (se ainda estava no
+  começo do funil).
 
 ## IA
 
@@ -96,4 +120,5 @@ ajustados (fidelidade e proporcional junto do preço, rodapé com fonte, endere�
 - `src/app/painel/oportunidades/vendas/`: funil, novo contato, contato, lista de bloqueio e ações.
 - `src/app/descadastro/page.tsx`: página pública de descadastro.
 - `src/components/vendas/`: telas.
+- `test/vendas-importacao.test.ts`: 11 testes da importação em lote (60 empresas, repetição, corrida, regras).
 - `test/vendas.test.ts`: 28 testes, com rede proibida (qualquer chamada falha o teste) e IA falsa.

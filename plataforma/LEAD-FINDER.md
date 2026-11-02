@@ -51,6 +51,11 @@ Só a equipe da Growlift entra; os logins de loja não veem esta aba.
 - **Não mostra telefone** a não ser que `LEADS_MOSTRAR_TELEFONE=sim`. Mesmo assim, o telefone só aparece na tela, nunca é guardado. Ao lado dele vem um botão **"Chamar no WhatsApp"** (celular) ou **"Ligar (fixo)"**: o link é montado na hora, um contato por vez, à mão; nada de envio em massa.
 - **Só quem não tem site funcionando:** lugares com site próprio que passou na checagem são contados ("N com site funcionando ficaram de fora"), mas não aparecem nem são guardados. Os que já estavam na lista ficam escondidos; o chip "Website próprio" ainda mostra.
 
+## Levar para o CRM
+
+Os botões "Importar selecionadas para o CRM" e "Importar oportunidades elegíveis" levam os lugares para Vendas
+levando só o place ID e as conclusões da equipe. Detalhes em `VENDAS.md`.
+
 ## Custos (tabela do Google, conferida em 26/10/2026)
 
 Fonte: developers.google.com/maps/billing-and-pricing/pricing. Valores em dólar; o Google cobra em reais pela cotação do dia.

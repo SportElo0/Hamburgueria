@@ -4,8 +4,10 @@ import { notFound } from 'next/navigation';
 import { requireUser } from '@/lib/auth';
 import { publicOrigin } from '@/lib/origem';
 import { linkMaps, nomeCategoria } from '@/lib/oportunidades/regras';
+import { leadDoLugar } from '@/lib/oportunidades/dados';
 import { contatoPorId, gravacaoPermitida, tokenDescadastro } from '@/lib/vendas/dados';
-import { ETAPAS_ENCERRADAS, linkWhatsAppComercial, linkWhatsAppDoLead, nomeFonte, rodape } from '@/lib/vendas/regras';
+import { ETAPAS_ENCERRADAS, analisarContato, contatoCompleto, linkWhatsAppComercial, linkWhatsAppDoLead, nomeExibicao, nomeFonte, rodape } from '@/lib/vendas/regras';
+import { CompletarContato } from '@/components/vendas/CompletarContato';
 import { AcoesContato } from '@/components/vendas/AcoesContato';
 import { CopiarLink } from '@/components/vendas/CopiarLink';
 import { Rascunhos } from '@/components/vendas/Rascunhos';
@@ -41,6 +43,10 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
   const encerrado = ETAPAS_ENCERRADAS.includes(c.etapa);
   const primeiroAprovado = c.rascunhos.some((r) => r.tipo === 'primeiro' && r.status === 'aprovado');
   const quente = ['respondeu', 'quente', 'morno'].includes(c.etapa);
+  const lead = c.placeId ? await leadDoLugar(c.placeId) : undefined;
+  const analise = analisarContato(c, lead?.verificacao);
+  const completo = contatoCompleto(c);
+  const PRIORIDADE = { alta: 'bg-ok/10 text-ok', media: 'bg-warn/10 text-warn', baixa: 'bg-line text-ink-soft' } as const;
 
   return (
     <>
@@ -48,18 +54,24 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
         ← Vendas
       </Link>
       <div className="mt-2 flex flex-wrap items-center gap-3">
-        <h1 className="text-3xl font-bold">{c.negocio}</h1>
+        <h1 className="text-3xl font-bold">{nomeExibicao(c)}</h1>
         <ChipEtapa etapa={c.etapa} />
       </div>
       <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-[auto_1fr]">
         <dt className="text-ink-mute">E-mail</dt>
-        <dd className="font-semibold break-all">{c.email}</dd>
+        <dd className="font-semibold break-all">{c.email || <span className="text-warn">Falta</span>}</dd>
         <dt className="text-ink-mute">Fonte do e-mail</dt>
         <dd>
-          {nomeFonte(c.fonte.tipo)} ·{' '}
-          <a className="break-all text-accent underline underline-offset-2" href={c.fonte.url} target="_blank" rel="noopener noreferrer nofollow">
-            {c.fonte.url}
-          </a>
+          {c.fonte ? (
+            <>
+              {nomeFonte(c.fonte.tipo)} ·{' '}
+              <a className="break-all text-accent underline underline-offset-2" href={c.fonte.url} target="_blank" rel="noopener noreferrer nofollow">
+                {c.fonte.url}
+              </a>
+            </>
+          ) : (
+            <span className="text-warn">Falta</span>
+          )}
         </dd>
         {(c.cidade || c.uf) && (
           <>
@@ -94,6 +106,44 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
       {c.observacoes && <p className="mt-3 max-w-3xl text-sm whitespace-pre-wrap text-ink-soft">{c.observacoes}</p>}
       <AvisoFase1 gravacao={gravacaoPermitida()} />
 
+      <section className="card mt-6 p-5" aria-labelledby="analise">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2 id="analise" className="text-lg font-bold">
+            Análise do lead
+          </h2>
+          <span className={`chip ${PRIORIDADE[analise.prioridade]}`}>Prioridade {analise.prioridade === 'media' ? 'média' : analise.prioridade}</span>
+          <span className="chip bg-accent-soft text-accent">Plano sugerido: {analise.plano}</span>
+        </div>
+        <p className="mt-1 text-xs text-ink-mute">Por regras fixas, com os dados da equipe (checagem, verificação e ramo). Nada é adivinhado.</p>
+        {analise.motivos.length > 0 && (
+          <ul className="mt-2 list-disc space-y-0.5 pl-5 text-sm">
+            {analise.motivos.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        )}
+        {analise.falta.length > 0 && (
+          <p className="mt-2 text-sm text-warn">
+            <span className="font-semibold">Falta:</span> {analise.falta.join(' · ')}
+          </p>
+        )}
+        {completo && c.etapa === 'novo' && c.rascunhos.every((r) => r.status === 'descartado') && (
+          <p role="status" className="mt-3 rounded-lg bg-ok/10 px-3 py-2 text-sm font-semibold text-ok">
+            Contato qualificado. Próximo passo: &quot;Gerar primeiro e-mail&quot; aqui embaixo, ou &quot;Preparar abordagens&quot; em Vendas para vários de uma vez.
+          </p>
+        )}
+        {!completo && c.etapa !== 'nao-contatar' && (
+          <div className="mt-4 border-t border-line pt-4">
+            <h3 className="text-sm font-bold">Qualificar: completar o contato</h3>
+            <p className="mb-3 mt-1 text-sm text-ink-soft">
+              Abra o negócio no Google Maps, ache o site ou o Instagram <strong>dele</strong> e copie de lá o nome e o e-mail comercial. Dados do Google não podem ser
+              guardados.
+            </p>
+            <CompletarContato id={c.id} inicial={{ negocio: c.negocio, email: c.email, fonteTipo: c.fonte?.tipo, fonteUrl: c.fonte?.url }} />
+          </div>
+        )}
+      </section>
+
       {quente && (
         <section className="card mt-6 border-bad/30 p-5" aria-labelledby="whats">
           <h2 id="whats" className="text-lg font-bold">
@@ -120,7 +170,7 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
       )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <Rascunhos id={c.id} rascunhos={c.rascunhos} rodape={rodape(linkSair, c.negocio, nomeFonte(c.fonte.tipo))} encerrado={encerrado} podeAcompanhar={primeiroAprovado && ['aprovado', 'enviado'].includes(c.etapa)} />
+        <Rascunhos id={c.id} rascunhos={c.rascunhos} rodape={rodape(linkSair, nomeExibicao(c), c.fonte ? nomeFonte(c.fonte.tipo) : '{fonte}')} encerrado={encerrado || !completo} podeAcompanhar={primeiroAprovado && ['aprovado', 'enviado'].includes(c.etapa)} />
         <div className="space-y-6">
           <AcoesContato id={c.id} etapa={c.etapa} podeWhatsapp={quente || c.etapa === 'cliente'} />
           <section className="card p-5" aria-labelledby="historico">

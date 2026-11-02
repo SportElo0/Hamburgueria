@@ -3,7 +3,8 @@ import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypt
 import { ConflictError, storage } from '../storage';
 import { gravacaoPermitida } from '../ambiente';
 import { dayWindow } from '../limits';
-import { leadDoLugar, marcarNaoContatar } from '../oportunidades/dados';
+import { leadDoLugar, listarLeads, marcarNaoContatar } from '../oportunidades/dados';
+import type { Lead } from '../oportunidades/regras';
 import { escreverRascunho, type Cliente } from './ia';
 import {
   DOMINIOS_PUBLICOS,
@@ -11,8 +12,11 @@ import {
   ETAPAS_MANUAIS,
   ETAPA_IDS,
   MAX_ACOMPANHAMENTOS,
+  completarSchema,
   conferirRascunho,
+  contatoCompleto,
   contatoSchema,
+  nomeExibicao,
   dominioDe,
   edicaoRascunhoSchema,
   nomeEtapa,
@@ -124,6 +128,8 @@ export async function bloqueado(alvo: { email?: string; placeId?: string }): Pro
 
 /* ---------- contacts ---------- */
 
+const novoId = () => randomBytes(8).toString('hex').slice(0, 10);
+
 export async function criarContato(raw: unknown, por: string, now = new Date()): Promise<Contato> {
   exigirGravacao();
   const parsed = contatoSchema.safeParse(raw);
@@ -134,10 +140,11 @@ export async function criarContato(raw: unknown, por: string, now = new Date()):
   if (d.placeId && !lead) throw new VendasError('Esse lugar não está na lista de Oportunidades.');
   if (lead && (lead.situacao === 'nao-contatar' || lead.situacao === 'descartada'))
     throw new VendasError(`Esse negócio está como "${lead.situacao === 'nao-contatar' ? 'Não contatar' : 'Descartada'}" em Oportunidades.`);
-  const id = randomBytes(8).toString('hex').replace(/[^a-z0-9]/g, '').slice(0, 10).padEnd(10, '0');
+  const id = novoId();
   const iso = now.toISOString();
   const contato: Contato = {
     id,
+    origem: 'manual',
     placeId: d.placeId,
     negocio: d.negocio,
     email: d.email,
@@ -158,7 +165,7 @@ export async function criarContato(raw: unknown, por: string, now = new Date()):
   };
   await atualizar<Record<string, Contato>>(CONTATOS, {}, (atual) => {
     const repetido = Object.values(atual).find((c) => c.email === d.email || (d.placeId && c.placeId === d.placeId));
-    if (repetido) throw new VendasError(`Já existe um contato para ${repetido.email === d.email ? 'este e-mail' : 'este negócio'}: ${repetido.negocio}.`);
+    if (repetido) throw new VendasError(`Já existe um contato para ${repetido.email === d.email ? 'este e-mail' : 'este negócio'}: ${nomeExibicao(repetido)}.`);
     return { ...atual, [id]: contato };
   });
   return contato;
@@ -224,6 +231,183 @@ export async function registrarWhatsapp(id: string, raw: unknown, por: string, n
   });
 }
 
+/** The Oportunidades decision always wins: "Descartada" or "Não contatar" there stops any writing here. */
+async function exigirLeadAberto(placeId: string | undefined) {
+  if (!placeId) return;
+  const lead = await leadDoLugar(placeId);
+  if (lead?.situacao === 'nao-contatar') throw new VendasError('Esse negócio está como "Não contatar" em Oportunidades.');
+  if (lead?.situacao === 'descartada') throw new VendasError('Esse negócio está como "Descartada" em Oportunidades.');
+}
+
+/* ---------- import from Oportunidades ---------- */
+
+export const MAX_IMPORTACAO = 500;
+const ETAPAS_INICIAIS: Etapa[] = ['qualificar', 'novo', 'em-aprovacao', 'aprovado'];
+
+export interface ResumoImportacao {
+  importadas: { id: string; placeId: string; pendenteVerificacao: boolean }[];
+  jaCadastradas: { id: string; placeId: string }[];
+  ignoradas: { placeId: string; motivo: string }[];
+  /** Imported, but "sem site" still needs the hand check in 2 sources before it can be used in a text. */
+  pendentesVerificacao: number;
+}
+
+/** Why a lead cannot enter the CRM, or null when it can. */
+function motivoParaIgnorar(l: Lead, bloqueados: Set<string>): string | null {
+  if (l.situacao === 'nao-contatar') return 'Não contatar';
+  if (l.situacao === 'descartada') return 'Descartada';
+  if (bloqueados.has(hash('lugar', l.placeId))) return 'Na lista de bloqueio';
+  if (l.categoria === 'site-proprio') return 'Já tem site próprio funcionando';
+  if (l.sinais.some((s) => /fechado definitivamente/i.test(s))) return 'Fechado definitivamente no Google';
+  return null;
+}
+
+const pendenteVerificacao = (l: Lead) => l.categoria === 'sem-site' && l.verificacao.situacao !== 'confirmado';
+
+/** For the Oportunidades screen: which place IDs are already in the CRM (→ contact id) and which could be imported. */
+export async function situacaoNoCrm(): Promise<{ noCrm: Record<string, string>; elegiveis: string[] }> {
+  const [leads, contatos, bloqueio] = await Promise.all([listarLeads(), listarContatos(), listarBloqueio()]);
+  const noCrm: Record<string, string> = {};
+  for (const c of contatos) if (c.placeId) noCrm[c.placeId] = c.id;
+  const bloqueados = new Set(bloqueio.map((b) => b.chave));
+  const elegiveis = leads.filter((l) => !noCrm[l.placeId] && !motivoParaIgnorar(l, bloqueados)).map((l) => l.placeId);
+  return { noCrm, elegiveis };
+}
+
+/**
+ * Brings Oportunidades leads into the CRM as "Aguardando qualificação". Copies only the place ID and the team's own
+ * findings (city, segment, category, the site check); never a name, address, phone or site from Google.
+ * Safe to run twice, or twice at once: the place ID check happens inside the same atomic write.
+ */
+export async function importarLeads(alvo: { placeIds: string[] } | 'elegiveis', por: string, now = new Date()): Promise<ResumoImportacao> {
+  exigirGravacao();
+  const leads = await listarLeads();
+  const porId = new Map(leads.map((l) => [l.placeId, l]));
+  const pedidos = alvo === 'elegiveis' ? leads.map((l) => l.placeId) : [...new Set(alvo.placeIds.map(String))];
+  if (pedidos.length === 0) throw new VendasError('Nenhuma empresa selecionada.');
+  if (pedidos.length > MAX_IMPORTACAO) throw new VendasError(`No máximo ${MAX_IMPORTACAO} empresas por vez.`);
+  const bloqueados = new Set((await listarBloqueio()).map((b) => b.chave));
+  const iso = now.toISOString();
+  let resumo: ResumoImportacao = { importadas: [], jaCadastradas: [], ignoradas: [], pendentesVerificacao: 0 };
+
+  await atualizar<Record<string, Contato>>(CONTATOS, {}, (atual) => {
+    // Rebuilt on every retry, so a conflicting write never leaves a half-counted summary.
+    resumo = { importadas: [], jaCadastradas: [], ignoradas: [], pendentesVerificacao: 0 };
+    const existentes = new Map<string, string>();
+    for (const c of Object.values(atual)) if (c.placeId) existentes.set(c.placeId, c.id);
+    const novo = { ...atual };
+    for (const placeId of pedidos) {
+      const l = porId.get(placeId);
+      if (!l) {
+        resumo.ignoradas.push({ placeId, motivo: 'Não está na lista de Oportunidades' });
+        continue;
+      }
+      const ja = existentes.get(placeId);
+      if (ja) {
+        resumo.jaCadastradas.push({ id: ja, placeId });
+        continue;
+      }
+      const motivo = motivoParaIgnorar(l, bloqueados);
+      if (motivo) {
+        resumo.ignoradas.push({ placeId, motivo });
+        continue;
+      }
+      const pendente = pendenteVerificacao(l);
+      const id = novoId();
+      novo[id] = {
+        id,
+        origem: 'importado',
+        placeId,
+        negocio: '',
+        email: '',
+        fonte: null,
+        segmento: l.segmento,
+        // "Sem site" only reaches a text after the hand check in 2 sources (Oportunidades' rule).
+        categoria: pendente ? 'incerta' : l.categoria,
+        sinais: l.sinais,
+        cidade: l.cidade,
+        uf: l.uf,
+        etapa: 'qualificar',
+        observacoes: '',
+        rascunhos: [],
+        historico: [evento(por, 'cadastro', 'Importado de Oportunidades. Falta o nome do negócio, o e-mail comercial e a fonte do e-mail.', now)],
+        criadoEm: iso,
+        criadoPor: por,
+        atualizadoEm: iso,
+      };
+      existentes.set(placeId, id);
+      resumo.importadas.push({ id, placeId, pendenteVerificacao: pendente });
+      if (pendente) resumo.pendentesVerificacao++;
+    }
+    return novo;
+  });
+  return resumo;
+}
+
+/** Qualifying: the team types the name, the business e-mail and where it found it. Then the contact can get texts. */
+export async function completarContato(id: string, raw: unknown, por: string, now = new Date()) {
+  const parsed = completarSchema.safeParse(raw);
+  if (!parsed.success) throw new VendasError(parsed.error.issues[0]?.message || 'Confira os dados.');
+  const d = parsed.data;
+  const c = await contatoPorId(id);
+  if (!c) throw new VendasError('Contato não encontrado.');
+  if (await bloqueado({ email: d.email, placeId: c.placeId })) throw new VendasError('Este e-mail ou negócio está na lista de bloqueio: não pode ser contatado.');
+  await exigirLeadAberto(c.placeId);
+  exigirGravacao();
+  let salvo: Contato | undefined;
+  await atualizar<Record<string, Contato>>(CONTATOS, {}, (atual) => {
+    const x = Object.hasOwn(atual, id) ? atual[id] : undefined;
+    if (!x) throw new VendasError('Contato não encontrado.');
+    if (x.etapa === 'nao-contatar') throw new VendasError('Este contato pediu para não ser contatado.');
+    const outro = Object.values(atual).find((o) => o.id !== id && o.email === d.email);
+    if (outro) throw new VendasError(`Este e-mail já está em outro contato: ${nomeExibicao(outro)}.`);
+    const mudou = x.negocio !== d.negocio || x.email !== d.email || x.fonte?.url !== d.fonteUrl;
+    const base = mudou ? comEvento(x, evento(por, 'cadastro', `Contato completado. E-mail achado em: ${d.fonteUrl}`, now)) : x;
+    salvo = { ...base, negocio: d.negocio, email: d.email, fonte: { tipo: d.fonteTipo, url: d.fonteUrl }, etapa: x.etapa === 'qualificar' ? 'novo' : x.etapa };
+    return { ...atual, [id]: salvo };
+  });
+  return salvo!;
+}
+
+/**
+ * "Preparar abordagens": a first draft for every complete contact still without one, up to `max` per click (the
+ * simulator is instant; the AI, when on, is slower and has its own monthly cap). Everything lands in the approval queue.
+ */
+export async function prepararRascunhosEmLote(por: string, opts: { cliente?: Cliente; max?: number; now?: Date } = {}) {
+  exigirGravacao();
+  const max = Math.min(Math.max(opts.max ?? 10, 1), 30);
+  const candidatos = (await listarContatos()).filter((c) => c.etapa === 'novo' && contatoCompleto(c) && c.rascunhos.every((r) => r.status === 'descartado'));
+  const gerados: string[] = [];
+  const falhas: { id: string; motivo: string }[] = [];
+  for (const c of candidatos.slice(0, max)) {
+    try {
+      await gerarRascunho(c.id, 'primeiro', por, { cliente: opts.cliente, now: opts.now });
+      gerados.push(c.id);
+    } catch (err) {
+      if (!(err instanceof VendasError)) throw err;
+      falhas.push({ id: c.id, motivo: err.message });
+    }
+  }
+  return { gerados: gerados.length, falhas, restantes: Math.max(candidatos.length - max, 0) };
+}
+
+/** Keeps the CRM in step when the team changes a lead in Oportunidades. */
+export async function sincronizarComOportunidade(placeId: string, situacao: string, por: string, now = new Date()) {
+  if (!gravacaoPermitida()) return;
+  const c = (await listarContatos()).find((x) => x.placeId === placeId);
+  if (!c || c.etapa === 'nao-contatar') return;
+  if (situacao === 'nao-contatar') {
+    await bloquearContato(c.id, 'Marcado como "Não contatar" em Oportunidades.', 'equipe', por, now);
+  } else if (situacao === 'descartada' && ETAPAS_INICIAIS.includes(c.etapa)) {
+    const em = now.toISOString();
+    await alterarContato(c.id, (x) => ({
+      ...comEvento(x, evento(por, 'etapa', `${nomeEtapa(x.etapa)} → Perdido (descartada em Oportunidades)`, now)),
+      etapa: 'perdido',
+      rascunhos: x.rascunhos.map((r) => (r.status === 'para-aprovar' ? { ...r, status: 'descartado', decididoEm: em, decididoPor: por } : r)),
+    }));
+  }
+}
+
 /* ---------- drafts ---------- */
 
 const idRascunho = () => randomBytes(6).toString('hex');
@@ -234,7 +418,9 @@ export async function gerarRascunho(id: string, tipo: TipoRascunho, por: string,
   const c = await contatoPorId(id);
   if (!c) throw new VendasError('Contato não encontrado.');
   if (ETAPAS_ENCERRADAS.includes(c.etapa)) throw new VendasError(`Contato em "${nomeEtapa(c.etapa)}": não recebe novos textos.`);
+  if (!contatoCompleto(c)) throw new VendasError('Complete o contato antes: nome do negócio, e-mail comercial e a fonte do e-mail.');
   if (await bloqueado({ email: c.email, placeId: c.placeId })) throw new VendasError('Este contato está na lista de bloqueio.');
+  await exigirLeadAberto(c.placeId);
   const vivos = c.rascunhos.filter((r) => r.status !== 'descartado');
   if (vivos.some((r) => r.status === 'para-aprovar')) throw new VendasError('Já tem um rascunho esperando aprovação. Aprove ou descarte antes de gerar outro.');
   if (tipo === 'primeiro' && vivos.some((r) => r.tipo === 'primeiro')) throw new VendasError('O primeiro e-mail já foi aprovado. O próximo só pode ser um acompanhamento.');
@@ -289,6 +475,7 @@ export async function aprovarRascunho(id: string, rid: string, por: string, now 
   const c = await contatoPorId(id);
   if (!c) throw new VendasError('Contato não encontrado.');
   if (await bloqueado({ email: c.email, placeId: c.placeId })) throw new VendasError('Este contato está na lista de bloqueio.');
+  await exigirLeadAberto(c.placeId);
   return alterarRascunho(id, rid, por, now, (r, atual) => {
     if (ETAPAS_ENCERRADAS.includes(atual.etapa)) throw new VendasError(`Contato em "${nomeEtapa(atual.etapa)}": não dá para aprovar.`);
     const conf = conferirRascunho(r.assunto, r.corpo);
@@ -327,10 +514,10 @@ export async function bloquearContato(id: string, motivo: string, origem: Bloque
   const c = await contatoPorId(id);
   if (!c) throw new VendasError('Contato não encontrado.');
   const em = now.toISOString();
-  const rotulo = c.email.includes('*') ? c.email : mascarar(c.email);
+  const rotulo = !c.email || c.email.includes('*') ? c.email : mascarar(c.email);
   const novos: Bloqueio[] = [];
-  if (!c.email.includes('*')) novos.push({ chave: hash('email', c.email), tipo: 'email', rotulo, motivo, origem, em, por });
-  if (c.placeId) novos.push({ chave: hash('lugar', c.placeId), tipo: 'lugar', rotulo: `${c.negocio} (Oportunidades)`, motivo, origem, em, por });
+  if (c.email && !c.email.includes('*')) novos.push({ chave: hash('email', c.email), tipo: 'email', rotulo, motivo, origem, em, por });
+  if (c.placeId) novos.push({ chave: hash('lugar', c.placeId), tipo: 'lugar', rotulo: `${nomeExibicao(c)} (Oportunidades)`, motivo, origem, em, por });
   await adicionarBloqueios(novos);
   if (c.placeId) await marcarNaoContatar(c.placeId, motivo, por, now);
   // What the business wrote and the team's free notes may carry personal data: after an opt-out only the facts stay.

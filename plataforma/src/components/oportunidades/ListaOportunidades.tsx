@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useMemo, useState, useTransition } from 'react';
 import { revisarAction, verAoVivoAction } from '@/app/painel/oportunidades/actions';
+import { ImportarParaCrm, podeImportar } from './ImportarParaCrm';
 import type { LugarAoVivo } from '@/lib/oportunidades/places';
 import {
   CATEGORIAS,
@@ -24,8 +25,23 @@ import { AtribuicaoGoogle, CHIP_CATEGORIA, Telefone, dataCurta, linkSeguro } fro
 
 const POR_PAGINA = 40;
 
-export function ListaOportunidades({ leads, limiteDetalhes, usadasDetalhes }: { leads: Lead[]; limiteDetalhes: number; usadasDetalhes: number }) {
+export function ListaOportunidades({
+  leads,
+  limiteDetalhes,
+  usadasDetalhes,
+  noCrm: noCrmInicial,
+  elegiveis,
+}: {
+  leads: Lead[];
+  limiteDetalhes: number;
+  usadasDetalhes: number;
+  /** place ID → CRM contact id, for the leads already in Vendas. */
+  noCrm: Record<string, string>;
+  elegiveis: number;
+}) {
   const [items, setItems] = useState(leads);
+  const [noCrm, setNoCrm] = useState(noCrmInicial);
+  const [sel, setSel] = useState<Set<string>>(new Set());
   const [filtro, setFiltro] = useState({ categoria: '', cidade: '', segmento: '', situacao: '' });
   const [mostrar, setMostrar] = useState(POR_PAGINA);
   const cidades = useMemo(() => [...new Set(items.map((l) => l.cidade))].sort(), [items]);
@@ -91,9 +107,35 @@ export function ListaOportunidades({ leads, limiteDetalhes, usadasDetalhes }: { 
         />
       </div>
 
+      <ImportarParaCrm
+        selecionadas={[...sel]}
+        visiveisSelecionaveis={visiveis.filter((l) => podeImportar(l, noCrm)).map((l) => l.placeId)}
+        elegiveis={elegiveis}
+        selecionar={(ids) => setSel(new Set(ids))}
+        importou={(r) => {
+          setNoCrm((m) => ({ ...m, ...Object.fromEntries([...r.importadas, ...r.jaCadastradas].map((x) => [x.placeId, x.id])) }));
+          setSel(new Set());
+        }}
+      />
+
       <div className="mt-4 space-y-3">
         {visiveis.slice(0, mostrar).map((l) => (
-          <CartaoLead key={l.placeId} lead={l} salvo={(novo) => setItems((list) => list.map((x) => (x.placeId === novo.placeId ? novo : x)))} />
+          <CartaoLead
+            key={l.placeId}
+            lead={l}
+            crmId={noCrm[l.placeId]}
+            selecionavel={podeImportar(l, noCrm)}
+            marcado={sel.has(l.placeId)}
+            marcar={(v) =>
+              setSel((s) => {
+                const n = new Set(s);
+                if (v) n.add(l.placeId);
+                else n.delete(l.placeId);
+                return n;
+              })
+            }
+            salvo={(novo) => setItems((list) => list.map((x) => (x.placeId === novo.placeId ? novo : x)))}
+          />
         ))}
         {visiveis.length === 0 && <p className="text-ink-mute">Nenhum lugar com esses filtros.</p>}
         {visiveis.length > mostrar && (
@@ -124,7 +166,21 @@ function Filtro({ id, rotulo, valor, mudar, opcoes, vazio = 'Todas' }: { id: str
   );
 }
 
-function CartaoLead({ lead: l, salvo }: { lead: Lead; salvo: (l: Lead) => void }) {
+function CartaoLead({
+  lead: l,
+  salvo,
+  crmId,
+  selecionavel,
+  marcado,
+  marcar,
+}: {
+  lead: Lead;
+  salvo: (l: Lead) => void;
+  crmId?: string;
+  selecionavel: boolean;
+  marcado: boolean;
+  marcar: (v: boolean) => void;
+}) {
   const [aoVivo, setAoVivo] = useState<LugarAoVivo | null>(null);
   const [aberto, setAberto] = useState(false);
   const [error, setError] = useState('');
@@ -146,6 +202,16 @@ function CartaoLead({ lead: l, salvo }: { lead: Lead; salvo: (l: Lead) => void }
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2">
+            {selecionavel && (
+              <input
+                type="checkbox"
+                className="size-4 accent-[var(--color-accent)]"
+                checked={marcado}
+                onChange={(e) => marcar(e.target.checked)}
+                aria-label="Selecionar para importar no CRM"
+              />
+            )}
+            {crmId && <span className="chip bg-ok/10 text-ok">No CRM</span>}
             <span className={`chip ${CHIP_CATEGORIA[l.categoria]}`}>{nomeCategoria(l.categoria)}</span>
             {l.categoriaRevisada && <span className="chip bg-line text-ink-soft">revisada</span>}
             <span className="text-sm font-semibold">{situacao}</span>
@@ -167,10 +233,17 @@ function CartaoLead({ lead: l, salvo }: { lead: Lead; salvo: (l: Lead) => void }
               {pending ? 'Carregando…' : 'Ver dados do Google'}
             </button>
           )}
-          {l.situacao !== 'nao-contatar' && l.situacao !== 'descartada' && (
-            <Link className="btn-ghost min-h-9 px-3" href={`/painel/oportunidades/vendas/novo?lugar=${encodeURIComponent(l.placeId)}`}>
-              Abordar por e-mail
+          {crmId ? (
+            <Link className="btn-ghost min-h-9 px-3" href={`/painel/oportunidades/vendas/${crmId}`}>
+              Abrir ficha no CRM
             </Link>
+          ) : (
+            l.situacao !== 'nao-contatar' &&
+            l.situacao !== 'descartada' && (
+              <Link className="btn-ghost min-h-9 px-3" href={`/painel/oportunidades/vendas/novo?lugar=${encodeURIComponent(l.placeId)}`}>
+                Abordar por e-mail
+              </Link>
+            )
           )}
         </div>
       </div>

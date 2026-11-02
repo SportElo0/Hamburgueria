@@ -18,7 +18,8 @@ export const LIMITE_EMAILS_DIA = 5;
 export const MAX_ACOMPANHAMENTOS = 1;
 
 export const ETAPAS = [
-  { id: 'novo', nome: 'Novo', dica: 'Contato cadastrado, ainda sem texto aprovado' },
+  { id: 'qualificar', nome: 'Aguardando qualificação', dica: 'Importado de Oportunidades: falta nome, e-mail comercial e fonte' },
+  { id: 'novo', nome: 'Novo', dica: 'Contato completo, ainda sem texto aprovado' },
   { id: 'em-aprovacao', nome: 'Em aprovação', dica: 'Tem rascunho esperando uma pessoa ler' },
   { id: 'aprovado', nome: 'Aprovado', dica: 'Texto aprovado; o envio chega na fase 2' },
   { id: 'enviado', nome: 'Enviado', dica: 'E-mail enviado, esperando resposta' },
@@ -81,10 +82,16 @@ export interface Contato {
   id: string;
   /** Link to the Oportunidades lead (Google place ID), when it came from there. */
   placeId?: string;
-  /** Typed by the team from the business's own channels, never copied from Google. */
+  /**
+   * Typed by the team from the business's own channels, never copied from Google. Empty ('') while an imported
+   * contact waits for qualification: the Google terms only let us keep the place ID.
+   */
   negocio: string;
+  /** '' until the team finds a public business address (imported contacts start without one). */
   email: string;
-  fonte: { tipo: FonteContato; url: string };
+  fonte: { tipo: FonteContato; url: string } | null;
+  /** How the contact entered the CRM. */
+  origem?: 'manual' | 'importado';
   segmento?: Segmento;
   categoria?: Categoria;
   /** What the panel's own check saw on the business's site (team data, not Google's). */
@@ -115,6 +122,12 @@ export const dominioDe = (email: string) => normalizarEmail(email).split('@')[1]
 /** Webmail domains: blocking one of these would block everyone, so the block list only takes the full address. */
 export const DOMINIOS_PUBLICOS = ['gmail.com', 'hotmail.com', 'outlook.com', 'live.com', 'yahoo.com', 'yahoo.com.br', 'icloud.com', 'uol.com.br', 'bol.com.br', 'terra.com.br', 'ig.com.br', 'msn.com'];
 
+const negocioSchema = z.string().trim().min(2, 'Informe o nome do negócio.').max(80);
+const emailSchema = z.string().trim().toLowerCase().max(120).email('Confira o e-mail.');
+const sempublico = (email: string) => !DOMINIOS_PUBLICOS.includes(email.split('@')[1] ?? '');
+const MSG_PUBLICO =
+  'E-mail de Gmail, Hotmail e parecidos costuma ser pessoal: use o endereço com o domínio do próprio negócio. Se o negócio só tem esse, fale com ele por outro canal.';
+
 export const contatoSchema = z.object({
   placeId: z
     .string()
@@ -122,8 +135,8 @@ export const contatoSchema = z.object({
     .regex(/^[A-Za-z0-9_-]{10,300}$/)
     .optional()
     .or(z.literal('').transform(() => undefined)),
-  negocio: z.string().trim().min(2, 'Informe o nome do negócio.').max(80),
-  email: z.string().trim().toLowerCase().max(120).email('Confira o e-mail.'),
+  negocio: negocioSchema,
+  email: emailSchema,
   fonteTipo: z.enum(FONTE_IDS, { message: 'Escolha onde acharam o e-mail.' }),
   fonteUrl: httpsUrl,
   cidade: z.string().trim().max(60).default(''),
@@ -139,11 +152,92 @@ export const contatoSchema = z.object({
     .or(z.literal('').transform(() => undefined)),
   observacoes: z.string().trim().max(1000).default(''),
   conferido: z.literal(true, { message: 'Confirme que o e-mail é público e do próprio negócio.' }),
-}).refine((d) => !DOMINIOS_PUBLICOS.includes(d.email.split('@')[1] ?? ''), {
-  message: 'E-mail de Gmail, Hotmail e parecidos costuma ser pessoal: use o endereço com o domínio do próprio negócio. Se o negócio só tem esse, fale com ele por outro canal.',
-  path: ['email'],
-});
+}).refine((d) => sempublico(d.email), { message: MSG_PUBLICO, path: ['email'] });
 export type ContatoInput = z.input<typeof contatoSchema>;
+
+/** Qualifying an imported contact: the same rules as a manual one (name, business e-mail, verifiable source). */
+export const completarSchema = z
+  .object({
+    negocio: negocioSchema,
+    email: emailSchema,
+    fonteTipo: z.enum(FONTE_IDS, { message: 'Escolha onde acharam o e-mail.' }),
+    fonteUrl: httpsUrl,
+    conferido: z.literal(true, { message: 'Confirme que o e-mail é público e do próprio negócio.' }),
+  })
+  .refine((d) => sempublico(d.email), { message: MSG_PUBLICO, path: ['email'] });
+
+/** Name, e-mail and source: without all three nothing can be written to the business. */
+export const contatoCompleto = (c: Pick<Contato, 'negocio' | 'email' | 'fonte'>) => Boolean(c.negocio && c.email && !c.email.includes('*') && c.fonte);
+
+/** What the screen shows while the team has not typed the name yet (never a name from Google). */
+export function nomeExibicao(c: Pick<Contato, 'negocio' | 'segmento' | 'cidade'>) {
+  if (c.negocio) return c.negocio;
+  const seg = c.segmento ? SEGMENTOS.find((s) => s.id === c.segmento)?.nome : undefined;
+  return `${seg ?? 'Negócio'}${c.cidade ? ` em ${c.cidade}` : ''} (sem nome ainda)`;
+}
+
+export interface Analise {
+  prioridade: 'alta' | 'media' | 'baixa';
+  plano: 'Start' | 'Grow';
+  motivos: string[];
+  falta: string[];
+  /** Enough to prepare a draft now. */
+  pronto: boolean;
+}
+
+/**
+ * The lead review, by fixed rules over the team's own data (category, site check, hand verification, segment).
+ * No AI and nothing guessed: what is unknown shows up in "falta".
+ */
+export function analisarContato(
+  c: Pick<Contato, 'negocio' | 'email' | 'fonte' | 'segmento' | 'categoria' | 'sinais'>,
+  verificacao?: { situacao: string; fontes: string[] },
+): Analise {
+  const grow = Boolean(c.segmento && SEGMENTOS_PEDIDO.has(c.segmento));
+  const motivos: string[] = [];
+  const falta: string[] = [];
+  let pontos = 0;
+  const confirmado = verificacao?.situacao === 'confirmado';
+  switch (c.categoria) {
+    case 'sem-site':
+      if (confirmado) {
+        motivos.push('Sem site, confirmado pela equipe em 2 fontes.');
+        pontos += 3;
+      } else {
+        motivos.push('O Google não mostra site, mas a equipe ainda não confirmou em 2 fontes.');
+        falta.push('Verificação manual (2 fontes) em Oportunidades');
+        pontos += 1;
+      }
+      break;
+    case 'so-rede-social':
+      motivos.push('Aparece na internet só por rede social ou app.');
+      pontos += 2;
+      break;
+    case 'site-com-problemas':
+      motivos.push(`Site com problemas: ${c.sinais.slice(0, 2).join('; ') || 'ver a checagem'}.`);
+      pontos += 2;
+      break;
+    case 'incerta':
+      motivos.push('A checagem não conseguiu concluir; conferir à mão.');
+      break;
+    default:
+      break;
+  }
+  if (grow) {
+    motivos.push('Ramo de pedido e delivery: o plano Grow (pedido no site, sem comissão) faz sentido.');
+    pontos += 1;
+  }
+  if (!c.negocio) falta.push('Nome do negócio (do site ou da rede dele)');
+  if (!c.email || c.email.includes('*')) falta.push('E-mail comercial');
+  if (!c.fonte) falta.push('Link da fonte do e-mail');
+  return {
+    prioridade: pontos >= 3 ? 'alta' : pontos >= 2 ? 'media' : 'baixa',
+    plano: grow ? 'Grow' : 'Start',
+    motivos,
+    falta,
+    pronto: contatoCompleto(c),
+  };
+}
 
 export const edicaoRascunhoSchema = z.object({
   assunto: z.string().trim().min(3, 'Escreva o assunto.').max(120),

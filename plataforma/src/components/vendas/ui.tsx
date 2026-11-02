@@ -2,6 +2,7 @@ import type { Etapa } from '@/lib/vendas/regras';
 import { nomeEtapa } from '@/lib/vendas/regras';
 
 export const CHIP_ETAPA: Record<Etapa, string> = {
+  qualificar: 'bg-warn/10 text-warn',
   novo: 'bg-line text-ink-soft',
   'em-aprovacao': 'bg-warn/10 text-warn',
   aprovado: 'bg-accent-soft text-accent',
