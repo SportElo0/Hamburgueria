@@ -75,6 +75,18 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - **Palavra:** SITE.
 - **Pronto em 01/11:** `09-o-lanche-e-bom.mp4 (voz 1,20 crédito)`.
 
+### 14 · "Uma estrela" (novo, 02/11)
+- **Gancho:** "Uma estrela. E agora?" O Zé recebe "Demorou e chegou frio", tem vontade de responder no calor (rascunho riscado), respira e responde com educação; dias depois, alguém lê a crítica e a resposta.
+- **Palavra:** GOOGLE (o direct ganhou um modelo de resposta). **Pronto:** `14-uma-estrela.mp4` (voz 1,20 crédito; Agenda 13/11 15h).
+
+### 15 · "O celular não para" (novo, 02/11)
+- **Gancho:** "O celular não para." Sábado 21h, forno cheio, WhatsApp perguntando entrega, horário e cardápio; com respostas rápidas e cardápio num link, a Carla responde e volta pro forno.
+- **Palavra:** SITE. **Pronto:** `15-o-celular-nao-para.mp4` (voz 1,05 crédito; Agenda 14/11 15h).
+
+### 16 · "O cardápio em PDF" (novo, 02/11)
+- **Gancho:** "O cardápio que ninguém abriu." A Lu toca no link e vem um PDF pesado; abre pequeno, sem preço; ela vai pra outra e o dono nunca sabe. Um cardápio que abre na hora deixa o caminho curto.
+- **Palavra:** CARDÁPIO. **Pronto:** `16-cardapio-em-pdf.mp4` (voz 1,05 crédito; Agenda 15/11 15h).
+
 ## Ordem de produção (pela data na Agenda)
 
 1. Reel 1 (03/11) e Reel 5 (04/11) primeiro, depois 4 (06/11), 3 (10/11), 9 (11/11), 6 (12/11), e por fim 7, 2 e 8.

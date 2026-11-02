@@ -74,6 +74,9 @@ Pra aparecer bem pra quem procura onde comer, o básico é:
 
 Ninguém consegue garantir posição no Google, mas dá pra deixar tudo em dia pra ter mais chance de ser encontrado.
 
+E se precisar responder uma avaliação ruim, um modelo pra adaptar:
+"Sentimos muito, [nome]. Não é o que queremos pra você. Pode nos chamar no WhatsApp [número]? Queremos entender o que aconteceu e resolver."
+
 Quer saber como está o seu restaurante hoje? O diagnóstico é grátis e a prévia chega no seu WhatsApp em até 2 dias úteis 👇
 
 Pra não receber mais mensagens por aqui, responda SAIR.

@@ -1,5 +1,7 @@
 # Carrosséis do dia
 
+**Semana de 02 a 08/11**
+
 Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos já estão na **Agenda do Instagram** do painel, esperando a aprovação de vocês.
 
 **Como eles foram feitos (e por que não são genéricos):**
@@ -18,7 +20,19 @@ Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos
 | Sáb 07/11 | O prato é lindo. A foto, nem sempre. | Reel 6 · Do zero |
 | Dom 08/11 | Só o Instagram basta? | Reel 3 · Dois minutos |
 
-Na semana seguinte os Reels continuam todo dia às 15h (13, 7, 8 e 2 de 09 a 12/11); os carrosséis dessa semana vêm no próximo lote.
+**Semana de 09 a 15/11**
+
+| Dia | Carrossel (10h) | Reel do dia (15h) |
+| --- | --- | --- |
+| Seg 09/11 | Feriado chegando: seu horário no Google está certo? | Reel 13 · Porta aberta |
+| Ter 10/11 | 7 perguntas antes de contratar um site | Reel 7 · Quem atende é quem faz |
+| Qua 11/11 | Quanto cada pedido pelo app te custa? | Reel 8 · Sábado à noite |
+| Qui 12/11 | seunegocio.com.br: por que ter o seu? | Reel 2 · A confeitaria |
+| Sex 13/11 | Como pedir avaliação sem parecer chato | Reel 14 · Uma estrela (novo) |
+| Sáb 14/11 | 5 respostas prontas pro WhatsApp | Reel 15 · O celular não para (novo) |
+| Dom 15/11 | 6 erros no cardápio que afastam o cliente | Reel 16 · O cardápio em PDF (novo) |
+
+O carrossel de feriado vai na segunda (09/11) de propósito: dá tempo de ajustar o horário de 15/11 e de 20/11.
 
 Gerar de novo: `node growlift-social/_fonte/carrosseis.mjs` (ou só um: `... carrosseis.mjs 02`).
 
@@ -153,4 +167,205 @@ Salve pra lembrar do combo. E se quiser ver exemplos, comenta SITE.
 
 ```
 Capa de carrossel: "Só o Instagram basta?", com dois cartões lado a lado, Instagram e Site.
+```
+
+## Seg 09/11 · Feriado chegando: seu horário no Google está certo?
+
+Pasta `12-feriado/` (8 slides). Palavra no ManyChat: **GOOGLE**.
+
+**Legenda**
+
+```
+Feriado chegando: o seu horário no Google está certo? Salve e confira 👇
+
+Feriados nacionais até o começo de 2027:
+Dom 15/11 · Proclamação da República
+Sex 20/11 · Dia Nacional de Zumbi e da Consciência Negra
+Sex 25/12 · Natal
+Sex 01/01 · Confraternização Universal
+(Os feriados da sua cidade e do seu estado contam também.)
+
+No Perfil da Empresa no Google: Editar perfil, Horário, Horário especial. Escolha a data e marque fechado, ou aberto com o horário do dia. Vai abrir normal? Confirme mesmo assim: o Google pode deixar de mostrar o aviso de que o horário pode ser diferente.
+
+Comenta GOOGLE que a gente te manda o básico pra deixar o seu perfil em dia.
+
+#feriado #perfildaempresanogoogle #restaurante #googlemeunegocio #growlift
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Capa de carrossel: "Feriado chegando. Seu horário no Google está certo?", com uma folha de calendário marcando sexta-feira, 20 de novembro.
+```
+
+## Ter 10/11 · 7 perguntas antes de contratar um site
+
+Pasta `07-antes-de-contratar/` (10 slides). Palavra no ManyChat: **SITE**.
+
+**Legenda**
+
+```
+Vai contratar um site pro seu negócio? Salve estas 7 perguntas e faça pra qualquer empresa, inclusive pra gente 👇
+
+1. O domínio fica em nome de quem?
+2. Funciona bem no celular?
+3. Em quanto tempo fica no ar (por escrito)?
+4. Quantas alterações por mês estão inclusas?
+5. Tem fidelidade ou multa?
+6. Quem vai te atender, e por onde?
+7. Cobra alguma taxa por pedido?
+
+As principais respostas da Growlift estão no site e no contrato: link na bio.
+
+Comenta SITE que a gente te manda exemplos e explica como funciona.
+
+#criacaodesites #sitepararestaurante #negocioslocais #dicasdenegocio #growlift
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Capa de carrossel: "7 perguntas antes de contratar um site", com cartões de perguntas como Domínio, Celular, Prazo, Alterações e Fidelidade.
+```
+
+## Qua 11/11 · Quanto cada pedido pelo app te custa?
+
+Pasta `08-faca-a-conta/` (9 slides). Palavra no ManyChat: **PEDIDO**.
+
+**Legenda**
+
+```
+Quanto cada pedido pelo app de delivery te custa de verdade? Faça a conta com os seus números 👇
+
+1. Some o que o app cobra no mês: comissão, taxa de pagamento e mensalidade, se houver.
+2. Veja quanto você vendeu pelo app no mesmo mês.
+3. Divida o custo pelas vendas: é quanto fica de cada pedido.
+
+Não é pra largar o app: ele traz cliente que ainda não te conhece. A ideia é saber o custo e ter também um canal seu, pra quem já é cliente pedir direto. Os números do carrossel são só um exemplo.
+
+No pedido pelo próprio site (plano Grow), a Growlift não cobra comissão por pedido: você paga a mensalidade e, se a sua conta cobrar, a tarifa do Pix. Valores e condições: link na bio.
+
+Comenta PEDIDO que a gente te mostra como funciona.
+
+#delivery #restaurante #pedidoonline #gestaoderestaurante #growlift
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Capa de carrossel: "Quanto cada pedido pelo app te custa?", com uma fração: custo do app sobre vendas no app igual à porcentagem de cada pedido.
+```
+
+## Qui 12/11 · seunegocio.com.br: por que ter o seu?
+
+Pasta `09-dominio/` (8 slides). Palavra no ManyChat: **SITE**.
+
+**Legenda**
+
+```
+seunegocio.com.br: por que ter um endereço com o nome do seu negócio? 👇
+
+1. Link de rede social ou de plataforma segue as regras de outra empresa; o domínio é seu endereço.
+2. É fácil de falar: cabe na placa, na sacola e no cardápio.
+3. Quem viu a fachada digita o nome e encontra o seu site.
+
+Os domínios .com.br são registrados no Registro.br, com CPF ou CNPJ. Pergunte sempre em nome de quem o seu fica, e não deixe vencer.
+
+No plano Start, o domínio com o nome do seu negócio e a hospedagem ficam por nossa conta. Valores e condições: link na bio.
+
+Comenta SITE que a gente te manda exemplos no direct.
+
+#dominio #criacaodesites #negocioslocais #sitepararestaurante #growlift
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Capa de carrossel: "seunegocio.com.br: por que ter o seu?", com uma barra de endereço de site.
+```
+
+## Sex 13/11 · Como pedir avaliação sem parecer chato
+
+Pasta `10-pedir-avaliacao/` (9 slides). Palavra no ManyChat: **GOOGLE**.
+
+**Legenda**
+
+```
+Como pedir avaliação no Google sem parecer chato 👇
+
+1. Peça a todos os clientes, do mesmo jeito (não só a quem elogiou).
+2. Na hora certa: fim da refeição, junto com a conta ou na entrega.
+3. QR no balcão e na sacola, que abre direto a tela de avaliação.
+4. Uma frase curta, sem pressão e sem nada em troca.
+
+E o que não pode: dar desconto ou brinde em troca de avaliação, pressionar alguém a apagar uma avaliação ruim ou usar avaliação de quem não foi cliente, como amigo ou funcionário. Isso vai contra as regras do Google e pode derrubar avaliações do seu perfil.
+
+Numa pesquisa da Reclame AQUI com a Abrasel (agosto de 2024), 63% disseram que escolhem onde comer pelas avaliações de outros clientes. No plano Start, o QR de avaliação pro balcão e pra sacola já está incluso.
+
+Comenta GOOGLE que a gente te manda o básico do perfil no direct.
+
+#avaliacoesgoogle #restaurante #perfildaempresanogoogle #marketingpararestaurantes #growlift
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Capa de carrossel: "Como pedir avaliação sem parecer chato", com um QR code ilustrativo.
+```
+
+## Sáb 14/11 · 5 respostas prontas pro WhatsApp
+
+Pasta `11-whatsapp-respostas/` (9 slides). Palavra no ManyChat: **5**.
+
+**Legenda**
+
+```
+5 perguntas que o WhatsApp do seu restaurante responde todo dia. Deixe as respostas prontas 👇
+
+/horario: que horas abre hoje
+/cardapio: o link do cardápio com preços
+/entrega: bairros, taxa e tempo médio
+/pix: a chave e o pedido de comprovante
+/endereco: a rua e o link do mapa
+
+No WhatsApp Business, as respostas rápidas ficam salvas e aparecem quando você digita a barra (/). Os textos do carrossel são modelos: troque o que está entre colchetes pelos seus dados (taxa e prazo de entrega só os reais; no Pix, prefira chave de CNPJ, e-mail ou aleatória).
+
+Salve e manda pra quem atende o WhatsApp aí. Se quiser um cardápio com cara de site pra mandar no /cardapio, comenta SITE.
+
+#whatsappbusiness #restaurante #atendimentoaocliente #delivery #growlift
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Capa de carrossel: "5 perguntas que o seu WhatsApp responde todo dia", com balões de conversa perguntando horário, cardápio e entrega.
+```
+
+## Dom 15/11 · 6 erros no cardápio que afastam o cliente
+
+Pasta `06-cardapio-erros/` (10 slides). Palavra no ManyChat: **CARDÁPIO**.
+
+**Legenda**
+
+```
+6 erros no cardápio online que afastam o cliente. Salve e confira o seu 👇
+
+1. Só foto no Instagram
+2. Sem preço
+3. PDF pesado que não abre bem no celular
+4. Preço ou prato desatualizado
+5. Nenhum botão pra pedir
+6. Sem horário e endereço por perto
+
+Numa pesquisa da Reclame AQUI com a Abrasel (agosto de 2024, mais de 400 consumidores na plataforma do Reclame AQUI), antes de ir a um restaurante, 13% buscam o cardápio online e 23% buscam a faixa de preço.
+
+Comenta CARDÁPIO que a gente te manda exemplos de site com cardápio no direct.
+
+#cardapiodigital #restaurante #sitepararestaurante #marketingpararestaurantes #growlift
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Capa de carrossel: "6 erros no cardápio que afastam o cliente", com a ilustração de um cardápio de exemplo com marcações de erro.
 ```
