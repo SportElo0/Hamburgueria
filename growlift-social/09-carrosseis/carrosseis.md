@@ -5,12 +5,12 @@ Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos
 **Como eles foram feitos (e por que não são genéricos):**
 - Capa com uma promessa concreta em poucas palavras; o slide 2 segura sozinho (o Instagram pode mostrar o carrossel de novo a partir dele).
 - Uma ideia por slide, slide de resumo para salvar e um pedido só no fim (Comenta GOOGLE ou SITE, as palavras do ManyChat).
-- Números só de pesquisa com fonte escrita no slide e na legenda: Reclame AQUI e Abrasel (agosto de 2024, mais de 400 consumidores) e Abrasel com Harmo (279 mil avaliações de 3.006 bares e restaurantes no Google, jan/2023 a set/2024).
+- Números só de pesquisa com fonte escrita no slide e na legenda: Reclame AQUI e Abrasel (agosto de 2024, mais de 400 consumidores na plataforma do Reclame AQUI) e Abrasel com Harmo (279 mil avaliações de 3.006 bares e restaurantes associados à Abrasel, no Google, jan/2023 a set/2024).
 - Avaliações, telas de busca e nomes são exemplos, marcados como "exemplo" ou "Tela ilustrativa · nome fictício".
 
 | Dia | Carrossel (10h) | Reel do dia (15h) |
 | --- | --- | --- |
-| Seg 02/11 | Antes de sair de casa, ele confere 4 coisas | Reel 9 · O lanche é bom |
+| Seg 02/11 | O que ele confere antes de ir | Reel 9 · O lanche é bom |
 | Ter 03/11 | Portfólio (fixado, já existia) | Reel 1 · Quatro negócios |
 | Qua 04/11 | Recebeu 1 estrela. E agora? (3 respostas prontas) | Reel 5 · Aberto no Google |
 | Qui 05/11 | Quem somos (fixado, já existia) | Reel 12 · Cardápio completo |
@@ -22,20 +22,20 @@ Na semana seguinte os Reels continuam todo dia às 15h (13, 7, 8 e 2 de 09 a 12/
 
 Gerar de novo: `node growlift-social/_fonte/carrosseis.mjs` (ou só um: `... carrosseis.mjs 02`).
 
-## Seg 02/11 · Antes de sair de casa, ele confere 4 coisas
+## Seg 02/11 · O que ele confere antes de ir
 
 Pasta `01-antes-de-ir/` (9 slides). Palavra no ManyChat: **GOOGLE**.
 
 **Legenda**
 
 ```
-Antes de sair de casa, o seu cliente confere 4 coisas. Salve este carrossel e confira as suas 👇
+O que o seu cliente confere antes de sair de casa? Salve este carrossel e confira o seu 👇
 
-Numa pesquisa da Reclame AQUI com a Abrasel (agosto de 2024, mais de 400 consumidores), 63% disseram que escolhem bares e restaurantes pelas avaliações de outros clientes. Depois vêm a faixa de preço (23%), as fotos dos pratos e do ambiente (18%) e o cardápio online (13%). E 40% olham como o restaurante responde a uma crítica.
+Numa pesquisa da Reclame AQUI com a Abrasel (agosto de 2024, mais de 400 consumidores na plataforma do Reclame AQUI), 63% disseram que escolhem bares e restaurantes pelas avaliações de outros clientes. Na mesma pesquisa, antes de ir ao restaurante, 24% buscam as avaliações, 23% a faixa de preço, 18% as fotos dos pratos e do ambiente e 13% o cardápio online (além de endereço e horário). E 40% consideram a resposta do restaurante a uma crítica um fator fundamental pra decidir.
 
 Ou seja: antes da comida, o cliente prova o que encontra no celular.
 
-Comenta GOOGLE que a gente te manda no direct o básico pra aparecer bem pra quem procura onde comer.
+Comenta GOOGLE que a gente te manda no direct o básico pra deixar o seu perfil em dia pra quem procura onde comer.
 
 #restaurante #marketingpararestaurantes #avaliacoesgoogle #cardapiodigital #growlift
 ```
@@ -43,7 +43,7 @@ Comenta GOOGLE que a gente te manda no direct o básico pra aparecer bem pra que
 **Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
 
 ```
-Capa de carrossel: "Antes de sair de casa, ele confere 4 coisas", com um celular mostrando a busca "restaurante perto de mim" (tela ilustrativa).
+Capa de carrossel: "O que ele confere antes de ir", com um celular mostrando a busca "restaurante perto de mim" (tela ilustrativa).
 ```
 
 ## Qua 04/11 · Recebeu 1 estrela. E agora? (3 respostas prontas)
@@ -55,9 +55,9 @@ Pasta `02-avaliacao-ruim/` (9 slides). Palavra no ManyChat: **GOOGLE**.
 ```
 Recebeu uma avaliação de 1 estrela? Não apaga o app. Salve estas 3 respostas prontas 👇
 
-Num estudo da Abrasel com a Harmo, só 27% das avaliações de bares e restaurantes no Google tinham resposta (279 mil avaliações de 3.006 casas, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes disseram que olham como o restaurante responde a uma crítica.
+Num estudo da Abrasel com a Harmo, só 27% das avaliações de 3.006 bares e restaurantes associados à Abrasel tinham resposta no Google (279 mil avaliações, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes consideram a resposta à crítica um fator fundamental pra decidir.
 
-Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar. As avaliações do carrossel são exemplos, não são de clientes reais.
+Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar. As avaliações do carrossel são fictícias, só exemplos: não são de clientes reais.
 
 Comenta GOOGLE que a gente te manda mais dicas no direct.
 
@@ -90,7 +90,7 @@ Seu Perfil da Empresa no Google (o antigo Google Meu Negócio) tem estes 10 iten
 9. Fotos reais da fachada, dos pratos e do ambiente
 10. Avaliações respondidas
 
-A nota média dos bares e restaurantes no Google é 4,3 (estudo da Abrasel com a Harmo, 279 mil avaliações de 3.006 casas). A nota é só uma parte: o resto do perfil você controla hoje. A verificação é feita pelo Google.
+Num estudo com 3.006 bares e restaurantes associados à Abrasel (Abrasel e Harmo, 279 mil avaliações), a nota média no Google foi 4,3. A nota é só uma parte: o resto do perfil você controla hoje. A verificação é feita pelo Google.
 
 Comenta GOOGLE que a gente te mostra como deixar o seu perfil em dia.
 
@@ -142,7 +142,7 @@ Só o Instagram basta pro seu restaurante? A resposta honesta: não é um ou out
 
 O Instagram é ótimo pra mostrar pratos, bastidores e novidades, e os Reels chegam em quem ainda não te segue. O site organiza o que o cliente procura na hora de decidir: cardápio com preço em texto, endereço, horário e um botão pra falar com você, num endereço com o nome do seu negócio.
 
-Numa pesquisa da Reclame AQUI com a Abrasel (2024), quando o cliente encontra uma crítica, 14% vão procurar o restaurante nas redes sociais e 11% vão ao site oficial. Ele usa os dois.
+Numa pesquisa da Reclame AQUI com a Abrasel (2024), ao encontrar uma crítica, 59% leem as opiniões de outros clientes, 14% procuram o restaurante nas redes sociais e 11% vão ao site oficial. Tem gente que procura nas redes e gente que procura no site.
 
 Salve pra lembrar do combo. E se quiser ver exemplos, comenta SITE.
 

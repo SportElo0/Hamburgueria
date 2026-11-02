@@ -91,7 +91,7 @@ const step = ({ n, title, body, visual = '', tag = '' }) =>
    <p class="p" style="margin-top:26px">${body}</p>
    <div style="position:absolute;left:0;right:0;bottom:0">${visual}</div>`;
 
-const review = ({ k, label, text, reply, who = 'Cliente (exemplo)' }) =>
+const review = ({ k, label, text, reply, who = 'Cliente fictício (exemplo)' }) =>
   `<span class="pill">${label}</span>
    <div class="card" style="margin-top:34px;background:#f4f6fa;color:#121826;padding:34px 38px">
      <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:30px">${who}</b>${stars(k, 36, '#d5dbe5')}</div>
@@ -165,7 +165,7 @@ const phoneSearch = ({ query, name, rating, meta, chips = [], tag = 'Tela ilustr
         <div style="display:flex;gap:8px;margin-top:14px">${['#ffe8cc', '#fde2e2', '#dbeafe'].map((c) => `<div style="flex:1;height:84px;border-radius:14px;background:${c}"></div>`).join('')}</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px">${chips.map((c) => `<span style="padding:8px 14px;border-radius:999px;background:#eef2f8;font-size:19px;font-weight:700;color:#334">${c}</span>`).join('')}</div>
       </div>
-      <div style="margin-top:14px;text-align:center;font-size:18px;font-weight:700;color:#6a7385">${tag}</div>
+      <div style="margin-top:14px;text-align:center;font-size:21px;font-weight:800;color:#4a5568">${tag}</div>
     </div>
   </div>`;
 
@@ -217,7 +217,7 @@ const zoom = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
 
 const siteVsInsta = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
   <div class="card" style="padding:26px;text-align:center">
-    <div style="width:110px;height:110px;margin:0 auto;border-radius:30px;background:linear-gradient(135deg,#feda75,#d62976 55%,#4f5bd5);display:grid;place-items:center"><svg width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="#fff"/></svg></div>
+    <div style="width:110px;height:110px;margin:0 auto;border-radius:30px;background:#1f2838;border:1.5px solid rgba(255,255,255,.18);display:grid;place-items:center">${icon('phone', { size: 62, color: '#c6cede', width: 1.8 })}</div>
     <div style="font-size:40px;font-weight:800;margin-top:20px">Instagram</div><div class="s" style="font-size:28px;margin-top:6px">a vitrine do dia a dia</div></div>
   <div class="card" style="padding:26px;text-align:center;border-color:rgba(77,141,255,.55)">
     <div style="width:110px;height:110px;margin:0 auto;border-radius:30px;background:${TOKENS.blue};display:grid;place-items:center">${icon('site', { size: 62, color: '#fff', width: 2 })}</div>
@@ -227,54 +227,54 @@ const siteVsInsta = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:
 // ---------------------------------------------------------------------------------------------
 // Conteúdo
 
-const SRC_RA = 'Reclame AQUI e Abrasel, pesquisa com mais de 400 consumidores, agosto de 2024.';
-const SRC_HARMO = 'Abrasel e Harmo, 279 mil avaliações de 3.006 bares e restaurantes no Google, jan/2023 a set/2024.';
+const SRC_RA = 'Reclame AQUI e Abrasel, pesquisa com mais de 400 consumidores na plataforma do Reclame AQUI, agosto de 2024.';
+const SRC_HARMO = 'Abrasel e Harmo, 279 mil avaliações de 3.006 bares e restaurantes associados à Abrasel no Google, jan/2023 a set/2024.';
 
 const CARROSSEIS = [
   {
     slug: '01-antes-de-ir',
     kicker: 'O que o cliente olha',
     slides: [
-      (o) => slide(cover({ title: `Antes de sair de casa, ele confere ${B('4 coisas.')}`, sub: 'O que a pesquisa mostra sobre quem escolhe onde comer.', visual: phoneSearch({ query: 'restaurante perto', name: 'Restaurante Exemplo', rating: '4,6', meta: '', chips: ['Cardápio', 'Fotos'] }) }), { ...o, glow: 'tr' }),
+      (o) => slide(cover({ title: `O que ele confere ${B('antes de ir.')}`, sub: 'O que uma pesquisa mostra sobre quem escolhe onde comer.', visual: phoneSearch({ query: 'restaurante perto', name: 'Restaurante Exemplo', rating: '4,6', meta: '', chips: ['Cardápio', 'Fotos'] }) }), { ...o, glow: 'tr' }),
       (o) => slide(stat({ number: '63%', label: 'escolhem onde comer pelas avaliações de outros clientes.', body: 'Antes da sua comida, ele prova a opinião de quem já foi.', source: SRC_RA }), o),
-      (o) => slide(step({ n: 1, title: `As ${B('avaliações.')}`, body: 'Peça avaliação a quem gostou (um QR no balcão ajuda) e responda todas, as boas e as ruins.', tag: '63%', visual: `<div class="card" style="padding:28px 32px;display:flex;align-items:center;gap:24px"><span style="font-size:72px;font-weight:900">4,6</span>${stars(5, 48)}<span class="s" style="font-size:28px">exemplo</span></div>` }), { ...o, glow: 'br' }),
-      (o) => slide(step({ n: 2, title: `A ${B('faixa de preço.')}`, body: 'Preço em texto no cardápio online evita a pergunta “quanto custa?” e a desistência por dúvida.', tag: '23%', visual: `<div class="card" style="padding:26px 32px">${[['Prato do dia', 'R$ 00,00'], ['Porção', 'R$ 00,00'], ['Bebida', 'R$ 00,00']].map(([a, b], i) => `<div style="display:flex;justify-content:space-between;font-size:36px;font-weight:700;padding:12px 0;${i ? 'border-top:1.5px solid rgba(255,255,255,.08)' : ''}"><span>${a}</span><span style="color:${TOKENS.blueSoft}">${b}</span></div>`).join('')}<div class="ill" style="margin-top:8px">Exemplo de cardápio com preço em texto</div></div>` }), o),
-      (o) => slide(step({ n: 3, title: `Fotos dos pratos e ${B('do ambiente.')}`, body: 'Fotos reais, com boa luz. O que chega na mesa precisa ser igual ao que aparece na foto.', tag: '18%', visual: `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">${['#e8a54b', '#e86a9a', '#2fae78'].map((c) => `<div style="height:220px;border-radius:26px;background:linear-gradient(160deg,${c},#1a2130)"></div>`).join('')}</div>` }), { ...o, glow: 'bl' }),
-      (o) => slide(step({ n: 4, title: `O ${B('cardápio online.')}`, body: 'Cardápio só em foto no Instagram é difícil de ler e não aparece como texto na busca. Coloque num lugar que abre com um toque.', tag: '13%', visual: `<div class="card" style="padding:24px 30px;display:flex;align-items:center;gap:22px">${icon('pedido', { size: 70, color: TOKENS.blueBright, width: 1.8 })}<span style="font-size:36px;font-weight:700">seunegocio.com.br/cardapio</span></div>` }), o),
-      (o) => slide(stat({ number: '40%', label: 'olham como você responde a uma crítica.', body: 'Uma resposta educada pesa tanto quanto a reclamação.', source: SRC_RA }), { ...o, glow: 'tr' }),
+      (o) => slide(step({ n: 1, title: `As ${B('avaliações.')}`, body: 'Peça avaliação a todos os clientes (um QR no balcão ajuda) e responda todas, as boas e as ruins.', tag: '24% buscam', visual: `<div class="card" style="padding:28px 32px;display:flex;align-items:center;gap:24px"><span style="font-size:72px;font-weight:900">4,6</span>${stars(5, 48)}<span class="s" style="font-size:28px">exemplo</span></div>` }), { ...o, glow: 'br' }),
+      (o) => slide(step({ n: 2, title: `A ${B('faixa de preço.')}`, body: 'Preço em texto no cardápio online ajuda a evitar a pergunta “quanto custa?” e a desistência por dúvida.', tag: '23% buscam', visual: `<div class="card" style="padding:26px 32px">${[['Prato do dia', 'R$ 00,00'], ['Porção', 'R$ 00,00'], ['Bebida', 'R$ 00,00']].map(([a, b], i) => `<div style="display:flex;justify-content:space-between;font-size:36px;font-weight:700;padding:12px 0;${i ? 'border-top:1.5px solid rgba(255,255,255,.08)' : ''}"><span>${a}</span><span style="color:${TOKENS.blueSoft}">${b}</span></div>`).join('')}<div class="ill" style="margin-top:8px">Exemplo de cardápio com preço em texto</div></div>` }), o),
+      (o) => slide(step({ n: 3, title: `Fotos dos pratos e ${B('do ambiente.')}`, body: 'Fotos reais, com boa luz. O que chega na mesa precisa ser igual ao que aparece na foto.', tag: '18% buscam', visual: `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">${['#e8a54b', '#e86a9a', '#2fae78'].map((c) => `<div style="height:220px;border-radius:26px;background:linear-gradient(160deg,${c},#1a2130)"></div>`).join('')}</div>` }), { ...o, glow: 'bl' }),
+      (o) => slide(step({ n: 4, title: `O ${B('cardápio online.')}`, body: 'Cardápio só em foto no Instagram é difícil de ler e não aparece como texto na busca. Coloque num lugar que abre com um toque.', tag: '13% buscam', visual: `<div class="card" style="padding:24px 30px;display:flex;align-items:center;gap:22px">${icon('pedido', { size: 70, color: TOKENS.blueBright, width: 1.8 })}<span style="font-size:36px;font-weight:700">seunegocio.com.br/cardapio</span></div>` }), o),
+      (o) => slide(stat({ number: '40%', label: 'dizem que a resposta à crítica é fundamental pra decidir.', body: 'Responder bem, com educação, pode fazer diferença.', source: SRC_RA }), { ...o, glow: 'tr' }),
       (o) => slide(checklist({ title: `Confira o ${B('seu hoje.')}`, items: ['Avaliações respondidas, as boas e as ruins', 'Preço em texto no cardápio online', 'Fotos reais dos pratos e do ambiente', 'Cardápio que abre com um toque', 'Endereço e horário certos'] }), o),
-      (o) => slide(cta({ title: `Quer aparecer melhor ${B('pra quem procura?')}`, body: 'A gente te manda no direct o básico pra deixar tudo em dia.', word: 'GOOGLE' }), { ...o, glow: 'br' }),
+      (o) => slide(cta({ title: `Quer deixar o seu perfil ${B('em dia?')}`, body: 'A gente te manda no direct o básico pra quem procura onde comer encontrar tudo certo.', word: 'GOOGLE' }), { ...o, glow: 'br' }),
     ],
-    caption: `Antes de sair de casa, o seu cliente confere 4 coisas. Salve este carrossel e confira as suas 👇
+    caption: `O que o seu cliente confere antes de sair de casa? Salve este carrossel e confira o seu 👇
 
-Numa pesquisa da Reclame AQUI com a Abrasel (agosto de 2024, mais de 400 consumidores), 63% disseram que escolhem bares e restaurantes pelas avaliações de outros clientes. Depois vêm a faixa de preço (23%), as fotos dos pratos e do ambiente (18%) e o cardápio online (13%). E 40% olham como o restaurante responde a uma crítica.
+Numa pesquisa da Reclame AQUI com a Abrasel (agosto de 2024, mais de 400 consumidores na plataforma do Reclame AQUI), 63% disseram que escolhem bares e restaurantes pelas avaliações de outros clientes. Na mesma pesquisa, antes de ir ao restaurante, 24% buscam as avaliações, 23% a faixa de preço, 18% as fotos dos pratos e do ambiente e 13% o cardápio online (além de endereço e horário). E 40% consideram a resposta do restaurante a uma crítica um fator fundamental pra decidir.
 
 Ou seja: antes da comida, o cliente prova o que encontra no celular.
 
-Comenta GOOGLE que a gente te manda no direct o básico pra aparecer bem pra quem procura onde comer.
+Comenta GOOGLE que a gente te manda no direct o básico pra deixar o seu perfil em dia pra quem procura onde comer.
 
 #restaurante #marketingpararestaurantes #avaliacoesgoogle #cardapiodigital #growlift`,
-    alt: 'Capa de carrossel: "Antes de sair de casa, ele confere 4 coisas", com um celular mostrando a busca "restaurante perto de mim" (tela ilustrativa).',
+    alt: 'Capa de carrossel: "O que ele confere antes de ir", com um celular mostrando a busca "restaurante perto de mim" (tela ilustrativa).',
   },
   {
     slug: '02-avaliacao-ruim',
     kicker: 'Modelos prontos',
     slides: [
-      (o) => slide(cover({ title: `Recebeu 1 estrela. ${B('E agora?')}`, sub: '3 respostas prontas pra copiar e adaptar.', visual: `<div class="card" style="margin-left:auto;width:720px;background:#f4f6fa;color:#121826;padding:30px 34px;transform:rotate(-3deg)"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:28px">Cliente (exemplo)</b>${stars(1, 36, '#d5dbe5')}</div><p style="font-size:32px;line-height:1.4;margin-top:14px;color:#2b3446">“Demorou demais e a comida chegou fria.”</p></div>` }), { ...o, glow: 'tr' }),
-      (o) => slide(stat({ number: '27%', label: 'das avaliações de restaurantes no Google recebem resposta.', body: 'E 40% dos clientes olham como você responde a uma crítica (Reclame AQUI e Abrasel, 2024).', source: SRC_HARMO }), o),
-      (o) => slide(step({ n: 1, title: `Antes de ${B('responder.')}`, body: 'Respire, leia de novo e responda em até 2 dias. Curto, educado e sem brigar: quem lê é o próximo cliente.', visual: `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">${['Agradeça', 'Reconheça', 'Resolva', 'Convide'].map((t, i) => `<div class="card" style="padding:22px 14px;text-align:center"><div style="font-size:52px;font-weight:900;color:${TOKENS.blueBright}">${i + 1}</div><div style="font-size:28px;font-weight:800;margin-top:6px">${t}</div></div>`).join('')}</div>` }), { ...o, glow: 'br' }),
+      (o) => slide(cover({ title: `Recebeu 1 estrela. ${B('E agora?')}`, sub: '3 respostas prontas pra copiar e adaptar.', visual: `<div class="card" style="margin-left:auto;width:720px;background:#f4f6fa;color:#121826;padding:30px 34px;transform:rotate(-3deg)"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:28px">Cliente fictício (exemplo)</b>${stars(1, 36, '#d5dbe5')}</div><p style="font-size:32px;line-height:1.4;margin-top:14px;color:#2b3446">“Demorou demais e a comida chegou fria.”</p></div>` }), { ...o, glow: 'tr' }),
+      (o) => slide(stat({ number: '27%', label: 'das avaliações de 3.006 bares e restaurantes analisados no Google tiveram resposta.', body: 'E, pra 40% dos clientes, a resposta à crítica é fundamental pra decidir (Reclame AQUI e Abrasel, 2024).', source: SRC_HARMO }), o),
+      (o) => slide(step({ n: 1, title: `Antes de ${B('responder.')}`, body: 'Respire, leia de novo e responda o quanto antes. Curto, educado e sem brigar: quem lê é o próximo cliente.', visual: `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">${['Agradeça', 'Reconheça', 'Resolva', 'Convide'].map((t, i) => `<div class="card" style="padding:22px 14px;text-align:center"><div style="font-size:52px;font-weight:900;color:${TOKENS.blueBright}">${i + 1}</div><div style="font-size:28px;font-weight:800;margin-top:6px">${t}</div></div>`).join('')}</div>` }), { ...o, glow: 'br' }),
       (o) => slide(review({ k: 5, label: 'Avaliação boa', text: 'Comida ótima e atendimento rápido. Voltaremos!', reply: 'Que alegria ler isso, [nome]! Obrigado por escolher a gente. O [prato] é feito todo dia aqui na casa. Esperamos vocês de volta!' }), o),
       (o) => slide(review({ k: 3, label: 'Avaliação média', text: 'Comida boa, mas o lugar estava cheio e barulhento.', reply: 'Obrigado pela visita e pela sinceridade, [nome]. Nos fins de semana a casa enche mesmo: de [dia] a [dia] é mais tranquilo. Fica o convite pra voltar!' }), { ...o, glow: 'bl' }),
       (o) => slide(review({ k: 1, label: 'Avaliação ruim', text: 'Demorou demais e a comida chegou fria.', reply: 'Sentimos muito, [nome]. Não é o que queremos pra você. Pode nos chamar no WhatsApp [número]? Queremos entender o que aconteceu e resolver.' }), o),
-      (o) => slide(dodont({ title: `O que ${B('não fazer.')}`, dos: ['Responder todas, com o nome da pessoa', 'Levar o problema pro privado'], donts: ['Discutir ou acusar o cliente', 'A mesma resposta copiada pra todos', 'Oferecer brinde pra mudar a nota'] }), { ...o, glow: 'tr' }),
+      (o) => slide(dodont({ title: `O que ${B('não fazer.')}`, dos: ['Responder todas, com o nome da pessoa', 'Levar o problema pro privado'], donts: ['Discutir ou acusar o cliente', 'A mesma resposta copiada pra todos', 'Expor dados do cliente na resposta', 'Oferecer brinde pra mudar a nota'] }), { ...o, glow: 'tr' }),
       (o) => slide(checklist({ title: `A resposta ${B('em 4 passos.')}`, items: ['Agradeça pelo comentário, pelo nome', 'Reconheça o que deu errado, sem desculpa pronta', 'Leve a solução pro WhatsApp ou telefone', 'Convide a pessoa pra voltar'] }), o),
       (o) => slide(cta({ title: `Quer mais ${B('modelos assim?')}`, body: 'A gente te manda o básico pra cuidar do seu perfil no Google.', word: 'GOOGLE' }), { ...o, glow: 'br' }),
     ],
     caption: `Recebeu uma avaliação de 1 estrela? Não apaga o app. Salve estas 3 respostas prontas 👇
 
-Num estudo da Abrasel com a Harmo, só 27% das avaliações de bares e restaurantes no Google tinham resposta (279 mil avaliações de 3.006 casas, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes disseram que olham como o restaurante responde a uma crítica.
+Num estudo da Abrasel com a Harmo, só 27% das avaliações de 3.006 bares e restaurantes associados à Abrasel tinham resposta no Google (279 mil avaliações, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes consideram a resposta à crítica um fator fundamental pra decidir.
 
-Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar. As avaliações do carrossel são exemplos, não são de clientes reais.
+Quem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar. As avaliações do carrossel são fictícias, só exemplos: não são de clientes reais.
 
 Comenta GOOGLE que a gente te manda mais dicas no direct.
 
@@ -286,9 +286,9 @@ Comenta GOOGLE que a gente te manda mais dicas no direct.
     kicker: 'Checklist',
     slides: [
       (o) => slide(cover({ title: `Seu perfil no Google tem ${B('estes 10 itens?')}`, sub: 'O checklist que a gente confere antes de qualquer coisa.', visual: phoneSearch({ query: 'pizzaria aberta', name: 'Pizzaria Exemplo', rating: '4,5', meta: '', chips: ['Rota', 'Site'] }) }), { ...o, glow: 'tr' }),
-      (o) => slide(stat({ number: '4,3', label: 'é a nota média dos bares e restaurantes no Google.', body: 'Nota é só uma parte. O resto do perfil é o que você controla hoje.', source: SRC_HARMO }), o),
+      (o) => slide(stat({ number: '4,3', label: 'é a nota média de 3.006 bares e restaurantes analisados no Google.', body: 'Nota é só uma parte. O resto do perfil é o que você controla hoje.', source: SRC_HARMO }), o),
       (o) => slide(checklist({ title: `1 a 3: ${B('quem é você.')}`, items: ['Nome igual ao da fachada, sem palavra-chave inventada', 'Categoria certa (ex.: hamburgueria, pizzaria)', 'Endereço e pino do mapa no lugar certo'] }), { ...o, glow: 'br' }),
-      (o) => slide(checklist({ title: `4 a 6: ${B('quando abre.')}`, items: ['Horário de cada dia da semana', 'Horário especial de feriado (o mais esquecido)', 'Opções certas: delivery, retirada, no local'] }), o),
+      (o) => slide(checklist({ title: `4 a 6: ${B('quando abre.')}`, items: ['Horário de cada dia da semana', 'Horário especial de feriado (fácil de esquecer)', 'Opções certas: delivery, retirada, no local'] }), o),
       (o) => slide(checklist({ title: `7 e 8: ${B('como falar com você.')}`, items: ['Telefone ou WhatsApp que alguém atende', 'Link do site ou do cardápio que abre no celular'] }), { ...o, glow: 'bl' }),
       (o) => slide(checklist({ title: `9 e 10: ${B('o que ele vê.')}`, items: ['Fotos reais: fachada, pratos e ambiente', 'Avaliações respondidas e um QR no balcão pra pedir novas'] }), o),
       (o) => slide(checklist({ title: `Os ${B('10, num lugar só.')}`, cols: 2, items: ['Nome da fachada', 'Categoria', 'Endereço e pino', 'Horário', 'Feriados', 'Delivery e retirada', 'Telefone', 'Site ou cardápio', 'Fotos reais', 'Avaliações'] }), { ...o, glow: 'tr' }),
@@ -307,7 +307,7 @@ Comenta GOOGLE que a gente te manda mais dicas no direct.
 9. Fotos reais da fachada, dos pratos e do ambiente
 10. Avaliações respondidas
 
-A nota média dos bares e restaurantes no Google é 4,3 (estudo da Abrasel com a Harmo, 279 mil avaliações de 3.006 casas). A nota é só uma parte: o resto do perfil você controla hoje. A verificação é feita pelo Google.
+Num estudo com 3.006 bares e restaurantes associados à Abrasel (Abrasel e Harmo, 279 mil avaliações), a nota média no Google foi 4,3. A nota é só uma parte: o resto do perfil você controla hoje. A verificação é feita pelo Google.
 
 Comenta GOOGLE que a gente te mostra como deixar o seu perfil em dia.
 
@@ -348,9 +348,9 @@ Salve e manda pra quem cuida das fotos aí. E se quiser ver essas fotos num site
     kicker: 'Site ou Instagram?',
     slides: [
       (o) => slide(cover({ title: `Só o Instagram ${B('basta?')}`, sub: 'O que cada um faz pelo seu restaurante, sem exagero.', visual: siteVsInsta }), { ...o, glow: 'tr' }),
-      (o) => slide(step({ n: 1, title: `Não é ${B('um ou outro.')}`, body: 'O Instagram mostra o dia a dia pra quem já te segue. O site organiza tudo pra quem procura você agora, no Google ou no link que você manda.', visual: `<div class="card" style="padding:26px 30px"><p class="s" style="font-size:28px">Na pesquisa da Reclame AQUI com a Abrasel (2024), ao ver uma crítica, 14% procuram o restaurante nas redes sociais e 11% vão ao site oficial.</p></div>` }), o),
+      (o) => slide(step({ n: 1, title: `Não é ${B('um ou outro.')}`, body: 'O Instagram mostra o dia a dia pra quem já te segue. O site organiza tudo pra quem procura você agora, no Google ou no link que você manda.', visual: `<div class="card" style="padding:26px 30px"><p class="s" style="font-size:28px">Na pesquisa da Reclame AQUI com a Abrasel (2024), ao ver uma crítica, 59% leem opiniões de outros clientes, 14% procuram o restaurante nas redes sociais e 11% vão ao site oficial.</p></div>` }), o),
       (o) => slide(checklist({ title: `O Instagram ${B('faz bem.')}`, items: ['Mostrar pratos, bastidores e novidades', 'Reels que alcançam quem ainda não te segue', 'Conversa rápida pelo direct'] }), { ...o, glow: 'br' }),
-      (o) => slide(dodont({ title: `Onde ele ${B('não alcança.')}`, dos: ['Use o Instagram pra mostrar e conversar'], donts: ['Cardápio só em foto (difícil de ler)', 'Depender só de quem já te segue', 'Endereço e horário perdidos nos posts'] }), o),
+      (o) => slide(dodont({ title: `Onde ele ${B('não alcança.')}`, dos: ['Use o Instagram pra mostrar e conversar'], donts: ['Cardápio só em foto (difícil de ler)', 'Depender só do algoritmo pra ser achado', 'Endereço e horário perdidos nos posts'] }), o),
       (o) => slide(checklist({ title: `O site ${B('faz bem.')}`, items: ['Cardápio com preço em texto', 'Endereço, mapa e horário num lugar', 'Botão de WhatsApp ou de pedido', 'Domínio com o nome do seu negócio'] }), { ...o, glow: 'bl' }),
       (o) => slide(compare({ title: `Lado a ${B('lado.')}`, a: 'Instagram', b: 'Site', rows: [['Fotos e Reels do dia a dia', true, 'algumas'], ['Cardápio com preço em texto', false, true], ['Endereço, mapa e horário fixos', 'na bio', true], ['Pedido ou WhatsApp com um toque', 'no perfil', true], ['O nome do negócio no endereço', false, true]] }), o),
       (o) => slide(checklist({ title: `O ${B('combo')} que funciona.`, items: ['Instagram pra mostrar e atrair', 'Link da bio levando pro seu site', 'Site com cardápio, horário e botão de contato', 'Perfil no Google apontando pro mesmo site'] }), { ...o, glow: 'tr' }),
@@ -360,7 +360,7 @@ Salve e manda pra quem cuida das fotos aí. E se quiser ver essas fotos num site
 
 O Instagram é ótimo pra mostrar pratos, bastidores e novidades, e os Reels chegam em quem ainda não te segue. O site organiza o que o cliente procura na hora de decidir: cardápio com preço em texto, endereço, horário e um botão pra falar com você, num endereço com o nome do seu negócio.
 
-Numa pesquisa da Reclame AQUI com a Abrasel (2024), quando o cliente encontra uma crítica, 14% vão procurar o restaurante nas redes sociais e 11% vão ao site oficial. Ele usa os dois.
+Numa pesquisa da Reclame AQUI com a Abrasel (2024), ao encontrar uma crítica, 59% leem as opiniões de outros clientes, 14% procuram o restaurante nas redes sociais e 11% vão ao site oficial. Tem gente que procura nas redes e gente que procura no site.
 
 Salve pra lembrar do combo. E se quiser ver exemplos, comenta SITE.
 
