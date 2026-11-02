@@ -1,0 +1,11 @@
+{
+  "_sobre": "O que a Growlift faz de verdade e pode aparecer num carrossel. Um bloco 'cta' que cita a Growlift precisa apontar para um destes ids (campo 'fato'). Nada fora daqui. Atualize só com origem conferida.",
+  "fatos": [
+    { "id": "dm-cardapio", "texto": "Quem comenta CARDÁPIO recebe no direct os exemplos de site e cardápio online (botão 'Ver os modelos' para growlift.com.br/#modelos).", "origem": "growlift-social/05-reels/automacao-comenta-reels-11-13.md (Reel 12 · CARDÁPIO)" },
+    { "id": "dm-google", "texto": "Quem comenta GOOGLE recebe no direct o básico para deixar o perfil do Google em dia.", "origem": "growlift-social/05-reels/automacao-comenta-reels-11-13.md" },
+    { "id": "dm-site", "texto": "Quem comenta SITE recebe no direct como funciona o site e o diagnóstico grátis.", "origem": "growlift-social/05-reels/automacao-comenta-reels-11-13.md" },
+    { "id": "pedido-tela-cozinha", "texto": "No plano Grow, o pedido feito pelo site da loja (com as observações escritas pelo cliente) aparece na tela da cozinha do painel, com alerta.", "origem": "plataforma: sistema de pedidos (OrdersBoard) e Reel 8; site growlift.com.br#planos" },
+    { "id": "planos", "texto": "Planos Start, Grow e Scale, nos termos do site.", "origem": "growlift/index.html" },
+    { "id": "diagnostico-gratis", "texto": "Diagnóstico grátis pelo site; a prévia chega pelo WhatsApp.", "origem": "growlift/index.html" }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "_sobre": "Preferências do Lucas e do Antônio sobre capas, textos e layouts. Valem para os PRÓXIMOS carrosséis (roteiros em rascunho); nunca mudam um roteiro já aprovado. Adicione com: node feedback.mjs <capa|texto|layout|geral> \"o que vocês acharam\" [--evitar palavra | --max-capa N | --sem-componente nome | --capa-com componente].",
+  "regras": [
+    { "id": "p1", "data": "2026-11-02", "sobre": "texto", "nota": "Sem avisos de 'história fictícia', 'nome fictício' ou 'não garantimos' nos posts; só o 'Projeto conceito' pequeno em site conceito.", "verificar": { "tipo": "palavra-evitar", "valor": "fictício" } },
+    { "id": "p2", "data": "2026-11-02", "sobre": "geral", "nota": "Conteúdo útil para o dono do negócio, não propaganda da Growlift; a marca só no fim.", "verificar": null },
+    { "id": "p3", "data": "2026-11-02", "sobre": "layout", "nota": "Nada de slide só com o logo; variar diagramas, comparações, mockups e cenas.", "verificar": null },
+    { "id": "p4", "data": "2026-11-02", "sobre": "texto", "nota": "Respostas e directs nunca dizem 'mensagem automática' nem 'robô'.", "verificar": { "tipo": "palavra-evitar", "valor": "automática" } },
+    { "id": "p5", "data": "2026-11-02", "sobre": "capa", "nota": "Gancho específico com o problema real; nada de 'dicas' ou 'tudo sobre'.", "verificar": { "tipo": "max-palavras-capa", "valor": 12 } }
+  ]
+}

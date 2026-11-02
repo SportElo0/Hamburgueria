@@ -1,0 +1,358 @@
+{
+  "slug": "b-x-especial",
+  "serie": "Cardápio que se explica",
+  "status": "rascunho",
+  "palavra": "CARDÁPIO",
+  "fontes": [],
+  "slides": [
+    {
+      "funcao": "gancho",
+      "arranjo": "palco",
+      "gap": 50,
+      "brilho": "tr",
+      "blocos": [
+        {
+          "tipo": "cardapio",
+          "flex": 1,
+          "inclinar": -2.5,
+          "titulo": "Lanches",
+          "tamNome": 46,
+          "itens": [
+            {
+              "nome": "X-Especial",
+              "marca": "?"
+            },
+            {
+              "nome": "X-Da Casa",
+              "apagado": true
+            },
+            {
+              "nome": "Combo 2",
+              "apagado": true
+            }
+          ]
+        },
+        {
+          "tipo": "titulo",
+          "tam": "capa",
+          "texto": "“X-Especial” **não diz nada** pra quem nunca veio."
+        },
+        {
+          "tipo": "texto",
+          "tam": "p",
+          "texto": "Como escrever um cardápio que se explica sozinho. →"
+        }
+      ]
+    },
+    {
+      "funcao": "problema",
+      "arranjo": "pilha",
+      "gap": 40,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "O nome é óbvio **pra quem já é cliente**."
+        },
+        {
+          "tipo": "colunas",
+          "flex": 1,
+          "a": {
+            "titulo": "Quem já veio",
+            "tom": "bom",
+            "itens": [
+              "Sabe o que vem",
+              "Pede sem pensar"
+            ]
+          },
+          "b": {
+            "titulo": "Quem chegou agora",
+            "tom": "ruim",
+            "itens": [
+              "Vê só o nome",
+              "Precisa perguntar",
+              "Ou escolhe o que já conhece"
+            ]
+          }
+        },
+        {
+          "tipo": "texto",
+          "tam": "m",
+          "texto": "O cardápio fala com quem **ainda não te conhece**."
+        }
+      ]
+    },
+    {
+      "funcao": "anatomia",
+      "arranjo": "pilha",
+      "gap": 34,
+      "brilho": "bl",
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "A anatomia de uma boa descrição"
+        },
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "Quatro partes, **uma linha**."
+        },
+        {
+          "tipo": "anatomia",
+          "flex": 1,
+          "partes": [
+            {
+              "trecho": "X-Especial",
+              "depois": ":",
+              "rotulo": "Nome"
+            },
+            {
+              "trecho": "pão brioche, duas carnes, cheddar e bacon",
+              "depois": ".",
+              "rotulo": "O que vem",
+              "nota": "os ingredientes principais"
+            },
+            {
+              "trecho": "Serve 1 pessoa",
+              "depois": ".",
+              "rotulo": "Tamanho"
+            },
+            {
+              "trecho": "Contém glúten, leite e ovo",
+              "depois": ".",
+              "rotulo": "Aviso",
+              "nota": "completo, conferido com a cozinha"
+            }
+          ]
+        },
+        {
+          "tipo": "selo",
+          "texto": "Exemplo: use os dados do seu prato"
+        }
+      ]
+    },
+    {
+      "funcao": "antes e depois 1",
+      "arranjo": "pilha",
+      "gap": 40,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "Do nome **à descrição**."
+        },
+        {
+          "tipo": "antesDepois",
+          "flex": 1,
+          "antes": {
+            "rotulo": "Hoje",
+            "nome": "X-Especial",
+            "desc": ""
+          },
+          "depois": {
+            "rotulo": "Com descrição",
+            "nome": "X-Especial",
+            "desc": "Pão brioche, duas carnes, cheddar e bacon. Serve 1 pessoa."
+          }
+        },
+        {
+          "tipo": "texto",
+          "tam": "p",
+          "texto": "O nome continua o mesmo. Só ganhou o que faltava."
+        }
+      ]
+    },
+    {
+      "funcao": "antes e depois 2: quantidade",
+      "arranjo": "lado",
+      "cols": [
+        0.8,
+        1.2
+      ],
+      "gap": 44,
+      "brilho": "br",
+      "blocos": [
+        {
+          "tipo": "grupo",
+          "arranjo": "pilha",
+          "gap": 28,
+          "blocos": [
+            {
+              "tipo": "rotulo",
+              "texto": "Porções e combos"
+            },
+            {
+              "tipo": "titulo",
+              "tam": "g",
+              "texto": "Diga **quanto vem**."
+            },
+            {
+              "tipo": "texto",
+              "tam": "m",
+              "texto": "“Serve 2” responde a pergunta mais comum antes de ela chegar no WhatsApp."
+            }
+          ]
+        },
+        {
+          "tipo": "cardapio",
+          "titulo": "Porções",
+          "tamNome": 46,
+          "tamDesc": 36,
+          "itens": [
+            {
+              "nome": "Combo 2",
+              "marca": "x"
+            },
+            {
+              "nome": "Porção mista",
+              "marca": "x"
+            },
+            {
+              "nome": "Porção mista",
+              "desc": "Batata, calabresa e frango empanado. Serve 2 pessoas.",
+              "marca": "ok"
+            },
+            {
+              "nome": "Combo 2",
+              "desc": "2 X-Salada, batata média e 2 refrigerantes lata.",
+              "marca": "ok"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "funcao": "erros comuns",
+      "arranjo": "pilha",
+      "gap": 40,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "4 coisas que **confundem** quem chega."
+        },
+        {
+          "tipo": "lista",
+          "flex": 1,
+          "marcador": "x",
+          "gap": 30,
+          "itens": [
+            [
+              "Abreviação da casa",
+              "“c/ cb e mb” só a cozinha entende"
+            ],
+            [
+              "“Consulte” no lugar do preço",
+              "o preço precisa estar visível pro cliente"
+            ],
+            [
+              "Foto que não bate com o prato",
+              "a expectativa chega antes da comida"
+            ],
+            [
+              "O mesmo texto em todos os itens",
+              "“delicioso” não descreve nada"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "funcao": "cuidado: alergênicos",
+      "arranjo": "pilha",
+      "gap": 34,
+      "brilho": "tl",
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "Com cuidado"
+        },
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "Algum ingrediente pode fazer mal a alguém? **Escreva.**"
+        },
+        {
+          "tipo": "cardapio",
+          "tamNome": 38,
+          "tamDesc": 30,
+          "itens": [
+            {
+              "nome": "Molho da casa",
+              "desc": "Maionese temperada com alho e ervas. Contém ovo.",
+              "marca": "ok"
+            }
+          ]
+        },
+        {
+          "tipo": "lista",
+          "marcador": "ponto",
+          "tamTexto": 32,
+          "gap": 14,
+          "itens": [
+            "Escreva todos os alergênicos que a cozinha confirmar",
+            "Divide equipamento? Avise do contato com outros alimentos",
+            "Mudou a receita? Atualize o cardápio",
+            "Na dúvida, não afirme: peça que o cliente fale com a loja"
+          ],
+          "flex": 1
+        }
+      ]
+    },
+    {
+      "funcao": "modelo + tarefa",
+      "arranjo": "pilha",
+      "gap": 40,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "O modelo **pra copiar**."
+        },
+        {
+          "tipo": "modelo",
+          "flex": 1,
+          "texto": "[Nome]: [ingredientes principais]. [Tamanho ou quantas pessoas serve]. [Aviso, se tiver: contém …].",
+          "tam": 46
+        },
+        {
+          "tipo": "tarefa",
+          "icone": "anotar",
+          "rotulo": "Tarefa de hoje",
+          "texto": "Reescreva só os 3 itens mais pedidos."
+        }
+      ]
+    },
+    {
+      "funcao": "fecho útil + pedido",
+      "arranjo": "pilha",
+      "gap": 34,
+      "brilho": "tr",
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "Cardápio claro **responde antes da pergunta**."
+        },
+        {
+          "tipo": "resumo",
+          "flex": 1,
+          "itens": [
+            "Nome + o que vem",
+            "Tamanho ou quantos serve",
+            "Aviso completo, conferido com a cozinha",
+            "Sem abreviação da casa"
+          ]
+        },
+        {
+          "tipo": "cta",
+          "palavra": "CARDÁPIO",
+          "texto": "Comenta e a gente te manda no direct exemplos de cardápio online.",
+          "fato": "dm-cardapio"
+        }
+      ]
+    }
+  ],
+  "legenda": "“X-Especial” não diz nada pra quem nunca veio 👇\n\nQuem já é cliente sabe o que vem. Quem chegou agora vê só o nome e precisa perguntar.\n\nUma boa descrição tem quatro partes: o nome, o que vem, o tamanho (ou quantas pessoas serve) e o aviso de alergênicos, quando tiver, como “contém leite”. O aviso precisa estar completo, conferido com a cozinha e atualizado sempre que a receita mudar. (Exemplo ilustrativo: os alergênicos do seu prato dependem da sua receita. Dúvida sobre as regras? Fale com a vigilância sanitária ou com um nutricionista.)\n\nTarefa de hoje: reescreva só os 3 itens mais pedidos. Salve o modelo.\n\nComenta CARDÁPIO que a gente te manda no direct exemplos de cardápio online.\n\n#restaurante #cardapio #cardapiodigital #lanchonete #growlift",
+  "alt": "Capa de carrossel: um cardápio de papel de exemplo com o item \"X-Especial\" marcado com um ponto de interrogação e o título \"X-Especial não diz nada pra quem nunca veio\"."
+}

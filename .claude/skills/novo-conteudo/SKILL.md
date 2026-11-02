@@ -17,14 +17,16 @@ Tudo mora em `growlift-social/` e aparece no painel (`/painel/conteudos`) depois
 
 ## Regras da marca
 
-- **Nada inventado:** nenhum cliente, depoimento, número de vendas ou resultado. Prazos e planos só como estão no site e no contrato (site no ar em até 7 dias úteis; alterações: Start 1, Grow 2, Lift 4 por mês, cada uma em até 2 dias úteis).
-- **Portfólio:** só os projetos conceito (Brasa Burger, Varanda Bistrô, Doce Ateliê, Aurora Advocacia), sempre marcados "Projeto conceito · nome fictício", e o próprio site da Growlift. Marcas reais de clientes só com autorização por escrito.
-- **Pessoas:** só fotos autorizadas (Lucas e Antônio já estão em `_fonte/assets/`).
+- **Nada inventado:** nenhum cliente, depoimento, número de vendas ou resultado. Prazos e planos só como estão no site (`growlift/index.html`) e no contrato. Os planos atuais são **Start, Grow e Scale** (o antigo "Lift" não existe mais); confira prazos e alterações no site antes de citar.
+- **Portfólio:** só os projetos conceito (Brasa Burger, Varanda Bistrô, Doce Ateliê, Aurora Advocacia), com o selo pequeno "Projeto conceito" (decisão de 02/11: sem "nome fictício" nem "não garantimos" nos posts), e o próprio site da Growlift. Marcas reais de clientes só com autorização por escrito.
+- **Pessoas:** só fotos autorizadas. Decisão de 01/11: **sem foto do Lucas e do Antônio** nos posts e Reels por enquanto (use bonequinhos desenhados).
 - **Preço em post:** só com as condições junto (regra do consumidor); prefira mandar para o site.
 - **Nunca prometer** faturamento, posição no Google, "melhor" ou "líder".
-- **Nada é publicado** no Instagram nem no WhatsApp: vocês entregam a peça, quem aprova e posta são eles.
+- **Nada é publicado sem aprovação:** posts entram na Agenda do painel, e só saem no Instagram depois que eles aprovam lá (o painel publica na hora marcada). WhatsApp: vocês entregam o texto, eles enviam.
 
 ## Como produzir
+
+- **Carrossel:** use a skill `carrossel-editorial` (gerador novo em `_fonte/editorial/`, com conferência automática e prévia). Os 12 carrosséis de 02 a 15/11 seguem em `_fonte/carrosseis.mjs`, só para manutenção.
 
 - **Imagens** (story 1080×1920, post 1080×1350): modelos em `_fonte/pecas.mjs`, textos em `_fonte/gerar.mjs`. Rode `node growlift-social/_fonte/gerar.mjs` e confira as imagens geradas.
 - **Reels** (MP4 1080×1920, 30 fps, sem som): `_fonte/reels/gerar-reels.mjs` (cenas em HTML; gravações do site real com `captureSite`). Rode só o que mudou: `node growlift-social/_fonte/reels/gerar-reels.mjs 3`. Para o Reel 8, `npm run build` em `plataforma/` antes.

@@ -1,0 +1,387 @@
+{
+  "slug": "a-conte-os-toques",
+  "serie": "Do Instagram ao pedido",
+  "status": "rascunho",
+  "palavra": "CARDÁPIO",
+  "fontes": [],
+  "slides": [
+    {
+      "funcao": "gancho",
+      "arranjo": "palco",
+      "gap": 46,
+      "brilho": "tr",
+      "blocos": [
+        {
+          "tipo": "grupo",
+          "arranjo": "lado",
+          "flex": 1,
+          "cols": [
+            0.95,
+            1.05
+          ],
+          "gap": 20,
+          "alinharItens": "center",
+          "blocos": [
+            {
+              "tipo": "contador",
+              "icone": "toque",
+              "n": "?",
+              "rotulo": "toques até conseguir pedir"
+            },
+            {
+              "tipo": "celular",
+              "largura": 370,
+              "altura": 540,
+              "inclinar": 4,
+              "direita": true,
+              "tela": {
+                "tipo": "perfil",
+                "nome": "Lanchonete Exemplo",
+                "bio": "Lanches artesanais\nPedidos pelo link abaixo",
+                "link": "seulink.com.br/lanchonete"
+              }
+            }
+          ]
+        },
+        {
+          "tipo": "titulo",
+          "tam": "capa",
+          "texto": "Seu cliente quer pedir. **Quantos toques** até conseguir?"
+        },
+        {
+          "tipo": "texto",
+          "tam": "p",
+          "texto": "Arraste e conte junto. →"
+        }
+      ]
+    },
+    {
+      "funcao": "cena: o caminho inteiro",
+      "arranjo": "pilha",
+      "gap": 30,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "Um caminho comum, **parada por parada**."
+        },
+        {
+          "tipo": "fluxo",
+          "flex": 1,
+          "compacto": true,
+          "tamTexto": 32,
+          "passos": [
+            {
+              "t": "Abre o perfil",
+              "icone": "perfil"
+            },
+            {
+              "t": "Toca no link da bio",
+              "icone": "link"
+            },
+            {
+              "t": "Cai numa lista de links",
+              "icone": "lista",
+              "alerta": true,
+              "nota": "qual é o certo?"
+            },
+            {
+              "t": "Abre o cardápio em PDF",
+              "icone": "arquivo",
+              "alerta": true
+            },
+            {
+              "t": "Dá zoom pra achar o preço",
+              "icone": "lupa",
+              "alerta": true
+            },
+            {
+              "t": "Pergunta no WhatsApp",
+              "icone": "falar",
+              "alerta": true,
+              "nota": "e espera"
+            }
+          ]
+        },
+        {
+          "tipo": "selo",
+          "texto": "Exemplo ilustrativo"
+        }
+      ]
+    },
+    {
+      "funcao": "trava 1: o cardápio",
+      "arranjo": "lado",
+      "cols": [
+        0.9,
+        1.1
+      ],
+      "gap": 50,
+      "brilho": "bl",
+      "blocos": [
+        {
+          "tipo": "celular",
+          "largura": 380,
+          "altura": 700,
+          "tela": {
+            "tipo": "pdf",
+            "lupa": "quanto custa?",
+            "altura": 520
+          }
+        },
+        {
+          "tipo": "grupo",
+          "arranjo": "pilha",
+          "gap": 28,
+          "blocos": [
+            {
+              "tipo": "rotulo",
+              "texto": "Parada 1"
+            },
+            {
+              "tipo": "titulo",
+              "tam": "m",
+              "texto": "O cardápio que precisa de **zoom**."
+            },
+            {
+              "tipo": "texto",
+              "tam": "m",
+              "texto": "Foto ou PDF: o cliente amplia, procura o preço, arrasta, amplia de novo."
+            },
+            {
+              "tipo": "texto",
+              "tam": "p",
+              "texto": "Cada zoom é mais um passo antes do pedido."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "funcao": "trava 2: a pergunta",
+      "arranjo": "pilha",
+      "gap": 34,
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "Parada 2"
+        },
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "A pergunta que **o cardápio** devia responder."
+        },
+        {
+          "tipo": "grupo",
+          "arranjo": "lado",
+          "cols": [
+            1.05,
+            0.95
+          ],
+          "gap": 40,
+          "blocos": [
+            {
+              "tipo": "celular",
+              "largura": 410,
+              "altura": 640,
+              "tela": {
+                "tipo": "chat",
+                "nome": "Lanchonete Exemplo",
+                "msgs": [
+                  {
+                    "de": "cliente",
+                    "t": "Oi! Quanto tá o X-Salada?"
+                  },
+                  {
+                    "espera": "sem resposta ainda"
+                  },
+                  {
+                    "de": "cliente",
+                    "t": "E entrega no meu bairro?"
+                  },
+                  {
+                    "espera": "sem resposta ainda"
+                  }
+                ]
+              }
+            },
+            {
+              "tipo": "grupo",
+              "arranjo": "pilha",
+              "gap": 26,
+              "blocos": [
+                {
+                  "tipo": "texto",
+                  "tam": "m",
+                  "texto": "Vira pergunta:"
+                },
+                {
+                  "tipo": "lista",
+                  "marcador": "ponto",
+                  "tamTexto": 38,
+                  "gap": 18,
+                  "itens": [
+                    "Preço",
+                    "Bairros de entrega",
+                    "Horário de hoje",
+                    "Pagamento"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "funcao": "trava 3: o link",
+      "arranjo": "lado",
+      "cols": [
+        1.15,
+        0.85
+      ],
+      "gap": 40,
+      "brilho": "br",
+      "blocos": [
+        {
+          "tipo": "grupo",
+          "arranjo": "pilha",
+          "gap": 28,
+          "blocos": [
+            {
+              "tipo": "rotulo",
+              "texto": "Parada 3"
+            },
+            {
+              "tipo": "titulo",
+              "tam": "m",
+              "texto": "O link que leva **pra outra lista**."
+            },
+            {
+              "tipo": "texto",
+              "tam": "m",
+              "texto": "Quem quer pedir procura um botão claro. Seis parecidos viram dúvida."
+            }
+          ]
+        },
+        {
+          "tipo": "celular",
+          "largura": 360,
+          "altura": 760,
+          "tela": {
+            "tipo": "links",
+            "nome": "Lanchonete Exemplo",
+            "itens": [
+              "Promoções",
+              "Cardápio",
+              "Cardápio novo",
+              "Avaliações",
+              "Onde estamos",
+              "WhatsApp"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "funcao": "comparação",
+      "arranjo": "pilha",
+      "gap": 36,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "O mesmo pedido, **dois caminhos**."
+        },
+        {
+          "tipo": "colunas",
+          "flex": 1,
+          "a": {
+            "titulo": "Caminho longo",
+            "tom": "ruim",
+            "numerar": true,
+            "itens": [
+              "Lista de links",
+              "PDF com zoom",
+              "Pergunta no WhatsApp",
+              "Espera a resposta",
+              "Pede"
+            ]
+          },
+          "b": {
+            "titulo": "Caminho curto",
+            "tom": "bom",
+            "numerar": true,
+            "itens": [
+              "Toca no link",
+              "Vê o cardápio com preço",
+              "Pede"
+            ],
+            "rodape": "Menos paradas tende a facilitar o pedido."
+          }
+        },
+        {
+          "tipo": "selo",
+          "texto": "Exemplo ilustrativo"
+        }
+      ]
+    },
+    {
+      "funcao": "exercício",
+      "arranjo": "pilha",
+      "gap": 30,
+      "brilho": "tr",
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "Para fazer hoje"
+        },
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "Peça pra alguém **de fora** pedir pelo seu Instagram."
+        },
+        {
+          "tipo": "ficha",
+          "flex": 1,
+          "titulo": "O teste",
+          "linhas": [
+            "Quantos toques até conseguir pedir?",
+            "Onde travou?",
+            "O que precisou perguntar?"
+          ],
+          "rodape": "Sem ajudar. Só observe e anote."
+        }
+      ]
+    },
+    {
+      "funcao": "fecho útil + pedido",
+      "arranjo": "pilha",
+      "gap": 34,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "Encurte o caminho **até o pedido**."
+        },
+        {
+          "tipo": "resumo",
+          "flex": 1,
+          "itens": [
+            "Um link que leva direto ao cardápio",
+            "Cardápio que abre com um toque",
+            "Preço e entrega escritos"
+          ]
+        },
+        {
+          "tipo": "cta",
+          "palavra": "CARDÁPIO",
+          "texto": "Comenta e a gente te manda no direct exemplos de site e cardápio online.",
+          "fato": "dm-cardapio"
+        }
+      ]
+    }
+  ],
+  "legenda": "Seu cliente quer pedir. Quantos toques até conseguir? 👇\n\nFaça o teste: peça pra alguém de fora pedir pelo seu Instagram, sem ajudar. Conte os toques, veja onde travou e o que precisou perguntar.\n\nAs paradas mais comuns: lista de links sem um botão claro, cardápio em foto ou PDF que pede zoom, e preço ou entrega que só se descobre perguntando no WhatsApp.\n\nSalve pra fazer o teste hoje à noite.\n\nComenta CARDÁPIO que a gente te manda no direct exemplos de site e cardápio online.\n\n#restaurante #lanchonete #cardapiodigital #delivery #growlift",
+  "alt": "Capa de carrossel: um celular com o perfil de uma lanchonete de exemplo e um contador de toques, com o título \"Seu cliente quer pedir. Quantos toques até conseguir?\"."
+}

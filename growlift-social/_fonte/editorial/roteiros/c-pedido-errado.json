@@ -1,0 +1,377 @@
+{
+  "slug": "c-pedido-errado",
+  "serie": "Pedido certo",
+  "status": "rascunho",
+  "palavra": "PEDIDO",
+  "fontes": [],
+  "slides": [
+    {
+      "funcao": "gancho",
+      "arranjo": "palco",
+      "gap": 50,
+      "brilho": "tr",
+      "blocos": [
+        {
+          "tipo": "comanda",
+          "flex": 1,
+          "centro": true,
+          "largura": 520,
+          "inclinar": 3,
+          "titulo": "COMANDA",
+          "numero": "nº 47",
+          "linhas": [
+            "1 x-sal s/ceb",
+            {
+              "t": "+ bat md",
+              "apagado": true
+            },
+            "1 refri lt",
+            {
+              "t": "obs: ????",
+              "apagado": true
+            }
+          ]
+        },
+        {
+          "tipo": "titulo",
+          "tam": "capa",
+          "texto": "O pedido saiu errado. **Onde começou a falha?**"
+        },
+        {
+          "tipo": "texto",
+          "tam": "p",
+          "texto": "Um caminho comum, ponto por ponto. →"
+        }
+      ]
+    },
+    {
+      "funcao": "mapa do caminho",
+      "arranjo": "pilha",
+      "gap": 30,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "Um pedido passa **por várias mãos**."
+        },
+        {
+          "tipo": "linhaTempo",
+          "flex": 1,
+          "ativo": [
+            1,
+            2,
+            4
+          ],
+          "pontos": [
+            {
+              "t": "O cliente pede",
+              "icone": "falar"
+            },
+            {
+              "t": "Alguém anota",
+              "icone": "anotar",
+              "nota": "ponto 1"
+            },
+            {
+              "t": "Confirma com o cliente",
+              "icone": "check",
+              "nota": "ponto 2"
+            },
+            {
+              "t": "A cozinha lê e monta",
+              "icone": "panela",
+              "nota": "ponto 3"
+            },
+            {
+              "t": "Fecha o saco e sai",
+              "icone": "saco",
+              "nota": "ponto 4"
+            }
+          ]
+        },
+        {
+          "tipo": "selo",
+          "texto": "Exemplo de caminho: o seu pode ter outros pontos"
+        }
+      ]
+    },
+    {
+      "funcao": "ponto 1: anotar",
+      "arranjo": "pilha",
+      "gap": 34,
+      "brilho": "bl",
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "Ponto 1 · Anotar"
+        },
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "Observação **sempre no mesmo lugar**."
+        },
+        {
+          "tipo": "grupo",
+          "arranjo": "lado",
+          "gap": 30,
+          "alinharItens": "center",
+          "blocos": [
+            {
+              "tipo": "comanda",
+              "largura": 420,
+              "inclinar": -2,
+              "titulo": "ANTES",
+              "linhas": [
+                {
+                  "t": "1 x-sal s/ceb",
+                  "tam": 34
+                },
+                {
+                  "t": "+bat md c/ ched?",
+                  "tam": 34
+                },
+                {
+                  "t": "1 refri",
+                  "tam": 34
+                }
+              ]
+            },
+            {
+              "tipo": "comanda",
+              "largura": 440,
+              "legivel": true,
+              "titulo": "DEPOIS",
+              "linhas": [
+                [
+                  "ITEM",
+                  "1 X-Salada"
+                ],
+                [
+                  "SEM",
+                  "cebola"
+                ],
+                [
+                  "ITEM",
+                  "1 Batata média"
+                ],
+                [
+                  "COM",
+                  "cheddar"
+                ],
+                [
+                  "ITEM",
+                  "1 Refri lata"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "tipo": "texto",
+          "tam": "p",
+          "texto": "Combine com a equipe: SEM, COM e TROCAR."
+        }
+      ]
+    },
+    {
+      "funcao": "ponto 2: confirmar",
+      "arranjo": "lado",
+      "cols": [
+        1,
+        1
+      ],
+      "gap": 40,
+      "brilho": "br",
+      "blocos": [
+        {
+          "tipo": "grupo",
+          "arranjo": "pilha",
+          "gap": 28,
+          "blocos": [
+            {
+              "tipo": "rotulo",
+              "texto": "Ponto 2 · Confirmar"
+            },
+            {
+              "tipo": "titulo",
+              "tam": "m",
+              "texto": "Repita o pedido **antes da cozinha**."
+            },
+            {
+              "tipo": "texto",
+              "tam": "m",
+              "texto": "Por escrito, o cliente confere e fica registrado."
+            }
+          ]
+        },
+        {
+          "tipo": "celular",
+          "largura": 440,
+          "altura": 820,
+          "tela": {
+            "tipo": "chat",
+            "nome": "Cliente",
+            "tam": 27,
+            "msgs": [
+              {
+                "de": "cliente",
+                "t": "Um X-Salada sem cebola, batata média com cheddar e um refri lata"
+              },
+              {
+                "de": "loja",
+                "t": "Confirmando:\nX-Salada SEM cebola\nBatata média COM cheddar\nRefri lata\nEntrega na Rua Exemplo, 100. Certo?"
+              },
+              {
+                "de": "cliente",
+                "t": "Isso!"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "funcao": "ponto 3: a cozinha lê",
+      "arranjo": "pilha",
+      "gap": 40,
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "Ponto 3 · A cozinha lê"
+        },
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "Se precisa adivinhar, **já errou**."
+        },
+        {
+          "tipo": "colunas",
+          "flex": 1,
+          "a": {
+            "titulo": "Difícil de ler",
+            "tom": "ruim",
+            "itens": [
+              "Letra apertada",
+              "Observação no meio da linha",
+              "Vias misturadas no balcão"
+            ]
+          },
+          "b": {
+            "titulo": "Fácil de ler",
+            "tom": "bom",
+            "itens": [
+              "Uma via só pra cozinha",
+              "Letra de forma",
+              "SEM e COM em destaque"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "funcao": "ponto 4: conferir",
+      "arranjo": "pilha",
+      "gap": 36,
+      "brilho": "tl",
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "Ponto 4 · Conferir"
+        },
+        {
+          "tipo": "titulo",
+          "tam": "m",
+          "texto": "Antes de fechar o saco, **a comanda na mão**."
+        },
+        {
+          "tipo": "fluxo",
+          "flex": 1,
+          "direcao": "h",
+          "tamTexto": 32,
+          "passos": [
+            {
+              "t": "Itens",
+              "icone": "pedido",
+              "ok": true
+            },
+            {
+              "t": "SEM e COM",
+              "icone": "anotar",
+              "ok": true
+            },
+            {
+              "t": "Bebida e molhos",
+              "icone": "saco",
+              "ok": true
+            },
+            {
+              "t": "Endereço",
+              "icone": "google",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "tipo": "texto",
+          "tam": "m",
+          "texto": "Quem fecha o saco confere item por item. Só depois sai."
+        }
+      ]
+    },
+    {
+      "funcao": "para imprimir",
+      "arranjo": "pilha",
+      "tom": "claro",
+      "gap": 30,
+      "blocos": [
+        {
+          "tipo": "rotulo",
+          "texto": "Para imprimir e colar na cozinha"
+        },
+        {
+          "tipo": "ficha",
+          "flex": 1,
+          "claro": true,
+          "titulo": "Conferência antes de sair",
+          "caixas": [
+            "Itens do pedido",
+            "SEM e COM de cada item",
+            "Bebidas e molhos",
+            "Nome e endereço"
+          ],
+          "rodape": "Salve e imprima. Comanda com nome e endereço: descarte depois."
+        }
+      ]
+    },
+    {
+      "funcao": "fecho útil + pedido",
+      "arranjo": "pilha",
+      "gap": 34,
+      "blocos": [
+        {
+          "tipo": "titulo",
+          "tam": "g",
+          "texto": "Olhe o caminho inteiro, **não só a cozinha**."
+        },
+        {
+          "tipo": "resumo",
+          "flex": 1,
+          "itens": [
+            "Anote sempre do mesmo jeito",
+            "Confirme por escrito",
+            "Uma via só pra cozinha",
+            "Confira antes de fechar"
+          ]
+        },
+        {
+          "tipo": "cta",
+          "palavra": "PEDIDO",
+          "texto": "Comenta e a gente te explica no direct como, no plano Grow, o pedido feito pelo site chega escrito na tela da cozinha.",
+          "fato": "pedido-tela-cozinha"
+        }
+      ]
+    }
+  ],
+  "legenda": "O pedido saiu errado. Onde começou a falha? 👇\n\nNem sempre o problema está no fogão. Um pedido passa por várias mãos: quem anota, quem confirma, quem lê na cozinha e quem fecha o saco.\n\nQuatro cuidados simples:\n1. Anote sempre do mesmo jeito (SEM, COM, TROCAR)\n2. Confirme o pedido por escrito com o cliente\n3. Uma via só para a cozinha, em letra de forma\n4. Confira item por item antes de fechar\n\nO slide 7 é pra imprimir e colar na cozinha. Salve.\n\nComenta PEDIDO que a gente te explica no direct como, no plano Grow, o pedido feito pelo site chega escrito na tela da cozinha.\n\n#restaurante #delivery #lanchonete #gestaoderestaurante #growlift",
+  "alt": "Capa de carrossel: uma comanda de papel rabiscada e difícil de ler, com o título \"O pedido saiu errado. Onde começou a falha?\"."
+}
