@@ -38,7 +38,7 @@ export function ImportarParaCrm({
       const r = await importarAction(alvo);
       if (!r.ok) return setErro(r.error);
       setResumo(r.dados);
-      setRestantes((n) => Math.max(n - r.dados.importadas.length, 0));
+      setRestantes((n) => (alvo === 'elegiveis' ? r.dados.restantes : Math.max(n - r.dados.importadas.length, 0)));
       importou(r.dados);
     });
 
@@ -94,6 +94,9 @@ export function ImportarParaCrm({
             <li>
               <strong>{resumo.pendentesVerificacao}</strong> pendentes de verificação (&quot;sem site&quot; ainda não conferido em 2 fontes)
             </li>
+            {resumo.restantes > 0 && (
+              <li className="font-semibold text-warn sm:col-span-2">Faltam {resumo.restantes} elegíveis (até 500 por clique): clique de novo em &quot;Importar oportunidades elegíveis&quot;.</li>
+            )}
           </ul>
           <p className="mt-2 text-ink-soft">
             Todas as importadas precisam de nome, e-mail comercial e fonte antes de qualquer texto.{' '}

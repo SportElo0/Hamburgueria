@@ -85,11 +85,12 @@ describe('importar Oportunidades para o CRM', () => {
   });
 
   it('rodar duas vezes (ou duas ao mesmo tempo) não duplica nada', async () => {
-    await semear(20);
+    const ids = await semear(20);
     const [a, b] = await Promise.all([importarLeads('elegiveis', 'ana'), importarLeads('elegiveis', 'bia')]);
     expect(a.importadas.length + b.importadas.length).toBe(20);
     expect(a.jaCadastradas.length + b.jaCadastradas.length).toBe(20);
-    const de_novo = await importarLeads('elegiveis', 'ana');
+    await expect(importarLeads('elegiveis', 'ana')).rejects.toThrow(/Nenhuma oportunidade elegível/);
+    const de_novo = await importarLeads({ placeIds: ids }, 'ana');
     expect(de_novo.importadas).toHaveLength(0);
     expect(de_novo.jaCadastradas).toHaveLength(20);
     const contatos = await listarContatos();
@@ -204,5 +205,39 @@ describe('qualificar e preparar abordagens', () => {
     await sincronizarComOportunidade(importadas[1].placeId, 'descartada', 'ana');
     expect((await contatoPorId(importadas[0].id))!.etapa).toBe('nao-contatar');
     expect((await contatoPorId(importadas[1].id))!.etapa).toBe('perdido');
+  });
+});
+
+describe('ajustes da revisão de segurança', () => {
+  it('"elegíveis" com mais de 500 na lista importa 500 e diz quantas faltam', async () => {
+    const { MAX_IMPORTACAO } = await import('@/lib/vendas/dados');
+    await semear(MAX_IMPORTACAO + 20, { PlaceImport0000: { situacao: 'descartada' } });
+    const r = await importarLeads('elegiveis', 'ana');
+    expect(r.importadas).toHaveLength(MAX_IMPORTACAO);
+    expect(r.restantes).toBe(19);
+    const r2 = await importarLeads('elegiveis', 'ana');
+    expect(r2.importadas).toHaveLength(19);
+    expect(r2.restantes).toBe(0);
+    await expect(importarLeads('elegiveis', 'ana')).rejects.toThrow(/Nenhuma oportunidade elegível/);
+  });
+
+  it('contato incompleto não pula etapas (só pode ir para Frio ou Perdido)', async () => {
+    const { mudarEtapa } = await import('@/lib/vendas/dados');
+    await semear(1);
+    const { importadas } = await importarLeads('elegiveis', 'ana');
+    const id = importadas[0].id;
+    for (const etapa of ['novo', 'aprovado', 'enviado', 'quente', 'cliente']) await expect(mudarEtapa(id, etapa, 'ana')).rejects.toThrow(/Complete o contato/);
+    expect((await mudarEtapa(id, 'perdido', 'ana')).etapa).toBe('perdido');
+  });
+
+  it('com texto aprovado, completar de novo é recusado', async () => {
+    const { aprovarRascunho } = await import('@/lib/vendas/dados');
+    await semear(1);
+    const { importadas } = await importarLeads('elegiveis', 'ana');
+    const id = importadas[0].id;
+    await completarContato(id, completo, 'ana');
+    const x = await gerarRascunho(id, 'primeiro', 'ana');
+    await aprovarRascunho(id, x.rascunhos[0].id, 'ana');
+    await expect(completarContato(id, { ...completo, email: 'outro@padariaexemplo.com.br' }, 'ana')).rejects.toThrow(/já tem texto aprovado/);
   });
 });

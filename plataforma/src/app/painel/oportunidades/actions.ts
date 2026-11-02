@@ -36,8 +36,9 @@ export async function revisarAction(placeId: string, input: unknown): Promise<Re
   const user = await requireUser();
   const res = await rodar(async () => {
     const lead = await revisar(placeId, input, user.email);
-    // "Não contatar" and "Descartada" here also apply to the CRM (block, or move to Perdido).
-    await sincronizarComOportunidade(placeId, lead.situacao, user.email);
+    // "Não contatar" and "Descartada" here also apply to the CRM (block, or move to Perdido). The review is already
+    // saved; if this step fails, the CRM still refuses any text for the lead (it re-reads Oportunidades each time).
+    await sincronizarComOportunidade(placeId, lead.situacao, user.email).catch((err) => console.error('sincronizar CRM', err instanceof Error ? err.message : err));
     return lead;
   });
   if (res.ok) {

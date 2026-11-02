@@ -10,6 +10,8 @@ import { AvisoFase1, ChipEtapa, dataHora } from '@/components/vendas/ui';
 import { CopiarLink } from '@/components/vendas/CopiarLink';
 
 export const metadata = { title: 'Vendas' };
+/** "Preparar abordagens" runs here: up to 10 drafts (with the AI on, a few seconds each). */
+export const maxDuration = 60;
 
 const QUENTES: Etapa[] = ['quente', 'respondeu'];
 

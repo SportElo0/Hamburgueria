@@ -187,6 +187,8 @@ export async function mudarEtapa(id: string, etapa: string, por: string, now = n
   if (!ETAPA_IDS.includes(etapa as Etapa) || !ETAPAS_MANUAIS.includes(etapa as Etapa)) throw new VendasError('Etapa inválida.');
   return alterarContato(id, (c) => {
     if (c.etapa === 'nao-contatar') throw new VendasError('Este contato pediu para não ser contatado. A etapa não muda mais.');
+    if (!contatoCompleto(c) && !['qualificar', 'frio', 'perdido'].includes(etapa))
+      throw new VendasError('Complete o contato (nome, e-mail comercial e fonte) antes de avançar no funil.');
     if (c.etapa === etapa) return c;
     return { ...comEvento(c, evento(por, 'etapa', `${nomeEtapa(c.etapa)} → ${nomeEtapa(etapa as Etapa)}`, now)), etapa: etapa as Etapa };
   });
@@ -250,6 +252,8 @@ export interface ResumoImportacao {
   ignoradas: { placeId: string; motivo: string }[];
   /** Imported, but "sem site" still needs the hand check in 2 sources before it can be used in a text. */
   pendentesVerificacao: number;
+  /** Eligible leads left for a next click (only "elegíveis", above the per-click cap). */
+  restantes: number;
 }
 
 /** Why a lead cannot enter the CRM, or null when it can. */
@@ -281,18 +285,29 @@ export async function situacaoNoCrm(): Promise<{ noCrm: Record<string, string>; 
  */
 export async function importarLeads(alvo: { placeIds: string[] } | 'elegiveis', por: string, now = new Date()): Promise<ResumoImportacao> {
   exigirGravacao();
-  const leads = await listarLeads();
+  const [leads, bloqueio] = await Promise.all([listarLeads(), listarBloqueio()]);
   const porId = new Map(leads.map((l) => [l.placeId, l]));
-  const pedidos = alvo === 'elegiveis' ? leads.map((l) => l.placeId) : [...new Set(alvo.placeIds.map(String))];
-  if (pedidos.length === 0) throw new VendasError('Nenhuma empresa selecionada.');
-  if (pedidos.length > MAX_IMPORTACAO) throw new VendasError(`No máximo ${MAX_IMPORTACAO} empresas por vez.`);
-  const bloqueados = new Set((await listarBloqueio()).map((b) => b.chave));
+  const bloqueados = new Set(bloqueio.map((b) => b.chave));
+  let pedidos: string[];
+  let restantes = 0;
+  if (alvo === 'elegiveis') {
+    // Pick the eligible ones first, then cap: a big list never blocks the button; the rest goes on the next click.
+    const noCrm = new Set((await listarContatos()).map((c) => c.placeId).filter(Boolean));
+    const todos = leads.filter((l) => !noCrm.has(l.placeId) && !motivoParaIgnorar(l, bloqueados)).map((l) => l.placeId);
+    pedidos = todos.slice(0, MAX_IMPORTACAO);
+    restantes = todos.length - pedidos.length;
+    if (pedidos.length === 0) throw new VendasError('Nenhuma oportunidade elegível para importar.');
+  } else {
+    pedidos = [...new Set(alvo.placeIds.map(String))];
+    if (pedidos.length === 0) throw new VendasError('Nenhuma empresa selecionada.');
+    if (pedidos.length > MAX_IMPORTACAO) throw new VendasError(`No máximo ${MAX_IMPORTACAO} empresas por vez.`);
+  }
   const iso = now.toISOString();
-  let resumo: ResumoImportacao = { importadas: [], jaCadastradas: [], ignoradas: [], pendentesVerificacao: 0 };
+  let resumo: ResumoImportacao = { importadas: [], jaCadastradas: [], ignoradas: [], pendentesVerificacao: 0, restantes };
 
   await atualizar<Record<string, Contato>>(CONTATOS, {}, (atual) => {
     // Rebuilt on every retry, so a conflicting write never leaves a half-counted summary.
-    resumo = { importadas: [], jaCadastradas: [], ignoradas: [], pendentesVerificacao: 0 };
+    resumo = { importadas: [], jaCadastradas: [], ignoradas: [], pendentesVerificacao: 0, restantes };
     const existentes = new Map<string, string>();
     for (const c of Object.values(atual)) if (c.placeId) existentes.set(c.placeId, c.id);
     const novo = { ...atual };
@@ -359,6 +374,7 @@ export async function completarContato(id: string, raw: unknown, por: string, no
     const x = Object.hasOwn(atual, id) ? atual[id] : undefined;
     if (!x) throw new VendasError('Contato não encontrado.');
     if (x.etapa === 'nao-contatar') throw new VendasError('Este contato pediu para não ser contatado.');
+    if (x.rascunhos.some((r) => r.status === 'aprovado')) throw new VendasError('Este contato já tem texto aprovado: o nome e o e-mail não mudam mais por aqui.');
     const outro = Object.values(atual).find((o) => o.id !== id && o.email === d.email);
     if (outro) throw new VendasError(`Este e-mail já está em outro contato: ${nomeExibicao(outro)}.`);
     const mudou = x.negocio !== d.negocio || x.email !== d.email || x.fonte?.url !== d.fonteUrl;

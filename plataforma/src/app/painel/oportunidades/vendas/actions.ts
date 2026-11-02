@@ -49,7 +49,7 @@ export async function criarContatoAction(input: unknown): Promise<Resposta<{ id:
 
 /** Oportunidades → CRM, for the selected place IDs or every eligible lead. Nothing is sent. */
 export async function importarAction(alvo: { placeIds: string[] } | 'elegiveis'): Promise<Resposta<ResumoImportacao>> {
-  if (alvo !== 'elegiveis' && (!alvo || !Array.isArray(alvo.placeIds) || alvo.placeIds.some((p) => typeof p !== 'string' || !/^[A-Za-z0-9_-]{10,300}$/.test(p))))
+  if (alvo !== 'elegiveis' && (!alvo || !Array.isArray(alvo.placeIds) || alvo.placeIds.length > 500 || alvo.placeIds.some((p) => typeof p !== 'string' || !/^[A-Za-z0-9_-]{10,300}$/.test(p))))
     return invalido();
   return rodar((por) => importarLeads(alvo, por), [BASE, '/painel/oportunidades']);
 }
