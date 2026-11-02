@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState, useTransition } from 'react';
 import { revisarAction, verAoVivoAction } from '@/app/painel/oportunidades/actions';
 import type { LugarAoVivo } from '@/lib/oportunidades/places';
@@ -165,6 +166,11 @@ function CartaoLead({ lead: l, salvo }: { lead: Lead; salvo: (l: Lead) => void }
             <button type="button" className="btn-ghost min-h-9 px-3" onClick={carregar} disabled={pending} title="Usa 1 consulta do limite do mês">
               {pending ? 'Carregando…' : 'Ver dados do Google'}
             </button>
+          )}
+          {l.situacao !== 'nao-contatar' && l.situacao !== 'descartada' && (
+            <Link className="btn-ghost min-h-9 px-3" href={`/painel/oportunidades/vendas/novo?lugar=${encodeURIComponent(l.placeId)}`}>
+              Abordar por e-mail
+            </Link>
           )}
         </div>
       </div>

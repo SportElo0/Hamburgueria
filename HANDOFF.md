@@ -118,6 +118,14 @@ Texto da caixinha: "Quero receber ofertas da <loja> no WhatsApp (no máximo uma 
 - Guarda só o place ID e as conclusões da equipe; nome, endereço, telefone e site do Google não são guardados nem exportados (termos do Google).
 - Não envia mensagem. "Sem website" só é confirmado depois de 2 fontes públicas conferidas à mão.
 
+## Vendas (Growlift Sales Agent, fase 1, 02/11/2026)
+
+`/painel/oportunidades/vendas`: CRM comercial ligado a Oportunidades. Contato com fonte verificável (nunca o Google),
+funil, histórico por empresa, rascunhos de e-mail (simulador sem IA por padrão; IA econômica `claude-haiku-5-5` só com
+`VENDAS_IA=claude` + `ANTHROPIC_API_KEY`, que não existem), fila de aprovação, lista de bloqueio e página pública
+`/descadastro`. **Não envia e-mail nem WhatsApp.** Só grava em Production ou local (a prévia usa o banco real; ver
+`plataforma/ISOLAR-AMBIENTES.md`). Detalhes e fase 2 em `plataforma/VENDAS.md`. Ainda não publicado.
+
 ## Inteligência (Growlift Intelligence, fase 1)
 
 `/painel/inteligencia`: custos por item, margem de contribuição, matriz do cardápio e recomendações por regras, com a decisão

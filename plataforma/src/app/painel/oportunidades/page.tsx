@@ -18,7 +18,12 @@ export default async function OportunidadesPage() {
         ← Lojas
       </Link>
       <div className="mt-2">
-        <h1 className="text-3xl font-bold">Oportunidades</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-3xl font-bold">Oportunidades</h1>
+          <Link href="/painel/oportunidades/vendas" className="btn-primary">
+            Vendas (CRM)
+          </Link>
+        </div>
         <p className="mt-1 max-w-3xl text-ink-soft">
           Negócios da região que podem precisar de site. A busca usa a Places API do Google; o painel guarda só o identificador do lugar e o que a equipe concluiu.
         </p>
@@ -31,6 +36,7 @@ export default async function OportunidadesPage() {
           <li>Nome, endereço, telefone e site vindos do Google aparecem na tela e não são guardados nem exportados (termos do Google Maps Platform). O CSV leva o place ID, o link do Maps e as conclusões da equipe.</li>
           <li>&quot;Sem website&quot; só vale como confirmado depois de conferir pelo menos 2 outras fontes públicas, anotadas com data.</li>
           <li>Este painel não envia mensagem nenhuma. Contato é feito por uma pessoa, um negócio por vez, dizendo quem é e por que está falando. Se pedirem para não contatar, marque &quot;Não contatar&quot;. Campanha de WhatsApp só para quem aceitou receber.</li>
+          <li>Em Vendas, o e-mail de abordagem é cadastrado com a fonte (site ou rede do próprio negócio, nunca o Google) e todo texto passa pela aprovação de uma pessoa. Quem pede para sair vai para a lista de bloqueio e fica &quot;Não contatar&quot; aqui.</li>
         </ul>
       </details>
 

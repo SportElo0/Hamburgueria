@@ -265,6 +265,24 @@ export async function revisar(placeId: string, raw: unknown, por: string, now = 
   return salvo!;
 }
 
+/** One lead by place ID (the Sales Agent reads the team's findings from here). */
+export async function leadDoLugar(placeId: string): Promise<Lead | undefined> {
+  if (!PLACE_ID.test(placeId)) return undefined;
+  const doc = await storage().readJSON<Record<string, Lead>>(LUGARES);
+  return doc && Object.hasOwn(doc.data, placeId) ? doc.data[placeId] : undefined;
+}
+
+/** "Não contatar" set from outside the review form: an opt-out or a block in the Sales Agent. Never undone here. */
+export async function marcarNaoContatar(placeId: string, motivo: string, por: string, now = new Date()) {
+  if (!PLACE_ID.test(placeId)) return;
+  await atualizar<Record<string, Lead>>(LUGARES, {}, (atual) => {
+    const antes = Object.hasOwn(atual, placeId) ? atual[placeId] : undefined;
+    if (!antes || antes.situacao === 'nao-contatar') return atual;
+    const nota = `[${now.toISOString().slice(0, 10)}] Não contatar (${por}): ${motivo}`;
+    return { ...atual, [placeId]: { ...antes, situacao: 'nao-contatar', observacoes: [antes.observacoes, nota].filter(Boolean).join('\n').slice(-1000) } };
+  });
+}
+
 export async function listarLeads(): Promise<Lead[]> {
   const doc = await storage().readJSON<Record<string, Lead>>(LUGARES);
   return Object.values(doc?.data ?? {}).sort((a, b) => b.criadoEm.localeCompare(a.criadoEm) || a.placeId.localeCompare(b.placeId));

@@ -14,6 +14,7 @@
     "seed": "node --experimental-strip-types scripts/seed.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
     "@vercel/blob": "latest",
     "next": "^16.4.2",
     "postgres": "^3.4.7",
