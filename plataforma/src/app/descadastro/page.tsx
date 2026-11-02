@@ -26,6 +26,13 @@ export default async function DescadastroPage({ searchParams }: { searchParams: 
           <>
             <h1 className="mt-1 text-2xl font-bold">Pronto, não vamos mais escrever.</h1>
             <p className="mt-2 text-ink-soft">O seu e-mail foi tirado da nossa lista de contatos comerciais. Desculpe o incômodo.</p>
+            <p className="mt-2 text-sm text-ink-mute">
+              Guardamos só um código irreversível do endereço, para nunca mais escrever. Dúvidas sobre os seus dados:{' '}
+              <a className="text-accent underline" href="mailto:contato@growlift.com.br">
+                contato@growlift.com.br
+              </a>
+              .
+            </p>
           </>
         ) : r === 'invalido' || !valido ? (
           <>

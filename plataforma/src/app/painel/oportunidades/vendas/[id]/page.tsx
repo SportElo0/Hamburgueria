@@ -120,7 +120,7 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
       )}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <Rascunhos id={c.id} rascunhos={c.rascunhos} rodape={rodape(linkSair)} encerrado={encerrado} podeAcompanhar={primeiroAprovado && ['aprovado', 'enviado'].includes(c.etapa)} />
+        <Rascunhos id={c.id} rascunhos={c.rascunhos} rodape={rodape(linkSair, c.negocio, nomeFonte(c.fonte.tipo))} encerrado={encerrado} podeAcompanhar={primeiroAprovado && ['aprovado', 'enviado'].includes(c.etapa)} />
         <div className="space-y-6">
           <AcoesContato id={c.id} etapa={c.etapa} podeWhatsapp={quente || c.etapa === 'cliente'} />
           <section className="card p-5" aria-labelledby="historico">

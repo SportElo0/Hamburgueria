@@ -12,6 +12,7 @@ import {
   fatosDoContato,
   linkWhatsAppComercial,
   pedeParaSair,
+  possivelReclamacao,
   rascunhoSimulado,
   rodape,
 } from '@/lib/vendas/regras';
@@ -31,6 +32,7 @@ import {
   filaDeAprovacao,
   gerarRascunho,
   gravacaoPermitida,
+  lerToken,
   listarBloqueio,
   listarContatos,
   mudarEtapa,
@@ -53,7 +55,7 @@ const base = {
   conferido: true,
 };
 
-async function semearLead(situacao = 'boa') {
+async function semearLead(situacao = 'boa', categoria = 'site-com-problemas', verificado = false) {
   await storage().writeJSON('oportunidades/lugares.json', {
     [PLACE]: {
       placeId: PLACE,
@@ -61,11 +63,11 @@ async function semearLead(situacao = 'boa') {
       uf: 'SP',
       bairro: '',
       segmento: 'padarias',
-      categoria: 'site-com-problemas',
+      categoria,
       categoriaRevisada: false,
       sinais: ['Sem HTTPS (cadeado)'],
       checadoEm: '2026-11-01T12:00:00.000Z',
-      verificacao: { situacao: 'pendente', fontes: [], links: '' },
+      verificacao: verificado ? { situacao: 'confirmado', fontes: ['instagram', 'busca-google'], links: '' } : { situacao: 'pendente', fontes: [], links: '' },
       observacoes: '',
       situacao,
       criadoEm: '2026-11-01T12:00:00.000Z',
@@ -316,5 +318,53 @@ describe('WhatsApp e ambiente', () => {
     await expect(criarContato(base, 'ana')).rejects.toThrow(/prévia/);
     vi.stubEnv('VERCEL_ENV', 'production');
     expect(gravacaoPermitida()).toBe(true);
+  });
+});
+
+describe('ajustes das revisões', () => {
+  it('recusa e-mail de domínio público (costuma ser pessoal)', async () => {
+    await expect(criarContato({ ...base, email: 'padaria@gmail.com' }, 'ana')).rejects.toThrow(/Gmail/);
+  });
+
+  it('"sem site" só vai para o texto depois da verificação manual', async () => {
+    await semearLead('boa', 'sem-site', false);
+    expect((await criarContato({ ...base, placeId: PLACE }, 'ana')).categoria).toBe('incerta');
+  });
+
+  it('"sem site" verificado continua', async () => {
+    await semearLead('boa', 'sem-site', true);
+    expect((await criarContato({ ...base, placeId: PLACE }, 'ana')).categoria).toBe('sem-site');
+  });
+
+  it('possível reclamação bloqueia e avisa', async () => {
+    expect(possivelReclamacao('Vou reclamar no Procon')).toBe(true);
+    expect(pedeParaSair('Isso fere a LGPD')).toBe(true);
+    const c = await criarContato(base, 'ana');
+    await registrarResposta(c.id, 'Vou chamar meu advogado.', 'ana');
+    const x = (await contatoPorId(c.id))!;
+    expect(x.etapa).toBe('nao-contatar');
+    expect(x.historico.at(-1)!.texto).toMatch(/ATENÇÃO/);
+  });
+
+  it('no descadastro, respostas, notas e observações são apagadas', async () => {
+    const c = await criarContato({ ...base, observacoes: 'Dono se chama Fulano' }, 'ana');
+    await anotar(c.id, 'Fulano atende de manhã', 'ana');
+    await registrarResposta(c.id, 'Fulano aqui, telefone 11 98888-7777. Pode ligar.', 'ana');
+    await descadastrar(tokenDescadastro(c.id));
+    const x = (await contatoPorId(c.id))!;
+    expect(JSON.stringify(x)).not.toMatch(/Fulano|98888/);
+    expect(x.observacoes).toBe('');
+  });
+
+  it('sem SESSION_SECRET o link é só inválido (a página não quebra)', () => {
+    vi.stubEnv('SESSION_SECRET', '');
+    expect(lerToken('abcdefghij.' + 'a'.repeat(32))).toBeNull();
+  });
+
+  it('rodapé diz a fonte, o endereço e a política', () => {
+    const r = rodape('https://x/d', 'Padaria Exemplo', 'Instagram do negócio');
+    expect(r).toContain('contato comercial de Padaria Exemplo (instagram do negócio)');
+    expect(r).toContain('Rua Barão de Monte Mor, 55');
+    expect(r).toContain('growlift.com.br/privacidade.html');
   });
 });

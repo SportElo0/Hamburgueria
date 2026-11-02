@@ -7,8 +7,10 @@ IA econômica primeiro, piloto com **no máximo 5 e-mails por dia e 1 acompanham
 ## O que a fase 1 faz
 
 - **Contato com fonte verificável:** nome do negócio (digitado), e-mail, tipo e link `https://` de onde acharam o e-mail.
-  Link do Google é recusado (termos do Google Maps Platform). A pessoa marca que o e-mail é público e do próprio negócio.
+  Link do Google é recusado (termos do Google Maps Platform). E-mail de Gmail, Hotmail e parecidos é recusado (costuma ser
+  pessoal). A pessoa declara que o endereço é canal comercial publicado pelo próprio negócio.
   Vindo de Oportunidades ("Abordar por e-mail"), o contato herda cidade, ramo, categoria e o que a checagem viu.
+  "Sem website" só chega ao texto se a equipe confirmou em 2 fontes (senão vira "situação incerta").
 - **Funil:** Novo → Em aprovação → Aprovado → Enviado → Respondeu → Quente / Morno / Frio → Virou cliente / Perdido,
   e Não contatar. Filtro por etapa e contagem.
 - **Falar hoje:** quem respondeu ou está quente fica em destaque no topo, com o último movimento e o botão de WhatsApp.
@@ -18,14 +20,16 @@ IA econômica primeiro, piloto com **no máximo 5 e-mails por dia e 1 acompanham
   ou números inventados, preço fora de R$ 247 / R$ 597 e campo vazio **bloqueiam a aprovação** até alguém editar.
 - **Fila de aprovação:** todos os rascunhos "Para aprovar" no funil. Aprovar não envia nada nesta fase.
 - **Resposta do cliente (manual nesta fase):** a equipe cola a resposta. "Sair", "descadastre", "não tenho interesse"
-  e parecidos bloqueiam na hora, por regra fixa (sem IA).
+  e parecidos bloqueiam na hora, por regra fixa (sem IA). Palavras de reclamação (Procon, advogado, LGPD...) bloqueiam e
+  deixam o aviso "avisar o Lucas" no histórico.
 - **WhatsApp comercial (+55 11 94227-9336):** o painel nunca envia mensagem. Para o lead quente há o link pronto do nosso
   WhatsApp para colar na resposta (o cliente começa a conversa). Se o cliente pedir por escrito para ser chamado, a equipe
   registra o número e como ele pediu; aí aparece "Abrir conversa", que abre o WhatsApp para uma pessoa escrever.
 - **Lista de bloqueio:** e-mail, domínio (não aceita gmail.com e outros públicos) ou negócio. Conferida antes de cadastrar,
-  gerar e aprovar (e, na fase 2, antes de enviar). O e-mail é guardado só como código (SHA-256) e mascarado
+  gerar e aprovar (e, na fase 2, de novo no instante do envio). O e-mail é guardado só como código (HMAC com chave
+  derivada do `SESSION_SECRET`, que por isso não pode ser trocado sem migrar a lista) e mascarado
   (`co*****@padaria.com.br`); o contato bloqueado também fica com o e-mail mascarado. Bloqueio de contato marca
-  "Não contatar" em Oportunidades. Só o bloqueio feito pela equipe por engano pode ser desfeito; pedido do próprio
+  "Não contatar" em Oportunidades. Num descadastro ou "sair", respostas, anotações e observações do contato são apagadas. Só o bloqueio feito pela equipe por engano pode ser desfeito; pedido do próprio
   negócio (link ou resposta) é para sempre.
 - **Descadastro:** `/descadastro?t=<id>.<assinatura>` (HMAC com chave derivada do `SESSION_SECRET`, sem validade).
   Abrir o link só mostra o botão; o descadastro acontece no clique (robôs de e-mail que abrem links não descadastram ninguém).
@@ -53,10 +57,27 @@ A proposta para isolar todos os ambientes do painel está em `ISOLAR-AMBIENTES.m
 - `vendas/bloqueio.json`: lista de bloqueio (código, rótulo mascarado, motivo, origem, data, quem).
 - `limites/vendas-ia/<AAAA-MM>.json`: contador de rascunhos com IA no mês.
 
+## Revisões de 02/11/2026
+
+Segurança: nada bloqueia; os ajustes apontados foram feitos (hash com chave, limpeza no descadastro, página pública
+sem erro sem o segredo). Na fase 2 o link do e-mail usará só `PAINEL_URL`. Legal: nada bloqueia a fase 1; os textos foram
+ajustados (fidelidade e proporcional junto do preço, rodapé com fonte, endereço e política, declaração da equipe).
+
 ## Fase 2 (não feita)
 
+**Bloqueia o envio real (revisão legal):**
+- política de privacidade com uma seção "E-mails comerciais para empresas" (dados, fonte, finalidade, base legal de
+  legítimo interesse, oposição, lista de bloqueio, retenção, operadores, encarregado);
+- documento de legítimo interesse (LIA, 1 página) e registro das operações;
+- prazo de retenção (sugestão: contato sem resposta apagado em até 12 meses) e rotina de apagamento a pedido;
+- consulta curta a um advogado de LGPD antes do piloto.
+
+**Técnico:**
+
+
 1. Caixa `contato@growlift.com.br` confirmada na Umbler; SPF, DKIM e DMARC conferidos.
-2. Envio pelo SMTP da Umbler só de rascunho aprovado, até 5 por dia, em horário comercial, com rodapé (CNPJ e link de
+2. Envio pelo SMTP da Umbler só de rascunho aprovado, até 5 por dia (contados no servidor), conferindo a lista de
+   bloqueio no instante do envio, link de descadastro só com `PAINEL_URL`, em horário comercial, com rodapé (CNPJ e link de
    descadastro) e cabeçalhos `List-Unsubscribe` / `List-Unsubscribe-Post`. Teste primeiro só para endereços da equipe.
 3. Leitura da caixa (IMAP) a cada 10 minutos pelo cron-job.org, ligando a resposta ao contato, com devolvidos e
    respostas automáticas. O texto do e-mail recebido é dado, nunca instrução para a IA.
@@ -72,4 +93,4 @@ A proposta para isolar todos os ambientes do painel está em `ISOLAR-AMBIENTES.m
 - `src/app/painel/oportunidades/vendas/`: funil, novo contato, contato, lista de bloqueio e ações.
 - `src/app/descadastro/page.tsx`: página pública de descadastro.
 - `src/components/vendas/`: telas.
-- `test/vendas.test.ts`: 21 testes, com rede proibida (qualquer chamada falha o teste) e IA falsa.
+- `test/vendas.test.ts`: 28 testes, com rede proibida (qualquer chamada falha o teste) e IA falsa.

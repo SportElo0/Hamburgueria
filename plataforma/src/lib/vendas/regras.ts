@@ -139,6 +139,9 @@ export const contatoSchema = z.object({
     .or(z.literal('').transform(() => undefined)),
   observacoes: z.string().trim().max(1000).default(''),
   conferido: z.literal(true, { message: 'Confirme que o e-mail é público e do próprio negócio.' }),
+}).refine((d) => !DOMINIOS_PUBLICOS.includes(d.email.split('@')[1] ?? ''), {
+  message: 'E-mail de Gmail, Hotmail e parecidos costuma ser pessoal: use o endereço com o domínio do próprio negócio. Se o negócio só tem esse, fale com ele por outro canal.',
+  path: ['email'],
 });
 export type ContatoInput = z.input<typeof contatoSchema>;
 
@@ -183,18 +186,36 @@ const PALAVRAS_SAIR = [
   'unsubscribe',
   'stop',
   'spam',
+  'cancelar',
+  'cancele',
+  'tirar meu',
+  'tire meu',
+  'excluir',
+  'exclua',
+  'nao quero',
+  'nao me envie',
+  'nao me escreva',
+  'parar',
+  'chega',
 ];
+/** Words that may announce a complaint: they block like "sair" and also flag the contact for a person to look at. */
+const PALAVRAS_RECLAMACAO = ['procon', 'advogad', 'processo', 'denuncia', 'lgpd', 'anpd', 'reclame aqui'];
 const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 export function pedeParaSair(texto: string) {
   const t = ` ${semAcento(texto).replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ')} `;
-  return PALAVRAS_SAIR.some((p) => (p.length <= 5 ? t.includes(` ${p} `) : t.includes(p)));
+  return PALAVRAS_SAIR.some((p) => (p.length <= 5 ? t.includes(` ${p} `) : t.includes(p))) || possivelReclamacao(texto);
+}
+export function possivelReclamacao(texto: string) {
+  const t = semAcento(texto);
+  return PALAVRAS_RECLAMACAO.some((p) => t.includes(p));
 }
 
 /** What Growlift sells, as published on growlift.com.br (checked 02/11/2026). The drafts may only use these. */
 export const OFERTA = {
   start: 'Plano Start, R$ 247 por mês: site feito do zero, domínio no nome do negócio, hospedagem, botão de WhatsApp e Perfil no Google conferido todo mês.',
   grow: 'Plano Grow, R$ 597 por mês: tudo do Start mais pedido pelo próprio site, com Pix na hora, sem comissão.',
-  condicoes: 'Mensalidade fixa, sem comissão. Contrato com fidelidade (6 meses no Start, 4 no Grow), criação do site sem custo, desistência em até 7 dias sem multa.',
+  condicoes:
+    'Mensalidade fixa, sem comissão. Fidelidade de 6 meses no Start e 4 no Grow; a criação do site não tem custo para quem cumpre o prazo (cancelando antes, paga a parte proporcional da criação). Desistência em até 7 dias sem custo. Detalhes em growlift.com.br/termos.html.',
   diagnostico: 'Diagnóstico grátis: em até 2 dias úteis, um retrato de como o negócio aparece na internet e uma prévia do site novo.',
 };
 export const PRECOS_PERMITIDOS = ['247', '597'];
@@ -225,7 +246,7 @@ export function fatosDoContato(c: Contexto): string[] {
 }
 
 const ABERTURA: Record<Categoria, string> = {
-  'sem-site': 'procurei {negocio} na internet e não encontrei um site próprio',
+  'sem-site': 'procurei {negocio} na internet e não encontrei um site próprio nos canais públicos que consultei',
   'so-rede-social': 'vi que hoje {negocio} aparece na internet principalmente pelas redes sociais',
   'site-com-problemas': 'abri o site de {negocio} e notei um ponto a melhorar: {problema}',
   'site-proprio': 'vi o site de {negocio}',
@@ -258,9 +279,9 @@ export function rascunhoSimulado(c: Contexto): { assunto: string; corpo: string 
       'Olá, tudo bem?',
       `Sou da Growlift, uma agência de São Paulo que faz sites para negócios locais. ${abertura[0].toUpperCase()}${abertura.slice(1)}.`,
       pedido
-        ? 'A gente faz o site do zero e, no plano Grow (R$ 597 por mês), o cliente pede pelo próprio site, com Pix na hora e sem comissão por pedido.'
-        : 'A gente faz o site do zero, com domínio no nome do negócio, botão de WhatsApp e o Perfil no Google conferido todo mês, no plano Start (R$ 247 por mês).',
-      'Se quiser, preparo um diagnóstico grátis de como o negócio aparece na internet, com uma prévia do site, em até 2 dias úteis e sem compromisso. Basta responder este e-mail.',
+        ? 'A gente faz o site do zero e, no plano Grow (R$ 597 por mês, com fidelidade de 4 meses; condições em growlift.com.br/termos.html), o cliente pede pelo próprio site, com Pix na hora e sem comissão por pedido.'
+        : 'A gente faz o site do zero, com domínio no nome do negócio, botão de WhatsApp e o Perfil no Google conferido todo mês, no plano Start (R$ 247 por mês, com fidelidade de 6 meses; condições em growlift.com.br/termos.html).',
+      'Se quiser, preparo um diagnóstico grátis de como o negócio aparece na internet, com uma prévia ilustrativa de site, em até 2 dias úteis e sem compromisso. Basta responder este e-mail.',
       'Obrigado!',
     ].join('\n\n'),
   };
@@ -306,11 +327,11 @@ export function conferirRascunho(assunto: string, corpo: string): { alertas: str
 }
 
 /** The footer every sent e-mail will carry (phase 2). Shown under the draft so the reviewer sees the whole message. */
-export function rodape(linkDescadastro: string) {
+export function rodape(linkDescadastro: string, negocio = '{negócio}', fonte = '{fonte}') {
   return [
     '--',
     'Growlift · sites para negócios locais',
-    `69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · ${EMAIL_COMERCIAL}`,
-    `Achamos o seu e-mail no canal público do seu negócio. Para não receber mais: ${linkDescadastro} ou responda "sair".`,
+    `69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP · ${EMAIL_COMERCIAL}`,
+    `Você recebeu este e-mail porque o endereço está publicado como contato comercial de ${negocio} (${fonte.toLowerCase()}). Para não receber mais: ${linkDescadastro} ou responda SAIR. Como tratamos dados: growlift.com.br/privacidade.html`,
   ].join('\n');
 }

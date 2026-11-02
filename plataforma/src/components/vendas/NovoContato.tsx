@@ -108,13 +108,13 @@ export function NovoContato({ placeId, cidade = '', uf = '', segmento = '' }: Pr
         <label className="label" htmlFor="observacoes">
           Observações (opcional)
         </label>
-        <textarea id="observacoes" name="observacoes" className="field min-h-20" maxLength={1000} />
+        <textarea id="observacoes" name="observacoes" className="field min-h-20" maxLength={1000} placeholder="Sobre o negócio, nunca sobre pessoas (nada de dados pessoais, saúde, família etc.)" />
       </div>
       <label className="flex items-start gap-2 text-sm md:col-span-2">
         <input type="checkbox" name="conferido" className="mt-1" required />
         <span>
-          Conferi que este e-mail é público e é do próprio negócio (não de uma pessoa física), e que não veio do Google. Se o negócio pedir para não ser
-          contatado, ele vai para a lista de bloqueio.
+          Conferi que este endereço está publicado pelo próprio negócio como canal comercial (não é e-mail pessoal de alguém), que não veio do Google e que
+          o link colado mostra o endereço. Se o negócio pedir para não ser contatado, ele vai para a lista de bloqueio.
         </span>
       </label>
       {error && (

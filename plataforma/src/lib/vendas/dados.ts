@@ -17,6 +17,7 @@ import {
   nomeEtapa,
   normalizarEmail,
   pedeParaSair,
+  possivelReclamacao,
   whatsappSchema,
   type Contato,
   type Etapa,
@@ -58,7 +59,17 @@ export interface Bloqueio {
   por: string;
 }
 
-const hash = (tipo: Bloqueio['tipo'], valor: string) => createHash('sha256').update(`growlift-bloqueio:${tipo}:${valor}`).digest('hex');
+/**
+ * Keyed hash (HMAC with a key derived from SESSION_SECRET): someone holding the block list and a list of addresses
+ * still cannot tell who opted out. Changing SESSION_SECRET would orphan the list, so that secret must never rotate
+ * without migrating it.
+ */
+const chaveBloqueio = () => {
+  const s = process.env.SESSION_SECRET ?? '';
+  if (s.length < 32) throw new VendasError('SESSION_SECRET ausente ou curto: a lista de bloqueio não pode ser conferida.');
+  return createHash('sha256').update(`vendas-bloqueio:${s}`).digest();
+};
+const hash = (tipo: Bloqueio['tipo'], valor: string) => createHmac('sha256', chaveBloqueio()).update(`${tipo}:${valor}`).digest('hex');
 export const mascarar = (email: string) => {
   const [u, d] = normalizarEmail(email).split('@');
   return `${u.slice(0, 2)}${'*'.repeat(Math.max(2, u.length - 2))}@${d ?? ''}`;
@@ -131,7 +142,8 @@ export async function criarContato(raw: unknown, por: string, now = new Date()):
     email: d.email,
     fonte: { tipo: d.fonteTipo, url: d.fonteUrl },
     segmento: d.segmento ?? lead?.segmento,
-    categoria: lead?.categoria,
+    // "Sem site" only reaches an e-mail after the team confirmed it in 2 public sources (Oportunidades' rule).
+    categoria: lead && lead.categoria === 'sem-site' && lead.verificacao.situacao !== 'confirmado' ? 'incerta' : lead?.categoria,
     sinais: lead?.sinais ?? [],
     cidade: d.cidade || lead?.cidade || '',
     uf: d.uf || lead?.uf || '',
@@ -188,8 +200,10 @@ export async function registrarResposta(id: string, texto: string, por: string, 
   if (pedeParaSair(t)) {
     const c = await contatoPorId(id);
     if (!c) throw new VendasError('Contato não encontrado.');
-    await alterarContato(id, (x) => comEvento(x, evento(por, 'resposta', t, now)));
-    return bloquearContato(id, 'Pediu para não receber mais (resposta ao e-mail).', 'resposta', por, now);
+    const motivo = possivelReclamacao(t)
+      ? 'Pediu para não receber mais. ATENÇÃO: a resposta cita reclamação (Procon, advogado, LGPD ou parecido); avisar o Lucas.'
+      : 'Pediu para não receber mais (resposta ao e-mail).';
+    return bloquearContato(id, motivo, 'resposta', por, now);
   }
   return alterarContato(id, (c) => {
     const avancar: Etapa[] = ['novo', 'em-aprovacao', 'aprovado', 'enviado'];
@@ -318,10 +332,13 @@ export async function bloquearContato(id: string, motivo: string, origem: Bloque
   if (c.placeId) novos.push({ chave: hash('lugar', c.placeId), tipo: 'lugar', rotulo: `${c.negocio} (Oportunidades)`, motivo, origem, em, por });
   await adicionarBloqueios(novos);
   if (c.placeId) await marcarNaoContatar(c.placeId, motivo, por, now);
+  // What the business wrote and the team's free notes may carry personal data: after an opt-out only the facts stay.
+  const limpar = origem !== 'equipe';
   return alterarContato(id, (x) => ({
-    ...comEvento(x, evento(por, 'bloqueio', `Bloqueado: ${motivo}`, now)),
+    ...comEvento(limpar ? { ...x, historico: x.historico.map((e) => (e.tipo === 'resposta' || e.tipo === 'whatsapp' || e.tipo === 'nota' ? { ...e, texto: '[removido a pedido]' } : e)) } : x, evento(por, 'bloqueio', `Bloqueado: ${motivo}`, now)),
     etapa: 'nao-contatar',
     email: rotulo,
+    observacoes: limpar ? '' : x.observacoes,
     whatsapp: undefined,
     rascunhos: x.rascunhos.map((r) => (r.status === 'para-aprovar' ? { ...r, status: 'descartado', decididoEm: em, decididoPor: por } : r)),
   }));
@@ -374,7 +391,12 @@ export function tokenDescadastro(id: string) {
 export function lerToken(token: string): string | null {
   const m = /^([a-z0-9]{10})\.([A-Za-z0-9_-]{32})$/.exec(String(token ?? ''));
   if (!m) return null;
-  const esperado = Buffer.from(tokenDescadastro(m[1]).split('.')[1]);
+  let esperado: Buffer;
+  try {
+    esperado = Buffer.from(tokenDescadastro(m[1]).split('.')[1]);
+  } catch {
+    return null;
+  }
   const veio = Buffer.from(m[2]);
   return esperado.length === veio.length && timingSafeEqual(esperado, veio) ? m[1] : null;
 }

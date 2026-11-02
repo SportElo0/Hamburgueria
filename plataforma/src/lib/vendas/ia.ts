@@ -35,6 +35,10 @@ Regras que não podem ser quebradas:
 - Tom: português do Brasil, simples, educado, de pessoa para pessoa, sem exagero, sem pressão e sem emoji.
 - Diga quem somos e por que estamos escrevendo. Termine oferecendo o diagnóstico grátis e pedindo para responder o e-mail.
 - No máximo 900 caracteres no corpo. Sem links, sem assinatura e sem rodapé (o rodapé com CNPJ e descadastro é colocado depois).
+- Não diga que o destinatário pediu ou aceitou receber nada. Não use dados de pessoas, só o nome do negócio.
+- Não cite concorrentes, aplicativos, outras marcas nem porcentagens de comissão.
+- Se citar preço, cite junto a fidelidade do plano, como está nos fatos.
+- Não escreva como se fosse uma pessoa específica: quem aprova o texto é que assina.
 - Um acompanhamento é curto (até 400 caracteres), lembra o primeiro e-mail e diz que basta responder "sair" para não receber mais.`;
 
 export interface ResultadoIA {

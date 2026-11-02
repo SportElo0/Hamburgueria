@@ -46,7 +46,7 @@ Só a equipe da Growlift entra; os logins de loja não veem esta aba.
 ## O que ele não faz (de propósito)
 
 - **Não guarda nem exporta** nome, endereço, telefone ou site vindos do Google. Os Termos do Google Maps Platform proíbem: seção 3.2.3(a) "No Scraping", que inclui "copy and save business names, addresses". Esses dados aparecem só na tela, no resultado da pesquisa ou no botão "Ver dados do Google", com a atribuição "Google Maps". O que pode ser guardado para sempre é o **place ID**, que é a chave de tudo.
-- **Não envia mensagem nenhuma.** Não tem botão de WhatsApp nem de e-mail. Contato é feito por uma pessoa, um negócio por vez, dizendo quem é. Se pedirem para não ser contatados, marquem "Não contatar". Campanha de WhatsApp só para quem aceitou receber (regras no CLAUDE.md).
+- **Não envia mensagem nenhuma.** A abordagem por e-mail fica em Vendas (`VENDAS.md`), com fonte, aprovação humana e lista de bloqueio; na fase 1 nada é enviado. Contato é feito por uma pessoa, um negócio por vez, dizendo quem é. Se pedirem para não ser contatados, marquem "Não contatar". Campanha de WhatsApp só para quem aceitou receber (regras no CLAUDE.md).
 - **Não raspa o Google nem outros sites.** A busca é pela API oficial; a checagem do site é uma visita à página inicial; as outras fontes a equipe confere à mão.
 - **Não mostra telefone** a não ser que `LEADS_MOSTRAR_TELEFONE=sim`. Mesmo assim, o telefone só aparece na tela, nunca é guardado. Ao lado dele vem um botão **"Chamar no WhatsApp"** (celular) ou **"Ligar (fixo)"**: o link é montado na hora, um contato por vez, à mão; nada de envio em massa.
 - **Só quem não tem site funcionando:** lugares com site próprio que passou na checagem são contados ("N com site funcionando ficaram de fora"), mas não aparecem nem são guardados. Os que já estavam na lista ficam escondidos; o chip "Website próprio" ainda mostra.
@@ -113,9 +113,9 @@ O Google Cloud exige ser maior de 18 anos, então a conta e a chave ficam no nom
 
 A lista de segmentos da pesquisa segue o que a Growlift vende. A ordem é pelo plano que cada nicho usa melhor.
 
-**1. Pedido e Pix no site (plano Lift, R$ 597/mês).** É o produto mais forte, para quem vende por delivery ou retirada e hoje paga comissão a aplicativo.
-- No iFood, as fontes citam de 12% a 27% por pedido, além da mensalidade. Com a entrega do iFood, o custo pode passar de 30%. O Lift é mensalidade fixa, sem comissão.
-- Nos dados de 2025 da Abrasel, os aplicativos ainda somam 54% do faturamento de delivery, o WhatsApp 26% e o site ou app próprio só 12%. É exatamente aí que o Lift entra.
+**1. Pedido e Pix no site (plano Grow, R$ 597/mês).** É o produto mais forte, para quem vende por delivery ou retirada e hoje paga comissão a aplicativo.
+- No iFood, as fontes citam de 12% a 27% por pedido, além da mensalidade. Com a entrega do iFood, o custo pode passar de 30%. O Grow é mensalidade fixa, sem comissão.
+- Nos dados de 2025 da Abrasel, os aplicativos ainda somam 54% do faturamento de delivery, o WhatsApp 26% e o site ou app próprio só 12%. É exatamente aí que o Grow entra.
 - No iFood, a marmita lidera o almoço (38% dos pedidos), lanche e açaí dominam a tarde e a noite, e a padaria domina o café da manhã (54%).
 
 | Segmento | Por quê |
