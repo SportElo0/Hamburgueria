@@ -283,6 +283,24 @@ export async function marcarNaoContatar(placeId: string, motivo: string, por: st
   });
 }
 
+/** "Mandei" / "Liguei" in Mandar WhatsApp: one contact per business, recorded without the number. */
+export async function marcarContatado(placeId: string, canal: 'whatsapp' | 'ligacao', por: string, now = new Date()) {
+  if (!PLACE_ID.test(placeId)) throw new LeadError('Lugar não encontrado.');
+  let salvo: Lead | undefined;
+  await atualizar<Record<string, Lead>>(LUGARES, {}, (atual) => {
+    const antes = Object.hasOwn(atual, placeId) ? atual[placeId] : undefined;
+    if (!antes) throw new LeadError('Lugar não encontrado.');
+    if (antes.situacao === 'nao-contatar') throw new LeadError('Este negócio pediu para não ser contatado.');
+    if (antes.contatado) {
+      salvo = antes;
+      return atual;
+    }
+    salvo = { ...antes, contatado: { em: now.toISOString(), por, canal } };
+    return { ...atual, [placeId]: salvo };
+  });
+  return salvo!;
+}
+
 export async function listarLeads(): Promise<Lead[]> {
   const doc = await storage().readJSON<Record<string, Lead>>(LUGARES);
   return Object.values(doc?.data ?? {}).sort((a, b) => b.criadoEm.localeCompare(a.criadoEm) || a.placeId.localeCompare(b.placeId));

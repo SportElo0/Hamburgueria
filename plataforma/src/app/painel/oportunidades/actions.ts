@@ -2,7 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireUser } from '@/lib/auth';
-import { LeadError, estimarPesquisa, executarPesquisa, revisar, verAoVivo, type Resultado } from '@/lib/oportunidades/dados';
+import { LeadError, estimarPesquisa, executarPesquisa, marcarContatado, marcarNaoContatar, revisar, verAoVivo, type Resultado } from '@/lib/oportunidades/dados';
+import { paginaWhatsapp, type LinhaWhatsapp } from '@/lib/oportunidades/whatsapp';
 import { PlacesError, type LugarAoVivo } from '@/lib/oportunidades/places';
 import type { Estimativa, Lead } from '@/lib/oportunidades/regras';
 import { sincronizarComOportunidade } from '@/lib/vendas/dados';
@@ -51,4 +52,37 @@ export async function revisarAction(placeId: string, input: unknown): Promise<Re
 export async function verAoVivoAction(placeId: string): Promise<Resposta<LugarAoVivo>> {
   await requireUser();
   return rodar(() => verAoVivo(placeId));
+}
+
+/* ---------- Mandar WhatsApp ---------- */
+
+const PLACE = /^[A-Za-z0-9_-]{10,300}$/;
+
+/** The next 10 businesses, name and phone live from Google (never stored). `pular`: the ones already on screen. */
+export async function paginaWhatsappAction(pular: string[]): Promise<Resposta<LinhaWhatsapp[]>> {
+  await requireUser();
+  if (!Array.isArray(pular) || pular.length > 500 || !pular.every((p) => typeof p === 'string' && PLACE.test(p))) return { ok: false, error: 'Pedido inválido.' };
+  return rodar(() => paginaWhatsapp(pular));
+}
+
+/** "Mandei" / "Liguei": one contact per business, recorded without the number. */
+export async function contatadoAction(placeId: string, canal: 'whatsapp' | 'ligacao'): Promise<Resposta<null>> {
+  const user = await requireUser();
+  if (!PLACE.test(String(placeId)) || (canal !== 'whatsapp' && canal !== 'ligacao')) return { ok: false, error: 'Pedido inválido.' };
+  const res = await rodar(async () => (await marcarContatado(placeId, canal, user.email), null));
+  revalidatePath('/painel/oportunidades');
+  return res;
+}
+
+/** "Não quer": never again, here and in the CRM. */
+export async function naoQuerAction(placeId: string): Promise<Resposta<null>> {
+  const user = await requireUser();
+  if (!PLACE.test(String(placeId))) return { ok: false, error: 'Pedido inválido.' };
+  const res = await rodar(async () => {
+    await marcarNaoContatar(placeId, 'Pediu para não ser contatado (Mandar WhatsApp).', user.email);
+    await sincronizarComOportunidade(placeId, 'nao-contatar', user.email).catch((err) => console.error('oportunidades: sincronizar', err instanceof Error ? err.message : err));
+    return null;
+  });
+  revalidatePath('/painel/oportunidades');
+  return res;
 }

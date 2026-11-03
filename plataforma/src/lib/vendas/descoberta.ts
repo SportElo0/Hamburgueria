@@ -112,7 +112,7 @@ export async function descobrirNoSite(site: URL, abrir = abrirPagina): Promise<R
   };
 
   const inicio = await ler(site);
-  if (!inicio.html) return { ok: false, motivo: inicio.checagem.sinais[0] ?? 'O site não abriu.' };
+  if (!inicio.html) return { ok: false, motivo: 'O site abriu vazio ou com erro: não tem e-mail para pegar. Use o WhatsApp.' };
   const home = extrairDaPagina(inicio.html, inicio.url);
   let todos = home.emails.map((e) => ({ e, url: inicio.url }));
   for (const pagina of home.contatos) {

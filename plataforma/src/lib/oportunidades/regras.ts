@@ -118,6 +118,8 @@ export interface Lead {
   situacao: Situacao;
   criadoEm: string;
   pesquisaId: string;
+  /** The one WhatsApp message or call made from "Mandar WhatsApp" (who and when; never the number). */
+  contatado?: { em: string; por: string; canal: 'whatsapp' | 'ligacao' };
 }
 
 export interface Pesquisa {

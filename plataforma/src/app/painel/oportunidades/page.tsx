@@ -21,9 +21,14 @@ export default async function OportunidadesPage() {
       <div className="mt-2">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-3xl font-bold">Oportunidades</h1>
-          <Link href="/painel/oportunidades/vendas" className="btn-primary">
-            Vendas (CRM)
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/painel/oportunidades/whatsapp" className="btn-primary">
+              Mandar WhatsApp
+            </Link>
+            <Link href="/painel/oportunidades/vendas" className="btn-ghost">
+              Vendas (CRM)
+            </Link>
+          </div>
         </div>
         <p className="mt-1 max-w-3xl text-ink-soft">
           Negócios da região que podem precisar de site. A busca usa a Places API do Google; o painel guarda só o identificador do lugar e o que a equipe concluiu.
