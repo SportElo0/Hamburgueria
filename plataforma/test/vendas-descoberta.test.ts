@@ -3,9 +3,9 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { storage, useFileStorage } from '@/lib/storage';
-import { bloquearManual, contatoPorId, importarLeads, listarContatos } from '@/lib/vendas/dados';
+import { bloquearManual, contatoPorId, importarLeads, listarContatos, registrarContatoDireto } from '@/lib/vendas/dados';
 import { buscarContatosNosSites, categoriasNoLeadFinder, confirmarSugestoes, escolherEmail, extrairDaPagina, pendentesDeBusca, telefoneAoVivo } from '@/lib/vendas/descoberta';
-import { canalDoContato, textosContatoDireto } from '@/lib/vendas/regras';
+import { canalDoContato, contatoDiretoRecente, textosContatoDireto } from '@/lib/vendas/regras';
 import type { Abertura } from '@/lib/oportunidades/site';
 import type { LugarAoVivo } from '@/lib/oportunidades/places';
 
@@ -94,12 +94,12 @@ describe('Buscar contatos nos sites', () => {
   it('só consulta o Google o que foi aprovado e guarda só o que veio do site', async () => {
     expect(pendentesDeBusca(await listarContatos(), await categoriasNoLeadFinder())).toHaveLength(4);
     const r = await buscarContatosNosSites(2, 'teste@growlift', { ver, abrir });
-    expect(r).toEqual({ analisados: 2, achados: 2, semEmail: 0, restantes: 2 });
+    expect(r).toEqual({ analisados: 2, achados: 2, semEmail: 0, adiados: 0, restantes: 2 });
     expect(consultas).toHaveLength(2);
     const todos = JSON.stringify(await listarContatos());
     expect(todos).not.toMatch(/NOME DO GOOGLE|Rua do Google|99123/);
     const r2 = await buscarContatosNosSites(5, 'teste@growlift', { ver, abrir });
-    expect(r2).toEqual({ analisados: 2, achados: 0, semEmail: 2, restantes: 0 });
+    expect(r2).toEqual({ analisados: 2, achados: 0, semEmail: 2, adiados: 0, restantes: 0 });
     const lista = await listarContatos();
     const por = (p: string) => lista.find((c) => c.placeId === p)!;
     expect(por('PlaceDescobertaA001').sugestao).toMatchObject({ negocio: 'Cantina do Mar', email: 'contato@cantinadomar.com.br', fonteUrl: 'https://www.cantinadomar.com.br/' });
@@ -145,11 +145,26 @@ describe('Contato direto (sem e-mail)', () => {
         expect(texto).toMatch(/Growlift/);
         expect(texto).not.toMatch(/R\$|mensagem autom|rob[oô]|Scale|garant/i);
       }
-      expect(t.instagram).toMatch(/não receber/);
-      expect(t.whatsapp).toMatch(/Google Maps/);
-      expect(t.whatsapp).toMatch(/"não"/);
+      for (const texto of [t.instagram, t.whatsapp]) {
+        expect(texto).toMatch(/Google Maps/);
+        expect(texto).toMatch(/NÃO ou SAIR/);
+        expect(texto).toMatch(/privacidade/);
+        expect(texto).toMatch(/não custa nada e não obriga a contratar/);
+        expect(texto).not.toMatch(/de graça|sem compromisso|Vimos o perfil/);
+      }
     }
-    expect(textosContatoDireto({ negocio: 'Cantina do Mar', segmento: 'restaurantes', categoria: 'sem-site', cidade: '' }).whatsapp).toMatch(/o Cantina do Mar ainda não/);
+    expect(textosContatoDireto({ negocio: 'Cantina do Mar', segmento: 'restaurantes', categoria: 'sem-site', cidade: '' }).whatsapp).toMatch(/Achamos o Cantina do Mar pelo Google Maps e não achamos um site próprio/);
+  });
+
+  it('contato direto: uma vez só', async () => {
+    const c = (await listarContatos()).find((x) => x.placeId === 'PlaceDescobertaE005')!;
+    await registrarContatoDireto(c.id, 'whatsapp', 'teste@growlift', new Date('2026-11-03T12:00:00Z'));
+    await expect(registrarContatoDireto(c.id, 'instagram', 'teste@growlift', new Date('2026-12-01T12:00:00Z'))).rejects.toThrow(/não mande de novo/);
+    await expect(registrarContatoDireto(c.id, 'email', 'teste@growlift')).rejects.toThrow(/Canal/);
+    const depois = (await contatoPorId(c.id))!;
+    expect(depois.contatoDireto?.canal).toBe('whatsapp');
+    expect(contatoDiretoRecente(depois, new Date('2026-12-01T12:00:00Z'))).toBe(true);
+    expect(contatoDiretoRecente(depois, new Date('2027-03-01T12:00:00Z'))).toBe(false);
   });
 
   it('telefone só aparece com a opção ligada, e nunca fica guardado', async () => {

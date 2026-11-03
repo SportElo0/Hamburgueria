@@ -218,11 +218,11 @@ export async function executarPesquisa(raw: unknown, aprovadas: number, por: str
 }
 
 /** Google's current data for one place, for the review screen. Counted against the month's cap; never stored. */
-export async function verAoVivo(placeId: string, now = new Date()): Promise<LugarAoVivo> {
+export async function verAoVivo(placeId: string, now = new Date(), telefone = telefoneLiberado()): Promise<LugarAoVivo> {
   if (!PLACE_ID.test(placeId)) throw new LeadError('Identificador de lugar inválido.');
   if (!chaveConfigurada()) throw new LeadError('A chave GOOGLE_MAPS_API_KEY não está configurada na Vercel.');
   if (!(await take('places', 'detalhes', limites().detalhes, mes(now)))) throw new LeadError(`O limite do mês para consultar lugares (${limites().detalhes}) acabou.`);
-  return detalhesDoLugar(placeId, telefoneLiberado());
+  return detalhesDoLugar(placeId, telefone);
 }
 
 export const revisaoSchema = z.object({

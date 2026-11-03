@@ -119,6 +119,8 @@ export interface Contato {
   whatsapp?: { numero: string; pedidoEm: string; como: string };
   /** What "Buscar contatos nos sites" found on the business's own site, waiting for a person to confirm. */
   sugestao?: SugestaoContato;
+  /** The one direct contact (Instagram, WhatsApp or call) made by a person; no second one for DIAS_SEM_REPETIR days. */
+  contatoDireto?: { canal: CanalDireto; em: string; por: string };
   observacoes: string;
   rascunhos: Rascunho[];
   historico: Evento[];
@@ -468,6 +470,14 @@ export function canalDoContato(c: Pick<Contato, 'email' | 'fonte' | 'categoria' 
 }
 export const NOME_CANAL: Record<Canal, string> = { email: 'E-mail', instagram: 'Direct no Instagram', telefone: 'Ligação ou WhatsApp' };
 
+/** One direct message per business: after it, the buttons hide for this long (no answer means no). */
+export const DIAS_SEM_REPETIR = 90;
+export const CANAIS_DIRETOS = ['instagram', 'whatsapp', 'ligacao'] as const;
+export type CanalDireto = (typeof CANAIS_DIRETOS)[number];
+export const NOME_CANAL_DIRETO: Record<CanalDireto, string> = { instagram: 'direct no Instagram', whatsapp: 'mensagem de WhatsApp', ligacao: 'ligação' };
+export const contatoDiretoRecente = (c: Pick<Contato, 'contatoDireto'>, now = new Date()) =>
+  Boolean(c.contatoDireto && now.getTime() - Date.parse(c.contatoDireto.em) < DIAS_SEM_REPETIR * 86_400_000);
+
 export interface TextosDiretos {
   instagram: string;
   whatsapp: string;
@@ -480,20 +490,25 @@ export interface TextosDiretos {
  * the person say no.
  */
 export function textosContatoDireto(c: Pick<Contato, 'negocio' | 'segmento' | 'categoria' | 'cidade'>): TextosDiretos {
+  // Only what the Lead Finder actually saw; nothing about the business is assumed.
   const situacao =
     c.categoria === 'so-rede-social'
-      ? 'ainda não tem um site próprio, só o Instagram'
+      ? 'não achamos um site próprio de vocês, só o Instagram'
       : c.categoria === 'sem-site'
-        ? 'ainda não aparece com um site próprio no Google'
-        : 'pode ganhar um site mais fácil de usar no celular';
-  const oferta = 'A gente monta de graça uma prévia de como ficaria o site de vocês, com cardápio e botão para pedir, sem compromisso.';
+        ? 'não achamos um site próprio de vocês no Google'
+        : c.categoria === 'site-com-problemas'
+          ? 'vimos o site de vocês e achamos que dá para melhorar a versão no celular'
+          : 'queremos mostrar como um site próprio pode ajudar vocês';
+  const oferta = 'A gente monta uma prévia de como ficaria o site de vocês, com cardápio e botão para pedir. A prévia não custa nada e não obriga a contratar.';
+  const sair = 'Se preferir não receber, responda NÃO ou SAIR que a gente não chama mais. Como cuidamos dos dados: growlift.com.br/privacidade.html';
+  const ola = `Oi! Tudo bem? Aqui é da Growlift (growlift.com.br), a gente faz sites para restaurantes e negócios locais. Achamos ${c.negocio ? `o ${c.negocio}` : 'vocês'} pelo Google Maps${c.cidade ? `, em ${c.cidade}` : ''}`;
   return {
-    instagram: `Oi! Tudo bem? Aqui é da Growlift, a gente faz sites para restaurantes e negócios locais. Vimos o perfil ${c.negocio ? `do ${c.negocio}` : 'de vocês'} e notamos que ${c.negocio ? 'vocês ' : ''}${situacao}. ${oferta} Podemos mandar? Se preferir não receber, é só avisar que a gente não escreve mais.`,
-    whatsapp: `Oi! Tudo bem? Aqui é da Growlift, a gente faz sites para restaurantes e negócios locais${c.cidade ? ` (vimos vocês no Google Maps, em ${c.cidade})` : ' (vimos vocês no Google Maps)'}. Notamos que ${c.negocio ? `o ${c.negocio}` : 'vocês'} ${situacao}. ${oferta} Podemos mandar por aqui? Se preferir não receber, é só responder "não" que a gente não chama mais.`,
+    instagram: `${ola} e ${situacao}. ${oferta} Podemos mandar? ${sair}`,
+    whatsapp: `${ola} e ${situacao}. ${oferta} Podemos mandar por aqui? ${sair}`,
     ligacao: [
       `Apresente-se: "Oi, aqui é da Growlift, a gente faz sites para restaurantes e negócios locais. Falo com o responsável${c.negocio ? ` pelo ${c.negocio}` : ''}?"`,
-      `Diga por que ligou: "Vimos vocês no Google Maps e notamos que ${situacao}."`,
-      'Ofereça só o diagnóstico grátis e a prévia do site, sem preço e sem compromisso.',
+      `Diga por que ligou: "Achamos vocês pelo Google Maps e ${situacao}."`,
+      'Ofereça só a prévia do site, que não custa nada e não obriga a contratar. Não fale preço nem prazo.',
       'Se toparem: peça o melhor e-mail ou WhatsApp para mandar a prévia e registre aqui em "Anotação".',
       'Se não quiserem: agradeça e toque em "Bloquear contato" para ninguém ligar de novo.',
     ].join('\n'),

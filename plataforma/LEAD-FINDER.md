@@ -25,7 +25,7 @@ Só a equipe da Growlift entra; os logins de loja não veem esta aba.
      - o site não respondeu a tempo;
      - o link é estranho;
      - o Google marca o lugar como fechado definitivamente.
-5. **Checagem do site:** uma única visita à página inicial, como uma pessoa abrindo o link. Não abre outras páginas nem guarda o conteúdo. Recusa endereços internos (proteção contra SSRF), também em IPv6, depois de redirecionamentos e no momento da conexão.
+5. **Checagem do site:** uma única visita à página inicial, como uma pessoa abrindo o link. Não abre outras páginas nem guarda o conteúdo. (Em Vendas, o botão "Buscar contatos nos sites" abre a página inicial e até 2 páginas de contato do mesmo site, com a mesma proteção, e guarda só o e-mail comercial achado, o nome que o site dá a si mesmo e o link da página do e-mail; ver `VENDAS.md`.) Recusa endereços internos (proteção contra SSRF), também em IPv6, depois de redirecionamentos e no momento da conexão.
 6. **Verificação manual:** "Sem website" só vale como confirmado depois de a equipe marcar pelo menos **2 fontes públicas** consultadas:
    - busca no Google;
    - Instagram;
@@ -45,7 +45,7 @@ Só a equipe da Growlift entra; os logins de loja não veem esta aba.
 
 ## O que ele não faz (de propósito)
 
-- **Não guarda nem exporta** nome, endereço, telefone ou site vindos do Google. Os Termos do Google Maps Platform proíbem: seção 3.2.3(a) "No Scraping", que inclui "copy and save business names, addresses". Esses dados aparecem só na tela, no resultado da pesquisa ou no botão "Ver dados do Google", com a atribuição "Google Maps". O que pode ser guardado para sempre é o **place ID**, que é a chave de tudo.
+- **Não guarda nem exporta** nome, endereço, telefone ou site vindos do Google. Os Termos do Google Maps Platform proíbem: seção 3.2.3(a) "No Scraping", que inclui "copy and save business names, addresses". Esses dados aparecem só na tela, no resultado da pesquisa ou no botão "Ver dados do Google", com a atribuição "Google Maps". O que pode ser guardado para sempre é o **place ID**, que é a chave de tudo. A única exceção é em Vendas: o **link da página do próprio site do negócio onde o e-mail comercial foi achado**, guardado como prova de origem do e-mail. O e-mail e o link vêm do site do negócio, não do Google (o endereço do site vindo do Google só serve para abrir a página e não é guardado). O nome guardado também vem do site (título), nunca do Google.
 - **Não envia mensagem nenhuma.** A abordagem por e-mail fica em Vendas (`VENDAS.md`), com fonte, aprovação humana e lista de bloqueio; na fase 1 nada é enviado. Contato é feito por uma pessoa, um negócio por vez, dizendo quem é. Se pedirem para não ser contatados, marquem "Não contatar". Campanha de WhatsApp só para quem aceitou receber (regras no CLAUDE.md).
 - **Não raspa o Google nem outros sites.** A busca é pela API oficial; a checagem do site é uma visita à página inicial; as outras fontes a equipe confere à mão.
 - **Não mostra telefone** a não ser que `LEADS_MOSTRAR_TELEFONE=sim`. Mesmo assim, o telefone só aparece na tela, nunca é guardado. Ao lado dele vem um botão **"Chamar no WhatsApp"** (celular) ou **"Ligar (fixo)"**: o link é montado na hora, um contato por vez, à mão; nada de envio em massa.

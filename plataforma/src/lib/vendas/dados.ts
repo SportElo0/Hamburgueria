@@ -29,6 +29,10 @@ import {
   type Evento,
   type Rascunho,
   type SugestaoContato,
+  CANAIS_DIRETOS,
+  NOME_CANAL_DIRETO,
+  contatoDiretoRecente,
+  type CanalDireto,
   type TipoRascunho,
 } from './regras';
 
@@ -192,6 +196,17 @@ export async function salvarSugestao(id: string, sugestao: SugestaoContato, por:
       ? `Busca no site do negócio: achado ${sugestao.email}${sugestao.negocio ? ` (${sugestao.negocio})` : ''}. Falta uma pessoa confirmar.`
       : `Busca no site do negócio: ${sugestao.motivo ?? 'nada encontrado'}`;
     return { ...comEvento(c, evento(por, 'cadastro', texto, now)), sugestao };
+  });
+}
+
+/** "Já mandei": the one direct contact is recorded, and the panel will not offer another for DIAS_SEM_REPETIR days. */
+export async function registrarContatoDireto(id: string, canal: string, por: string, now = new Date()) {
+  if (!CANAIS_DIRETOS.includes(canal as CanalDireto)) throw new VendasError('Canal inválido.');
+  return alterarContato(id, (c) => {
+    if (c.etapa === 'nao-contatar') throw new VendasError('Este contato pediu para não ser contatado.');
+    if (contatoDiretoRecente(c, now)) throw new VendasError('Este negócio já foi contatado diretamente. Se não respondeu, não mande de novo.');
+    const contatoDireto = { canal: canal as CanalDireto, em: now.toISOString(), por };
+    return { ...comEvento(c, evento(por, 'nota', `Contato direto por ${NOME_CANAL_DIRETO[canal as CanalDireto]} (uma vez; não repetir).`, now)), contatoDireto };
   });
 }
 

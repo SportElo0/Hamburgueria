@@ -61,6 +61,20 @@ Em **Oportunidades**, acima da lista: caixas de seleção nos cartões e dois bo
 - Marcar "Não contatar" em Oportunidades bloqueia o contato no CRM; "Descartada" move para Perdido (se ainda estava no
   começo do funil).
 
+## Buscar contatos nos sites e contato direto (03/11/2026)
+
+**Buscar contatos nos sites** (em "Aguardando qualificação"):
+- Mostra o custo antes: 1 consulta ao Google (Place Details) por negócio, só para saber o endereço do site; conta no limite mensal do Lead Finder. Até 5 por clique.
+- Lê o site do próprio negócio (página inicial e até 2 de contato, mesmo endereço) com o verificador seguro do Lead Finder e sugere o nome (título do site), o e-mail comercial e o link da página. Nunca sugere Gmail, Hotmail e parecidos; só HTTPS.
+- Nada fica completo sozinho: os achados aparecem em "Achados nos sites" e uma pessoa confirma (regras de sempre: bloqueio, duplicado, webmail). Sem e-mail, fica o motivo e o contato vai para o contato direto. Se o Google ou o site não respondem, nada é guardado e o contato volta na próxima busca.
+
+**Contato direto** (ficha do contato, para quem não tem e-mail comercial):
+- Canal na lista: E-mail, Direct no Instagram ou Ligação/WhatsApp (pela categoria do Lead Finder).
+- Textos prontos para 1 direct, 1 mensagem de WhatsApp e um roteiro de ligação: falam como a Growlift (growlift.com.br), dizem que acharam o negócio pelo Google Maps, oferecem só a prévia ("não custa nada e não obriga a contratar"), sem preço, com NÃO/SAIR e o link da política de privacidade.
+- Telefone ao vivo do Google (só com `LEADS_MOSTRAR_TELEFONE=sim`), nunca guardado; o link do WhatsApp abre a conversa com o texto e quem envia é a pessoa. Nunca pelo WhatsApp que atende clientes.
+- **Uma vez só:** "Já mandei" (ou abrir a conversa) registra o contato e esconde os botões por 90 dias. Se pedirem para sair: "Bloquear contato" (bloqueia o lugar também, não volta em nova importação).
+- Revisões de segurança e legal feitas em 03/11; política de privacidade do site atualizada (seção "Quando a Growlift procura o seu negócio primeiro").
+
 ## IA
 
 - Por padrão os textos vêm do **simulador** (frases fixas, sem IA, sem custo, sem internet).

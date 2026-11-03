@@ -30,7 +30,7 @@ export function BuscarContatos({ pendentes }: { pendentes: number }) {
       const d = r.dados;
       setMsg({
         ok: true,
-        texto: `${d.analisados} site(s) lido(s): ${d.achados} com e-mail para confirmar, ${d.semEmail} sem e-mail (vão para outro canal).${d.restantes ? ` Faltam ${d.restantes}: clique de novo.` : ''}`,
+        texto: `${d.analisados} site(s) lido(s): ${d.achados} com e-mail para confirmar, ${d.semEmail} sem e-mail (vão para outro canal)${d.adiados ? `, ${d.adiados} não responderam agora` : ''}.${d.restantes ? ` Faltam ${d.restantes}: clique de novo.` : ''}`,
       });
     });
 

@@ -22,7 +22,7 @@ import {
 } from '@/lib/vendas/dados';
 import type { TipoRascunho } from '@/lib/vendas/regras';
 import { buscarContatosNosSites, confirmarSugestoes, estimarBusca, telefoneAoVivo, type ResumoBusca } from '@/lib/vendas/descoberta';
-import { contatoPorId } from '@/lib/vendas/dados';
+import { contatoPorId, registrarContatoDireto } from '@/lib/vendas/dados';
 import type { ResumoImportacao } from '@/lib/vendas/dados';
 
 export type Resposta<T = null> = { ok: true; dados: T } | { ok: false; error: string };
@@ -141,6 +141,11 @@ export async function confirmarSugestoesAction(ids: string[]): Promise<Resposta<
     const r = await confirmarSugestoes(ids, por);
     return { confirmados: r.confirmados.length, falhas: r.falhas };
   }, [BASE]);
+}
+
+export async function contatoDiretoAction(id: string, canal: string): Promise<Resposta> {
+  if (!idOk(id)) return invalido();
+  return rodar(async (por) => (await registrarContatoDireto(id, canal, por), null), [BASE, `${BASE}/${id}`]);
 }
 
 /** The business phone for a call or one WhatsApp message, live from Google: shown, never stored. */

@@ -15,7 +15,7 @@ import { VendasError, completarContato, listarContatos, salvarSugestao } from '.
 
 const CATEGORIAS_COM_SITE = new Set(['site-proprio', 'site-com-problemas', 'incerta']);
 /** Per click: each contact may take up to ~25 s (three page visits), three at a time, inside the page's 60 s. */
-export const MAX_POR_VEZ = 6;
+export const MAX_POR_VEZ = 5;
 const PARALELO = 3;
 const TEMPO_POR_CONTATO_MS = 25_000;
 
@@ -68,7 +68,9 @@ export function extrairDaPagina(html: string, url: URL): Extraido {
     } catch {
       continue;
     }
-    if (!/^https?:$/.test(u.protocol) || dominioBase(u.hostname) !== dominioBase(url.hostname)) continue;
+    // The same site only (exact host, with or without www): on shared hosting the base domain belongs to many sites.
+    const semWww = (h: string) => h.toLowerCase().replace(/^www\./, '');
+    if (!/^https?:$/.test(u.protocol) || semWww(u.hostname) !== semWww(url.hostname)) continue;
     if (!contatos.some((c) => c.href === u.href) && u.href !== url.href) contatos.push(u);
     if (contatos.length >= 2) break;
   }
@@ -156,6 +158,8 @@ export interface ResumoBusca {
   analisados: number;
   achados: number;
   semEmail: number;
+  /** Not answered now (Google or the site): nothing saved, they stay for the next click. */
+  adiados: number;
   restantes: number;
 }
 
@@ -165,16 +169,19 @@ export interface ResumoBusca {
  */
 export async function buscarContatosNosSites(aprovadas: number, por: string, opts: { now?: Date; ver?: (placeId: string) => Promise<LugarAoVivo>; abrir?: typeof abrirPagina } = {}): Promise<ResumoBusca> {
   const now = opts.now ?? new Date();
-  const ver = opts.ver ?? ((id: string) => verAoVivo(id, now));
+  // The search needs only the site address: no phone field, which would also cost more.
+  const ver = opts.ver ?? ((id: string) => verAoVivo(id, now, false));
   const fila = pendentesDeBusca(await listarContatos(), await categoriasNoLeadFinder());
   const alvo = fila.slice(0, Math.min(MAX_POR_VEZ, Math.max(0, Math.floor(aprovadas))));
   if (!alvo.length) throw new VendasError(fila.length ? 'Confirme o custo antes de buscar.' : 'Nenhum contato com site esperando busca.');
   let achados = 0;
   let semEmail = 0;
+  let adiados = 0;
   for (let i = 0; i < alvo.length; i += PARALELO) {
     await Promise.all(
       alvo.slice(i, i + PARALELO).map(async (c) => {
-        let r: ResultadoSite;
+        // Transient problems (Google or the site not answering now) save nothing, so the contact stays in the queue.
+        let r: ResultadoSite | null;
         try {
           const lugar = await ver(c.placeId!);
           let site: URL | null = null;
@@ -183,11 +190,15 @@ export async function buscarContatosNosSites(aprovadas: number, por: string, opt
           } catch {
             site = null;
           }
-          r = site ? await comTempo(descobrirNoSite(site, opts.abrir), TEMPO_POR_CONTATO_MS, { ok: false, motivo: 'O site demorou demais: conferir à mão.' }) : { ok: false, motivo: 'O Google não mostra mais site para este negócio.' };
+          r = site ? await comTempo<ResultadoSite | null>(descobrirNoSite(site, opts.abrir), TEMPO_POR_CONTATO_MS, null) : { ok: false, motivo: 'O Google não mostra mais site para este negócio.' };
         } catch (err) {
           // The monthly cap or a Google refusal: keep the contact pending (no suggestion saved) and stop here.
           if (err instanceof Error && /limite do mês|recusou|chave/i.test(err.message)) throw new VendasError(err.message);
-          r = { ok: false, motivo: 'Não deu para consultar agora: tentar de novo depois.' };
+          r = null;
+        }
+        if (!r) {
+          adiados++;
+          return;
         }
         if (r.ok) achados++;
         else semEmail++;
@@ -195,7 +206,7 @@ export async function buscarContatosNosSites(aprovadas: number, por: string, opt
       }),
     );
   }
-  return { analisados: alvo.length, achados, semEmail, restantes: Math.max(0, fila.length - alvo.length) };
+  return { analisados: alvo.length, achados, semEmail, adiados, restantes: Math.max(0, fila.length - alvo.length + adiados) };
 }
 
 /** "Confirmar selecionados": each suggestion goes through the same rules as typing it by hand (block list, duplicates, webmail). */
