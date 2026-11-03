@@ -43,6 +43,20 @@ export type DiagnosisInput = z.input<typeof diagnosisInputSchema>;
 export const DIAGNOSIS_STATUSES = ['novo', 'em-andamento', 'enviado', 'descartado'] as const;
 export type DiagnosisStatus = (typeof DIAGNOSIS_STATUSES)[number];
 
+/** The automatic first look at the site the person wrote (diagnostico-auto.ts). Plain-word points, nothing copied from the page. */
+export interface DiagnosisAnalysis {
+  /** site: a website was opened; sem-site: none, or only social networks; conferir: could not tell, look by hand. */
+  tipo: 'site' | 'sem-site' | 'conferir';
+  site?: string;
+  redes: string[];
+  instagram?: string;
+  /** What to improve. */
+  pontos: string[];
+  /** What is already good. */
+  ok: string[];
+  em: string;
+}
+
 export interface DiagnosisRequest {
   id: string;
   createdAt: string;
@@ -57,6 +71,7 @@ export interface DiagnosisRequest {
   source: string;
   /** Hashed sender address for the per-sender daily limit; empty when unknown. */
   sender?: string;
+  analysis?: DiagnosisAnalysis;
 }
 
 export class DiagnosisError extends Error {}
@@ -108,6 +123,12 @@ export async function listDiagnosisRequests(days = 30, now = new Date()): Promis
   const keys = Array.from({ length: days }, (_, i) => dayOf(new Date(now.getTime() - i * 86_400_000)));
   const docs = await Promise.all(keys.map((d) => storage().readJSON<DiagnosisRequest[]>(keyOf(d))));
   return docs.flatMap((d) => d?.data ?? []).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export async function saveDiagnosisAnalysis(id: string, analysis: DiagnosisAnalysis) {
+  const day = /^(\d{4})(\d{2})(\d{2})-/.exec(id);
+  if (!day) throw new DiagnosisError('Pedido inválido.');
+  await updateDay(`${day[1]}-${day[2]}-${day[3]}`, (list) => list.map((r) => (r.id === id ? { ...r, analysis } : r)));
 }
 
 export async function setDiagnosisStatus(id: string, status: DiagnosisStatus) {

@@ -76,9 +76,32 @@ export function DiagnosisList({ requests }: { requests: DiagnosisRequest[] }) {
                 <dd className="whitespace-pre-line">{r.wishes || <span className="text-ink-mute">Não informou</span>}</dd>
               </div>
             </dl>
+            <Analise r={r} />
           </article>
         );
       })}
     </div>
+  );
+}
+
+/** The automatic first look at the site (done when the request arrives, or at 6:30). */
+function Analise({ r }: { r: DiagnosisRequest }) {
+  const a = r.analysis;
+  if (!a) return <p className="mt-3 text-sm text-ink-mute">Análise automática do site: ainda não feita (sai no resumo das 6h30).</p>;
+  return (
+    <section className="mt-4 rounded-lg border border-line bg-paper p-4" aria-label="Análise automática">
+      <p className="text-sm font-semibold">
+        {a.tipo === 'sem-site' ? 'Não tem site: fazer a prévia' : a.tipo === 'conferir' ? 'Conferir o site à mão' : `O que melhorar em ${a.site}`}
+        <span className="ml-2 font-normal text-ink-mute">análise automática da página inicial · {fmtWhen(a.em)}</span>
+      </p>
+      {a.pontos.length > 0 && (
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-[15px]">
+          {a.pontos.map((p) => (
+            <li key={p}>{p}</li>
+          ))}
+        </ul>
+      )}
+      {a.ok.length > 0 && <p className="mt-2 text-sm text-ok">Já está bom: {a.ok.join(' ')}</p>}
+    </section>
   );
 }

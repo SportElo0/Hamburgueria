@@ -1,5 +1,9 @@
-import { NextResponse, type NextRequest } from 'next/server';
-import { createDiagnosisRequest, DiagnosisError } from '@/lib/diagnostics';
+import { after, NextResponse, type NextRequest } from 'next/server';
+import { createDiagnosisRequest, DiagnosisError, saveDiagnosisAnalysis } from '@/lib/diagnostics';
+import { analisarPedido } from '@/lib/diagnostico-auto';
+
+/** Room for the one-page site check that runs after the answer (diagnostico-auto.ts). */
+export const maxDuration = 30;
 
 // Public: the Growlift site's free-diagnosis form posts here.
 const CORS = {
@@ -21,6 +25,14 @@ export async function POST(request: NextRequest) {
   try {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? '';
     const created = await createDiagnosisRequest(body, request.headers.get('origin') ?? '', new Date(), ip);
+    // The free first look at the site, after the person already has the answer. If it fails, the 6:30 run retries.
+    after(async () => {
+      try {
+        await saveDiagnosisAnalysis(created.id, await analisarPedido(created));
+      } catch (err) {
+        console.error('diagnostico: análise ao receber', err instanceof Error ? err.message : err);
+      }
+    });
     return NextResponse.json({ id: created.id }, { status: 201, headers: CORS });
   } catch (err) {
     if (err instanceof DiagnosisError) return NextResponse.json({ error: err.message }, { status: 422, headers: CORS });
