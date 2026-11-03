@@ -60,9 +60,9 @@ const PLACE = /^[A-Za-z0-9_-]{10,300}$/;
 
 /** The next 10 businesses, name and phone live from Google (never stored). `pular`: the ones already on screen. */
 export async function paginaWhatsappAction(pular: string[]): Promise<Resposta<LinhaWhatsapp[]>> {
-  await requireUser();
+  const user = await requireUser();
   if (!Array.isArray(pular) || pular.length > 500 || !pular.every((p) => typeof p === 'string' && PLACE.test(p))) return { ok: false, error: 'Pedido inválido.' };
-  return rodar(() => paginaWhatsapp(pular));
+  return rodar(() => paginaWhatsapp(pular, user.email));
 }
 
 /** "Mandei" / "Liguei": one contact per business, recorded without the number. */

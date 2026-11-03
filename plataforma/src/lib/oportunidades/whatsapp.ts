@@ -1,6 +1,8 @@
 import 'server-only';
 import { LeadError, limites, listarLeads, telefoneLiberado, usoDoMes, verAoVivo } from './dados';
 import { estimar, linkMaps, linkWhatsApp, type Lead } from './regras';
+import { gravacaoPermitida } from '../ambiente';
+import { take } from '../limits';
 import { textosContatoDireto } from '../vendas/regras';
 
 /**
@@ -36,13 +38,21 @@ export interface LinhaWhatsapp {
 }
 
 /** The next page, live from Google. Nothing of it is stored. */
-export async function paginaWhatsapp(pular: string[], now = new Date(), ver = (id: string) => verAoVivo(id, now, true)): Promise<LinhaWhatsapp[]> {
+/** Pages per person per hour: reloading the page cannot burn the month's Google calls. */
+export const PAGINAS_POR_HORA = 6;
+
+export async function paginaWhatsapp(pular: string[], por: string, now = new Date(), ver = (id: string) => verAoVivo(id, now, true)): Promise<LinhaWhatsapp[]> {
+  // A preview cannot count calls (read-only storage), so it makes none.
+  if (!gravacaoPermitida()) throw new LeadError('Esta é uma versão de prévia: a lista só funciona no painel oficial.');
   if (!telefoneLiberado()) throw new LeadError('Para mostrar o WhatsApp dos negócios, ligue LEADS_MOSTRAR_TELEFONE=sim na Vercel.');
+  if (!(await take('whatsapp-pagina', por, PAGINAS_POR_HORA, now.toISOString().slice(0, 13))))
+    throw new LeadError(`Limite de ${PAGINAS_POR_HORA} páginas por hora (cada uma consulta o Google). Mande as mensagens desta lista e volte daqui a pouco.`);
   const fora = new Set(pular);
   const alvo = filaWhatsapp(await listarLeads())
     .filter((l) => !fora.has(l.placeId))
     .slice(0, POR_PAGINA);
-  const linhas = await Promise.all(
+  // One business Google cannot return (deleted, or the month's cap reached midway) must not hide the others.
+  const linhas = await Promise.allSettled(
     alvo.map(async (l) => {
       const g = await ver(l.placeId);
       const texto = textosContatoDireto({ negocio: g.nome, segmento: l.segmento, categoria: l.categoria, cidade: l.cidade }).whatsapp;
@@ -50,5 +60,8 @@ export async function paginaWhatsapp(pular: string[], now = new Date(), ver = (i
       return { placeId: l.placeId, nome: g.nome, telefone: g.telefone ?? '', whatsapp: wa ? `${wa}?text=${encodeURIComponent(texto)}` : '', maps: linkMaps(l.placeId), categoria: l.categoria };
     }),
   );
-  return linhas;
+  const ok = linhas.flatMap((r) => (r.status === 'fulfilled' ? [r.value] : []));
+  const falha = linhas.find((r) => r.status === 'rejected');
+  if (!ok.length && falha) throw falha.reason;
+  return ok;
 }

@@ -30,8 +30,9 @@ export function MandarWhatsapp({ fila, custo, liberado }: { fila: number; custo:
     start(async () => {
       const r = e === 'nao-quer' ? await naoQuerAction(placeId) : await contatadoAction(placeId, e === 'ligado' ? 'ligacao' : 'whatsapp');
       if (!r.ok) {
-        setErro(r.error);
-        setEstado((s) => ({ ...s, [placeId]: 'aberto' }));
+        // The conversation may already be open: say so, so nobody sends a second message.
+        setErro(e === 'nao-quer' ? r.error : `${r.error} A conversa pode ter aberto: se mandou, não mande de novo.`);
+        if (e === 'nao-quer') setEstado((s) => ({ ...s, [placeId]: 'aberto' }));
       }
     });
   };

@@ -30,7 +30,7 @@ describe('Mandar WhatsApp', () => {
   });
 
   it('traz nome e WhatsApp ao vivo com a mensagem pronta, e não guarda nada do Google', async () => {
-    const linhas = await paginaWhatsapp([], new Date(), ver);
+    const linhas = await paginaWhatsapp([], 'teste', new Date(), ver);
     expect(linhas).toHaveLength(5);
     const cel = linhas.find((l) => l.placeId.endsWith('01'))!;
     expect(cel.nome).toBe('Restaurante 01');
@@ -53,9 +53,19 @@ describe('Mandar WhatsApp', () => {
   });
 
   it('pula quem já está na tela e respeita o telefone desligado', async () => {
-    const primeira = await paginaWhatsapp(['PlaceWhats000001', 'PlaceWhats000005'], new Date(), ver);
+    const primeira = await paginaWhatsapp(['PlaceWhats000001', 'PlaceWhats000005'], 'teste', new Date(), ver);
     expect(primeira.map((l) => l.placeId)).not.toContain('PlaceWhats000001');
     vi.stubEnv('LEADS_MOSTRAR_TELEFONE', '');
-    await expect(paginaWhatsapp([], new Date(), ver)).rejects.toThrow(/LEADS_MOSTRAR_TELEFONE/);
+    await expect(paginaWhatsapp([], 'teste', new Date(), ver)).rejects.toThrow(/LEADS_MOSTRAR_TELEFONE/);
+  });
+
+  it('uma ficha com erro não esconde as outras, e há limite por hora', async () => {
+    const quebrado = async (id: string) => (id.endsWith('01') ? Promise.reject(new Error('apagado')) : ver(id));
+    const linhas = await paginaWhatsapp([], 'teste', new Date('2026-11-03T20:00:00Z'), quebrado);
+    expect(linhas.map((l) => l.placeId)).not.toContain('PlaceWhats000001');
+    expect(linhas.length).toBe(4);
+    for (let i = 1; i < 6; i++) await paginaWhatsapp([], 'teste', new Date('2026-11-03T20:10:00Z'), ver);
+    await expect(paginaWhatsapp([], 'teste', new Date('2026-11-03T20:20:00Z'), ver)).rejects.toThrow(/por hora/);
+    await expect(paginaWhatsapp([], 'outra@pessoa', new Date('2026-11-03T20:20:00Z'), ver)).resolves.toHaveLength(5);
   });
 });
