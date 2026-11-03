@@ -6,7 +6,8 @@ import { publicOrigin } from '@/lib/origem';
 import { linkMaps, nomeCategoria } from '@/lib/oportunidades/regras';
 import { leadDoLugar } from '@/lib/oportunidades/dados';
 import { contatoPorId, gravacaoPermitida, tokenDescadastro } from '@/lib/vendas/dados';
-import { ETAPAS_ENCERRADAS, analisarContato, contatoCompleto, linkWhatsAppComercial, linkWhatsAppDoLead, nomeExibicao, nomeFonte, rodape } from '@/lib/vendas/regras';
+import { ETAPAS_ENCERRADAS, analisarContato, canalDoContato, contatoCompleto, linkWhatsAppComercial, linkWhatsAppDoLead, nomeExibicao, nomeFonte, rodape, textosContatoDireto } from '@/lib/vendas/regras';
+import { ContatoDireto } from '@/components/vendas/ContatoDireto';
 import { CompletarContato } from '@/components/vendas/CompletarContato';
 import { AcoesContato } from '@/components/vendas/AcoesContato';
 import { CopiarLink } from '@/components/vendas/CopiarLink';
@@ -139,10 +140,29 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
               Abra o negócio no Google Maps, ache o site ou o Instagram <strong>dele</strong> e copie de lá o nome e o e-mail comercial. Dados do Google não podem ser
               guardados.
             </p>
-            <CompletarContato id={c.id} inicial={{ negocio: c.negocio, email: c.email, fonteTipo: c.fonte?.tipo, fonteUrl: c.fonte?.url }} />
+            {c.sugestao && (
+              <p className={`mb-3 rounded-lg px-3 py-2 text-sm ${c.sugestao.email ? 'bg-ok/10' : 'bg-warn/10'}`}>
+                <strong>Busca no site do negócio ({dataHora(c.sugestao.em)}):</strong>{' '}
+                {c.sugestao.email ? `achado ${c.sugestao.email}. Já está preenchido abaixo: confira e salve.` : c.sugestao.motivo}
+                {c.sugestao.avisos.length > 0 && <span className="block text-xs text-warn">{c.sugestao.avisos.join(' ')}</span>}
+              </p>
+            )}
+            <CompletarContato
+              id={c.id}
+              inicial={{
+                negocio: c.negocio || c.sugestao?.negocio || '',
+                email: c.email || c.sugestao?.email || '',
+                fonteTipo: c.fonte?.tipo ?? (c.sugestao?.email ? 'site' : undefined),
+                fonteUrl: c.fonte?.url ?? c.sugestao?.fonteUrl,
+              }}
+            />
           </div>
         )}
       </section>
+
+      {!completo && c.etapa !== 'nao-contatar' && canalDoContato(c, lead?.categoria) !== 'email' && (
+        <ContatoDireto id={c.id} canal={canalDoContato(c, lead?.categoria)} textos={textosContatoDireto({ ...c, categoria: lead?.categoria ?? c.categoria })} temLugar={Boolean(c.placeId)} mapsUrl={c.placeId ? linkMaps(c.placeId) : undefined} />
+      )}
 
       {quente && (
         <section className="card mt-6 border-bad/30 p-5" aria-labelledby="whats">
@@ -169,7 +189,7 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
         </section>
       )}
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <Rascunhos id={c.id} rascunhos={c.rascunhos} rodape={rodape(linkSair, nomeExibicao(c), c.fonte ? nomeFonte(c.fonte.tipo) : '{fonte}')} encerrado={encerrado || !completo} podeAcompanhar={primeiroAprovado && ['aprovado', 'enviado'].includes(c.etapa)} />
         <div className="space-y-6">
           <AcoesContato id={c.id} etapa={c.etapa} podeWhatsapp={quente || c.etapa === 'cliente'} />

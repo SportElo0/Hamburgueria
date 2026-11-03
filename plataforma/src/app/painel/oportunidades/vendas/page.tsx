@@ -5,7 +5,9 @@ import { listarLeads } from '@/lib/oportunidades/dados';
 import { linkMaps } from '@/lib/oportunidades/regras';
 import { PrepararAbordagens } from '@/components/vendas/PrepararAbordagens';
 import { iaLigada } from '@/lib/vendas/ia';
-import { ETAPAS, ETAPA_IDS, analisarContato, contatoCompleto, linkWhatsAppComercial, linkWhatsAppDoLead, nomeExibicao, type Etapa } from '@/lib/vendas/regras';
+import { ETAPAS, ETAPA_IDS, NOME_CANAL, analisarContato, canalDoContato, contatoCompleto, linkWhatsAppComercial, linkWhatsAppDoLead, nomeExibicao, type Etapa } from '@/lib/vendas/regras';
+import { pendentesDeBusca } from '@/lib/vendas/descoberta';
+import { BuscarContatos, ConfirmarAchados, type Achado } from '@/components/vendas/BuscarContatos';
 import { AvisoFase1, ChipEtapa, dataHora } from '@/components/vendas/ui';
 import { CopiarLink } from '@/components/vendas/CopiarLink';
 
@@ -26,6 +28,11 @@ export default async function VendasPage({ searchParams }: { searchParams: Promi
     .filter((c) => c.etapa === 'qualificar')
     .map((c) => ({ c, a: analisarContato(c, c.placeId ? verificacoes.get(c.placeId) : undefined) }))
     .sort((x, y) => ORDEM[x.a.prioridade] - ORDEM[y.a.prioridade]);
+  const categorias = Object.fromEntries(leads.map((l) => [l.placeId, l.categoria]));
+  const paraBuscar = pendentesDeBusca(contatos, categorias).length;
+  const achados: Achado[] = contatos
+    .filter((c) => c.etapa === 'qualificar' && !c.email && c.sugestao?.email && c.sugestao.fonteUrl)
+    .map((c) => ({ id: c.id, negocio: c.sugestao!.negocio, email: c.sugestao!.email!, fonteUrl: c.sugestao!.fonteUrl!, avisos: c.sugestao!.avisos }));
   const prontos = contatos.filter((c) => c.etapa === 'novo' && contatoCompleto(c) && c.rascunhos.every((r) => r.status === 'descartado')).length;
   const contagem = contagemPorEtapa(contatos);
   const fila = filaDeAprovacao(contatos);
@@ -108,8 +115,12 @@ export default async function VendasPage({ searchParams }: { searchParams: Promi
                 Importados de Oportunidades. Para cada um: nome do negócio, e-mail comercial e o link de onde veio o e-mail (site ou rede dele, nunca o Google).
               </p>
             </div>
-            <PrepararAbordagens prontos={prontos} />
+            <div className="flex flex-wrap items-start justify-end gap-2">
+              <BuscarContatos pendentes={paraBuscar} />
+              <PrepararAbordagens prontos={prontos} />
+            </div>
           </div>
+          <ConfirmarAchados achados={achados} />
           {aQualificar.length > 0 && (
             <div className="mt-3 overflow-x-auto rounded-xl border border-line bg-card">
               <table className="w-full min-w-[640px] text-left text-sm">
@@ -118,6 +129,7 @@ export default async function VendasPage({ searchParams }: { searchParams: Promi
                     <th className="px-3 py-2 font-semibold">Empresa</th>
                     <th className="px-3 py-2 font-semibold">Prioridade</th>
                     <th className="px-3 py-2 font-semibold">Plano</th>
+                    <th className="px-3 py-2 font-semibold">Canal</th>
                     <th className="px-3 py-2 font-semibold">Falta</th>
                     <th className="px-3 py-2" />
                   </tr>
@@ -129,10 +141,11 @@ export default async function VendasPage({ searchParams }: { searchParams: Promi
                         <Link href={`/painel/oportunidades/vendas/${c.id}`} className="font-semibold hover:text-accent">
                           {nomeExibicao(c)}
                         </Link>
-                        <span className="block text-xs text-ink-mute">{a.motivos[0]}</span>
+                        <span className="block text-xs text-ink-mute">{c.sugestao?.motivo ?? a.motivos[0]}</span>
                       </td>
                       <td className="px-3 py-2">{a.prioridade === 'media' ? 'Média' : a.prioridade === 'alta' ? 'Alta' : 'Baixa'}</td>
                       <td className="px-3 py-2">{a.plano}</td>
+                      <td className="px-3 py-2">{NOME_CANAL[canalDoContato(c, c.placeId ? categorias[c.placeId] : undefined)]}</td>
                       <td className="px-3 py-2 text-warn">{a.falta.join(' · ')}</td>
                       <td className="px-3 py-2 text-right whitespace-nowrap">
                         {c.placeId && (

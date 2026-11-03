@@ -28,6 +28,7 @@ import {
   type Etapa,
   type Evento,
   type Rascunho,
+  type SugestaoContato,
   type TipoRascunho,
 } from './regras';
 
@@ -181,6 +182,17 @@ async function alterarContato(id: string, fn: (c: Contato) => Contato): Promise<
     return { ...atual, [id]: salvo };
   });
   return salvo!;
+}
+
+/** Keeps what "Buscar contatos nos sites" found (or why nothing was found), only while the contact still waits for qualification. */
+export async function salvarSugestao(id: string, sugestao: SugestaoContato, por: string, now = new Date()) {
+  return alterarContato(id, (c) => {
+    if (c.etapa !== 'qualificar' || c.email) return c;
+    const texto = sugestao.email
+      ? `Busca no site do negócio: achado ${sugestao.email}${sugestao.negocio ? ` (${sugestao.negocio})` : ''}. Falta uma pessoa confirmar.`
+      : `Busca no site do negócio: ${sugestao.motivo ?? 'nada encontrado'}`;
+    return { ...comEvento(c, evento(por, 'cadastro', texto, now)), sugestao };
+  });
 }
 
 export async function mudarEtapa(id: string, etapa: string, por: string, now = new Date()) {
@@ -379,7 +391,7 @@ export async function completarContato(id: string, raw: unknown, por: string, no
     if (outro) throw new VendasError(`Este e-mail já está em outro contato: ${nomeExibicao(outro)}.`);
     const mudou = x.negocio !== d.negocio || x.email !== d.email || x.fonte?.url !== d.fonteUrl;
     const base = mudou ? comEvento(x, evento(por, 'cadastro', `Contato completado. E-mail achado em: ${d.fonteUrl}`, now)) : x;
-    salvo = { ...base, negocio: d.negocio, email: d.email, fonte: { tipo: d.fonteTipo, url: d.fonteUrl }, etapa: x.etapa === 'qualificar' ? 'novo' : x.etapa };
+    salvo = { ...base, negocio: d.negocio, email: d.email, fonte: { tipo: d.fonteTipo, url: d.fonteUrl }, etapa: x.etapa === 'qualificar' ? 'novo' : x.etapa, sugestao: undefined };
     return { ...atual, [id]: salvo };
   });
   return salvo!;

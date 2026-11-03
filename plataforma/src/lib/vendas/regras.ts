@@ -78,6 +78,22 @@ export interface Rascunho {
   decididoPor?: string;
 }
 
+/**
+ * Found automatically on the business's own website (never Google's data): the name the site gives itself, a business
+ * e-mail published there and the page where it is. Only a suggestion: a person confirms before the contact is complete.
+ * Without an e-mail, only the reason is kept (no address, no link).
+ */
+export interface SugestaoContato {
+  em: string;
+  negocio?: string;
+  email?: string;
+  fonteUrl?: string;
+  /** Things to look at before confirming (e.g. "o nome veio do título da página"). */
+  avisos: string[];
+  /** Why nothing usable was found. */
+  motivo?: string;
+}
+
 export interface Contato {
   id: string;
   /** Link to the Oportunidades lead (Google place ID), when it came from there. */
@@ -101,6 +117,8 @@ export interface Contato {
   etapa: Etapa;
   /** Phone the business itself gave and asked to be called on, with when and how it asked. */
   whatsapp?: { numero: string; pedidoEm: string; como: string };
+  /** What "Buscar contatos nos sites" found on the business's own site, waiting for a person to confirm. */
+  sugestao?: SugestaoContato;
   observacoes: string;
   rascunhos: Rascunho[];
   historico: Evento[];
@@ -431,4 +449,53 @@ export function rodape(linkDescadastro: string, negocio = '{negócio}', fonte = 
     '69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP',
     `Você recebeu este e-mail porque o endereço está publicado como contato comercial de ${negocio} (${fonte.toLowerCase()}). Para não receber mais: ${linkDescadastro} ou responda SAIR. Como tratamos dados: growlift.com.br/privacidade.html`,
   ].join('\n');
+}
+
+/* ---------- channels for businesses without a usable e-mail ---------- */
+
+/**
+ * How to reach a contact: e-mail when it has (or can have) a business address on its own site; Instagram direct when it
+ * only has a social profile; a call or one WhatsApp message by a person when it has nothing online.
+ */
+export type Canal = 'email' | 'instagram' | 'telefone';
+export function canalDoContato(c: Pick<Contato, 'email' | 'fonte' | 'categoria' | 'sugestao' | 'negocio'>, categoriaNoLeadFinder?: string): Canal {
+  if (contatoCompleto(c) || c.sugestao?.email) return 'email';
+  // An imported "sem site" not yet confirmed in 2 sources shows as "incerta" here; Oportunidades still knows the truth.
+  const cat = categoriaNoLeadFinder ?? c.categoria;
+  if (cat === 'so-rede-social') return 'instagram';
+  if (cat === 'sem-site' || c.sugestao?.motivo) return 'telefone';
+  return 'email';
+}
+export const NOME_CANAL: Record<Canal, string> = { email: 'E-mail', instagram: 'Direct no Instagram', telefone: 'Ligação ou WhatsApp' };
+
+export interface TextosDiretos {
+  instagram: string;
+  whatsapp: string;
+  ligacao: string;
+}
+
+/**
+ * Ready texts for the team to send by hand, one business at a time (never in bulk, never by a robot). They speak as
+ * Growlift ("a gente"), say where the contact came from, offer only the free diagnosis, carry no price and always let
+ * the person say no.
+ */
+export function textosContatoDireto(c: Pick<Contato, 'negocio' | 'segmento' | 'categoria' | 'cidade'>): TextosDiretos {
+  const situacao =
+    c.categoria === 'so-rede-social'
+      ? 'ainda não tem um site próprio, só o Instagram'
+      : c.categoria === 'sem-site'
+        ? 'ainda não aparece com um site próprio no Google'
+        : 'pode ganhar um site mais fácil de usar no celular';
+  const oferta = 'A gente monta de graça uma prévia de como ficaria o site de vocês, com cardápio e botão para pedir, sem compromisso.';
+  return {
+    instagram: `Oi! Tudo bem? Aqui é da Growlift, a gente faz sites para restaurantes e negócios locais. Vimos o perfil ${c.negocio ? `do ${c.negocio}` : 'de vocês'} e notamos que ${c.negocio ? 'vocês ' : ''}${situacao}. ${oferta} Podemos mandar? Se preferir não receber, é só avisar que a gente não escreve mais.`,
+    whatsapp: `Oi! Tudo bem? Aqui é da Growlift, a gente faz sites para restaurantes e negócios locais${c.cidade ? ` (vimos vocês no Google Maps, em ${c.cidade})` : ' (vimos vocês no Google Maps)'}. Notamos que ${c.negocio ? `o ${c.negocio}` : 'vocês'} ${situacao}. ${oferta} Podemos mandar por aqui? Se preferir não receber, é só responder "não" que a gente não chama mais.`,
+    ligacao: [
+      `Apresente-se: "Oi, aqui é da Growlift, a gente faz sites para restaurantes e negócios locais. Falo com o responsável${c.negocio ? ` pelo ${c.negocio}` : ''}?"`,
+      `Diga por que ligou: "Vimos vocês no Google Maps e notamos que ${situacao}."`,
+      'Ofereça só o diagnóstico grátis e a prévia do site, sem preço e sem compromisso.',
+      'Se toparem: peça o melhor e-mail ou WhatsApp para mandar a prévia e registre aqui em "Anotação".',
+      'Se não quiserem: agradeça e toque em "Bloquear contato" para ninguém ligar de novo.',
+    ].join('\n'),
+  };
 }

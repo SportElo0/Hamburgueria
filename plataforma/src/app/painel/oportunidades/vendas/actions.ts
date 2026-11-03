@@ -21,6 +21,8 @@ import {
   registrarWhatsapp,
 } from '@/lib/vendas/dados';
 import type { TipoRascunho } from '@/lib/vendas/regras';
+import { buscarContatosNosSites, confirmarSugestoes, estimarBusca, telefoneAoVivo, type ResumoBusca } from '@/lib/vendas/descoberta';
+import { contatoPorId } from '@/lib/vendas/dados';
 import type { ResumoImportacao } from '@/lib/vendas/dados';
 
 export type Resposta<T = null> = { ok: true; dados: T } | { ok: false; error: string };
@@ -119,4 +121,34 @@ export async function bloquearManualAction(valor: string, motivo: string): Promi
 export async function desbloquearAction(chave: string): Promise<Resposta> {
   if (!/^[a-f0-9]{64}$/.test(String(chave))) return invalido();
   return rodar(async (por) => (await desbloquear(chave, por), null), [`${BASE}/bloqueio`]);
+}
+
+/* ---------- finding contacts on the businesses' own sites ---------- */
+
+/** The cost the person sees before "Buscar agora": one Google call per contact (Place Details, for the site address). */
+export async function estimarBuscaAction() {
+  return rodar(() => estimarBusca(), []);
+}
+
+export async function buscarContatosAction(aprovadas: number): Promise<Resposta<ResumoBusca>> {
+  if (!Number.isInteger(aprovadas) || aprovadas < 1 || aprovadas > 10) return invalido();
+  return rodar((por) => buscarContatosNosSites(aprovadas, por), [BASE]);
+}
+
+export async function confirmarSugestoesAction(ids: string[]): Promise<Resposta<{ confirmados: number; falhas: { id: string; erro: string }[] }>> {
+  if (!Array.isArray(ids) || ids.length === 0 || ids.length > 100 || !ids.every(idOk)) return invalido();
+  return rodar(async (por) => {
+    const r = await confirmarSugestoes(ids, por);
+    return { confirmados: r.confirmados.length, falhas: r.falhas };
+  }, [BASE]);
+}
+
+/** The business phone for a call or one WhatsApp message, live from Google: shown, never stored. */
+export async function telefoneAction(id: string) {
+  if (!idOk(id)) return invalido<Awaited<ReturnType<typeof telefoneAoVivo>>>();
+  return rodar(async () => {
+    const c = await contatoPorId(id);
+    if (!c) throw new VendasError('Contato não encontrado.');
+    return telefoneAoVivo(c);
+  }, []);
 }
