@@ -64,23 +64,6 @@
    "chave": "05-reels/roteiros.md#1-o-site-que-passa-de-lado"
   },
   {
-   "id": "2026-11-03-carrossel-bom-mas-nao-vende",
-   "titulo": "Carrossel · Seu restaurante é bom, mas não vende? (link da bio)",
-   "tipo": "carrossel",
-   "arquivos": [
-    "09-carrosseis/13-bom-mas-nao-vende/01.png",
-    "09-carrosseis/13-bom-mas-nao-vende/02.png",
-    "09-carrosseis/13-bom-mas-nao-vende/03.png",
-    "09-carrosseis/13-bom-mas-nao-vende/04.png",
-    "09-carrosseis/13-bom-mas-nao-vende/05.png",
-    "09-carrosseis/13-bom-mas-nao-vende/06.png",
-    "09-carrosseis/13-bom-mas-nao-vende/07.png"
-   ],
-   "legenda": "Seu restaurante é bom… mas não vende? Pode não ser a cozinha. 👇\n\n3 sinais pra conferir hoje:\n1. Quem procura no Google não te encontra (ou acha horário errado).\n2. O cardápio só existe em foto ou PDF.\n3. Pra pedir, só mandando mensagem e esperando.\n\nMarcou algum? Salva o post e começa pelo resumo do slide 6.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #hamburgueria #marketingpararestaurantes #delivery #growlift",
-   "quando": "2026-11-03T19:00:00-03:00",
-   "ia": false
-  },
-  {
    "id": "2026-11-04-carrossel-perfil-sem-pedido",
    "titulo": "Carrossel · Entraram no seu Instagram e saíram sem pedir? (link da bio)",
    "tipo": "carrossel",
@@ -584,6 +567,23 @@
    "quando": "2026-11-21T10:00:00-03:00",
    "ia": false,
    "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-03-carrossel-bom-mas-nao-vende",
+   "titulo": "Carrossel · Seu restaurante é bom, mas não vende? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/13-bom-mas-nao-vende/01.png",
+    "09-carrosseis/13-bom-mas-nao-vende/02.png",
+    "09-carrosseis/13-bom-mas-nao-vende/03.png",
+    "09-carrosseis/13-bom-mas-nao-vende/04.png",
+    "09-carrosseis/13-bom-mas-nao-vende/05.png",
+    "09-carrosseis/13-bom-mas-nao-vende/06.png",
+    "09-carrosseis/13-bom-mas-nao-vende/07.png"
+   ],
+   "legenda": "Seu restaurante é bom… mas não vende? Pode não ser a cozinha. 👇\n\n3 sinais pra conferir hoje:\n1. Quem procura no Google não te encontra (ou acha horário errado).\n2. O cardápio só existe em foto ou PDF.\n3. Pra pedir, só mandando mensagem e esperando.\n\nMarcou algum? Salva o post e começa pelo resumo do slide 6.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #hamburgueria #marketingpararestaurantes #delivery #growlift",
+   "quando": "2026-11-22T10:00:00-03:00",
+   "ia": false
   }
  ]
 }

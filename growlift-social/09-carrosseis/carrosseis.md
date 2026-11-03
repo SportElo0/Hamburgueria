@@ -7,6 +7,7 @@
 - Fundos variando (claro, azul, escuro) e cenas com os bonequinhos dos Reels. Quando o mascote da Growlift ficar pronto, ele entra como guia em todos os slides.
 - Maioria sobre restaurantes; de vez em quando um para outros negócios locais (sábado 07/11: barbearia, salão, clínica).
 - Os carrosséis antigos de 03 a 08/11 foram para 16 a 21/11 na Agenda (continuam como rascunho; aprovar só se quiserem).
+- "Seu restaurante é bom… mas não vende?" não saiu em 03/11: ficou como rascunho para 22/11 (escolham a data ao aprovar).
 
 Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos já estão na **Agenda do Instagram** do painel, esperando a aprovação de vocês.
 
@@ -19,7 +20,7 @@ Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos
 | Dia | Carrossel (10h) | Reel do dia (15h) |
 | --- | --- | --- |
 | Seg 02/11 | O que ele confere antes de ir | Reel 9 · O lanche é bom |
-| Ter 03/11 | **Novo (19h):** Seu restaurante é bom… mas não vende? | Reel 1 · Quatro negócios |
+| Ter 03/11 | O prato é lindo. A foto, nem sempre. (antigo do dia 07, remarcado por vocês) | Reel 1 · Quatro negócios |
 | Qua 04/11 | **Novo:** Entraram no seu Instagram… e saíram sem pedir? | Reel 5 · Aberto no Google |
 | Qui 05/11 | **Novo:** Seu delivery depende só de aplicativo? | Reel 12 · Cardápio completo |
 | Sex 06/11 | **Novo:** Sexta à noite: quantos pedidos ficaram sem resposta? | Reel 4 · Ela procurou |
