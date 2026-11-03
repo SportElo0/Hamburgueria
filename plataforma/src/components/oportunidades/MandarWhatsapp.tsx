@@ -1,8 +1,19 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useSyncExternalStore, useTransition } from 'react';
 import { contatadoAction, naoQuerAction, paginaWhatsappAction } from '@/app/painel/oportunidades/actions';
 import type { LinhaWhatsapp } from '@/lib/oportunidades/whatsapp';
+import { primeiraMensagem } from '@/lib/vendas/regras';
+
+const CHAVE_NOME = 'growlift:remetente';
+const nomeSalvo = () => {
+  try {
+    return localStorage.getItem(CHAVE_NOME);
+  } catch {
+    return null;
+  }
+};
+const semAssinatura = () => () => {};
 
 type Estado = 'aberto' | 'mandado' | 'ligado' | 'nao-quer';
 
@@ -10,7 +21,27 @@ type Estado = 'aberto' | 'mandado' | 'ligado' | 'nao-quer';
  * One button, a list of names with their WhatsApp, one tap to open the conversation with the message ready.
  * The person presses send. Each business once; "Não quer" removes it for good.
  */
-export function MandarWhatsapp({ fila, custo, liberado }: { fila: number; custo: { chamadas: number; pagas: number; usd: number; gratisRestantes: number }; liberado: boolean }) {
+export function MandarWhatsapp({
+  remetenteInicial,
+  fila,
+  custo,
+  liberado,
+}: {
+  remetenteInicial: string;
+  fila: number;
+  custo: { chamadas: number; pagas: number; usd: number; gratisRestantes: number };
+  liberado: boolean;
+}) {
+  // The name the person likes to sign with, remembered on this device only (the server render uses the login name).
+  const salvo = useSyncExternalStore(semAssinatura, nomeSalvo, () => null);
+  const [digitado, setDigitado] = useState<string | null>(null);
+  const remetente = digitado ?? salvo ?? remetenteInicial;
+  const mudarNome = (v: string) => {
+    setDigitado(v);
+    try {
+      localStorage.setItem(CHAVE_NOME, v);
+    } catch {}
+  };
   const [pending, start] = useTransition();
   const [linhas, setLinhas] = useState<LinhaWhatsapp[]>([]);
   const [estado, setEstado] = useState<Record<string, Estado>>({});
@@ -39,15 +70,20 @@ export function MandarWhatsapp({ fila, custo, liberado }: { fila: number; custo:
 
   return (
     <div className="mt-6">
+      <label className="block max-w-xs text-sm font-semibold" htmlFor="remetente">
+        Seu nome na mensagem
+        <input id="remetente" className="field mt-1" maxLength={30} value={remetente} onChange={(e) => mudarNome(e.target.value)} />
+      </label>
       {linhas.length > 0 && (
         <ul className="divide-y divide-line rounded-xl border border-line bg-card">
           {linhas.map((l) => {
             const e = estado[l.placeId] ?? 'aberto';
             return (
               <li key={l.placeId} className={`flex flex-wrap items-center justify-between gap-3 px-4 py-4 ${e !== 'aberto' ? 'opacity-60' : ''}`}>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1 basis-80">
                   <p className="text-lg font-bold">{l.nome}</p>
                   <p className="text-sm text-ink-mute">{l.telefone || 'Sem telefone no Google'}</p>
+                  {e === 'aberto' && <p className="mt-1 line-clamp-3 text-sm whitespace-pre-line text-ink-soft">{primeiraMensagem(l.categoria, l.nome, remetente)}</p>}
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   {e === 'mandado' && <span className="chip bg-ok/10 text-ok">Mensagem mandada</span>}
@@ -56,7 +92,7 @@ export function MandarWhatsapp({ fila, custo, liberado }: { fila: number; custo:
                   {e === 'aberto' && (
                     <>
                       {l.whatsapp ? (
-                        <a className="btn-primary min-h-11 px-4" href={l.whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => marcar(l.placeId, 'mandado')}>
+                        <a className="btn-primary min-h-11 px-4" href={`${l.whatsapp}?text=${encodeURIComponent(primeiraMensagem(l.categoria, l.nome, remetente))}`} target="_blank" rel="noopener noreferrer" onClick={() => marcar(l.placeId, 'mandado')}>
                           Abrir WhatsApp
                         </a>
                       ) : l.telefone ? (

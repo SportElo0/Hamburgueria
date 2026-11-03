@@ -29,7 +29,7 @@ const TIPO_EVENTO: Record<string, string> = {
 };
 
 export default async function ContatoPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireUser();
+  const user = await requireUser();
   const { id } = await params;
   const c = await contatoPorId(id);
   if (!c) notFound();
@@ -161,7 +161,7 @@ export default async function ContatoPage({ params }: { params: Promise<{ id: st
       </section>
 
       {!completo && c.etapa !== 'nao-contatar' && canalDoContato(c, lead?.categoria) !== 'email' && (
-        <ContatoDireto id={c.id} canal={canalDoContato(c, lead?.categoria)} textos={textosContatoDireto({ ...c, categoria: lead?.categoria ?? c.categoria })} temLugar={Boolean(c.placeId)} mapsUrl={c.placeId ? linkMaps(c.placeId) : undefined}
+        <ContatoDireto id={c.id} canal={canalDoContato(c, lead?.categoria)} textos={textosContatoDireto({ ...c, categoria: lead?.categoria ?? c.categoria }, user.name)} temLugar={Boolean(c.placeId)} mapsUrl={c.placeId ? linkMaps(c.placeId) : undefined}
           ultimo={c.contatoDireto && contatoDiretoRecente(c) ? c.contatoDireto : null}
         />
       )}

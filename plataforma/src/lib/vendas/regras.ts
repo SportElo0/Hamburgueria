@@ -481,6 +481,8 @@ export const contatoDiretoRecente = (c: Pick<Contato, 'contatoDireto'>, now = ne
 export interface TextosDiretos {
   instagram: string;
   whatsapp: string;
+  /** For after they answer: the offer, with how to opt out and the privacy page. */
+  oferta: string;
   ligacao: string;
 }
 
@@ -489,7 +491,7 @@ export interface TextosDiretos {
  * Growlift ("a gente"), say where the contact came from, offer only the free diagnosis, carry no price and always let
  * the person say no.
  */
-export function textosContatoDireto(c: Pick<Contato, 'negocio' | 'segmento' | 'categoria' | 'cidade'>): TextosDiretos {
+export function textosContatoDireto(c: Pick<Contato, 'negocio' | 'segmento' | 'categoria' | 'cidade'>, remetente = ''): TextosDiretos {
   // Only what the Lead Finder actually saw; nothing about the business is assumed.
   const situacao =
     c.categoria === 'so-rede-social'
@@ -503,8 +505,10 @@ export function textosContatoDireto(c: Pick<Contato, 'negocio' | 'segmento' | 'c
   const sair = 'Se preferir não receber, responda NÃO ou SAIR que a gente não chama mais. Como cuidamos dos dados: growlift.com.br/privacidade.html';
   const ola = `Oi! Tudo bem? Aqui é da Growlift (growlift.com.br), a gente faz sites para restaurantes e negócios locais. Achamos ${c.negocio ? `o ${c.negocio}` : 'vocês'} pelo Google Maps${c.cidade ? `, em ${c.cidade}` : ''}`;
   return {
-    instagram: `${ola} e ${situacao}. ${oferta} Podemos mandar? ${sair}`,
-    whatsapp: `${ola} e ${situacao}. ${oferta} Podemos mandar por aqui? ${sair}`,
+    // The first message is the team's short one (a question, no offer); the longer offer is for when they answer.
+    instagram: primeiraMensagem(c.categoria, c.negocio, remetente),
+    whatsapp: primeiraMensagem(c.categoria, c.negocio, remetente),
+    oferta: `${ola} e ${situacao}. ${oferta} ${sair}`,
     ligacao: [
       `Apresente-se: "Oi, aqui é da Growlift, a gente faz sites para restaurantes e negócios locais. Falo com o responsável${c.negocio ? ` pelo ${c.negocio}` : ''}?"`,
       `Diga por que ligou: "Achamos vocês pelo Google Maps e ${situacao}."`,
@@ -513,4 +517,21 @@ export function textosContatoDireto(c: Pick<Contato, 'negocio' | 'segmento' | 'c
       'Se não quiserem: agradeça e toque em "Bloquear contato" para ninguém ligar de novo.',
     ].join('\n'),
   };
+}
+
+/**
+ * The first message a person sends by hand (WhatsApp or Instagram direct), written by the team on 03/11/2026: short,
+ * from the real sender, saying where the contact came from and ending in an easy question about the business. No
+ * offer, no price, no link. The sender's own name is used because a person really sends it (never a robot).
+ */
+export function primeiraMensagem(categoria: string | undefined, restaurante: string, remetente: string): string {
+  const nome = restaurante.trim() || 'restaurante de vocês';
+  const quem = remetente.trim() ? `Sou o ${remetente.trim()}, da Growlift.` : 'Aqui é da Growlift.';
+  const pergunta =
+    categoria === 'site-com-problemas'
+      ? `Estava olhando o site do ${nome} e fiquei curioso: hoje vocês conseguem receber pedidos diretamente por ele ou o cliente acaba precisando chamar no WhatsApp?`
+      : categoria === 'so-rede-social'
+        ? `Vi o Instagram do ${nome} e queria entender uma coisa: quando o cliente escolhe o que quer pedir, como vocês fazem para ele finalizar o pedido?`
+        : `Encontrei o ${nome} no Google e fiquei com uma dúvida: quando alguém quer conhecer o cardápio e fazer um pedido, vocês têm algum link próprio ou fazem tudo pelo WhatsApp?`;
+  return `Oi, tudo bem? ${quem}\n\n${pergunta}`;
 }

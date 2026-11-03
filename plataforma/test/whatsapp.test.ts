@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import { storage, useFileStorage } from '@/lib/storage';
 import { listarLeads, marcarContatado, marcarNaoContatar } from '@/lib/oportunidades/dados';
 import { filaWhatsapp, paginaWhatsapp } from '@/lib/oportunidades/whatsapp';
+import { primeiraMensagem } from '@/lib/vendas/regras';
 import type { LugarAoVivo } from '@/lib/oportunidades/places';
 
 const lead = (placeId: string, categoria: string, criadoEm = '2026-11-01T12:00:00.000Z') => ({
@@ -23,6 +24,22 @@ beforeEach(async () => {
   await storage().writeJSON('oportunidades/lugares.json', doc);
 });
 
+describe('primeira mensagem', () => {
+  it('curta, de quem manda, com uma pergunta, sem oferta nem preço', () => {
+    const sem = primeiraMensagem('sem-site', 'Cantina do Mar', 'Antonio');
+    expect(sem).toBe('Oi, tudo bem? Sou o Antonio, da Growlift.\n\nEncontrei o Cantina do Mar no Google e fiquei com uma dúvida: quando alguém quer conhecer o cardápio e fazer um pedido, vocês têm algum link próprio ou fazem tudo pelo WhatsApp?');
+    expect(primeiraMensagem('site-com-problemas', 'Cantina do Mar', 'Antonio')).toMatch(/Estava olhando o site do Cantina do Mar/);
+    expect(primeiraMensagem('so-rede-social', 'Cantina do Mar', 'Lucas')).toMatch(/Sou o Lucas.*\n\nVi o Instagram do Cantina do Mar/s);
+    expect(primeiraMensagem('incerta', '', '')).toMatch(/^Oi, tudo bem\? Aqui é da Growlift\.\n\nEncontrei o restaurante de vocês no Google/);
+    for (const c of ['sem-site', 'site-com-problemas', 'so-rede-social']) {
+      const m = primeiraMensagem(c, 'X', 'Antonio');
+      expect(m.endsWith('?')).toBe(true);
+      expect(m.length).toBeLessThan(260);
+      expect(m).not.toMatch(/R\$|grátis|prévia|mensagem autom|https?:/i);
+    }
+  });
+});
+
 describe('Mandar WhatsApp', () => {
   it('lista quem não tem site primeiro e deixa de fora site próprio', async () => {
     const fila = filaWhatsapp(await listarLeads());
@@ -34,8 +51,7 @@ describe('Mandar WhatsApp', () => {
     expect(linhas).toHaveLength(5);
     const cel = linhas.find((l) => l.placeId.endsWith('01'))!;
     expect(cel.nome).toBe('Restaurante 01');
-    expect(cel.whatsapp).toMatch(/^https:\/\/wa\.me\/55\d+\?text=/);
-    expect(decodeURIComponent(cel.whatsapp)).toMatch(/Achamos o Restaurante 01 pelo Google Maps.*NÃO ou SAIR/);
+    expect(cel.whatsapp).toMatch(/^https:\/\/wa\.me\/55\d+$/);
     const fixo = linhas.find((l) => l.placeId.endsWith('03'))!;
     expect(fixo.whatsapp).toBe('');
     expect(fixo.telefone).toBe('(12) 3896-1234');

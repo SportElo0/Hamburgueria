@@ -145,15 +145,14 @@ describe('Contato direto (sem e-mail)', () => {
         expect(texto).toMatch(/Growlift/);
         expect(texto).not.toMatch(/R\$|mensagem autom|rob[oô]|Scale|garant/i);
       }
-      for (const texto of [t.instagram, t.whatsapp]) {
-        expect(texto).toMatch(/Google Maps/);
-        expect(texto).toMatch(/NÃO ou SAIR/);
-        expect(texto).toMatch(/privacidade/);
-        expect(texto).toMatch(/não custa nada e não obriga a contratar/);
-        expect(texto).not.toMatch(/de graça|sem compromisso|Vimos o perfil/);
-      }
+      for (const texto of [t.instagram, t.whatsapp]) expect(texto.endsWith('?')).toBe(true);
+      expect(t.oferta).toMatch(/Google Maps/);
+      expect(t.oferta).toMatch(/NÃO ou SAIR/);
+      expect(t.oferta).toMatch(/privacidade/);
+      expect(t.oferta).toMatch(/não custa nada e não obriga a contratar/);
+      expect(t.oferta).not.toMatch(/de graça|sem compromisso|Vimos o perfil/);
     }
-    expect(textosContatoDireto({ negocio: 'Cantina do Mar', segmento: 'restaurantes', categoria: 'sem-site', cidade: '' }).whatsapp).toMatch(/Achamos o Cantina do Mar pelo Google Maps e não achamos um site próprio/);
+    expect(textosContatoDireto({ negocio: 'Cantina do Mar', segmento: 'restaurantes', categoria: 'sem-site', cidade: '' }, 'Antonio').whatsapp).toMatch(/Sou o Antonio, da Growlift.*Encontrei o Cantina do Mar no Google/s);
   });
 
   it('contato direto: uma vez só', async () => {

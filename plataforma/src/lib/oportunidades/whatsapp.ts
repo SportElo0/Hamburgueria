@@ -3,7 +3,6 @@ import { LeadError, limites, listarLeads, telefoneLiberado, usoDoMes, verAoVivo 
 import { estimar, linkMaps, linkWhatsApp, type Lead } from './regras';
 import { gravacaoPermitida } from '../ambiente';
 import { take } from '../limits';
-import { textosContatoDireto } from '../vendas/regras';
 
 /**
  * "Mandar WhatsApp": the simple way to reach the businesses from Oportunidades. A page of up to 10 at a time, with the
@@ -31,7 +30,7 @@ export interface LinhaWhatsapp {
   placeId: string;
   nome: string;
   telefone: string;
-  /** wa.me link with the message, only for mobile numbers. */
+  /** wa.me link (no text yet: the screen adds the message with the sender's name), only for mobile numbers. */
   whatsapp: string;
   maps: string;
   categoria: string;
@@ -55,9 +54,7 @@ export async function paginaWhatsapp(pular: string[], por: string, now = new Dat
   const linhas = await Promise.allSettled(
     alvo.map(async (l) => {
       const g = await ver(l.placeId);
-      const texto = textosContatoDireto({ negocio: g.nome, segmento: l.segmento, categoria: l.categoria, cidade: l.cidade }).whatsapp;
-      const wa = linkWhatsApp(g.telefone);
-      return { placeId: l.placeId, nome: g.nome, telefone: g.telefone ?? '', whatsapp: wa ? `${wa}?text=${encodeURIComponent(texto)}` : '', maps: linkMaps(l.placeId), categoria: l.categoria };
+      return { placeId: l.placeId, nome: g.nome, telefone: g.telefone ?? '', whatsapp: linkWhatsApp(g.telefone) ?? '', maps: linkMaps(l.placeId), categoria: l.categoria };
     }),
   );
   const ok = linhas.flatMap((r) => (r.status === 'fulfilled' ? [r.value] : []));

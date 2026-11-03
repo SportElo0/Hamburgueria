@@ -9,7 +9,7 @@ export const metadata = { title: 'Mandar WhatsApp' };
 export const maxDuration = 30;
 
 export default async function MandarWhatsappPage() {
-  await requireUser();
+  const user = await requireUser();
   const est = await estimarPagina();
   const liberado = telefoneLiberado();
   return (
@@ -31,7 +31,7 @@ export default async function MandarWhatsappPage() {
           Para mostrar os números, ligue LEADS_MOSTRAR_TELEFONE=sim na Vercel (só Production).
         </p>
       )}
-      <MandarWhatsapp fila={est.fila} custo={{ chamadas: est.chamadas, pagas: est.pagas, usd: est.usd, gratisRestantes: est.gratisRestantes }} liberado={liberado && est.cabe} />
+      <MandarWhatsapp remetenteInicial={user.name} fila={est.fila} custo={{ chamadas: est.chamadas, pagas: est.pagas, usd: est.usd, gratisRestantes: est.gratisRestantes }} liberado={liberado && est.cabe} />
     </>
   );
 }
