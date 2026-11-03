@@ -50,27 +50,6 @@
    "chave": "05-reels/roteiros.md#9-sua-marca-merece-mais-reel-premium"
   },
   {
-   "id": "2026-11-03-carrossel-portfolio",
-   "titulo": "Carrossel fixado · Portfólio",
-   "tipo": "carrossel",
-   "arquivos": [
-    "04-posts-fixados/2-portfolio/01.png",
-    "04-posts-fixados/2-portfolio/02.png",
-    "04-posts-fixados/2-portfolio/03.png",
-    "04-posts-fixados/2-portfolio/04.png",
-    "04-posts-fixados/2-portfolio/05.png",
-    "04-posts-fixados/2-portfolio/06.png",
-    "04-posts-fixados/2-portfolio/07.png"
-   ],
-   "capa": null,
-   "legenda": "4 sites para 4 ramos: hamburgueria, restaurante, confeitaria e escritório.\n\nOs quatro primeiros são projetos conceito que criamos para mostrar o que dá para fazer em cada ramo. O último é o nosso próprio site.\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\nQuer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.\n\n#growlift #criacaodesites #sitepararestaurante #webdesign #saopaulo",
-   "quando": "2026-11-03T10:00:00-03:00",
-   "ia": false,
-   "palavra": "",
-   "chave": "04-posts-fixados/2-portfolio",
-   "fixar": true
-  },
-  {
    "id": "2026-11-02-reel-01",
    "titulo": "Reel 1 · Quatro negócios (Comenta SITE)",
    "tipo": "reel",
@@ -85,24 +64,38 @@
    "chave": "05-reels/roteiros.md#1-o-site-que-passa-de-lado"
   },
   {
-   "id": "2026-11-04-carrossel-avaliacao-ruim",
-   "titulo": "Carrossel · Recebeu 1 estrela. E agora? (Comenta GOOGLE)",
+   "id": "2026-11-03-carrossel-bom-mas-nao-vende",
+   "titulo": "Carrossel · Seu restaurante é bom, mas não vende? (link da bio)",
    "tipo": "carrossel",
    "arquivos": [
-    "09-carrosseis/02-avaliacao-ruim/01.png",
-    "09-carrosseis/02-avaliacao-ruim/02.png",
-    "09-carrosseis/02-avaliacao-ruim/03.png",
-    "09-carrosseis/02-avaliacao-ruim/04.png",
-    "09-carrosseis/02-avaliacao-ruim/05.png",
-    "09-carrosseis/02-avaliacao-ruim/06.png",
-    "09-carrosseis/02-avaliacao-ruim/07.png",
-    "09-carrosseis/02-avaliacao-ruim/08.png",
-    "09-carrosseis/02-avaliacao-ruim/09.png"
+    "09-carrosseis/13-bom-mas-nao-vende/01.png",
+    "09-carrosseis/13-bom-mas-nao-vende/02.png",
+    "09-carrosseis/13-bom-mas-nao-vende/03.png",
+    "09-carrosseis/13-bom-mas-nao-vende/04.png",
+    "09-carrosseis/13-bom-mas-nao-vende/05.png",
+    "09-carrosseis/13-bom-mas-nao-vende/06.png",
+    "09-carrosseis/13-bom-mas-nao-vende/07.png"
    ],
-   "legenda": "Recebeu uma avaliação de 1 estrela? Não apaga o app. Salve estas 3 respostas prontas 👇\n\nNum estudo da Abrasel com a Harmo, só 27% das avaliações de 3.006 bares e restaurantes associados à Abrasel tinham resposta no Google (279 mil avaliações, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes consideram a resposta à crítica um fator fundamental pra decidir.\n\nQuem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar.\n\nComenta GOOGLE que a gente te manda mais dicas no direct.\n\n#restaurante #avaliacoesgoogle #atendimentoaocliente #marketingpararestaurantes #growlift",
+   "legenda": "Seu restaurante é bom… mas não vende? Pode não ser a cozinha. 👇\n\n3 sinais pra conferir hoje:\n1. Quem procura no Google não te encontra (ou acha horário errado).\n2. O cardápio só existe em foto ou PDF.\n3. Pra pedir, só mandando mensagem e esperando.\n\nMarcou algum? Salva o post e começa pelo resumo do slide 6.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #hamburgueria #marketingpararestaurantes #delivery #growlift",
+   "quando": "2026-11-03T19:00:00-03:00",
+   "ia": false
+  },
+  {
+   "id": "2026-11-04-carrossel-perfil-sem-pedido",
+   "titulo": "Carrossel · Entraram no seu Instagram e saíram sem pedir? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/14-perfil-sem-pedido/01.png",
+    "09-carrosseis/14-perfil-sem-pedido/02.png",
+    "09-carrosseis/14-perfil-sem-pedido/03.png",
+    "09-carrosseis/14-perfil-sem-pedido/04.png",
+    "09-carrosseis/14-perfil-sem-pedido/05.png",
+    "09-carrosseis/14-perfil-sem-pedido/06.png",
+    "09-carrosseis/14-perfil-sem-pedido/07.png"
+   ],
+   "legenda": "Entraram no seu Instagram… e saíram sem pedir? 👀\n\n3 sinais de que o perfil espanta quem já estava com fome:\n1. A bio não diz como pedir.\n2. As fotos não mostram o que tem e quanto custa.\n3. O link da bio não leva ao pedido.\n\nO resumo pra arrumar está no slide 6. Salva e confere o seu hoje.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #instagramparanegocios #marketingpararestaurantes #delivery #growlift",
    "quando": "2026-11-04T10:00:00-03:00",
-   "ia": false,
-   "palavra": "GOOGLE"
+   "ia": false
   },
   {
    "id": "2026-11-04-reel-05",
@@ -119,23 +112,21 @@
    "chave": "05-reels/roteiros.md#5-perfil-da-empresa-no-google-o-basico-educativo"
   },
   {
-   "id": "2026-11-05-carrossel-quem-somos",
-   "titulo": "Carrossel fixado · Quem somos",
+   "id": "2026-11-05-carrossel-so-aplicativo",
+   "titulo": "Carrossel · Seu delivery depende só de aplicativo? (link da bio)",
    "tipo": "carrossel",
    "arquivos": [
-    "04-posts-fixados/1-quem-somos/01.png",
-    "04-posts-fixados/1-quem-somos/02.png",
-    "04-posts-fixados/1-quem-somos/03.png",
-    "04-posts-fixados/1-quem-somos/04.png",
-    "04-posts-fixados/1-quem-somos/05.png"
+    "09-carrosseis/15-so-aplicativo/01.png",
+    "09-carrosseis/15-so-aplicativo/02.png",
+    "09-carrosseis/15-so-aplicativo/03.png",
+    "09-carrosseis/15-so-aplicativo/04.png",
+    "09-carrosseis/15-so-aplicativo/05.png",
+    "09-carrosseis/15-so-aplicativo/06.png",
+    "09-carrosseis/15-so-aplicativo/07.png"
    ],
-   "capa": null,
-   "legenda": "Quem atende você é quem faz o seu site.\n\nSomos a Growlift, de São Paulo: criamos sites para negócios locais, cuidamos da presença no Google e colocamos o pedido e o pagamento no próprio site do cliente.\n\nComo funciona: diagnóstico grátis pelo site, prévia no seu WhatsApp em até 2 dias úteis e, se você gostar, é só escolher o plano para o site ir ao ar com o seu domínio. Planos, valores e condições: link na bio.\n\nQuer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link na bio.\n\n#growlift #criacaodesites #negocioslocais #sitesprofissionais #saopaulo",
+   "legenda": "Seu delivery depende só de aplicativo? O app ajuda a ser achado. Mas o cliente fiel pode pedir direto com você. 👇\n\n3 sinais de que é hora de ter um canal seu, junto com o app:\n1. Você não tem como falar com quem já pediu.\n2. O cliente fiel costuma pedir pelo app, com comissão em cada pedido.\n3. Se o app muda a regra, o seu movimento muda junto.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#delivery #restaurante #cardapiodigital #marketingpararestaurantes #growlift",
    "quando": "2026-11-05T10:00:00-03:00",
-   "ia": false,
-   "palavra": "",
-   "chave": "04-posts-fixados/1-quem-somos",
-   "fixar": true
+   "ia": false
   },
   {
    "id": "2026-11-05-reel-12",
@@ -152,23 +143,21 @@
    "chave": "05-reels/roteiros.md#12-o-seu-cardapio-completo"
   },
   {
-   "id": "2026-11-06-carrossel-perfil-google-checklist",
-   "titulo": "Carrossel · Perfil no Google: 10 itens (Comenta GOOGLE)",
+   "id": "2026-11-06-carrossel-sexta-a-noite",
+   "titulo": "Carrossel · Sexta à noite: quantos pedidos ficaram sem resposta? (link da bio)",
    "tipo": "carrossel",
    "arquivos": [
-    "09-carrosseis/03-perfil-google-checklist/01.png",
-    "09-carrosseis/03-perfil-google-checklist/02.png",
-    "09-carrosseis/03-perfil-google-checklist/03.png",
-    "09-carrosseis/03-perfil-google-checklist/04.png",
-    "09-carrosseis/03-perfil-google-checklist/05.png",
-    "09-carrosseis/03-perfil-google-checklist/06.png",
-    "09-carrosseis/03-perfil-google-checklist/07.png",
-    "09-carrosseis/03-perfil-google-checklist/08.png"
+    "09-carrosseis/16-sexta-a-noite/01.png",
+    "09-carrosseis/16-sexta-a-noite/02.png",
+    "09-carrosseis/16-sexta-a-noite/03.png",
+    "09-carrosseis/16-sexta-a-noite/04.png",
+    "09-carrosseis/16-sexta-a-noite/05.png",
+    "09-carrosseis/16-sexta-a-noite/06.png",
+    "09-carrosseis/16-sexta-a-noite/07.png"
    ],
-   "legenda": "Seu Perfil da Empresa no Google (o antigo Google Meu Negócio) tem estes 10 itens? Salve e confira hoje 👇\n\n1. Nome igual ao da fachada\n2. Categoria certa\n3. Endereço e pino do mapa no lugar\n4. Horário de cada dia\n5. Horário especial de feriado\n6. Delivery, retirada ou no local\n7. Telefone ou WhatsApp que alguém atende\n8. Link do site ou do cardápio\n9. Fotos reais da fachada, dos pratos e do ambiente\n10. Avaliações respondidas\n\nNum estudo com 3.006 bares e restaurantes associados à Abrasel (Abrasel e Harmo, 279 mil avaliações), a nota média no Google foi 4,3. A nota é só uma parte: o resto do perfil você controla hoje. A verificação é feita pelo Google.\n\nComenta GOOGLE que a gente te mostra como deixar o seu perfil em dia.\n\n#perfildaempresanogoogle #googlemeunegocio #restaurante #marketinglocal #growlift",
+   "legenda": "Sexta à noite: quantos pedidos ficaram sem resposta? 📲🔥 Pode estar acontecendo com você.\n\n3 sinais de que o WhatsApp não aguenta o pico:\n1. As mesmas perguntas, toda hora.\n2. Pedido anotado errado.\n3. A resposta chega quando já é tarde.\n\nNo slide 6 tem os 3 ajustes pra sexta que vem. Salva!\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#delivery #restaurante #whatsappbusiness #hamburgueria #growlift",
    "quando": "2026-11-06T10:00:00-03:00",
-   "ia": false,
-   "palavra": "GOOGLE"
+   "ia": false
   },
   {
    "id": "2026-11-06-reel-04",
@@ -185,24 +174,21 @@
    "chave": "05-reels/roteiros.md#4-tres-sinais-de-que-o-seu-negocio-precisa-de-site-educativo"
   },
   {
-   "id": "2026-11-07-carrossel-foto-de-prato",
-   "titulo": "Carrossel · Foto de prato com o celular (Comenta SITE)",
+   "id": "2026-11-07-carrossel-indicacao",
+   "titulo": "Carrossel · Seu cliente indica você, e o amigo não te acha? (link da bio)",
    "tipo": "carrossel",
    "arquivos": [
-    "09-carrosseis/04-foto-de-prato/01.png",
-    "09-carrosseis/04-foto-de-prato/02.png",
-    "09-carrosseis/04-foto-de-prato/03.png",
-    "09-carrosseis/04-foto-de-prato/04.png",
-    "09-carrosseis/04-foto-de-prato/05.png",
-    "09-carrosseis/04-foto-de-prato/06.png",
-    "09-carrosseis/04-foto-de-prato/07.png",
-    "09-carrosseis/04-foto-de-prato/08.png",
-    "09-carrosseis/04-foto-de-prato/09.png"
+    "09-carrosseis/17-indicacao/01.png",
+    "09-carrosseis/17-indicacao/02.png",
+    "09-carrosseis/17-indicacao/03.png",
+    "09-carrosseis/17-indicacao/04.png",
+    "09-carrosseis/17-indicacao/05.png",
+    "09-carrosseis/17-indicacao/06.png",
+    "09-carrosseis/17-indicacao/07.png"
    ],
-   "legenda": "O prato é lindo. A foto, nem sempre. 5 ajustes pra fotografar com o celular que você já tem 👇\n\n1. Luz da janela, sem flash\n2. De cima pra prato raso; a 45° pra lanche, bolo e drinque\n3. Fundo limpo, só a comida\n4. Chegue perto em vez de usar zoom (e limpe a lente)\n5. Filtro leve: o que chega na mesa tem que ser igual à foto\n\nNuma pesquisa da Reclame AQUI com a Abrasel (agosto de 2024), 18% dos consumidores disseram que olham as fotos dos pratos e do ambiente antes de escolher onde comer.\n\nSalve e manda pra quem cuida das fotos aí. E se quiser ver essas fotos num site com a cara do seu restaurante, comenta SITE.\n\n#fotografiadecomida #restaurante #dicasdefoto #marketingpararestaurantes #growlift",
+   "legenda": "Seu cliente indica você… e o amigo não te acha? 🔎\n\nPra barbearia, salão, clínica, loja: 3 sinais pra quem vive de indicação:\n1. Procuram seu nome e aparece outro lugar.\n2. Não dá pra ver serviços e preços sem perguntar.\n3. Pra marcar horário, só ligando.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#negociolocal #barbearia #salaodebeleza #marketingdigital #growlift",
    "quando": "2026-11-07T10:00:00-03:00",
-   "ia": false,
-   "palavra": "SITE"
+   "ia": false
   },
   {
    "id": "2026-11-12-reel-06",
@@ -219,23 +205,21 @@
    "chave": "05-reels/roteiros.md#6-bastidores-como-nasce-um-modelo"
   },
   {
-   "id": "2026-11-08-carrossel-site-ou-instagram",
-   "titulo": "Carrossel · Só o Instagram basta? (Comenta SITE)",
+   "id": "2026-11-08-carrossel-posta-todo-dia",
+   "titulo": "Carrossel · Você posta todo dia e o movimento não muda? (link da bio)",
    "tipo": "carrossel",
    "arquivos": [
-    "09-carrosseis/05-site-ou-instagram/01.png",
-    "09-carrosseis/05-site-ou-instagram/02.png",
-    "09-carrosseis/05-site-ou-instagram/03.png",
-    "09-carrosseis/05-site-ou-instagram/04.png",
-    "09-carrosseis/05-site-ou-instagram/05.png",
-    "09-carrosseis/05-site-ou-instagram/06.png",
-    "09-carrosseis/05-site-ou-instagram/07.png",
-    "09-carrosseis/05-site-ou-instagram/08.png"
+    "09-carrosseis/18-posta-todo-dia/01.png",
+    "09-carrosseis/18-posta-todo-dia/02.png",
+    "09-carrosseis/18-posta-todo-dia/03.png",
+    "09-carrosseis/18-posta-todo-dia/04.png",
+    "09-carrosseis/18-posta-todo-dia/05.png",
+    "09-carrosseis/18-posta-todo-dia/06.png",
+    "09-carrosseis/18-posta-todo-dia/07.png"
    ],
-   "legenda": "Só o Instagram basta pro seu restaurante? A resposta honesta: não é um ou outro 👇\n\nO Instagram é ótimo pra mostrar pratos, bastidores e novidades, e os Reels chegam em quem ainda não te segue. O site organiza o que o cliente procura na hora de decidir: cardápio com preço em texto, endereço, horário e um botão pra falar com você, num endereço com o nome do seu negócio.\n\nNuma pesquisa da Reclame AQUI com a Abrasel (2024), ao encontrar uma crítica, 59% leem as opiniões de outros clientes, 14% procuram o restaurante nas redes sociais e 11% vão ao site oficial. Tem gente que procura nas redes e gente que procura no site.\n\nSalve pra lembrar do combo. E se quiser ver exemplos, comenta SITE.\n\n#sitepararestaurante #instagramparanegocios #restaurante #marketingpararestaurantes #growlift",
+   "legenda": "Você posta todo dia… e o movimento não muda? ❤️➡️🛒\n\n3 sinais de que o post para no \"curtir\":\n1. O post não diz o que fazer.\n2. Quem vê não sabe onde fica nem quando abre.\n3. O caminho até o pedido tem passos demais.\n\nOs 3 ajustes estão no slide 6. Salva pra fazer essa semana.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #instagramparanegocios #marketingpararestaurantes #delivery #growlift",
    "quando": "2026-11-08T10:00:00-03:00",
-   "ia": false,
-   "palavra": "SITE"
+   "ia": false
   },
   {
    "id": "2026-11-10-reel-03",
@@ -482,6 +466,124 @@
    "quando": "2026-11-15T15:00:00-03:00",
    "ia": true,
    "palavra": "CARDÁPIO"
+  },
+  {
+   "id": "2026-11-03-carrossel-portfolio",
+   "titulo": "Carrossel fixado · Portfólio",
+   "tipo": "carrossel",
+   "arquivos": [
+    "04-posts-fixados/2-portfolio/01.png",
+    "04-posts-fixados/2-portfolio/02.png",
+    "04-posts-fixados/2-portfolio/03.png",
+    "04-posts-fixados/2-portfolio/04.png",
+    "04-posts-fixados/2-portfolio/05.png",
+    "04-posts-fixados/2-portfolio/06.png",
+    "04-posts-fixados/2-portfolio/07.png"
+   ],
+   "capa": null,
+   "legenda": "4 sites para 4 ramos: hamburgueria, restaurante, confeitaria e escritório.\n\nOs quatro primeiros são projetos conceito que criamos para mostrar o que dá para fazer em cada ramo. O último é o nosso próprio site.\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\nQuer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.\n\n#growlift #criacaodesites #sitepararestaurante #webdesign #saopaulo",
+   "quando": "2026-11-16T10:00:00-03:00",
+   "ia": false,
+   "palavra": "",
+   "chave": "04-posts-fixados/2-portfolio",
+   "fixar": true
+  },
+  {
+   "id": "2026-11-04-carrossel-avaliacao-ruim",
+   "titulo": "Carrossel · Recebeu 1 estrela. E agora? (Comenta GOOGLE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/02-avaliacao-ruim/01.png",
+    "09-carrosseis/02-avaliacao-ruim/02.png",
+    "09-carrosseis/02-avaliacao-ruim/03.png",
+    "09-carrosseis/02-avaliacao-ruim/04.png",
+    "09-carrosseis/02-avaliacao-ruim/05.png",
+    "09-carrosseis/02-avaliacao-ruim/06.png",
+    "09-carrosseis/02-avaliacao-ruim/07.png",
+    "09-carrosseis/02-avaliacao-ruim/08.png",
+    "09-carrosseis/02-avaliacao-ruim/09.png"
+   ],
+   "legenda": "Recebeu uma avaliação de 1 estrela? Não apaga o app. Salve estas 3 respostas prontas 👇\n\nNum estudo da Abrasel com a Harmo, só 27% das avaliações de 3.006 bares e restaurantes associados à Abrasel tinham resposta no Google (279 mil avaliações, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes consideram a resposta à crítica um fator fundamental pra decidir.\n\nQuem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar.\n\nComenta GOOGLE que a gente te manda mais dicas no direct.\n\n#restaurante #avaliacoesgoogle #atendimentoaocliente #marketingpararestaurantes #growlift",
+   "quando": "2026-11-17T10:00:00-03:00",
+   "ia": false,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-05-carrossel-quem-somos",
+   "titulo": "Carrossel fixado · Quem somos",
+   "tipo": "carrossel",
+   "arquivos": [
+    "04-posts-fixados/1-quem-somos/01.png",
+    "04-posts-fixados/1-quem-somos/02.png",
+    "04-posts-fixados/1-quem-somos/03.png",
+    "04-posts-fixados/1-quem-somos/04.png",
+    "04-posts-fixados/1-quem-somos/05.png"
+   ],
+   "capa": null,
+   "legenda": "Quem atende você é quem faz o seu site.\n\nSomos a Growlift, de São Paulo: criamos sites para negócios locais, cuidamos da presença no Google e colocamos o pedido e o pagamento no próprio site do cliente.\n\nComo funciona: diagnóstico grátis pelo site, prévia no seu WhatsApp em até 2 dias úteis e, se você gostar, é só escolher o plano para o site ir ao ar com o seu domínio. Planos, valores e condições: link na bio.\n\nQuer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link na bio.\n\n#growlift #criacaodesites #negocioslocais #sitesprofissionais #saopaulo",
+   "quando": "2026-11-18T10:00:00-03:00",
+   "ia": false,
+   "palavra": "",
+   "chave": "04-posts-fixados/1-quem-somos",
+   "fixar": true
+  },
+  {
+   "id": "2026-11-06-carrossel-perfil-google-checklist",
+   "titulo": "Carrossel · Perfil no Google: 10 itens (Comenta GOOGLE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/03-perfil-google-checklist/01.png",
+    "09-carrosseis/03-perfil-google-checklist/02.png",
+    "09-carrosseis/03-perfil-google-checklist/03.png",
+    "09-carrosseis/03-perfil-google-checklist/04.png",
+    "09-carrosseis/03-perfil-google-checklist/05.png",
+    "09-carrosseis/03-perfil-google-checklist/06.png",
+    "09-carrosseis/03-perfil-google-checklist/07.png",
+    "09-carrosseis/03-perfil-google-checklist/08.png"
+   ],
+   "legenda": "Seu Perfil da Empresa no Google (o antigo Google Meu Negócio) tem estes 10 itens? Salve e confira hoje 👇\n\n1. Nome igual ao da fachada\n2. Categoria certa\n3. Endereço e pino do mapa no lugar\n4. Horário de cada dia\n5. Horário especial de feriado\n6. Delivery, retirada ou no local\n7. Telefone ou WhatsApp que alguém atende\n8. Link do site ou do cardápio\n9. Fotos reais da fachada, dos pratos e do ambiente\n10. Avaliações respondidas\n\nNum estudo com 3.006 bares e restaurantes associados à Abrasel (Abrasel e Harmo, 279 mil avaliações), a nota média no Google foi 4,3. A nota é só uma parte: o resto do perfil você controla hoje. A verificação é feita pelo Google.\n\nComenta GOOGLE que a gente te mostra como deixar o seu perfil em dia.\n\n#perfildaempresanogoogle #googlemeunegocio #restaurante #marketinglocal #growlift",
+   "quando": "2026-11-19T10:00:00-03:00",
+   "ia": false,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-07-carrossel-foto-de-prato",
+   "titulo": "Carrossel · Foto de prato com o celular (Comenta SITE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/04-foto-de-prato/01.png",
+    "09-carrosseis/04-foto-de-prato/02.png",
+    "09-carrosseis/04-foto-de-prato/03.png",
+    "09-carrosseis/04-foto-de-prato/04.png",
+    "09-carrosseis/04-foto-de-prato/05.png",
+    "09-carrosseis/04-foto-de-prato/06.png",
+    "09-carrosseis/04-foto-de-prato/07.png",
+    "09-carrosseis/04-foto-de-prato/08.png",
+    "09-carrosseis/04-foto-de-prato/09.png"
+   ],
+   "legenda": "O prato é lindo. A foto, nem sempre. 5 ajustes pra fotografar com o celular que você já tem 👇\n\n1. Luz da janela, sem flash\n2. De cima pra prato raso; a 45° pra lanche, bolo e drinque\n3. Fundo limpo, só a comida\n4. Chegue perto em vez de usar zoom (e limpe a lente)\n5. Filtro leve: o que chega na mesa tem que ser igual à foto\n\nNuma pesquisa da Reclame AQUI com a Abrasel (agosto de 2024), 18% dos consumidores disseram que olham as fotos dos pratos e do ambiente antes de escolher onde comer.\n\nSalve e manda pra quem cuida das fotos aí. E se quiser ver essas fotos num site com a cara do seu restaurante, comenta SITE.\n\n#fotografiadecomida #restaurante #dicasdefoto #marketingpararestaurantes #growlift",
+   "quando": "2026-11-20T10:00:00-03:00",
+   "ia": false,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-08-carrossel-site-ou-instagram",
+   "titulo": "Carrossel · Só o Instagram basta? (Comenta SITE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/05-site-ou-instagram/01.png",
+    "09-carrosseis/05-site-ou-instagram/02.png",
+    "09-carrosseis/05-site-ou-instagram/03.png",
+    "09-carrosseis/05-site-ou-instagram/04.png",
+    "09-carrosseis/05-site-ou-instagram/05.png",
+    "09-carrosseis/05-site-ou-instagram/06.png",
+    "09-carrosseis/05-site-ou-instagram/07.png",
+    "09-carrosseis/05-site-ou-instagram/08.png"
+   ],
+   "legenda": "Só o Instagram basta pro seu restaurante? A resposta honesta: não é um ou outro 👇\n\nO Instagram é ótimo pra mostrar pratos, bastidores e novidades, e os Reels chegam em quem ainda não te segue. O site organiza o que o cliente procura na hora de decidir: cardápio com preço em texto, endereço, horário e um botão pra falar com você, num endereço com o nome do seu negócio.\n\nNuma pesquisa da Reclame AQUI com a Abrasel (2024), ao encontrar uma crítica, 59% leem as opiniões de outros clientes, 14% procuram o restaurante nas redes sociais e 11% vão ao site oficial. Tem gente que procura nas redes e gente que procura no site.\n\nSalve pra lembrar do combo. E se quiser ver exemplos, comenta SITE.\n\n#sitepararestaurante #instagramparanegocios #restaurante #marketingpararestaurantes #growlift",
+   "quando": "2026-11-21T10:00:00-03:00",
+   "ia": false,
+   "palavra": "SITE"
   }
  ]
 }

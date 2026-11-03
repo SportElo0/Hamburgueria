@@ -2,6 +2,12 @@
 
 **Semana de 02 a 08/11**
 
+**Formato novo a partir de 03/11** (pedido de 03/11: faltava gancho). Gerador: `_fonte/carrosseis-v2.mjs`.
+- Capa que cutuca ("é bom, mas não vende?"), slide 2 com o porquê, **3 sinais** (um por slide), resumo para salvar e convite: **"Quer um teste mais profundo? Link da bio"** (diagnóstico grátis, em até 2 dias úteis no WhatsApp, sem compromisso).
+- Fundos variando (claro, azul, escuro) e cenas com os bonequinhos dos Reels. Quando o mascote da Growlift ficar pronto, ele entra como guia em todos os slides.
+- Maioria sobre restaurantes; de vez em quando um para outros negócios locais (sábado 07/11: barbearia, salão, clínica).
+- Os carrosséis antigos de 03 a 08/11 foram para 16 a 21/11 na Agenda (continuam como rascunho; aprovar só se quiserem).
+
 Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos já estão na **Agenda do Instagram** do painel, esperando a aprovação de vocês.
 
 **Como eles foram feitos (e por que não são genéricos):**
@@ -13,12 +19,12 @@ Um carrossel por dia às 10h e um Reel às 15h, a partir de segunda 02/11. Todos
 | Dia | Carrossel (10h) | Reel do dia (15h) |
 | --- | --- | --- |
 | Seg 02/11 | O que ele confere antes de ir | Reel 9 · O lanche é bom |
-| Ter 03/11 | Portfólio (fixado, já existia) | Reel 1 · Quatro negócios |
-| Qua 04/11 | Recebeu 1 estrela. E agora? (3 respostas prontas) | Reel 5 · Aberto no Google |
-| Qui 05/11 | Quem somos (fixado, já existia) | Reel 12 · Cardápio completo |
-| Sex 06/11 | Seu perfil no Google tem estes 10 itens? | Reel 4 · Ela procurou |
-| Sáb 07/11 | O prato é lindo. A foto, nem sempre. | Reel 6 · Do zero |
-| Dom 08/11 | Só o Instagram basta? | Reel 3 · Dois minutos |
+| Ter 03/11 | **Novo (19h):** Seu restaurante é bom… mas não vende? | Reel 1 · Quatro negócios |
+| Qua 04/11 | **Novo:** Entraram no seu Instagram… e saíram sem pedir? | Reel 5 · Aberto no Google |
+| Qui 05/11 | **Novo:** Seu delivery depende só de aplicativo? | Reel 12 · Cardápio completo |
+| Sex 06/11 | **Novo:** Sexta à noite: quantos pedidos ficaram sem resposta? | Reel 4 · Ela procurou |
+| Sáb 07/11 | **Novo:** Seu cliente indica você… e o amigo não te acha? | Reel 6 · Do zero |
+| Dom 08/11 | **Novo:** Você posta todo dia… e o movimento não muda? | Reel 3 · Dois minutos |
 
 **Semana de 09 a 15/11**
 
