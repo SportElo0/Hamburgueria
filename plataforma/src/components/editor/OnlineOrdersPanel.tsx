@@ -7,7 +7,8 @@ import type { PdvSend } from '@/lib/pdv';
 import { newId, type Store } from '@/lib/schema';
 import { brl, orderingOf, todaySP, type Coupon } from '@/lib/ordering';
 import type { OperatorSummary } from '@/lib/operators';
-import { createOperatorAction, removeOperatorAction, saveMercadoPagoTokenAction } from '@/app/painel/actions';
+import { createOperatorAction, removeOperatorAction, saveMercadoPagoTokenAction, setOperatorFuncaoAction } from '@/app/painel/actions';
+import { FUNCOES, NOME_FUNCAO, type Funcao } from '@/lib/session';
 import { setOpenAction } from '@/app/loja/[slug]/actions';
 import type { Update } from './StoreEditor';
 
@@ -188,6 +189,7 @@ export function OnlineOrdersPanel(props: {
   const [operators, setOperators] = useState(props.operators);
   const [opEmail, setOpEmail] = useState('');
   const [opName, setOpName] = useState('');
+  const [opFuncao, setOpFuncao] = useState<Funcao>('dono');
   const [handover, setHandover] = useState<{ email: string; password: string } | null>(null);
   const [open, setOpen] = useState(props.open);
   const [areaName, setAreaName] = useState('');
@@ -406,7 +408,10 @@ export function OnlineOrdersPanel(props: {
 
       <section className="card space-y-4 p-5">
         <h2 className="text-lg font-bold">Acesso da loja</h2>
-        <p className="text-sm text-ink-mute">Logins da equipe da loja. Eles entram só na tela de pedidos desta loja.</p>
+        <p className="text-sm text-ink-mute">
+          Logins da equipe da loja, cada um vê só o seu: <strong>Dono</strong> o painel do dono e todas as telas; <strong>Cozinha</strong> só os pedidos e os esgotados;{' '}
+          <strong>Garçom</strong> só o salão, o mapa e a fila. Trocar a função vale na hora, sem nova senha.
+        </p>
         <ul className="divide-y divide-line rounded-lg border border-line">
           {operators.length === 0 && <li className="px-3 py-2.5 text-sm text-ink-mute">Nenhum login ainda.</li>}
           {operators.map((op) => (
@@ -414,13 +419,33 @@ export function OnlineOrdersPanel(props: {
               <span>
                 <strong>{op.name}</strong> <span className="text-ink-mute">{op.email}</span>
               </span>
-              <span className="flex gap-3">
+              <span className="flex items-center gap-3">
+                <select
+                  aria-label={`Função de ${op.name}`}
+                  className="rounded-md border border-line bg-white px-2 py-1"
+                  value={op.funcao ?? 'dono'}
+                  disabled={busy}
+                  onChange={(e) => {
+                    const funcao = e.target.value as Funcao;
+                    start(async () => {
+                      const res = await setOperatorFuncaoAction(props.store.slug, op.email, funcao);
+                      if (res.ok) setOperators((list) => list.map((x) => (x.email === op.email ? { ...x, funcao } : x)));
+                      else setMsg({ tone: 'bad', text: res.error ?? 'Erro.' });
+                    });
+                  }}
+                >
+                  {FUNCOES.map((f) => (
+                    <option key={f} value={f}>
+                      {NOME_FUNCAO[f]}
+                    </option>
+                  ))}
+                </select>
                 <button
                   type="button"
                   className="underline"
                   onClick={() =>
                     start(async () => {
-                      const res = await createOperatorAction(props.store.slug, op.email, op.name);
+                      const res = await createOperatorAction(props.store.slug, op.email, op.name, op.funcao ?? 'dono');
                       if (res.ok && res.password) setHandover({ email: op.email, password: res.password });
                       else setMsg({ tone: 'bad', text: res.error ?? 'Erro.' });
                     })
@@ -459,10 +484,13 @@ export function OnlineOrdersPanel(props: {
           onSubmit={(e) => {
             e.preventDefault();
             start(async () => {
-              const res = await createOperatorAction(props.store.slug, opEmail, opName);
+              const res = await createOperatorAction(props.store.slug, opEmail, opName, opFuncao);
               if (!res.ok || !res.password) return setMsg({ tone: 'bad', text: res.error ?? 'Erro.' });
               setHandover({ email: opEmail.trim().toLowerCase(), password: res.password });
-              setOperators((list) => [...list.filter((x) => x.email !== opEmail.trim().toLowerCase()), { email: opEmail.trim().toLowerCase(), name: opName.trim() || opEmail, createdAt: new Date().toISOString() }]);
+              setOperators((list) => [
+                ...list.filter((x) => x.email !== opEmail.trim().toLowerCase()),
+                { email: opEmail.trim().toLowerCase(), name: opName.trim() || opEmail, funcao: opFuncao, createdAt: new Date().toISOString() },
+              ]);
               setOpEmail('');
               setOpName('');
             });
@@ -479,6 +507,18 @@ export function OnlineOrdersPanel(props: {
               E-mail
             </label>
             <input id="op-email" type="email" className="field" value={opEmail} onChange={(e) => setOpEmail(e.target.value)} required />
+          </div>
+          <div>
+            <label htmlFor="op-funcao" className="label">
+              Função
+            </label>
+            <select id="op-funcao" className="field" value={opFuncao} onChange={(e) => setOpFuncao(e.target.value as Funcao)}>
+              {FUNCOES.map((f) => (
+                <option key={f} value={f}>
+                  {NOME_FUNCAO[f]}
+                </option>
+              ))}
+            </select>
           </div>
           <button type="submit" className="btn-ghost" disabled={busy}>
             Criar login

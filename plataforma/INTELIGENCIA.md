@@ -39,7 +39,7 @@ Aba **Inteligência** do painel (`/painel/inteligencia`). Só a equipe da Growli
 
 ## Próximas fases (não feitas)
 
-1. Tela do dono do restaurante (hoje só a equipe vê) e relatório mensal em PDF.
+1. Relatório mensal em PDF. (A tela do dono já existe: ver `PAINEL-DONO.md`; a análise completa com recomendações continua só para a equipe.)
 2. Custos dos adicionais e importação de vendas de outros canais (com autorização).
 3. IA consultiva: explicar os números já calculados e responder perguntas, com limite de custo e sem inventar dados.
 4. Central interna: tarefas, reuniões e horas por cliente para o acompanhamento do Scale.

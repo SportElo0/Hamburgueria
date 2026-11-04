@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation';
-import { requireStoreAccess } from '@/lib/auth';
+import { SALAO, requireStoreAccess } from '@/lib/auth';
 import { getDraft } from '@/lib/stores';
 import { orderingOf } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
 import { SalaoBoard } from '@/components/mesa/SalaoBoard';
+import { logout } from '@/app/login/actions';
 
 export const metadata = { title: 'Salão' };
 
@@ -11,9 +12,9 @@ export const metadata = { title: 'Salão' };
 export default async function SalaoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
-  await requireStoreAccess(slug);
+  const user = await requireStoreAccess(slug, SALAO);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const ordering = orderingOf(draft.data.store);
-  return <SalaoBoard slug={slug} storeName={draft.data.store.name} count={ordering.tables.count} enabled={ordering.enabled && ordering.tables.enabled} />;
+  return <SalaoBoard slug={slug} storeName={draft.data.store.name} count={ordering.tables.count} enabled={ordering.enabled && ordering.tables.enabled} garcom={user.funcao === 'garcom'} logout={logout} />;
 }

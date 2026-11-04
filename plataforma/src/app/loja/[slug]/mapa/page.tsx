@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { requireStoreAccess } from '@/lib/auth';
+import { SALAO, requireStoreAccess } from '@/lib/auth';
 import { getDraft } from '@/lib/stores';
 import { orderingOf, brl } from '@/lib/ordering';
 import { seatingHistory } from '@/lib/mesas';
@@ -16,7 +16,7 @@ const TZ = 'America/Sao_Paulo';
 export default async function MapaPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ aba?: string; dias?: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
-  await requireStoreAccess(slug);
+  const user = await requireStoreAccess(slug, SALAO);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const ordering = orderingOf(draft.data.store);
@@ -45,8 +45,8 @@ export default async function MapaPage({ params, searchParams }: { params: Promi
             <a href={`/movimento/${slug}`} target="_blank" rel="noreferrer" className="btn-ghost min-h-11">
               Como o cliente vê
             </a>
-            <Link href={`/loja/${slug}`} className="btn-ghost min-h-11">
-              Pedidos
+            <Link href={user.funcao === 'garcom' ? `/loja/${slug}/salao` : `/loja/${slug}`} className="btn-ghost min-h-11">
+              {user.funcao === 'garcom' ? 'Salão' : 'Pedidos'}
             </Link>
           </nav>
         </div>

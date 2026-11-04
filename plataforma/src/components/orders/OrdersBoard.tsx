@@ -61,6 +61,8 @@ export function OrdersBoard(props: {
   enabled: boolean;
   userName: string;
   team: boolean;
+  /** The team or the owner's login: links to every screen. The kitchen's login sees only its orders. */
+  dono: boolean;
   /** Ordering at the table is on: link to the waiter's floor screen. */
   tables: boolean;
   menu: MenuForStaff[];
@@ -177,25 +179,34 @@ export function OrdersBoard(props: {
             <button type="button" onClick={() => setMenuOpen(true)} className="btn-ghost min-h-11">
               Esgotados{operation?.soldOut.length ? ` (${operation.soldOut.length})` : ''}
             </button>
-            {props.tables && (
-              <a href={`/loja/${props.slug}/salao`} className="btn-ghost min-h-11">
-                Salão
+            {props.dono && (
+              <a href={`/loja/${props.slug}/dono`} className="btn-primary min-h-11">
+                Painel do dono
               </a>
             )}
-            {props.tables && (
-              <a href={`/loja/${props.slug}/mapa`} className="btn-ghost min-h-11">
-                Mapa
+            {props.dono && (
+              <>
+              {props.tables && (
+                <a href={`/loja/${props.slug}/salao`} className="btn-ghost min-h-11">
+                  Salão
+                </a>
+              )}
+              {props.tables && (
+                <a href={`/loja/${props.slug}/mapa`} className="btn-ghost min-h-11">
+                  Mapa
+                </a>
+              )}
+              <a href={`/loja/${props.slug}/cardapio`} className="btn-ghost min-h-11">
+                Cardápio
               </a>
+              <a href={`/loja/${props.slug}/relatorio`} className="btn-ghost min-h-11">
+                Relatório
+              </a>
+              <a href={`/loja/${props.slug}/clientes`} className="btn-ghost min-h-11">
+                Clientes
+              </a>
+              </>
             )}
-            <a href={`/loja/${props.slug}/cardapio`} className="btn-ghost min-h-11">
-              Cardápio
-            </a>
-            <a href={`/loja/${props.slug}/relatorio`} className="btn-ghost min-h-11">
-              Relatório
-            </a>
-            <a href={`/loja/${props.slug}/clientes`} className="btn-ghost min-h-11">
-              Clientes
-            </a>
             {props.team && (
               <a href={`/painel/lojas/${props.slug}?aba=online`} className="btn-ghost min-h-11">
                 Configurar

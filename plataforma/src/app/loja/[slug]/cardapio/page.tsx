@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { requireStoreAccess } from '@/lib/auth';
+import { DONO, requireStoreAccess } from '@/lib/auth';
 import { getDraft, getPublished, listPedidos } from '@/lib/stores';
 import { isSlug } from '@/lib/slug';
 import { CardapioEditor, type CardapioCategory } from '@/components/cardapio/CardapioEditor';
@@ -10,7 +10,7 @@ export const metadata = { title: 'Cardápio' };
 export default async function CardapioPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
-  await requireStoreAccess(slug);
+  await requireStoreAccess(slug, DONO);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const published = await getPublished(slug);

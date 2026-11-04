@@ -25,7 +25,8 @@ import { migrateFromBlob, migrationPending } from '@/lib/migracao';
 import { setMercadoPagoToken } from '@/lib/pix';
 import { pushOrder, recentSends } from '@/lib/pdv';
 import { getOrder } from '@/lib/orders';
-import { OperatorError, removeOperator, upsertOperator } from '@/lib/operators';
+import { OperatorError, removeOperator, setOperatorFuncao, upsertOperator } from '@/lib/operators';
+import type { Funcao } from '@/lib/session';
 import { DiagnosisError, setDiagnosisStatus, type DiagnosisStatus } from '@/lib/diagnostics';
 import { ContentError, setContentStatus, type ContentStatus } from '@/lib/conteudos';
 
@@ -254,12 +255,23 @@ export async function saveMercadoPagoTokenAction(slug: string, token: string): P
   return { ok: true };
 }
 
-export async function createOperatorAction(slug: string, email: string, name: string): Promise<ActionResult & { password?: string }> {
+export async function createOperatorAction(slug: string, email: string, name: string, funcao: Funcao): Promise<ActionResult & { password?: string }> {
   const user = await requireUser();
   if (!isSlug(slug)) return BAD_SLUG;
   try {
-    const password = await upsertOperator(slug, { email, name }, user.email);
+    const password = await upsertOperator(slug, { email, name, funcao }, user.email);
     return { ok: true, password };
+  } catch (err) {
+    return { ok: false, error: err instanceof OperatorError ? err.message : message(err) };
+  }
+}
+
+export async function setOperatorFuncaoAction(slug: string, email: string, funcao: Funcao): Promise<ActionResult> {
+  await requireUser();
+  if (!isSlug(slug) || typeof email !== 'string') return BAD_SLUG;
+  try {
+    await setOperatorFuncao(slug, email, funcao);
+    return { ok: true };
   } catch (err) {
     return { ok: false, error: err instanceof OperatorError ? err.message : message(err) };
   }

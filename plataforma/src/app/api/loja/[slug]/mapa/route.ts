@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { storeAccess } from '@/lib/auth';
+import { SALAO, storeAccess } from '@/lib/auth';
 import { floor } from '@/lib/mesas';
 import { reservationsOfDay } from '@/lib/reservas';
 import { queueOfDay } from '@/lib/fila';
@@ -63,7 +63,7 @@ export type MapForStaff = Awaited<ReturnType<typeof mapForStaff>>;
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  if (!isSlug(slug) || !(await storeAccess(slug))) return NextResponse.json({ error: 'Sem acesso.' }, { status: 401 });
+  if (!isSlug(slug) || !(await storeAccess(slug, SALAO))) return NextResponse.json({ error: 'Sem acesso.' }, { status: 401 });
   const asked = request.nextUrl.searchParams.get('data') ?? '';
   const date = /^\d{4}-\d{2}-\d{2}$/.test(asked) ? asked : today();
   return NextResponse.json(await mapForStaff(slug, date), { headers: { 'Cache-Control': 'no-store' } });

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { storeAccess } from '@/lib/auth';
+import { SALAO, storeAccess } from '@/lib/auth';
 import { floor } from '@/lib/mesas';
 import { isSlug } from '@/lib/slug';
 
@@ -16,6 +16,6 @@ async function floorForStaff(slug: string) {
 /** The waiter's floor screen polls this. Team or that store's staff only. */
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  if (!isSlug(slug) || !(await storeAccess(slug))) return NextResponse.json({ error: 'Sem acesso.' }, { status: 401 });
+  if (!isSlug(slug) || !(await storeAccess(slug, SALAO))) return NextResponse.json({ error: 'Sem acesso.' }, { status: 401 });
   return NextResponse.json({ tables: await floorForStaff(slug), now: new Date().toISOString() }, { headers: { 'Cache-Control': 'no-store' } });
 }

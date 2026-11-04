@@ -37,7 +37,15 @@ interface Alert {
   secondary?: { label: string; run: () => void };
 }
 
-export function SalaoBoard(props: { slug: string; storeName: string; count: number; enabled: boolean }) {
+export function SalaoBoard(props: {
+  slug: string;
+  storeName: string;
+  count: number;
+  enabled: boolean;
+  /** A waiter's login: no kitchen screen, and a way to sign out (this is their start screen). */
+  garcom?: boolean;
+  logout?: () => Promise<void>;
+}) {
   const [tables, setTables] = useState<FloorForStaff | null>(null);
   const [error, setError] = useState('');
   const [now, setNow] = useState(() => Date.now());
@@ -147,9 +155,22 @@ export function SalaoBoard(props: { slug: string; storeName: string; count: numb
             <button type="button" onClick={bell.arm} className={`btn min-h-11 border px-3 ${bell.armed ? 'border-line bg-white text-ink-mute' : 'border-warn bg-warn text-white'}`}>
               {bell.armed ? 'Som ligado' : 'Ligar som'}
             </button>
-            <a href={`/loja/${props.slug}`} className="btn-ghost min-h-11 px-3">
-              Cozinha
-            </a>
+            {props.garcom ? (
+              <a href={`/loja/${props.slug}/mapa`} className="btn-ghost min-h-11 px-3">
+                Mapa
+              </a>
+            ) : (
+              <a href={`/loja/${props.slug}`} className="btn-ghost min-h-11 px-3">
+                Cozinha
+              </a>
+            )}
+            {props.garcom && props.logout && (
+              <form action={props.logout}>
+                <button type="submit" className="btn-ghost min-h-11 px-3">
+                  Sair
+                </button>
+              </form>
+            )}
           </div>
         </div>
         {error && <p className="mx-auto mt-2 max-w-3xl rounded-lg bg-bad px-3 py-2 text-sm font-semibold text-white">{error}</p>}

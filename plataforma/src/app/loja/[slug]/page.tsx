@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { requireStoreAccess } from '@/lib/auth';
+import { COZINHA, requireStoreAccess } from '@/lib/auth';
 import { getDraft, getPublished } from '@/lib/stores';
 import { orderingOf } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
@@ -12,7 +12,7 @@ export const metadata = { title: 'Pedidos da loja' };
 export default async function StoreOrdersPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
-  const user = await requireStoreAccess(slug);
+  const user = await requireStoreAccess(slug, COZINHA);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const ordering = orderingOf(draft.data.store);
@@ -26,6 +26,7 @@ export default async function StoreOrdersPage({ params }: { params: Promise<{ sl
       enabled={ordering.enabled}
       userName={user.name || user.email}
       team={isTeam(user)}
+      dono={isTeam(user) || user.funcao === 'dono'}
       tables={ordering.enabled && ordering.tables.enabled}
       menu={menu}
       logout={logout}

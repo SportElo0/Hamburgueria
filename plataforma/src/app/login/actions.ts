@@ -2,7 +2,7 @@
 
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { authenticate, SESSION_COOKIE, SESSION_DAYS, signSession, type Session } from '@/lib/session';
+import { authenticate, homeOf, isFuncao, SESSION_COOKIE, SESSION_DAYS, signSession, type Session } from '@/lib/session';
 import { authenticateOperator } from '@/lib/operators';
 import { clientIp, count, hourWindow, record } from '@/lib/limits';
 
@@ -31,7 +31,7 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
   const user: Omit<Session, 'exp'> | null = team
     ? { email: team.email, name: team.name, role: 'equipe' }
     : operator
-      ? { email: operator.email, name: operator.name, role: 'loja', slug: operator.slug }
+      ? { email: operator.email, name: operator.name, role: 'loja', slug: operator.slug, funcao: isFuncao(operator.funcao) ? operator.funcao : 'dono' }
       : null;
   if (!user) {
     await record('login-email', who, hour);
@@ -48,7 +48,7 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     path: '/',
     maxAge: SESSION_DAYS * 86_400,
   });
-  if (user.role === 'loja') redirect(`/loja/${user.slug}`);
+  if (user.role === 'loja') redirect(back.startsWith(`/loja/${user.slug}/`) || back === `/loja/${user.slug}` ? back : homeOf(user));
   redirect(back.startsWith('/painel') || back.startsWith('/loja/') ? back : '/painel');
 }
 

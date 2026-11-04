@@ -1,18 +1,20 @@
 import 'server-only';
 import { storage, ConflictError } from './storage';
-import { hashPassword, teamUsers, verifyPassword } from './session';
+import { hashPassword, isFuncao, teamUsers, verifyPassword, type Funcao } from './session';
 
 /**
  * Logins for a store's own staff (they see only that store's orders). The team creates them in the
  * panel and passes the generated password on once; only its hash is kept.
- *   acessos/<sha256(email)>.json    { email, name, slug, hash, createdAt, createdBy }
- *   lojas/<slug>/acessos.json       [{ email, name, createdAt }] for the panel list
+ *   acessos/<sha256(email)>.json    { email, name, slug, funcao, hash, createdAt, createdBy }
+ *   lojas/<slug>/acessos.json       [{ email, name, funcao, createdAt }] for the panel list
+ * Logins made before roles existed have no `funcao`: they are the owner's (dono).
  */
 
 export interface Operator {
   email: string;
   name: string;
   slug: string;
+  funcao?: Funcao;
   hash: string;
   createdAt: string;
   createdBy: string;
@@ -21,6 +23,7 @@ export interface Operator {
 export interface OperatorSummary {
   email: string;
   name: string;
+  funcao?: Funcao;
   createdAt: string;
 }
 
@@ -57,19 +60,40 @@ async function updateList(slug: string, fn: (list: OperatorSummary[]) => Operato
 }
 
 /** Creates the login, or gives an existing login of this store a new password. Returns the password to hand over. */
-export async function upsertOperator(slug: string, input: { email: string; name: string }, by: string): Promise<string> {
+export async function upsertOperator(slug: string, input: { email: string; name: string; funcao: Funcao }, by: string): Promise<string> {
   const email = input.email.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new OperatorError('Informe um e-mail válido.');
+  if (!isFuncao(input.funcao)) throw new OperatorError('Escolha a função: dono, cozinha ou garçom.');
+  const funcao = input.funcao;
   if (teamUsers().some((u) => u.email.toLowerCase() === email)) throw new OperatorError('Esse e-mail já é da equipe.');
   const key = await keyOf(email);
   const existing = await storage().readJSON<Operator>(key);
   if (existing && existing.data.slug !== slug) throw new OperatorError('Esse e-mail já acessa outra loja.');
   const password = generatePassword();
   const name = input.name.trim().slice(0, 60) || email;
-  const operator: Operator = { email, name, slug, hash: await hashPassword(password), createdAt: new Date().toISOString(), createdBy: by };
+  const operator: Operator = { email, name, slug, funcao, hash: await hashPassword(password), createdAt: new Date().toISOString(), createdBy: by };
   await storage().writeJSON(key, operator);
-  await updateList(slug, (list) => [...list.filter((o) => o.email !== email), { email, name, createdAt: operator.createdAt }]);
+  await updateList(slug, (list) => [...list.filter((o) => o.email !== email), { email, name, funcao, createdAt: operator.createdAt }]);
   return password;
+}
+
+/** Changes what a login sees, keeping its password. Takes effect on its next screen (the role is read on every request). */
+export async function setOperatorFuncao(slug: string, email: string, funcao: Funcao) {
+  if (!isFuncao(funcao)) throw new OperatorError('Função inválida.');
+  const key = await keyOf(email);
+  let e = '';
+  for (let attempt = 0; ; attempt++) {
+    const doc = await storage().readJSON<Operator>(key);
+    if (!doc || doc.data.slug !== slug) throw new OperatorError('Esse login não é desta loja.');
+    try {
+      await storage().writeJSON(key, { ...doc.data, funcao }, doc.etag);
+      e = doc.data.email;
+      break;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 3) throw err;
+    }
+  }
+  await updateList(slug, (list) => list.map((o) => (o.email === e ? { ...o, funcao } : o)));
 }
 
 export async function removeOperator(slug: string, email: string) {
@@ -88,9 +112,11 @@ export async function authenticateOperator(email: string, password: string): Pro
 
 /**
  * A staff session stays valid only while its login exists for that store and was not re-issued
- * after the session started: removing a login or giving it a new password ends old sessions.
+ * after the session started: removing a login or giving it a new password ends old sessions. A role
+ * change needs no new session: the role returned here (from storage, never from the cookie) is the one used.
  */
-export async function operatorActive(email: string, slug: string, sessionStart: number): Promise<boolean> {
+export async function operatorActive(email: string, slug: string, sessionStart: number): Promise<Funcao | null> {
   const doc = await storage().readJSON<Operator>(await keyOf(email));
-  return Boolean(doc && doc.data.slug === slug && Date.parse(doc.data.createdAt) <= sessionStart);
+  if (!doc || doc.data.slug !== slug || Date.parse(doc.data.createdAt) > sessionStart) return null;
+  return isFuncao(doc.data.funcao) ? doc.data.funcao : 'dono';
 }

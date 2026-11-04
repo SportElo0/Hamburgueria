@@ -7,7 +7,8 @@ import { seedStores } from '@/lib/seeds';
 import { storeSchema, toPublic, type Store, type StoreRecord } from '@/lib/schema';
 import { DEFAULT_ORDERING, PRICE_CHANGED, applyCoupon, isReviewUrl, nextStatus, orderInputSchema, orderingSchema, priceOrder, publicOrdering, salesReport, type OrderInput } from '@/lib/ordering';
 import { ActionError, OrderError, applyAction, getOperation, getOrder, listOrders, ordersForDays, placeOrder, setOpen, setSoldOut, simulateDemoPayment, trackOrder } from '@/lib/orders';
-import { authenticateOperator, removeOperator, upsertOperator } from '@/lib/operators';
+import { authenticateOperator, listOperators, operatorActive, removeOperator, setOperatorFuncao, upsertOperator } from '@/lib/operators';
+import { canUse, homeOf, type Funcao } from '@/lib/session';
 import { listCustomers, setOptOut } from '@/lib/customers';
 import { addSubscriber } from '@/lib/subscribers';
 import { summariesForDays } from '@/lib/inteligencia/dados';
@@ -199,16 +200,45 @@ describe('regras de status', () => {
 
 describe('acesso da loja', () => {
   it('cria login com senha gerada, troca a senha e remove', async () => {
-    const pass = await upsertOperator(SLUG, { email: 'Caixa@ElPatron.com', name: 'Caixa' }, 'equipe');
+    const pass = await upsertOperator(SLUG, { email: 'Caixa@ElPatron.com', name: 'Caixa', funcao: 'cozinha' }, 'equipe');
     expect(pass).toMatch(/^[a-z2-9]{4}-[a-z2-9]{4}-[a-z2-9]{4}-[a-z2-9]{4}$/);
     expect((await authenticateOperator('caixa@elpatron.com', pass))?.slug).toBe(SLUG);
     expect(await authenticateOperator('caixa@elpatron.com', 'errada')).toBeNull();
-    const pass2 = await upsertOperator(SLUG, { email: 'caixa@elpatron.com', name: 'Caixa' }, 'equipe');
+    const pass2 = await upsertOperator(SLUG, { email: 'caixa@elpatron.com', name: 'Caixa', funcao: 'cozinha' }, 'equipe');
     expect(await authenticateOperator('caixa@elpatron.com', pass)).toBeNull();
     expect(await authenticateOperator('caixa@elpatron.com', pass2)).not.toBeNull();
-    await expect(upsertOperator('outra-loja', { email: 'caixa@elpatron.com', name: '' }, 'equipe')).rejects.toThrow(/outra loja/);
+    await expect(upsertOperator('outra-loja', { email: 'caixa@elpatron.com', name: '', funcao: 'dono' }, 'equipe')).rejects.toThrow(/outra loja/);
     await removeOperator(SLUG, 'caixa@elpatron.com');
     expect(await authenticateOperator('caixa@elpatron.com', pass2)).toBeNull();
+  });
+
+  it('guarda a função, troca sem nova senha e a sessão lê a função do login, não do cookie', async () => {
+    const pass = await upsertOperator(SLUG, { email: 'garcom@elpatron.com', name: 'Zé', funcao: 'garcom' }, 'equipe');
+    const start = Date.now() + 1;
+    expect((await authenticateOperator('garcom@elpatron.com', pass))?.funcao).toBe('garcom');
+    expect(await operatorActive('garcom@elpatron.com', SLUG, start)).toBe('garcom');
+    await setOperatorFuncao(SLUG, 'garcom@elpatron.com', 'cozinha');
+    expect(await operatorActive('garcom@elpatron.com', SLUG, start)).toBe('cozinha');
+    expect(await authenticateOperator('garcom@elpatron.com', pass)).not.toBeNull();
+    expect((await listOperators(SLUG)).find((o) => o.email === 'garcom@elpatron.com')?.funcao).toBe('cozinha');
+    await expect(setOperatorFuncao('outra-loja', 'garcom@elpatron.com', 'dono')).rejects.toThrow(/desta loja/);
+    await expect(setOperatorFuncao(SLUG, 'garcom@elpatron.com', 'chefe' as never)).rejects.toThrow(/inválida/);
+    await expect(upsertOperator(SLUG, { email: 'x@elpatron.com', name: 'X', funcao: 'admin' as never }, 'equipe')).rejects.toThrow(/função/);
+    await removeOperator(SLUG, 'garcom@elpatron.com');
+  });
+
+  it('cada função abre só as suas telas', () => {
+    const loja = (funcao?: Funcao) => ({ role: 'loja' as const, slug: SLUG, funcao });
+    expect(canUse({ role: 'equipe' }, 'qualquer', ['dono'])).toBe(true);
+    expect(canUse(loja('dono'), 'outra-loja')).toBe(false);
+    expect(canUse(loja(undefined), SLUG, ['dono'])).toBe(true);
+    expect(canUse(loja('cozinha'), SLUG, ['dono'])).toBe(false);
+    expect(canUse(loja('cozinha'), SLUG, ['dono', 'cozinha'])).toBe(true);
+    expect(canUse(loja('garcom'), SLUG, ['dono', 'cozinha'])).toBe(false);
+    expect(homeOf(loja(undefined))).toBe(`/loja/${SLUG}/dono`);
+    expect(homeOf(loja('cozinha'))).toBe(`/loja/${SLUG}`);
+    expect(homeOf(loja('garcom'))).toBe(`/loja/${SLUG}/salao`);
+    expect(homeOf({ role: 'equipe' })).toBe('/painel');
   });
 });
 

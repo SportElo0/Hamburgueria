@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import QRCode from 'qrcode';
-import { requireStoreAccess } from '@/lib/auth';
+import { SALAO, requireStoreAccess } from '@/lib/auth';
 import { getDraft } from '@/lib/stores';
 import { orderingOf } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
@@ -14,7 +14,7 @@ export const metadata = { title: 'QR Codes das mesas' };
 export default async function MesasQrPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
-  await requireStoreAccess(slug);
+  await requireStoreAccess(slug, SALAO);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const ordering = orderingOf(draft.data.store);

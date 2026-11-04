@@ -12,10 +12,33 @@ export interface Session {
   /** `loja`: a store's own staff, limited to that store's orders. Older cookies have no role: team. */
   role?: 'equipe' | 'loja';
   slug?: string;
+  /** What a store login sees. Read again from the login on every request (see auth.ts); older logins have none: dono. */
+  funcao?: Funcao;
   exp: number;
 }
 
 export const isTeam = (s: Pick<Session, 'role'>) => s.role !== 'loja';
+
+/** Store logins: the owner sees everything of the store; the kitchen, the orders; the waiter, the floor. */
+export const FUNCOES = ['dono', 'cozinha', 'garcom'] as const;
+export type Funcao = (typeof FUNCOES)[number];
+export const NOME_FUNCAO: Record<Funcao, string> = { dono: 'Dono', cozinha: 'Cozinha', garcom: 'Garçom' };
+export const isFuncao = (v: unknown): v is Funcao => typeof v === 'string' && (FUNCOES as readonly string[]).includes(v);
+
+/** Where each login lands after signing in, and where it goes when it opens a screen it can't use. */
+export function homeOf(s: Pick<Session, 'role' | 'slug' | 'funcao'>): string {
+  if (isTeam(s)) return '/painel';
+  const base = `/loja/${s.slug}`;
+  const f = s.funcao ?? 'dono';
+  return f === 'dono' ? `${base}/dono` : f === 'garcom' ? `${base}/salao` : base;
+}
+
+/** The team sees every store; a store login only its own, and only the screens of its role. */
+export function canUse(s: Pick<Session, 'role' | 'slug' | 'funcao'>, slug: string, funcoes?: readonly Funcao[]): boolean {
+  if (isTeam(s)) return true;
+  if (s.slug !== slug) return false;
+  return !funcoes || funcoes.includes(s.funcao ?? 'dono');
+}
 
 const enc = new TextEncoder();
 

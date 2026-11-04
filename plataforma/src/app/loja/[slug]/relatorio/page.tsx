@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { requireStoreAccess } from '@/lib/auth';
+import { DONO, requireStoreAccess } from '@/lib/auth';
 import { getDraft } from '@/lib/stores';
 import { ordersForDays } from '@/lib/orders';
 import { brl, salesReport, type SalesReport } from '@/lib/ordering';
@@ -25,7 +25,7 @@ const shortDay = (day: string) => {
 export default async function ReportPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ dias?: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
-  await requireStoreAccess(slug);
+  await requireStoreAccess(slug, DONO);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const { dias } = await searchParams;
