@@ -4,6 +4,7 @@ import { DONO, requireStoreAccess } from '@/lib/auth';
 import { CustoError, salvarCustoManual } from '@/lib/dono';
 import { ItemEditError, addItemByOwner, editItemByOwner, getDraft, getPublished, setTablesCount } from '@/lib/stores';
 import { isSlug } from '@/lib/slug';
+import { floor } from '@/lib/mesas';
 
 export interface DonoResult {
   ok: boolean;
@@ -42,7 +43,7 @@ export async function salvarItemAction(slug: string, itemId: string, input: { na
 }
 
 /** The owner adds an item to the menu, optionally with what it costs to make. */
-export async function adicionarItemAction(slug: string, input: { name: string; price: number; category: string; cost: number | null }): Promise<DonoResult & { id?: string }> {
+export async function adicionarItemAction(slug: string, input: { name: string; price: number; category: string; cost: number | null }): Promise<DonoResult & { id?: string; aviso?: string }> {
   if (!isSlug(slug) || !input || typeof input !== 'object') return { ok: false, error: 'Dados inválidos.' };
   const { name, price, category, cost } = input;
   if (typeof name !== 'string' || typeof category !== 'string' || typeof price !== 'number' || !Number.isInteger(price)) return { ok: false, error: 'Dados inválidos.' };
@@ -51,7 +52,15 @@ export async function adicionarItemAction(slug: string, input: { name: string; p
   const by = user.name || user.email;
   try {
     const id = await addItemByOwner(slug, { name, price, category }, by);
-    if (cost !== null) await salvarCustoManual(slug, id, cost, by);
+    if (cost !== null) {
+      try {
+        await salvarCustoManual(slug, id, cost, by);
+      } catch (err) {
+        // The item exists already: say so, so the owner fixes the cost on its row instead of adding it twice.
+        console.error('custo do item novo', err);
+        return { ok: true, id, aviso: 'Item adicionado, mas o custo não foi salvo. Escreva o custo na linha do item.' };
+      }
+    }
     return { ok: true, id };
   } catch (err) {
     if (err instanceof ItemEditError || err instanceof CustoError) return { ok: false, error: err.message };
@@ -65,7 +74,8 @@ export async function mesasAction(slug: string, count: number): Promise<DonoResu
   if (!isSlug(slug) || typeof count !== 'number' || !Number.isInteger(count)) return { ok: false, error: 'Número inválido.' };
   const user = await requireStoreAccess(slug, DONO);
   try {
-    await setTablesCount(slug, count, user.name || user.email);
+    const highestOpen = Math.max(0, ...(await floor(slug)).map((t) => t.number));
+    await setTablesCount(slug, count, user.name || user.email, highestOpen);
     return { ok: true };
   } catch (err) {
     if (err instanceof ItemEditError) return { ok: false, error: err.message };

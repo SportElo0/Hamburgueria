@@ -38,6 +38,8 @@ function NovoItem({ slug, categorias, onAdded }: { slug: string; categorias: str
           setErro('');
           const r = await adicionarItemAction(slug, { name: name.trim(), price: priceCents, category: category.trim(), cost: costCents });
           if (!r.ok || !r.id) return setErro(r.error ?? 'Não foi possível adicionar.');
+          const custoSalvo = r.aviso ? null : costCents;
+          setErro(r.aviso ?? '');
           onAdded(category.trim(), {
             id: r.id,
             name: name.trim(),
@@ -45,9 +47,9 @@ function NovoItem({ slug, categorias, onAdded }: { slug: string; categorias: str
             price: priceCents,
             category: category.trim(),
             soldOut: false,
-            cost: costCents,
-            costMode: costCents === null ? null : 'manual',
-            manualCost: costCents,
+            cost: custoSalvo,
+            costMode: custoSalvo === null ? null : 'manual',
+            manualCost: custoSalvo,
             packaging: 0,
           });
           setName('');

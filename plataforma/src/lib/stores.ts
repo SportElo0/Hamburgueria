@@ -208,13 +208,22 @@ async function updateBoth(slug: string, by: string, fn: (store: Store) => Store)
   }
 }
 
-/** The owner says how many tables the restaurant has (1 to 200). */
-export async function setTablesCount(slug: string, count: number, by: string) {
+async function ownerLimit(slug: string) {
+  if (!(await take('cardapio-loja', slug, 60, hourWindow()))) throw new ItemEditError('Muitas mudanças nesta hora. Espere um pouco ou fale com a Growlift.');
+}
+const ownerLog = (slug: string, description: string, by: string) =>
+  logChange(slug, { description: `Feita pelo dono: ${description}`.slice(0, 500), counted: false, reason: 'Feita pela loja' }, by).catch((err) => console.error('registro da mudança do dono', err));
+
+/** The owner says how many tables the restaurant has (1 to 200), never fewer than a table open right now. */
+export async function setTablesCount(slug: string, count: number, by: string, highestOpen = 0) {
   if (!Number.isInteger(count) || count < 1 || count > 200) throw new ItemEditError('Informe de 1 a 200 mesas.');
+  if (count < highestOpen) throw new ItemEditError(`A mesa ${highestOpen} está aberta. Libere ou feche a conta dela antes de diminuir.`);
+  await ownerLimit(slug);
   await updateBoth(slug, by, (store) => {
     const o = orderingOf(store);
     return { ...store, ordering: { ...o, tables: { ...o.tables, count } } };
   });
+  await ownerLog(slug, `número de mesas: ${count}`, by);
 }
 
 /** The owner edits an item; with no published menu yet, only the draft exists and gets the change. */
@@ -223,6 +232,7 @@ export async function editItemByOwner(slug: string, itemId: string, input: Store
   const edit: StoreItemEdit = { name: input.name.trim(), description: input.description.trim(), price: input.price };
   if (!edit.name || edit.name.length > 120) throw new ItemEditError('O nome precisa ter de 1 a 120 letras.');
   if (!Number.isInteger(edit.price) || edit.price < 1 || edit.price > 10_000_000) throw new ItemEditError('Preço inválido.');
+  await ownerLimit(slug);
   let found = false;
   await updateBoth(slug, by, (store) => {
     const r = editItemIn(store, itemId, edit);
@@ -230,6 +240,7 @@ export async function editItemByOwner(slug: string, itemId: string, input: Store
     return r ? r.store : store;
   });
   if (!found) throw new ItemEditError('Esse item não está mais no cardápio. Atualize a página.');
+  await ownerLog(slug, `${edit.name} (${(edit.price / 100).toFixed(2)})`, by);
 }
 
 /** The owner adds an item (name, price, category; a new category is created). Returns its id. */
@@ -239,7 +250,7 @@ export async function addItemByOwner(slug: string, input: { name: string; price:
   if (!name || name.length > 120) throw new ItemEditError('O nome precisa ter de 1 a 120 letras.');
   if (!category || category.length > 80) throw new ItemEditError('Escreva a categoria (ex.: Lanches, Bebidas).');
   if (!Number.isInteger(input.price) || input.price < 1 || input.price > 10_000_000) throw new ItemEditError('Preço inválido.');
-  if (!(await take('cardapio-loja', slug, 60, hourWindow()))) throw new ItemEditError('Muitas mudanças nesta hora. Espere um pouco.');
+  await ownerLimit(slug);
   const id = newId();
   await updateBoth(slug, by, (store) => {
     const cats = store.catalog.categories;
@@ -252,6 +263,7 @@ export async function addItemByOwner(slug: string, input: { name: string; price:
         : [...cats, { id: newId(), name: category, description: '', items: [item] }];
     return { ...store, catalog: { categories } };
   });
+  await ownerLog(slug, `item novo ${name} em ${category} (${(input.price / 100).toFixed(2)})`, by);
   return id;
 }
 

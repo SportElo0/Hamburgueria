@@ -6,7 +6,7 @@ import { storage, useFileStorage } from '@/lib/storage';
 import { seedStores } from '@/lib/seeds';
 import { storeSchema, type Store, type StoreRecord } from '@/lib/schema';
 import { CustoError, itensDoDono, salvarCustoManual } from '@/lib/dono';
-import { addItemByOwner, createStore, editItemByOwner, getDraft, getPublished, setTablesCount } from '@/lib/stores';
+import { addItemByOwner, createStore, editItemByOwner, getChanges, getDraft, getPublished, setTablesCount } from '@/lib/stores';
 import { floor, freeTable, seatTable } from '@/lib/mesas';
 import { orderingOf } from '@/lib/ordering';
 import { createDemo } from '@/lib/inteligencia/dados';
@@ -180,6 +180,8 @@ describe('o dono monta mesas e cardápio sozinho', () => {
     await freeTable('cantina-nova', 3, 'Dono');
     expect(await floor('cantina-nova')).toEqual([]);
     await expect(setTablesCount('cantina-nova', 0, 'Dono')).rejects.toThrow(/1 a 200/);
+    await expect(setTablesCount('cantina-nova', 4, 'Dono', 6)).rejects.toThrow(/mesa 6 está aberta/);
+    expect((await getChanges('cantina-nova')).map((c) => c.description)).toContain('Feita pelo dono: número de mesas: 8');
   });
 
   it('a demonstração vem com mesas abertas, pedidos pelo QR e chamados', async () => {
