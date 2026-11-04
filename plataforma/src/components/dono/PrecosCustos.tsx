@@ -195,15 +195,19 @@ function Row({ slug, item, onSaved, onSoldOut }: { slug: string; item: ItemDono;
           role="switch"
           aria-checked={item.soldOut}
           aria-label={`${item.name} esgotado`}
-          disabled={pending}
-          onClick={() =>
+          onClick={() => {
+            // Flips at once; goes back if the server says no.
+            const next = !item.soldOut;
+            setMsg(null);
+            onSoldOut(next);
             start(async () => {
-              setMsg(null);
-              const r = await setSoldOutAction(slug, item.id, !item.soldOut);
-              if (r.ok) onSoldOut(!item.soldOut);
-              else setMsg({ ok: false, text: r.error ?? 'Não foi possível mudar.' });
-            })
-          }
+              const r = await setSoldOutAction(slug, item.id, next);
+              if (!r.ok) {
+                onSoldOut(!next);
+                setMsg({ ok: false, text: r.error ?? 'Não foi possível mudar.' });
+              }
+            });
+          }}
           className={`btn min-h-10 w-full border px-3 ${item.soldOut ? 'border-bad bg-bad/10 text-bad' : 'border-line bg-white text-ink-soft hover:border-ink-mute'}`}
         >
           {item.soldOut ? 'Esgotado' : 'Disponível'}

@@ -1,4 +1,5 @@
 import 'server-only';
+import { after } from 'next/server';
 import { storage, ConflictError } from './storage';
 import { monthKey, nextIsExtra } from './changes';
 import { hourWindow, take } from './limits';
@@ -211,8 +212,19 @@ async function updateBoth(slug: string, by: string, fn: (store: Store) => Store)
 async function ownerLimit(slug: string) {
   if (!(await take('cardapio-loja', slug, 60, hourWindow()))) throw new ItemEditError('Muitas mudanças nesta hora. Espere um pouco ou fale com a Growlift.');
 }
-const ownerLog = (slug: string, description: string, by: string) =>
-  logChange(slug, { description: `Feita pelo dono: ${description}`.slice(0, 500), counted: false, reason: 'Feita pela loja' }, by).catch((err) => console.error('registro da mudança do dono', err));
+/** The owner's change goes to the change log after the answer is sent, so the screen does not wait for it. */
+async function ownerLog(slug: string, description: string, by: string) {
+  const write = () =>
+    logChange(slug, { description: `Feita pelo dono: ${description}`.slice(0, 500), counted: false, reason: 'Feita pela loja' }, by).then(
+      () => undefined,
+      (err) => console.error('registro da mudança do dono', err),
+    );
+  try {
+    after(write);
+  } catch {
+    await write(); // outside a request (tests, scripts)
+  }
+}
 
 /** The owner says how many tables the restaurant has (1 to 200), never fewer than a table open right now. */
 export async function setTablesCount(slug: string, count: number, by: string, highestOpen = 0) {
