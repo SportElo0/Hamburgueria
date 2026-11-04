@@ -14,6 +14,8 @@ export interface Session {
   slug?: string;
   /** What a store login sees. Read again from the login on every request (see auth.ts); older logins have none: dono. */
   funcao?: Funcao;
+  /** A restaurant that signed up alone and the team has not approved yet: it only sees the waiting screen. */
+  pendente?: boolean;
   exp: number;
 }
 
@@ -26,17 +28,18 @@ export const NOME_FUNCAO: Record<Funcao, string> = { dono: 'Dono', cozinha: 'Coz
 export const isFuncao = (v: unknown): v is Funcao => typeof v === 'string' && (FUNCOES as readonly string[]).includes(v);
 
 /** Where each login lands after signing in, and where it goes when it opens a screen it can't use. */
-export function homeOf(s: Pick<Session, 'role' | 'slug' | 'funcao'>): string {
+export function homeOf(s: Pick<Session, 'role' | 'slug' | 'funcao' | 'pendente'>): string {
   if (isTeam(s)) return '/painel';
+  if (s.pendente) return '/cadastro/aguardando';
   const base = `/loja/${s.slug}`;
   const f = s.funcao ?? 'dono';
   return f === 'dono' ? `${base}/dono` : f === 'garcom' ? `${base}/salao` : base;
 }
 
 /** The team sees every store; a store login only its own, and only the screens of its role. */
-export function canUse(s: Pick<Session, 'role' | 'slug' | 'funcao'>, slug: string, funcoes?: readonly Funcao[]): boolean {
+export function canUse(s: Pick<Session, 'role' | 'slug' | 'funcao' | 'pendente'>, slug: string, funcoes?: readonly Funcao[]): boolean {
   if (isTeam(s)) return true;
-  if (s.slug !== slug) return false;
+  if (s.pendente || s.slug !== slug) return false;
   return !funcoes || funcoes.includes(s.funcao ?? 'dono');
 }
 

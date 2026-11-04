@@ -10,15 +10,17 @@ export const currentUser = cache(async (): Promise<Session | null> => {
   const jar = await cookies();
   const session = await verifySession(jar.get(SESSION_COOKIE)?.value);
   if (session?.role !== 'loja') return session;
-  const funcao = await operatorActive(session.email, session.slug ?? '', session.exp - SESSION_DAYS * 86_400_000);
-  return funcao ? { ...session, funcao } : null;
+  const active = await operatorActive(session.email, session.slug ?? '', session.exp - SESSION_DAYS * 86_400_000);
+  if (!active) return null;
+  // Role and approval come from the stored login, never from the cookie.
+  return { ...session, funcao: active.funcao, pendente: active.pendente || undefined };
 });
 
 /** Agency team only. Every page and Server Function checks the session itself; the proxy redirect is only a convenience. */
 export async function requireUser(): Promise<Session> {
   const user = await currentUser();
   if (!user) redirect('/login');
-  if (!isTeam(user)) redirect(`/loja/${user.slug}`);
+  if (!isTeam(user)) redirect(homeOf(user));
   return user;
 }
 

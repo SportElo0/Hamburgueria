@@ -8,6 +8,7 @@ import { ImportSeeds } from '@/components/ImportSeeds';
 import { seedStores } from '@/lib/seeds';
 import { MigrateBlob } from '@/components/MigrateBlob';
 import { migrationPending } from '@/lib/migracao';
+import { listarCadastros } from '@/lib/cadastros';
 
 // The one-time copy from the old store runs from this page and can take up to ~50 s.
 export const maxDuration = 60;
@@ -38,6 +39,7 @@ export default async function PainelPage() {
   );
   const extras = rows.reduce((n, r) => n + r.usage.extras, 0);
   const pendingMigration = await migrationPending();
+  const cadastros = (await listarCadastros()).filter((c) => c.status === 'pendente');
   const missingSeeds = pendingMigration ? [] : seedStores().filter((s) => !stores.some((x) => x.slug === s.slug)).map((s) => s.name);
 
   return (
@@ -55,6 +57,14 @@ export default async function PainelPage() {
         </Link>
       </div>
 
+      {cadastros.length > 0 && (
+        <Link href="/painel/cadastros" className="card mt-5 flex flex-wrap items-center justify-between gap-3 border-accent bg-accent-soft p-4 hover:border-accent-deep">
+          <span className="font-semibold">
+            {cadastros.length === 1 ? `1 restaurante novo esperando aprovação: ${cadastros[0].restaurante}` : `${cadastros.length} restaurantes novos esperando aprovação`}
+          </span>
+          <span className="btn-primary">Ver cadastros</span>
+        </Link>
+      )}
       {pendingMigration && <MigrateBlob />}
       {missingSeeds.length > 0 && <ImportSeeds names={missingSeeds} />}
 

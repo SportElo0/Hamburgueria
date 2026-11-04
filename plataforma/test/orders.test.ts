@@ -216,9 +216,9 @@ describe('acesso da loja', () => {
     const pass = await upsertOperator(SLUG, { email: 'garcom@elpatron.com', name: 'Zé', funcao: 'garcom' }, 'equipe');
     const start = Date.now() + 1;
     expect((await authenticateOperator('garcom@elpatron.com', pass))?.funcao).toBe('garcom');
-    expect(await operatorActive('garcom@elpatron.com', SLUG, start)).toBe('garcom');
+    expect(await operatorActive('garcom@elpatron.com', SLUG, start)).toEqual({ funcao: 'garcom', pendente: false });
     await setOperatorFuncao(SLUG, 'garcom@elpatron.com', 'cozinha');
-    expect(await operatorActive('garcom@elpatron.com', SLUG, start)).toBe('cozinha');
+    expect(await operatorActive('garcom@elpatron.com', SLUG, start)).toEqual({ funcao: 'cozinha', pendente: false });
     expect(await authenticateOperator('garcom@elpatron.com', pass)).not.toBeNull();
     expect((await listOperators(SLUG)).find((o) => o.email === 'garcom@elpatron.com')?.funcao).toBe('cozinha');
     await expect(setOperatorFuncao('outra-loja', 'garcom@elpatron.com', 'dono')).rejects.toThrow(/desta loja/);

@@ -151,7 +151,12 @@ export default async function ResumoPage({ params }: { params: Promise<{ slug: s
           </Link>
         )}
 
-        {d.margemBaixa.length > 0 ? (
+        {d.totalItens === 0 ? (
+          <div className="card border-l-4 border-l-accent p-5">
+            <p className="font-bold">Cardápio ainda não está no painel</p>
+            <p className="mt-1 text-sm text-ink-soft">A Growlift monta o cardápio com você. Depois disso aparecem preços, custos e margens.</p>
+          </div>
+        ) : d.margemBaixa.length > 0 ? (
           <Link href={`${base}/precos`} className="card block border-l-4 border-l-warn p-5 hover:border-warn">
             <p className="font-bold">
               {d.margemBaixa.length === 1 ? `${d.margemBaixa[0].name} com margem baixa` : `${d.margemBaixa.length} itens com margem baixa`}

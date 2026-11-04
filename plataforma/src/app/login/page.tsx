@@ -1,17 +1,18 @@
 import { redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
-import { teamUsers } from '@/lib/session';
+import { homeOf, teamUsers } from '@/lib/session';
 import { LoginForm } from './LoginForm';
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ volta?: string }> }) {
-  if (await currentUser()) redirect('/painel');
+  const user = await currentUser();
+  if (user) redirect(homeOf(user));
   const { volta } = await searchParams;
   const configured = teamUsers().length > 0 && Boolean(process.env.SESSION_SECRET);
   return (
     <main className="grid min-h-dvh place-items-center px-4">
-      <div className="card w-full max-w-sm p-7">
-        <h1 className="text-2xl font-bold">Painel das lojas</h1>
-        <p className="mt-1 text-sm text-ink-mute">Entre com a conta da equipe.</p>
+      <div className="card my-8 w-full max-w-sm p-7">
+        <h1 className="text-2xl font-bold">Entrar</h1>
+        <p className="mt-1 text-sm text-ink-mute">Painel do restaurante e da equipe Growlift.</p>
         {configured ? (
           <LoginForm volta={volta ?? ''} />
         ) : (

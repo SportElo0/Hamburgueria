@@ -17,11 +17,13 @@ export default async function DonoLayout({ children, params }: { children: React
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const o = orderingOf(draft.data.store);
+  const logo = typeof draft.data.store.extra.logo === 'string' && draft.data.store.extra.logo.startsWith('/api/midia/') ? draft.data.store.extra.logo : '';
   return (
     <div className="min-h-dvh lg:flex">
       <DonoNav
         slug={slug}
         storeName={draft.data.store.name}
+        logo={logo}
         userName={user.name || user.email}
         team={isTeam(user)}
         tables={o.enabled && o.tables.enabled}

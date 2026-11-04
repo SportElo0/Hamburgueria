@@ -22,7 +22,7 @@ function Svg({ name }: { name: Icon }) {
 }
 
 /** The dark bar of the owner's panel. On a narrow screen it becomes a bar on top with the sections side by side. */
-export function DonoNav(props: { slug: string; storeName: string; userName: string; team: boolean; tables: boolean; logout: () => Promise<void> }) {
+export function DonoNav(props: { slug: string; storeName: string; logo: string; userName: string; team: boolean; tables: boolean; logout: () => Promise<void> }) {
   const path = usePathname();
   const base = `/loja/${props.slug}/dono`;
   const live: { href: string; label: string; icon: Icon }[] = [
@@ -44,9 +44,15 @@ export function DonoNav(props: { slug: string; storeName: string; userName: stri
   return (
     <aside className="bg-[#0b1220] text-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col">
       <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-3 lg:block lg:px-5 lg:pt-6">
-        <div className="min-w-0">
-          <p className="text-[15px] font-bold">Painel do dono</p>
-          <p className="truncate text-[13px] text-white/60">{props.storeName}</p>
+        <div className="flex min-w-0 items-center gap-3">
+          {props.logo && (
+            // eslint-disable-next-line @next/next/no-img-element -- the restaurant's own logo, served by the panel
+            <img src={props.logo} alt="" className="h-10 w-10 shrink-0 rounded-lg bg-white object-contain p-0.5" />
+          )}
+          <div className="min-w-0">
+            <p className="text-[15px] font-bold">Painel do dono</p>
+            <p className="truncate text-[13px] text-white/60">{props.storeName}</p>
+          </div>
         </div>
         <form action={props.logout} className="lg:hidden">
           <button type="submit" className="min-h-10 rounded-lg px-3 text-sm text-white/70 hover:bg-white/10 hover:text-white">

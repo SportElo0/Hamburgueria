@@ -37,7 +37,7 @@ describe('sessão da loja', () => {
   it('cai quando o login é removido ou ganha senha nova', async () => {
     await upsertOperator('loja-a', { email: 'caixa@teste.local', name: 'Caixa', funcao: 'dono' }, 'equipe');
     const start = Date.now() + 1;
-    expect(await operatorActive('caixa@teste.local', 'loja-a', start)).toBe('dono');
+    expect(await operatorActive('caixa@teste.local', 'loja-a', start)).toEqual({ funcao: 'dono', pendente: false });
     expect(await operatorActive('caixa@teste.local', 'loja-b', start)).toBeNull();
     await new Promise((r) => setTimeout(r, 5));
     await upsertOperator('loja-a', { email: 'caixa@teste.local', name: 'Caixa', funcao: 'dono' }, 'equipe');

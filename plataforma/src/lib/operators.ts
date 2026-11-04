@@ -15,6 +15,8 @@ export interface Operator {
   name: string;
   slug: string;
   funcao?: Funcao;
+  /** Signed up alone on the login screen (see cadastros.ts) and not approved yet. */
+  pendente?: boolean;
   hash: string;
   createdAt: string;
   createdBy: string;
@@ -27,7 +29,7 @@ export interface OperatorSummary {
   createdAt: string;
 }
 
-async function keyOf(email: string) {
+export async function operatorKey(email: string) {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(email.trim().toLowerCase()));
   return `acessos/${Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('')}.json`;
 }
@@ -66,12 +68,14 @@ export async function upsertOperator(slug: string, input: { email: string; name:
   if (!isFuncao(input.funcao)) throw new OperatorError('Escolha a função: dono, cozinha ou garçom.');
   const funcao = input.funcao;
   if (teamUsers().some((u) => u.email.toLowerCase() === email)) throw new OperatorError('Esse e-mail já é da equipe.');
-  const key = await keyOf(email);
+  const key = await operatorKey(email);
   const existing = await storage().readJSON<Operator>(key);
   if (existing && existing.data.slug !== slug) throw new OperatorError('Esse e-mail já acessa outra loja.');
   const password = generatePassword();
   const name = input.name.trim().slice(0, 60) || email;
-  const operator: Operator = { email, name, slug, funcao, hash: await hashPassword(password), createdAt: new Date().toISOString(), createdBy: by };
+  // A new password from the team does not approve a sign-up on its own: approval also creates the store.
+  const pendente = existing?.data.slug === slug && existing.data.pendente ? true : undefined;
+  const operator: Operator = { email, name, slug, funcao, ...(pendente ? { pendente } : {}), hash: await hashPassword(password), createdAt: new Date().toISOString(), createdBy: by };
   await storage().writeJSON(key, operator);
   await updateList(slug, (list) => [...list.filter((o) => o.email !== email), { email, name, funcao, createdAt: operator.createdAt }]);
   return password;
@@ -80,7 +84,7 @@ export async function upsertOperator(slug: string, input: { email: string; name:
 /** Changes what a login sees, keeping its password. Takes effect on its next screen (the role is read on every request). */
 export async function setOperatorFuncao(slug: string, email: string, funcao: Funcao) {
   if (!isFuncao(funcao)) throw new OperatorError('Função inválida.');
-  const key = await keyOf(email);
+  const key = await operatorKey(email);
   let e = '';
   for (let attempt = 0; ; attempt++) {
     const doc = await storage().readJSON<Operator>(key);
@@ -97,14 +101,14 @@ export async function setOperatorFuncao(slug: string, email: string, funcao: Fun
 }
 
 export async function removeOperator(slug: string, email: string) {
-  const key = await keyOf(email);
+  const key = await operatorKey(email);
   const existing = await storage().readJSON<Operator>(key);
   if (existing?.data.slug === slug) await storage().remove(key);
   await updateList(slug, (list) => list.filter((o) => o.email !== email.trim().toLowerCase()));
 }
 
 export async function authenticateOperator(email: string, password: string): Promise<Operator | null> {
-  const doc = await storage().readJSON<Operator>(await keyOf(email));
+  const doc = await storage().readJSON<Operator>(await operatorKey(email));
   // Unknown emails still pay for a hash check, so timing does not reveal which logins exist.
   const ok = await verifyPassword(password, doc?.data.hash ?? 'pbkdf2.210000.eCAzA5ZVKqeqWGsesrdo-g.KDqd6hjPkfqmBszWRdu-00vcRG1bm0NSMZ8GLilWb98');
   return doc && ok ? doc.data : null;
@@ -115,8 +119,8 @@ export async function authenticateOperator(email: string, password: string): Pro
  * after the session started: removing a login or giving it a new password ends old sessions. A role
  * change needs no new session: the role returned here (from storage, never from the cookie) is the one used.
  */
-export async function operatorActive(email: string, slug: string, sessionStart: number): Promise<Funcao | null> {
-  const doc = await storage().readJSON<Operator>(await keyOf(email));
+export async function operatorActive(email: string, slug: string, sessionStart: number): Promise<{ funcao: Funcao; pendente: boolean } | null> {
+  const doc = await storage().readJSON<Operator>(await operatorKey(email));
   if (!doc || doc.data.slug !== slug || Date.parse(doc.data.createdAt) > sessionStart) return null;
-  return isFuncao(doc.data.funcao) ? doc.data.funcao : 'dono';
+  return { funcao: isFuncao(doc.data.funcao) ? doc.data.funcao : 'dono', pendente: doc.data.pendente === true };
 }

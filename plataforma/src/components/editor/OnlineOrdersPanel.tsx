@@ -223,6 +223,9 @@ export function OnlineOrdersPanel(props: {
           <a href={props.ordersUrl} className="btn-ghost min-h-12 px-5 text-base" target="_blank" rel="noreferrer">
             Tela de pedidos
           </a>
+          <a href={`${props.ordersUrl}/dono`} className="btn-ghost min-h-12 px-5 text-base" target="_blank" rel="noreferrer">
+            Painel do dono
+          </a>
         </div>
       </section>
       {msg && (
