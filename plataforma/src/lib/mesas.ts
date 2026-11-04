@@ -1,7 +1,7 @@
 import 'server-only';
 import { createHmac, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { storage, ConflictError } from './storage';
-import { getPublished } from './stores';
+import { getDraft, getPublished } from './stores';
 import { monthKey } from './changes';
 import type { Store } from './schema';
 import { count, hourWindow, record, take } from './limits';
@@ -147,6 +147,17 @@ export async function tableSettings(slug: string, number: number) {
   if (!ordering.enabled || !ordering.tables.enabled) throw new TableError('Este restaurante não está recebendo pedidos pela mesa.');
   if (!Number.isInteger(number) || number < 1 || number > ordering.tables.count) throw new TableError('Mesa não encontrada.');
   return record.store;
+}
+
+/**
+ * The staff (waiter or owner) opens a table by hand: only the table must exist. It works without the QR
+ * ordering on, so a restaurant can follow its floor before it takes orders by phone. Phones still go through
+ * tableSettings.
+ */
+async function staffTableSettings(slug: string, number: number) {
+  const store = (await getPublished(slug))?.store ?? (await getDraft(slug))?.data.store;
+  if (!store) throw new TableError('Restaurante não encontrado.');
+  if (!Number.isInteger(number) || number < 1 || number > orderingOf(store).tables.count) throw new TableError('Mesa não encontrada.');
 }
 
 const newToken = () => randomBytes(24).toString('base64url');
@@ -417,7 +428,7 @@ export async function seatTable(
   input: { people: number | null; reservationId?: string; credit?: number },
   now = new Date(),
 ): Promise<Seating> {
-  await tableSettings(slug, number);
+  await staffTableSettings(slug, number);
   if (input.people !== null && (!Number.isInteger(input.people) || input.people < 1 || input.people > 40)) throw new TableError('Número de pessoas inválido.');
   return change(slug, (doc) => {
     const current = doc.seatings[number];

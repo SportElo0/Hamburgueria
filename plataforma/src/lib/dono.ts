@@ -1,6 +1,6 @@
 import 'server-only';
 import { ConflictError } from './storage';
-import { getPublished } from './stores';
+import { getDraft, getPublished } from './stores';
 import { getOperation } from './orders';
 import { floor } from './mesas';
 import { getCostSheet, saveCostSheet, summariesForDays } from './inteligencia/dados';
@@ -32,13 +32,15 @@ export interface ItemDono {
 }
 
 export async function itensDoDono(slug: string): Promise<{ categories: { name: string; items: ItemDono[] }[]; published: boolean }> {
-  const [published, costs, op] = await Promise.all([getPublished(slug), getCostSheet(slug), getOperation(slug)]);
-  if (!published) return { categories: [], published: false };
+  const [published, draft, costs, op] = await Promise.all([getPublished(slug), getDraft(slug), getCostSheet(slug), getOperation(slug)]);
+  // Customers see the published menu; before there is one, the owner builds the menu in the draft.
+  const store = published?.store ?? draft?.data.store;
+  if (!store) return { categories: [], published: false };
   const { sheet } = costs;
   const soldOut = new Set(op.soldOut);
   return {
-    published: true,
-    categories: published.store.catalog.categories.map((c) => ({
+    published: Boolean(published),
+    categories: store.catalog.categories.map((c) => ({
       name: c.name,
       items: c.items.map((i) => {
         const p = sheet.products[i.id];

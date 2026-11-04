@@ -2,6 +2,7 @@ import 'server-only';
 import { storage, ConflictError } from './storage';
 import { monthKey, nextIsExtra } from './changes';
 import { hourWindow, take } from './limits';
+import { orderingOf } from './ordering';
 import {
   changeEntrySchema,
   changeLimit,
@@ -185,6 +186,73 @@ export async function editItemByStore(slug: string, itemId: string, input: Store
     await logChange(slug, { description: `Feita pela loja: ${after.name}: ${changes.join(', ')}`.slice(0, 500), counted: false, reason: 'Feita pela loja' }, by);
   }
   return after;
+}
+
+/**
+ * Applies `fn` to the draft and, when there is one, to the published copy, each re-read on a write conflict.
+ * For owner changes that must hold for customers at once and not be undone by the team's next publish.
+ */
+async function updateBoth(slug: string, by: string, fn: (store: Store) => Store) {
+  for (const key of [publishedKey(slug), draftKey(slug)]) {
+    for (let attempt = 0; ; attempt++) {
+      const doc = await storage().readJSON<StoreRecord>(key);
+      if (!doc) break;
+      const store = storeSchema.parse(fn(doc.data.store));
+      try {
+        await storage().writeJSON(key, key === draftKey(slug) ? { ...doc.data, store, updatedAt: new Date().toISOString(), updatedBy: by } : { ...doc.data, store }, doc.etag);
+        break;
+      } catch (err) {
+        if (!(err instanceof ConflictError) || attempt === 3) throw err;
+      }
+    }
+  }
+}
+
+/** The owner says how many tables the restaurant has (1 to 200). */
+export async function setTablesCount(slug: string, count: number, by: string) {
+  if (!Number.isInteger(count) || count < 1 || count > 200) throw new ItemEditError('Informe de 1 a 200 mesas.');
+  await updateBoth(slug, by, (store) => {
+    const o = orderingOf(store);
+    return { ...store, ordering: { ...o, tables: { ...o.tables, count } } };
+  });
+}
+
+/** The owner edits an item; with no published menu yet, only the draft exists and gets the change. */
+export async function editItemByOwner(slug: string, itemId: string, input: StoreItemEdit, by: string) {
+  if (await getPublished(slug)) return editItemByStore(slug, itemId, input, by);
+  const edit: StoreItemEdit = { name: input.name.trim(), description: input.description.trim(), price: input.price };
+  if (!edit.name || edit.name.length > 120) throw new ItemEditError('O nome precisa ter de 1 a 120 letras.');
+  if (!Number.isInteger(edit.price) || edit.price < 1 || edit.price > 10_000_000) throw new ItemEditError('Preço inválido.');
+  let found = false;
+  await updateBoth(slug, by, (store) => {
+    const r = editItemIn(store, itemId, edit);
+    found = Boolean(r);
+    return r ? r.store : store;
+  });
+  if (!found) throw new ItemEditError('Esse item não está mais no cardápio. Atualize a página.');
+}
+
+/** The owner adds an item (name, price, category; a new category is created). Returns its id. */
+export async function addItemByOwner(slug: string, input: { name: string; price: number; category: string }, by: string): Promise<string> {
+  const name = input.name.trim().replace(/\s+/g, ' ');
+  const category = input.category.trim().replace(/\s+/g, ' ');
+  if (!name || name.length > 120) throw new ItemEditError('O nome precisa ter de 1 a 120 letras.');
+  if (!category || category.length > 80) throw new ItemEditError('Escreva a categoria (ex.: Lanches, Bebidas).');
+  if (!Number.isInteger(input.price) || input.price < 1 || input.price > 10_000_000) throw new ItemEditError('Preço inválido.');
+  if (!(await take('cardapio-loja', slug, 60, hourWindow()))) throw new ItemEditError('Muitas mudanças nesta hora. Espere um pouco.');
+  const id = newId();
+  await updateBoth(slug, by, (store) => {
+    const cats = store.catalog.categories;
+    if (cats.flatMap((c) => c.items).length >= 300) throw new ItemEditError('O cardápio já tem itens demais.');
+    const item = itemSchema.parse({ id, name, description: '', price: input.price, priceLabel: '', image: '', imageAlt: '', available: true, featured: false, tags: [], options: [] });
+    const at = cats.findIndex((c) => c.name.toLocaleLowerCase('pt-BR') === category.toLocaleLowerCase('pt-BR'));
+    const categories =
+      at >= 0
+        ? cats.map((c, i) => (i === at ? { ...c, items: [...c.items, item] } : c))
+        : [...cats, { id: newId(), name: category, description: '', items: [item] }];
+    return { ...store, catalog: { categories } };
+  });
+  return id;
 }
 
 export async function getChanges(slug: string, month = monthKey()) {

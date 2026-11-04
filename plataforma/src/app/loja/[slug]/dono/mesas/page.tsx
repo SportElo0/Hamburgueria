@@ -19,7 +19,9 @@ export default async function MesasDonoPage({ params }: { params: Promise<{ slug
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">Mesas</h1>
-          <p className="mt-1 text-ink-soft">Ao vivo: quem está sentado, quanto já pediu e quem está chamando. Atualiza sozinho.</p>
+          <p className="mt-1 text-ink-soft">
+            Toque numa mesa para marcar quem sentou ou liberar. Quem abre a conta pelo QR aparece sozinho, com o que já pediu. Atualiza sozinho.
+          </p>
         </div>
         {o.enabled && o.tables.enabled && (
           <div className="flex gap-2">
@@ -32,11 +34,7 @@ export default async function MesasDonoPage({ params }: { params: Promise<{ slug
           </div>
         )}
       </div>
-      {o.enabled && o.tables.enabled ? (
-        <MesasAoVivo slug={slug} count={o.tables.count} />
-      ) : (
-        <p className="card mt-6 px-5 py-10 text-center text-ink-mute">O pedido pela mesa (QR) está desligado nesta loja. Fale com a Growlift para ligar.</p>
-      )}
+      <MesasAoVivo slug={slug} count={o.tables.count} qr={o.enabled && o.tables.enabled} />
     </div>
   );
 }

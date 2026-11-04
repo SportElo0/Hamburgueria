@@ -7,7 +7,7 @@ import { costSheetSchema, EMPTY_COST_SHEET, type CostSheet } from './custos';
 import { analyze } from './analise';
 import { SUMMARY_VERSION, monthSummaryKey, summarizeDay, type DaySummary, type MonthSummary } from './resumo';
 import { recommend, decisionSchema, type Decision, type DecisionStatus } from './recomendacoes';
-import { DEMO_SLUG, demoCostSheet, demoOrders, demoStore } from './demo';
+import { DEMO_SLUG, demoCostSheet, demoFloor, demoOrders, demoStore } from './demo';
 import type { StoreRecord } from '../schema';
 
 /**
@@ -145,6 +145,10 @@ export async function createDemo(by: string, now = new Date()) {
   await storage().writeJSON(costsKey(DEMO_SLUG), { sheet: demoCostSheet(), updatedAt: now.toISOString(), updatedBy: by });
   await storage().writeJSON(decisionsKey(DEMO_SLUG), {});
   const days = demoOrders(today, 120);
+  // Tables open right now, with their orders among today's (the owner's live floor).
+  const last = days[days.length - 1];
+  const floor = last.orders.length ? demoFloor(last.orders[0], now) : null;
+  if (floor) last.orders.push(...floor.orders);
   // Os resumos dos meses vão prontos: abrir a demo não precisa ler os 120 dias de pedidos.
   const closed = lastClosedDay(now);
   const stamp = now.getTime();
@@ -163,6 +167,7 @@ export async function createDemo(by: string, now = new Date()) {
     ...days.map(({ day, orders }) => () => storage().writeJSON(`pedidos/${DEMO_SLUG}/${day}.json`, orders)),
     ...[...months].map(([m, doc]) => () => storage().writeJSON(monthSummaryKey(DEMO_SLUG, m), doc)),
     ...old.map((k) => () => storage().remove(k)),
+    ...(floor ? [() => storage().writeJSON(`mesas/${DEMO_SLUG}/abertas.json`, { seatings: floor.seatings })] : []),
   ];
   for (let i = 0; i < writes.length; i += 10) await Promise.all(writes.slice(i, i + 10).map((w) => w()));
   return { slug: DEMO_SLUG, days: days.length, orders: days.reduce((s, d) => s + d.orders.length, 0) };

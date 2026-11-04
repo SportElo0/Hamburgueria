@@ -83,7 +83,8 @@ export function demoStore(): Store {
     notice: { active: false, text: '' },
     catalog: { categories },
     extra: { demo: true },
-    ordering: { ...DEFAULT_ORDERING },
+    // Everything on, so the owner's panel can be shown in full: never published, so no phone can order.
+    ordering: { ...DEFAULT_ORDERING, enabled: true, tables: { enabled: true, count: 12 } },
     account: {
       plan: 'parceiro',
       changeLimit: null,
@@ -225,4 +226,65 @@ export function demoOrders(today: string, days: number, seed = 20261028): { day:
     out.push({ day, orders });
   }
   return out;
+}
+
+/**
+ * Tables open right now in the demo (for the owner's live floor): some seated by the waiter, some opened by
+ * phone with orders, two calls. `today` orders are cloned from a delivery order of the day, as table orders.
+ */
+export function demoFloor(template: Order, now: Date) {
+  const ago = (min: number) => new Date(now.getTime() - min * 60_000).toISOString();
+  const plan = [
+    { number: 2, people: 4, min: 25, qr: true, orders: 2, calls: [] as { kind: 'garcom' | 'conta'; min: number }[] },
+    { number: 3, people: 2, min: 40, qr: false, orders: 0, calls: [] },
+    { number: 5, people: 3, min: 52, qr: true, orders: 2, calls: [{ kind: 'garcom' as const, min: 3 }] },
+    { number: 7, people: 6, min: 70, qr: true, orders: 3, calls: [{ kind: 'conta' as const, min: 2 }] },
+    { number: 9, people: 2, min: 12, qr: true, orders: 1, calls: [] },
+    { number: 12, people: null, min: 2, qr: true, orders: 0, calls: [] },
+  ];
+  const seatings: Record<string, unknown> = {};
+  const orders: Order[] = [];
+  let n = 900;
+  for (const t of plan) {
+    const id = `demo${t.number}${now.getTime().toString(36)}`;
+    seatings[t.number] = {
+      id,
+      number: t.number,
+      code: String(1000 + t.number * 37).slice(-4),
+      openedAt: ago(t.min),
+      // Mesa 12 was opened by a phone a moment ago and still waits for the waiter.
+      confirmed: t.number !== 12,
+      devices: t.qr ? ['demo'] : [],
+      calls: t.calls.map((c) => ({ kind: c.kind, at: ago(c.min) })),
+      people: t.people,
+    };
+    for (let k = 0; k < t.orders; k++) {
+      const line = template.lines[(t.number + k) % template.lines.length];
+      const quantity = 1 + ((t.number + k) % 3);
+      const total = line.unit * quantity;
+      const at = ago(Math.max(1, t.min - 5 - k * 12));
+      orders.push({
+        ...template,
+        id: `${template.id.slice(0, 9)}${String(++n).padStart(4, '0')}mesa00`,
+        number: n,
+        createdAt: at,
+        updatedAt: at,
+        status: k === t.orders - 1 && t.number !== 7 ? 'preparo' : 'concluido',
+        history: [{ status: 'novo', at, by: 'demo' }],
+        customer: { name: `Mesa ${t.number}`, phone: '', email: '' },
+        mode: 'mesa',
+        address: null,
+        table: { number: t.number, session: id },
+        payment: { method: 'cartao', status: 'na-mesa', changeFor: null, pix: null, paidAt: null },
+        lines: [{ ...line, quantity, total }],
+        subtotal: total,
+        deliveryFee: 0,
+        feePending: false,
+        discount: 0,
+        coupon: '',
+        total,
+      } as Order);
+    }
+  }
+  return { seatings, orders };
 }

@@ -25,7 +25,7 @@ export default async function InteligenciaIndex() {
           <div className="max-w-xl">
             <p className="font-bold">Demonstração com dados fictícios</p>
             <p className="mt-1 text-sm text-ink-mute">
-              Uma hamburgueria inventada, com 120 dias de pedidos e custos gerados pelo painel. Serve para mostrar como funciona
+              Uma hamburgueria inventada, com 120 dias de pedidos, custos e mesas abertas gerados pelo painel. Serve para mostrar como funciona
               sem usar dados de clientes. Não é publicada e não aparece em nenhum site.
             </p>
           </div>
@@ -33,6 +33,11 @@ export default async function InteligenciaIndex() {
             {demo && (
               <Link href={`/painel/inteligencia/${DEMO_SLUG}`} className="btn-primary">
                 Abrir demonstração
+              </Link>
+            )}
+            {demo && (
+              <Link href={`/loja/${DEMO_SLUG}/dono`} className="btn-primary">
+                Ver como o dono vê
               </Link>
             )}
             <DemoButton exists={Boolean(demo)} />
