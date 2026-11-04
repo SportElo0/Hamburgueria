@@ -24,16 +24,31 @@ export interface Cadastro {
   logo: string;
   criadoEm: string;
   status: 'pendente' | 'aprovado';
+  /** Which version of the privacy notice the person ticked as read, and when. */
+  avisoVersao?: string;
   decididoPor?: string;
   decididoEm?: string;
 }
 
 export class CadastroError extends Error {}
 
+/** The privacy notice the form links to (/cadastro/privacidade). Bump `versao` when its text changes. */
+export const AVISO_CADASTRO = { versao: '2026-11-04', atualizado: 'novembro de 2026' };
+
 const key = (slug: string) => `cadastros/${slug}.json`;
 export const LOGO_TYPES: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
 export const MAX_LOGO = 2 * 1024 * 1024;
 export const logoUrl = (storageKey: string) => (storageKey ? `/api/${storageKey}` : '');
+
+/** The real type of an image from its first bytes (the browser's declared type is not trusted). */
+export function tipoDaImagem(bytes: Uint8Array): keyof typeof LOGO_TYPES | null {
+  const b = (i: number) => bytes[i];
+  if (b(0) === 0xff && b(1) === 0xd8 && b(2) === 0xff) return 'image/jpeg';
+  if (b(0) === 0x89 && b(1) === 0x50 && b(2) === 0x4e && b(3) === 0x47) return 'image/png';
+  const ascii = (from: number, to: number) => String.fromCharCode(...bytes.slice(from, to));
+  if (ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP') return 'image/webp';
+  return null;
+}
 
 function randomName() {
   return Array.from(crypto.getRandomValues(new Uint8Array(12)), (b) => b.toString(16).padStart(2, '0')).join('');
@@ -71,9 +86,13 @@ export function validarCadastro(input: NovoCadastro) {
 /** Saves the sign-up and the owner's pending login. Returns the store address it reserved. */
 export async function criarCadastro(input: NovoCadastro, now = new Date()): Promise<{ slug: string; email: string; nome: string }> {
   const { restaurante, dono, email, whatsapp } = validarCadastro(input);
-  if (teamUsers().some((u) => u.email.toLowerCase() === email)) throw new CadastroError('Esse e-mail já tem conta. Use "Já tenho conta".');
+  if (teamUsers().some((u) => u.email.toLowerCase() === email)) throw new CadastroError('Não foi possível criar a conta com esse e-mail. Se ele já tem conta, use "Já tenho conta" ou fale com a Growlift.');
   const opKey = await operatorKey(email);
-  if (await storage().readJSON<Operator>(opKey)) throw new CadastroError('Esse e-mail já tem conta. Use "Já tenho conta" ou fale com a Growlift.');
+  if (await storage().readJSON<Operator>(opKey)) throw new CadastroError('Não foi possível criar a conta com esse e-mail. Se ele já tem conta, use "Já tenho conta" ou fale com a Growlift.');
+  // The file must really be the image it claims to be; it is saved with the type its bytes show.
+  const logoBytes = input.logo && input.logo.size > 0 ? Buffer.from(await input.logo.arrayBuffer()) : null;
+  const logoType = logoBytes ? tipoDaImagem(logoBytes) : null;
+  if (logoBytes && !logoType) throw new CadastroError('A logo precisa ser uma imagem JPG, PNG ou WebP.');
   const hash = await hashPassword(input.senha);
 
   // Reserve a free address: not a store already, and not another sign-up (the write fails if it exists).
@@ -83,7 +102,7 @@ export async function criarCadastro(input: NovoCadastro, now = new Date()): Prom
   for (let n = 1; n <= 30 && !cadastro; n++) {
     const slug = n === 1 ? base : `${base}-${n}`;
     if (await getDraft(slug)) continue;
-    const doc: Cadastro = { slug, restaurante, dono, email, whatsapp, logo: '', criadoEm, status: 'pendente' };
+    const doc: Cadastro = { slug, restaurante, dono, email, whatsapp, logo: '', criadoEm, status: 'pendente', avisoVersao: AVISO_CADASTRO.versao };
     try {
       await storage().writeJSON(key(slug), doc, null);
       cadastro = doc;
@@ -98,14 +117,14 @@ export async function criarCadastro(input: NovoCadastro, now = new Date()): Prom
     await storage().writeJSON(opKey, operator, null);
   } catch (err) {
     await storage().remove(key(cadastro.slug));
-    if (err instanceof ConflictError) throw new CadastroError('Esse e-mail já tem conta. Use "Já tenho conta".');
+    if (err instanceof ConflictError) throw new CadastroError('Não foi possível criar a conta com esse e-mail. Se ele já tem conta, use "Já tenho conta" ou fale com a Growlift.');
     throw err;
   }
 
-  if (input.logo && input.logo.size > 0) {
-    const logo = `midia/${cadastro.slug}/${randomName()}.${LOGO_TYPES[input.logo.type]}`;
+  if (logoBytes && logoType) {
+    const logo = `midia/${cadastro.slug}/${randomName()}.${LOGO_TYPES[logoType]}`;
     try {
-      await storage().writeFile(logo, Buffer.from(await input.logo.arrayBuffer()), input.logo.type);
+      await storage().writeFile(logo, logoBytes, logoType);
       await storage().writeJSON(key(cadastro.slug), { ...cadastro, logo });
     } catch (err) {
       // The sign-up still counts without the logo; the team can ask for it on WhatsApp.

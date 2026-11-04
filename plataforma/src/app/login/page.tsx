@@ -20,6 +20,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             Nenhuma conta configurada. Defina <code>ADMIN_USERS</code> e <code>SESSION_SECRET</code> nas variáveis de ambiente.
           </p>
         )}
+        <p className="mt-6 text-center text-xs text-ink-mute">
+          <a href="/cadastro/privacidade" className="underline">
+            Privacidade
+          </a>
+        </p>
       </div>
     </main>
   );

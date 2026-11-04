@@ -25,3 +25,15 @@ Feito para computador (barra escura à esquerda); no celular a barra vira uma fa
 - **Em breve (etapas 2 e 3):** Pedidos e delivery, Equipe, Clientes e avaliações; promoção com data; demonstração no MacBook.
 
 Código: `src/app/loja/[slug]/dono/`, `src/lib/dono.ts`, `src/lib/dono-resumo.ts`, `src/components/dono/`. Testes: `test/dono.test.ts` e os de função em `test/orders.test.ts`.
+
+## Cadastro de restaurante novo
+
+Na tela de entrar: **Sou restaurante › Sou novo**. O dono informa nome do restaurante, logo (opcional), o próprio nome, WhatsApp e e-mail, e cria a senha.
+
+- O login nasce `pendente`: só abre `/cadastro/aguardando` até a equipe decidir (`canUse` nega tudo; `homeOf` manda para a espera). O `pendente` é lido do armazenamento a cada acesso.
+- A equipe decide em **Painel › Cadastros** (aviso na tela Lojas quando há pedido). Fale com o dono pelo WhatsApp antes.
+  - **Aprovar:** cria a loja em rascunho (nada publicado) com a logo em `extra.logo`, tira o `pendente` e põe o dono em Acesso da loja.
+  - **Recusar:** apaga cadastro, login e logo. O mesmo e-mail pode se cadastrar de novo.
+- Proteções: 3 cadastros por hora por endereço de internet, 30 por dia no painel (só contam os que passam na validação), campo isca, logo só JPG/PNG/WebP de até 2 MB conferida pelos primeiros bytes, mensagem igual para e-mail já usado.
+- Aviso de privacidade em `/cadastro/privacidade` (versão em `AVISO_CADASTRO`, guardada no cadastro). Pedido para apagar conta aprovada: hoje é manual, em até 15 dias (remover o login em Acesso da loja e apagar `cadastros/<slug>.json`).
+- Código: `src/lib/cadastros.ts`, `src/app/login/`, `src/app/cadastro/`, `src/app/painel/cadastros/`. Testes: `test/cadastros.test.ts`.

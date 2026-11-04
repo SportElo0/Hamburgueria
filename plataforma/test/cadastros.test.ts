@@ -36,9 +36,9 @@ describe('cadastro de restaurante', () => {
     await createStore({ slug: 'cantina-da-praca', name: 'Outra', segment: 'restaurante' }, 'equipe');
     expect((await criarCadastro(base)).slug).toBe('cantina-da-praca-2');
     expect((await criarCadastro({ ...base, email: 'b@exemplo.com' })).slug).toBe('cantina-da-praca-3');
-    await expect(criarCadastro({ ...base, restaurante: 'Outro' })).rejects.toThrow(/já tem conta/);
+    await expect(criarCadastro({ ...base, restaurante: 'Outro' })).rejects.toThrow(/esse e-mail/);
     await upsertOperator('loja-x', { email: 'caixa@x.com', name: 'Caixa', funcao: 'cozinha' }, 'equipe');
-    await expect(criarCadastro({ ...base, email: 'caixa@x.com' })).rejects.toThrow(/já tem conta/);
+    await expect(criarCadastro({ ...base, email: 'caixa@x.com' })).rejects.toThrow(/esse e-mail/);
   });
 
   it('valida o formulário', () => {
@@ -78,6 +78,16 @@ describe('cadastro de restaurante', () => {
     expect(await listarCadastros()).toEqual([]);
     // O mesmo e-mail pode se cadastrar de novo depois.
     expect((await criarCadastro(base)).slug).toBe('cantina-da-praca');
+  });
+
+  it('a logo precisa ser imagem de verdade, não só dizer que é', async () => {
+    const fake = new File(['<html><script>alert(1)</script></html>'], 'logo.png', { type: 'image/png' });
+    await expect(criarCadastro({ ...base, logo: fake })).rejects.toThrow(/JPG, PNG ou WebP/);
+    expect(await getCadastro('cantina-da-praca')).toBeNull();
+    // Um JPEG enviado como "png" é guardado como JPEG.
+    const jpeg = new File([new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 1, 2])], 'logo.png', { type: 'image/png' });
+    await criarCadastro({ ...base, logo: jpeg });
+    expect((await getCadastro('cantina-da-praca'))!.logo).toMatch(/\.jpg$/);
   });
 
   it('nova senha dada pela equipe não aprova o cadastro sozinha', async () => {

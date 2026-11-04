@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { authenticate, homeOf, isFuncao, SESSION_COOKIE, SESSION_DAYS, signSession, type Session } from '@/lib/session';
 import { authenticateOperator } from '@/lib/operators';
 import { clientIp, count, dayWindow, hourWindow, record, take } from '@/lib/limits';
-import { CadastroError, criarCadastro } from '@/lib/cadastros';
+import { CadastroError, MAX_LOGO, criarCadastro, validarCadastro } from '@/lib/cadastros';
 
 /** Failed logins allowed per hour, per e-mail and per address, before the form stops trying. */
 const MAX_FAILS_EMAIL = 10;
@@ -65,23 +65,36 @@ const MAX_CADASTROS_DIA = 30;
 
 /** "Sou restaurante" › "Sou novo": creates the owner's password and a sign-up the team approves. */
 export async function cadastrar(_prev: CadastroState, formData: FormData): Promise<CadastroState> {
+  // Long junk is cut before anything else (and before it is echoed back in `valores`).
   const field = (k: string) => {
     const v = formData.get(k);
-    return typeof v === 'string' ? v : '';
+    return typeof v === 'string' ? v.slice(0, 240) : '';
   };
   const valores = { restaurante: field('restaurante'), dono: field('dono'), email: field('email'), whatsapp: field('whatsapp') };
-  // A field people never see: only robots fill it. Answer as if it worked, without saving anything.
+  // A field people never see: only robots fill it. Answer vaguely, without saving anything.
   if (field('site')) return { error: 'Não foi possível enviar agora. Tente de novo mais tarde.', valores };
   if (field('aceite') !== 'sim') return { error: 'Para criar a conta, marque que leu como usamos os seus dados.', valores };
   if (field('senha') !== field('senha2')) return { error: 'As duas senhas não são iguais.', valores };
   const logo = formData.get('logo');
+  if (logo instanceof File && logo.size > MAX_LOGO) return { error: 'A logo passa de 2 MB. Mande uma imagem menor.', valores };
   const ip = clientIp(await headers());
-  if (!(await take('cadastro-dia', 'todos', MAX_CADASTROS_DIA, dayWindow())) || (ip && !(await take('cadastro-ip', ip, MAX_CADASTROS_IP, hourWindow())))) {
+  if (ip && !(await take('cadastro-ip', ip, MAX_CADASTROS_IP, hourWindow()))) {
     return { error: 'Muitos cadastros agora. Tente de novo mais tarde ou chame a Growlift no WhatsApp.', valores };
+  }
+  const input = { ...valores, senha: field('senha'), logo: logo instanceof File ? logo : null };
+  try {
+    validarCadastro(input);
+  } catch (err) {
+    if (err instanceof CadastroError) return { error: err.message, valores };
+    throw err;
+  }
+  // The panel-wide daily cap only counts sign-ups that passed the checks, so junk cannot use it up.
+  if (!(await take('cadastro-dia', 'todos', MAX_CADASTROS_DIA, dayWindow()))) {
+    return { error: 'Muitos cadastros hoje. Tente amanhã ou chame a Growlift no WhatsApp.', valores };
   }
   let user: Omit<Session, 'exp'>;
   try {
-    const c = await criarCadastro({ ...valores, senha: field('senha'), logo: logo instanceof File ? logo : null });
+    const c = await criarCadastro(input);
     user = { email: c.email, name: c.nome, role: 'loja', slug: c.slug, funcao: 'dono', pendente: true };
   } catch (err) {
     if (err instanceof CadastroError) return { error: err.message, valores };
