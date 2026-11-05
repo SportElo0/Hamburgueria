@@ -72,7 +72,7 @@ export function CardapioView({ store, faixa, exemplo = false }: { store: Store; 
                       exemplo={exemplo}
                       image={image}
                       alt={i.imageAlt || i.name}
-                      item={i.modelo3d ? { id: i.id, name: i.name, image, imageAlt: i.imageAlt || i.name, modelo3d: { src: media(i.modelo3d.src), larguraCm: i.modelo3d.larguraCm, alturaCm: i.modelo3d.alturaCm } } : null}
+                      item={i.modelo3d ? { id: i.id, name: i.name, image, imageAlt: i.imageAlt || i.name, modelo3d: { src: media(i.modelo3d.src), ios: i.modelo3d.ios ? media(i.modelo3d.ios) : undefined, larguraCm: i.modelo3d.larguraCm, alturaCm: i.modelo3d.alturaCm } } : null}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-base leading-tight font-bold">{i.name}</p>

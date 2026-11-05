@@ -54,6 +54,8 @@ export const modelo3dSchema = z.object({
   medidoPor: text(120).optional(),
   medidoEm: text(40).optional(),
   origemMedida: z.enum(['equipe', 'dono']).optional(),
+  /** A ready USDZ for the iPhone (Quick Look); without it the viewer converts the GLB on the phone. */
+  ios: z.string().regex(/^midia\/[a-z0-9-]+\/[a-z0-9]+\.usdz$/).optional(),
 });
 export type Modelo3d = z.infer<typeof modelo3dSchema>;
 

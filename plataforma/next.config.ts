@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // The iPhone's AR files: Quick Look only opens a USDZ sent with its own type.
+        source: '/3d/:file*.usdz',
+        headers: [{ key: 'Content-Type', value: 'model/vnd.usdz+zip' }],
+      },
+      {
         // Read-only and public (tables free or taken, nothing personal): any site may frame it.
         source: '/movimento/:slug/embed',
         headers: [

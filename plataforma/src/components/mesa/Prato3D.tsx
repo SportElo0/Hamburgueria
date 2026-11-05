@@ -8,7 +8,8 @@ export interface Prato3DItem {
   name: string;
   image: string;
   imageAlt: string;
-  modelo3d: { src: string; larguraCm: number; alturaCm: number };
+  /** `ios`: a ready USDZ for the iPhone's Quick Look; without it the viewer converts the GLB on the phone. */
+  modelo3d: { src: string; larguraCm: number; alturaCm: number; ios?: string };
 }
 
 const cm = (n: number) => `${n.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} cm`;
@@ -61,7 +62,7 @@ export function Prato3D({ item, onClose, onVer, exemplo = false }: { item: Prato
     onCloseRef.current = onClose;
   });
 
-  const { src } = item.modelo3d;
+  const { src, ios } = item.modelo3d;
   const alt = `${item.name} em 3D`;
   const poster = item.image;
 
@@ -96,6 +97,7 @@ export function Prato3D({ item, onClose, onVer, exemplo = false }: { item: Prato
           'ar-usdz-max-texture-size': '1024',
         };
         if (poster) attrs.poster = poster;
+        if (ios) attrs['ios-src'] = ios;
         if (!calmo) Object.assign(attrs, { 'auto-rotate': '', 'auto-rotate-delay': '600', 'rotation-per-second': '16deg' });
         for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
         el.style.cssText = 'width:100%;height:100%;background:transparent;--poster-color:transparent;--progress-bar-color:#0865FE';
@@ -122,7 +124,7 @@ export function Prato3D({ item, onClose, onVer, exemplo = false }: { item: Prato
       el?.remove();
       viewer.current = null;
     };
-  }, [src, alt, poster]);
+  }, [src, ios, alt, poster]);
 
   useEffect(() => {
     const antes = document.activeElement as HTMLElement | null;
