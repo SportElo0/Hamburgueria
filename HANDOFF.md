@@ -231,6 +231,8 @@ Outros:
 
 ## Regras combinadas
 
+- **Só português do Brasil (05/11):** nada de Reel com voz ou palavras de Portugal. Ouvir uma amostra da voz antes de narrar; na dúvida, gravar com a voz de um dos sócios.
+
 - Não inventar dados do negócio; não afirmar resultado sem testar.
 - Não criar PR sem pedido. Commits terminam com as linhas de coautoria do Claude.
 - Não usar as senhas pessoais dos usuários para entrar no painel.

@@ -22,6 +22,7 @@ Tudo mora em `growlift-social/` e aparece no painel (`/painel/conteudos`) depois
 - **Pessoas:** só fotos autorizadas (Lucas e Antônio já estão em `_fonte/assets/`).
 - **Preço em post:** só com as condições junto (regra do consumidor); prefira mandar para o site.
 - **Nunca prometer** faturamento, posição no Google, "melhor" ou "líder".
+- **Só português do Brasil:** narração e textos sempre em português brasileiro. Nenhuma voz com sotaque de Portugal (as vozes prontas da ElevenLabs costumam soar portuguesas: os sócios já reprovaram). Antes de narrar um Reel, gere uma amostra curta com a voz escolhida e mande para os sócios ouvirem; só narre o Reel depois do "ok" deles.
 - **Nada é publicado** no Instagram nem no WhatsApp: vocês entregam a peça, quem aprova e posta são eles.
 
 ## Como produzir
