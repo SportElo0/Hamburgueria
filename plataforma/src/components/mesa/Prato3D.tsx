@@ -46,7 +46,7 @@ export function Selo3D() {
  * AR (iPhone: Quick Look; Android: Scene Viewer or WebXR) with the size locked, so it can't be pinched bigger.
  * The file is already scaled to the dish's real width on upload. The viewer library loads only when this opens.
  */
-/** `exemplo`: the demo menu's code-made burger, which is no dish served anywhere: the notice says so. */
+/** `exemplo`: the demo menu's AI-made burger, which is no dish served anywhere: the notice says so. */
 export function Prato3D({ item, onClose, onVer, exemplo = false }: { item: Prato3DItem; onClose: () => void; onVer: (modo: 'tela' | 'mesa') => void; exemplo?: boolean }) {
   const box = useRef<HTMLDivElement>(null);
   const viewer = useRef<ModelViewerElement | null>(null);
@@ -190,7 +190,7 @@ export function Prato3D({ item, onClose, onVer, exemplo = false }: { item: Prato
         <div className="px-5 pt-3 pb-[max(16px,env(safe-area-inset-bottom))]">
           <p className="mb-3 text-center text-[14px] leading-snug text-[#4A5568]">
             {exemplo
-              ? `Exemplo para demonstração: 3D feito em computador, não é um prato de verdade. Tem ${cm(item.modelo3d.larguraCm)} na parte mais larga, com o prato. O tamanho no celular é aproximado.`
+              ? `Exemplo para demonstração: 3D gerado por IA a partir de uma imagem, não é um prato de verdade. Tem ${cm(item.modelo3d.larguraCm)} na parte mais larga. O tamanho no celular é aproximado.`
               : `3D feito a partir do prato servido aqui, com ${cm(item.modelo3d.larguraCm)} na parte mais larga (com a louça, se ela aparece). O tamanho no celular é aproximado e a montagem pode variar um pouco de um prato para outro.`}
           </p>
           {podeAR ? (
