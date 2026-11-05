@@ -1,8 +1,9 @@
 // Builds a simple 3D burger (GLB) to test the "dish in 3D" flow without a real scan.
 // It is NOT a real dish: never put it on a real store's menu.
-//   node scripts/prato-teste-3d.mjs saida.glb [--textura]
+//   node scripts/prato-teste-3d.mjs saida.glb [--textura] [--cm 22]
 // --textura adds a 2048 px texture to the top bun, to test the browser's texture reduction.
-import { Document, NodeIO } from '@gltf-transform/core';
+// --cm N scales it to N cm wide (with the plate), as the panel's upload does; for the public example menu.
+import { Document, NodeIO, getBounds } from '@gltf-transform/core';
 import sharp from 'sharp';
 
 const [out = 'prato-teste.glb', ...flags] = process.argv.slice(2);
@@ -89,6 +90,22 @@ if (flags.includes('--textura')) {
   }
   const png = await sharp(raw, { raw: { width: size, height: size, channels: 3 } }).png().toBuffer();
   topo.setBaseColorFactor([1, 1, 1, 1]).setBaseColorTexture(doc.createTexture('gergelim').setImage(new Uint8Array(png)).setMimeType('image/png'));
+}
+
+const cmAt = flags.indexOf('--cm');
+if (cmAt >= 0) {
+  // Same as assentar() in src/lib/modelo3d.ts: widest side seen from above = N cm, centred, resting at height 0.
+  const cm = Number(flags[cmAt + 1]);
+  const { min, max } = getBounds(scene);
+  const f = cm / 100 / Math.max(max[0] - min[0], max[2] - min[2]);
+  const raiz = doc.createNode('tamanho-real').setScale([f, f, f]).setTranslation([-((min[0] + max[0]) / 2) * f, -min[1] * f, -((min[2] + max[2]) / 2) * f]);
+  for (const child of [...scene.listChildren()]) {
+    scene.removeChild(child);
+    raiz.addChild(child);
+  }
+  scene.addChild(raiz);
+  const b = getBounds(scene);
+  console.log('medidas (cm):', ((b.max[0] - b.min[0]) * 100).toFixed(1), 'x', ((b.max[1] - b.min[1]) * 100).toFixed(1));
 }
 
 await new NodeIO().write(out, doc);
