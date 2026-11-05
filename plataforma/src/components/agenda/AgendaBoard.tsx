@@ -48,8 +48,12 @@ const TIPO = { reel: 'Reel', carrossel: 'Carrossel', imagem: 'Foto' };
 export function AgendaBoard({ cards, connected }: { cards: AgendaCard[]; connected: boolean }) {
   const [pending, start] = useTransition();
   const [msg, setMsg] = useState('');
+  // Posted items leave the list (they are on Instagram now); the history stays one tap away.
+  const [verPostados, setVerPostados] = useState(false);
+  const postados = cards.filter((c) => c.status === 'postado').length;
+  const visiveis = verPostados ? cards : cards.filter((c) => c.status !== 'postado');
   const days = new Map<string, AgendaCard[]>();
-  for (const c of cards) {
+  for (const c of visiveis) {
     const k = localParts(c.quando).date;
     days.set(k, [...(days.get(k) ?? []), c]);
   }
@@ -67,6 +71,11 @@ export function AgendaBoard({ cards, connected }: { cards: AgendaCard[]; connect
             {pending ? <Busy>Verificando…</Busy> : 'Verificar agora'}
           </button>
         )}
+        {postados > 0 && (
+          <button type="button" className="btn-ghost min-h-10" aria-pressed={verPostados} onClick={() => setVerPostados((v) => !v)}>
+            {verPostados ? 'Esconder os já postados' : `Ver os ${postados} já postados`}
+          </button>
+        )}
         {msg && (
           <span role="status" className="text-ink-mute">
             {msg}
@@ -74,6 +83,7 @@ export function AgendaBoard({ cards, connected }: { cards: AgendaCard[]; connect
         )}
       </div>
       {cards.length === 0 && <p className="card px-5 py-10 text-center text-ink-mute">Nenhum post preparado ainda.</p>}
+      {cards.length > 0 && visiveis.length === 0 && <p className="card px-5 py-10 text-center text-ink-mute">Tudo o que estava na agenda já foi postado.</p>}
       {[...days.entries()].map(([day, list]) => (
         <section key={day}>
           <h2 className="text-sm font-bold tracking-wide text-ink-mute uppercase">{dayTitle(list[0].quando)}</h2>
