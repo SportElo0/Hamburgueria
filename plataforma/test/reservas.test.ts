@@ -311,7 +311,13 @@ describe('Pix real (Mercado Pago simulado)', () => {
     await realStore();
     mercadoPago(4000);
     const r = await createReservation(SLUG, input({ email: 'ana@teste.local' }), '', ORIGIN, NOON);
-    expect(await settleReservationFromMercadoPago(SLUG, '555')).toBe(true);
-    expect((await getReservation(SLUG, r.id))!.status).toBe('confirmada');
+    // The confirmation reads the real clock: pin it a minute after the booking, or the test fails once the day's Pix time is past.
+    vi.useFakeTimers({ now: new Date(NOON.getTime() + 60_000), toFake: ['Date'] });
+    try {
+      expect(await settleReservationFromMercadoPago(SLUG, '555')).toBe(true);
+      expect((await getReservation(SLUG, r.id))!.status).toBe('confirmada');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

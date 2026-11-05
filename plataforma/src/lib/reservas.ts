@@ -408,7 +408,7 @@ export async function cancelByCustomer(slug: string, id: string, token: string, 
 }
 
 /** Personal data (name, phone, e-mail) of bookings older than the store's retention are erased; the money record stays. */
-async function purgeOld(slug: string, keepMonths: number, now: Date) {
+export async function purgeOld(slug: string, keepMonths: number, now: Date) {
   const limit = dayOf(new Date(now.getTime() - keepMonths * 30 * 86_400_000));
   const keys = (await storage().list(`reservas/${slug}/`)).filter((k) => (/(\d{4}-\d{2}-\d{2})\.json$/.exec(k)?.[1] ?? '9999') < limit);
   for (const key of keys) {

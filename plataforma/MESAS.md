@@ -127,10 +127,15 @@ privacidade, na parte de Reservas), porque o aviso de privacidade `/privacidade/
   - Cada envio fica em `pdv/<loja>/envios.json` (últimos 300). No editor da equipe aparecem os últimos envios com
     "Reenviar" para os que falharam. Opcional: `SAIPOS_API_URL` para o ambiente de testes do Saipos.
 
+## Limpeza diária dos dados
+
+Uma vez por dia, o mesmo alarme de 5 minutos da agenda do Instagram (`/api/instagram/tick`) roda `src/lib/limpeza.ts`:
+reservas mais velhas que o prazo da loja (padrão 6 meses) perdem nome, telefone e e-mail (o registro do dinheiro fica), e os dias
+antigos da fila de espera são apagados. Antes só rodava quando chegava reserva ou pessoa nova na fila. Teste: `test/limpeza.test.ts`.
+
 ## Ainda não feito
 
 - Pagar com cartão pelo celular na mesa.
-- Apagar sozinho os dados das reservas antigas.
 - Devolver só a diferença do sinal pelo Pix (hoje o garçom devolve no caixa).
 - Quiz entre as mesas.
 - Cupom em pedido da mesa.

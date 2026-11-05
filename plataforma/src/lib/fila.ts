@@ -94,7 +94,8 @@ async function writeDay<R>(slug: string, day: string, fn: (list: QueueEntry[]) =
   throw new ConflictError();
 }
 
-async function purgeOld(slug: string, now: Date) {
+/** Waiting-list days older than KEEP_DAYS are deleted (they hold names and phones). */
+export async function purgeOld(slug: string, now: Date) {
   const limit = dayOf(new Date(now.getTime() - KEEP_DAYS * 86_400_000));
   const keys = await storage().list(`fila/${slug}/`);
   await Promise.all(keys.filter((k) => (/(\d{4}-\d{2}-\d{2})\.json$/.exec(k)?.[1] ?? '9999') < limit).map((k) => storage().remove(k)));
