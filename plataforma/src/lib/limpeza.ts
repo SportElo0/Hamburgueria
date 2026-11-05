@@ -21,8 +21,13 @@ async function lojasCom(prefixo: string) {
   return [...new Set((await storage().list(prefixo)).map((k) => k.split('/')[1]).filter(Boolean))];
 }
 
+/**
+ * The store's retention. A read error is NOT turned into the default: it throws, and the store is skipped (and retried),
+ * so a database hiccup can never erase data of a store that keeps it for 12 or 24 months. The default only applies when
+ * the store really does not exist any more.
+ */
 async function mesesDe(slug: string) {
-  const record = (await getPublished(slug).catch(() => null)) ?? (await getDraft(slug).catch(() => null))?.data ?? null;
+  const record = (await getPublished(slug)) ?? (await getDraft(slug))?.data ?? null;
   return record ? orderingOf(record.store).reservations.seller.keepMonths : MESES_PADRAO;
 }
 
@@ -36,11 +41,13 @@ export interface Limpeza {
 export async function limpezaDiaria(agora = new Date()): Promise<Limpeza> {
   if (!gravacaoPermitida()) return { feito: 'nao-e-producao' };
   const hoje = diaSP(agora);
-  const doc = await storage().readJSON<{ dia: string }>(ESTADO);
+  const doc = await storage().readJSON<{ dia: string; tentarApos?: string }>(ESTADO);
   if (doc?.data.dia === hoje) return { feito: 'ja-feito' };
+  if (doc?.data.tentarApos && Date.parse(doc.data.tentarApos) > agora.getTime()) return { feito: 'ja-feito' };
+  let marca: string;
   try {
     // Claimed first, so two ticks at the same time do not both run it.
-    await storage().writeJSON(ESTADO, { dia: hoje, em: agora.toISOString() }, doc ? doc.etag : null);
+    marca = await storage().writeJSON(ESTADO, { dia: hoje, em: agora.toISOString() }, doc ? doc.etag : null);
   } catch (err) {
     if (err instanceof ConflictError) return { feito: 'ja-feito' };
     throw err;
@@ -65,6 +72,12 @@ export async function limpezaDiaria(agora = new Date()): Promise<Limpeza> {
       falhas.push(`fila/${slug}`);
       console.error('limpeza: fila', slug, err instanceof Error ? err.message : err);
     }
+  }
+  if (falhas.length) {
+    // Something was skipped: try again in an hour instead of waiting for tomorrow.
+    await storage()
+      .writeJSON(ESTADO, { dia: '', em: agora.toISOString(), tentarApos: new Date(agora.getTime() + 3600_000).toISOString(), falhas }, marca)
+      .catch((err) => console.error('limpeza: marca', err instanceof Error ? err.message : err));
   }
   return { feito: 'ok', reservas, filas, ...(falhas.length ? { falhas } : {}) };
 }
