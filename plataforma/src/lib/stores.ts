@@ -247,6 +247,52 @@ export async function setContaConfig(slug: string, servico: number, couvert: num
   await ownerLog(slug, `taxa de serviço ${servico}% e couvert ${(couvert / 100).toFixed(2)}`, by);
 }
 
+/**
+ * The owner imports a whole menu at once (read from a photo or PDF, see importar-cardapio.ts): new categories are
+ * created, items already in the same category (same name) are left as they are. Draft and published copy.
+ */
+export async function importItemsByOwner(
+  slug: string,
+  categorias: { name: string; items: { name: string; price: number; description: string }[] }[],
+  by: string,
+): Promise<{ adicionados: number; repetidos: number }> {
+  await ownerLimit(slug);
+  const key = (t: string) => t.trim().toLocaleLowerCase('pt-BR');
+  let adicionados = 0;
+  let repetidos = 0;
+  await updateBoth(slug, by, (store) => {
+    let cats = store.catalog.categories.map((c) => ({ ...c, items: [...c.items] }));
+    adicionados = 0;
+    repetidos = 0;
+    let total = cats.reduce((n, c) => n + c.items.length, 0);
+    for (const ci of categorias) {
+      const name = ci.name.trim().slice(0, 80);
+      if (!name) continue;
+      let cat = cats.find((c) => key(c.name) === key(name));
+      if (!cat) {
+        if (cats.length >= 40) throw new ItemEditError('O cardápio já tem categorias demais (40).');
+        cat = { id: newId(), name, description: '', items: [] };
+        cats = [...cats, cat];
+      }
+      for (const it of ci.items) {
+        if (cat.items.some((x) => key(x.name) === key(it.name))) {
+          repetidos++;
+          continue;
+        }
+        if (total >= 300 || cat.items.length >= 300) throw new ItemEditError('O cardápio passaria de 300 itens.');
+        cat.items.push(
+          itemSchema.parse({ id: newId(), name: it.name.trim(), description: it.description.trim(), price: it.price, priceLabel: '', image: '', imageAlt: '', available: true, featured: false, tags: [], options: [] }),
+        );
+        adicionados++;
+        total++;
+      }
+    }
+    return { ...store, catalog: { categories: cats } };
+  });
+  if (adicionados) await ownerLog(slug, `cardápio importado: ${adicionados} itens novos`, by);
+  return { adicionados, repetidos };
+}
+
 /** The owner edits an item; with no published menu yet, only the draft exists and gets the change. */
 export async function editItemByOwner(slug: string, itemId: string, input: StoreItemEdit, by: string) {
   if (await getPublished(slug)) return editItemByStore(slug, itemId, input, by);

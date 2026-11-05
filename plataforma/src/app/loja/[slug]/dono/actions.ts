@@ -2,7 +2,8 @@
 
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { CustoError, salvarCustoManual } from '@/lib/dono';
-import { ItemEditError, addItemByOwner, editItemByOwner, getDraft, getPublished, setContaConfig, setTablesCount } from '@/lib/stores';
+import { ItemEditError, addItemByOwner, editItemByOwner, getDraft, getPublished, importItemsByOwner, setContaConfig, setTablesCount } from '@/lib/stores';
+import { lerCardapio } from '@/lib/importar-cardapio';
 import { isSlug } from '@/lib/slug';
 import { floor } from '@/lib/mesas';
 
@@ -95,5 +96,21 @@ export async function contaConfigAction(slug: string, servico: number, couvert: 
     if (err instanceof ItemEditError) return { ok: false, error: err.message };
     console.error('contaConfigAction', err);
     return { ok: false, error: 'Não foi possível salvar. Tente de novo.' };
+  }
+}
+
+/** The owner imports the menu the Claude transcribed from a photo or PDF (the text is read again here). */
+export async function importarCardapioAction(slug: string, texto: string): Promise<DonoResult & { adicionados?: number; repetidos?: number }> {
+  if (!isSlug(slug) || typeof texto !== 'string' || texto.length > 60_000) return { ok: false, error: 'Texto inválido ou grande demais.' };
+  const lido = lerCardapio(texto);
+  if (!lido.total) return { ok: false, error: 'Não achei nenhum item com preço no texto. Confira o formato.' };
+  const user = await requireStoreAccess(slug, DONO);
+  try {
+    const r = await importItemsByOwner(slug, lido.categorias, user.name || user.email);
+    return { ok: true, ...r };
+  } catch (err) {
+    if (err instanceof ItemEditError) return { ok: false, error: err.message };
+    console.error('importarCardapioAction', err);
+    return { ok: false, error: 'Não foi possível importar. Tente de novo.' };
   }
 }

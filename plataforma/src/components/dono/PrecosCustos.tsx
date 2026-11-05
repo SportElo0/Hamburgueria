@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from 'react';
 import { adicionarItemAction, salvarItemAction } from '@/app/loja/[slug]/dono/actions';
+import { ImportarCardapio } from './ImportarCardapio';
 import { setSoldOutAction } from '@/app/loja/[slug]/actions';
 import { MARGEM_BAIXA, margem, parseReais } from '@/lib/dono-resumo';
 import { brl } from '@/lib/ordering';
@@ -283,7 +284,8 @@ export function PrecosCustos({ slug, categories }: { slug: string; categories: {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-wrap items-start gap-3">
+        <ImportarCardapio slug={slug} />
         <NovoItem
           slug={slug}
           categorias={cats.map((c) => c.name)}
