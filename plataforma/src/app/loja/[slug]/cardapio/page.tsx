@@ -34,8 +34,8 @@ export default async function CardapioPage({ params }: { params: Promise<{ slug:
             <p className="text-xs font-semibold tracking-wide text-ink-mute uppercase">Cardápio</p>
             <h1 className="text-lg font-bold">{draft.data.store.name}</h1>
           </div>
-          <Link href={`/loja/${slug}`} className="btn-ghost min-h-11">
-            Voltar aos pedidos
+          <Link href={`/loja/${slug}/dono/precos`} className="btn-primary min-h-11">
+            ← Painel do dono
           </Link>
         </div>
       </header>

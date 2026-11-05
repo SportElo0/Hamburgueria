@@ -88,15 +88,12 @@ export function DonoNav(props: { slug: string; storeName: string; logo: string; 
       </nav>
 
       <div className="hidden px-3 lg:mt-6 lg:block">
-        <p className="px-3 text-[11px] font-semibold tracking-wider text-white/40 uppercase">Outras telas (abrem em outra aba)</p>
+        <p className="px-3 text-[11px] font-semibold tracking-wider text-white/40 uppercase">Outras telas</p>
         <ul className="mt-1">
           {screens.map((s) => (
             <li key={s.href}>
-              <a href={s.href} target="_blank" rel="noopener" className="flex min-h-10 items-center justify-between gap-2 rounded-lg px-3 text-sm text-white/70 hover:bg-white/10 hover:text-white">
+              <a href={s.href} className="flex min-h-10 items-center rounded-lg px-3 text-sm text-white/70 hover:bg-white/10 hover:text-white">
                 {s.label}
-                <span aria-hidden="true" className="text-white/40">
-                  ↗
-                </span>
               </a>
             </li>
           ))}

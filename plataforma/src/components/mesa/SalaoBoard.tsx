@@ -44,6 +44,8 @@ export function SalaoBoard(props: {
   enabled: boolean;
   /** A waiter's login: no kitchen screen, and a way to sign out (this is their start screen). */
   garcom?: boolean;
+  /** The owner (or the team): a way back to the owner's panel. */
+  dono?: boolean;
   logout?: () => Promise<void>;
 }) {
   const [tables, setTables] = useState<FloorForStaff | null>(null);
@@ -155,11 +157,16 @@ export function SalaoBoard(props: {
             <button type="button" onClick={bell.arm} className={`btn min-h-11 border px-3 ${bell.armed ? 'border-line bg-white text-ink-mute' : 'border-warn bg-warn text-white'}`}>
               {bell.armed ? 'Som ligado' : 'Ligar som'}
             </button>
+            {props.dono && (
+              <a href={`/loja/${props.slug}/dono/mesas`} className="btn-primary min-h-11 px-3">
+                ← Painel do dono
+              </a>
+            )}
             {props.garcom ? (
               <a href={`/loja/${props.slug}/mapa`} className="btn-ghost min-h-11 px-3">
                 Mapa
               </a>
-            ) : (
+            ) : props.dono ? null : (
               <a href={`/loja/${props.slug}`} className="btn-ghost min-h-11 px-3">
                 Cozinha
               </a>

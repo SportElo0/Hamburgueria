@@ -45,8 +45,8 @@ export default async function MapaPage({ params, searchParams }: { params: Promi
             <a href={`/movimento/${slug}`} target="_blank" rel="noreferrer" className="btn-ghost min-h-11">
               Como o cliente vê
             </a>
-            <Link href={user.funcao === 'garcom' ? `/loja/${slug}/salao` : `/loja/${slug}`} className="btn-ghost min-h-11">
-              {user.funcao === 'garcom' ? 'Salão' : 'Pedidos'}
+            <Link href={user.funcao === 'garcom' ? `/loja/${slug}/salao` : `/loja/${slug}/dono/mesas`} className={user.funcao === 'garcom' ? 'btn-ghost min-h-11' : 'btn-primary min-h-11'}>
+              {user.funcao === 'garcom' ? 'Salão' : '← Painel do dono'}
             </Link>
           </nav>
         </div>

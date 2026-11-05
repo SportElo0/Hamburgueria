@@ -181,7 +181,7 @@ export function OrdersBoard(props: {
             </button>
             {props.dono && (
               <a href={`/loja/${props.slug}/dono`} className="btn-primary min-h-11">
-                Painel do dono
+                ← Painel do dono
               </a>
             )}
             {props.dono && (

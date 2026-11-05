@@ -16,5 +16,5 @@ export default async function SalaoPage({ params }: { params: Promise<{ slug: st
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const ordering = orderingOf(draft.data.store);
-  return <SalaoBoard slug={slug} storeName={draft.data.store.name} count={ordering.tables.count} enabled={ordering.enabled && ordering.tables.enabled} garcom={user.funcao === 'garcom'} logout={logout} />;
+  return <SalaoBoard slug={slug} storeName={draft.data.store.name} count={ordering.tables.count} enabled={ordering.enabled && ordering.tables.enabled} garcom={user.funcao === 'garcom'} dono={user.funcao !== 'garcom'} logout={logout} />;
 }

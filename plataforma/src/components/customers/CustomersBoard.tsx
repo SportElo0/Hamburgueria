@@ -80,8 +80,8 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
             <p className="text-xs font-semibold tracking-wide text-ink-mute uppercase">Clientes e campanhas</p>
             <h1 className="text-lg font-bold">{props.storeName}</h1>
           </div>
-          <a href={`/loja/${props.slug}`} className="btn-ghost min-h-11">
-            Voltar aos pedidos
+          <a href={`/loja/${props.slug}/dono`} className="btn-primary min-h-11">
+            ← Painel do dono
           </a>
         </div>
       </header>

@@ -53,8 +53,8 @@ export default async function ReportPage({ params, searchParams }: { params: Pro
                 </Link>
               ))}
             </nav>
-            <Link href={`/loja/${slug}`} className="btn-ghost min-h-11">
-              Voltar aos pedidos
+            <Link href={`/loja/${slug}/dono`} className="btn-primary min-h-11">
+              ← Painel do dono
             </Link>
           </div>
         </div>
