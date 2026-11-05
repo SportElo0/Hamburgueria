@@ -30,7 +30,7 @@ body{background:#f4f6fa;color:${INK}}
 .open b{width:14px;height:14px;border-radius:50%;background:#16a34a;display:inline-block}
 .cta{margin:22px 30px 0;height:86px;border-radius:999px;background:${BLUE};color:#fff;display:flex;align-items:center;justify-content:center;gap:14px;font-size:32px;font-weight:800}
 .ring{position:absolute;border:5px solid ${BLUE};border-radius:26px;pointer-events:none}
-.toast{position:absolute;left:480px;top:1196px;background:${INK};color:#fff;border-radius:22px;padding:20px 26px;font-size:28px;font-weight:600;line-height:1.3;box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
+.toast{position:absolute;left:470px;top:1292px;background:${INK};color:#fff;border-radius:22px;padding:20px 26px;font-size:28px;font-weight:600;line-height:1.3;box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
 .tap{position:absolute;width:80px;height:80px;border-radius:50%;background:rgba(18,24,38,.18);border:4px solid ${INK}}
 #end{position:absolute;inset:0;background:${BLUE};color:#fff;z-index:45}
 `;
@@ -107,16 +107,26 @@ ${comentaBlock('Quer um site assim?', 'CARDÁPIO', 'blue')}
 `;
 
 const script = `
+window.MOTION=2;
+// Headline lines arrive one after another (60 ms stagger) with the strong ease-out; the block leaves faster than it came.
+function lines(id,t,a,b){
+  const el=$(id); if(!el)return;
+  if(!el.dataset.split){el.innerHTML=el.innerHTML.split('<br>').map((l)=>'<span class="ln" style="display:block">'+l+'</span>').join('');el.dataset.split='1';}
+  const vis=t>=a&&t<b; el.style.visibility=vis?'visible':'hidden'; el.style.opacity=vis?1:0;
+  const out=eoS((b-t)/.28);
+  [...el.children].forEach((ln,i)=>{const k=eoS((t-a-i*.06)/.45);const v=Math.min(k,out);ln.style.opacity=v;ln.style.transform='translateY('+((1-k)*26)+'px)';});
+}
 window.draw=(t)=>{
   const H=[['h1',0,2.42],['h2',2.42,9.1],['h3',9.1,12.2],['h4',12.2,13.6],['h5',13.6,15.2],['h6',15.2,17.4],['h7',17.4,20.4],['h8',20.4,23.55]];
-  for(const [id,a,b] of H) show(id,t,a,b,{dy:30,fi:.3,fo:.2});
+  for(const [id,a,b] of H) lines(id,t,a,b);
   const box=(id,a)=>{$(id).className=t>=a?'box':''};
   box('h2b',3.55); box('h7b',18.95); $('h8b').className=t>=22.6?'boxb':'';
   // Paper menu, then it turns into the phone
-  show('menu',t,0.1,9.6,{pop:true,sc:.3,fi:.55,base:'rotate(-3deg)'});
-  show('b1',t,5.08,9.3,{pop:true,sc:.5,base:'rotate(-5deg)'}); show('b2',t,6.04,9.3,{pop:true,sc:.5,base:'rotate(4deg)'});
-  show('b3',t,7.0,9.3,{pop:true,sc:.5,base:'rotate(3deg)'}); show('b4',t,7.97,9.3,{pop:true,sc:.5,base:'rotate(-4deg)'});
-  show('phone',t,9.5,23.55,{pop:true,sc:.25,fi:.6,dy:0}); show('ilus',t,9.8,23.55,{dy:0});
+  show('menu',t,0.1,9.45,{sc:.05,fi:.6,fo:.3,dy:40,base:'rotate(-3deg)'});
+  if(t>=9.15&&t<9.45){const k=eioS((t-9.15)/.3);$('menu').style.transform='rotate(-3deg) translateY('+(-60*k)+'px) scale('+(1-.04*k)+')';}
+  show('b1',t,5.08,9.3,{sc:.06,dy:18,fi:.4,base:'rotate(-5deg)'}); show('b2',t,6.04,9.3,{sc:.06,dy:18,fi:.4,base:'rotate(4deg)'});
+  show('b3',t,7.0,9.3,{sc:.06,dy:18,fi:.4,base:'rotate(3deg)'}); show('b4',t,7.97,9.3,{sc:.06,dy:18,fi:.4,base:'rotate(-4deg)'});
+  show('phone',t,9.5,23.55,{sc:.05,fi:.6,dy:70}); show('ilus',t,9.8,23.55,{dy:0});
   show('pPh',t,12.27,23.55,{dy:30}); show('pMap',t,13.69,23.55,{dy:30}); show('pCta',t,15.28,23.55,{pop:true,sc:.4});
   // A tap on "Pedir agora" and the message it opens
   const tapK=(t>=16.2&&t<16.9)?1-Math.abs((t-16.55)/.35):0; const tp=$('tap'); tp.style.left='630px'; tp.style.top='1110px'; tp.style.opacity=Math.max(0,tapK); tp.style.transform='scale('+(.7+.3*Math.max(0,tapK))+')';
@@ -125,12 +135,12 @@ window.draw=(t)=>{
   show('r1',t,17.9,18.7,{pop:true,sc:.1,dy:0,fi:.2}); show('r2',t,18.7,19.5,{pop:true,sc:.1,dy:0,fi:.2}); show('r3',t,19.5,20.4,{pop:true,sc:.1,dy:0,fi:.2});
   // Chef: holds the menu, then walks left and points at the phone
   const kc=show('chefW',t,0.3,23.55,{dy:80,fi:.5});
-  const walk=eio((t-9.2)/.8); const bob=Math.sin(t*5)*6;
+  const walk=eioS((t-9.2)/.8); const bob=Math.sin(t*5)*6;
   $('chefW').style.transform='translate('+(-40*walk)+'px,'+((1-kc)*80+bob)+'px)';
   $('armsHold').style.opacity=t<9.4?1:0; $('armsPoint').style.opacity=t<9.4?0:1;
   show('spk',t,22.6,23.55,{pop:true,sc:.6,dy:0}); $('spk').style.transform+=' rotate('+(t*90)+'deg)';
   // End card: wipes in as a growing circle
-  const ke=eio((t-23.55)/.6); $('end').style.clipPath='circle('+(ke*150)+'% at 50% 60%)'; $('end').style.visibility=t>=23.55?'visible':'hidden';
+  const ke=eioS((t-23.55)/.6); $('end').style.clipPath='circle('+(ke*150)+'% at 50% 60%)'; $('end').style.visibility=t>=23.55?'visible':'hidden';
   comenta(t,23.6,24.65,'CARDÁPIO');
 };
 `;

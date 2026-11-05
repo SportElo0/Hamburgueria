@@ -11,11 +11,18 @@ const eo=(x)=>1-Math.pow(1-clamp(x),3);
 const eio=(x)=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
 const back=(x)=>{x=clamp(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
 const $=(id)=>document.getElementById(id);
-// Visible from a to b, fading/rising in and out. Returns the "in" progress (0..1).
+// Strong curves (Emil Kowalski's tokens): ease-out cubic-bezier(.23,1,.32,1), ease-in-out cubic-bezier(.77,0,.175,1).
+function bez(x1,y1,x2,y2){const cx=3*x1,bx=3*(x2-x1)-cx,ax=1-cx-bx,cy=3*y1,by=3*(y2-y1)-cy,ay=1-cy-by;
+  const X=(u)=>((ax*u+bx)*u+cx)*u,Y=(u)=>((ay*u+by)*u+cy)*u,dX=(u)=>(3*ax*u+2*bx)*u+cx;
+  return (x)=>{x=clamp(x);let u=x;for(let i=0;i<8;i++){const d=X(u)-x;if(Math.abs(d)<1e-5)break;const g=dX(u);if(Math.abs(g)<1e-6)break;u-=d/g;}return Y(clamp(u));};}
+const eoS=bez(.23,1,.32,1), eioS=bez(.77,0,.175,1);
+// MOTION v2 (opt-in per reel with window.MOTION=2): strong ease-out in and out, exits ~70% of the entrance,
+// "pop" starts at scale .94 at most (never from nothing), no overshoot.
 function show(id,t,a,b,o={}){
   const el=typeof id==='string'?$(id):id; if(!el)return 0;
-  const fi=o.fi??.35, fo=o.fo??.3, dy=o.dy??40, sc=o.sc??0, x=o.x??0;
-  const kin=o.pop?back((t-a)/fi):eo((t-a)/fi), kout=b===undefined?1:eo((b-t)/fo);
+  const v2=window.MOTION===2;
+  const fi=o.fi??(v2?.45:.35), fo=o.fo??(v2?fi*.7:.3), dy=o.dy??(v2?28:40), sc=v2&&o.sc?Math.min(o.sc,.06):(o.sc??0), x=o.x??0;
+  const kin=v2?eoS((t-a)/fi):o.pop?back((t-a)/fi):eo((t-a)/fi), kout=b===undefined?1:(v2?eoS((b-t)/fo):eo((b-t)/fo));
   const k=Math.min(kin,kout); const vis=t>=a&&(b===undefined||t<b);
   el.style.opacity=vis?Math.max(0,Math.min(1,k)):0;
   el.style.visibility=vis&&k>0?'visible':'hidden';

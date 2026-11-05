@@ -157,7 +157,7 @@ const convite = ({ titulo = 'Quer um teste <em>mais profundo?</em>', texto }) =>
      <span style="display:inline-flex;align-items:center;gap:16px;height:96px;padding:0 40px;border-radius:999px;background:#fff;color:${BLUE};font-size:38px;font-weight:900;box-shadow:0 30px 60px -24px rgba(0,0,0,.45)">${svgIcon('<path d="M12 19V5M5 12l7-7 7 7"/>', 40, BLUE, 3)}Link da bio</span>
      <span style="font-size:32px;font-weight:800;color:#fff">Diagnóstico grátis</span></div>
    <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap">${['Em até 2 dias úteis', 'No seu WhatsApp', 'Sem compromisso'].map((x) => `<span class="chip">${x}</span>`).join('')}</div>
-   <div style="position:absolute;right:-30px;bottom:-30px;height:420px;width:520px">${boneco('gc', { x: 220, y: 40, size: 300, shirt: '#ffffff', cara: 'feliz' })}${balao('A gente te manda o que ajustar 👋', { x: 0, y: 0, rot: -4, size: 28 })}</div>`;
+   <div style="position:absolute;right:-30px;bottom:-30px;height:420px;width:520px">${boneco('gc', { x: 220, y: 40, size: 300, shirt: '#ffffff', cara: 'feliz' })}${balao('A gente te manda o que ajustar 👋', { x: -170, y: 84, rot: -4, size: 28 })}</div>`;
 
 // ---------------------------------------------------------------------------------------------
 // Os carrosséis
@@ -326,43 +326,46 @@ ${LEGENDA_FIM}
         capa({
           gancho: 'Seu delivery depende <em>só de aplicativo?</em>',
           sub: '3 sinais de que é hora de ter um canal seu, junto com o app.',
-          cena: `<div style="position:absolute;left:150px;top:150px">${store('lj2', 'DELIVERY', BLUE, { w: 420 })}</div>
-            <div style="position:absolute;left:620px;top:120px;width:300px;height:420px;border-radius:40px;background:#1b2230;display:grid;place-items:center;box-shadow:0 40px 80px -30px rgba(0,0,0,.8)"><div style="text-align:center;color:#fff"><div style="font-size:100px">📱</div><div style="font-size:26px;font-weight:800;margin-top:10px">aplicativo de<br>delivery</div></div></div>
-            <svg style="position:absolute;left:520px;top:300px" width="140" height="60"><path d="M10 30h110M100 12l22 18-22 18" stroke="${AMBER}" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            ${boneco('d3', { x: 30, y: 300, size: 230, shirt: RED, cara: 'triste' })}`,
+          tamanho: 100,
+          cena: `<div style="position:absolute;left:110px;top:150px">${store('lj2', 'DELIVERY', BLUE, { w: 430 })}</div>
+            ${celular(`<div style="padding:56px 22px 0;font-size:24px;font-weight:900">Pedidos</div>${['Seu Restaurante', 'Outro lugar', 'Mais um lugar'].map((n, i) => `<div style="margin:14px 18px 0;padding:16px;border-radius:18px;border:1.5px solid #e6eaf2;display:flex;gap:14px;align-items:center"><div style="width:62px;height:62px;border-radius:14px;background:${['#ffe8cc', '#dbeafe', '#dcfce7'][i]}"></div><div style="flex:1"><div style="font-size:22px;font-weight:800">${n}</div><div style="font-size:18px;color:#6b7588;margin-top:4px">${['30–40 min', '25–35 min', '40–50 min'][i]}</div></div></div>`).join('')}<div style="margin:18px 18px 0;padding:14px;border-radius:14px;background:#fff4e6;font-size:19px;font-weight:800;color:#b45309;text-align:center">pedido pelo app de delivery</div>`, { x: 600, y: 40, w: 360, h: 580, rot: 4 })}
+            <svg style="position:absolute;left:500px;top:330px" width="120" height="60"><path d="M10 30h90M80 12l22 18-22 18" stroke="${AMBER}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            ${boneco('d3', { x: 20, y: 330, size: 240, shirt: RED, cara: 'triste' })}`,
         }),
       () =>
         porque({
           frase: 'O app ajuda a ser achado. <em>Mas o cliente é de quem?</em>',
-          tamanho: 76,
+          tamanho: 80,
           apoio: 'Quem já gosta da sua comida pode pedir direto com você. Os dois canais juntos, e não um só.',
-          cena: `${boneco('c8', { x: 220, y: 100, size: 300, shirt: '#7c5cff' })}${balao('Adoro esse lanche! Pedi de novo 😋', { x: 130, y: 0, rot: -3 })}
-            <div style="position:absolute;left:600px;top:150px">${food('burger', 220)}</div>`,
+          cena: `${boneco('c8', { x: 90, y: 150, size: 320, shirt: '#7c5cff' })}${balao('Adoro esse lanche! 😋', { x: 40, y: 50, rot: -3, size: 32 })}
+            ${[['Primeira vez', 'pelo app', '#fff4e6', '#b45309', 60], ['Da segunda em diante', 'direto no seu link', '#e2eaff', BLUE, 250]]
+              .map(([a, b, bg, fg, y]) => `<div class="card" style="position:absolute;left:470px;top:${y}px;width:500px;padding:28px 32px;display:flex;gap:22px;align-items:center"><div style="flex:none;width:70px;height:70px;border-radius:20px;background:${bg};display:grid;place-items:center">${svgIcon(ICON.bag, 40, fg, 2.4)}</div><div><div style="font-size:24px;font-weight:800;color:#6b7588">${a}</div><div style="font-size:36px;font-weight:900;color:${fg};margin-top:4px">${b}</div></div></div>`)
+              .join('')}`,
         }),
       () =>
         sinal({
           n: 1,
           titulo: 'Você não tem como <em>falar com quem já pediu.</em>',
           texto: 'Em geral, o pedido chega, mas o contato fica no aplicativo. Pra avisar de uma novidade, você depende dele.',
-          cena: `<div class="card" style="position:absolute;left:150px;top:30px;width:520px;padding:30px 34px"><div style="font-size:28px;font-weight:900">Pedido #2481 ✅</div><div style="font-size:26px;color:#6b7588;margin-top:12px">Cliente: <b style="letter-spacing:.2em">•••••••</b></div><div style="font-size:26px;color:#6b7588;margin-top:8px">Contato: <b>pelo aplicativo</b></div></div>
-            ${boneco('c9', { x: 640, y: 220, size: 280, shirt: AMBER, cara: 'triste' })}
-            ${balao('E pra chamar de novo? 🤔', { x: 330, y: 300, rot: -3 })}`,
+          cena: `<div class="card" style="position:absolute;left:110px;top:30px;width:600px;padding:34px 38px;transform:rotate(-2deg)"><div style="font-size:34px;font-weight:900">Pedido #2481 <span class="ok">✓</span></div><div style="font-size:30px;color:#6b7588;margin-top:18px">Cliente: <b style="letter-spacing:.24em;color:#121826">•••••••</b></div><div style="font-size:30px;color:#6b7588;margin-top:10px">Contato: <b style="color:#121826">só pelo aplicativo</b></div></div>
+            ${boneco('c9', { x: 680, y: 200, size: 300, shirt: AMBER, cara: 'triste' })}
+            ${balao('E pra chamar de novo? 🤔', { x: 260, y: 330, rot: -3, size: 34 })}`,
         }),
       () =>
         sinal({
           n: 2,
           titulo: 'O cliente fiel <em>costuma pedir pelo app.</em>',
           texto: 'Quem já é da casa poderia pedir no seu cardápio. Pelo app, em geral há comissão em cada pedido, até no da décima vez.',
-          cena: `<div style="position:absolute;left:130px;top:40px;display:grid;gap:12px">${['1º pedido', '2º pedido', '3º pedido', '10º pedido'].map((p, i) => `<div class="card" style="padding:16px 26px;font-size:28px;font-weight:800;display:flex;gap:30px;justify-content:space-between;width:${430 + i * 20}px"><span>${p}</span><span style="color:${RED}">− comissão</span></div>`).join('')}</div>
-            ${boneco('c10', { x: 690, y: 220, size: 270, shirt: '#22a06b', cara: 'bravo' })}`,
+          cena: `<div style="position:absolute;left:110px;top:20px;display:grid;gap:14px">${['1º pedido', '2º pedido', '3º pedido', '10º pedido'].map((p, i) => `<div class="card" style="padding:22px 30px;font-size:34px;font-weight:900;display:flex;gap:30px;justify-content:space-between;align-items:center;width:${520 + i * 24}px;transform:rotate(${i % 2 ? 1 : -1}deg)"><span>${p}</span><span style="font-size:28px;color:${RED};background:#ffe9e7;padding:6px 18px;border-radius:999px">− comissão</span></div>`).join('')}</div>
+            ${boneco('c10', { x: 720, y: 230, size: 270, shirt: '#22a06b', cara: 'bravo' })}`,
         }),
       () =>
         sinal({
           n: 3,
           titulo: 'Se o app muda a regra, <em>seu movimento muda junto.</em>',
           texto: 'Os apps podem mudar taxa, destaque na lista e área de entrega, e quem decide não é você. Ter um canal seu deixa você menos exposto.',
-          cena: `<div class="card" style="position:absolute;left:140px;top:40px;width:560px;padding:30px 34px"><div style="font-size:24px;font-weight:900;color:${BLUE}">AVISO</div><div style="font-size:32px;font-weight:900;margin-top:8px">Atualizamos as regras da plataforma</div><div style="font-size:24px;color:#6b7588;margin-top:10px">Taxas · ordem da lista · área de entrega</div></div>
-            ${boneco('c11', { x: 680, y: 220, size: 280, shirt: RED, cara: 'triste' })}`,
+          cena: `<div class="card" style="position:absolute;left:110px;top:40px;width:640px;padding:36px 40px;transform:rotate(-2deg)"><div style="display:inline-block;font-size:24px;font-weight:900;letter-spacing:.12em;color:#fff;background:${BLUE};padding:6px 16px;border-radius:999px">AVISO</div><div style="font-size:40px;font-weight:900;margin-top:16px;line-height:1.15">Atualizamos as regras da plataforma</div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">${['Taxas', 'Ordem da lista', 'Área de entrega'].map((x) => `<span style="font-size:24px;font-weight:800;color:#3b4659;background:#eef1f6;padding:8px 16px;border-radius:999px">${x}</span>`).join('')}</div></div>
+            ${boneco('c11', { x: 720, y: 230, size: 280, shirt: RED, cara: 'triste' })}`,
         }),
       ({ tema }) =>
         resumo({
