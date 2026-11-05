@@ -48,7 +48,7 @@ ${selo(1, 'CMV')}
   <div id="melC" class="abs" style="left:40px;top:820px">${pessoa('pm', { ...ELENCO.mel, size: 320 })}</div>
   ${nome('mName', 'Mel, filha da Rosa', 60, 1220, '#3b2a8a')}
   <div id="rec" class="card" style="left:420px;top:440px;width:600px;padding:34px 40px">
-    <div style="font-size:28px;font-weight:900;letter-spacing:.14em;color:#8db8ff">PARMEGIANA</div>
+    <div style="display:flex;justify-content:space-between"><span style="font-size:28px;font-weight:900;letter-spacing:.14em;color:#8db8ff">PARMEGIANA</span><span style="font-size:26px;font-weight:800;color:#ffc94d">exemplo</span></div>
     ${row('r1', 'Ingredientes', 'R$ 22,00', RED)}
     ${row('r2', 'Preço', 'R$ 39,90')}
   </div>
@@ -65,7 +65,7 @@ ${selo(1, 'CMV')}
     </div>
     <div style="display:flex;justify-content:space-between;margin-top:18px"><span id="lblR" style="font-size:34px;font-weight:900;color:${RED}">ingrediente</span><span id="lblG" style="font-size:34px;font-weight:900;color:${GREEN}">sobra</span></div>
   </div>
-  <div id="pct" class="abs" style="left:0;right:0;top:1060px;text-align:center"><span class="chip" style="position:relative;font-size:48px;padding:16px 36px;border-color:${RED};color:${RED}" id="pctT">55% vai em ingrediente</span></div>
+  <div id="pct" class="abs" style="left:0;right:0;top:1060px;text-align:center"><span class="chip" style="position:relative;font-size:48px;padding:16px 36px;border-color:${RED};color:${RED}" id="pctT">55% vai em ingrediente (exemplo)</span></div>
 </div>
 
 ${comentaBlock('Quer a conta passo a passo?', 'MARGEM')}

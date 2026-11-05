@@ -53,10 +53,10 @@ ${selo(2, 'Engenharia de cardápio')}
     <div style="position:relative;height:220px">${prato('i1', 'picanha', 240)}</div><div style="position:relative;height:220px">${prato('i2', 'parmegiana', 240)}</div><div style="position:relative;height:220px">${prato('i3', 'risoto', 240)}</div><div style="position:relative;height:220px">${prato('i4', 'sopa', 240)}</div>
   </div>
 </div>
-${cena('picanha', 'A picanha', 'ESTRELA', '#ffc94d', 'Não mexe!')}
+${cena('picanha', 'A picanha', 'ESTRELA', '#ffc94d', 'Mantém!')}
 ${cena('parmegiana', 'A parmegiana', 'CAVALO DE BATALHA', '#ff9a5b', 'Rever a porção')}
 ${cena('risoto', 'O risoto', 'QUEBRA-CABEÇA', '#8db8ff', 'Dar destaque')}
-${cena('sopa', 'A sopa', 'ABACAXI', '#7ddc7d', 'Troca ou tira')}
+${cena('sopa', 'A sopa', 'ABACAXI', '#7ddc7d', 'Testar trocar')}
 <div id="mat" class="abs" style="left:0;top:0;width:1080px;height:1300px">
   <div class="big" style="top:390px;font-size:76px">Engenharia<br><span style="color:#4d8dff">de cardápio</span></div>
   <div class="lbl" style="left:70px;top:600px;font-size:26px;color:#8790a6">VENDE MUITO ↑</div>

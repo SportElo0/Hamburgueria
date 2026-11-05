@@ -25,7 +25,7 @@ const cell = (i) => `<div id="w${i}" style="flex:1;height:120px;border-radius:22
 const linha = (id, k, v) => `<div id="${id}" style="display:flex;gap:16px;padding:16px 0;border-top:1px solid rgba(255,255,255,.08)"><span style="width:250px;font-size:30px;font-weight:700;color:#8790a6">${k}</span><span style="flex:1;font-size:32px;font-weight:800">${v}</span></div>`;
 const chat = `<div style="height:100%;background:#0b141a;padding:54px 18px 0;color:#e9edef">
   <div style="font-size:26px;font-weight:800;color:#8db8ff;margin-bottom:18px">Panela da Rosa → Dona Cida</div>
-  <div id="msg" style="margin-left:auto;max-width:92%;padding:18px 22px;border-radius:22px 22px 6px 22px;background:#005c4b;font-size:28px;line-height:1.4">Oi, dona Cida! Sentimos sua falta por aqui. Sexta tem frango com quiabo.<br><span style="color:#b6e3d4;font-size:24px">Para não receber mais, responda SAIR.</span></div>
+  <div id="msg" style="margin-left:auto;max-width:92%;padding:18px 22px;border-radius:22px 22px 6px 22px;background:#005c4b;font-size:28px;line-height:1.4">Oi, dona Cida! Aqui é a Panela da Rosa. Sentimos sua falta. Sexta tem frango com quiabo.<br><span style="color:#b6e3d4;font-size:24px">Para não receber mais, responda SAIR.</span></div>
 </div>`;
 const pessoaLista = (id, nomeP, ok) => `<div id="${id}" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-radius:20px;background:${ok ? 'rgba(34,197,94,.14)' : '#0f1520'};border:2px solid ${ok ? GREEN : '#2a3446'};margin-top:14px"><span style="font-size:30px;font-weight:800;color:${ok ? '#f3f5f9' : '#8790a6'}">${nomeP}</span><span style="font-size:26px;font-weight:800;color:${ok ? GREEN : '#8790a6'}">${ok ? 'aceitou ✓' : 'não aceitou'}</span></div>`;
 
@@ -59,7 +59,7 @@ ${nome('cName', 'Dona Cida', 120, 1190, '#7a2b4f')}
     ${linha('f1', 'Vem', 'toda sexta, no jantar')}
     ${linha('f2', 'Última visita', 'há 3 semanas')}
     ${linha('f3', 'Gosta de', 'frango com quiabo · mesa 4')}
-    <div id="f4" style="margin-top:18px;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-radius:20px;background:rgba(34,197,94,.14);border:2px solid ${GREEN}"><span style="font-size:30px;font-weight:800">Aceitou receber mensagens</span><span style="font-size:34px;font-weight:900;color:${GREEN}">✓</span></div>
+    <div id="f4" style="margin-top:18px;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-radius:20px;background:rgba(34,197,94,.14);border:2px solid ${GREEN}"><span style="font-size:30px;font-weight:800">Aceitou receber mensagens do restaurante</span><span style="font-size:34px;font-weight:900;color:${GREEN}">✓</span></div>
   </div>
   <div id="lista" class="chip" style="left:720px;top:400px;color:#8db8ff;border-color:#4d8dff">numa lista só</div>
 </div>

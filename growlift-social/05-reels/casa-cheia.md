@@ -1,6 +1,6 @@
 # Série "Casa Cheia" (Reels 17 em diante, 05/11)
 
-**A ideia:** uma série fixa, com os mesmos personagens em todo episódio, que ensina gestão de restaurante sem jargão. Cada episódio é uma situação do dia a dia da Panela da Rosa e explica **um nome difícil** (CMV, engenharia de cardápio, CRM, ticket médio, fechamento do mês). O valor vem primeiro; o Scale aparece no máximo numa frase, e só quando faz sentido.
+**A ideia:** uma série fixa, com os mesmos personagens em todo episódio, que ensina gestão de restaurante sem jargão. Cada episódio é uma situação do dia a dia da Panela da Rosa e explica **um nome difícil** (CMV, engenharia de cardápio, CRM, ticket médio, fechamento do mês). O valor vem primeiro; a série não vende o Scale (ele ainda não está à venda).
 
 Tudo é inventado: restaurante, pessoas, pratos e números. Os bonequinhos são desenhados em código pela Growlift (`_fonte/reels/novos/elenco.mjs`), sem foto e sem marca real.
 
@@ -21,7 +21,9 @@ Cores: Rosa de avental vermelho; Mel de roxo, de óculos; Beto de colete preto e
 
 - Mesmo visual dos Reels de história (fundo escuro, legenda grande, selo "CASA CHEIA · EP. N" no topo, "Comenta PALAVRA" no fim).
 - Números só de exemplo, dentro da história, e marcados "exemplo" quando parecem dado real. Nunca "aumenta vendas" nem resultado prometido. Sugestão é "teste", não promessa.
-- Mensagem para cliente sempre **só para quem aceitou**, com **SAIR**, no máximo uma por mês.
+- Mensagem para cliente sempre **só para quem aceitou de forma clara**, identificando o restaurante, com **SAIR**, e com pouca frequência (a gente sugere no máximo uma por mês).
+- Todas as respostas do direct terminam com "Para sair, responda SAIR." e o link de privacidade.
+- Antes de lançar: conferir no INPI e no Google se não existe restaurante "Panela da Rosa".
 - Voz "Andre" (ElevenLabs v4 pelo Higgsfield, 2,07 créditos cada, custo conferido antes). Na legenda: "Narração com voz gerada por inteligência artificial." e o rótulo de IA ligado.
 - Para refazer um episódio: `cd growlift-social/_fonte/reels/novos && node render.mjs 17` (ou 18, 19, 20). Quadros para conferir: `node render.mjs 17 --still 2,10,20`.
 
@@ -52,16 +54,16 @@ Narração com voz gerada por inteligência artificial.
 ### Ep. 2 · Reel 18 · "Cada prato tem um papel" (engenharia de cardápio)
 - **Arquivo:** `18-cada-prato-um-papel.mp4` (34 s).
 - **História:** os pratos da Rosa ganham rosto. Picanha: vende muito e sobra muito, a **Estrela** (não mexe). Parmegiana: vende muito e sobra pouco, o **Cavalo de batalha** (rever a porção). Risoto: sobra muito e pouca gente pede, o **Quebra-cabeça** (precisa de destaque). Sopa: vende pouco e sobra pouco, o **Abacaxi** (troca ou tira). No fim, os quatro no quadro.
-- **Palavra:** MARGEM.
+- **Palavra:** MARGEM. Na tela, os selos de ação são "Mantém!" e "Testar trocar" (sugestão, não ordem).
 
 Legenda:
 ```
 Todo prato do seu cardápio tem um papel. Você sabe qual é o de cada um? ⭐🐴🧩🍍
 
-⭐ Estrela: vende muito e sobra muito. Destaque e não mexe.
+⭐ Estrela: vende muito e sobra muito. Destaque e mantém.
 🐴 Cavalo de batalha: vende muito, sobra pouco. Revê porção ou custo.
 🧩 Quebra-cabeça: sobra muito, pouca gente pede. Precisa de destaque.
-🍍 Abacaxi: vende pouco e sobra pouco. Troca ou tira.
+🍍 Abacaxi: vende pouco e sobra pouco. Vale testar trocar ou tirar.
 
 Isso se chama engenharia de cardápio. Quer descobrir o papel dos seus pratos? Comenta MARGEM.
 
@@ -74,7 +76,7 @@ Narração com voz gerada por inteligência artificial.
 ### Ep. 3 · Reel 19 · "Ela vem toda sexta" (CRM)
 - **Arquivo:** `19-ela-vem-toda-sexta.mp4` (28 s).
 - **História:** toda sexta a dona Cida senta na mesa 4 e pede frango com quiabo. Um dia ela para de vir, e no meio da correria ninguém percebe. A Mel explica: CRM é a memória do restaurante (quem veio, quando, do que gosta), numa lista só, com a permissão de cada cliente. Aí dá para mandar um "sentimos sua falta" só para quem aceitou, com a opção SAIR.
-- **Palavra:** CLIENTE.
+- **Palavra:** CLIENTE. O cartão diz "Aceitou receber mensagens do restaurante" e a mensagem se identifica ("Aqui é a Panela da Rosa").
 
 Legenda:
 ```
@@ -93,10 +95,10 @@ Narração com voz gerada por inteligência artificial.
 ```
 
 ### Ep. 4 · Reel 20 · "Dia 31" (fechamento do mês, ticket médio)
-- **Arquivo:** `20-dia-31.mp4` (33 s).
-- **História:** dia 31, a Rosa abre a caixa de comandas e não sabe quanto vendeu nem quanto sobrou. A Mel resume em três números (vendas, custo dos ingredientes, ticket médio) e tira três testes para o mês seguinte: combo do almoço com bebida, picanha no topo do cardápio e rever a porção da parmegiana. Teste, não promessa: no outro mês, mede de novo. Fecho: no Scale, que está chegando, esse relatório vem pronto todo mês.
+- **Arquivo:** `20-dia-31.mp4` (28 s).
+- **História:** dia 31, a Rosa abre a caixa de comandas e não sabe quanto vendeu nem quanto sobrou. A Mel resume em três números (vendas, custo dos ingredientes, ticket médio) e tira três testes para o mês seguinte: combo do almoço com bebida, picanha no topo do cardápio e rever a porção da parmegiana. Teste, não promessa: no outro mês, mede de novo. Os números aparecem com a etiqueta "números de exemplo".
 - **Palavra:** RELATÓRIO (cadastrar também RELATORIO, sem acento, no ManyChat).
-- **Atenção:** é o único episódio que cita o Scale. Mantém "está chegando": o Scale ainda não está à venda, sem preço nem data.
+- **Revisão legal (05/11):** a frase final sobre o Scale saiu do vídeo e do direct (o relatório mensal não está na oferta pública do Scale). A narração foi cortada do áudio original, sem gerar de novo.
 
 Legenda:
 ```
@@ -135,21 +137,27 @@ A conta do CMV, passo a passo:
 Faz isso com os 5 pratos que mais saem e compara. Aí aparecem as estrelas, os cavalos de batalha, os quebra-cabeças e os abacaxis do seu cardápio.
 
 Quer ajuda pra montar a conta do seu? Responde aqui que a gente te ajuda.
+
+Para sair, responda SAIR.
+Seus dados: growlift.com.br/privacidade.html
 ```
 
 **CLIENTE** (ep. 3):
 ```
 Opa! Aqui vai o modelo da série Casa Cheia 👇
 
-"Oi, [nome]! Sentimos sua falta por aqui. [Dia] tem [prato que a pessoa gosta]. Esperamos você!
+"Oi, [nome]! Aqui é o [restaurante]. Sentimos sua falta por aqui. [Dia] tem [prato]. Esperamos você!
 Para não receber mais mensagens, responda SAIR."
 
 Três regras pra não virar spam:
-✅ Só pra quem aceitou receber mensagens do restaurante
-✅ No máximo uma por mês
-✅ Sempre com a opção de sair, e quem pediu SAIR sai da lista na hora
+✅ Só pra quem aceitou, de forma clara, receber mensagens do restaurante (anota quando e como)
+✅ Sempre com a opção SAIR, e quem pediu sai da lista na hora
+✅ Pouca frequência: a gente sugere no máximo uma por mês
 
-Quer ajuda pra organizar a lista de clientes do seu restaurante? Responde aqui.
+No WhatsApp Business, mensagem fora da janela de 24 h precisa de modelo aprovado pelo WhatsApp.
+
+Para sair, responda SAIR.
+Seus dados: growlift.com.br/privacidade.html
 ```
 
 **RELATÓRIO** (ep. 4):
@@ -164,14 +172,17 @@ Opa! Aqui vai o modelo do relatório do mês, da série Casa Cheia 👇
 🧪 3 testes pro mês que vem
 Cada um com: o que fazer, o número que justifica e como medir no fim do mês.
 
-No plano Scale da Growlift, esse relatório vem pronto todo mês. Ele ainda não está à venda: quer ser avisado quando abrir? Responde AVISA.
+Quer ajuda pra montar o do seu restaurante? Responde aqui que a gente te ajuda.
+
+Para sair, responda SAIR.
+Seus dados: growlift.com.br/privacidade.html
 ```
 
 ## Próximos episódios (roteiros para aprovar)
 
 5. **"Que letra é essa?"** (pedido errado e desperdício): o Beto anota "X-bac s/ ceb… mal?", o Seu Juca faz errado, o prato volta e vai pro lixo. A Mel conta quanto custa um prato refeito (ingrediente + gás + tempo). Lição: pedido que chega escrito, do jeito que o cliente escolheu. Palavra: MESA.
 6. **"Vai uma bebida?"** (ticket médio): duas mesas iguais, uma com o Beto sugerindo bebida e sobremesa. A Mel mostra o ticket médio das duas. Lição: sugestão ativa, sem empurrar. Palavra: MARGEM.
-7. **"Segunda vazia"** (dia fraco): o salão vazio na segunda e lotado na sexta. Promoção só no dia fraco, nunca no dia cheio. Palavra: RELATÓRIO.
-8. **"O preço que termina em 90"** (preço e âncora): por que R$ 39,90 e não R$ 40; o prato mais caro no topo faz os outros parecerem acessíveis. Palavra: MARGEM.
-9. **"Casa cheia, porta vazia"** (movimento ao vivo e reserva): o cliente desiste de ir achando que está lotado. O site mostra o movimento e os horários livres para reservar. Palavra: MESA.
-10. **"10% esquecidos"** (taxa de serviço e couvert): a conta sai sem a taxa porque ninguém lembrou. Taxa e couvert avisados no cardápio e já entrando na conta. Palavra: MESA.
+7. **"Segunda vazia"** (dia fraco): o salão vazio na segunda e lotado na sexta. Promoção só no dia fraco, nunca no dia cheio, sempre com validade e regras claras. Palavra: RELATÓRIO.
+8. **"O preço que termina em 90"** (preço e âncora): por que R$ 39,90 e não R$ 40; o prato mais caro no topo faz os outros parecerem acessíveis. Nunca ensinar "de/por" com preço que não foi praticado. Palavra: MARGEM.
+9. **"Casa cheia, porta vazia"** (movimento ao vivo e reserva): o cliente desiste de ir achando que está lotado. O site mostra o movimento e os horários livres para reservar. Só gravar quando o Scale estiver à venda e o site listar isso. Palavra: MESA.
+10. **"10% esquecidos"** (taxa de serviço e couvert): a conta sai sem a taxa porque ninguém lembrou. Ensinar: taxa e couvert avisados no cardápio; a taxa de serviço é opcional e o cliente pode pedir para tirar. Palavra: MESA.
