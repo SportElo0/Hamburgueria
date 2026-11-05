@@ -195,6 +195,12 @@ No cardápio da mesa (QR), o prato com 3D ganha um selo **3D**. O cliente toca, 
 - **Teste:** `node plataforma/scripts/prato-teste-3d.mjs saida.glb` gera um hambúrguer de teste (não é prato real; nunca em loja de verdade).
 - **Falta:** escanear um prato de verdade com o iPhone Pro (13 Pro ou 16 Pro Max) e testar a câmera no iPhone e no Android. Arquivos 3D trocados ou removidos ficam no armazenamento (não são apagados).
 
+## Apresentação do Scale e série Casa Cheia (05/11/2026)
+
+- **Apresentação do plano Scale** (24 slides, fundo claro, com animações): https://claude.ai/artifact/Lf867V7uadSyimr3o7sv6C (privada; para mostrar a alguém, compartilhar pelo menu Share). Baixa em PDF ou PowerPoint. Revisada pelo `revisor-legal` e corrigida. **Falta preencher** mensalidade, implantação e meses de contrato (slide Investimento, hoje `R$ [___]`) e só usar com preço depois do piloto e do site mudar. O 3D aparece como "em teste".
+- **Série de Reels "Casa Cheia"** (Reels 17 a 20): restaurante e personagens inventados (Rosa, Mel, Beto, Seu Juca, Dona Cida), um nome difícil por episódio (CMV, engenharia de cardápio, CRM, fechamento do mês). Roteiros, legendas, respostas do direct (MARGEM, CLIENTE, RELATÓRIO) e próximos 6 episódios em `growlift-social/05-reels/casa-cheia.md`. Fonte: `growlift-social/_fonte/reels/novos/reel17.mjs` a `reel20.mjs` e o elenco em `elenco.mjs`. As palavras novas precisam ser cadastradas no ManyChat.
+- O ambiente da sessão ganhou o host `d8j0ntlcm91z4.cloudfront.net` (arquivos do Higgsfield) para baixar as narrações.
+
 ## Pendências
 
 El Patron (aguardando o dono):

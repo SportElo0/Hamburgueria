@@ -90,3 +90,8 @@ Editorial surf action photograph, vertical 2:3. Turquoise-blue ocean on a sunny 
 - Higgsfield, modelo `elevenlabs_v4`, voz preset "Andre" (`f1e8226e-2248-4d5f-b43c-0a79e9949dbf`), stability 0,35, similarity 0,8, como no Reel 10. Custo conferido antes: 2,07 créditos cada (6,21 no total). O Reel 11 foi refeito depois da revisão legal (texto novo, 1,84 crédito). Textos em `05-reels/roteiros.md`.
 - O vídeo é feito em código (HTML + Playwright + ffmpeg, `_fonte/reels/novos/`), sem gerar imagem nem vídeo no Higgsfield. Para refazer: `cd _fonte/reels/novos && node render.mjs 11` (ou 12, 13); `node render.mjs 11 --still 3,9` gera quadros para conferir.
 
+
+## Reels 17 a 20, série Casa Cheia, narração (05/11/2026)
+- Higgsfield, modelo `elevenlabs_v4`, voz preset "Andre" (`f1e8226e-2248-4d5f-b43c-0a79e9949dbf`), stability 0,35, similarity 0,8. Custo conferido antes: 2,07 créditos cada (8,28 no total). Textos em `_fonte/reels/novos/falas.json` e `05-reels/casa-cheia.md`.
+- Personagens desenhados em código (`_fonte/reels/novos/elenco.mjs`); nenhuma imagem gerada por IA.
+- 05/11: Reel 20 refeito (fechamento completo, com aluguel, salários e contas), nova narração de 2,07 créditos (custo conferido antes). Total da série: 10,35 créditos.

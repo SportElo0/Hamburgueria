@@ -6,7 +6,7 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 
 ## Regras que valem para todos (aprendidas no Reel 11)
 
-- **Sem aviso fixo na tela (decisão de 02/11):** nada de "história fictícia", "nome fictício" ou "não garantimos" no vídeo nem na legenda. Fica só um "Projeto conceito" pequeno onde aparece um site conceito (regra da casa). O rótulo de IA vai pela própria Agenda (marcação "Feito com IA" do Instagram), sem frase na legenda.
+- **Sem aviso fixo na tela (decisão de 02/11):** nada de "história fictícia", "nome fictício" ou "não garantimos" no vídeo nem na legenda. **Atualização de 05/11 (revisão legal):** a legenda leva sempre "Narração com voz gerada por inteligência artificial.", além do rótulo de IA ligado. Fica só um "Projeto conceito" pequeno onde aparece um site conceito (regra da casa). O rótulo de IA vai pela própria Agenda (marcação "Feito com IA" do Instagram), sem frase na legenda.
 - Sem resultado nem prazo na história (nada de "um fechou, o outro contratou", "em 3 meses", "vendeu mais"). O contraste é: um **espera**, o outro **aparece**.
 - Sem marca real, sem nome de pessoa ou loja real. Personagens e lojas desenhados pela Growlift.
 - Voz gerada por IA avisada na legenda e rótulo de IA ligado na Agenda.
