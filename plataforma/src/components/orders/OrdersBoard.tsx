@@ -1,26 +1,59 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
-import type { StaffOrder } from '@/app/api/loja/[slug]/pedidos/route';
-import { orderAction, setOpenAction, setSoldOutAction } from '@/app/loja/[slug]/actions';
-import { STATUS_LABEL, brl, type OperatorAction, type OrderStatus } from '@/lib/ordering';
-import type { Operation } from '@/lib/orders';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
+import { useRouter } from "next/navigation";
+import type { StaffOrder } from "@/app/api/loja/[slug]/pedidos/route";
+import {
+  orderAction,
+  setOpenAction,
+  setSoldOutAction,
+} from "@/app/loja/[slug]/actions";
+import {
+  STATUS_LABEL,
+  brl,
+  type OperatorAction,
+  type OrderStatus,
+} from "@/lib/ordering";
+import type { Operation } from "@/lib/orders";
 
 const POLL_MS = 5000;
 const RING_MS = 7000;
 
-type Column = 'novos' | 'preparo' | 'saida' | 'finalizados';
+type Column = "novos" | "preparo" | "saida" | "finalizados";
+type Setor = "tudo" | "cozinha" | "bar";
 const COLUMNS: { id: Column; label: string; statuses: OrderStatus[] }[] = [
-  { id: 'novos', label: 'Novos', statuses: ['novo', 'aguardando-pix'] },
-  { id: 'preparo', label: 'Em preparo', statuses: ['preparo'] },
-  { id: 'saida', label: 'Saiu / pronto', statuses: ['saiu', 'pronto'] },
-  { id: 'finalizados', label: 'Finalizados', statuses: ['concluido', 'recusado', 'expirado'] },
+  { id: "novos", label: "Novos", statuses: ["novo", "aguardando-pix"] },
+  { id: "preparo", label: "Em preparo", statuses: ["preparo"] },
+  { id: "saida", label: "Saiu / pronto", statuses: ["saiu", "pronto"] },
+  {
+    id: "finalizados",
+    label: "Finalizados",
+    statuses: ["concluido", "recusado", "expirado"],
+  },
 ];
 
-const MODE_CHIP = { entrega: 'Entrega', retirada: 'Retirada', mesa: 'Salão' } as const;
-const time = (iso: string) => new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
-const phoneLabel = (p: string) => (p.length === 11 ? `(${p.slice(0, 2)}) ${p.slice(2, 7)}-${p.slice(7)}` : `(${p.slice(0, 2)}) ${p.slice(2, 6)}-${p.slice(6)}`);
+const MODE_CHIP = {
+  entrega: "Entrega",
+  retirada: "Retirada",
+  mesa: "Salão",
+} as const;
+const time = (iso: string) =>
+  new Date(iso).toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "America/Sao_Paulo",
+  });
+const phoneLabel = (p: string) =>
+  p.length === 11
+    ? `(${p.slice(0, 2)}) ${p.slice(2, 7)}-${p.slice(7)}`
+    : `(${p.slice(0, 2)}) ${p.slice(2, 6)}-${p.slice(6)}`;
 
 /** Two short tones; an AudioContext needs one tap on the page before it may play. The floor screen uses it too. */
 export function useBell() {
@@ -33,7 +66,7 @@ export function useBell() {
   }, []);
   const ring = useCallback(() => {
     const ac = ctx.current;
-    if (!ac || ac.state !== 'running') return;
+    if (!ac || ac.state !== "running") return;
     [0, 0.22].forEach((t, i) => {
       const osc = ac.createOscillator();
       const gain = ac.createGain();
@@ -66,30 +99,82 @@ export function OrdersBoard(props: {
   /** Ordering at the table is on: link to the waiter's floor screen. */
   tables: boolean;
   menu: MenuForStaff[];
+  /** Item ids the bar prepares (the drink categories); everything else is the kitchen's. */
+  barItems: string[];
   logout: () => Promise<void>;
 }) {
   const [orders, setOrders] = useState<StaffOrder[] | null>(null);
   const [operation, setOperation] = useState<Operation | null>(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [lastSync, setLastSync] = useState<Date | null>(null);
-  const [tab, setTab] = useState<Column>('novos');
-  const [printing, setPrinting] = useState<StaffOrder | null>(null);
+  const [tab, setTab] = useState<Column>("novos");
+  const [printQueue, setPrintQueue] = useState<StaffOrder[]>([]);
+  const printing = printQueue[0] ?? null;
+  const setPrinting = (o: StaffOrder) => setPrintQueue((q) => [...q, o]);
+  // Which station this screen is (kept on this device): the whole order, only the kitchen's items or only the bar's.
+  const [setor, setSetorState] = useState<Setor>("tudo");
+  const [autoPrint, setAutoPrintState] = useState(false);
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem(`growlift:setor:${props.slug}`);
+      const a =
+        localStorage.getItem(`growlift:imprimir:${props.slug}`) === "sim";
+      const t = window.setTimeout(() => {
+        if (s === "cozinha" || s === "bar") setSetorState(s);
+        setAutoPrintState(a);
+      }, 0);
+      return () => window.clearTimeout(t);
+    } catch {}
+  }, [props.slug]);
+  const setSetor = (v: Setor) => {
+    setSetorState(v);
+    try {
+      localStorage.setItem(`growlift:setor:${props.slug}`, v);
+    } catch {}
+  };
+  const setAutoPrint = (v: boolean) => {
+    setAutoPrintState(v);
+    try {
+      localStorage.setItem(
+        `growlift:imprimir:${props.slug}`,
+        v ? "sim" : "nao",
+      );
+    } catch {}
+  };
+  const bar = useMemo(() => new Set(props.barItems), [props.barItems]);
+  /** The order as this station sees it: only its lines (null when nothing in it is for this station). */
+  const doSetor = useCallback(
+    (o: StaffOrder): StaffOrder | null => {
+      if (setor === "tudo") return o;
+      const lines = o.lines.filter(
+        (l) => bar.has(l.productId) === (setor === "bar"),
+      );
+      return lines.length ? { ...o, lines } : null;
+    },
+    [setor, bar],
+  );
   const [, startTransition] = useTransition();
   const bell = useBell();
   const router = useRouter();
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch(`/api/loja/${props.slug}/pedidos`, { cache: 'no-store' });
-      if (res.status === 401) return router.push(`/login?volta=/loja/${props.slug}`);
+      const res = await fetch(`/api/loja/${props.slug}/pedidos`, {
+        cache: "no-store",
+      });
+      if (res.status === 401)
+        return router.push(`/login?volta=/loja/${props.slug}`);
       if (!res.ok) throw new Error(String(res.status));
-      const data = (await res.json()) as { orders: StaffOrder[]; operation: Operation };
+      const data = (await res.json()) as {
+        orders: StaffOrder[];
+        operation: Operation;
+      };
       setOrders(data.orders);
       setOperation(data.operation);
       setLastSync(new Date());
-      setError('');
+      setError("");
     } catch {
-      setError('Sem conexão com o servidor. Tentando de novo…');
+      setError("Sem conexão com o servidor. Tentando de novo…");
     }
   }, [props.slug, router]);
 
@@ -102,40 +187,84 @@ export function OrdersBoard(props: {
     };
   }, [load]);
 
-  const waiting = useMemo(() => (orders ?? []).filter((o) => o.status === 'novo'), [orders]);
+  const waiting = useMemo(
+    () => (orders ?? []).filter((o) => o.status === "novo"),
+    [orders],
+  );
 
   // Rings while any order waits to be accepted, like a kitchen bell; the tab title counts them.
   useEffect(() => {
-    document.title = waiting.length ? `(${waiting.length}) Novo pedido · ${props.storeName}` : `Pedidos · ${props.storeName}`;
+    document.title = waiting.length
+      ? `(${waiting.length}) Novo pedido · ${props.storeName}`
+      : `Pedidos · ${props.storeName}`;
     if (!waiting.length || !bell.armed) return;
     bell.ring();
     const t = window.setInterval(bell.ring, RING_MS);
     return () => window.clearInterval(t);
   }, [waiting.length, bell, props.storeName]);
 
-  // Print one ticket: render it, let the browser print, then clear.
+  // Print the tickets one by one: render the first, let the browser print, then the next.
   useEffect(() => {
     if (!printing) return;
-    const done = () => setPrinting(null);
-    window.addEventListener('afterprint', done, { once: true });
+    const done = () => setPrintQueue((q) => q.slice(1));
+    window.addEventListener("afterprint", done, { once: true });
     const t = window.setTimeout(() => window.print(), 50);
-    return () => window.clearTimeout(t);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("afterprint", done);
+    };
   }, [printing]);
 
-  const act = (o: StaffOrder, action: OperatorAction, reason = '') =>
+  // Automatic printing: every order that arrives while this screen is open prints once, with this station's items.
+  // Orders already on screen when it opens are not printed again.
+  const vistos = useRef<Set<string> | null>(null);
+  useEffect(() => {
+    if (!orders) return;
+    if (!vistos.current) {
+      vistos.current = new Set(orders.map((o) => o.id));
+      return;
+    }
+    const novos = orders.filter(
+      (o) =>
+        !vistos.current!.has(o.id) &&
+        o.status !== "aguardando-pix" &&
+        o.status !== "aguardando-garcom",
+    );
+    for (const o of novos) vistos.current.add(o.id);
+    if (!autoPrint) return;
+    const meus = novos.map(doSetor).filter((o): o is StaffOrder => Boolean(o));
+    if (meus.length) {
+      const t = window.setTimeout(
+        () => setPrintQueue((q) => [...q, ...meus]),
+        0,
+      );
+      return () => window.clearTimeout(t);
+    }
+  }, [orders, autoPrint, doSetor]);
+
+  const act = (o: StaffOrder, action: OperatorAction, reason = "") =>
     startTransition(async () => {
       const res = await orderAction(props.slug, o.id, action, reason);
-      if (!res.ok) setError(res.error ?? 'Não foi possível atualizar.');
+      if (!res.ok) setError(res.error ?? "Não foi possível atualizar.");
       await load();
     });
 
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleSoldOut = (itemId: string, out: boolean) => {
     // Flip the switch now; the transition below would hold the update until the server answers.
-    setOperation((op) => (op ? { ...op, soldOut: out ? [...op.soldOut, itemId] : op.soldOut.filter((x) => x !== itemId) } : op));
+    setOperation((op) =>
+      op
+        ? {
+            ...op,
+            soldOut: out
+              ? [...op.soldOut, itemId]
+              : op.soldOut.filter((x) => x !== itemId),
+          }
+        : op,
+    );
     startTransition(async () => {
       const res = await setSoldOutAction(props.slug, itemId, out);
-      if (!res.ok) setError(res.error ?? 'Não foi possível atualizar.');
+      if (!res.ok) setError(res.error ?? "Não foi possível atualizar.");
       await load();
     });
   };
@@ -150,16 +279,29 @@ export function OrdersBoard(props: {
   // Unpaid Pix orders wait below the ones to act on: nothing to prepare until the money is in.
   const byColumn = (c: Column) =>
     (orders ?? [])
-      .filter((o) => COLUMNS.find((x) => x.id === c)!.statuses.includes(o.status))
-      .sort((a, b) => Number(a.status === 'aguardando-pix') - Number(b.status === 'aguardando-pix'));
-  const doneToday = (orders ?? []).filter((o) => o.status === 'concluido');
+      .map(doSetor)
+      .filter((o): o is StaffOrder => Boolean(o))
+      .filter((o) =>
+        COLUMNS.find((x) => x.id === c)!.statuses.includes(o.status),
+      )
+      .sort(
+        (a, b) =>
+          Number(a.status === "aguardando-pix") -
+          Number(b.status === "aguardando-pix"),
+      );
+  const doneToday = (orders ?? []).filter((o) => o.status === "concluido");
 
   return (
-    <div className="min-h-dvh pb-16" onPointerDown={bell.armed ? undefined : bell.arm}>
+    <div
+      className="min-h-dvh pb-16"
+      onPointerDown={bell.armed ? undefined : bell.arm}
+    >
       <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-3 px-4 py-3">
           <div>
-            <p className="text-xs font-semibold tracking-wide text-ink-mute uppercase">Pedidos do site</p>
+            <p className="text-xs font-semibold tracking-wide text-ink-mute uppercase">
+              Pedidos do site
+            </p>
             <h1 className="text-lg font-bold">{props.storeName}</h1>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -168,47 +310,82 @@ export function OrdersBoard(props: {
               onClick={toggleOpen}
               disabled={!operation || !props.enabled}
               aria-pressed={operation?.open ?? false}
-              className={`btn min-h-11 border ${operation?.open ? 'border-ok bg-ok text-white' : 'border-line bg-white text-ink'}`}
+              className={`btn min-h-11 border ${operation?.open ? "border-ok bg-ok text-white" : "border-line bg-white text-ink"}`}
             >
-              <span aria-hidden="true" className={`h-2.5 w-2.5 rounded-full ${operation?.open ? 'bg-white' : 'bg-bad'}`} />
-              {operation?.open ? 'Loja aberta' : 'Loja fechada'}
+              <span
+                aria-hidden="true"
+                className={`h-2.5 w-2.5 rounded-full ${operation?.open ? "bg-white" : "bg-bad"}`}
+              />
+              {operation?.open ? "Loja aberta" : "Loja fechada"}
             </button>
-            <button type="button" onClick={bell.arm} className={`btn min-h-11 border ${bell.armed ? 'border-line bg-white text-ink-mute' : 'border-warn bg-warn text-white'}`}>
-              {bell.armed ? 'Som ligado' : 'Ativar som dos pedidos'}
+            <button
+              type="button"
+              onClick={bell.arm}
+              className={`btn min-h-11 border ${bell.armed ? "border-line bg-white text-ink-mute" : "border-warn bg-warn text-white"}`}
+            >
+              {bell.armed ? "Som ligado" : "Ativar som dos pedidos"}
             </button>
-            <button type="button" onClick={() => setMenuOpen(true)} className="btn-ghost min-h-11">
-              Esgotados{operation?.soldOut.length ? ` (${operation.soldOut.length})` : ''}
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              className="btn-ghost min-h-11"
+            >
+              Esgotados
+              {operation?.soldOut.length
+                ? ` (${operation.soldOut.length})`
+                : ""}
             </button>
             {props.dono && (
-              <a href={`/loja/${props.slug}/dono`} className="btn-primary min-h-11">
+              <a
+                href={`/loja/${props.slug}/dono`}
+                className="btn-primary min-h-11"
+              >
                 ← Painel do dono
               </a>
             )}
             {props.dono && (
               <>
-              {props.tables && (
-                <a href={`/loja/${props.slug}/salao`} className="btn-ghost min-h-11">
-                  Salão
+                {props.tables && (
+                  <a
+                    href={`/loja/${props.slug}/salao`}
+                    className="btn-ghost min-h-11"
+                  >
+                    Salão
+                  </a>
+                )}
+                {props.tables && (
+                  <a
+                    href={`/loja/${props.slug}/mapa`}
+                    className="btn-ghost min-h-11"
+                  >
+                    Mapa
+                  </a>
+                )}
+                <a
+                  href={`/loja/${props.slug}/cardapio`}
+                  className="btn-ghost min-h-11"
+                >
+                  Cardápio
                 </a>
-              )}
-              {props.tables && (
-                <a href={`/loja/${props.slug}/mapa`} className="btn-ghost min-h-11">
-                  Mapa
+                <a
+                  href={`/loja/${props.slug}/relatorio`}
+                  className="btn-ghost min-h-11"
+                >
+                  Relatório
                 </a>
-              )}
-              <a href={`/loja/${props.slug}/cardapio`} className="btn-ghost min-h-11">
-                Cardápio
-              </a>
-              <a href={`/loja/${props.slug}/relatorio`} className="btn-ghost min-h-11">
-                Relatório
-              </a>
-              <a href={`/loja/${props.slug}/clientes`} className="btn-ghost min-h-11">
-                Clientes
-              </a>
+                <a
+                  href={`/loja/${props.slug}/clientes`}
+                  className="btn-ghost min-h-11"
+                >
+                  Clientes
+                </a>
               </>
             )}
             {props.team && (
-              <a href={`/painel/lojas/${props.slug}?aba=online`} className="btn-ghost min-h-11">
+              <a
+                href={`/painel/lojas/${props.slug}?aba=online`}
+                className="btn-ghost min-h-11"
+              >
                 Configurar
               </a>
             )}
@@ -220,98 +397,244 @@ export function OrdersBoard(props: {
           </div>
         </div>
         {!props.enabled && (
-          <p className="bg-warn px-4 py-2 text-center text-sm font-semibold text-white">Os pedidos pelo site estão desligados para esta loja. A equipe liga em Configurar.</p>
+          <p className="bg-warn px-4 py-2 text-center text-sm font-semibold text-white">
+            Os pedidos pelo site estão desligados para esta loja. A equipe liga
+            em Configurar.
+          </p>
         )}
         {props.enabled && operation && !operation.open && (
-          <p className="bg-accent px-4 py-2 text-center text-sm text-white">A loja está fechada: o site não aceita pedidos. Toque em “Loja fechada” para abrir.</p>
+          <p className="bg-accent px-4 py-2 text-center text-sm text-white">
+            A loja está fechada: o site não aceita pedidos. Toque em “Loja
+            fechada” para abrir.
+          </p>
         )}
-        {error && <p className="bg-bad px-4 py-2 text-center text-sm font-semibold text-white">{error}</p>}
+        {error && (
+          <p className="bg-bad px-4 py-2 text-center text-sm font-semibold text-white">
+            {error}
+          </p>
+        )}
       </header>
 
       <div className="mx-auto max-w-[1500px] px-4 pt-4 print:hidden">
         <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-ink-mute">
           <span>
-            {doneToday.length} concluído{doneToday.length === 1 ? '' : 's'} hoje · {brl(doneToday.reduce((s, o) => s + o.total, 0))}
+            {doneToday.length} concluído{doneToday.length === 1 ? "" : "s"} hoje
+            · {brl(doneToday.reduce((s, o) => s + o.total, 0))}
           </span>
-          <span>{lastSync ? `Atualizado às ${lastSync.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}` : 'Carregando…'}</span>
+          <span>
+            {lastSync
+              ? `Atualizado às ${lastSync.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo" })}`
+              : "Carregando…"}
+          </span>
         </div>
 
-        <nav aria-label="Situação" className="mt-3 flex gap-1 overflow-x-auto lg:hidden">
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <div
+            role="group"
+            aria-label="Esta tela é de"
+            className="flex rounded-lg border border-line bg-white p-0.5"
+          >
+            {(["tudo", "cozinha", "bar"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                aria-pressed={setor === v}
+                onClick={() => setSetor(v)}
+                className={`min-h-10 rounded-md px-3 text-sm font-semibold ${setor === v ? "bg-accent text-white" : "text-ink-soft hover:text-ink"}`}
+              >
+                {v === "tudo" ? "Tudo" : v === "cozinha" ? "Cozinha" : "Bar"}
+              </button>
+            ))}
+          </div>
+          <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-semibold">
+            <input
+              type="checkbox"
+              checked={autoPrint}
+              onChange={(e) => setAutoPrint(e.target.checked)}
+              className="h-4 w-4 accent-accent"
+            />
+            Imprimir sozinho
+          </label>
+          {setor !== "tudo" && (
+            <span className="text-xs text-ink-mute">
+              {setor === "bar"
+                ? "Só as bebidas de cada pedido."
+                : "Só a comida de cada pedido; as bebidas vão para o bar."}
+            </span>
+          )}
+          {autoPrint && (
+            <details className="text-xs text-ink-mute">
+              <summary className="cursor-pointer">
+                Para imprimir sem a janela de impressão
+              </summary>
+              <p className="mt-1 max-w-xl">
+                Abra o Chrome deste computador com a opção{" "}
+                <code>--kiosk-printing</code> no atalho (Propriedades do atalho
+                › Destino, no fim) e deixe a impressora do setor como padrão.
+                Sem isso, cada pedido abre a janela de impressão e alguém
+                precisa apertar Imprimir.
+              </p>
+            </details>
+          )}
+        </div>
+
+        <nav
+          aria-label="Situação"
+          className="mt-3 flex gap-1 overflow-x-auto lg:hidden"
+        >
           {COLUMNS.map((c) => (
             <button
               key={c.id}
               type="button"
-              aria-current={tab === c.id ? 'true' : undefined}
+              aria-current={tab === c.id ? "true" : undefined}
               onClick={() => setTab(c.id)}
               className="btn min-h-10 shrink-0 border border-line bg-white aria-[current=true]:border-accent aria-[current=true]:bg-accent aria-[current=true]:text-white"
             >
-              {c.label} <span className="tabular-nums">{byColumn(c.id).length}</span>
+              {c.label}{" "}
+              <span className="tabular-nums">{byColumn(c.id).length}</span>
             </button>
           ))}
         </nav>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-4">
           {COLUMNS.map((c) => (
-            <section key={c.id} aria-label={c.label} className={`${tab === c.id ? '' : 'hidden'} lg:block`}>
+            <section
+              key={c.id}
+              aria-label={c.label}
+              className={`${tab === c.id ? "" : "hidden"} lg:block`}
+            >
               <h2 className="mb-2 hidden items-center gap-2 text-sm font-bold tracking-wide text-ink-soft uppercase lg:flex">
                 {c.label}
-                <span className="chip bg-line text-ink">{byColumn(c.id).length}</span>
+                <span className="chip bg-line text-ink">
+                  {byColumn(c.id).length}
+                </span>
               </h2>
               <div className="grid gap-3">
                 {orders === null ? (
-                  <p className="card p-4 text-sm text-ink-mute">Carregando pedidos…</p>
+                  <p className="card p-4 text-sm text-ink-mute">
+                    Carregando pedidos…
+                  </p>
                 ) : byColumn(c.id).length === 0 ? (
-                  <p className="rounded-xl border border-dashed border-line p-4 text-sm text-ink-mute">{c.id === 'novos' ? 'Nenhum pedido esperando. Os novos tocam um alerta.' : 'Nada aqui.'}</p>
+                  <p className="rounded-xl border border-dashed border-line p-4 text-sm text-ink-mute">
+                    {c.id === "novos"
+                      ? "Nenhum pedido esperando. Os novos tocam um alerta."
+                      : "Nada aqui."}
+                  </p>
                 ) : (
-                  byColumn(c.id).map((o) => <OrderCard key={o.id} order={o} storeName={props.storeName} onAction={act} onPrint={() => setPrinting(o)} />)
+                  byColumn(c.id).map((o) => (
+                    <OrderCard
+                      key={o.id}
+                      order={o}
+                      storeName={props.storeName}
+                      onAction={act}
+                      onPrint={() => setPrinting(o)}
+                    />
+                  ))
                 )}
               </div>
             </section>
           ))}
         </div>
-        <p className="mt-6 text-xs text-ink-mute">Logado como {props.userName}. Deixe esta tela aberta durante o expediente; ela se atualiza sozinha.</p>
+        <p className="mt-6 text-xs text-ink-mute">
+          Logado como {props.userName}. Deixe esta tela aberta durante o
+          expediente; ela se atualiza sozinha.
+        </p>
       </div>
 
-      {printing && <Ticket order={printing} storeName={props.storeName} />}
-      {menuOpen && <SoldOutSheet menu={props.menu} soldOut={operation?.soldOut ?? []} onToggle={toggleSoldOut} onClose={() => setMenuOpen(false)} />}
+      {printing && (
+        <Ticket order={printing} storeName={props.storeName} setor={setor} />
+      )}
+      {menuOpen && (
+        <SoldOutSheet
+          menu={props.menu}
+          soldOut={operation?.soldOut ?? []}
+          onToggle={toggleSoldOut}
+          onClose={() => setMenuOpen(false)}
+        />
+      )}
     </div>
   );
 }
 
-const METHOD_LABEL = { pix: 'Pix', cartao: 'Cartão', dinheiro: 'Dinheiro' } as const;
+const METHOD_LABEL = {
+  pix: "Pix",
+  cartao: "Cartão",
+  dinheiro: "Dinheiro",
+} as const;
 
 function PaymentBadge({ o }: { o: StaffOrder }) {
   const { method, status, changeFor } = o.payment;
-  if (o.mode === 'mesa') {
-    return <span className="chip bg-accent-soft text-accent">{status === 'pago' ? `Pago na mesa · ${METHOD_LABEL[method]}` : 'Paga ao fechar a mesa'}</span>;
+  if (o.mode === "mesa") {
+    return (
+      <span className="chip bg-accent-soft text-accent">
+        {status === "pago"
+          ? `Pago na mesa · ${METHOD_LABEL[method]}`
+          : "Paga ao fechar a mesa"}
+      </span>
+    );
   }
-  if (method === 'pix') {
+  if (method === "pix") {
     const map = {
-      pago: ['Pix pago', 'bg-ok text-white'],
-      pendente: [o.status === 'expirado' ? 'Pix não pago' : 'Aguardando Pix', 'bg-line text-ink'],
-      devolver: ['Pix: devolver valor', 'bg-bad text-white'],
-      devolvido: ['Pix devolvido', 'bg-line text-ink'],
-      'na-entrega': ['Pix', 'bg-line text-ink'],
-      'na-mesa': ['Pix', 'bg-line text-ink'],
+      pago: ["Pix pago", "bg-ok text-white"],
+      pendente: [
+        o.status === "expirado" ? "Pix não pago" : "Aguardando Pix",
+        "bg-line text-ink",
+      ],
+      devolver: ["Pix: devolver valor", "bg-bad text-white"],
+      devolvido: ["Pix devolvido", "bg-line text-ink"],
+      "na-entrega": ["Pix", "bg-line text-ink"],
+      "na-mesa": ["Pix", "bg-line text-ink"],
     } as const;
     const [label, cls] = map[status];
-    return <span className={`chip ${cls}`}>{label}{o.payment.pixProvider === 'demo' ? ' (teste)' : ''}</span>;
+    return (
+      <span className={`chip ${cls}`}>
+        {label}
+        {o.payment.pixProvider === "demo" ? " (teste)" : ""}
+      </span>
+    );
   }
-  if (method === 'cartao') return <span className="chip bg-accent-soft text-accent">{o.mode === 'entrega' ? 'Cartão na entrega' : 'Cartão no balcão'}</span>;
-  return <span className="chip bg-accent-soft text-accent">Dinheiro{changeFor ? ` · troco p/ ${brl(changeFor)}` : ' · sem troco'}</span>;
+  if (method === "cartao")
+    return (
+      <span className="chip bg-accent-soft text-accent">
+        {o.mode === "entrega" ? "Cartão na entrega" : "Cartão no balcão"}
+      </span>
+    );
+  return (
+    <span className="chip bg-accent-soft text-accent">
+      Dinheiro{changeFor ? ` · troco p/ ${brl(changeFor)}` : " · sem troco"}
+    </span>
+  );
 }
 
 /** Quick sold-out switches for service; the site hides the item within seconds, no publish needed. */
-function SoldOutSheet({ menu, soldOut, onToggle, onClose }: { menu: MenuForStaff[]; soldOut: string[]; onToggle: (id: string, out: boolean) => void; onClose: () => void }) {
+function SoldOutSheet({
+  menu,
+  soldOut,
+  onToggle,
+  onClose,
+}: {
+  menu: MenuForStaff[];
+  soldOut: string[];
+  onToggle: (id: string, out: boolean) => void;
+  onClose: () => void;
+}) {
   return (
-    <div role="dialog" aria-modal="true" aria-labelledby="esgotados-title" className="fixed inset-0 z-40 flex justify-end bg-ink/40 print:hidden" onClick={(e) => e.target === e.currentTarget && onClose()}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="esgotados-title"
+      className="fixed inset-0 z-40 flex justify-end bg-ink/40 print:hidden"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
       <div className="flex h-full w-full max-w-md flex-col bg-paper shadow-2xl">
         <div className="flex items-center justify-between border-b border-line px-5 py-4">
           <div>
             <h2 id="esgotados-title" className="text-lg font-bold">
               Esgotados
             </h2>
-            <p className="text-sm text-ink-mute">Marcou, sai do site na hora. Desmarque quando voltar.</p>
+            <p className="text-sm text-ink-mute">
+              Marcou, sai do site na hora. Desmarque quando voltar.
+            </p>
           </div>
           <button type="button" className="btn-ghost" onClick={onClose}>
             Fechar
@@ -320,17 +643,33 @@ function SoldOutSheet({ menu, soldOut, onToggle, onClose }: { menu: MenuForStaff
         <div className="flex-1 space-y-5 overflow-y-auto px-5 py-4">
           {menu.map((c) => (
             <section key={c.id}>
-              <h3 className="text-xs font-bold tracking-wide text-ink-mute uppercase">{c.name}</h3>
+              <h3 className="text-xs font-bold tracking-wide text-ink-mute uppercase">
+                {c.name}
+              </h3>
               <ul className="mt-2 divide-y divide-line rounded-lg border border-line bg-white">
                 {c.items.map((i) => {
                   const out = soldOut.includes(i.id);
                   return (
                     <li key={i.id}>
                       <label className="flex min-h-12 cursor-pointer items-center justify-between gap-3 px-3">
-                        <span className={`text-[15px] ${out ? 'text-ink-mute line-through' : ''}`}>{i.name}</span>
+                        <span
+                          className={`text-[15px] ${out ? "text-ink-mute line-through" : ""}`}
+                        >
+                          {i.name}
+                        </span>
                         <span className="flex items-center gap-2 text-sm font-semibold">
-                          {out ? <span className="text-bad">Esgotado</span> : <span className="text-ok">Disponível</span>}
-                          <input type="checkbox" className="h-5 w-5 accent-bad" checked={out} onChange={(e) => onToggle(i.id, e.target.checked)} aria-label={`${i.name} esgotado`} />
+                          {out ? (
+                            <span className="text-bad">Esgotado</span>
+                          ) : (
+                            <span className="text-ok">Disponível</span>
+                          )}
+                          <input
+                            type="checkbox"
+                            className="h-5 w-5 accent-bad"
+                            checked={out}
+                            onChange={(e) => onToggle(i.id, e.target.checked)}
+                            aria-label={`${i.name} esgotado`}
+                          />
                         </span>
                       </label>
                     </li>
@@ -348,60 +687,97 @@ function SoldOutSheet({ menu, soldOut, onToggle, onClose }: { menu: MenuForStaff
 /** Pre-written WhatsApp message for the order's current step. */
 function notifyText(o: StaffOrder, storeName: string) {
   if (!o.customer.phone) return null;
-  const first = o.customer.name.split(' ')[0];
+  const first = o.customer.name.split(" ")[0];
   const by = {
     preparo: `seu pedido #${o.number} foi aceito e já está sendo preparado. 🔥`,
     saiu: `seu pedido #${o.number} saiu para entrega! 🛵`,
     pronto: `seu pedido #${o.number} está pronto para retirar no balcão. ✅`,
     concluido: `obrigado pelo pedido #${o.number}! Bom apetite. 🍔`,
-    recusado: `infelizmente não conseguimos fazer o pedido #${o.number}${o.reason ? ` (${o.reason})` : ''}.${o.payment.status === 'devolvido' || o.payment.status === 'devolver' ? ' O valor do Pix será devolvido.' : ''}`,
+    recusado: `infelizmente não conseguimos fazer o pedido #${o.number}${o.reason ? ` (${o.reason})` : ""}.${o.payment.status === "devolvido" || o.payment.status === "devolver" ? " O valor do Pix será devolvido." : ""}`,
   } as Partial<Record<OrderStatus, string>>;
   const body = by[o.status];
   return body ? `Olá, ${first}! Aqui é do ${storeName}: ${body}` : null;
 }
 
-function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrder; storeName: string; onAction: (o: StaffOrder, a: OperatorAction, reason?: string) => void; onPrint: () => void }) {
+function OrderCard({
+  order: o,
+  storeName,
+  onAction,
+  onPrint,
+}: {
+  order: StaffOrder;
+  storeName: string;
+  onAction: (o: StaffOrder, a: OperatorAction, reason?: string) => void;
+  onPrint: () => void;
+}) {
   const [refusing, setRefusing] = useState(false);
-  const [reason, setReason] = useState('');
-  const highlight = o.status === 'novo';
+  const [reason, setReason] = useState("");
+  const highlight = o.status === "novo";
   const wa = `https://wa.me/55${o.customer.phone}`;
   return (
     <article
-      className={`card overflow-hidden ${highlight ? 'border-2 border-accent shadow-[0_8px_24px_-12px_rgb(194_65_12/0.6)]' : ''} ${o.status === 'aguardando-pix' ? 'opacity-75' : ''}`}
+      className={`card overflow-hidden ${highlight ? "border-2 border-accent shadow-[0_8px_24px_-12px_rgb(194_65_12/0.6)]" : ""} ${o.status === "aguardando-pix" ? "opacity-75" : ""}`}
       aria-labelledby={`o-${o.id}`}
     >
-      <div className={`flex items-center justify-between gap-2 px-4 py-2.5 ${highlight ? 'bg-accent text-white' : 'bg-paper'}`}>
+      <div
+        className={`flex items-center justify-between gap-2 px-4 py-2.5 ${highlight ? "bg-accent text-white" : "bg-paper"}`}
+      >
         <h3 id={`o-${o.id}`} className="text-base font-bold">
-          #{o.number} <span className="font-semibold opacity-80">· {time(o.createdAt)}</span>
+          #{o.number}{" "}
+          <span className="font-semibold opacity-80">
+            · {time(o.createdAt)}
+          </span>
         </h3>
-        <span className="text-xs font-semibold tracking-wide uppercase">{STATUS_LABEL[o.status]}</span>
+        <span className="text-xs font-semibold tracking-wide uppercase">
+          {STATUS_LABEL[o.status]}
+        </span>
       </div>
       <div className="space-y-3 px-4 py-3 text-sm">
-        {o.status === 'aguardando-pix' && <p className="rounded-lg bg-line px-3 py-2 font-semibold">Não prepare ainda: o cliente não pagou o Pix. Ele entra em Novos quando o pagamento cair.</p>}
-        {o.mode === 'mesa' ? (
-          <p className="text-2xl font-black tracking-tight">Mesa {o.table?.number}</p>
-        ) : (
-        <div>
-          <p className="text-[15px] font-bold">{o.customer.name}</p>
-          <p className="flex flex-wrap gap-x-3">
-            <a href={`tel:+55${o.customer.phone}`} className="underline">
-              {phoneLabel(o.customer.phone)}
-            </a>
-            <a href={wa} target="_blank" rel="noreferrer" className="text-ok underline">
-              WhatsApp
-            </a>
+        {o.status === "aguardando-pix" && (
+          <p className="rounded-lg bg-line px-3 py-2 font-semibold">
+            Não prepare ainda: o cliente não pagou o Pix. Ele entra em Novos
+            quando o pagamento cair.
           </p>
-        </div>
+        )}
+        {o.mode === "mesa" ? (
+          <p className="text-2xl font-black tracking-tight">
+            Mesa {o.table?.number}
+          </p>
+        ) : (
+          <div>
+            <p className="text-[15px] font-bold">{o.customer.name}</p>
+            <p className="flex flex-wrap gap-x-3">
+              <a href={`tel:+55${o.customer.phone}`} className="underline">
+                {phoneLabel(o.customer.phone)}
+              </a>
+              <a
+                href={wa}
+                target="_blank"
+                rel="noreferrer"
+                className="text-ok underline"
+              >
+                WhatsApp
+              </a>
+            </p>
+          </div>
         )}
         <div className="flex flex-wrap gap-1.5">
-          <span className={`chip ${o.mode === 'entrega' ? 'bg-accent text-white' : o.mode === 'mesa' ? 'bg-accent text-white' : 'bg-line text-ink'}`}>{MODE_CHIP[o.mode]}</span>
+          <span
+            className={`chip ${o.mode === "entrega" ? "bg-accent text-white" : o.mode === "mesa" ? "bg-accent text-white" : "bg-line text-ink"}`}
+          >
+            {MODE_CHIP[o.mode]}
+          </span>
           <PaymentBadge o={o} />
         </div>
         {o.address && (
           <p className="leading-snug">
             {o.address.area && <strong>{o.address.area}: </strong>}
             {o.address.street}
-            {o.address.reference && <span className="block text-ink-mute">Ref.: {o.address.reference}</span>}
+            {o.address.reference && (
+              <span className="block text-ink-mute">
+                Ref.: {o.address.reference}
+              </span>
+            )}
           </p>
         )}
         <ul className="divide-y divide-line border-y border-line">
@@ -413,12 +789,28 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
                 </span>
                 <span className="tabular-nums">{brl(l.total)}</span>
               </p>
-              {l.options.length > 0 && <p className="text-ink-soft">{l.options.map((x) => (x.group === 'Adicionais' ? `+ ${x.label}` : `${x.group}: ${x.label}`)).join(' · ')}</p>}
-              {l.notes && <p className="font-semibold text-warn">Obs.: {l.notes}</p>}
+              {l.options.length > 0 && (
+                <p className="text-ink-soft">
+                  {l.options
+                    .map((x) =>
+                      x.group === "Adicionais"
+                        ? `+ ${x.label}`
+                        : `${x.group}: ${x.label}`,
+                    )
+                    .join(" · ")}
+                </p>
+              )}
+              {l.notes && (
+                <p className="font-semibold text-warn">Obs.: {l.notes}</p>
+              )}
             </li>
           ))}
         </ul>
-        {o.note && <p className="rounded-lg bg-accent-soft px-3 py-2 font-semibold text-accent">Obs. do pedido: {o.note}</p>}
+        {o.note && (
+          <p className="rounded-lg bg-accent-soft px-3 py-2 font-semibold text-accent">
+            Obs. do pedido: {o.note}
+          </p>
+        )}
         <dl className="space-y-0.5">
           {o.discount > 0 && (
             <div className="flex justify-between text-ok">
@@ -426,10 +818,12 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
               <dd className="tabular-nums">− {brl(o.discount)}</dd>
             </div>
           )}
-          {o.mode === 'entrega' && (
+          {o.mode === "entrega" && (
             <div className="flex justify-between text-ink-mute">
               <dt>Entrega</dt>
-              <dd className="tabular-nums">{o.feePending ? 'a combinar' : brl(o.deliveryFee)}</dd>
+              <dd className="tabular-nums">
+                {o.feePending ? "a combinar" : brl(o.deliveryFee)}
+              </dd>
             </div>
           )}
           <div className="flex justify-between text-base font-bold">
@@ -437,7 +831,9 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
             <dd className="tabular-nums">{brl(o.total)}</dd>
           </div>
         </dl>
-        {o.status === 'recusado' && o.reason && <p className="text-bad">Motivo: {o.reason}</p>}
+        {o.status === "recusado" && o.reason && (
+          <p className="text-bad">Motivo: {o.reason}</p>
+        )}
         {notifyText(o, storeName) && (
           <a
             href={`https://wa.me/55${o.customer.phone}?text=${encodeURIComponent(notifyText(o, storeName)!)}`}
@@ -448,8 +844,11 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
             Avisar o cliente no WhatsApp
           </a>
         )}
-        {o.payment.status === 'devolver' && (
-          <p className="rounded-lg bg-bad px-3 py-2 font-semibold text-white">A devolução automática do Pix falhou. Devolva o valor pelo app do Mercado Pago.</p>
+        {o.payment.status === "devolver" && (
+          <p className="rounded-lg bg-bad px-3 py-2 font-semibold text-white">
+            A devolução automática do Pix falhou. Devolva o valor pelo app do
+            Mercado Pago.
+          </p>
         )}
       </div>
 
@@ -459,46 +858,87 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
             className="flex w-full flex-col gap-2"
             onSubmit={(e) => {
               e.preventDefault();
-              onAction(o, 'recusar', reason);
+              onAction(o, "recusar", reason);
               setRefusing(false);
             }}
           >
             <label className="label" htmlFor={`r-${o.id}`}>
               Motivo (o cliente vê)
             </label>
-            <input id={`r-${o.id}`} className="field" value={reason} maxLength={200} onChange={(e) => setReason(e.target.value)} placeholder="Ex.: acabou o pão australiano" autoFocus />
+            <input
+              id={`r-${o.id}`}
+              className="field"
+              value={reason}
+              maxLength={200}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Ex.: acabou o pão australiano"
+              autoFocus
+            />
             <div className="flex gap-2">
               <button type="submit" className="btn-danger flex-1">
-                Confirmar recusa{o.payment.status === 'pago' ? ' e devolver Pix' : ''}
+                Confirmar recusa
+                {o.payment.status === "pago" ? " e devolver Pix" : ""}
               </button>
-              <button type="button" className="btn-ghost" onClick={() => setRefusing(false)}>
+              <button
+                type="button"
+                className="btn-ghost"
+                onClick={() => setRefusing(false)}
+              >
                 Voltar
               </button>
             </div>
           </form>
         ) : (
           <>
-            {o.status === 'novo' && (
-              <button type="button" className="btn min-h-12 basis-full bg-ok text-base text-white hover:bg-accent" onClick={() => onAction(o, 'aceitar')}>
+            {o.status === "novo" && (
+              <button
+                type="button"
+                className="btn min-h-12 basis-full bg-ok text-base text-white hover:bg-accent"
+                onClick={() => onAction(o, "aceitar")}
+              >
                 Aceitar pedido
               </button>
             )}
-            {o.status === 'preparo' && (
-              <button type="button" className="btn-primary min-h-12 basis-full text-base" onClick={() => onAction(o, 'despachar')}>
-                {o.mode === 'entrega' ? 'Saiu para entrega' : o.mode === 'mesa' ? 'Pronto para levar à mesa' : 'Pronto para retirada'}
+            {o.status === "preparo" && (
+              <button
+                type="button"
+                className="btn-primary min-h-12 basis-full text-base"
+                onClick={() => onAction(o, "despachar")}
+              >
+                {o.mode === "entrega"
+                  ? "Saiu para entrega"
+                  : o.mode === "mesa"
+                    ? "Pronto para levar à mesa"
+                    : "Pronto para retirada"}
               </button>
             )}
-            {(o.status === 'saiu' || o.status === 'pronto') && (
-              <button type="button" className="btn-primary min-h-12 basis-full text-base" onClick={() => onAction(o, 'concluir')}>
-                {o.mode === 'entrega' ? 'Entregue' : o.mode === 'mesa' ? 'Entregue na mesa' : 'Retirado'}
+            {(o.status === "saiu" || o.status === "pronto") && (
+              <button
+                type="button"
+                className="btn-primary min-h-12 basis-full text-base"
+                onClick={() => onAction(o, "concluir")}
+              >
+                {o.mode === "entrega"
+                  ? "Entregue"
+                  : o.mode === "mesa"
+                    ? "Entregue na mesa"
+                    : "Retirado"}
               </button>
             )}
-            {['novo', 'preparo', 'aguardando-pix'].includes(o.status) && (
-              <button type="button" className="btn-danger flex-1" onClick={() => setRefusing(true)}>
+            {["novo", "preparo", "aguardando-pix"].includes(o.status) && (
+              <button
+                type="button"
+                className="btn-danger flex-1"
+                onClick={() => setRefusing(true)}
+              >
                 Recusar
               </button>
             )}
-            <button type="button" className="btn-ghost flex-1" onClick={onPrint}>
+            <button
+              type="button"
+              className="btn-ghost flex-1"
+              onClick={onPrint}
+            >
               Imprimir
             </button>
           </>
@@ -509,22 +949,43 @@ function OrderCard({ order: o, storeName, onAction, onPrint }: { order: StaffOrd
 }
 
 /** 80 mm kitchen ticket; only this prints. */
-function Ticket({ order: o, storeName }: { order: StaffOrder; storeName: string }) {
+function Ticket({
+  order: o,
+  storeName,
+  setor,
+}: {
+  order: StaffOrder;
+  storeName: string;
+  setor: Setor;
+}) {
   return (
     <div className="ticket hidden print:block">
-      <p style={{ textAlign: 'center', fontWeight: 700 }}>{storeName}</p>
-      <p style={{ textAlign: 'center', fontSize: '20px', fontWeight: 800 }}>PEDIDO #{o.number}</p>
-      <p style={{ textAlign: 'center' }}>{new Date(o.createdAt).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}</p>
+      <p style={{ textAlign: "center", fontWeight: 700 }}>{storeName}</p>
+      {setor !== "tudo" && (
+        <p style={{ textAlign: "center", fontSize: "18px", fontWeight: 800 }}>
+          {setor === "bar" ? "BAR" : "COZINHA"}
+        </p>
+      )}
+      <p style={{ textAlign: "center", fontSize: "20px", fontWeight: 800 }}>
+        PEDIDO #{o.number}
+      </p>
+      <p style={{ textAlign: "center" }}>
+        {new Date(o.createdAt).toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+        })}
+      </p>
       <hr />
-      {o.mode === 'mesa' ? (
-        <p style={{ fontSize: '20px', fontWeight: 800 }}>MESA {o.table?.number}</p>
+      {o.mode === "mesa" ? (
+        <p style={{ fontSize: "20px", fontWeight: 800 }}>
+          MESA {o.table?.number}
+        </p>
       ) : (
         <>
           <p>
             <strong>{o.customer.name}</strong> · {phoneLabel(o.customer.phone)}
           </p>
           <p>
-            <strong>{o.mode === 'entrega' ? 'ENTREGA' : 'RETIRADA'}</strong>
+            <strong>{o.mode === "entrega" ? "ENTREGA" : "RETIRADA"}</strong>
           </p>
         </>
       )}
@@ -537,38 +998,60 @@ function Ticket({ order: o, storeName }: { order: StaffOrder; storeName: string 
       )}
       <hr />
       {o.lines.map((l, i) => (
-        <div key={i} style={{ marginBottom: '4px' }}>
-          <p style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div key={i} style={{ marginBottom: "4px" }}>
+          <p style={{ display: "flex", justifyContent: "space-between" }}>
             <strong>
               {l.quantity}x {l.name}
             </strong>
             <span>{brl(l.total)}</span>
           </p>
           {l.options.map((x, k) => (
-            <p key={k}>&nbsp;&nbsp;{x.group === 'Adicionais' ? `+ ${x.label}` : `${x.group}: ${x.label}`}</p>
+            <p key={k}>
+              &nbsp;&nbsp;
+              {x.group === "Adicionais"
+                ? `+ ${x.label}`
+                : `${x.group}: ${x.label}`}
+            </p>
           ))}
           {l.notes && <p>&nbsp;&nbsp;OBS: {l.notes}</p>}
         </div>
       ))}
       {o.note && <p>OBS DO PEDIDO: {o.note}</p>}
-      <hr />
-      {o.discount > 0 && <p>Cupom {o.coupon}: - {brl(o.discount)}</p>}
-      {o.mode === 'entrega' && <p>Entrega: {o.feePending ? 'a combinar' : brl(o.deliveryFee)}</p>}
-      <p style={{ fontSize: '16px', fontWeight: 800 }}>TOTAL: {brl(o.total)}</p>
-      <p>
-        Pagamento:{' '}
-        {o.mode === 'mesa'
-          ? 'NA MESA'
-          : o.payment.method === 'pix'
-          ? o.payment.status === 'pago'
-            ? 'PIX PAGO'
-            : 'PIX (não confirmado)'
-          : o.payment.method === 'cartao'
-            ? o.mode === 'entrega'
-              ? 'CARTÃO NA ENTREGA'
-              : 'CARTÃO NO BALCÃO'
-            : `DINHEIRO${o.payment.changeFor ? ` - troco p/ ${brl(o.payment.changeFor)}` : ''}`}
-      </p>
+      {setor !== "tudo" ? (
+        <p>
+          Só os itens {setor === "bar" ? "do bar" : "da cozinha"}. O resto do
+          pedido sai no outro setor.
+        </p>
+      ) : (
+        <>
+          <hr />
+          {o.discount > 0 && (
+            <p>
+              Cupom {o.coupon}: - {brl(o.discount)}
+            </p>
+          )}
+          {o.mode === "entrega" && (
+            <p>Entrega: {o.feePending ? "a combinar" : brl(o.deliveryFee)}</p>
+          )}
+          <p style={{ fontSize: "16px", fontWeight: 800 }}>
+            TOTAL: {brl(o.total)}
+          </p>
+          <p>
+            Pagamento:{" "}
+            {o.mode === "mesa"
+              ? "NA MESA"
+              : o.payment.method === "pix"
+                ? o.payment.status === "pago"
+                  ? "PIX PAGO"
+                  : "PIX (não confirmado)"
+                : o.payment.method === "cartao"
+                  ? o.mode === "entrega"
+                    ? "CARTÃO NA ENTREGA"
+                    : "CARTÃO NO BALCÃO"
+                  : `DINHEIRO${o.payment.changeFor ? ` - troco p/ ${brl(o.payment.changeFor)}` : ""}`}
+          </p>
+        </>
+      )}
     </div>
   );
 }

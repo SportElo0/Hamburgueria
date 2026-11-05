@@ -41,6 +41,8 @@ export interface Seating {
   payments?: TablePayment[];
   /** The waiter took the service charge off this table's bill (it is optional for the customer). */
   semServico?: boolean;
+  /** Who last took the service charge off or put it back, and when. */
+  servicoMudou?: { por: string; em: string; cobrar: boolean };
 }
 
 export interface TablePayment {
@@ -212,12 +214,24 @@ export async function contaConfig(slug: string): Promise<ContaConfig> {
 }
 
 /** The waiter takes the service charge off a table's bill, or puts it back. */
-export async function setServico(slug: string, number: number, cobrar: boolean) {
+export async function setServico(slug: string, number: number, cobrar: boolean, by = 'equipe', now = new Date()) {
+  const [orders, conta] = await Promise.all([
+    (async () => {
+      const s = (await readDoc(slug)).data.seatings[number];
+      return s ? tableOrders(slug, s.id, now) : [];
+    })(),
+    contaConfig(slug),
+  ]);
   await change(slug, (doc) => {
     const s = doc.seatings[number];
     if (!s) throw new TableError('Essa mesa já foi fechada.');
+    // Taking the charge off must not leave the table having paid more than its bill by Pix (no automatic refund).
+    if (!cobrar && paidOf(s) > billOf({ ...s, semServico: true }, orders, conta).total - (s.credit ?? 0)) {
+      throw new TableError('Esta mesa já pagou pelo Pix mais do que a conta sem a taxa. Feche a conta com a taxa ou devolva a diferença no caixa.');
+    }
     if (cobrar) delete s.semServico;
     else s.semServico = true;
+    s.servicoMudou = { por: by, em: now.toISOString(), cobrar };
   });
 }
 export type TableState = Awaited<ReturnType<typeof tableState>>;

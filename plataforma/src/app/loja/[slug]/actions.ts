@@ -226,9 +226,9 @@ export async function staffOrderAction(slug: string, number: number, items: unkn
 /** The waiter takes the service charge off a table's bill (it is optional for the customer), or puts it back. */
 export async function servicoAction(slug: string, number: number, cobrar: boolean): Promise<OrderActionResult> {
   if (!isSlug(slug) || !Number.isInteger(number) || number < 1 || number > 200 || typeof cobrar !== 'boolean') return { ok: false, error: 'Mesa inválida.' };
-  await requireStoreAccess(slug, SALAO);
+  const user = await requireStoreAccess(slug, SALAO);
   try {
-    await setServico(slug, number, cobrar);
+    await setServico(slug, number, cobrar, user.name || user.email);
     return { ok: true };
   } catch (err) {
     if (err instanceof TableError) return { ok: false, error: err.message };
