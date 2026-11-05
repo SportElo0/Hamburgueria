@@ -7,7 +7,18 @@ Rascunho de estratégia, 31/10/2026. Nada aqui foi publicado. Preço e condiçõ
 Captar → juntar quem se interessou → aquecer com conteúdo → abrir as vendas numa data marcada → fechar.
 No nosso caso o produto é o **Scale** (sistema de pedido na mesa), não um curso.
 
-## A oferta
+## A oferta (atualizada em 05/11)
+
+Decisão dos sócios: **Scale R$ 997/mês + implantação R$ 1.500.** O site próprio **sai do Scale** e vira a condição de fechamento: "o site é vendido separado por R$ 997; fechando o Scale até [data], ele sai sem custo e o domínio e a hospedagem dos primeiros 12 meses ficam por nossa conta". Está no slide "bonus-site" da apresentação.
+
+Para não virar propaganda enganosa (CDC art. 37):
+1. O site precisa ser vendido de verdade por R$ 997 a quem não fecha o Scale.
+2. A data é real e, passada a data, o site volta a ser cobrado.
+3. A proposta diz o que acontece com domínio e hospedagem depois dos 12 meses.
+4. O site da Growlift hoje diz que a criação do site é sem custo nos planos e que o Scale tem "tudo do Grow": alinhar antes de lançar o Scale.
+
+### Versão anterior (31/10)
+
 
 | Item | Preço normal | No lançamento |
 | --- | --- | --- |
