@@ -151,7 +151,7 @@
    ],
    "capa": "05-reels/04-ela-procurou-capa.png",
    "legenda": "Comenta GOOGLE que a gente te mostra como o seu restaurante aparece 📩\n\nSábado, meio-dia. A Ana procurou \"hamburgueria perto de mim\". A lanchonete do seu João fica a duas quadras, mas não apareceu. Ela foi pra outro lugar, e ele nem soube que ela procurou.\n\nTrês sinais de que o seu negócio pode não estar aparecendo pra quem procura:\n1. O cardápio só existe em foto no Instagram.\n2. O horário no Google está errado.\n3. Pra pedir, só mandando mensagem.\n\n#growlift #sitepararestaurante #googlemeunegocio #hamburgueria #pequenosnegocios",
-   "quando": "2026-11-06T15:00:00-03:00",
+   "quando": "2026-11-06T19:00:00-03:00",
    "ia": true,
    "palavra": "GOOGLE",
    "chave": "05-reels/roteiros.md#4-tres-sinais-de-que-o-seu-negocio-precisa-de-site-educativo"
@@ -182,7 +182,7 @@
    ],
    "capa": "05-reels/06-do-zero-capa.png",
    "legenda": "Comenta SITE que a gente te mostra como funciona 📩\n\nA Júlia faz bolos lindos e chegou com um caderno cheio de ideias: as cores, os sabores, as fotos dos bolos. Do caderno nasce o código, escrito do zero, sem modelo pronto. Depois vem o visual, depois as fotos.\n\n#growlift #bastidores #criacaodesites #confeitaria #webdesign",
-   "quando": "2026-11-07T15:00:00-03:00",
+   "quando": "2026-11-07T19:00:00-03:00",
    "ia": true,
    "palavra": "SITE",
    "chave": "05-reels/roteiros.md#6-bastidores-como-nasce-um-modelo"
@@ -213,7 +213,7 @@
    ],
    "capa": "05-reels/03-dois-minutos-capa.png",
    "legenda": "Comenta SITE que a gente te mostra como funciona 📩\n\nOnze e meia, a chapa já quente. O Marcos tinha dois minutos entre um pedido e outro: pediu o diagnóstico grátis pelo celular e voltou pra chapa. Em até 2 dias úteis, a prévia do site chega no WhatsApp. Sem compromisso.\n\n#growlift #diagnosticogratis #sitepararestaurante #negocioslocais #pequenosnegocios",
-   "quando": "2026-11-08T15:00:00-03:00",
+   "quando": "2026-11-08T19:00:00-03:00",
    "ia": true,
    "palavra": "SITE",
    "chave": "05-reels/roteiros.md#3-do-celular-ao-diagnostico"
@@ -246,7 +246,7 @@
    ],
    "capa": "05-reels/13-porta-aberta-capa.png",
    "legenda": "Comenta PEDIDO que a gente te mostra como funciona 📩\n\nA porta fecha. A fome não 🌙\n\nCom a loja fechada, o site continua mostrando o cardápio com foto, o horário e o endereço. Pedido não entra enquanto a loja está fechada.\n\nQuando você abre, o pedido do site cai direto na tela da loja, com Pix na hora (plano Grow). Valores e condições: link na bio.\n\n#cardapiodigital #sitepararestaurante #delivery #restaurante #lanchonete",
-   "quando": "2026-11-09T15:00:00-03:00",
+   "quando": "2026-11-09T19:00:00-03:00",
    "ia": true,
    "palavra": "PEDIDO",
    "chave": "05-reels/roteiros.md#13-a-porta-que-fica-aberta"
@@ -584,6 +584,58 @@
    "legenda": "Seu restaurante é bom… mas não vende? Pode não ser a cozinha. 👇\n\n3 sinais pra conferir hoje:\n1. Quem procura no Google não te encontra (ou acha horário errado).\n2. O cardápio só existe em foto ou PDF.\n3. Pra pedir, só mandando mensagem e esperando.\n\nMarcou algum? Salva o post e começa pelo resumo do slide 6.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #hamburgueria #marketingpararestaurantes #delivery #growlift",
    "quando": "2026-11-22T10:00:00-03:00",
    "ia": false
+  },
+  {
+   "id": "2026-11-06-casa-cheia-17",
+   "titulo": "Casa Cheia ep. 1 · Cadê o dinheiro? (Comenta MARGEM)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/17-cade-o-dinheiro.mp4"
+   ],
+   "capa": "05-reels/17-cade-o-dinheiro-capa.png",
+   "legenda": "Vender muito não é a mesma coisa que sobrar dinheiro. 🍝\n\nA parmegiana da Rosa sai toda noite. Mas, de cada R$ 39,90, R$ 22 vão embora em ingrediente. Esse número tem nome: CMV, o custo da mercadoria vendida.\n\nFaz a conta com o prato que mais sai aí: custo dos ingredientes ÷ preço. Quanto maior o resultado, menos sobra pra pagar o resto: aluguel, salários, contas e impostos (isso fica pro episódio 4).\n\nQuer a conta passo a passo? Comenta MARGEM.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #gestaoderestaurante #cmv #donoderestaurante #cardapio",
+   "quando": "2026-11-06T15:00:00-03:00",
+   "ia": true,
+   "palavra": "MARGEM"
+  },
+  {
+   "id": "2026-11-07-casa-cheia-18",
+   "titulo": "Casa Cheia ep. 2 · Cada prato tem um papel (Comenta MARGEM)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/18-cada-prato-um-papel.mp4"
+   ],
+   "capa": "05-reels/18-cada-prato-um-papel-capa.png",
+   "legenda": "Todo prato do seu cardápio tem um papel. Você sabe qual é o de cada um? ⭐🐴🧩🍍\n\n⭐ Estrela: vende muito e sobra muito. Destaque e mantém.\n🐴 Cavalo de batalha: vende muito, sobra pouco. Revê porção ou custo.\n🧩 Quebra-cabeça: sobra muito, pouca gente pede. Precisa de destaque.\n🍍 Abacaxi: vende pouco e sobra pouco. Vale testar trocar ou tirar.\n\nIsso se chama engenharia de cardápio. Quer descobrir o papel dos seus pratos? Comenta MARGEM.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #engenhariadecardapio #cardapio #gestaoderestaurante #donoderestaurante",
+   "quando": "2026-11-07T15:00:00-03:00",
+   "ia": true,
+   "palavra": "MARGEM"
+  },
+  {
+   "id": "2026-11-08-casa-cheia-19",
+   "titulo": "Casa Cheia ep. 3 · Ela vem toda sexta (Comenta CLIENTE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/19-ela-vem-toda-sexta.mp4"
+   ],
+   "capa": "05-reels/19-ela-vem-toda-sexta-capa.png",
+   "legenda": "Quantas \"donas Cida\" pararam de vir aí, e ninguém percebeu? 🪑\n\nCRM é um nome chique para uma coisa simples: a memória do restaurante. Quem é cliente, quando veio pela última vez e do que gosta. Tudo numa lista só, com a permissão de cada um.\n\nCom isso, dá pra mandar um \"sentimos sua falta\" só pra quem aceitou receber, sempre com a opção de sair.\n\nQuer um modelo dessa mensagem? Comenta CLIENTE.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #crm #fidelizacao #gestaoderestaurante #donoderestaurante",
+   "quando": "2026-11-08T15:00:00-03:00",
+   "ia": true,
+   "palavra": "CLIENTE"
+  },
+  {
+   "id": "2026-11-09-casa-cheia-20",
+   "titulo": "Casa Cheia ep. 4 · Dia 31: quanto sobrou? (Comenta RELATÓRIO)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/20-dia-31.mp4"
+   ],
+   "capa": "05-reels/20-dia-31-capa.png",
+   "legenda": "Vendeu R$ 50 mil no mês. Quanto sobrou de verdade? 📦\n\nA conta do fechamento tem que ter TUDO:\n– ingredientes\n– taxas do cartão e dos aplicativos\n– aluguel\n– salários e encargos, inclusive o seu (o dono também precisa de salário)\n– luz, gás e água\n– impostos e contador\n\nO que fica no fim é o lucro. No exemplo da Panela, R$ 3.500. Vender bem não é o mesmo que sobrar.\n\nQuer o modelo dessa conta? Comenta RELATÓRIO.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #gestaoderestaurante #fechamentodecaixa #lucro #donoderestaurante",
+   "quando": "2026-11-09T15:00:00-03:00",
+   "ia": true,
+   "palavra": "RELATÓRIO"
   }
  ]
 }
