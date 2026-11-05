@@ -161,6 +161,30 @@ registrada pela equipe. Sem IA: todos os números são calculados pelo painel, e
 - Reels no estilo história: `growlift-social/_fonte/reels/novos/` (ver `growlift-social/05-reels/novo-estilo-historias.md`). Carrosséis: `growlift-social/_fonte/carrosseis.mjs`.
 - Ainda abertos: decidir sobre o "responda SAIR" nos directs; limite de hashtags ainda é 30 no painel (o Instagram aceita 5); antes de 16/11, tirar vídeos e imagens do pacote da função (Blob) para não estourar o limite da Vercel Hobby.
 
+## Estado em 05/11/2026: sistema do restaurante (Scale)
+
+Painel em produção: commit e22d999. Tudo testado (314 testes) e publicado; nada pendente no código.
+
+- **Logins por função** (dono, cozinha, garçom), lidos do armazenamento a cada acesso. Logins antigos valem como dono. Detalhes em `plataforma/PAINEL-DONO.md`.
+- **Painel do dono** `/loja/<loja>/dono`: Resumo, Preços e custos, Mesas. Outras telas abrem na mesma aba com "← Painel do dono" (no iPad não há como voltar de outra aba).
+- **Cadastro de restaurante** na tela de entrar ("Sou restaurante › Sou novo"); a equipe aprova em Painel › Cadastros. Aviso de privacidade em `/cadastro/privacidade`.
+- **O dono monta sozinho**: quantas mesas, ocupar/liberar mesa, itens e custos (mesmo sem cardápio no ar), taxa de serviço e couvert.
+- **Garçom lança pedido** pelo celular (tela do salão e Mesas do dono); vai direto para a cozinha.
+- **Taxa de serviço e couvert** na conta (celular da mesa, salão, Pix da mesa); garçom pode tirar a taxa (fica registrado quem).
+- **Bar e cozinha** separados na tela de pedidos (escolha por aparelho) com "Imprimir sozinho" (Chrome com `--kiosk-printing` para não abrir a janela).
+- **Fechamento do dia** `/loja/<loja>/fechamento`: Pix, cartão, dinheiro, taxa, couvert, por canal, em aberto.
+- **Importar cardápio de foto ou PDF** em Preços e custos (via Claude: pedido pronto → colar resposta → prévia → importar).
+- **Dados para o Claude** (Painel › Dados p/ Claude): documento por período, por restaurante ou de todos, para o projeto "Consultor de restaurantes" no Claude (instruções na mesma tela). Sem IA no painel: `ANTHROPIC_API_KEY` não está configurada.
+- **Dados de teste** numa loja que nunca foi ao ar (Lojas › loja › Pedidos online › Dados de teste) e demonstração com mesas abertas ("Ver como o dono vê" em Inteligência).
+- **Roteiro de visita** ao restaurante em Conteúdos › Planejamento.
+- Autorização dos sócios (05/11): publicar sem perguntar a cada vez depois de testar.
+
+Ainda a decidir (dependem de serviço de fora):
+- Cartão pelo celular na mesa: Mercado Pago (Checkout); precisa de uma conta de teste do Mercado Pago para testar.
+- Nota fiscal (NFC-e): preferir a integração com o PDV do restaurante (Saipos pronto, falta credencial de parceiro) a um emissor próprio.
+- Pedidos de aplicativos de entrega: exige cadastro da Growlift como integradora.
+- Domínio `painel.growlift.com.br` (falta saber onde o growlift.com.br está registrado).
+
 ## Pendências
 
 El Patron (aguardando o dono):
