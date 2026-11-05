@@ -2,7 +2,7 @@ import { emptyStore, type Item, type Store } from './schema';
 
 /**
  * A made-up restaurant for showing the QR menu and the 3D dish in sales visits: nothing here is a real
- * business, dish or price. The 3D file is the code-made test burger (public/3d/), not a scan.
+ * business, dish or price. The 3D file (public/3d/) was made by AI from an AI image, not scanned from a real dish.
  */
 const item = (id: string, name: string, description: string, price: number, extra: Partial<Item> = {}): Item => ({
   id,
@@ -28,7 +28,9 @@ export function cardapioExemplo(): Store {
       description: '',
       items: [
         item('classico', 'Clássico', 'Pão brioche, blend 160 g, queijo, alface e molho da casa. Toque na imagem para ver em 3D.', 3490, {
-          modelo3d: { src: '/3d/hamburguer-exemplo.glb', larguraCm: 22, alturaCm: 8.2, profundidadeCm: 22 },
+          image: '/3d/hamburguer-exemplo.jpg',
+          imageAlt: 'Cheeseburguer com alface e tomate (imagem gerada por IA)',
+          modelo3d: { src: '/3d/hamburguer-exemplo.glb', larguraCm: 13, alturaCm: 10.9, profundidadeCm: 13 },
           options: [
             {
               id: 'ponto',
