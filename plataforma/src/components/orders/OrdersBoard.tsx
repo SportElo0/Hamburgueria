@@ -325,6 +325,9 @@ export function OrdersBoard(props: {
             >
               {bell.armed ? "Som ligado" : "Ativar som dos pedidos"}
             </button>
+            <a href={`/loja/${props.slug}/fechamento`} className="btn-ghost min-h-11">
+              Fechamento
+            </a>
             <button
               type="button"
               onClick={() => setMenuOpen(true)}

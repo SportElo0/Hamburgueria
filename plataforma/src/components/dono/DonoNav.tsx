@@ -38,6 +38,7 @@ export function DonoNav(props: { slug: string; storeName: string; logo: string; 
   const screens = [
     { href: `/loja/${props.slug}`, label: 'Tela da cozinha' },
     { href: `/loja/${props.slug}/salao`, label: 'Tela do salão (garçom)' },
+    { href: `/loja/${props.slug}/fechamento`, label: 'Fechamento do dia' },
     { href: `/loja/${props.slug}/cardapio`, label: 'Cardápio completo' },
   ];
 
