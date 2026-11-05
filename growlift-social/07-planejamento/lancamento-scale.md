@@ -9,7 +9,7 @@ No nosso caso o produto é o **Scale** (sistema de pedido na mesa), não um curs
 
 ## A oferta (atualizada em 05/11)
 
-Decisão dos sócios: **Scale R$ 997/mês + implantação R$ 1.500.** O site próprio **sai do Scale** e vira a condição de fechamento: "o site é vendido separado por R$ 997; fechando o Scale até [data], ele sai sem custo e o domínio e a hospedagem dos primeiros 12 meses ficam por nossa conta". Está no slide "bonus-site" da apresentação.
+Decisão dos sócios: **Scale R$ 997/mês + implantação R$ 1.500.** O site próprio **sai do Scale** e vira a condição de fechamento: "o site é vendido separado por R$ 997; fechando o Scale até [data], ele sai sem custo e o domínio e a hospedagem dos primeiros 12 meses ficam por nossa conta". Fica fora da apresentação: é falada pessoalmente, depois do preço.
 
 Para não virar propaganda enganosa (CDC art. 37):
 1. O site precisa ser vendido de verdade por R$ 997 a quem não fecha o Scale.
