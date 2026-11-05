@@ -209,7 +209,7 @@ export function Prato3D({ item, onClose, onVer, exemplo = false }: { item: Prato
               <p className="mt-2.5 text-center text-[13px] leading-snug text-[#4A5568]">
                 {arFalhou
                   ? 'Não deu para abrir a câmera neste celular. Gire o prato aqui na tela.'
-                  : 'Aponte a câmera para a mesa e mova o celular devagar. O prato aparece em tamanho aproximado ao real.'}
+                  : 'Aponte para a mesa, ou para o meio do prato, e mova o celular devagar até ele aparecer. Arraste com o dedo para ajustar o lugar. O tamanho é aproximado ao real.'}
               </p>
             </>
           ) : (
