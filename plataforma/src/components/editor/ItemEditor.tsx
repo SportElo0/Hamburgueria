@@ -5,6 +5,7 @@ import { newId, type Item } from '@/lib/schema';
 import { formatPrice, parsePrice } from '@/lib/slug';
 import { uploadImageAction } from '@/app/painel/actions';
 import { IconButton, mediaSrc } from './CatalogEditor';
+import { Modelo3dField } from './Modelo3dField';
 
 export function ItemEditor({ item, slug, change }: { item: Item; slug: string; change: (fn: (i: Item) => void) => void }) {
   const base = `item-${item.id}`;
@@ -59,6 +60,7 @@ export function ItemEditor({ item, slug, change }: { item: Item; slug: string; c
           Destacar este item
         </label>
         <OptionsEditor item={item} change={change} />
+        <Modelo3dField item={item} slug={slug} change={change} />
       </div>
     </div>
   );

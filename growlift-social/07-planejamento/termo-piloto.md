@@ -48,7 +48,10 @@ Números e depoimentos do piloto (por exemplo, tempo de atendimento, ticket méd
 10. CONFIDENCIALIDADE
 As partes não divulgam informações internas uma da outra (como vendas, custos e preços) obtidas durante o piloto. O sigilo vale por [2 anos] após o fim do piloto e não se aplica a informação que já era pública.
 
-11. FORO
+11. PRATOS EM 3D (só se o piloto usar)
+A Growlift cria o 3D de pratos escolhidos a partir do prato que o Restaurante apresenta e mede. O Restaurante se compromete a servir ao cliente a mesma porção, tamanho e montagem mostrados no 3D, e a avisar a Growlift quando mudar receita, porção ou louça desses pratos. A Growlift atualiza ou retira o 3D em até [2 dias úteis] depois do aviso, ou na hora em caso de reclamação de cliente.
+
+12. FORO
 Fica eleito o foro da comarca de [São Paulo/SP]. Este termo é assinado em duas vias de igual teor.
 
 [CIDADE], [DATA].
@@ -70,4 +73,5 @@ Testemunhas (opcional):
 - **Plantão (cláusula 4):** número e horários reais, iguais ao combinado no guia de instalação. Se não houver plantão no fim de semana, escreva isso nos dois.
 - **Testemunhas e CPF:** os campos de CPF são só para o papel assinado. Não guardem a cópia assinada no repositório nem no painel: fica com vocês (CPF nunca vai para arquivo do projeto).
 - **Dados (cláusula 8):** se o restaurante for usar reserva ou fila de espera no piloto, o aviso de privacidade dele aparece na tela (configurado em Reservas). Se não for usar, a cláusula fica só como garantia.
+- **Pratos em 3D (cláusula 11):** se o piloto não usar 3D, apaguem a cláusula e o Foro vira 11. Se usar, só coloquem o 3D no ar depois do termo assinado.
 - **Pix na mesa:** fica fora do piloto (cláusula 6). Se um dia entrar, o termo precisa de um aditivo explicando que o Pix cai direto na conta do restaurante.

@@ -24,6 +24,7 @@ export default async function PrivacidadeLoja({ params }: { params: Promise<{ sl
   const s = sellerOf(record.store);
   const fila = o.tables.enabled && o.waitlist.enabled;
   const mesa = o.tables.enabled && o.tablePay;
+  const tem3d = o.tables.enabled && record.store.catalog.categories.some((c) => c.items.some((i) => i.modelo3d));
   const pdv = o.pdv.provider === 'saipos' && Boolean(o.pdv.codStore);
   return (
     <main className="mx-auto max-w-2xl space-y-4 px-5 py-10 text-[15px] leading-relaxed">
@@ -48,6 +49,14 @@ export default async function PrivacidadeLoja({ params }: { params: Promise<{ sl
           <h2 className="font-bold">Pagar a conta pelo celular</h2>
           <p>
             O Pix é gerado pelo Mercado Pago e o dinheiro vai direto para a conta do restaurante. Quando o Mercado Pago pede, seu e-mail é enviado a ele para processar o pagamento; ele trata os dados do pagamento por conta própria. Não pedimos CPF. Se você pagar a mais, ou se a mesa já estiver fechada, o valor é devolvido pelo Mercado Pago na conta de onde saiu o Pix.
+          </p>
+        </section>
+      )}
+      {tem3d && (
+        <section>
+          <h2 className="font-bold">Pratos em 3D no cardápio da mesa</h2>
+          <p>
+            Contamos quantas vezes cada prato foi aberto em 3D, só como um número por prato e por mês, sem ligar a você. Para evitar abuso, guardamos uma marca embaralhada do seu acesso, que muda a cada hora e não permite saber quem você é. A câmera é aberta pelo seu próprio celular (Apple ou Google): nós não recebemos imagens dela. No Android, o visualizador do Google recebe o endereço do arquivo 3D do prato.
           </p>
         </section>
       )}

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { isSlug } from '@/lib/slug';
-import { clientIp } from '@/lib/limits';
+import { clientIp, dayWindow, hourWindow, record, take } from '@/lib/limits';
+import { getPublished } from '@/lib/stores';
 import { TableError, callFromTable, deviceCookie, joinTable, openTable, orderAtTable, tableState, validKey } from '@/lib/mesas';
 import { checkTablePayment, paymentOutcome, simulateTablePayment, startTablePayment } from '@/lib/mesa-pagamento';
 
@@ -25,7 +26,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 interface Body {
   k?: string;
-  action?: 'abrir' | 'entrar' | 'pedir' | 'chamar' | 'pagar' | 'pagamento' | 'simular-pix';
+  action?: 'abrir' | 'entrar' | 'pedir' | 'chamar' | 'pagar' | 'pagamento' | 'simular-pix' | 'ver3d';
+  itemId?: unknown;
+  modo?: unknown;
   parts?: unknown;
   email?: unknown;
   payment?: unknown;
@@ -54,6 +57,24 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const cookie = deviceCookie(slug, number);
   const token = request.cookies.get(cookie)?.value;
   const ip = clientIp(request.headers);
+
+  // A dish opened in 3D ("tela") or on the table with the camera ("mesa"): a monthly count per dish, nothing about the person.
+  if (body.action === 'ver3d') {
+    const itemId = typeof body.itemId === 'string' && /^[\w-]{1,40}$/.test(body.itemId) ? body.itemId : null;
+    const modo = body.modo === 'tela' || body.modo === 'mesa' ? body.modo : null;
+    if (!itemId || !modo) return NextResponse.json({ error: 'Pedido inválido.' }, { status: 400, headers: NO_STORE });
+    try {
+      // The per-address limit first (cheap), then the menu read; no address (local runs) counts nothing.
+      if (ip && (await take(`ver3d-ip-${slug}`, ip, 60, hourWindow()))) {
+        const store = (await getPublished(slug))?.store;
+        const has3d = store?.catalog.categories.some((c) => c.items.some((i) => i.id === itemId && i.modelo3d));
+        if (has3d) await record(`ver3d-${slug}`, `${itemId}:${modo}`, dayWindow().slice(0, 7));
+      }
+    } catch (err) {
+      console.error('mesa ver3d', err);
+    }
+    return NextResponse.json({ ok: true }, { headers: NO_STORE });
+  }
 
   try {
     let newToken: string | null = null;

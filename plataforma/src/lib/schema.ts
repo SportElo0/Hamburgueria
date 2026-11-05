@@ -41,6 +41,22 @@ export const optionGroupSchema = z.object({
   choices: z.array(choiceSchema).max(40),
 });
 
+/**
+ * A dish in 3D for the table's "see it at real size". The file is scaled on upload so 1 unit = 1 metre and
+ * its widest side seen from above is `larguraCm`; the sizes are measured from the stored file, never typed in.
+ */
+export const modelo3dSchema = z.object({
+  src: z.string().regex(/^midia\/[a-z0-9-]+\/[a-z0-9]+\.glb$/),
+  larguraCm: z.number().min(3).max(100),
+  alturaCm: z.number().min(0).max(100),
+  profundidadeCm: z.number().min(0).max(100),
+  /** Proof for a complaint ("the dish came smaller"): who sent it, when, and who measured with the ruler. */
+  medidoPor: text(120).optional(),
+  medidoEm: text(40).optional(),
+  origemMedida: z.enum(['equipe', 'dono']).optional(),
+});
+export type Modelo3d = z.infer<typeof modelo3dSchema>;
+
 export const itemSchema = z.object({
   id,
   name: text(120).min(1),
@@ -55,6 +71,8 @@ export const itemSchema = z.object({
   featured: z.boolean(),
   tags: z.array(text(30).min(1)).max(10),
   options: z.array(optionGroupSchema).max(10),
+  /** Only the Growlift team sends it (Painel › loja › Cardápio); only the table menu shows it for now. */
+  modelo3d: modelo3dSchema.nullable().optional(),
 });
 
 export const categorySchema = z.object({
@@ -208,7 +226,12 @@ export function toPublic(store: Store, publishedAt: string | null, mediaBase: st
     catalog: {
       categories: store.catalog.categories.map((c) => ({
         ...c,
-        items: c.items.map((i) => ({ ...i, image: media(i.image) })),
+        // The 3D dish is only on the table menu for now: the sites don't get it.
+        items: c.items.map((item) => {
+          const i = { ...item, image: media(item.image) };
+          delete i.modelo3d;
+          return i;
+        }),
       })),
     },
     extra: store.extra,

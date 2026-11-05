@@ -24,6 +24,7 @@ export function mesaMenu(store: Store): MesaCategory[] {
           image: media(i.image),
           imageAlt: i.imageAlt || i.name,
           available: i.available,
+          modelo3d: i.modelo3d ? { src: media(i.modelo3d.src), larguraCm: i.modelo3d.larguraCm, alturaCm: i.modelo3d.alturaCm } : null,
           options: i.options.map((g) => ({
             id: g.id,
             name: g.name,

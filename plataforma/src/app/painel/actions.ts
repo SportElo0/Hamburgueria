@@ -5,7 +5,10 @@ import { redirect } from 'next/navigation';
 import { ZodError } from 'zod';
 import { requireUser } from '@/lib/auth';
 import { storage } from '@/lib/storage';
-import { newId, storeSchema, type PedidoEntry, type Store } from '@/lib/schema';
+import { newId, storeSchema, type Modelo3d, type PedidoEntry, type Store } from '@/lib/schema';
+import { ImageUtils } from '@gltf-transform/core';
+import { MAX_BYTES as MAX_MODELO, MAX_TRIANGULOS, Modelo3dError, assentar, cabecalhoGlb, io as glbIo, triangulos } from '@/lib/modelo3d';
+import { count as countHits, dayWindow } from '@/lib/limits';
 import { isSlug } from '@/lib/slug';
 import {
   ConflictError,
@@ -144,6 +147,63 @@ export async function uploadImageAction(slug: string, formData: FormData): Promi
   } catch (err) {
     return { ok: false, error: message(err) };
   }
+}
+
+/**
+ * The team sends a dish in 3D (already lightened in the browser) and its real width. The server scales the
+ * file to that width itself, so the size the table shows is always the one checked here.
+ */
+export async function uploadModelo3dAction(slug: string, formData: FormData): Promise<ActionResult & { modelo?: Modelo3d }> {
+  const user = await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  const file = formData.get('arquivo');
+  const larguraCm = Number(formData.get('larguraCm'));
+  const origem = formData.get('origemMedida');
+  if (origem !== 'equipe' && origem !== 'dono') return { ok: false, error: 'Diga quem mediu o prato com a régua.' };
+  if (!(file instanceof File)) return { ok: false, error: 'Nenhum arquivo enviado.' };
+  if (file.size > MAX_MODELO) return { ok: false, error: 'O 3D passa de 4 MB. Exporte com menos detalhe e tente de novo.' };
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  if (!cabecalhoGlb(bytes)) return { ok: false, error: 'Envie um arquivo .glb válido.' };
+  if (!(await getDraft(slug))) return { ok: false, error: 'Loja não encontrada.' };
+  try {
+    let doc;
+    try {
+      // No decoders here: compressed meshes and outside files are refused (the browser step removes both).
+      doc = await glbIo().readBinary(bytes);
+    } catch {
+      return { ok: false, error: 'Não deu para ler o arquivo 3D. Escolha o arquivo de novo.' };
+    }
+    if (triangulos(doc) > MAX_TRIANGULOS * 1.1) return { ok: false, error: 'O 3D tem detalhe demais. Escolha o arquivo de novo para ele ser reduzido.' };
+    for (const t of doc.getRoot().listTextures()) {
+      const image = t.getImage();
+      const size = image && ImageUtils.getSize(image, t.getMimeType());
+      if (!size || size[0] > 2048 || size[1] > 2048) return { ok: false, error: 'As imagens do 3D precisam estar dentro do arquivo e ter até 2048 px.' };
+    }
+    const medidas = assentar(doc, larguraCm);
+    const out = await glbIo().writeBinary(doc);
+    if (out.byteLength > MAX_MODELO + 64 * 1024) return { ok: false, error: 'O 3D passa de 4 MB. Exporte com menos detalhe e tente de novo.' };
+    const key = `midia/${slug}/${newId()}.glb`;
+    await storage().writeFile(key, Buffer.from(out), 'model/gltf-binary');
+    return { ok: true, modelo: { src: key, ...medidas, medidoPor: user.name || user.email, medidoEm: new Date().toISOString(), origemMedida: origem } };
+  } catch (err) {
+    if (err instanceof Modelo3dError) return { ok: false, error: err.message };
+    console.error('uploadModelo3d', err);
+    return { ok: false, error: 'Não deu para salvar o 3D. Escolha o arquivo de novo.' };
+  }
+}
+
+/** How many times this month each dish was opened in 3D and on the table (camera), counted without any personal data. */
+export async function contagem3dAction(slug: string, itemIds: string[]): Promise<Record<string, { tela: number; mesa: number }>> {
+  await requireUser();
+  if (!isSlug(slug) || !Array.isArray(itemIds)) return {};
+  const mes = dayWindow().slice(0, 7);
+  const out: Record<string, { tela: number; mesa: number }> = {};
+  for (const id of itemIds.slice(0, 50)) {
+    if (typeof id !== 'string' || !/^[\w-]{1,40}$/.test(id)) continue;
+    const [tela, mesa] = await Promise.all([countHits(`ver3d-${slug}`, `${id}:tela`, mes), countHits(`ver3d-${slug}`, `${id}:mesa`, mes)]);
+    out[id] = { tela, mesa };
+  }
+  return out;
 }
 
 export async function addPedidoAction(slug: string, texto: string, canal: PedidoEntry['canal']): Promise<ActionResult> {

@@ -185,6 +185,16 @@ Ainda a decidir (dependem de serviço de fora):
 - Pedidos de aplicativos de entrega: exige cadastro da Growlift como integradora.
 - Domínio `painel.growlift.com.br` (falta saber onde o growlift.com.br está registrado).
 
+## Prato em 3D no tamanho real (05/11/2026)
+
+No cardápio da mesa (QR), o prato com 3D ganha um selo **3D**. O cliente toca, vê o prato girando com a medida e, em "Ver na minha mesa", abre a câmera (iPhone: Quick Look; Android: Scene Viewer ou WebXR) com o tamanho travado (`ar-scale="fixed"`). Só na mesa; a API dos sites não recebe o 3D.
+
+- **Quem envia:** só a equipe (Painel › Lojas › loja › Cardápio › item › Prato em 3D). O navegador reduz o escaneamento (menos de 150 mil triângulos, imagens de no máximo 1024 px em JPEG). O servidor confere o GLB e o **reescala para a largura medida com régua**: as medidas guardadas saem do arquivo, nunca digitadas. Também guarda quem enviou, quando e quem mediu (Growlift ou dono por vídeo).
+- **Código:** `plataforma/src/lib/modelo3d.ts` (escala, medidas), `modelo3d-navegador.ts` (redução), `components/mesa/Prato3D.tsx` (visualizador, `@google/model-viewer` carregado sob demanda), `components/editor/Modelo3dField.tsx`, ação `ver3d` na rota da mesa (contagem mensal por prato, sem dado pessoal; aparece no painel do item).
+- **Guia:** `growlift-social/07-planejamento/prato-3d.md` (como escanear, roteiro de vídeo para o dono, testes no iPhone e no Android, o que dizer na venda). Termo de piloto ganhou a cláusula 11 (3D).
+- **Teste:** `node plataforma/scripts/prato-teste-3d.mjs saida.glb` gera um hambúrguer de teste (não é prato real; nunca em loja de verdade).
+- **Falta:** escanear um prato de verdade com o iPhone Pro (13 Pro ou 16 Pro Max) e testar a câmera no iPhone e no Android. Arquivos 3D trocados ou removidos ficam no armazenamento (não são apagados).
+
 ## Pendências
 
 El Patron (aguardando o dono):

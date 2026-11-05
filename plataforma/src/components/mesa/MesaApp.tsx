@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { brl, type OrderStatus } from "@/lib/ordering";
 import type { TableState } from "@/lib/mesas";
+import { Cubo, Prato3D, Selo3D } from "./Prato3D";
 
 /**
  * The table's phone screen: open or join the table, order from the menu, follow the table's bill,
@@ -24,6 +25,8 @@ export interface MesaItem {
   image: string;
   imageAlt: string;
   available: boolean;
+  /** Dish in 3D at real size (only items the Growlift team scanned). */
+  modelo3d?: { src: string; larguraCm: number; alturaCm: number } | null;
   options: {
     id: string;
     name: string;
@@ -117,6 +120,7 @@ export function MesaApp(props: {
   const [view, setView] = useState<"cardapio" | "conta">("cardapio");
   const [cart, setCart] = useState<CartLine[]>([]);
   const [picking, setPicking] = useState<MesaItem | null>(null);
+  const [vendo3d, setVendo3d] = useState<MesaItem | null>(null);
   const [reviewing, setReviewing] = useState(false);
   const [toast, setToast] = useState("");
   // This phone was at the table with a bill, and the table is gone: the bill was paid. Say thanks (and ask for a review).
@@ -194,6 +198,16 @@ export function MesaApp(props: {
     } finally {
       setBusy(false);
     }
+  };
+
+  // Counts how often dishes are opened in 3D (no personal data); never blocks or shows an error.
+  const contar3d = (itemId: string, modo: "tela" | "mesa") => {
+    void fetch(api, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ k: props.tableKey, action: "ver3d", itemId, modo }),
+      keepalive: true,
+    }).catch(() => {});
   };
 
   const priced = useMemo(
@@ -367,6 +381,7 @@ export function MesaApp(props: {
                     notes: "",
                   })
             }
+            onVer3d={setVendo3d}
             cart={cart}
           />
         </>
@@ -409,6 +424,14 @@ export function MesaApp(props: {
           item={picking}
           onClose={() => setPicking(null)}
           onAdd={(line) => (addLine(line), setPicking(null))}
+          onVer3d={picking.modelo3d ? () => setVendo3d(picking) : undefined}
+        />
+      )}
+      {vendo3d?.modelo3d && (
+        <Prato3D
+          item={{ ...vendo3d, modelo3d: vendo3d.modelo3d }}
+          onClose={() => setVendo3d(null)}
+          onVer={(modo) => contar3d(vendo3d.id, modo)}
         />
       )}
       {reviewing && (
@@ -553,11 +576,14 @@ export function Cardapio({
   menu,
   kitchenOpen,
   onPick,
+  onVer3d,
   cart,
 }: {
   menu: MesaCategory[];
   kitchenOpen: boolean;
   onPick: (item: MesaItem) => void;
+  /** Only the customer's menu passes it: dishes with a 3D get a "3D" mark and open it on tap. */
+  onVer3d?: (item: MesaItem) => void;
   cart: CartLine[];
 }) {
   const inCart = useMemo(() => {
@@ -607,7 +633,27 @@ export function Cardapio({
                   key={item.id}
                   className={`flex items-center gap-3 rounded-[20px] border border-[#E6EBF2] bg-[#FFFFFF] p-3 ${item.available ? "" : "opacity-50"}`}
                 >
-                  {item.image ? (
+                  {item.modelo3d && onVer3d ? (
+                    <button
+                      type="button"
+                      onClick={() => onVer3d(item)}
+                      aria-label={`Ver ${item.name} em 3D`}
+                      className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-[#E6EBF2] transition-transform duration-150 ease-out active:scale-[0.96]"
+                    >
+                      {item.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={item.image}
+                          alt=""
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <Cubo className="mx-auto mb-3 h-8 w-8 text-[#4A5568]" />
+                      )}
+                      <Selo3D />
+                    </button>
+                  ) : item.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={item.image}
@@ -661,10 +707,12 @@ export function OpcoesSheet({
   item,
   onClose,
   onAdd,
+  onVer3d,
 }: {
   item: MesaItem;
   onClose: () => void;
   onAdd: (line: Omit<CartLine, "key">) => void;
+  onVer3d?: () => void;
 }) {
   const [picked, setPicked] = useState<Record<string, string[]>>({});
   const [qty, setQty] = useState(1);
@@ -691,6 +739,18 @@ export function OpcoesSheet({
   return (
     <Sheet title={item.name} onClose={onClose}>
       <div className="space-y-5 px-5 pb-4">
+        {onVer3d && (
+          <button
+            type="button"
+            onClick={onVer3d}
+            className="flex min-h-12 w-full items-center gap-3 rounded-2xl border-[1.5px] border-[#0865FE]/30 bg-[#0865FE]/[0.06] px-4 text-left text-[15px] font-bold text-[#0865FE]"
+          >
+            <span className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#0865FE] text-[11px] font-black text-[#FFFFFF]">
+              3D
+            </span>
+            Ver na sua mesa, em tamanho aproximado
+          </button>
+        )}
         {item.description && (
           <p className="text-sm leading-relaxed text-[#4A5568]">
             {item.description}
