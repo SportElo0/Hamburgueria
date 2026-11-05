@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Prato3D, Selo3D, Cubo, type Prato3DItem } from '@/components/mesa/Prato3D';
 
 /** A dish's photo on the public menu; with a 3D, the photo opens it (the same viewer as the table menu). */
-export function FotoPrato({ item, image, alt }: { item: Prato3DItem | null; image: string; alt: string }) {
+export function FotoPrato({ item, image, alt, exemplo = false }: { item: Prato3DItem | null; image: string; alt: string; exemplo?: boolean }) {
   const [aberto, setAberto] = useState(false);
   if (!item) {
     // eslint-disable-next-line @next/next/no-img-element -- photos served by the panel, already sized on upload
@@ -26,7 +26,7 @@ export function FotoPrato({ item, image, alt }: { item: Prato3DItem | null; imag
         )}
         <Selo3D />
       </button>
-      {aberto && <Prato3D item={item} onClose={() => setAberto(false)} onVer={() => {}} />}
+      {aberto && <Prato3D item={item} exemplo={exemplo} onClose={() => setAberto(false)} onVer={() => {}} />}
     </>
   );
 }
