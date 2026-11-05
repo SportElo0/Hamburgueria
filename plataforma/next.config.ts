@@ -6,8 +6,12 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
   // Conteúdos reads the social kit copied in by scripts/conteudos.mjs (see the build script).
   outputFileTracingIncludes: {
-    '/painel/conteudos': ['./conteudos-gerados/manifest.json'],
-    '/painel/conteudos/**': ['./conteudos-gerados/**/*'],
+    // Only the routes that serve the files carry them (213 MB): every other Conteúdos page reads just the lists.
+    // Bundling the files into every page made each one its own Vercel function, past the Hobby limit of 12.
+    '/painel/conteudos': ['./conteudos-gerados/manifest.json', './conteudos-gerados/agenda.json'],
+    '/painel/conteudos/**': ['./conteudos-gerados/manifest.json', './conteudos-gerados/agenda.json'],
+    '/painel/conteudos/arquivo/**': ['./conteudos-gerados/**/*'],
+    '/painel/conteudos/zip': ['./conteudos-gerados/**/*'],
     // The Instagram agenda: the public file links and the publisher read the same copy.
     '/api/conteudos/**': ['./conteudos-gerados/**/*'],
     '/api/instagram/**': ['./conteudos-gerados/agenda.json', './conteudos-gerados/manifest.json'],

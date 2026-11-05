@@ -4,7 +4,8 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { useFileStorage } from '@/lib/storage';
-import { byteRange, ContentError, downloadName, getStatuses, readContentFile, setContentStatus, type Manifest } from '@/lib/conteudos';
+import { byteRange, ContentError, downloadName, getStatuses, setContentStatus, type Manifest } from '@/lib/conteudos';
+import { readContentFile } from '@/lib/conteudos-arquivos';
 import { zip } from '@/lib/zip';
 
 const file = (p: string) => ({ path: p, name: path.basename(p), type: 'image/png', size: 3, width: 1080, height: 1920, format: 'Story', thumb: p.replace('.png', '.webp'), doNotPublish: false });

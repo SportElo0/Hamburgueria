@@ -2,7 +2,8 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { Readable } from 'node:stream';
 import { NextResponse } from 'next/server';
-import { byteRange, contentFilePath, readContentFile } from '@/lib/conteudos';
+import { byteRange } from '@/lib/conteudos';
+import { contentFilePath, readContentFile } from '@/lib/conteudos-arquivos';
 import { verifyContentLink } from '@/lib/link-publico';
 
 export const runtime = 'nodejs';

@@ -55,7 +55,7 @@ export interface StatusEntry {
 
 export class ContentError extends Error {}
 
-const root = () => path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.CONTEUDOS_GERADOS_DIR || 'conteudos-gerados');
+export const root = () => path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.CONTEUDOS_GERADOS_DIR || 'conteudos-gerados');
 /** A file the build script wrote next to the manifest (agenda.json), or null. */
 export async function readGenerated<T>(name: 'agenda.json'): Promise<T | null> {
   try {
@@ -86,35 +86,6 @@ export function statusKeys(m: Manifest): Set<string> {
   return keys;
 }
 export const sectionKey = (doc: Pick<ContentDoc, 'file'>, id: string) => `${doc.file}#${id}`;
-
-/** Only paths listed in the manifest are ever read, so a request can never reach other files. */
-export async function readContentFile(rel: string, kind: 'arquivo' | 'miniatura') {
-  const m = await getManifest();
-  for (const f of m.folders)
-    for (const g of f.groups)
-      for (const file of g.files) {
-        if (kind === 'arquivo' && file.path === rel) return { file, data: await fs.readFile(path.join(root(), 'arquivos', file.path)) };
-        if (kind === 'arquivo' && file.cover && file.cover === rel)
-          return { file: { ...file, path: file.cover, type: 'image/png' }, data: await fs.readFile(path.join(root(), 'arquivos', file.cover)) };
-        if (kind === 'miniatura' && file.thumb === rel) {
-          const thumbDir = file.thumb === file.path ? 'arquivos' : 'miniaturas';
-          return { file: { ...file, type: thumbDir === 'arquivos' ? file.type : 'image/webp' }, data: await fs.readFile(path.join(root(), thumbDir, file.thumb)) };
-        }
-      }
-  return null;
-}
-
-/** Where a listed file is on disk (for streaming big videos), with its declared type; null when not listed. */
-export async function contentFilePath(rel: string): Promise<{ abs: string; type: string } | null> {
-  const m = await getManifest();
-  for (const f of m.folders)
-    for (const g of f.groups)
-      for (const file of g.files) {
-        if (file.path === rel) return { abs: path.join(root(), 'arquivos', file.path), type: file.type };
-        if (file.cover && file.cover === rel) return { abs: path.join(root(), 'arquivos', file.cover), type: 'image/png' };
-      }
-  return null;
-}
 
 export async function findGroup(id: string) {
   const m = await getManifest();

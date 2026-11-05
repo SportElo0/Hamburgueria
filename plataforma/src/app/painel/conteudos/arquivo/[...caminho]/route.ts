@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { currentUser } from '@/lib/auth';
 import { isTeam } from '@/lib/session';
-import { byteRange, downloadName, readContentFile } from '@/lib/conteudos';
+import { byteRange, downloadName } from '@/lib/conteudos';
+import { readContentFile } from '@/lib/conteudos-arquivos';
 
 // ?mini=1: the WebP thumbnail; ?baixar=1: download the original instead of opening it.
 // Byte ranges are honoured because phones (Safari above all) only play video that way.
