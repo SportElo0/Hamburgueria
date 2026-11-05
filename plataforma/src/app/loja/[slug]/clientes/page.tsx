@@ -1,21 +1,9 @@
-import { notFound } from 'next/navigation';
-import { DONO, requireStoreAccess } from '@/lib/auth';
-import { getDraft } from '@/lib/stores';
-import { listCustomers } from '@/lib/customers';
-import { orderingOf, todaySP } from '@/lib/ordering';
+import { notFound, redirect } from 'next/navigation';
 import { isSlug } from '@/lib/slug';
-import { CustomersBoard } from '@/components/customers/CustomersBoard';
 
-export const metadata = { title: 'Clientes e campanhas' };
-
+/** The clients screen moved into the owner's panel; old links and bookmarks land there. */
 export default async function CustomersPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
-  await requireStoreAccess(slug, DONO);
-  const draft = await getDraft(slug);
-  if (!draft) notFound();
-  const store = draft.data.store;
-  const today = todaySP();
-  const coupons = orderingOf(store).coupons.filter((c) => c.active && (!c.until || c.until >= today));
-  return <CustomersBoard slug={slug} storeName={store.name} siteUrl={store.siteUrl} coupons={coupons} customers={await listCustomers(slug)} />;
+  redirect(`/loja/${slug}/dono/clientes`);
 }

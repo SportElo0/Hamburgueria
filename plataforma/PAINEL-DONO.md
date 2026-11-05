@@ -22,7 +22,10 @@ Feito para computador (barra escura à esquerda); no celular a barra vira uma fa
 - **Resumo geral:** vendas e pedidos de hoje contra o mesmo dia da semana passada, vendas e ticket médio dos últimos 7 dias contra os 7 anteriores, horários de pico (30 dias), mais e menos pedidos da semana, avisos (mesas chamando, margem baixa ou itens sem custo, esgotados). Usa os resumos diários da Inteligência (`summariesForDays`), sem dado pessoal de cliente.
 - **Preços e custos:** muda nome e preço (vale na hora no cardápio publicado, como a tela Cardápio), esgota/volta o item e o dono escreve quanto gasta para fazer cada item. Mostra a sobra por venda e a margem (antes de taxas e impostos); abaixo de 30% aparece como margem baixa. Item com ficha técnica montada pela equipe mostra o custo da ficha e não pode ser mudado pelo dono.
 - **Mesas:** mesas ao vivo (atualiza a cada 8 s) e chamados de garçom/conta com "Já atendido". Fechar conta e confirmar mesa continuam na tela do salão.
-- **Em breve (etapas 2 e 3):** Pedidos e delivery, Equipe, Clientes e avaliações; promoção com data; demonstração no MacBook.
+- **Pedidos e delivery:** todos os pedidos de um dia (até 90 dias atrás), filtro por canal (entrega, retirada, mesa) e situação, detalhe de cada pedido (itens, pagamento, endereço, andamento) e o resumo do dia com o mesmo cálculo do relatório (`salesReport`). Mostra como o delivery está configurado; mudar continua com a equipe. Código: `dono/pedidos`, `src/lib/historico.ts`.
+- **Equipe:** o dono cria, troca entre cozinha e garçom, gera nova senha e remove os logins **de cozinha e garçom** da própria loja. Login de dono, login antigo sem função e cadastro pendente só a equipe mexe. Máximo de 30 logins por loja e 30 mudanças por hora. A senha aparece uma vez. Código: `dono/equipe`, `donoAdicionaLogin` e cia. em `src/lib/operators.ts`; testes em `test/equipe-dono.test.ts`.
+- **Clientes e avaliações:** a antiga tela de clientes e campanhas (a rota `/loja/<slug>/clientes` redireciona para cá) e o bloco de avaliações do Google (se o link está ligado e como responder).
+- **Em breve:** promoção com data; demonstração no MacBook.
 
 Código: `src/app/loja/[slug]/dono/`, `src/lib/dono.ts`, `src/lib/dono-resumo.ts`, `src/components/dono/`. Testes: `test/dono.test.ts` e os de função em `test/orders.test.ts`.
 

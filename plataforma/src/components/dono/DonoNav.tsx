@@ -29,12 +29,11 @@ export function DonoNav(props: { slug: string; storeName: string; logo: string; 
     { href: base, label: 'Resumo geral', icon: 'resumo' },
     { href: `${base}/precos`, label: 'Preços e custos', icon: 'precos' },
     { href: `${base}/mesas`, label: 'Mesas', icon: 'mesas' },
+    { href: `${base}/pedidos`, label: 'Pedidos e delivery', icon: 'pedidos' },
+    { href: `${base}/equipe`, label: 'Equipe', icon: 'equipe' },
+    { href: `${base}/clientes`, label: 'Clientes e avaliações', icon: 'clientes' },
   ];
-  const soon: { label: string; icon: Icon }[] = [
-    { label: 'Pedidos e delivery', icon: 'pedidos' },
-    { label: 'Equipe', icon: 'equipe' },
-    { label: 'Clientes e avaliações', icon: 'clientes' },
-  ];
+  const soon: { label: string; icon: Icon }[] = [];
   const screens = [
     { href: `/loja/${props.slug}`, label: 'Tela da cozinha' },
     { href: `/loja/${props.slug}/salao`, label: 'Tela do salão (garçom)' },

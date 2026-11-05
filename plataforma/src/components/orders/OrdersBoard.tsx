@@ -377,7 +377,7 @@ export function OrdersBoard(props: {
                   Relatório
                 </a>
                 <a
-                  href={`/loja/${props.slug}/clientes`}
+                  href={`/loja/${props.slug}/dono/clientes`}
                   className="btn-ghost min-h-11"
                 >
                   Clientes

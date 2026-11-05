@@ -62,7 +62,7 @@ async function updateList(slug: string, fn: (list: OperatorSummary[]) => Operato
 }
 
 /** Creates the login, or gives an existing login of this store a new password. Returns the password to hand over. */
-export async function upsertOperator(slug: string, input: { email: string; name: string; funcao: Funcao }, by: string): Promise<string> {
+export async function upsertOperator(slug: string, input: { email: string; name: string; funcao: Funcao }, by: string, opts: { soNovo?: boolean; etag?: string } = {}): Promise<string> {
   const email = input.email.trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new OperatorError('Informe um e-mail válido.');
   if (!isFuncao(input.funcao)) throw new OperatorError('Escolha a função: dono, cozinha ou garçom.');
@@ -76,19 +76,27 @@ export async function upsertOperator(slug: string, input: { email: string; name:
   // A new password from the team does not approve a sign-up on its own: approval also creates the store.
   const pendente = existing?.data.slug === slug && existing.data.pendente ? true : undefined;
   const operator: Operator = { email, name, slug, funcao, ...(pendente ? { pendente } : {}), hash: await hashPassword(password), createdAt: new Date().toISOString(), createdBy: by };
-  await storage().writeJSON(key, operator);
+  try {
+    // `soNovo`: only if nobody created this e-mail meanwhile; `etag`: only if the login is still the one checked.
+    await storage().writeJSON(key, operator, opts.soNovo ? null : opts.etag);
+  } catch (err) {
+    if (err instanceof ConflictError && (opts.soNovo || opts.etag)) throw new OperatorError(opts.soNovo ? 'Esse e-mail não pode ser usado. Use outro.' : 'Esse login mudou agora há pouco. Atualize a página.');
+    throw err;
+  }
   await updateList(slug, (list) => [...list.filter((o) => o.email !== email), { email, name, funcao, createdAt: operator.createdAt }]);
   return password;
 }
 
 /** Changes what a login sees, keeping its password. Takes effect on its next screen (the role is read on every request). */
-export async function setOperatorFuncao(slug: string, email: string, funcao: Funcao) {
+export async function setOperatorFuncao(slug: string, email: string, funcao: Funcao, soEquipe = false) {
   if (!isFuncao(funcao)) throw new OperatorError('Função inválida.');
   const key = await operatorKey(email);
   let e = '';
   for (let attempt = 0; ; attempt++) {
     const doc = await storage().readJSON<Operator>(key);
     if (!doc || doc.data.slug !== slug) throw new OperatorError('Esse login não é desta loja.');
+    // The owner's change is checked again on the copy it overwrites (the team may have just promoted this login).
+    if (soEquipe && (doc.data.pendente || !isFuncaoEquipe(doc.data.funcao))) throw new OperatorError('Esse login é de dono: só a Growlift muda.');
     try {
       await storage().writeJSON(key, { ...doc.data, funcao }, doc.etag);
       e = doc.data.email;
@@ -123,4 +131,60 @@ export async function operatorActive(email: string, slug: string, sessionStart: 
   const doc = await storage().readJSON<Operator>(await operatorKey(email));
   if (!doc || doc.data.slug !== slug || Date.parse(doc.data.createdAt) > sessionStart) return null;
   return { funcao: isFuncao(doc.data.funcao) ? doc.data.funcao : 'dono', pendente: doc.data.pendente === true };
+}
+
+/**
+ * What a store's owner manages alone (Painel do dono › Equipe): the kitchen and waiter logins of their own
+ * store. Owner logins, and sign-ups waiting for approval, stay with the Growlift team.
+ */
+export const EQUIPE_DO_DONO = ['cozinha', 'garcom'] as const satisfies readonly Funcao[];
+export type FuncaoEquipe = (typeof EQUIPE_DO_DONO)[number];
+export const isFuncaoEquipe = (v: unknown): v is FuncaoEquipe => typeof v === 'string' && (EQUIPE_DO_DONO as readonly string[]).includes(v);
+export const MAX_LOGINS_LOJA = 30;
+
+/** A kitchen or waiter login of this store, or an error the owner can read (never which other store an e-mail belongs to). */
+async function equipeDaLoja(slug: string, email: unknown): Promise<Operator & { etag: string }> {
+  if (typeof email !== 'string' || !email.trim()) throw new OperatorError('Login inválido.');
+  const doc = await storage().readJSON<Operator>(await operatorKey(email));
+  if (!doc || doc.data.slug !== slug) throw new OperatorError('Esse login não é desta loja. Atualize a página.');
+  if (doc.data.pendente || !isFuncaoEquipe(doc.data.funcao)) throw new OperatorError('Esse login é de dono: só a Growlift muda.');
+  return { ...doc.data, etag: doc.etag };
+}
+
+/** The owner adds a kitchen or waiter login. Returns the password to hand over in person. */
+export async function donoAdicionaLogin(slug: string, input: { email: unknown; name: unknown; funcao: unknown }, by: string): Promise<{ email: string; password: string }> {
+  if (!isFuncaoEquipe(input.funcao)) throw new OperatorError('Escolha a função: cozinha ou garçom.');
+  if (typeof input.email !== 'string' || typeof input.name !== 'string') throw new OperatorError('Dados inválidos.');
+  const email = input.email.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 120) throw new OperatorError('Informe um e-mail válido.');
+  const existing = await storage().readJSON<Operator>(await operatorKey(email));
+  if (existing) {
+    throw new OperatorError(existing.data.slug === slug ? 'Esse e-mail já tem login nesta loja. Use “Nova senha” na lista.' : 'Esse e-mail não pode ser usado. Use outro.');
+  }
+  if ((await listOperators(slug)).length >= MAX_LOGINS_LOJA) throw new OperatorError(`A loja já tem ${MAX_LOGINS_LOJA} logins. Remova quem saiu antes de criar outro.`);
+  try {
+    return { email, password: await upsertOperator(slug, { email, name: input.name, funcao: input.funcao }, by, { soNovo: true }) };
+  } catch (err) {
+    // The team's message names "the team" or "another store"; the owner only needs to try another e-mail.
+    if (err instanceof OperatorError && /equipe|outra loja/.test(err.message)) throw new OperatorError('Esse e-mail não pode ser usado. Use outro.');
+    throw err;
+  }
+}
+
+/** New password for a kitchen or waiter login; the old one, and its open sessions, stop working. */
+export async function donoNovaSenha(slug: string, email: unknown, by: string): Promise<string> {
+  const op = await equipeDaLoja(slug, email);
+  return upsertOperator(slug, { email: op.email, name: op.name, funcao: op.funcao as FuncaoEquipe }, by, { etag: op.etag });
+}
+
+export async function donoMudaFuncao(slug: string, email: unknown, funcao: unknown) {
+  if (!isFuncaoEquipe(funcao)) throw new OperatorError('Escolha a função: cozinha ou garçom.');
+  const op = await equipeDaLoja(slug, email);
+  await setOperatorFuncao(slug, op.email, funcao, true);
+}
+
+/** Removes a kitchen or waiter login; whoever is using it is logged out on their next screen. */
+export async function donoRemoveLogin(slug: string, email: unknown) {
+  const op = await equipeDaLoja(slug, email);
+  await removeOperator(slug, op.email);
 }

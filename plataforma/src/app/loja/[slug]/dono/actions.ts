@@ -6,6 +6,8 @@ import { ItemEditError, addItemByOwner, editItemByOwner, getDraft, getPublished,
 import { lerCardapio } from '@/lib/importar-cardapio';
 import { isSlug } from '@/lib/slug';
 import { floor } from '@/lib/mesas';
+import { OperatorError, donoAdicionaLogin, donoMudaFuncao, donoNovaSenha, donoRemoveLogin } from '@/lib/operators';
+import { hourWindow, take } from '@/lib/limits';
 
 export interface DonoResult {
   ok: boolean;
@@ -113,4 +115,35 @@ export async function importarCardapioAction(slug: string, texto: string): Promi
     console.error('importarCardapioAction', err);
     return { ok: false, error: 'Não foi possível importar. Tente de novo.' };
   }
+}
+
+/** Team logins (Equipe): at most 30 changes an hour per store, so a stolen owner session cannot churn logins. */
+async function equipe<T>(slug: string, run: (by: string) => Promise<T>): Promise<DonoResult & { data?: T }> {
+  if (!isSlug(slug)) return { ok: false, error: 'Loja inválida.' };
+  const user = await requireStoreAccess(slug, DONO);
+  try {
+    if (!(await take('equipe-dono', slug, 30, hourWindow()))) return { ok: false, error: 'Muitas mudanças nesta hora. Espere um pouco ou fale com a Growlift.' };
+    return { ok: true, data: await run(user.name ? `${user.name} (${user.email})` : user.email) };
+  } catch (err) {
+    if (err instanceof OperatorError) return { ok: false, error: err.message };
+    console.error('equipe do dono', err);
+    return { ok: false, error: 'Não foi possível salvar. Tente de novo.' };
+  }
+}
+
+export async function equipeAdicionarAction(slug: string, input: { email: string; name: string; funcao: string }) {
+  if (!input || typeof input !== 'object') return { ok: false, error: 'Dados inválidos.' };
+  return equipe(slug, (by) => donoAdicionaLogin(slug, input, by));
+}
+
+export async function equipeNovaSenhaAction(slug: string, email: string) {
+  return equipe(slug, (by) => donoNovaSenha(slug, email, by));
+}
+
+export async function equipeFuncaoAction(slug: string, email: string, funcao: string) {
+  return equipe(slug, () => donoMudaFuncao(slug, email, funcao));
+}
+
+export async function equipeRemoverAction(slug: string, email: string) {
+  return equipe(slug, () => donoRemoveLogin(slug, email));
 }

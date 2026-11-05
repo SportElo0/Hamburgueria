@@ -30,7 +30,8 @@ function vcard(list: Customer[]) {
   return list.map((c) => ['BEGIN:VCARD', 'VERSION:3.0', `FN:${c.name.replace(/[\r\n;,]/g, ' ')} (cliente)`, `TEL;TYPE=CELL:+55${c.phone}`, 'END:VCARD'].join('\r\n')).join('\r\n');
 }
 
-export function CustomersBoard(props: { slug: string; storeName: string; siteUrl: string; coupons: Coupon[]; customers: Customer[] }) {
+/** `embedded`: inside the owner's panel (its own bar and title), without the standalone page header. */
+export function CustomersBoard(props: { slug: string; storeName: string; siteUrl: string; coupons: Coupon[]; customers: Customer[]; embedded?: boolean }) {
   const [customers, setCustomers] = useState(props.customers);
   const [couponCode, setCouponCode] = useState(props.coupons[0]?.code ?? '');
   const coupon = props.coupons.find((c) => c.code === couponCode);
@@ -73,7 +74,8 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
   };
 
   return (
-    <div className="min-h-dvh pb-16">
+    <div className={props.embedded ? 'pb-10' : 'min-h-dvh pb-16'}>
+      {!props.embedded && (
       <header className="border-b border-line bg-paper">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <div>
@@ -85,8 +87,9 @@ export function CustomersBoard(props: { slug: string; storeName: string; siteUrl
           </a>
         </div>
       </header>
+      )}
 
-      <main className="mx-auto max-w-5xl space-y-4 px-4 pt-5">
+      <main className={props.embedded ? 'space-y-4' : 'mx-auto max-w-5xl space-y-4 px-4 pt-5'}>
         <section aria-label="Resumo" className="grid grid-cols-2 gap-3 md:grid-cols-3">
           <div className="card p-4">
             <p className="text-[13px] font-semibold text-ink-mute">Contatos (90 dias)</p>
