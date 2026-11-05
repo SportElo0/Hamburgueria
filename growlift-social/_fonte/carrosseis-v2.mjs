@@ -601,6 +601,90 @@ ${LEGENDA_FIM}
 #restaurante #instagramparanegocios #marketingpararestaurantes #delivery #growlift`,
     alt: 'Carrossel ilustrado: posts de comida com muitas curtidas e poucos pedidos, e três sinais (post sem chamada, sem endereço e horário, caminho longo até o pedido). Resumo com três ajustes e convite para o diagnóstico grátis pelo link da bio.',
   },
+  {
+    slug: '19-feriado-dia-20',
+    titulo: 'Dia 20 é feriado. O Google sabe disso?',
+    temas: ['escuro', 'azul', 'claro', 'claro', 'escuro', 'claro', 'azul'],
+    slides: [
+      () =>
+        capa({
+          gancho: 'Dia 20 é feriado. <em>O Google sabe disso?</em>',
+          sub: '3 sinais de que o seu horário pode enganar alguém na sexta, 20/11.',
+          tamanho: 92,
+          cena: `${celular(`${busca('hamburgueria aberta agora')}${resultado({ nome: 'Seu Restaurante', nota: '4,6', linha: 'Aberto · Fecha às 23h', cor: '#ffe8cc' })}${resultado({ nome: 'Outro lugar', nota: '4,4', linha: 'Fechado hoje', cor: '#dbeafe' })}`, { x: 400, y: 30, w: 420, h: 600, rot: 3 })}
+            ${boneco('f1', { x: 70, y: 270, size: 290, shirt: RED, cara: 'bravo' })}
+            ${balao('Dizia aberto! 😤', { x: 60, y: 170, rot: -4 })}`,
+        }),
+      () =>
+        porque({
+          frase: 'Quem está com fome <em>confia no Google.</em>',
+          apoio: 'Se ele diz aberto e a porta está fechada, o cliente perde a viagem. Se diz fechado e você abriu, ele nem aparece.',
+          cena: `<div class="card" style="position:absolute;left:170px;top:50px;width:330px;padding:0;overflow:hidden;text-align:center;transform:rotate(-3deg)">
+              <div style="background:${RED};color:#fff;font-size:34px;font-weight:900;letter-spacing:.12em;padding:16px 0">NOVEMBRO</div>
+              <div style="font-size:170px;font-weight:900;line-height:1;padding:20px 0 4px">20</div>
+              <div style="font-size:30px;font-weight:800;color:#3b4659;padding-bottom:26px">sexta · feriado</div></div>
+            ${boneco('f2', { x: 590, y: 110, size: 290, shirt: AMBER, cara: 'triste' })}${balao('Abre ou não abre? 🤔', { x: 540, y: 20, rot: 3 })}`,
+        }),
+      () =>
+        sinal({
+          n: 1,
+          titulo: 'O horário de feriado <em>nunca foi preenchido.</em>',
+          texto: 'O Perfil no Google tem um campo só pra isso: <b>Horário especial</b>. Sem ele, vale o horário de sempre.',
+          cena: `<div class="card" style="position:absolute;left:150px;top:30px;width:560px;padding:34px 36px">
+              <div style="font-size:32px;font-weight:900">Horário especial</div>
+              <div style="font-size:24px;color:#6b7588;margin-top:6px">Feriados e datas diferentes</div>
+              <div style="margin-top:26px;border:3px dashed #c9d2e3;border-radius:22px;padding:30px;text-align:center;font-size:28px;font-weight:800;color:#6b7588">Nenhuma data adicionada</div>
+              <div style="margin-top:22px;display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;background:#e2eaff;color:${BLUE};font-size:26px;font-weight:800">+ Adicionar data</div></div>
+            ${boneco('f3', { x: 700, y: 230, size: 270, shirt: BLUE, cara: 'triste' })}`,
+        }),
+      () =>
+        sinal({
+          n: 2,
+          titulo: 'Cada lugar diz <em>um horário.</em>',
+          texto: 'Google, Instagram, WhatsApp e site: quando um muda e o outro não, o cliente não sabe em quem acreditar.',
+          cena: `${[['Google', 'Aberto · 18h às 23h', 60, -3], ['Bio do Instagram', 'Abrimos às 19h', 380, 2], ['WhatsApp', 'Fechado hoje 😴', 700, -2]]
+            .map(([onde, txt, x, r]) => `<div class="card" style="position:absolute;left:${x}px;top:${x === 380 ? 140 : 60}px;width:300px;padding:26px 26px;transform:rotate(${r}deg)">
+              <div style="font-size:22px;font-weight:800;color:#6b7588;letter-spacing:.06em;text-transform:uppercase">${onde}</div>
+              <div style="font-size:30px;font-weight:900;margin-top:10px;line-height:1.2">${txt}</div>
+              <div style="margin-top:14px"><span class="x">✕</span></div></div>`)
+            .join('')}
+            ${boneco('f4', { x: 400, y: 330, size: 230, shirt: '#22a06b', cara: 'triste' })}`,
+        }),
+      () =>
+        sinal({
+          n: 3,
+          titulo: 'Vai fechar e <em>ninguém avisou.</em>',
+          texto: 'Sem story, sem aviso no WhatsApp, sem nada no perfil. O cliente descobre na porta.',
+          cena: `<div style="position:absolute;left:150px;top:30px;width:420px;height:480px;border-radius:24px 24px 0 0;background:#3a2a1f;box-shadow:inset 0 0 0 14px #2a1d15">
+              <div style="position:absolute;left:50%;top:120px;transform:translateX(-50%) rotate(-4deg);background:#fff;color:${RED};font-size:52px;font-weight:900;letter-spacing:.08em;padding:18px 34px;border-radius:14px;box-shadow:0 20px 40px -16px rgba(0,0,0,.6)">FECHADO</div></div>
+            ${boneco('f5', { x: 640, y: 210, size: 290, shirt: AMBER, cara: 'bravo' })}${balao('Podia ter avisado…', { x: 610, y: 110, rot: 3 })}`,
+        }),
+      ({ tema }) =>
+        resumo({
+          tema,
+          titulo: 'Antes do dia 20: <em>3 ajustes</em>',
+          itens: [
+            ['No Google, em Horário especial:', 'marque o dia 20 com o horário do feriado (ou fechado).'],
+            ['O mesmo horário em tudo:', 'bio do Instagram, mensagem do WhatsApp e site.'],
+            ['Avise na véspera:', 'um story e a mensagem de ausência com o horário do dia.'],
+          ],
+        }),
+      () => convite({ texto: 'A gente confere seu <b>Google</b>, <b>Instagram</b>, <b>WhatsApp</b> e <b>site</b> e te manda o que ajustar, com uma prévia do seu site.' }),
+    ],
+    legenda: `Dia 20 (sexta) é feriado. O Google sabe disso? 📅
+
+3 sinais de que o seu horário pode enganar alguém no feriado:
+1. O horário de feriado nunca foi preenchido.
+2. Cada lugar diz um horário.
+3. Vai fechar e ninguém avisou.
+
+No Perfil da Empresa no Google existe o campo "Horário especial", feito para feriados. No slide 6 estão os 3 ajustes pra fazer antes do dia 20. Salva!
+
+${LEGENDA_FIM}
+
+#restaurante #googlemeunegocio #feriado #hamburgueria #growlift`,
+    alt: 'Carrossel ilustrado sobre o horário de feriado do dia 20 de novembro: celular com busca mostrando "aberto", calendário do dia 20, o campo Horário especial do Google vazio, horários diferentes no Google, Instagram e WhatsApp, e uma porta fechada. Resumo com três ajustes e convite para o diagnóstico grátis pelo link da bio.',
+  },
 ];
 
 if (process.argv.includes('--json')) {
