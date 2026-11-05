@@ -2,11 +2,12 @@
 
 import { COZINHA, DONO, SALAO, TODOS, requireStoreAccess } from '@/lib/auth';
 import { ActionError, applyAction, setOpen, setSoldOut } from '@/lib/orders';
+import { OrderError } from '@/lib/ordering';
 import { OPERATOR_ACTIONS, PAYMENT_METHODS, type OperatorAction, type PaymentMethod } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
 import { setOptOut } from '@/lib/customers';
 import { ItemEditError, addPedido, editItemByStore, listPedidos } from '@/lib/stores';
-import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, seatTable } from '@/lib/mesas';
+import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, orderByStaff, seatTable } from '@/lib/mesas';
 import { QueueError, addByStaff, queueOfDay, updateQueue, type QueueAction } from '@/lib/fila';
 import { markRefundDone } from '@/lib/mesa-pagamento';
 import { ReservationError, cancelByStore, markArrived, markFinished, markNoShow, undoArrived } from '@/lib/reservas';
@@ -204,5 +205,20 @@ export async function addToQueueAction(slug: string, name: string, people: numbe
     if (err instanceof QueueError) return { ok: false, error: err.message };
     console.error('addToQueueAction', err);
     return { ok: false, error: 'Não foi possível adicionar. Tente de novo.' };
+  }
+}
+
+/** The waiter (or the owner) orders for a table: straight to the kitchen, into the table's bill. */
+export async function staffOrderAction(slug: string, number: number, items: unknown, expectedSubtotal: number | null): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !Number.isInteger(number) || number < 1 || number > 200) return { ok: false, error: 'Mesa inválida.' };
+  if (expectedSubtotal !== null && (typeof expectedSubtotal !== 'number' || !Number.isInteger(expectedSubtotal))) return { ok: false, error: 'Dados inválidos.' };
+  const user = await requireStoreAccess(slug, SALAO);
+  try {
+    await orderByStaff(slug, number, { items, expectedSubtotal }, user.name || user.email);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof OrderError || err instanceof TableError) return { ok: false, error: err.message };
+    console.error('staffOrderAction', err);
+    return { ok: false, error: 'Não foi possível lançar o pedido. Tente de novo.' };
   }
 }

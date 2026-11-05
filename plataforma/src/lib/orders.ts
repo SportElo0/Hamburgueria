@@ -2,7 +2,7 @@ import 'server-only';
 import { take } from './limits';
 import { ZodError } from 'zod';
 import { storage, ConflictError } from './storage';
-import { getPublished } from './stores';
+import { getDraft, getPublished } from './stores';
 import { after } from 'next/server';
 import { pushOrder } from './pdv';
 import { SUMMARY_VERSION, monthSummaryKey, type MonthSummary } from './inteligencia/resumo';
@@ -313,6 +313,60 @@ export async function placeTableOrder(
 }
 
 /** The days a seating can span: today and yesterday (service runs past midnight). */
+/**
+ * The waiter (or the owner) orders for a table from the staff screen: the order goes straight to the kitchen
+ * (no table confirmation), into the table's bill. Uses the menu customers see, or the draft before one is
+ * published; it works with the store "closed" for the site, since the waiter is on the floor.
+ */
+/** Checks and prices what the waiter is sending (throws OrderError), before anything is written. */
+export async function priceStaffOrder(slug: string, raw: unknown) {
+  const [record, draft, operation] = await Promise.all([getPublished(slug), getDraft(slug), getOperation(slug)]);
+  const source = record?.store ?? draft?.data.store;
+  if (!source) throw new OrderError('Loja não encontrada.');
+  const store = withSoldOut(source, operation.soldOut);
+  const parsed = tableOrderInputSchema.safeParse(raw);
+  if (!parsed.success) throw new OrderError(messageOf(parsed.error));
+  const lines = priceLines(store, parsed.data.items);
+  const subtotal = lines.reduce((sum, l) => sum + l.total, 0);
+  assertSeenSubtotal(parsed.data.expectedSubtotal, subtotal);
+  return { lines, subtotal };
+}
+
+export async function placeStaffTableOrder(slug: string, table: { number: number; session: string }, raw: unknown, by: string, now = new Date()): Promise<Order> {
+  const { lines, subtotal } = await priceStaffOrder(slug, raw);
+
+  const day = dayOf(now);
+  if (!(await take(`mesa-garcom-${slug}`, by, 300, day))) throw new OrderError('Muitos pedidos lançados hoje por este login.');
+  const at = now.toISOString();
+  const base: Omit<Order, 'number'> = {
+    id: `${day.replace(/-/g, '')}-${random(10)}`,
+    tokenHash: '',
+    createdAt: at,
+    updatedAt: at,
+    status: 'novo',
+    history: [{ status: 'novo', at, by }],
+    customer: { name: `Mesa ${table.number}`, phone: '', email: '' },
+    mode: 'mesa',
+    address: null,
+    table: { number: table.number, session: table.session },
+    payment: { method: 'cartao', status: 'na-mesa', changeFor: null, pix: null, paidAt: null },
+    lines,
+    subtotal,
+    deliveryFee: 0,
+    feePending: false,
+    discount: 0,
+    coupon: '',
+    total: subtotal,
+    note: `Lançado por ${by}`.slice(0, 200),
+    reason: '',
+  };
+  return writeDay(slug, day, (orders) => {
+    if (orders.length >= MAX_PER_DAY) throw new OrderError('A cozinha não está aceitando mais pedidos hoje.');
+    const created: Order = { ...base, number: orders.length + 1 };
+    return { orders: [...orders, created], result: created };
+  });
+}
+
 export const tableDays = (now: Date) => [dayOf(new Date(now.getTime() - 86_400_000)), dayOf(now)];
 
 /** Every order of one seating, oldest first. */

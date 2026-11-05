@@ -7,7 +7,8 @@ import { seedStores } from '@/lib/seeds';
 import { storeSchema, type Store, type StoreRecord } from '@/lib/schema';
 import { CustoError, itensDoDono, salvarCustoManual } from '@/lib/dono';
 import { addItemByOwner, createStore, editItemByOwner, getChanges, getDraft, getPublished, setTablesCount } from '@/lib/stores';
-import { floor, freeTable, seatTable } from '@/lib/mesas';
+import { floor, freeTable, orderByStaff, seatTable } from '@/lib/mesas';
+import { listOrders, setSoldOut } from '@/lib/orders';
 import { orderingOf } from '@/lib/ordering';
 import { clearTestData, createDemo, fillTestData } from '@/lib/inteligencia/dados';
 import { DEMO_SLUG } from '@/lib/inteligencia/demo';
@@ -229,5 +230,39 @@ describe('dados de teste numa loja', () => {
     await expect(fillTestData('real', 'Equipe')).rejects.toThrow(/pedidos de verdade/);
     await expect(clearTestData('real', 'Equipe')).rejects.toThrow(/pedidos de verdade|não tem dados de teste/);
     await expect(fillTestData(DEMO_SLUG, 'Equipe')).rejects.toThrow(/Recriar demonstração/);
+  });
+});
+
+describe('garçom lança pedido', () => {
+  beforeEach(() => {
+    useFileStorage(fs.mkdtempSync(path.join(os.tmpdir(), 'garcom-pede-')));
+  });
+
+  it('abre a mesa livre e manda direto para a cozinha, mesmo sem QR e sem cardápio no ar', async () => {
+    await createStore({ slug: 'love', name: 'Love', segment: 'restaurante' }, 'equipe');
+    await setTablesCount('love', 6, 'Dono');
+    const xis = await addItemByOwner('love', { name: 'X-Salada', price: 3490, category: 'Lanches' }, 'Dono');
+    const suco = await addItemByOwner('love', { name: 'Suco', price: 990, category: 'Bebidas' }, 'Dono');
+    const order = await orderByStaff('love', 4, { items: [{ productId: xis, quantity: 2, notes: 'sem cebola' }, { productId: suco, quantity: 1 }], expectedSubtotal: 7970 }, 'Zé');
+    expect(order).toMatchObject({ status: 'novo', mode: 'mesa', total: 7970, table: { number: 4 } });
+    expect(order.lines[0]).toMatchObject({ name: 'X-Salada', quantity: 2, notes: 'sem cebola' });
+    const mesa = (await floor('love')).find((t) => t.number === 4)!;
+    expect(mesa).toMatchObject({ confirmed: true, total: 7970 });
+    // Segundo pedido entra na mesma conta.
+    await orderByStaff('love', 4, { items: [{ productId: suco, quantity: 2 }], expectedSubtotal: 1980 }, 'Zé');
+    expect((await floor('love')).find((t) => t.number === 4)!.total).toBe(9950);
+    expect((await listOrders('love')).filter((o) => o.table?.number === 4)).toHaveLength(2);
+  });
+
+  it('recusa item esgotado, preço que mudou e mesa que não existe', async () => {
+    await createStore({ slug: 'love', name: 'Love', segment: 'restaurante' }, 'equipe');
+    await setTablesCount('love', 6, 'Dono');
+    const xis = await addItemByOwner('love', { name: 'X-Salada', price: 3490, category: 'Lanches' }, 'Dono');
+    await expect(orderByStaff('love', 2, { items: [{ productId: xis, quantity: 1 }], expectedSubtotal: 3000 }, 'Zé')).rejects.toThrow(/preço/);
+    await expect(orderByStaff('love', 9, { items: [{ productId: xis, quantity: 1 }], expectedSubtotal: null }, 'Zé')).rejects.toThrow(/não encontrada/);
+    await setSoldOut('love', xis, true, 'Cozinha');
+    await expect(orderByStaff('love', 2, { items: [{ productId: xis, quantity: 1 }], expectedSubtotal: null }, 'Zé')).rejects.toThrow(/esgotado/);
+    await expect(orderByStaff('love', 2, { items: [], expectedSubtotal: null }, 'Zé')).rejects.toThrow(/vazia/);
+    expect(await floor('love')).toEqual([]); // nenhuma mesa ficou aberta por um pedido que falhou
   });
 });

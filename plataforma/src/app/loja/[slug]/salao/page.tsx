@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { SALAO, requireStoreAccess } from '@/lib/auth';
-import { getDraft } from '@/lib/stores';
+import { getDraft, getPublished } from '@/lib/stores';
+import { getOperation } from '@/lib/orders';
+import { withSoldOut } from '@/lib/ordering';
+import { mesaMenu } from '@/lib/mesa-menu';
 import { orderingOf } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
 import { SalaoBoard } from '@/components/mesa/SalaoBoard';
@@ -16,5 +19,8 @@ export default async function SalaoPage({ params }: { params: Promise<{ slug: st
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const ordering = orderingOf(draft.data.store);
-  return <SalaoBoard slug={slug} storeName={draft.data.store.name} count={ordering.tables.count} enabled={ordering.enabled && ordering.tables.enabled} garcom={user.funcao === 'garcom'} dono={user.funcao !== 'garcom'} logout={logout} />;
+  // The waiter orders from the menu customers see (or the draft before it goes live), without sold-out items.
+  const [published, operation] = await Promise.all([getPublished(slug), getOperation(slug)]);
+  const menu = mesaMenu(withSoldOut(published?.store ?? draft.data.store, operation.soldOut));
+  return <SalaoBoard slug={slug} storeName={draft.data.store.name} count={ordering.tables.count} enabled={ordering.enabled && ordering.tables.enabled} garcom={user.funcao === 'garcom'} dono={user.funcao !== 'garcom'} menu={menu} logout={logout} />;
 }

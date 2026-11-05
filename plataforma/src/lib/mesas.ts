@@ -6,7 +6,7 @@ import { monthKey } from './changes';
 import type { Store } from './schema';
 import { count, hourWindow, record, take } from './limits';
 import { OrderError, orderingOf, type Order, type PaymentMethod, type PixCharge } from './ordering';
-import { ordersOfDays, placeTableOrder, tableDays, tableOrders, updateTableOrders } from './orders';
+import { ordersOfDays, placeStaffTableOrder, placeTableOrder, priceStaffOrder, tableDays, tableOrders, updateTableOrders } from './orders';
 
 /**
  * Ordering at the table. Each table has a QR code with a secret key (the link alone is not guessable).
@@ -456,6 +456,19 @@ export async function seatTable(
     doc.seatings[number] = s;
     return s;
   });
+}
+
+/**
+ * The waiter (or the owner) orders for a table from the staff screen. A free table is opened (as if the waiter
+ * seated people) and a table opened by a phone is confirmed, so the order goes straight to the kitchen.
+ */
+export async function orderByStaff(slug: string, number: number, raw: unknown, by: string, now = new Date()) {
+  // A wrong order (sold out, price changed, empty) must not leave a free table open.
+  await priceStaffOrder(slug, raw);
+  let seating = (await readDoc(slug)).data.seatings[number];
+  if (!seating) seating = await seatTable(slug, number, { people: null }, now);
+  else if (!seating.confirmed) await confirmTable(slug, number, by);
+  return placeStaffTableOrder(slug, { number, session: seating.id }, raw, by, now);
 }
 
 /**

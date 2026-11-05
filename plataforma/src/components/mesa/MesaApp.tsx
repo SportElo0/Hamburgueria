@@ -32,7 +32,7 @@ export interface MesaCategory {
   items: MesaItem[];
 }
 
-interface CartLine {
+export interface CartLine {
   key: string;
   itemId: string;
   name: string;
@@ -47,7 +47,7 @@ const POLL_MS = 8000;
 const PRICE_CHANGED = 'O preço de alguns itens mudou. Confira o novo total antes de fechar.';
 
 /** A cart line priced from the menu on screen, so a price changed on the panel shows before ordering. */
-function priceOf(menu: MesaCategory[], l: CartLine): number {
+export function priceOf(menu: MesaCategory[], l: CartLine): number {
   const item = menu.flatMap((c) => c.items).find((i) => i.id === l.itemId);
   if (!item) return l.unit;
   const extras = item.options.flatMap((g) => (l.selections[g.id] ?? []).map((id) => g.choices.find((c) => c.id === id)?.price ?? 0));
@@ -323,7 +323,7 @@ function Entrada(props: { storeName: string; number: number; open: boolean; busy
   );
 }
 
-function Cardapio({ menu, kitchenOpen, onPick, cart }: { menu: MesaCategory[]; kitchenOpen: boolean; onPick: (item: MesaItem) => void; cart: CartLine[] }) {
+export function Cardapio({ menu, kitchenOpen, onPick, cart }: { menu: MesaCategory[]; kitchenOpen: boolean; onPick: (item: MesaItem) => void; cart: CartLine[] }) {
   const inCart = useMemo(() => {
     const m = new Map<string, number>();
     for (const l of cart) m.set(l.itemId, (m.get(l.itemId) ?? 0) + l.quantity);
@@ -383,7 +383,7 @@ function Cardapio({ menu, kitchenOpen, onPick, cart }: { menu: MesaCategory[]; k
   );
 }
 
-function OpcoesSheet({ item, onClose, onAdd }: { item: MesaItem; onClose: () => void; onAdd: (line: Omit<CartLine, 'key'>) => void }) {
+export function OpcoesSheet({ item, onClose, onAdd }: { item: MesaItem; onClose: () => void; onAdd: (line: Omit<CartLine, 'key'>) => void }) {
   const [picked, setPicked] = useState<Record<string, string[]>>({});
   const [qty, setQty] = useState(1);
   const [notes, setNotes] = useState('');
@@ -461,9 +461,9 @@ function OpcoesSheet({ item, onClose, onAdd }: { item: MesaItem; onClose: () => 
   );
 }
 
-function Revisao(props: { cart: CartLine[]; total: number; busy: boolean; error: string; firstOrder: boolean; onQty: (key: string, q: number) => void; onClose: () => void; onSend: () => void }) {
+export function Revisao(props: { title?: string; cart: CartLine[]; total: number; busy: boolean; error: string; firstOrder: boolean; onQty: (key: string, q: number) => void; onClose: () => void; onSend: () => void }) {
   return (
-    <Sheet title="Seu pedido" onClose={props.onClose}>
+    <Sheet title={props.title ?? 'Seu pedido'} onClose={props.onClose}>
       <ul className="divide-y divide-[#E6EBF2] px-5">
         {props.cart.map((l) => (
           <li key={l.key} className="flex items-center gap-3 py-3">
@@ -771,7 +771,7 @@ function Obrigado({ storeName, reviewUrl, refund, onBack }: { storeName: string;
   );
 }
 
-function Stepper({ value, onChange, label, allowZero = false }: { value: number; onChange: (v: number) => void; label: string; allowZero?: boolean }) {
+export function Stepper({ value, onChange, label, allowZero = false }: { value: number; onChange: (v: number) => void; label: string; allowZero?: boolean }) {
   return (
     <div className="flex items-center gap-1.5">
       <button type="button" aria-label={`Menos ${label}`} disabled={!allowZero && value <= 1} onClick={() => onChange(value - 1)} className="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-[#C9D3E1] text-xl disabled:opacity-40">
@@ -787,7 +787,7 @@ function Stepper({ value, onChange, label, allowZero = false }: { value: number;
   );
 }
 
-function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+export function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);

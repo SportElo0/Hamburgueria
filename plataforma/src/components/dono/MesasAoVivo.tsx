@@ -9,6 +9,8 @@ import {
   tableAction,
 } from "@/app/loja/[slug]/actions";
 import { mesasAction } from "@/app/loja/[slug]/dono/actions";
+import { LancarPedido } from "@/components/mesa/LancarPedido";
+import type { MesaCategory } from "@/components/mesa/MesaApp";
 import { brl } from "@/lib/ordering";
 
 type Mesa = FloorForStaff[number];
@@ -29,10 +31,12 @@ export function MesasAoVivo({
   slug,
   count: initialCount,
   qr,
+  menu,
 }: {
   slug: string;
   count: number;
   qr: boolean;
+  menu: MesaCategory[];
 }) {
   const [mesas, setMesas] = useState<FloorForStaff | null>(null);
   const [count, setCount] = useState(initialCount);
@@ -42,6 +46,14 @@ export function MesasAoVivo({
   const [aberta, setAberta] = useState<number | null>(null);
   const [pessoas, setPessoas] = useState("");
   const [pending, start] = useTransition();
+  const [lancando, setLancando] = useState<number | null>(null);
+  const [aviso, setAviso] = useState("");
+  // The green notice goes away by itself after a few seconds.
+  useEffect(() => {
+    if (!aviso) return;
+    const t = window.setTimeout(() => setAviso(""), 4000);
+    return () => window.clearTimeout(t);
+  }, [aviso]);
   const router = useRouter();
 
   const load = useCallback(async () => {
@@ -352,7 +364,7 @@ export function MesasAoVivo({
                     Mesa {n}
                   </p>
                   <p className="text-sm text-ink-mute">
-                    Livre · toque para ocupar
+                    Livre · toque para ocupar ou pedir
                   </p>
                 </button>
                 {open &&
@@ -363,6 +375,18 @@ export function MesasAoVivo({
                       sentar(n, pessoasNum),
                     ),
                   )}
+                {open && (
+                  <button
+                    type="button"
+                    className="btn-ghost mt-2 w-full"
+                    onClick={() => {
+                      setLancando(n);
+                      setAberta(null);
+                    }}
+                  >
+                    + Lançar pedido
+                  </button>
+                )}
               </div>
             );
           const chamando = m.calls.some((c) => c.kind === "garcom");
@@ -464,6 +488,16 @@ export function MesasAoVivo({
               )}
               {open && m.confirmed && (
                 <>
+                  <button
+                    type="button"
+                    className="btn-primary mt-3 w-full"
+                    onClick={() => {
+                      setLancando(n);
+                      setAberta(null);
+                    }}
+                  >
+                    + Lançar pedido
+                  </button>
                   {pessoasForm("Salvar pessoas", () =>
                     run(
                       () => seatAction(slug, n, pessoasNum),
@@ -500,9 +534,38 @@ export function MesasAoVivo({
         })}
       </section>
       <p className="mt-3 text-xs text-ink-mute">
-        Fechar a conta de quem pediu pelo QR fica na tela do salão, onde se
-        escolhe a forma de pagamento.
+        Fechar a conta da mesa fica na tela do salão, onde se escolhe a forma de
+        pagamento.
       </p>
+      {lancando !== null && (
+        <LancarPedido
+          slug={slug}
+          number={lancando}
+          menu={menu}
+          onClose={() => setLancando(null)}
+          onSent={() => {
+            setAviso(`Pedido da mesa ${lancando} enviado para a cozinha.`);
+            setLancando(null);
+            void load();
+          }}
+        />
+      )}
+      {aviso && (
+        <div
+          role="status"
+          className="fixed inset-x-4 bottom-6 z-30 mx-auto flex max-w-md items-center justify-between gap-3 rounded-2xl bg-ok px-4 py-3 text-sm font-semibold text-white shadow-lg"
+        >
+          {aviso}
+          <button
+            type="button"
+            onClick={() => setAviso("")}
+            aria-label="Fechar aviso"
+            className="text-lg leading-none"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { DONO, requireStoreAccess } from '@/lib/auth';
-import { getDraft } from '@/lib/stores';
+import { getDraft, getPublished } from '@/lib/stores';
+import { getOperation } from '@/lib/orders';
+import { withSoldOut } from '@/lib/ordering';
+import { mesaMenu } from '@/lib/mesa-menu';
 import { orderingOf } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
 import { MesasAoVivo } from '@/components/dono/MesasAoVivo';
@@ -14,6 +17,8 @@ export default async function MesasDonoPage({ params }: { params: Promise<{ slug
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const o = orderingOf(draft.data.store);
+  const [published, operation] = await Promise.all([getPublished(slug), getOperation(slug)]);
+  const menu = mesaMenu(withSoldOut(published?.store ?? draft.data.store, operation.soldOut));
   return (
     <div className="mx-auto max-w-6xl">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -23,7 +28,7 @@ export default async function MesasDonoPage({ params }: { params: Promise<{ slug
             Toque numa mesa para marcar quem sentou ou liberar. Quem abre a conta pelo QR aparece sozinho, com o que já pediu. Atualiza sozinho.
           </p>
         </div>
-        {o.enabled && o.tables.enabled && (
+        {(
           <div className="flex gap-2">
             <a href={`/loja/${slug}/mapa`} className="btn-ghost min-h-11">
               Mapa e reservas
@@ -34,7 +39,7 @@ export default async function MesasDonoPage({ params }: { params: Promise<{ slug
           </div>
         )}
       </div>
-      <MesasAoVivo slug={slug} count={o.tables.count} qr={o.enabled && o.tables.enabled} />
+      <MesasAoVivo slug={slug} count={o.tables.count} qr={o.enabled && o.tables.enabled} menu={menu} />
     </div>
   );
 }

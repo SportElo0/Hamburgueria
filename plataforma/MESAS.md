@@ -28,6 +28,16 @@ mesma tela da cozinha dos pedidos do site e entra nos mesmos relatórios (modo "
 - **Fechar a conta:** o garçom escolhe como a mesa pagou (Pix, cartão ou dinheiro). Os pedidos ficam pagos com esse
   meio (é o que o relatório e as margens usam), o código deixa de valer e a mesa fica livre.
 
+## Garçom lança pedido (05/11/2026)
+
+- Na tela do salão (celular do garçom), tocar numa mesa livre abre o cardápio da mesa; numa mesa ocupada, "+ Lançar pedido".
+  O dono tem o mesmo botão em Painel do dono › Mesas.
+- O pedido vai direto para a cozinha (status novo), entra na conta da mesa e abre a mesa se estava livre (ou confirma a
+  que foi aberta pelo QR). Funciona com o QR desligado e antes de o cardápio ir ao ar (usa o rascunho).
+- O servidor confere e recalcula tudo antes de abrir a mesa: item esgotado, preço que mudou ou pedido vazio não abrem
+  mesa. Limite de 300 pedidos por login por dia. Código: `orderByStaff` (mesas.ts), `placeStaffTableOrder`
+  (orders.ts), `staffOrderAction`, `components/mesa/LancarPedido.tsx`.
+
 ## Onde ficam os dados
 
 - `mesas/<loja>/abertas.json`: as mesas abertas (código, se o garçom confirmou, chamadas, hash do token de cada
