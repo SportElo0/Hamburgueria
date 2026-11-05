@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { currentUser } from '@/lib/auth';
 import { isTeam } from '@/lib/session';
-import { downloadName, findGroup, readContentFile } from '@/lib/conteudos';
+import { downloadName, findGroup } from '@/lib/conteudos';
+import { readContentFile } from '@/lib/conteudos-arquivos';
 import { zip } from '@/lib/zip';
 
 // One group of pieces (a highlight, a carousel) as a single download, in posting order.
