@@ -298,6 +298,9 @@ export function OnlineOrdersPanel(props: {
           <a href={`${props.ordersUrl}/mesas`} className="btn-ghost w-full" target="_blank" rel="noreferrer">
             QR Codes para imprimir
           </a>
+          <a href={`${props.ordersUrl}/cardapio-qr`} className="btn-ghost w-full sm:col-span-2" target="_blank" rel="noreferrer">
+            QR só do cardápio (sem pedir)
+          </a>
         </div>
       </section>
 
