@@ -9,7 +9,7 @@ import { CustoError, itensDoDono, salvarCustoManual } from '@/lib/dono';
 import { addItemByOwner, createStore, editItemByOwner, getChanges, getDraft, getPublished, setTablesCount } from '@/lib/stores';
 import { floor, freeTable, seatTable } from '@/lib/mesas';
 import { orderingOf } from '@/lib/ordering';
-import { createDemo } from '@/lib/inteligencia/dados';
+import { clearTestData, createDemo, fillTestData } from '@/lib/inteligencia/dados';
 import { DEMO_SLUG } from '@/lib/inteligencia/demo';
 import { getCostSheet, saveCostSheet } from '@/lib/inteligencia/dados';
 import { EMPTY_COST_SHEET } from '@/lib/inteligencia/custos';
@@ -194,5 +194,40 @@ describe('o dono monta mesas e cardápio sozinho', () => {
     expect(await getPublished(DEMO_SLUG)).toBeNull();
     const { categories } = await itensDoDono(DEMO_SLUG);
     expect(categories.flatMap((c) => c.items).length).toBeGreaterThan(5);
+  });
+});
+
+describe('dados de teste numa loja', () => {
+  beforeEach(() => {
+    useFileStorage(fs.mkdtempSync(path.join(os.tmpdir(), 'dono-teste-')));
+  });
+
+  it('enche loja nunca publicada, mostra no painel do dono e apaga tudo', async () => {
+    await createStore({ slug: 'love', name: 'Love', segment: 'restaurante' }, 'equipe');
+    const r = await fillTestData('love', 'Equipe');
+    expect(r.orders).toBeGreaterThan(500);
+    expect((await getDraft('love'))!.data.store.extra.teste).toBe(true);
+    const { categories } = await itensDoDono('love');
+    expect(categories.flatMap((c) => c.items).filter((i) => i.cost !== null).length).toBeGreaterThan(5);
+    expect((await floor('love')).length).toBe(6);
+    expect(await getPublished('love')).toBeNull();
+    await fillTestData('love', 'Equipe'); // gerar de novo funciona
+    await clearTestData('love', 'Equipe');
+    expect(await storage().list('pedidos/love/')).toEqual([]);
+    expect(await floor('love')).toEqual([]);
+    expect((await getDraft('love'))!.data.store).toMatchObject({ catalog: { categories: [] } });
+    expect((await getDraft('love'))!.data.store.extra.teste).toBeUndefined();
+  });
+
+  it('nunca mexe em loja publicada ou com pedidos de verdade', async () => {
+    const record: StoreRecord = { store: store(), updatedAt: new Date().toISOString(), updatedBy: 'teste', publishedAt: new Date().toISOString() };
+    await storage().writeJSON(`lojas/${SLUG}/rascunho.json`, record);
+    await storage().writeJSON(`lojas/${SLUG}/publicado.json`, record);
+    await expect(fillTestData(SLUG, 'Equipe')).rejects.toThrow(/publicada/);
+    await createStore({ slug: 'real', name: 'Real', segment: 'restaurante' }, 'equipe');
+    await storage().writeJSON('pedidos/real/2026-11-01.json', []);
+    await expect(fillTestData('real', 'Equipe')).rejects.toThrow(/pedidos de verdade/);
+    await expect(clearTestData('real', 'Equipe')).rejects.toThrow(/pedidos de verdade|não tem dados de teste/);
+    await expect(fillTestData(DEMO_SLUG, 'Equipe')).rejects.toThrow(/Recriar demonstração/);
   });
 });

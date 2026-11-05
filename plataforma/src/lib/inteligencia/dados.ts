@@ -129,21 +129,13 @@ export async function intelligenceFor(slug: string, days: number, now = new Date
 }
 
 /**
- * Cria (ou recria) a loja de demonstração com dados fictícios: rascunho da loja, ficha
- * de custos e 120 dias de pedidos. Não publica nada e não toca em nenhuma outra loja.
+ * Grava os dados fictícios de uma loja: ficha de custos, 120 dias de pedidos (já resumidos por mês)
+ * e mesas abertas agora. Os pedidos usam os itens do cardápio de demonstração (demoStore).
  */
-export async function createDemo(by: string, now = new Date()) {
+async function writeFakeData(slug: string, by: string, now: Date) {
   const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
-  // Só recria se o slug for mesmo da demonstração: nunca sobrescreve uma loja de verdade ou publicada.
-  const [existing, published] = await Promise.all([getDraft(DEMO_SLUG), getPublished(DEMO_SLUG)]);
-  if (published || (existing && (existing.data.store.extra.demo !== true || existing.data.publishedAt))) {
-    throw new Error(`O endereço ${DEMO_SLUG} já é usado por uma loja que não é a demonstração.`);
-  }
-  const store = demoStore();
-  const record: StoreRecord = { store, updatedAt: now.toISOString(), updatedBy: by, publishedAt: null };
-  await storage().writeJSON(`lojas/${DEMO_SLUG}/rascunho.json`, record);
-  await storage().writeJSON(costsKey(DEMO_SLUG), { sheet: demoCostSheet(), updatedAt: now.toISOString(), updatedBy: by });
-  await storage().writeJSON(decisionsKey(DEMO_SLUG), {});
+  await storage().writeJSON(costsKey(slug), { sheet: demoCostSheet(), updatedAt: now.toISOString(), updatedBy: by });
+  await storage().writeJSON(decisionsKey(slug), {});
   const days = demoOrders(today, 120);
   // Tables open right now, with their orders among today's (the owner's live floor).
   const last = days[days.length - 1];
@@ -152,7 +144,7 @@ export async function createDemo(by: string, now = new Date()) {
   // Os resumos dos meses vão prontos: abrir a demo não precisa ler os 120 dias de pedidos.
   const closed = lastClosedDay(now);
   const stamp = now.getTime();
-  const key = customerKey(DEMO_SLUG);
+  const key = customerKey(slug);
   const months = new Map<string, MonthSummary>();
   // Os dias antes da demo também vão no resumo (sem pedidos), para a comparação de 90 dias (que olha 180) não precisar lê-los um a um.
   const before = Array.from({ length: 200 - days.length }, (_, i) => ({ day: dayOf(new Date(Date.parse(`${days[0].day}T12:00:00Z`) - (200 - days.length - i) * 86_400_000)), orders: [] }));
@@ -162,13 +154,77 @@ export async function createDemo(by: string, now = new Date()) {
     m.days[day] = summarizeDay(day, orders, stamp, key);
     months.set(day.slice(0, 7), m);
   }
-  const old = (await storage().list(`inteligencia/${DEMO_SLUG}/resumo/`)).filter((k) => !months.has(k.slice(-12, -5)));
+  const old = (await storage().list(`inteligencia/${slug}/resumo/`)).filter((k) => !months.has(k.slice(-12, -5)));
   const writes = [
-    ...days.map(({ day, orders }) => () => storage().writeJSON(`pedidos/${DEMO_SLUG}/${day}.json`, orders)),
-    ...[...months].map(([m, doc]) => () => storage().writeJSON(monthSummaryKey(DEMO_SLUG, m), doc)),
+    ...days.map(({ day, orders }) => () => storage().writeJSON(`pedidos/${slug}/${day}.json`, orders)),
+    ...[...months].map(([m, doc]) => () => storage().writeJSON(monthSummaryKey(slug, m), doc)),
     ...old.map((k) => () => storage().remove(k)),
-    ...(floor ? [() => storage().writeJSON(`mesas/${DEMO_SLUG}/abertas.json`, { seatings: floor.seatings })] : []),
+    ...(floor ? [() => storage().writeJSON(`mesas/${slug}/abertas.json`, { seatings: floor.seatings })] : []),
   ];
   for (let i = 0; i < writes.length; i += 10) await Promise.all(writes.slice(i, i + 10).map((w) => w()));
-  return { slug: DEMO_SLUG, days: days.length, orders: days.reduce((s, d) => s + d.orders.length, 0) };
+  return { days };
+}
+
+export class TestDataError extends Error {}
+
+/** A loja pode receber dados de teste: nunca publicada e sem pedidos de verdade (ou já marcada como teste). */
+async function testable(slug: string) {
+  if (slug === DEMO_SLUG) throw new TestDataError('Use Recriar demonstração para a loja de demonstração.');
+  const [draft, published] = await Promise.all([getDraft(slug), getPublished(slug)]);
+  if (!draft) throw new TestDataError('Loja não encontrada.');
+  if (published || draft.data.publishedAt) throw new TestDataError('Essa loja já foi publicada: dados de teste só em loja que nunca foi ao ar.');
+  if (draft.data.store.extra.teste !== true && (await storage().list(`pedidos/${slug}/`)).length > 0) {
+    throw new TestDataError('Essa loja já tem pedidos de verdade: não dá para misturar com dados de teste.');
+  }
+  return draft;
+}
+
+/**
+ * Enche uma loja de teste com dados fictícios para mostrar o painel do dono: o cardápio da hamburgueria
+ * de demonstração, custos, 120 dias de pedidos, 12 mesas com algumas abertas. Nunca publica nada; a loja
+ * fica marcada com `extra.teste` e o botão de limpar apaga tudo isso.
+ */
+export async function fillTestData(slug: string, by: string, now = new Date()) {
+  const draft = await testable(slug);
+  const demo = demoStore();
+  const o = draft.data.store.ordering;
+  const store = { ...draft.data.store, catalog: demo.catalog, extra: { ...draft.data.store.extra, teste: true }, ordering: { ...o, tables: { ...o.tables, count: 12 } } };
+  await storage().writeJSON(`lojas/${slug}/rascunho.json`, { ...draft.data, store, updatedAt: now.toISOString(), updatedBy: by }, draft.etag);
+  const { days } = await writeFakeData(slug, by, now);
+  return { days: days.length, orders: days.reduce((n, d) => n + d.orders.length, 0) };
+}
+
+/** Apaga os dados de teste: pedidos, resumos, custos, decisões, mesas e o cardápio de demonstração. */
+export async function clearTestData(slug: string, by: string, now = new Date()) {
+  const draft = await testable(slug);
+  if (draft.data.store.extra.teste !== true) throw new TestDataError('Essa loja não tem dados de teste.');
+  const keys = [
+    ...(await storage().list(`pedidos/${slug}/`)),
+    ...(await storage().list(`inteligencia/${slug}/resumo/`)),
+    ...(await storage().list(`mesas/${slug}/historico/`)),
+    costsKey(slug),
+    decisionsKey(slug),
+    `mesas/${slug}/abertas.json`,
+  ];
+  for (let i = 0; i < keys.length; i += 10) await Promise.all(keys.slice(i, i + 10).map((k) => storage().remove(k)));
+  const { teste: _teste, ...extra } = draft.data.store.extra;
+  void _teste;
+  await storage().writeJSON(`lojas/${slug}/rascunho.json`, { ...draft.data, store: { ...draft.data.store, extra, catalog: { categories: [] } }, updatedAt: now.toISOString(), updatedBy: by }, draft.etag);
+}
+
+/**
+ * Cria (ou recria) a loja de demonstração com dados fictícios: rascunho da loja, ficha
+ * de custos e 120 dias de pedidos. Não publica nada e não toca em nenhuma outra loja.
+ */
+export async function createDemo(by: string, now = new Date()) {
+  // Só recria se o slug for mesmo da demonstração: nunca sobrescreve uma loja de verdade ou publicada.
+  const [existing, published] = await Promise.all([getDraft(DEMO_SLUG), getPublished(DEMO_SLUG)]);
+  if (published || (existing && (existing.data.store.extra.demo !== true || existing.data.publishedAt))) {
+    throw new Error(`O endereço ${DEMO_SLUG} já é usado por uma loja que não é a demonstração.`);
+  }
+  const store = demoStore();
+  const record: StoreRecord = { store, updatedAt: now.toISOString(), updatedBy: by, publishedAt: null };
+  await storage().writeJSON(`lojas/${DEMO_SLUG}/rascunho.json`, record);
+  const { days } = await writeFakeData(DEMO_SLUG, by, now);
+  return { slug: DEMO_SLUG, days: days.length, orders: days.reduce((n, d) => n + d.orders.length, 0) };
 }

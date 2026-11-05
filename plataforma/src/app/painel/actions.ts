@@ -26,6 +26,7 @@ import { setMercadoPagoToken } from '@/lib/pix';
 import { pushOrder, recentSends } from '@/lib/pdv';
 import { getOrder } from '@/lib/orders';
 import { OperatorError, removeOperator, setOperatorFuncao, upsertOperator } from '@/lib/operators';
+import { TestDataError, clearTestData, fillTestData } from '@/lib/inteligencia/dados';
 import type { Funcao } from '@/lib/session';
 import { DiagnosisError, setDiagnosisStatus, type DiagnosisStatus } from '@/lib/diagnostics';
 import { ContentError, setContentStatus, type ContentStatus } from '@/lib/conteudos';
@@ -314,4 +315,34 @@ export async function resendToPdvAction(slug: string, orderId: string): Promise<
   await pushOrder(slug, order, { force: true });
   const last = (await recentSends(slug, 300)).find((e) => e.orderId === orderId);
   return last?.status === 'enviado' ? { ok: true } : { ok: false, error: last?.error || 'Não foi enviado.' };
+}
+
+// ───────────── Dados de teste (loja que nunca foi ao ar) ─────────────
+
+export async function encherTesteAction(slug: string): Promise<ActionResult> {
+  const user = await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  try {
+    await fillTestData(slug, user.name || user.email);
+    revalidatePath(`/painel/lojas/${slug}`);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof TestDataError) return { ok: false, error: err.message };
+    console.error('encherTesteAction', err);
+    return { ok: false, error: 'Não foi possível gerar os dados de teste.' };
+  }
+}
+
+export async function limparTesteAction(slug: string): Promise<ActionResult> {
+  const user = await requireUser();
+  if (!isSlug(slug)) return BAD_SLUG;
+  try {
+    await clearTestData(slug, user.name || user.email);
+    revalidatePath(`/painel/lojas/${slug}`);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof TestDataError) return { ok: false, error: err.message };
+    console.error('limparTesteAction', err);
+    return { ok: false, error: 'Não foi possível apagar os dados de teste.' };
+  }
 }

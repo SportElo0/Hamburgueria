@@ -7,7 +7,7 @@ import type { PdvSend } from '@/lib/pdv';
 import { newId, type Store } from '@/lib/schema';
 import { brl, orderingOf, todaySP, type Coupon } from '@/lib/ordering';
 import type { OperatorSummary } from '@/lib/operators';
-import { createOperatorAction, removeOperatorAction, saveMercadoPagoTokenAction, setOperatorFuncaoAction } from '@/app/painel/actions';
+import { createOperatorAction, encherTesteAction, limparTesteAction, removeOperatorAction, saveMercadoPagoTokenAction, setOperatorFuncaoAction } from '@/app/painel/actions';
 import { FUNCOES, NOME_FUNCAO, type Funcao } from '@/lib/session';
 import { setOpenAction } from '@/app/loja/[slug]/actions';
 import type { Update } from './StoreEditor';
@@ -407,6 +407,46 @@ export function OnlineOrdersPanel(props: {
             Fica guardado só no painel, nunca vai para o site. O dinheiro cai direto na conta da loja. Aviso de pagamento (webhook): <span className="font-mono break-all">{props.webhookUrl}</span>
           </p>
         </form>
+      </section>
+
+      <section className="card space-y-3 border-dashed p-5 lg:col-span-2">
+        <h2 className="text-lg font-bold">Dados de teste {props.store.extra.teste === true && <span className="chip ml-1 bg-warn/10 align-middle text-warn">com dados de teste</span>}</h2>
+        <p className="text-sm text-ink-mute">
+          Para mostrar ou testar o painel do dono: coloca o cardápio de uma hamburgueria de exemplo, custos, 120 dias de pedidos e 12 mesas com algumas abertas, tudo
+          fictício. Só funciona em loja que nunca foi ao ar e sem pedidos de verdade. Troca o cardápio atual desta loja.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="btn-ghost"
+            disabled={busy}
+            onClick={() => {
+              if (!window.confirm('Encher esta loja com dados fictícios? O cardápio dela é trocado pelo de exemplo.')) return;
+              start(async () => {
+                const r = await encherTesteAction(props.store.slug);
+                setMsg(r.ok ? { tone: 'ok', text: 'Dados de teste prontos. Recarregue a página e abra o Painel do dono.' } : { tone: 'bad', text: r.error ?? 'Erro.' });
+              });
+            }}
+          >
+            {busy ? 'Gerando…' : props.store.extra.teste === true ? 'Gerar de novo' : 'Encher com dados de teste'}
+          </button>
+          {props.store.extra.teste === true && (
+            <button
+              type="button"
+              className="btn-danger"
+              disabled={busy}
+              onClick={() => {
+                if (!window.confirm('Apagar todos os dados de teste desta loja (pedidos, custos, mesas e o cardápio de exemplo)?')) return;
+                start(async () => {
+                  const r = await limparTesteAction(props.store.slug);
+                  setMsg(r.ok ? { tone: 'ok', text: 'Dados de teste apagados. Recarregue a página.' } : { tone: 'bad', text: r.error ?? 'Erro.' });
+                });
+              }}
+            >
+              Apagar dados de teste
+            </button>
+          )}
+        </div>
       </section>
 
       <section className="card space-y-4 p-5">
