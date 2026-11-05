@@ -20,6 +20,7 @@ Cores: Rosa de avental vermelho; Mel de roxo, de óculos; Beto de colete preto e
 ## Regras da série
 
 - Mesmo visual dos Reels de história (fundo escuro, legenda grande, selo "CASA CHEIA · EP. N" no topo, "Comenta PALAVRA" no fim).
+- **Nada simplificado a ponto de ficar errado.** Fala só do que a gente sabe; quando o assunto tem mais partes (como o lucro), mostra todas. Sem "regra de mercado" ou porcentagem ideal que a gente não tenha como provar.
 - Números só de exemplo, dentro da história, e marcados "exemplo" quando parecem dado real. Nunca "aumenta vendas" nem resultado prometido. Sugestão é "teste", não promessa.
 - Mensagem para cliente sempre **só para quem aceitou de forma clara**, identificando o restaurante, com **SAIR**, e com pouca frequência (a gente sugere no máximo uma por mês).
 - Todas as respostas do direct terminam com "Para sair, responda SAIR." e o link de privacidade.
@@ -41,7 +42,7 @@ Vender muito não é a mesma coisa que sobrar dinheiro. 🍝
 
 A parmegiana da Rosa sai toda noite. Mas, de cada R$ 39,90, R$ 22 vão embora em ingrediente. Esse número tem nome: CMV, o custo da mercadoria vendida.
 
-Faz a conta com o prato que mais sai aí: custo dos ingredientes ÷ preço. Quanto maior o resultado, menos sobra pra pagar a casa.
+Faz a conta com o prato que mais sai aí: custo dos ingredientes ÷ preço. Quanto maior o resultado, menos sobra pra pagar o resto: aluguel, salários, contas e impostos (isso fica pro episódio 4).
 
 Quer a conta passo a passo? Comenta MARGEM.
 
@@ -94,29 +95,33 @@ Narração com voz gerada por inteligência artificial.
 #restaurante #crm #fidelizacao #gestaoderestaurante #donoderestaurante
 ```
 
-### Ep. 4 · Reel 20 · "Dia 31" (fechamento do mês, ticket médio)
-- **Arquivo:** `20-dia-31.mp4` (28 s).
-- **História:** dia 31, a Rosa abre a caixa de comandas e não sabe quanto vendeu nem quanto sobrou. A Mel resume em três números (vendas, custo dos ingredientes, ticket médio) e tira três testes para o mês seguinte: combo do almoço com bebida, picanha no topo do cardápio e rever a porção da parmegiana. Teste, não promessa: no outro mês, mede de novo. Os números aparecem com a etiqueta "números de exemplo".
-- **Palavra:** RELATÓRIO (cadastrar também RELATORIO, sem acento, no ManyChat).
-- **Revisão legal (05/11):** a frase final sobre o Scale saiu do vídeo e do direct (o relatório mensal não está na oferta pública do Scale). A narração foi cortada do áudio original, sem gerar de novo.
+### Ep. 4 · Reel 20 · "Dia 31: quanto sobrou de verdade?" (fechamento do mês e lucro)
+- **Arquivo:** `20-dia-31.mp4` (35 s). Versão 2, refeita em 05/11 a pedido dos sócios: a primeira resumia o mês em três números e deixava de fora aluguel, salários e contas, o que não é o fechamento de verdade.
+- **História:** a Panela vendeu R$ 50 mil no mês. A Mel faz a conta com tudo: sai o ingrediente (R$ 17 mil), as taxas do cartão e dos aplicativos (R$ 2.500), o aluguel (R$ 6 mil), os salários com encargos, inclusive o da própria Rosa (R$ 14 mil), luz, gás e água (R$ 3 mil), impostos e contador (R$ 4 mil). Sobram R$ 3.500, 7% do que vendeu. Vender bem não é o mesmo que sobrar.
+- **Números:** de exemplo, marcados "números de exemplo" na tela. Não dizer que é a média dos restaurantes: cada casa tem a sua conta.
+- **Narração:** "Dia trinta e um. A Panela vendeu cinquenta mil reais no mês. Mas quanto sobrou de verdade? A Mel faz a conta com tudo. Das vendas, sai o ingrediente. Saem as taxas do cartão e dos aplicativos. O aluguel. Os salários com os encargos, inclusive o da própria Rosa. Luz, gás, água, impostos e o contador. O que fica no fim é o lucro. Aqui, três mil e quinhentos. Vender bem não é o mesmo que sobrar. Quer o modelo dessa conta? Comenta RELATÓRIO!"
+- **Palavra:** RELATÓRIO (cadastrar também RELATORIO, sem acento, no ManyChat). Não cita o Scale.
 
 Legenda:
 ```
-Dia 31: você sabe quanto vendeu e quanto sobrou? 📦
+Vendeu R$ 50 mil no mês. Quanto sobrou de verdade? 📦
 
-A Rosa tinha uma caixa de sapato cheia de comandas. A Mel resumiu em 3 números:
-1. Vendas do mês
-2. Custo dos ingredientes (o CMV)
-3. Ticket médio: quanto cada mesa gastou, em média
+A conta do fechamento tem que ter TUDO:
+– ingredientes
+– taxas do cartão e dos aplicativos
+– aluguel
+– salários e encargos, inclusive o seu (o dono também precisa de salário)
+– luz, gás e água
+– impostos e contador
 
-Desses números saem 3 testes pro mês que vem. Teste, não promessa: no outro mês, mede de novo.
+O que fica no fim é o lucro. No exemplo da Panela, R$ 3.500. Vender bem não é o mesmo que sobrar.
 
-Quer o modelo do relatório? Comenta RELATÓRIO.
+Quer o modelo dessa conta? Comenta RELATÓRIO.
 
 Casa Cheia é a nossa série sobre gestão de restaurante.
 Narração com voz gerada por inteligência artificial.
 
-#restaurante #gestaoderestaurante #ticketmedio #fechamentodecaixa #donoderestaurante
+#restaurante #gestaoderestaurante #fechamentodecaixa #lucro #donoderestaurante
 ```
 
 ## Respostas do direct (ManyChat)
@@ -162,15 +167,20 @@ Seus dados: growlift.com.br/privacidade.html
 
 **RELATÓRIO** (ep. 4):
 ```
-Opa! Aqui vai o modelo do relatório do mês, da série Casa Cheia 👇
+Opa! Aqui vai o modelo do fechamento do mês, da série Casa Cheia 👇
 
-📊 3 números
-1. Vendas do mês (e do mês anterior, pra comparar)
-2. Custo dos ingredientes ÷ vendas (o CMV, em %)
-3. Ticket médio: total vendido ÷ número de contas
+Vendas do mês
+– Ingredientes e bebidas que você comprou pra vender
+– Taxas do cartão, do Pix e dos aplicativos de entrega
+– Aluguel
+– Salários e encargos da equipe
+– O seu salário (pró-labore): o dono também é custo
+– Luz, gás, água, internet
+– Impostos e contador
+– Outras contas fixas (manutenção, sistema, embalagem)
+= Lucro (o que sobrou de verdade)
 
-🧪 3 testes pro mês que vem
-Cada um com: o que fazer, o número que justifica e como medir no fim do mês.
+Dica: use os valores que saíram do caixa no mês, com as notas e os boletos na mão. Se não souber algum, anota "não sei" em vez de chutar, e pergunta pro seu contador.
 
 Quer ajuda pra montar o do seu restaurante? Responde aqui que a gente te ajuda.
 
@@ -183,6 +193,6 @@ Seus dados: growlift.com.br/privacidade.html
 5. **"Que letra é essa?"** (pedido errado e desperdício): o Beto anota "X-bac s/ ceb… mal?", o Seu Juca faz errado, o prato volta e vai pro lixo. A Mel conta quanto custa um prato refeito (ingrediente + gás + tempo). Lição: pedido que chega escrito, do jeito que o cliente escolheu. Palavra: MESA.
 6. **"Vai uma bebida?"** (ticket médio): duas mesas iguais, uma com o Beto sugerindo bebida e sobremesa. A Mel mostra o ticket médio das duas. Lição: sugestão ativa, sem empurrar. Palavra: MARGEM.
 7. **"Segunda vazia"** (dia fraco): o salão vazio na segunda e lotado na sexta. Promoção só no dia fraco, nunca no dia cheio, sempre com validade e regras claras. Palavra: RELATÓRIO.
-8. **"O preço que termina em 90"** (preço e âncora): por que R$ 39,90 e não R$ 40; o prato mais caro no topo faz os outros parecerem acessíveis. Nunca ensinar "de/por" com preço que não foi praticado. Palavra: MARGEM.
+8. **"Quanto custa o seu prato de verdade?"** (ficha técnica): o Seu Juca pesa cada ingrediente de uma porção e a Mel soma; o desperdício e o que estraga também entram. Lição: sem ficha técnica, o CMV é chute. Palavra: MARGEM.
 9. **"Casa cheia, porta vazia"** (movimento ao vivo e reserva): o cliente desiste de ir achando que está lotado. O site mostra o movimento e os horários livres para reservar. Só gravar quando o Scale estiver à venda e o site listar isso. Palavra: MESA.
 10. **"10% esquecidos"** (taxa de serviço e couvert): a conta sai sem a taxa porque ninguém lembrou. Ensinar: taxa e couvert avisados no cardápio; a taxa de serviço é opcional e o cliente pode pedir para tirar. Palavra: MESA.
