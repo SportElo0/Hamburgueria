@@ -8,7 +8,7 @@ import {
   seatAction,
   tableAction,
 } from "@/app/loja/[slug]/actions";
-import { mesasAction } from "@/app/loja/[slug]/dono/actions";
+import { contaConfigAction, mesasAction } from "@/app/loja/[slug]/dono/actions";
 import { LancarPedido } from "@/components/mesa/LancarPedido";
 import type { MesaCategory } from "@/components/mesa/MesaApp";
 import { brl } from "@/lib/ordering";
@@ -32,11 +32,14 @@ export function MesasAoVivo({
   count: initialCount,
   qr,
   menu,
+  conta,
 }: {
   slug: string;
   count: number;
   qr: boolean;
   menu: MesaCategory[];
+  /** Service charge (%) and cover charge per person (centavos) set now. */
+  conta: { servico: number; couvert: number };
 }) {
   const [mesas, setMesas] = useState<FloorForStaff | null>(null);
   const [count, setCount] = useState(initialCount);
@@ -252,6 +255,8 @@ export function MesasAoVivo({
           </p>
         )}
       </form>
+
+      <ContaConfig slug={slug} inicial={conta} />
 
       {chamados.length > 0 && (
         <section
@@ -567,5 +572,108 @@ export function MesasAoVivo({
         </div>
       )}
     </div>
+  );
+}
+
+const reais = (c: number) => (c ? (c / 100).toFixed(2).replace(".", ",") : "");
+
+/** Service charge and cover charge, set by the owner; they show on the table's bill and in the menu. */
+function ContaConfig({
+  slug,
+  inicial,
+}: {
+  slug: string;
+  inicial: { servico: number; couvert: number };
+}) {
+  const [salvo, setSalvo] = useState(inicial);
+  const [servico, setServico] = useState(String(inicial.servico || ""));
+  const [couvert, setCouvert] = useState(reais(inicial.couvert));
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [pending, start] = useTransition();
+  const s = servico.trim() ? Number(servico.replace(/\D/g, "")) : 0;
+  const cTxt = couvert
+    .replace(/R\$|\s/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".");
+  const c = cTxt ? Math.round(Number(cTxt) * 100) : 0;
+  const valido =
+    Number.isInteger(s) &&
+    s >= 0 &&
+    s <= 20 &&
+    Number.isFinite(c) &&
+    c >= 0 &&
+    c <= 50_000;
+  const mudou = s !== salvo.servico || c !== salvo.couvert;
+  return (
+    <form
+      className="mt-4 flex flex-wrap items-end gap-3"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!valido)
+          return setMsg({
+            ok: false,
+            text: "Taxa de 0 a 20% e couvert até R$ 500.",
+          });
+        start(async () => {
+          const r = await contaConfigAction(slug, s, c);
+          if (!r.ok)
+            return setMsg({
+              ok: false,
+              text: r.error ?? "Não foi possível salvar.",
+            });
+          setSalvo({ servico: s, couvert: c });
+          setMsg({ ok: true, text: "Salvo. Já vale nas contas abertas." });
+        });
+      }}
+    >
+      <div>
+        <label htmlFor="servico" className="label">
+          Taxa de serviço (%)
+        </label>
+        <input
+          id="servico"
+          className="field w-24 text-right tabular-nums"
+          inputMode="numeric"
+          placeholder="0"
+          value={servico}
+          onChange={(e) => setServico(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="couvert" className="label">
+          Couvert por pessoa (R$)
+        </label>
+        <input
+          id="couvert"
+          className="field w-28 text-right tabular-nums"
+          inputMode="decimal"
+          placeholder="0,00"
+          value={couvert}
+          onChange={(e) => setCouvert(e.target.value)}
+        />
+      </div>
+      {mudou && (
+        <button
+          type="submit"
+          className="btn-primary min-h-[42px]"
+          disabled={pending}
+        >
+          Salvar
+        </button>
+      )}
+      <p className="basis-full text-xs text-ink-mute">
+        A taxa de serviço aparece como opcional para o cliente e o garçom pode
+        tirar de uma mesa. O couvert entra quando o número de pessoas da mesa é
+        informado.
+      </p>
+      {msg && (
+        <p
+          role={msg.ok ? "status" : "alert"}
+          className={`basis-full text-sm font-semibold ${msg.ok ? "text-ok" : "text-bad"}`}
+        >
+          {msg.text}
+        </p>
+      )}
+    </form>
   );
 }

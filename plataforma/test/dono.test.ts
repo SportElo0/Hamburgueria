@@ -6,10 +6,10 @@ import { storage, useFileStorage } from '@/lib/storage';
 import { seedStores } from '@/lib/seeds';
 import { storeSchema, type Store, type StoreRecord } from '@/lib/schema';
 import { CustoError, itensDoDono, salvarCustoManual } from '@/lib/dono';
-import { addItemByOwner, createStore, editItemByOwner, getChanges, getDraft, getPublished, setTablesCount } from '@/lib/stores';
-import { floor, freeTable, orderByStaff, seatTable } from '@/lib/mesas';
+import { addItemByOwner, createStore, editItemByOwner, getChanges, getDraft, getPublished, setContaConfig, setTablesCount } from '@/lib/stores';
+import { floor, freeTable, orderByStaff, seatTable, setServico } from '@/lib/mesas';
 import { listOrders, setSoldOut } from '@/lib/orders';
-import { orderingOf } from '@/lib/ordering';
+import { contaDaMesa, orderingOf } from '@/lib/ordering';
 import { clearTestData, createDemo, fillTestData } from '@/lib/inteligencia/dados';
 import { DEMO_SLUG } from '@/lib/inteligencia/demo';
 import { getCostSheet, saveCostSheet } from '@/lib/inteligencia/dados';
@@ -264,5 +264,37 @@ describe('garçom lança pedido', () => {
     await expect(orderByStaff('love', 2, { items: [{ productId: xis, quantity: 1 }], expectedSubtotal: null }, 'Zé')).rejects.toThrow(/esgotado/);
     await expect(orderByStaff('love', 2, { items: [], expectedSubtotal: null }, 'Zé')).rejects.toThrow(/vazia/);
     expect(await floor('love')).toEqual([]); // nenhuma mesa ficou aberta por um pedido que falhou
+  });
+});
+
+describe('taxa de serviço e couvert', () => {
+  beforeEach(() => {
+    useFileStorage(fs.mkdtempSync(path.join(os.tmpdir(), 'conta-')));
+  });
+
+  it('soma na conta, o garçom tira a taxa de uma mesa e o couvert vem das pessoas', async () => {
+    await createStore({ slug: 'love', name: 'Love', segment: 'restaurante' }, 'equipe');
+    await setTablesCount('love', 6, 'Dono');
+    const xis = await addItemByOwner('love', { name: 'X-Salada', price: 5000, category: 'Lanches' }, 'Dono');
+    await setContaConfig('love', 10, 800, 'Dono');
+    await seatTable('love', 2, { people: 3 });
+    await orderByStaff('love', 2, { items: [{ productId: xis, quantity: 2 }], expectedSubtotal: 10000 }, 'Zé');
+    let mesa = (await floor('love')).find((t) => t.number === 2)!;
+    expect(mesa.conta).toEqual({ itens: 10000, servico: 1000, couvert: 2400, total: 13400 });
+    expect(mesa.total).toBe(13400);
+    await setServico('love', 2, false);
+    mesa = (await floor('love')).find((t) => t.number === 2)!;
+    expect(mesa.conta).toEqual({ itens: 10000, servico: 0, couvert: 2400, total: 12400 });
+    await setServico('love', 2, true);
+    expect((await floor('love')).find((t) => t.number === 2)!.total).toBe(13400);
+    // Sem o número de pessoas, não há couvert.
+    await orderByStaff('love', 3, { items: [{ productId: xis, quantity: 1 }], expectedSubtotal: 5000 }, 'Zé');
+    expect((await floor('love')).find((t) => t.number === 3)!.conta).toEqual({ itens: 5000, servico: 500, couvert: 0, total: 5500 });
+    await expect(setContaConfig('love', 25, 0, 'Dono')).rejects.toThrow(/20%/);
+  });
+
+  it('conta da mesa: regra pura', () => {
+    expect(contaDaMesa(9990, { conta: { servico: 10, couvert: 0 }, pessoas: null })).toEqual({ itens: 9990, servico: 999, couvert: 0, total: 10989 });
+    expect(contaDaMesa(5000, { conta: { servico: 0, couvert: 500 }, pessoas: 2 })).toEqual({ itens: 5000, servico: 0, couvert: 1000, total: 6000 });
   });
 });

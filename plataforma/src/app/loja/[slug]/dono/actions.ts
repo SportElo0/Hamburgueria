@@ -2,7 +2,7 @@
 
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { CustoError, salvarCustoManual } from '@/lib/dono';
-import { ItemEditError, addItemByOwner, editItemByOwner, getDraft, getPublished, setTablesCount } from '@/lib/stores';
+import { ItemEditError, addItemByOwner, editItemByOwner, getDraft, getPublished, setContaConfig, setTablesCount } from '@/lib/stores';
 import { isSlug } from '@/lib/slug';
 import { floor } from '@/lib/mesas';
 
@@ -80,6 +80,20 @@ export async function mesasAction(slug: string, count: number): Promise<DonoResu
   } catch (err) {
     if (err instanceof ItemEditError) return { ok: false, error: err.message };
     console.error('mesasAction', err);
+    return { ok: false, error: 'Não foi possível salvar. Tente de novo.' };
+  }
+}
+
+/** The owner sets the service charge (%) and the cover charge per person (centavos). */
+export async function contaConfigAction(slug: string, servico: number, couvert: number): Promise<DonoResult> {
+  if (!isSlug(slug) || typeof servico !== 'number' || typeof couvert !== 'number') return { ok: false, error: 'Dados inválidos.' };
+  const user = await requireStoreAccess(slug, DONO);
+  try {
+    await setContaConfig(slug, servico, couvert, user.name || user.email);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof ItemEditError) return { ok: false, error: err.message };
+    console.error('contaConfigAction', err);
     return { ok: false, error: 'Não foi possível salvar. Tente de novo.' };
   }
 }

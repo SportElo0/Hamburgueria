@@ -7,7 +7,7 @@ import { OPERATOR_ACTIONS, PAYMENT_METHODS, type OperatorAction, type PaymentMet
 import { isSlug } from '@/lib/slug';
 import { setOptOut } from '@/lib/customers';
 import { ItemEditError, addPedido, editItemByStore, listPedidos } from '@/lib/stores';
-import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, orderByStaff, seatTable } from '@/lib/mesas';
+import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, orderByStaff, seatTable, setServico } from '@/lib/mesas';
 import { QueueError, addByStaff, queueOfDay, updateQueue, type QueueAction } from '@/lib/fila';
 import { markRefundDone } from '@/lib/mesa-pagamento';
 import { ReservationError, cancelByStore, markArrived, markFinished, markNoShow, undoArrived } from '@/lib/reservas';
@@ -220,5 +220,19 @@ export async function staffOrderAction(slug: string, number: number, items: unkn
     if (err instanceof OrderError || err instanceof TableError) return { ok: false, error: err.message };
     console.error('staffOrderAction', err);
     return { ok: false, error: 'Não foi possível lançar o pedido. Tente de novo.' };
+  }
+}
+
+/** The waiter takes the service charge off a table's bill (it is optional for the customer), or puts it back. */
+export async function servicoAction(slug: string, number: number, cobrar: boolean): Promise<OrderActionResult> {
+  if (!isSlug(slug) || !Number.isInteger(number) || number < 1 || number > 200 || typeof cobrar !== 'boolean') return { ok: false, error: 'Mesa inválida.' };
+  await requireStoreAccess(slug, SALAO);
+  try {
+    await setServico(slug, number, cobrar);
+    return { ok: true };
+  } catch (err) {
+    if (err instanceof TableError) return { ok: false, error: err.message };
+    console.error('servicoAction', err);
+    return { ok: false, error: 'Não foi possível mudar a taxa. Tente de novo.' };
   }
 }

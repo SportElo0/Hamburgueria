@@ -5,7 +5,7 @@ import { getDraft, getPublished } from './stores';
 import { monthKey } from './changes';
 import type { Store } from './schema';
 import { count, hourWindow, record, take } from './limits';
-import { OrderError, orderingOf, type Order, type PaymentMethod, type PixCharge } from './ordering';
+import { OrderError, contaDaMesa, orderingOf, type ContaConfig, type Order, type PaymentMethod, type PixCharge } from './ordering';
 import { ordersOfDays, placeStaffTableOrder, placeTableOrder, priceStaffOrder, tableDays, tableOrders, updateTableOrders } from './orders';
 
 /**
@@ -39,6 +39,8 @@ export interface Seating {
   credit?: number;
   /** Pix payments made from the phones at the table (see mesa-pagamento.ts). */
   payments?: TablePayment[];
+  /** The waiter took the service charge off this table's bill (it is optional for the customer). */
+  semServico?: boolean;
 }
 
 export interface TablePayment {
@@ -70,6 +72,9 @@ export interface SeatingRecord {
   drinks: number;
   credit: number;
   reserved: boolean;
+  /** Service and cover charges on the bill (centavos), on top of `total`. */
+  servico?: number;
+  couvert?: number;
 }
 
 const historyKey = (slug: string, month: string) => `mesas/${slug}/historico/${month}.json`;
@@ -170,7 +175,8 @@ export const isMember = (s: Seating | undefined, token: string | undefined) => B
 export async function tableState(slug: string, number: number, token: string | undefined, now = new Date()) {
   const seating = (await readDoc(slug)).data.seatings[number];
   if (!seating || !isMember(seating, token)) return { open: Boolean(seating), member: false as const };
-  const orders = await tableOrders(slug, seating.id, now);
+  const [orders, conta] = await Promise.all([tableOrders(slug, seating.id, now), contaConfig(slug)]);
+  const bill = billOf(seating, orders, conta);
   return {
     open: true,
     member: true as const,
@@ -179,10 +185,13 @@ export async function tableState(slug: string, number: number, token: string | u
     phones: seating.devices.length,
     calls: seating.calls.map((c) => c.kind),
     orders: orders.map(publicTableOrder),
-    total: billTotal(orders),
+    total: bill.total,
+    conta: bill,
+    servicoPct: conta.servico,
+    couvertPessoa: conta.couvert,
     credit: seating.credit ?? 0,
     paid: paidOf(seating),
-    due: dueOf(seating, orders),
+    due: dueOf(seating, orders, conta),
     payments: (seating.payments ?? [])
       .filter((p) => p.status !== 'aguardando' || Date.parse(p.pix.expiresAt) > now.getTime())
       .map((p) => ({ id: p.id, amount: p.amount, status: p.status, refund: p.refund ?? null, pix: p.status === 'aguardando' ? { copyPaste: p.pix.copyPaste, qrBase64: p.pix.qrBase64, expiresAt: p.pix.expiresAt, demo: p.pix.provider === 'demo' } : null })),
@@ -191,8 +200,26 @@ export async function tableState(slug: string, number: number, token: string | u
 
 /** Paid by Pix from the table's phones so far (centavos). */
 export const paidOf = (s: Seating) => (s.payments ?? []).filter((p) => p.status === 'pago').reduce((n, p) => n + p.amount, 0);
-/** What is left to pay: the bill, minus the booking deposit, minus Pix already paid. */
-export const dueOf = (s: Seating, orders: Order[]) => Math.max(0, billTotal(orders) - (s.credit ?? 0) - paidOf(s));
+/** The whole bill of a seating: items, service charge and cover charge. */
+export const billOf = (s: Seating, orders: Order[], conta: ContaConfig) => contaDaMesa(billTotal(orders), { conta, pessoas: s.people, semServico: s.semServico });
+/** What is left to pay: the whole bill, minus the booking deposit, minus Pix already paid. */
+export const dueOf = (s: Seating, orders: Order[], conta: ContaConfig) => Math.max(0, billOf(s, orders, conta).total - (s.credit ?? 0) - paidOf(s));
+
+/** The store's service and cover charge settings (the published menu, or the draft before it goes live). */
+export async function contaConfig(slug: string): Promise<ContaConfig> {
+  const store = (await getPublished(slug))?.store ?? (await getDraft(slug))?.data.store;
+  return store ? orderingOf(store).conta : { servico: 0, couvert: 0 };
+}
+
+/** The waiter takes the service charge off a table's bill, or puts it back. */
+export async function setServico(slug: string, number: number, cobrar: boolean) {
+  await change(slug, (doc) => {
+    const s = doc.seatings[number];
+    if (!s) throw new TableError('Essa mesa já foi fechada.');
+    if (cobrar) delete s.semServico;
+    else s.semServico = true;
+  });
+}
 export type TableState = Awaited<ReturnType<typeof tableState>>;
 
 /** A seating's bill: every order the kitchen did not refuse. */
@@ -290,11 +317,12 @@ export async function callFromTable(slug: string, number: number, token: string 
 
 /** Every open seating with its orders, for the waiter's floor screen. */
 export async function floor(slug: string, now = new Date()) {
-  const [seatings, days] = await Promise.all([openSeatings(slug), ordersOfDays(slug, tableDays(now))]);
+  const [seatings, days, conta] = await Promise.all([openSeatings(slug), ordersOfDays(slug, tableDays(now)), contaConfig(slug)]);
   const all = days.flatMap((d) => d.orders);
   return seatings.map((s) => {
     const orders = all.filter((o) => o.table?.session === s.id);
-    return { ...s, devices: s.devices.length, orders, total: billTotal(orders) };
+    const bill = billOf(s, orders, conta);
+    return { ...s, devices: s.devices.length, orders, total: bill.total, conta: bill, servicoPct: conta.servico };
   });
 }
 export type FloorTable = Awaited<ReturnType<typeof floor>>[number];
@@ -378,6 +406,7 @@ export function drinkCategoryIds(store: Store): Set<string> {
 /** Keeps a closed bill's numbers (never who sat there) for the analysis of time at the table. */
 async function recordSeating(slug: string, seating: Seating, orders: Order[], now: Date) {
   const record = await getPublished(slug);
+  const conta = await contaConfig(slug);
   const drinkCats = record ? drinkCategoryIds(record.store) : new Set<string>();
   const categoryOf = new Map<string, string>();
   for (const c of record?.store.catalog.categories ?? []) for (const i of c.items) categoryOf.set(i.id, c.id);
@@ -394,6 +423,10 @@ async function recordSeating(slug: string, seating: Seating, orders: Order[], no
     drinks: kept.flatMap((o) => o.lines).reduce((n, l) => n + (drinkCats.has(categoryOf.get(l.productId) ?? '') ? l.quantity : 0), 0),
     credit: seating.credit ?? 0,
     reserved: Boolean(seating.reservationId),
+    ...(() => {
+      const b = billOf(seating, kept, conta);
+      return b.servico || b.couvert ? { servico: b.servico, couvert: b.couvert } : {};
+    })(),
   };
   const key = historyKey(slug, monthKey(now));
   for (let attempt = 0; attempt < 5; attempt++) {

@@ -39,7 +39,7 @@ export default async function MesasDonoPage({ params }: { params: Promise<{ slug
           </div>
         )}
       </div>
-      <MesasAoVivo slug={slug} count={o.tables.count} qr={o.enabled && o.tables.enabled} menu={menu} />
+      <MesasAoVivo slug={slug} count={o.tables.count} qr={o.enabled && o.tables.enabled} menu={menu} conta={o.conta} />
     </div>
   );
 }

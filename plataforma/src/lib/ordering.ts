@@ -173,6 +173,11 @@ export const orderingSchema = z.object({
     .default({ provider: 'nenhum', codStore: '', codes: {}, city: '', state: '' }),
   /** Customers pay the table's bill by Pix from their phone (whole or split). */
   tablePay: z.boolean().default(false),
+  /**
+   * The table's bill on top of the items: service charge in whole percent (0 = none; optional for the customer,
+   * the waiter can take it off a table) and a cover charge per person (centavos; 0 = none).
+   */
+  conta: z.object({ servico: z.number().int().min(0).max(20), couvert: z.number().int().min(0).max(50_000) }).default({ servico: 0, couvert: 0 }),
   /** Shown to every customer once the order is done or the bill is asked for. Empty = not shown. */
   reviewUrl: z.string().trim().max(300).refine((v) => v === '' || isReviewUrl(v), 'Use o link de avaliação do Google (começa com https://g.page/ ou https://search.google.com/).').default(''),
 });
@@ -196,8 +201,22 @@ export const DEFAULT_ORDERING: Ordering = {
   waitlist: { enabled: false, maxParties: 60 },
   pdv: { provider: 'nenhum', codStore: '', codes: {}, city: '', state: '' },
   tablePay: false,
+  conta: { servico: 0, couvert: 0 },
   reviewUrl: '',
 };
+
+export type ContaConfig = Ordering['conta'];
+
+/**
+ * The table's bill: the items (orders the kitchen did not refuse), the service charge on the items (unless the
+ * waiter took it off) and the cover charge for each person (only when the number of people is known).
+ */
+export function contaDaMesa(itens: number, opts: { conta: ContaConfig; pessoas: number | null | undefined; semServico?: boolean }) {
+  const servico = opts.semServico || !opts.conta.servico ? 0 : Math.round((itens * opts.conta.servico) / 100);
+  const couvert = opts.conta.couvert && opts.pessoas ? opts.conta.couvert * opts.pessoas : 0;
+  return { itens, servico, couvert, total: itens + servico + couvert };
+}
+export type ContaDaMesa = ReturnType<typeof contaDaMesa>;
 
 /** Stores saved before online ordering existed have no settings yet. */
 export function orderingOf(store: Pick<Store, 'ordering'> | { ordering?: Ordering }): Ordering {

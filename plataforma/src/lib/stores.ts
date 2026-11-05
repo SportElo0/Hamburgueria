@@ -238,6 +238,15 @@ export async function setTablesCount(slug: string, count: number, by: string, hi
   await ownerLog(slug, `número de mesas: ${count}`, by);
 }
 
+/** The owner sets the service charge (whole %, 0 to 20) and the cover charge per person (centavos). */
+export async function setContaConfig(slug: string, servico: number, couvert: number, by: string) {
+  if (!Number.isInteger(servico) || servico < 0 || servico > 20) throw new ItemEditError('A taxa de serviço vai de 0% a 20%.');
+  if (!Number.isInteger(couvert) || couvert < 0 || couvert > 50_000) throw new ItemEditError('Couvert inválido.');
+  await ownerLimit(slug);
+  await updateBoth(slug, by, (store) => ({ ...store, ordering: { ...orderingOf(store), conta: { servico, couvert } } }));
+  await ownerLog(slug, `taxa de serviço ${servico}% e couvert ${(couvert / 100).toFixed(2)}`, by);
+}
+
 /** The owner edits an item; with no published menu yet, only the draft exists and gets the change. */
 export async function editItemByOwner(slug: string, itemId: string, input: StoreItemEdit, by: string) {
   if (await getPublished(slug)) return editItemByStore(slug, itemId, input, by);

@@ -7,7 +7,7 @@ import { take } from './limits';
 import { checkCharge, createCharge, lookupMercadoPago, PixError, refundCharge, type PaymentCheck } from './pix';
 import { orderingOf, sellerReady } from './ordering';
 import { tableOrders } from './orders';
-import { TableError, billTotal, change, closeTable, dueOf, isMember, readDoc, tableSettings, type Seating, type TablePayment } from './mesas';
+import { TableError, billOf, change, closeTable, contaConfig, dueOf, isMember, readDoc, tableSettings, type Seating, type TablePayment } from './mesas';
 import { markFinished } from './reservas';
 
 /**
@@ -147,11 +147,11 @@ export async function startTablePayment(slug: string, number: number, token: str
   if (!seating || !isMember(seating, token)) throw new TablePayError('Este celular não está na mesa.');
   if (!seating.confirmed) throw new TablePayError('Espere o garçom confirmar a mesa para pagar.');
   const orders = await tableOrders(slug, seating.id, now);
-  const due = dueOf(seating, orders);
+  const due = dueOf(seating, orders, o.conta);
   if (due <= 0) throw new TablePayError('A conta já está paga.');
-  // A share is always of the whole bill (after a booking deposit), so each phone picking "3 pessoas" pays a third;
-  // the last one pays only what is left.
-  const amount = Math.min(due, Math.ceil(Math.max(0, billTotal(orders) - (seating.credit ?? 0)) / parts));
+  // A share is always of the whole bill (service and cover included, after a booking deposit), so each phone picking
+  // "3 pessoas" pays a third; the last one pays only what is left.
+  const amount = Math.min(due, Math.ceil(Math.max(0, billOf(seating, orders, o.conta).total - (seating.credit ?? 0)) / parts));
   if (amount < 100) throw new TablePayError('O valor mínimo para pagar pelo Pix é R$ 1,00.');
   const pending = (seating.payments ?? []).filter((p) => p.status === 'aguardando' && Date.parse(p.pix.expiresAt) > now.getTime());
   if (pending.length >= MAX_PENDING) throw new TablePayError('Já tem vários Pix abertos nesta mesa. Pague um deles ou espere vencer.');
@@ -205,12 +205,12 @@ async function settle(slug: string, id: string, check: PaymentCheck | 'demo', no
   const short = check !== 'demo' && check.amount < found.payment.amount;
   const { number } = found.seating;
   const session = found.seating.id;
-  const orders = await tableOrders(slug, session, now);
+  const [orders, conta] = await Promise.all([tableOrders(slug, session, now), contaConfig(slug)]);
   const decided = await change(slug, (doc) => {
     const s = doc.seatings[number];
     const p = s?.id === session ? s.payments?.find((x) => x.id === id) : undefined;
     if (!s || !p || p.status !== 'aguardando') return null;
-    const due = dueOf(s, orders);
+    const due = dueOf(s, orders, conta);
     const paid = short ? (check as PaymentCheck).amount : p.amount;
     const credit = short ? 0 : Math.min(p.amount, due);
     p.paidAt = now.toISOString();
@@ -235,7 +235,7 @@ async function settle(slug: string, id: string, check: PaymentCheck | 'demo', no
   if (decided.credit > 0 && decided.dueAfter <= 0) {
     // Check again with the orders as they are now: someone may have ordered in between.
     const s = (await readDoc(slug)).data.seatings[number];
-    if (s?.id === session && dueOf(s, await tableOrders(slug, session, now)) <= 0) {
+    if (s?.id === session && dueOf(s, await tableOrders(slug, session, now), conta) <= 0) {
       const closed = await closeTable(slug, number, 'pix', 'pago pelo Pix na mesa', now, session).catch((err) => {
         console.error('mesa: fechar depois do Pix', slug, err);
         return null;

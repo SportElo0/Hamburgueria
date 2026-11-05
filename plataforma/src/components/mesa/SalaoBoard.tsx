@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import type { FloorForStaff } from "@/app/api/loja/[slug]/salao/route";
 import {
   orderAction,
+  servicoAction,
   tableAction,
   type TableAction,
 } from "@/app/loja/[slug]/actions";
@@ -434,6 +435,17 @@ export function SalaoBoard(props: {
             setLancando(selected.number);
             setOpen(null);
           }}
+          onServico={(cobrar) =>
+            startTransition(async () => {
+              const r = await servicoAction(
+                props.slug,
+                selected.number,
+                cobrar,
+              );
+              if (!r.ok) setError(r.error ?? "Não foi possível mudar a taxa.");
+              await load();
+            })
+          }
         />
       )}
       {lancando !== null && (
@@ -476,6 +488,7 @@ function TableSheet({
   onClose,
   onRun,
   onLancar,
+  onServico,
 }: {
   table: Table;
   now: number;
@@ -483,6 +496,7 @@ function TableSheet({
   onClose: () => void;
   onRun: (a: TableAction, m?: PaymentMethod) => void;
   onLancar: () => void;
+  onServico: (cobrar: boolean) => void;
 }) {
   const [closing, setClosing] = useState(false);
   useEffect(() => {
@@ -554,6 +568,41 @@ function TableSheet({
               </ul>
             </div>
           ))}
+          {(t.servicoPct > 0 || t.conta.couvert > 0) && (
+            <div className="space-y-1 border-t border-line pt-2 text-sm tabular-nums">
+              <p className="flex justify-between text-ink-soft">
+                <span>Pedidos</span>
+                <span>{brl(t.conta.itens)}</span>
+              </p>
+              {t.servicoPct > 0 && (
+                <div className="flex items-center justify-between gap-2 text-ink-soft">
+                  <span>
+                    Taxa de serviço ({t.servicoPct}%)
+                    {t.semServico ? ": retirada" : ""}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    {brl(t.conta.servico)}
+                    <button
+                      type="button"
+                      disabled={pending}
+                      onClick={() => onServico(Boolean(t.semServico))}
+                      className="rounded-md border border-line px-2 py-1 text-xs font-semibold text-ink hover:border-accent"
+                    >
+                      {t.semServico ? "Cobrar" : "Tirar"}
+                    </button>
+                  </span>
+                </div>
+              )}
+              {t.conta.couvert > 0 ? (
+                <p className="flex justify-between text-ink-soft">
+                  <span>
+                    Couvert ({t.people} {t.people === 1 ? "pessoa" : "pessoas"})
+                  </span>
+                  <span>{brl(t.conta.couvert)}</span>
+                </p>
+              ) : null}
+            </div>
+          )}
           <p className="flex justify-between pt-1 text-lg font-extrabold tabular-nums">
             <span>Total</span>
             <span>{brl(t.total)}</span>
