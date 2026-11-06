@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
         headers: [{ key: 'Content-Type', value: 'model/vnd.usdz+zip' }],
       },
       {
+        // Demo dishes are public files: other Growlift pages (sales demos) may load them in their 3D viewer.
+        source: '/3d/:file*',
+        headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
+      },
+      {
         // Read-only and public (tables free or taken, nothing personal): any site may frame it.
         source: '/movimento/:slug/embed',
         headers: [
