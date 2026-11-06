@@ -30,7 +30,7 @@ export function cardapioExemplo(): Store {
         item('classico', 'Clássico', 'Pão brioche, blend 160 g, queijo, alface e molho da casa. Toque na imagem para ver em 3D.', 3490, {
           image: '/3d/hamburguer-exemplo.jpg',
           imageAlt: 'Cheeseburguer com alface e tomate (imagem gerada por IA)',
-          modelo3d: { src: '/3d/hamburguer-exemplo.glb', ios: '/3d/hamburguer-exemplo.usdz', larguraCm: 13, alturaCm: 10.9, profundidadeCm: 13 },
+          modelo3d: { src: '/3d/hamburguer-exemplo.glb', ios: '/3d/hamburguer-exemplo.usdz', larguraCm: 12, alturaCm: 9.6, profundidadeCm: 12 },
           options: [
             {
               id: 'ponto',
