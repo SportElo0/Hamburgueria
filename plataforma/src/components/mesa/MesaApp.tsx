@@ -26,7 +26,7 @@ export interface MesaItem {
   imageAlt: string;
   available: boolean;
   /** Dish in 3D at real size (only items the Growlift team scanned). */
-  modelo3d?: { src: string; larguraCm: number; alturaCm: number } | null;
+  modelo3d?: { src: string; ios?: string; larguraCm: number; alturaCm: number } | null;
   options: {
     id: string;
     name: string;
