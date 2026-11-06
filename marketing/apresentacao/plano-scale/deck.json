@@ -1,0 +1,18 @@
+{
+  "v": 4,
+  "createdOnFiles": { "v": 1, "at": "2026-11-05T21:40:00Z" },
+  "lists": "css",
+  "title": "Plano Scale · Growlift",
+  "cover": "cover",
+  "order": ["cover", "dor", "scale", "s-mesa", "mesa", "pedido-certo", "cardapio3d", "cozinha", "garcom", "conta", "movimento", "porta", "s-numeros", "dono", "fechamento", "relatorio", "matriz", "grow", "implantacao", "antesdepois", "entregaveis", "investimento", "fim"],
+  "sections": {
+    "abertura": { "description": "O salão cheio, o que trava o restaurante e o que é o Scale", "start": "cover" },
+    "salao": { "description": "Na mesa e no salão: pedido pelo QR, cardápio em 3D, cozinha, garçom, conta e porta", "start": "s-mesa" },
+    "numeros": { "description": "Nos números: painel do dono, fechamento do dia e relatório do mês com sugestões", "start": "s-numeros" },
+    "fechar": { "description": "Tudo que vem junto, a implantação e o investimento", "start": "grow" }
+  },
+  "faces": {
+    "inter": { "family": "Inter", "href": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" }
+  },
+  "designSystems": []
+}
