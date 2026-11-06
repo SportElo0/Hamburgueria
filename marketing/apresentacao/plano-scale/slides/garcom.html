@@ -1,0 +1,54 @@
+<section id="garcom" data-transition="fade" style="background:#F3F5F9;color:#0B1020;font-family:'Inter', Arial, sans-serif;padding:128px">
+<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:radial-gradient(circle at 20% 90%, rgba(8,101,254,0.12), rgba(8,101,254,0) 40%)"></div>
+<p style="position:absolute;left:128px;top:112px;width:900px;font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#0865FE">No salão</p>
+<h2 style="position:absolute;left:128px;top:156px;width:760px;font-size:72px;font-weight:900;letter-spacing:-2px;line-height:1.08;color:#0B1020">O garçom vê o salão inteiro.</h2>
+<div data-build-in="rise order 1" style="position:absolute;left:128px;top:420px;width:740px;display:flex;flex-direction:column;gap:8px"><h3 style="font-size:40px;font-weight:800;color:#0B1020">Mapa ao vivo</h3><p style="font-size:30px;line-height:1.4;color:#4A5568">Livre, ocupada, chamando ou com a conta pedida, e há quanto tempo cada mesa está sentada.</p></div>
+<div data-build-in="rise order 2" style="position:absolute;left:128px;top:620px;width:740px;display:flex;flex-direction:column;gap:8px"><h3 style="font-size:40px;font-weight:800;color:#0B1020">Chamado no bolso</h3><p style="font-size:30px;line-height:1.4;color:#4A5568">“Chamar garçom” e “pedir a conta” chegam no celular com o número da mesa.</p></div>
+<div data-build-in="rise order 3" style="position:absolute;left:128px;top:820px;width:740px;display:flex;flex-direction:column;gap:8px"><h3 style="font-size:40px;font-weight:800;color:#0B1020">Lança pelo celular</h3><p style="font-size:30px;line-height:1.4;color:#4A5568">Pedido feito ao garçom vai direto para a cozinha.</p></div>
+<p style="position:absolute;left:952px;top:128px;width:840px;font-size:24px;text-align:right;color:#5A6478">Simulação com dados de exemplo</p>
+<x-embed data-build-in="pop order 1" style="position:absolute;left:952px;top:180px;width:840px;height:760px"><!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:840px;height:760px;background:transparent;overflow:hidden;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{position:absolute;inset:8px;border-radius:44px;background:#0f1520;border:1px solid #1e2838;padding:30px}
+.hd{display:flex;justify-content:space-between;align-items:center;color:#f3f5f9}
+.hd b{font-size:30px;font-weight:900}
+.lg{display:flex;gap:18px;font-size:24px;color:#a9b3c7;font-weight:600}
+.lg i{display:inline-block;width:18px;height:18px;border-radius:50%;margin-right:8px;vertical-align:-2px}
+.grid{position:absolute;left:30px;right:30px;top:110px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.m{height:170px;border-radius:30px;background:#1a2232;border:3px solid #2a3446;color:#f3f5f9;padding:20px 22px;display:flex;flex-direction:column;justify-content:space-between;transition:background .4s,border-color .4s}
+.m b{font-size:30px;font-weight:900}
+.m span{font-size:24px;font-weight:700;color:#a9b3c7}
+.m.oc{background:rgba(8,101,254,.22);border-color:#0865fe}
+.m.oc span{color:#cfe0ff}
+.m.ch{background:rgba(255,201,77,.22);border-color:#ffc94d;animation:p 1s ease-in-out infinite}
+.m.ch span{color:#ffe6a6}
+.m.co{background:rgba(34,197,94,.2);border-color:#22c55e}
+.m.co span{color:#bbf7d0}
+@keyframes p{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.toast{position:absolute;left:30px;right:30px;bottom:26px;height:92px;border-radius:26px;background:#f3f5f9;color:#121826;display:flex;align-items:center;gap:18px;padding:0 26px;font-size:28px;font-weight:800;transform:translateY(160px);transition:transform .5s cubic-bezier(.23,1,.32,1)}
+.toast i{flex:none;width:26px;height:26px;border-radius:50%}
+</style></head><body><div class="wrap">
+<div class="hd"><b>Salão agora</b><div class="lg"><span><i style="background:#0865fe"></i>ocupada</span><span><i style="background:#ffc94d"></i>chamou</span><span><i style="background:#22c55e"></i>conta</span></div></div>
+<div class="grid" id="g"></div>
+<div class="toast" id="t"><i id="ti"></i><span id="tt"></span></div>
+</div>
+<script>
+const g=document.getElementById('g');
+const M=[[1,'oc',38],[2,'',0],[3,'oc',12],[4,'oc',51],[5,'',0],[6,'oc',24],[7,'oc',7],[8,'',0],[9,'oc',66]];
+const el={};
+M.forEach(([n,c,m])=>{const d=document.createElement('div');d.className='m '+c;d.innerHTML='<b>Mesa '+n+'</b><span></span>';g.appendChild(d);el[n]={d,c,m};});
+function paint(){Object.entries(el).forEach(([n,o])=>{o.d.className='m '+o.c;o.d.querySelector('span').textContent=o.c===''?'livre':o.c==='ch'?'chamou · '+o.m+' min':o.c==='co'?'pediu a conta':o.m+' min';});}
+function toast(txt,col){const t=document.getElementById('t');document.getElementById('tt').textContent=txt;document.getElementById('ti').style.background=col;t.style.transform='translateY(0)';setTimeout(()=>t.style.transform='translateY(160px)',2200);}
+let tick=0;
+function loop(){tick++;Object.values(el).forEach(o=>{if(o.c)o.m++;});
+if(tick===3){el[4].c='ch';toast('Mesa 4 chamou o garçom','#ffc94d');}
+if(tick===7){el[4].c='oc';}
+if(tick===9){el[9].c='co';toast('Mesa 9 pediu a conta','#22c55e');}
+if(tick===13){el[9].c='';el[9].m=0;}
+if(tick===15){el[2].c='oc';el[2].m=0;toast('Mesa 2 ocupada · 4 pessoas','#0865fe');}
+if(tick===20){M.forEach(([n,c,m])=>{el[n].c=c;el[n].m=m;});tick=0;}
+paint();}
+paint();setInterval(loop,700);
+</script></body></html></x-embed>
+<aside>Para o garçom, a vantagem é saber onde ir. Em vez de rodar o salão perguntando, ele vê quem chamou e quem pediu a conta. Para o dono, o mapa mostra o tempo de cada mesa, que depois vira número no painel: tempo médio de mesa, por dia e horário.</aside>
+</section>
