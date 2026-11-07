@@ -205,3 +205,36 @@ mostra o número; se não mudar nada em 60 dias, cancela sem multa" (passar pelo
   responder.
 - Preços dos concorrentes de IA (Alô Chefia) não são públicos.
 - Preços sugeridos são hipóteses.
+
+## 8. Planos (decisão dos sócios, 07/11/2026)
+
+**O produto de restaurante:** painel de decisões (a aba Inteligência e o painel do dono, como já mostrados) +
+cardápio 3D, em três níveis. Os preços são hipóteses e passam pelo `revisor-legal` antes de anunciar.
+
+| | **Essencial** | **Pro** | **Completo** |
+|---|---|---|---|
+| Itens em 3D | 3 | 8 | até 25 |
+| Troca de item em 3D (prato novo ou da estação) | — | 1 por mês | 2 por mês |
+| Cardápio por QR com 3D e "ver na mesa" (realidade aumentada) | sim | sim | sim |
+| Painel de decisões: vendas, margem, matriz do cardápio, recomendação com aprovação do dono | sim | sim | sim |
+| Custo dos itens montado pela Growlift | 10 itens | 20 itens | cardápio todo |
+| Hora da sobremesa: aviso na mesa e na tela do garçom, cartão com QR | — | sim | sim |
+| Medição da taxa de sobremesa por mesa | — | sim | sim |
+| Resumo do mês em áudio para o dono | — | sim | sim |
+| Vendas do iFood e do caixa no painel (margem por canal) | — | — | sim |
+| Ficha técnica por áudio e preço do insumo pela nota fiscal | — | — | sim |
+| Vídeo do 3D por mês para o Instagram | — | — | sim |
+| **Implantação** | **R$ 397** | **R$ 597** | **R$ 997** |
+| **Mensalidade** | **R$ 197** | **R$ 297** | **R$ 497** |
+
+**O que já está pronto e o que falta construir:**
+- **Essencial:** dá para vender já. O 3D, o cardápio por QR, a Inteligência e o painel do dono já existem.
+- **Pro:** falta a Hora da sobremesa, a medição e o resumo em áudio.
+- **Completo:** falta também a importação de vendas e a IA da ficha técnica.
+
+Até ficarem prontos, Pro e Completo aparecem como "em breve".
+
+**Comparação com o mercado:**
+- **Só 3D:** ARK cobra de R$ 69 a R$ 299/mês; Cardapia, R$ 390 a R$ 1.190 de montagem + R$ 97/mês.
+- **Diferença da Growlift:** o painel de decisões e a medição.
+- **Limite de itens:** o Completo para em 25 itens, porque o 3D sem limite come a mensalidade.
