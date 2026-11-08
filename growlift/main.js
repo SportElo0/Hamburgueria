@@ -203,6 +203,26 @@
     new IntersectionObserver(([e]) => { atForm = e.isIntersecting; show(); }, { rootMargin: '0px 0px -30% 0px' }).observe(diag);
   }
 
+  // 3D burger: the viewer (self-hosted, ~1 MB) loads only when the section gets near; the hint goes after a touch.
+  const palco = document.getElementById('palco3d');
+  if (palco) {
+    const load = () => {
+      if (document.querySelector('script[data-mv]')) return;
+      const sc = document.createElement('script');
+      sc.type = 'module';
+      sc.src = 'vendor/model-viewer-4.4.0.min.js';
+      sc.dataset.mv = '1';
+      document.head.appendChild(sc);
+    };
+    if ('IntersectionObserver' in window) {
+      const near = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { near.disconnect(); load(); } }, { rootMargin: '600px 0px' });
+      near.observe(palco);
+    } else load();
+    const stage = palco.querySelector('.stage');
+    const mv = document.getElementById('burger3d');
+    ['pointerdown', 'touchstart'].forEach((t) => mv.addEventListener(t, () => stage.classList.add('touched'), { once: true, passive: true }));
+  }
+
   // Phone mask: (11) 90000-0000
   const phone = document.getElementById('f-zap');
   // The English page has no form: everything below is the diagnosis form.

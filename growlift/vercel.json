@@ -6,7 +6,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://painel-lojas-sportelo.vercel.app; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' blob: data: https://painel-lojas-sportelo.vercel.app; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; worker-src 'self' blob:"
         },
         {
           "key": "X-Content-Type-Options",
