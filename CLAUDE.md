@@ -20,6 +20,7 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 - Time da Vercel: `team_YoPHQ4Hb11W9RPG1cwvdMC3G`. Deploy a partir do GitHub `SportElo0/Hamburgueria`, branch `claude/downtown-burger-site`.
 - Para publicar, use a skill `/publicar`. Conteúdo novo de redes sociais: skill `novo-conteudo`.
 - Não abrir pull request sem pedido.
+- **Mudanças no site da Growlift (`growlift/`):** antes de mexer, perguntar o que exatamente querem mudar e mostrar a proposta; só construir e publicar depois do ok (pedido do Antônio, 08/11/2026).
 
 ## Checagens antes de publicar
 
