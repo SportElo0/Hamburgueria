@@ -32,6 +32,20 @@ conta, consulta os dados autorizados e explica.
 - **Unidades:** cada loja do painel é uma unidade. O nome da unidade fica no perfil. Rede com várias unidades = várias
   lojas (não há agregação entre elas nesta versão).
 
+## Produto contratado: sistema completo ou só Conselheiro
+
+- **Onde a equipe escolhe:** Painel › Lojas › (loja) › **Produto contratado**. Fica em `store.extra.produto`
+  (`src/lib/produto.ts`); sem nada, vale o sistema completo.
+- **"Só Conselheiro + sobremesa 3D"** é para restaurante que já tem sistema de pedidos e mesas:
+  - o menu do dono mostra só **Conselheiro** (abre na Conversa) e **Sobremesa 3D**;
+  - as telas Resumo, Preços e custos, Mesas, Pedidos, Equipe e Clientes levam para a conversa
+    (`semSistemaCompleto` em `src/lib/produto-servidor.ts`);
+  - o cadastro não oferece o canal dos pedidos do painel.
+- **Sobremesa 3D nesse modo:**
+  - o cartão com QR abre as sobremesas em 3D no cardápio, e o pedido continua com o garçom no sistema do restaurante;
+  - não há aviso automático (ele depende das mesas da Growlift);
+  - a medição é antes e depois, com as vendas importadas, num teste.
+
 ## Telas
 
 | Aba | O que faz |

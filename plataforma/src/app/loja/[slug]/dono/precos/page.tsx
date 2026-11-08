@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { semSistemaCompleto } from '@/lib/produto-servidor';
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { itensDoDono } from '@/lib/dono';
 import { getDraft } from '@/lib/stores';
@@ -11,6 +12,7 @@ export default async function PrecosPage({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
   await requireStoreAccess(slug, DONO);
+  await semSistemaCompleto(slug);
   const [{ categories, published }, draft] = await Promise.all([itensDoDono(slug), getDraft(slug)]);
   const demo = draft?.data.store.extra.demo === true;
   return (

@@ -4,16 +4,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 /** Abas do Conselheiro. No celular rolam para o lado. */
-export function SubNav({ base, pendencias }: { base: string; pendencias: number }) {
+export function SubNav({ base, pendencias, soConselheiro = false }: { base: string; pendencias: number; soConselheiro?: boolean }) {
   const path = usePathname();
+  const hoje = { href: base, label: 'Hoje' };
+  const conversa = { href: `${base}/conversa`, label: 'Conversa' };
+  // Só Conselheiro: a conversa vem primeiro (é por onde o dono entra).
   const abas = [
-    { href: base, label: 'Hoje' },
-    { href: `${base}/conversa`, label: 'Conversa' },
+    ...(soConselheiro ? [conversa, hoje] : [hoje, conversa]),
     { href: `${base}/produtos`, label: 'Produtos e custos' },
     { href: `${base}/simulador`, label: 'Simulador' },
     { href: `${base}/decisoes`, label: 'Decisões' },
     { href: `${base}/testes`, label: 'Testes e metas' },
-    { href: `${base}/3d`, label: '3D' },
+    { href: `${base}/3d`, label: soConselheiro ? 'Sobremesa 3D' : '3D' },
     { href: `${base}/cadastro`, label: 'Cadastro' },
     { href: `${base}/importar`, label: 'Importar' },
   ];

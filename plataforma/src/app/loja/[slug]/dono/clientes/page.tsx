@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { semSistemaCompleto } from '@/lib/produto-servidor';
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { getDraft, getPublished } from '@/lib/stores';
 import { listCustomers } from '@/lib/customers';
@@ -12,6 +13,7 @@ export default async function ClientesDonoPage({ params }: { params: Promise<{ s
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
   await requireStoreAccess(slug, DONO);
+  await semSistemaCompleto(slug);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const store = draft.data.store;

@@ -3,7 +3,8 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { useFileStorage } from '@/lib/storage';
-import { createStore } from '@/lib/stores';
+import { createStore, getDraft, getPublished, setProdutoContratado } from '@/lib/stores';
+import { produtoDa } from '@/lib/produto';
 import { createDemo } from '@/lib/inteligencia/dados';
 import { DEMO_SLUG } from '@/lib/inteligencia/demo';
 import {
@@ -113,6 +114,15 @@ describe('conselheiro: dados da loja', () => {
     expect(c).toMatchObject({ ingredientes: 1200, embalagem: 150, origem: 'calculado', lote: { custo: 9600, rendimento: 8 }, confirmadoPor: 'dono' });
     const vendas = `produto;canal;inicio;fim;quantidade;receita\nClássico;${app.nome};01/11/2026;${hoje(NOW).split('-').reverse().join('/')};10;300,00\n`;
     expect((await previsualizar(DEMO_SLUG, 'vendas', vendas, null, NOW)).avisos.join(' ')).toMatch(/incompletas/);
+  });
+
+  it('produto contratado: sem marcação vale o sistema completo; só Conselheiro fica no rascunho', async () => {
+    await montar();
+    expect(produtoDa((await getDraft(OUTRA))!.data.store)).toBe('completo');
+    await setProdutoContratado(OUTRA, 'conselheiro', 'equipe');
+    expect(produtoDa((await getDraft(OUTRA))!.data.store)).toBe('conselheiro');
+    expect(await getPublished(OUTRA)).toBeNull(); // não publica nada
+    expect(produtoDa((await getDraft(DEMO_SLUG))!.data.store)).toBe('completo');
   });
 
   it('canal sem vendas registradas é "sem dado", não zero', async () => {

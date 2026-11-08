@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { semSistemaCompleto } from '@/lib/produto-servidor';
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { getDraft } from '@/lib/stores';
 import { listOperators } from '@/lib/operators';
@@ -11,6 +12,7 @@ export default async function EquipeDonoPage({ params }: { params: Promise<{ slu
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
   const user = await requireStoreAccess(slug, DONO);
+  await semSistemaCompleto(slug);
   if (!(await getDraft(slug))) notFound();
   const logins = (await listOperators(slug)).map(({ email, name, funcao }) => ({ email, name, funcao }));
   return (

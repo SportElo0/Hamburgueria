@@ -4,6 +4,8 @@ import { isSlug } from '@/lib/slug';
 import { contexto, etapasFeitas } from '@/lib/conselheiro/dados';
 import { ETAPAS } from '@/lib/conselheiro/modelo';
 import { SubNav } from '@/components/conselheiro/SubNav';
+import { getDraft } from '@/lib/stores';
+import { produtoDa } from '@/lib/produto';
 
 export const metadata = { title: 'Conselheiro' };
 
@@ -12,7 +14,9 @@ export default async function ConselheiroLayout({ children, params }: { children
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
   await requireStoreAccess(slug, DONO);
-  const feitas = etapasFeitas(await contexto(slug));
+  const [ctx, draft] = await Promise.all([contexto(slug), getDraft(slug)]);
+  const feitas = etapasFeitas(ctx);
+  const soConselheiro = draft ? produtoDa(draft.data.store) === 'conselheiro' : false;
   const faltam = ETAPAS.filter((e) => !feitas[e]).length;
   return (
     <div className="mx-auto max-w-6xl">
@@ -21,7 +25,7 @@ export default async function ConselheiroLayout({ children, params }: { children
       <p className="mt-1 hidden max-w-3xl text-ink-soft sm:block">
         Preço, promoção ou combo: veja quanto sobra, os riscos e como testar. Os números saem das contas do painel com os dados que você cadastrou; nada é previsão.
       </p>
-      <SubNav base={`/loja/${slug}/dono/conselheiro`} pendencias={faltam} />
+      <SubNav base={`/loja/${slug}/dono/conselheiro`} pendencias={faltam} soConselheiro={soConselheiro} />
       <div className="mt-6">{children}</div>
     </div>
   );

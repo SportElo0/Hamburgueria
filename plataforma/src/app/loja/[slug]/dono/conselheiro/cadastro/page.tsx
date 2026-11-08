@@ -4,6 +4,8 @@ import { DONO, requireStoreAccess } from '@/lib/auth';
 import { isSlug } from '@/lib/slug';
 import { fmtBps } from '@/lib/conselheiro/calculos';
 import { contexto, etapasFeitas } from '@/lib/conselheiro/dados';
+import { getDraft } from '@/lib/stores';
+import { produtoDa } from '@/lib/produto';
 import { CANAL_PAINEL, ETAPAS, NOME_ETAPA, NOME_TIPO_CANAL, TIPOS_CANAL, type Canal } from '@/lib/conselheiro/modelo';
 import { AcaoForm } from '@/components/conselheiro/AcaoForm';
 import { adicionarProdutoAction, criarCanalPainelAction, salvarCanalAction, salvarNegocioAction, salvarPrioritariosAction } from '../actions';
@@ -63,7 +65,9 @@ export default async function CadastroPage({ params }: { params: Promise<{ slug:
   const { perfil } = ctx;
   const feitas = etapasFeitas(ctx);
   const base = `/loja/${slug}/dono/conselheiro`;
-  const temCardapio = ctx.produtos.some((p) => p.origem === 'cardapio');
+  const draft = await getDraft(slug);
+  // Loja só Conselheiro não recebe pedidos pelo painel: não oferece o canal deles.
+  const temCardapio = (!draft || produtoDa(draft.data.store) !== 'conselheiro') && ctx.produtos.some((p) => p.origem === 'cardapio');
 
   return (
     <div className="space-y-6">
