@@ -141,6 +141,7 @@
     const slides = ramos.querySelector('.slides');
     const imgs = slides.querySelectorAll('img');
     const words = ramos.querySelector('.spin .track');
+    const url = ramos.querySelector('.bar .url');
     const dots = ramos.querySelectorAll('.ramos-dots i');
     const n = imgs.length;
     let target = 0;
@@ -164,6 +165,7 @@
         current = k;
         words.style.transform = `translateY(${-k * 1.15}em)`;
         dots.forEach((d, j) => d.classList.toggle('on', j === k));
+        if (url && imgs[k]?.dataset.url) url.textContent = imgs[k].dataset.url;
       }
     };
     const tick = () => {

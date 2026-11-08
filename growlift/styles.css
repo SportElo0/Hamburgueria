@@ -106,7 +106,8 @@ section { position: relative; }
 .ramos h2 { font-size: clamp(32px, 4.6vw, 64px); line-height: 1.04; font-weight: 800; }
 .spin { display: block; height: 1.15em; overflow: hidden; color: var(--blue-bright); }
 .spin .track { display: block; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.spin .track span { display: block; height: 1.15em; line-height: 1.15em; }
+.spin .track span { display: block; height: 1.15em; line-height: 1.15em; white-space: nowrap; }
+@media (max-width: 520px) { .ramos h2 .spin { font-size: min(1em, 8.4vw); } }
 .ramos .lead { margin: 16px auto 0; max-width: 760px; }
 .browser { position: relative; width: min(100%, 1040px, calc((100svh - 470px) * 16 / 9)); margin: clamp(24px, 4vh, 44px) auto 0; }
 .browser .frame { border-radius: 18px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 -30px 90px -30px rgba(8, 101, 254, 0.55), 0 40px 80px -40px rgba(0, 0, 0, 0.9); overflow: hidden; text-align: left; }
@@ -438,3 +439,12 @@ section { position: relative; }
 .big-stat b { font-size: clamp(72px, 10vw, 120px); line-height: 1; font-weight: 800; letter-spacing: -0.05em; color: var(--blue-bright); text-shadow: 0 0 40px rgba(77, 141, 255, 0.45); }
 .big-stat span { max-width: 240px; color: var(--muted); font-size: 15px; }
 @media (max-width: 900px) { .study { grid-template-columns: 1fr; } .bar-row { grid-template-columns: 96px 1fr 48px; } }
+
+/* Pesquisa como frase, sem caixa: número em destaque e a fonte logo abaixo */
+.proofline { margin: 28px 0 0; max-width: 620px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 18px; line-height: 1.55; color: var(--text-soft); }
+.proofline b { color: var(--text); font-weight: 800; font-size: 1.15em; font-variant-numeric: tabular-nums; }
+.proofline small { display: block; margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--dim); }
+.proofline a { color: var(--blue-soft); text-underline-offset: 3px; }
+.quote { max-width: 860px; }
+.quote .lead { max-width: 720px; }
+::selection { background: rgba(77, 141, 255, 0.35); color: #fff; }
