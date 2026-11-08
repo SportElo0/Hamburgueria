@@ -191,6 +191,18 @@
     render();
   }
 
+  // Mobile: one small "plan" button stays at the bottom after the cover, and steps aside at the form.
+  const sticky = document.querySelector('.sticky-cta');
+  const diag = document.getElementById('diagnostico');
+  const heroEl = document.querySelector('.hero');
+  if (sticky && diag && heroEl && 'IntersectionObserver' in window) {
+    let pastHero = false;
+    let atForm = false;
+    const show = () => sticky.classList.toggle('on', pastHero && !atForm);
+    new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting; show(); }).observe(heroEl);
+    new IntersectionObserver(([e]) => { atForm = e.isIntersecting; show(); }, { rootMargin: '0px 0px -30% 0px' }).observe(diag);
+  }
+
   // Phone mask: (11) 90000-0000
   const phone = document.getElementById('f-zap');
   // The English page has no form: everything below is the diagnosis form.
@@ -202,32 +214,15 @@
   });
 
   const form = document.getElementById('form-diagnostico');
-  // "O que mais atrapalha": up to 3; a fourth tick is undone with a note.
-  const dores = form.querySelectorAll('input[name=dor]');
-  dores.forEach((box) =>
-    box.addEventListener('change', () => {
-      if (box.checked && form.querySelectorAll('input[name=dor]:checked').length > 3) {
-        box.checked = false;
-        fail('Marque até 3: as que mais pesam hoje.');
-      }
-    }),
-  );
-  // The answers travel as plain lines in the free-text field the panel already keeps (1000 characters).
-  const answers = (f) => {
-    const picked = (name) => Array.from(form.querySelectorAll(`input[name=${name}]:checked`), (i) => i.value);
-    const lines = [
-      ['Maior dor', picked('dor').join('; ')],
-      ['Clientes chegam por', picked('canal').join(', ')],
-      ['Atendimentos por dia', picked('volume').join('')],
-      ['Quem responde o WhatsApp', picked('quem').join('')],
-      ['Sistema', f.sistema.value.trim()],
-      ['Em 30 dias quer', f.wishes.value.trim()],
-    ].filter(([, v]) => v);
-    return lines.map(([k, v]) => `${k}: ${v}`).join('\n').slice(0, 1000);
-  };
   const msg = document.getElementById('form-msg');
   const ok = document.getElementById('form-ok');
   const button = form.querySelector('button[type=submit]');
+  const steps = Array.from(form.querySelectorAll('.wstep'));
+  const count = document.getElementById('step-count');
+  const bar = form.querySelector('.progress i');
+  const other = form.querySelector('.other');
+  const otherInput = document.getElementById('f-ramo');
+  const picked = (name) => Array.from(form.querySelectorAll(`input[name=${name}]:checked`), (i) => i.value);
 
   const fail = (text, field) => {
     msg.textContent = text;
@@ -238,19 +233,87 @@
       field.setAttribute('aria-invalid', 'true');
       field.focus();
     }
+    return false;
   };
+  const clear = () => { msg.hidden = true; };
+
+  // One step at a time (only with JS: without it, the whole form shows at once).
+  let current = 0;
+  const go = (n) => {
+    current = n;
+    steps.forEach((st, i) => (st.hidden = i !== n));
+    count.textContent = `Passo ${n + 1} de ${steps.length}`;
+    bar.style.transform = `scaleX(${(n + 1) / steps.length})`;
+    clear();
+  };
+  form.classList.add('steps-on');
+  go(0);
+
+  // "O que mais atrapalha": up to 3.
+  form.querySelectorAll('input[name=dor]').forEach((box) =>
+    box.addEventListener('change', () => {
+      if (box.checked && picked('dor').length > 3) {
+        box.checked = false;
+        fail('Marque até 3: as que mais pesam hoje.');
+      } else clear();
+    }),
+  );
+  form.querySelectorAll('input[name=ramo]').forEach((r) =>
+    r.addEventListener('change', () => {
+      other.hidden = r.value !== 'Outro' || !r.checked;
+      if (!other.hidden) otherInput.focus();
+    }),
+  );
+
+  const valid = (n) => {
+    if (n === 0 && !picked('dor').length) return fail('Marque pelo menos uma coisa que atrapalha hoje.', form.querySelector('input[name=dor]'));
+    if (n === 1) {
+      const ramo = picked('ramo')[0];
+      if (!ramo) return fail('Escolha o ramo do negócio.', form.querySelector('input[name=ramo]'));
+      if (ramo === 'Outro' && otherInput.value.trim().length < 2) return fail('Conte qual é o ramo.', otherInput);
+    }
+    return true;
+  };
+  const toForm = () => form.getBoundingClientRect().top < 80 && form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  form.querySelectorAll('[data-next]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (!valid(current)) return;
+      go(current + 1);
+      toForm();
+      steps[current].querySelector('input:not([type=hidden])')?.focus({ preventScroll: true });
+    }),
+  );
+  form.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', () => { go(current - 1); toForm(); }));
+
+  // The answers travel as plain lines in the free-text field the panel already keeps (1000 characters).
+  const segment = () => {
+    const r = picked('ramo')[0] || '';
+    return (r === 'Outro' ? otherInput.value.trim() : r.replace(/ \(.*\)$/, '')).slice(0, 60);
+  };
+  const answers = (f) =>
+    [
+      ['Maior dor', picked('dor').join('; ')],
+      ['Ramo', picked('ramo')[0] === 'Outro' ? otherInput.value.trim() : picked('ramo')[0]],
+      ['Atendimentos por dia', picked('volume').join('')],
+      ['Quem responde o WhatsApp', picked('quem').join('')],
+      ['Mais', f.wishes.value.trim()],
+    ]
+      .filter(([, v]) => v)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join('\n')
+      .slice(0, 1000);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const f = form.elements;
     const digits = f.whatsapp.value.replace(/\D/g, '');
+    if (!valid(0)) return go(0);
+    if (!valid(1)) return go(1);
     if (f.business.value.trim().length < 2) return fail('Informe o nome do negócio.', f.business);
-    if (f.segment.value.trim().length < 2) return fail('Informe o ramo do negócio.', f.segment);
     if (digits.length < 10) return fail('Informe um WhatsApp com DDD.', f.whatsapp);
-    if (!form.querySelector('input[name=dor]:checked')) return fail('Marque pelo menos uma coisa que atrapalha hoje.', dores[0]);
-    if (!f.consent.checked) return fail('Marque a autorização para podermos mandar o diagnóstico no WhatsApp.', f.consent);
+    if (!f.consent.checked) return fail('Marque a autorização para podermos mandar o plano no WhatsApp.', f.consent);
 
-    msg.hidden = true;
+    clear();
     button.disabled = true;
     button.textContent = 'Enviando…';
     try {
@@ -259,8 +322,8 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           business: f.business.value,
-          segment: f.segment.value,
-          city: f.city.value,
+          segment: segment(),
+          city: '',
           whatsapp: digits,
           presence: f.presence.value,
           wishes: answers(f),
@@ -278,7 +341,7 @@
       const offline = err instanceof TypeError || (err && err.name === 'TimeoutError');
       fail(offline ? 'Sem conexão. Confira a internet e tente de novo.' : err.message);
       button.disabled = false;
-      button.textContent = 'Quero meu diagnóstico';
+      button.textContent = 'Receber meu plano grátis';
     }
   });
 })();
