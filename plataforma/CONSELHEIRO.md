@@ -188,6 +188,7 @@ muda uma decisão antiga (há teste para isso).
 | `ANTHROPIC_API_KEY` | chave da Anthropic (já usada em Vendas); só no servidor |
 | `CONSELHEIRO_IA_MODELO` | troca o modelo (padrão `claude-opus-5-5`, esforço médio, com troca automática de modelo pela Anthropic se o principal recusar) |
 | `CONSELHEIRO_IA_LIMITE_MES` | perguntas por loja por mês (padrão 150) |
+| `CONSELHEIRO_IA_LIMITE_GLOBAL_MES` | perguntas por mês somando todas as lojas (padrão 2000); vale também pôr um teto de gasto na conta da Anthropic |
 
 ## Importações (`csv.ts`, `importar.ts`)
 

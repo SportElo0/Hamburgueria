@@ -174,6 +174,27 @@ export async function adicionarProduto(slug: string, input: { nome: string; cate
   });
 }
 
+/** Vários produtos numa gravação só (importação): ou entram todos, ou nenhum. */
+export async function adicionarProdutos(slug: string, itens: { nome: string; categoria: string }[], by: string, loteId: string) {
+  const existentes = new Set((await listarProdutos(slug)).map((p) => normalizar(p.nome)));
+  const em = new Date().toISOString();
+  const novos = itens.map((i) => {
+    const nome = limpar(i.nome, 80);
+    if (!nome || existentes.has(normalizar(nome))) throw new DadosError(`Produto "${nome}" vazio ou repetido.`);
+    existentes.add(normalizar(nome));
+    return produtoSchema.parse({ id: novoId('p'), nome, categoria: limpar(i.categoria, 60), ativo: true, origem: 'importado', loteId, criadoEm: em, criadoPor: by });
+  });
+  await mutar<unknown[]>(chave(slug, 'produtos.json'), () => [], (lista) => {
+    if (lista.length + novos.length > 500) throw new DadosError('Limite de 500 produtos cadastrados.');
+    return { novo: [...lista, ...novos] };
+  });
+}
+
+/** Tira um lote do registro (a gravação dos dados dele falhou): o mesmo arquivo pode ser importado de novo. */
+export async function removerLote(slug: string, id: string) {
+  await mutar<unknown[]>(chave(slug, 'lotes.json'), () => [], (lista) => ({ novo: lista.filter((x) => (x as Lote).id !== id) }));
+}
+
 export const normalizar = (s: string) =>
   s
     .normalize('NFD')

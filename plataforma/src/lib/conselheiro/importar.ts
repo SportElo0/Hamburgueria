@@ -6,7 +6,8 @@ import {
   DadosError,
   adicionarCustos,
   adicionarPrecos,
-  adicionarProduto,
+  adicionarProdutos,
+  removerLote,
   chavesDeVendas,
   getLotes,
   getPerfil,
@@ -285,14 +286,21 @@ export async function importar(slug: string, input: { tipo: TipoLote; texto: str
     por: by,
     desfeitoEm: null,
   });
-  if (input.tipo === 'produtos') {
-    for (const r of registros) if (r.tipo === 'produtos') await adicionarProduto(slug, { nome: r.nome, categoria: r.categoria }, by, loteId);
-  } else if (input.tipo === 'custos') {
-    await adicionarCustos(slug, registros.flatMap((r) => (r.tipo === 'custos' ? [{ ...r.custo, loteId, confirmadoPor: by }] : [])), by);
-  } else if (input.tipo === 'precos') {
-    await adicionarPrecos(slug, registros.flatMap((r) => (r.tipo === 'precos' ? [{ ...r.preco, loteId }] : [])), by);
-  } else {
-    await gravarVendas(slug, loteId, registros.flatMap((r) => (r.tipo === 'vendas' ? [r.venda] : [])));
+  // O lote é registrado antes (barra o mesmo arquivo em duas abas ao mesmo tempo). Se a gravação dos dados
+  // falhar, ele sai do registro: nada fica pela metade travando a próxima tentativa.
+  try {
+    if (input.tipo === 'produtos') {
+      await adicionarProdutos(slug, registros.flatMap((r) => (r.tipo === 'produtos' ? [{ nome: r.nome, categoria: r.categoria }] : [])), by, loteId);
+    } else if (input.tipo === 'custos') {
+      await adicionarCustos(slug, registros.flatMap((r) => (r.tipo === 'custos' ? [{ ...r.custo, loteId, confirmadoPor: by }] : [])), by);
+    } else if (input.tipo === 'precos') {
+      await adicionarPrecos(slug, registros.flatMap((r) => (r.tipo === 'precos' ? [{ ...r.preco, loteId }] : [])), by);
+    } else {
+      await gravarVendas(slug, loteId, registros.flatMap((r) => (r.tipo === 'vendas' ? [r.venda] : [])));
+    }
+  } catch (err) {
+    await removerLote(slug, loteId).catch((e) => console.error('conselheiro lote não removido', e instanceof Error ? e.message : 'erro'));
+    throw err;
   }
   return { loteId, importadas: registros.length, ignoradas: previa.linhas.length - registros.length };
 }

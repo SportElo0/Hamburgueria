@@ -261,7 +261,7 @@ export async function salvarSimulacaoAction(slug: string, input: unknown): Promi
           riscos: i.decisao.riscos.split('\n').map((x) => x.trim()).filter(Boolean),
           proximoPasso: i.decisao.proximoPasso,
           simulacaoIds: [sim.id],
-          produtos: typeof i.entrada.produtoId === 'string' ? [i.entrada.produtoId] : [],
+          produtos: typeof i.entrada.produtoId === 'string' && (await contexto(q.slug)).produtos.some((p) => p.id === i.entrada.produtoId) ? [i.entrada.produtoId] : [],
           origem: 'simulador',
           conversaId: null,
         },
@@ -380,7 +380,7 @@ export async function perguntarAction(slug: string, input: { conversaId: string 
   const u = await requireStoreAccess(slug, DONO);
   if (!(await take('conselheiro-ia-hora', slug, 40, hourWindow()))) return { estado: 'erro-entrada', erro: 'Muitas perguntas nesta hora. Espere um pouco.' };
   try {
-    return await responder(slug, { conversaId: typeof input.conversaId === 'string' ? input.conversaId : null, pergunta: input.pergunta }, u.name || u.email);
+    return await responder(slug, { conversaId: typeof input.conversaId === 'string' ? input.conversaId : null, pergunta: input.pergunta.slice(0, 2000) }, u.name || u.email);
   } catch (err) {
     return { estado: 'erro-entrada', erro: err instanceof Error && err.message.startsWith('Escreva') ? err.message : 'Não foi possível perguntar agora.' };
   }

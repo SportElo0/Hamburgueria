@@ -32,6 +32,11 @@ export const PRECOS: Record<string, { entrada: number; saida: number; cache: num
 };
 
 export const iaLigada = () => process.env.CONSELHEIRO_IA === 'claude' && Boolean(process.env.ANTHROPIC_API_KEY?.trim());
+/** Teto de perguntas por mês somando todas as lojas (protege a conta da Anthropic). */
+export function limiteGlobalMes() {
+  const n = Number(process.env.CONSELHEIRO_IA_LIMITE_GLOBAL_MES);
+  return Number.isInteger(n) && n >= 0 ? n : 2000;
+}
 export const modelo = () => process.env.CONSELHEIRO_IA_MODELO?.trim() || MODELO_PADRAO;
 export function limiteMes() {
   const n = Number(process.env.CONSELHEIRO_IA_LIMITE_MES);
@@ -125,6 +130,7 @@ export async function responder(slug: string, input: { conversaId: string | null
   const mes = mesDe(now);
   const limite = limiteMes();
   if (!(await take('conselheiro-ia', slug, limite, mes))) return { estado: 'limite', limite };
+  if (!(await take('conselheiro-ia-global', 'todas', limiteGlobalMes(), mes))) return { estado: 'limite', limite };
 
   const ctx = await contexto(slug, now);
   const anterior = input.conversaId ? await getConversa(slug, input.conversaId) : null;
@@ -173,7 +179,8 @@ export async function responder(slug: string, input: { conversaId: string | null
         tokensEntrada: res.usage.input_tokens,
         tokensSaida: res.usage.output_tokens,
         tokensCache: res.usage.cache_read_input_tokens ?? 0,
-        custoMicroUsd: custoMicroUsd(model, res.usage),
+        // Custo pelo modelo que respondeu (a Anthropic pode trocar o modelo se o principal recusar).
+        custoMicroUsd: custoMicroUsd(res.model in PRECOS ? res.model : model, res.usage),
       });
       const textos = res.content.filter((b): b is Anthropic.Beta.BetaTextBlock => b.type === 'text').map((b) => b.text);
       if (res.stop_reason === 'refusal') {

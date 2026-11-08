@@ -84,6 +84,7 @@ export default async function CadastroPage({ params }: { params: Promise<{ slug:
             <div><label className="label" htmlFor="objetivos">Objetivos</label><textarea id="objetivos" name="objetivos" className="field min-h-20" maxLength={600} defaultValue={perfil.objetivos} placeholder="O que você quer melhorar nos próximos meses" /></div>
             <div><label className="label" htmlFor="restricoes">Restrições da operação</label><textarea id="restricoes" name="restricoes" className="field min-h-20" maxLength={600} defaultValue={perfil.restricoes} placeholder="Ex.: cozinha faz no máximo 60 lanches por noite" /></div>
           </div>
+          <p className="text-xs text-ink-mute">Não escreva nome, telefone ou outro dado de clientes nestes campos: eles são usados pelo Conselheiro.</p>
         </AcaoForm>
       </section>
 
