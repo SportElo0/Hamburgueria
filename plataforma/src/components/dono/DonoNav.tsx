@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-type Icon = 'resumo' | 'precos' | 'mesas' | 'pedidos' | 'equipe' | 'clientes';
+type Icon = 'resumo' | 'conselheiro' | 'precos' | 'mesas' | 'pedidos' | 'equipe' | 'clientes';
 
 function Svg({ name }: { name: Icon }) {
   const paths: Record<Icon, string> = {
     resumo: 'M4 19V10M10 19V5M16 19v-6M22 19H2',
+    conselheiro: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z',
     precos: 'M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8ZM7.5 7.5h.01',
     mesas: 'M3 8h18M5 8v11M19 8v11M8 4h8',
     pedidos: 'M6 3h12v18l-3-2-3 2-3-2-3 2V3ZM9 8h6M9 12h6',
@@ -27,6 +28,7 @@ export function DonoNav(props: { slug: string; storeName: string; logo: string; 
   const base = `/loja/${props.slug}/dono`;
   const live: { href: string; label: string; icon: Icon }[] = [
     { href: base, label: 'Resumo geral', icon: 'resumo' },
+    { href: `${base}/conselheiro`, label: 'Conselheiro', icon: 'conselheiro' },
     { href: `${base}/precos`, label: 'Preços e custos', icon: 'precos' },
     { href: `${base}/mesas`, label: 'Mesas', icon: 'mesas' },
     { href: `${base}/pedidos`, label: 'Pedidos e delivery', icon: 'pedidos' },
