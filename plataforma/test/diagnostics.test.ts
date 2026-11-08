@@ -3,7 +3,8 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { useFileStorage } from '@/lib/storage';
-import { createDiagnosisRequest, DiagnosisError, listDiagnosisRequests, setDiagnosisStatus } from '@/lib/diagnostics';
+import { countNewDiagnoses, createDiagnosisRequest, DiagnosisError, listDiagnosisRequests, setDiagnosisStatus } from '@/lib/diagnostics';
+import { storage } from '@/lib/storage';
 
 const ok = { business: 'Barbearia do Léo', segment: 'Barbearia', city: 'Diadema', whatsapp: '(11) 98888-7777', presence: '@barbeariadoleo', wishes: 'Quero agendamento', consent: true };
 
@@ -42,5 +43,33 @@ describe('pedidos de diagnóstico', () => {
     await expect(createDiagnosisRequest(ok, '', new Date(), '200.9.9.9')).resolves.toBeTruthy();
     const list = await listDiagnosisRequests(1);
     expect(JSON.stringify(list)).not.toContain('200.1.2.3');
+  });
+
+  it('a bolinha vermelha conta os pedidos novos e some quando alguém responde', async () => {
+    expect(await countNewDiagnoses()).toBe(0);
+    const a = await createDiagnosisRequest(ok, '');
+    const b = await createDiagnosisRequest({ ...ok, business: 'Doces da Ana' }, '');
+    expect(await countNewDiagnoses()).toBe(2);
+    await setDiagnosisStatus(a.id, 'em-andamento');
+    expect(await countNewDiagnoses()).toBe(1);
+    await setDiagnosisStatus(b.id, 'enviado');
+    expect(await countNewDiagnoses()).toBe(0);
+    // Back to "novo" counts again.
+    await setDiagnosisStatus(a.id, 'novo');
+    expect(await countNewDiagnoses()).toBe(1);
+  });
+
+  it('refaz a contagem a partir dos pedidos quando o índice não existe', async () => {
+    await createDiagnosisRequest(ok, '');
+    await createDiagnosisRequest({ ...ok, business: 'Doces da Ana' }, '');
+    await storage().remove('diagnosticos/novos.json');
+    expect(await countNewDiagnoses()).toBe(2);
+  });
+
+  it('pedidos com mais de 60 dias saem da contagem', async () => {
+    const old = new Date(Date.now() - 70 * 86_400_000);
+    await createDiagnosisRequest(ok, '', old);
+    expect(await countNewDiagnoses(old)).toBe(1);
+    expect(await countNewDiagnoses()).toBe(0);
   });
 });

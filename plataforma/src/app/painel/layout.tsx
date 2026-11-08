@@ -3,9 +3,13 @@ import { requireUser } from '@/lib/auth';
 import { logout } from '../login/actions';
 import { InstallButton } from '@/components/InstallButton';
 import { AvisoPrevia } from '@/components/AvisoPrevia';
+import { DiagnosticosNav } from '@/components/DiagnosticosNav';
+import { countNewDiagnoses } from '@/lib/diagnostics';
 
 export default async function PainelLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
+  // A failure to count never takes the panel down: the badge just stays hidden until the next check.
+  const novos = await countNewDiagnoses().catch(() => 0);
   return (
     <div className="min-h-dvh">
       <AvisoPrevia />
@@ -28,9 +32,7 @@ export default async function PainelLayout({ children }: { children: React.React
             <Link href="/painel/indicacoes" className="text-sm text-ink-mute hover:text-ink">
               Indicações
             </Link>
-            <Link href="/painel/diagnosticos" className="text-sm text-ink-mute hover:text-ink">
-              Diagnósticos
-            </Link>
+            <DiagnosticosNav initial={novos} />
             <Link href="/painel/conteudos" className="text-sm text-ink-mute hover:text-ink">
               Conteúdos
             </Link>
