@@ -127,6 +127,39 @@ privacidade, na parte de Reservas), porque o aviso de privacidade `/privacidade/
   - Cada envio fica em `pdv/<loja>/envios.json` (últimos 300). No editor da equipe aparecem os últimos envios com
     "Reenviar" para os que falharam. Opcional: `SAIPOS_API_URL` para o ambiente de testes do Saipos.
 
+## Hora da sobremesa (08/11/2026)
+
+Liga em Configurar → Pedidos online → **Hora da sobremesa** (com mesas ligadas). Regras em `src/lib/sobremesa.ts`
+(puro, testado em `test/sobremesa.test.ts`).
+
+- **Modos:**
+  - **Desligado (só mede):** nada aparece, mas a conta fechada já guarda as sobremesas (são as semanas de "antes").
+  - **Metade das mesas (teste):** só as mesas ímpares recebem o aviso; as pares são a comparação.
+  - **Todas as mesas.**
+- **Quando aparece:**
+  - na hora em que a mesa pede a conta;
+  - ou N minutos (padrão 15) depois que o último prato principal ficou pronto, sem nada mais na cozinha.
+  - **Só se:** a mesa pediu prato principal (bebida, adicional e sobremesa não contam) e ainda não pediu sobremesa.
+- **No celular da mesa:** cartão escuro com até 3 sobremesas disponíveis (as escolhidas pela equipe, depois as que
+  têm 3D), com o 3D ao tocar na foto e o "+" que põe no pedido.
+  - No cardápio, o cartão aparece em cima; na conta, embaixo do botão "Pedir a conta".
+  - "Agora não" fecha o cartão para aquele celular naquela mesa (`localStorage`, por código da mesa).
+- **Na tela do garçom:**
+  - Alerta verde, sem som: "Mesa N: oferecer sobremesa".
+  - "Já ofereci" grava `dessertOffered` na mesa e o alerta some.
+  - Só aparece para mesa já confirmada.
+- **Cartão para imprimir** (`/loja/<loja>/sobremesa-qr`, login de dono ou equipe): 4 por folha A4, com o QR do cardápio
+  só para ver (`/cardapio/<loja>#cat-<sobremesas>`). Serve também em mesa que pediu com o garçom.
+- **Medição** (mapa › Tempo nas mesas):
+  - **O que compara:** a parte das mesas que pediu sobremesa com o aviso e sem o aviso (mesas pares no teste e contas
+    de quando estava desligado), mais unidades, valor e em quantas o garçom ofereceu.
+  - **Confiável:** só com 30 mesas em cada grupo.
+  - **O que guarda:** cada conta fechada em `mesas/<loja>/historico/<AAAA-MM>.json` ganha `desserts`, `dessertRevenue`,
+    `dessertTest` e `dessertOffered`, sem dado de cliente.
+  - **Limite:** conta só o que foi pedido pelo painel (QR ou garçom). Sobremesa lançada só no caixa do restaurante
+    não aparece.
+- **Categorias de sobremesa:** as marcadas pela equipe ou, sem marcar, pelo nome (sobremesas, doces, sorvetes, açaí…).
+
 ## Limpeza diária dos dados
 
 Uma vez por dia, o mesmo alarme de 5 minutos da agenda do Instagram (`/api/instagram/tick`) roda `src/lib/limpeza.ts`:

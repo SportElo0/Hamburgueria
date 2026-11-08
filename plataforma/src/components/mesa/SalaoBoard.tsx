@@ -174,6 +174,19 @@ export function SalaoBoard(props: {
           });
         }
       }
+      if (t.sobremesa) {
+        out.push({
+          key: `s${t.number}`,
+          table: t.number,
+          tone: "ok",
+          title: `Mesa ${t.number}: oferecer sobremesa`,
+          detail:
+            t.sobremesa === "conta"
+              ? "Pediu a conta e não pediu doce. Ofereça antes de fechar."
+              : "Já comeu o prato e não pediu doce. Ofereça a sobremesa.",
+          primary: { label: "Já ofereci", run: () => run(t.number, "sobremesa") },
+        });
+      }
       for (const o of t.orders.filter((x) => x.status === "pronto")) {
         out.push({
           key: `p${o.id}`,

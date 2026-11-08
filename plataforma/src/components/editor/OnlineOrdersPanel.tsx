@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { SalaoSettings } from './SalaoSettings';
+import { SobremesaSettings } from './SobremesaSettings';
 import { SalaoExtras } from './SalaoExtras';
 import type { PdvSend } from '@/lib/pdv';
 import { newId, type Store } from '@/lib/schema';
@@ -313,6 +314,7 @@ export function OnlineOrdersPanel(props: {
           hasMercadoPago={hasMp}
         />
       )}
+      {o.tables.enabled && <SobremesaSettings value={o.sobremesa} store={props.store} ordersUrl={props.ordersUrl} onChange={(v) => set('sobremesa', v)} />}
       {o.tables.enabled && <SalaoExtras slug={props.store.slug} o={o} set={set} hasMercadoPago={hasMp} saiposReady={props.saiposReady} sends={props.pdvSends} />}
 
       <section className="card space-y-4 p-5">

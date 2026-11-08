@@ -80,6 +80,7 @@
 
 /* Dish in 3D (table menu): the sheet rises from the bottom; no motion when the phone asks for less. */
 @keyframes prato3d-sobe { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes sobremesa-in { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes prato3d-escurece { from { background-color: rgb(0 0 0 / 0); } }
 .prato3d-fundo { animation: prato3d-escurece 220ms cubic-bezier(.23, 1, .32, 1); }
 .prato3d-folha { animation: prato3d-sobe 300ms cubic-bezier(.23, 1, .32, 1); }

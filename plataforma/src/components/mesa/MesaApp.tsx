@@ -123,6 +123,8 @@ export function MesaApp(props: {
   const [vendo3d, setVendo3d] = useState<MesaItem | null>(null);
   const [reviewing, setReviewing] = useState(false);
   const [toast, setToast] = useState("");
+  // "Agora não" on the dessert card, per seating (the code changes with each new group at the table).
+  const [semSobremesa, setSemSobremesa] = useState<string | null>(null);
   // This phone was at the table with a bill, and the table is gone: the bill was paid. Say thanks (and ask for a review).
   const hadBill = useRef(false);
   const [thanked, setThanked] = useState(false);
@@ -290,6 +292,44 @@ export function MesaApp(props: {
     );
 
   const pendingCalls = new Set(state.calls);
+  const dessertKey = `sobremesa-${props.slug}-${props.number}-${state.code}`;
+  const dessertHidden = semSobremesa === dessertKey || lerDispensa(dessertKey);
+  const dessertItems = state.sobremesa
+    ? state.sobremesa.items
+        .map((id) => props.menu.flatMap((c) => c.items).find((i) => i.id === id))
+        .filter((i): i is MesaItem => Boolean(i))
+    : [];
+  const pickItem = (item: MesaItem) =>
+    item.options.length
+      ? setPicking(item)
+      : addLine({
+          itemId: item.id,
+          name: item.name,
+          quantity: 1,
+          unit: item.price,
+          selections: {},
+          detail: "",
+          notes: "",
+        });
+  const dessertCard =
+    state.sobremesa && dessertItems.length && !dessertHidden ? (
+      <SobremesaCard
+        reason={state.sobremesa.reason}
+        items={dessertItems}
+        kitchenOpen={props.kitchenOpen}
+        cart={cart}
+        onPick={(item) => {
+          pickItem(item);
+          if (!item.options.length) setToast(`${item.name} no pedido. Toque em Ver pedido para enviar.`);
+          setView("cardapio");
+        }}
+        onVer3d={setVendo3d}
+        onClose={() => {
+          guardarDispensa(dessertKey);
+          setSemSobremesa(dessertKey);
+        }}
+      />
+    ) : null;
   return (
     <Shell>
       <header className="sticky top-0 z-20 border-b border-[#E6EBF2] bg-[#F4F6FA]/95 px-4 pt-[max(12px,env(safe-area-inset-top))] pb-3 backdrop-blur">
@@ -347,6 +387,8 @@ export function MesaApp(props: {
         </p>
       )}
 
+      {view === "cardapio" && dessertCard}
+
       {view === "cardapio" ? (
         <>
           {(state.servicoPct > 0 || state.couvertPessoa > 0) && (
@@ -368,19 +410,7 @@ export function MesaApp(props: {
           <Cardapio
             menu={props.menu}
             kitchenOpen={props.kitchenOpen}
-            onPick={(item) =>
-              item.options.length
-                ? setPicking(item)
-                : addLine({
-                    itemId: item.id,
-                    name: item.name,
-                    quantity: 1,
-                    unit: item.price,
-                    selections: {},
-                    detail: "",
-                    notes: "",
-                  })
-            }
+            onPick={pickItem}
             onVer3d={setVendo3d}
             cart={cart}
           />
@@ -401,6 +431,8 @@ export function MesaApp(props: {
           }
         />
       )}
+      {/* On the bill, the card goes under the button just tapped, where the eyes already are. */}
+      {view === "conta" && dessertCard && <div className="pb-6">{dessertCard}</div>}
 
       {view === "cardapio" && cartCount > 0 && (
         <div className="fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[#F4F6FA] via-[#F4F6FA] to-transparent px-4 pt-6 pb-[max(16px,env(safe-area-inset-bottom))]">
@@ -455,6 +487,127 @@ export function MesaApp(props: {
         </p>
       )}
     </Shell>
+  );
+}
+
+function lerDispensa(key: string) {
+  try {
+    return window.localStorage.getItem(key) === "1";
+  } catch {
+    return false;
+  }
+}
+function guardarDispensa(key: string) {
+  try {
+    window.localStorage.setItem(key, "1");
+  } catch {
+    // Private mode or blocked storage: the card stays closed until the page reloads.
+  }
+}
+
+/**
+ * "Hora da sobremesa": after the main course (or when the table asks for the bill), up to 3 desserts, the ones
+ * scanned in 3D first. Shown once per seating; "Agora não" closes it for this phone.
+ */
+function SobremesaCard({
+  reason,
+  items,
+  kitchenOpen,
+  cart,
+  onPick,
+  onVer3d,
+  onClose,
+}: {
+  reason: "tempo" | "conta";
+  items: MesaItem[];
+  kitchenOpen: boolean;
+  cart: CartLine[];
+  onPick: (item: MesaItem) => void;
+  onVer3d: (item: MesaItem) => void;
+  onClose: () => void;
+}) {
+  const inCart = new Set(cart.map((l) => l.itemId));
+  return (
+    <section
+      aria-labelledby="sobremesa-titulo"
+      className="mx-4 mt-3 rounded-[24px] bg-[#121826] p-4 text-[#FFFFFF] motion-safe:animate-[sobremesa-in_320ms_cubic-bezier(0.22,1,0.36,1)]"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[12px] font-bold tracking-[0.14em] text-[#9DB8FF] uppercase">
+            Hora da sobremesa
+          </p>
+          <h2
+            id="sobremesa-titulo"
+            className="mt-1 text-lg leading-tight font-black"
+          >
+            {reason === "conta"
+              ? "Antes de fechar, uma sobremesa?"
+              : "Sobrou espaço para um doce?"}
+          </h2>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="min-h-11 shrink-0 rounded-full px-3 text-sm font-semibold text-[#C9D3E1] underline-offset-2 hover:underline"
+        >
+          Agora não
+        </button>
+      </div>
+      <ul className="mt-3 grid grid-cols-1 gap-2">
+        {items.map((item) => (
+          <li
+            key={item.id}
+            className="flex items-center gap-3 rounded-[18px] bg-[#FFFFFF]/8 p-2.5"
+          >
+            {item.modelo3d ? (
+              <button
+                type="button"
+                onClick={() => onVer3d(item)}
+                aria-label={`Ver ${item.name} em 3D`}
+                className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-[#FFFFFF]/10 transition-transform duration-150 ease-out active:scale-[0.96]"
+              >
+                {item.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={item.image} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <Cubo className="mx-auto h-7 w-7 text-[#C9D3E1]" />
+                )}
+                <Selo3D />
+              </button>
+            ) : item.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={item.image}
+                alt={item.imageAlt}
+                className="h-16 w-16 shrink-0 rounded-2xl bg-[#FFFFFF]/10 object-cover"
+              />
+            ) : null}
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] leading-tight font-bold">{item.name}</p>
+              <p className="mt-1 text-[14px] font-extrabold text-[#9DB8FF] tabular-nums">
+                {brl(item.price)}
+              </p>
+            </div>
+            {kitchenOpen && (
+              <button
+                type="button"
+                onClick={() => onPick(item)}
+                aria-label={`Adicionar ${item.name}`}
+                className="grid h-11 min-w-11 shrink-0 place-items-center rounded-full bg-[#0865FE] px-3 text-sm font-black text-[#FFFFFF] transition-transform duration-150 ease-out active:scale-[0.96]"
+              >
+                {inCart.has(item.id) ? "+1" : "+"}
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+      {items.some((i) => i.modelo3d) && (
+        <p className="mt-2.5 text-[12px] text-[#C9D3E1]">
+          Toque na foto para ver em 3D, do tamanho de verdade.
+        </p>
+      )}
+    </section>
   );
 }
 
