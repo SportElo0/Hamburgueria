@@ -114,10 +114,10 @@
       </div>
       <figure class="stage3d reveal d2" id="palco3d">
         <div class="stage">
-          <model-viewer id="burger3d" src="img/burger-3d.glb" poster="img/burger-real.webp" alt="Hambúrguer de exemplo em 3D em cima de um prato. Arraste para girar e use dois dedos para aproximar." camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="14deg" interaction-prompt="none" camera-orbit="110deg 78deg 0.62m" min-camera-orbit="auto 20deg 0.24m" max-camera-orbit="auto 88deg 0.8m" field-of-view="30deg" min-field-of-view="30deg" max-field-of-view="30deg" zoom-sensitivity="2.2" interpolation-decay="120" tone-mapping="neutral" shadow-intensity="1.2" shadow-softness="0.8" exposure="1" environment-image="neutral" ar ar-modes="scene-viewer quick-look" ar-scale="fixed" ar-placement="floor" loading="lazy">
+          <model-viewer id="burger3d" src="img/burger-3d.glb" poster="img/burger-real.webp" alt="Hambúrguer de exemplo em 3D em cima de um prato. Arraste para os lados para girar e use dois dedos para aproximar." camera-controls disable-pan touch-action="pan-y" interaction-prompt="none" camera-orbit="20deg 64deg 0.62m" min-camera-orbit="-Infinity 64deg 0.26m" max-camera-orbit="Infinity 64deg 0.8m" camera-target="auto auto auto" field-of-view="30deg" min-field-of-view="30deg" max-field-of-view="30deg" zoom-sensitivity="2.2" interpolation-decay="120" tone-mapping="neutral" shadow-intensity="1.2" shadow-softness="0.8" exposure="1" environment-image="neutral" ar ar-modes="scene-viewer quick-look" ar-scale="fixed" ar-placement="floor" loading="lazy">
             <button slot="ar-button" class="ar-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20.5 7.5v9L12 21.2 3.5 16.5v-9L12 2.8Z"/><path d="M3.8 7.6 12 12.2l8.2-4.6M12 12.2v8.8"/></svg>Ver na minha mesa</button>
           </model-viewer>
-          <p class="drag-hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5V4.5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.6-2.2L3.5 15a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/></svg><span class="hint-a">Role e o prato vira para você</span><span class="hint-b">Arraste para girar · dois dedos para aproximar</span></p>
+          <p class="drag-hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5V4.5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.6-2.2L3.5 15a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/></svg><span>Arraste para girar · dois dedos para aproximar</span></p>
           <p class="ia-tag">Criado por IA</p>
         </div>
       </figure>
@@ -136,26 +136,40 @@
     </div>
   </section>
 
-  <!-- Cena 3: WhatsApp. A conversa acontece com a rolagem e o 7x fecha a cena -->
+  <!-- Cena 3: WhatsApp em 4 passos de tela cheia. A tela segura e um passo substitui o outro com a rolagem -->
   <section class="scene-zap" id="whatsapp" aria-labelledby="zap-titulo">
-    <div class="wrap zap-grid">
-      <div class="zap-phone" role="img" aria-label="Exemplo fictício: às 23h41 um cliente pergunta o preço da limpeza de um ar-condicionado, a atendente de IA responde na hora com o preço e dois horários, e às 23h42 a visita fica agendada">
-        <div class="zap-head"><span class="zap-av" aria-hidden="true">R</span><div><b>Refrigeração Exemplo</b><small>exemplo fictício · preços ilustrativos</small></div></div>
-        <div class="zap-msgs">
-          <p class="zm in">Boa noite! Quanto fica a limpeza de um split de 12 mil?<i>23:41</i></p>
-          <p class="zm typing" aria-hidden="true"><span></span><span></span><span></span></p>
-          <p class="zm out">Boa noite! A limpeza do split de 12.000 BTUs sai por R$ 180, com a visita inclusa. Tenho quinta às 9h ou sexta às 14h. Qual fica melhor?<i>23:41</i></p>
-          <p class="zm in">Sexta às 14h<i>23:42</i></p>
-          <p class="zm out">Fechado: sexta, 14h. Me manda o endereço que eu já deixo anotado para o técnico.<i>23:42</i></p>
-        </div>
+    <div class="wrap zap2">
+      <div class="zap-side">
+        <h2 id="zap-titulo" class="zap-kicker">Atendimento com IA no WhatsApp</h2>
+        <ol class="zrail" aria-hidden="true">
+          <li class="on">Cliente chama</li><li>IA responde</li><li>Fica agendado</li><li>Você vê de manhã</li>
+        </ol>
       </div>
-      <div class="zap-copy">
-        <h2 id="zap-titulo" class="scene-title">Nunca mais espere resposta.</h2>
-        <p class="zap-lead">A atendente de IA responde na hora, com os seus preços e horários, e chama você quando precisa de gente. No WhatsApp oficial, com o seu número.</p>
-        <div class="seven"><b>7x</b><span>mais chance de levar a conversa adiante respondendo em até 1 hora.</span></div>
-        <p class="scene-src zap-src">Oldroyd, McElheran e Elkington, <i>Harvard Business Review</i>, 2011. <a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">Ler o artigo</a>. Resultado de uma pesquisa, não garantia.</p>
+      <div class="zpanels">
+        <article class="zpanel">
+          <p class="ztime">23h41</p>
+          <h3 class="zwhat">O cliente manda mensagem. Você já está dormindo.</h3>
+          <p class="zb in">Boa noite! Quanto fica a limpeza de um split de 12 mil?<i>23:41</i></p>
+        </article>
+        <article class="zpanel">
+          <p class="ztime">23h41</p>
+          <h3 class="zwhat">A IA responde na hora, com o seu preço e os seus horários livres.</h3>
+          <p class="zb out">A limpeza do split de 12.000 BTUs sai por R$ 180, com a visita inclusa. Tenho quinta às 9h ou sexta às 14h. Qual fica melhor?<i>23:41</i></p>
+        </article>
+        <article class="zpanel">
+          <p class="ztime">23h42</p>
+          <h3 class="zwhat">O cliente escolhe e a visita entra na sua agenda.</h3>
+          <div class="zcal"><p class="zcal-h">Agenda · sexta-feira</p><p class="zcal-b"><b>14:00 · Limpeza de split 12.000 BTUs</b><span>R$ 180 · visita inclusa</span><span>Endereço enviado pelo cliente no WhatsApp</span></p></div>
+        </article>
+        <article class="zpanel">
+          <p class="ztime">7h30</p>
+          <h3 class="zwhat">Você acorda com o cliente atendido e a visita marcada.</h3>
+          <div class="seven"><b>7x</b><span>mais chance de levar a conversa adiante respondendo em até 1 hora.</span></div>
+          <p class="scene-src zap-src">Oldroyd, McElheran e Elkington, <i>Harvard Business Review</i>, 2011. <a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">Ler o artigo</a>. Resultado de uma pesquisa, não garantia.</p>
+        </article>
       </div>
     </div>
+    <p class="zfic">Exemplo fictício · preços ilustrativos</p>
   </section>
 
   <!-- Sites: continua, com menos peso -->

@@ -235,8 +235,7 @@
     const take = () => {
       if (mvTaken) return;
       mvTaken = true;
-      mv.removeAttribute('auto-rotate');
-      stage.classList.add('touched', 'turned');
+      stage.classList.add('touched');
     };
     ['pointerdown', 'touchstart'].forEach((t) => mv.addEventListener(t, take, { passive: true }));
     // Until the visitor grabs the plate, the mouse wheel scrolls the page instead of zooming the 3D.
@@ -249,28 +248,6 @@
   if (gsap && ST) {
     gsap.registerPlugin(ST);
     const small = window.matchMedia('(max-width: 860px)').matches;
-
-    // Cena 1: the scroll turns the plate from its side to the front (only until the visitor takes over).
-    if (palco) {
-      const mv = document.getElementById('burger3d');
-      const stage = palco.querySelector('.stage');
-      const turn = { theta: 110, phi: 78 };
-      ST.create({
-        trigger: palco,
-        start: 'top 85%',
-        end: small ? 'center 55%' : 'center center',
-        scrub: 0.6,
-        onUpdate: (self) => {
-          if (mvTaken) return;
-          const p = self.progress;
-          turn.theta = 110 - 90 * p;
-          turn.phi = 78 - 16 * p;
-          mv.setAttribute('camera-orbit', `${turn.theta.toFixed(1)}deg ${turn.phi.toFixed(1)}deg 0.62m`);
-          stage.classList.toggle('turned', p > 0.95);
-          if (p > 0.95) mv.setAttribute('auto-rotate', ''); else mv.removeAttribute('auto-rotate');
-        },
-      });
-    }
 
     // Cena 2: pinned; the grey bar climbs to 18%, then the blue one to 41%.
     const sob = document.getElementById('pesquisa-3d');
@@ -294,33 +271,30 @@
         .to({}, { duration: 0.4 });
     }
 
-    // Cena 3: pinned; the question arrives, "digitando…", the answer, the choice, the booking, then the 7x.
+    // Cena 3: pinned; four full-screen steps replace each other with the scroll, the rail shows where we are.
     const zap = document.getElementById('whatsapp');
     if (zap) {
-      const msgs = zap.querySelectorAll('.zm:not(.typing)');
-      const typing = zap.querySelector('.zm.typing');
-      const seven = zap.querySelector('.seven');
-      const sevenB = seven.querySelector('b');
-      const after = zap.querySelectorAll('.zap-src');
-      zap.classList.add('live');
-      gsap.set(msgs, { autoAlpha: 0, y: 16, scale: 0.96, transformOrigin: 'bottom center' });
-      gsap.set(typing, { autoAlpha: 0, display: 'none' });
-      gsap.set(seven, { autoAlpha: 0 });
+      const panels = zap.querySelectorAll('.zpanel');
+      const rail = zap.querySelectorAll('.zrail li');
+      const sevenB = zap.querySelector('.seven b');
+      zap.querySelector('.zap2').classList.add('js-zap');
+      gsap.set(panels, { autoAlpha: 0, y: 40 });
+      gsap.set(panels[0], { autoAlpha: 1, y: 0 });
       gsap.set(sevenB, { scale: 0.4, transformOrigin: 'left center' });
-      gsap.set(after, { autoAlpha: 0 });
-      const pop = { autoAlpha: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.6)' };
-      const tl = gsap.timeline({ scrollTrigger: { trigger: zap, start: 'top top', end: small ? '+=130%' : '+=180%', pin: true, scrub: 0.8 } });
-      tl.from(zap.querySelector('.scene-title'), { y: 40, autoAlpha: 0, duration: 0.5 })
-        .to(msgs[0], pop)
-        .to(typing, { autoAlpha: 1, display: 'flex', duration: 0.3 }, '+=0.2')
-        .to(typing, { autoAlpha: 0, display: 'none', duration: 0.2 }, '+=0.5')
-        .to(msgs[1], pop, '<')
-        .to(msgs[2], pop, '+=0.35')
-        .to(msgs[3], pop, '+=0.35')
-        .to(seven, { autoAlpha: 1, duration: 0.3 }, '+=0.3')
-        .to(sevenB, { scale: 1, duration: 0.8, ease: 'back.out(1.4)' }, '<')
-        .to(after, { autoAlpha: 1, duration: 0.4 })
-        .to({}, { duration: 0.4 });
+      const mark = (p) => {
+        const k = Math.min(panels.length - 1, Math.floor(p * panels.length * 0.999 + 0.0001));
+        rail.forEach((li, n) => { li.classList.toggle('on', n === k); li.classList.toggle('past', n < k); });
+      };
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: zap, start: 'top top', end: small ? '+=260%' : '+=320%', pin: true, scrub: 0.6, onUpdate: (self) => mark(self.progress) },
+      });
+      tl.to({}, { duration: 0.6 });
+      for (let i = 1; i < panels.length; i++) {
+        tl.to(panels[i - 1], { autoAlpha: 0, y: -40, duration: 0.4, ease: 'power2.in' })
+          .to(panels[i], { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.1');
+        if (i === panels.length - 1) tl.to(sevenB, { scale: 1, duration: 0.6, ease: 'back.out(1.4)' }, '-=0.1');
+        tl.to({}, { duration: 0.6 });
+      }
     }
 
     // The 3D viewer and fonts change heights after load: keep the pins measured right.
