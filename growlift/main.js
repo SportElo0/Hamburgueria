@@ -202,6 +202,29 @@
   });
 
   const form = document.getElementById('form-diagnostico');
+  // "O que mais atrapalha": up to 3; a fourth tick is undone with a note.
+  const dores = form.querySelectorAll('input[name=dor]');
+  dores.forEach((box) =>
+    box.addEventListener('change', () => {
+      if (box.checked && form.querySelectorAll('input[name=dor]:checked').length > 3) {
+        box.checked = false;
+        fail('Marque até 3: as que mais pesam hoje.');
+      }
+    }),
+  );
+  // The answers travel as plain lines in the free-text field the panel already keeps (1000 characters).
+  const answers = (f) => {
+    const picked = (name) => Array.from(form.querySelectorAll(`input[name=${name}]:checked`), (i) => i.value);
+    const lines = [
+      ['Maior dor', picked('dor').join('; ')],
+      ['Clientes chegam por', picked('canal').join(', ')],
+      ['Atendimentos por dia', picked('volume').join('')],
+      ['Quem responde o WhatsApp', picked('quem').join('')],
+      ['Sistema', f.sistema.value.trim()],
+      ['Em 30 dias quer', f.wishes.value.trim()],
+    ].filter(([, v]) => v);
+    return lines.map(([k, v]) => `${k}: ${v}`).join('\n').slice(0, 1000);
+  };
   const msg = document.getElementById('form-msg');
   const ok = document.getElementById('form-ok');
   const button = form.querySelector('button[type=submit]');
@@ -224,6 +247,7 @@
     if (f.business.value.trim().length < 2) return fail('Informe o nome do negócio.', f.business);
     if (f.segment.value.trim().length < 2) return fail('Informe o ramo do negócio.', f.segment);
     if (digits.length < 10) return fail('Informe um WhatsApp com DDD.', f.whatsapp);
+    if (!form.querySelector('input[name=dor]:checked')) return fail('Marque pelo menos uma coisa que atrapalha hoje.', dores[0]);
     if (!f.consent.checked) return fail('Marque a autorização para podermos mandar o diagnóstico no WhatsApp.', f.consent);
 
     msg.hidden = true;
@@ -239,7 +263,7 @@
           city: f.city.value,
           whatsapp: digits,
           presence: f.presence.value,
-          wishes: f.wishes.value,
+          wishes: answers(f),
           consent: f.consent.checked,
           website: f.website.value,
         }),
