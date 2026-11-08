@@ -200,13 +200,23 @@
   if (sticky && diag && heroEl && 'IntersectionObserver' in window) {
     let pastHero = false;
     let atForm = false;
-    const show = () => sticky.classList.toggle('on', pastHero && !atForm);
+    const inScene = new Set();
+    const show = () => sticky.classList.toggle('on', pastHero && !atForm && inScene.size === 0);
     new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting; show(); }).observe(heroEl);
     new IntersectionObserver(([e]) => { atForm = e.isIntersecting; show(); }, { rootMargin: '0px 0px -30% 0px' }).observe(diag);
+    // The pinned scenes use the whole screen: the button steps aside while one is on screen.
+    const sceneIO = new IntersectionObserver((es) => {
+      es.forEach((e) => (e.isIntersecting ? inScene.add(e.target) : inScene.delete(e.target)));
+      show();
+    }, { threshold: 0.35 });
+    document.querySelectorAll('.scene-sobremesa, .scene-zap, #palco3d').forEach((el) => sceneIO.observe(el));
   }
 
-  // 3D burger: the viewer (self-hosted, ~1 MB) loads only when the section gets near; the hint goes after a touch.
+  // Cena 1: the burger on the plate. The viewer (self-hosted, ~1 MB) loads only when the section gets near.
+  // While the visitor scrolls in, the scroll turns the plate to face them; the first touch hands control over
+  // (rotation stops, zoom stays where they leave it).
   const palco = document.getElementById('palco3d');
+  let mvTaken = false;
   if (palco) {
     const load = () => {
       if (document.querySelector('script[data-mv]')) return;
@@ -222,7 +232,99 @@
     } else load();
     const stage = palco.querySelector('.stage');
     const mv = document.getElementById('burger3d');
-    ['pointerdown', 'touchstart'].forEach((t) => mv.addEventListener(t, () => stage.classList.add('touched'), { once: true, passive: true }));
+    const take = () => {
+      if (mvTaken) return;
+      mvTaken = true;
+      mv.removeAttribute('auto-rotate');
+      stage.classList.add('touched', 'turned');
+    };
+    ['pointerdown', 'touchstart'].forEach((t) => mv.addEventListener(t, take, { passive: true }));
+    // Until the visitor grabs the plate, the mouse wheel scrolls the page instead of zooming the 3D.
+    mv.addEventListener('wheel', (e) => { if (!mvTaken && !e.ctrlKey) e.stopPropagation(); }, { capture: true, passive: true });
+  }
+
+  // Cenas 2 e 3: the screen holds while the numbers climb and the chat plays. Without GSAP, everything shows.
+  const gsap = window.gsap;
+  const ST = window.ScrollTrigger;
+  if (gsap && ST) {
+    gsap.registerPlugin(ST);
+    const small = window.matchMedia('(max-width: 860px)').matches;
+
+    // Cena 1: the scroll turns the plate from its side to the front (only until the visitor takes over).
+    if (palco) {
+      const mv = document.getElementById('burger3d');
+      const stage = palco.querySelector('.stage');
+      const turn = { theta: 110, phi: 78 };
+      ST.create({
+        trigger: palco,
+        start: 'top 85%',
+        end: small ? 'center 55%' : 'center center',
+        scrub: 0.6,
+        onUpdate: (self) => {
+          if (mvTaken) return;
+          const p = self.progress;
+          turn.theta = 110 - 90 * p;
+          turn.phi = 78 - 16 * p;
+          mv.setAttribute('camera-orbit', `${turn.theta.toFixed(1)}deg ${turn.phi.toFixed(1)}deg 0.62m`);
+          stage.classList.toggle('turned', p > 0.95);
+          if (p > 0.95) mv.setAttribute('auto-rotate', ''); else mv.removeAttribute('auto-rotate');
+        },
+      });
+    }
+
+    // Cena 2: pinned; the grey bar climbs to 18%, then the blue one to 41%.
+    const sob = document.getElementById('pesquisa-3d');
+    if (sob) {
+      const bars = sob.querySelectorAll('.race-track i');
+      const nums = sob.querySelectorAll('.race-row b');
+      const src = sob.querySelector('.scene-src');
+      const counter = (el) => ({ v: 0, el, to: Number(el.dataset.to) });
+      const c = [counter(nums[0]), counter(nums[1])];
+      const show = (x) => () => { x.el.textContent = `${Math.round(x.v)}%`; };
+      gsap.set(bars, { scaleX: 0, transformOrigin: 'left center' });
+      gsap.set(src, { autoAlpha: 0, y: 12 });
+      c.forEach((x) => show(x)());
+      const tl = gsap.timeline({ scrollTrigger: { trigger: sob, start: 'top top', end: small ? '+=100%' : '+=140%', pin: true, scrub: 0.8 } });
+      tl.from(sob.querySelector('.scene-title'), { y: 40, autoAlpha: 0, duration: 0.6 })
+        .to(bars[0], { scaleX: 1, duration: 1, ease: 'power2.out' }, '+=0.1')
+        .to(c[0], { v: c[0].to, duration: 1, ease: 'power2.out', onUpdate: show(c[0]) }, '<')
+        .to(bars[1], { scaleX: 1, duration: 1.4, ease: 'power2.out' }, '+=0.15')
+        .to(c[1], { v: c[1].to, duration: 1.4, ease: 'power2.out', onUpdate: show(c[1]) }, '<')
+        .to(src, { autoAlpha: 1, y: 0, duration: 0.5 })
+        .to({}, { duration: 0.4 });
+    }
+
+    // Cena 3: pinned; the question arrives, "digitando…", the answer, the choice, the booking, then the 7x.
+    const zap = document.getElementById('whatsapp');
+    if (zap) {
+      const msgs = zap.querySelectorAll('.zm:not(.typing)');
+      const typing = zap.querySelector('.zm.typing');
+      const seven = zap.querySelector('.seven');
+      const sevenB = seven.querySelector('b');
+      const after = zap.querySelectorAll('.zap-src');
+      zap.classList.add('live');
+      gsap.set(msgs, { autoAlpha: 0, y: 16, scale: 0.96, transformOrigin: 'bottom center' });
+      gsap.set(typing, { autoAlpha: 0, display: 'none' });
+      gsap.set(seven, { autoAlpha: 0 });
+      gsap.set(sevenB, { scale: 0.4, transformOrigin: 'left center' });
+      gsap.set(after, { autoAlpha: 0 });
+      const pop = { autoAlpha: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.6)' };
+      const tl = gsap.timeline({ scrollTrigger: { trigger: zap, start: 'top top', end: small ? '+=130%' : '+=180%', pin: true, scrub: 0.8 } });
+      tl.from(zap.querySelector('.scene-title'), { y: 40, autoAlpha: 0, duration: 0.5 })
+        .to(msgs[0], pop)
+        .to(typing, { autoAlpha: 1, display: 'flex', duration: 0.3 }, '+=0.2')
+        .to(typing, { autoAlpha: 0, display: 'none', duration: 0.2 }, '+=0.5')
+        .to(msgs[1], pop, '<')
+        .to(msgs[2], pop, '+=0.35')
+        .to(msgs[3], pop, '+=0.35')
+        .to(seven, { autoAlpha: 1, duration: 0.3 }, '+=0.3')
+        .to(sevenB, { scale: 1, duration: 0.8, ease: 'back.out(1.4)' }, '<')
+        .to(after, { autoAlpha: 1, duration: 0.4 })
+        .to({}, { duration: 0.4 });
+    }
+
+    // The 3D viewer and fonts change heights after load: keep the pins measured right.
+    window.addEventListener('load', () => ST.refresh());
   }
 
   // Phone mask: (11) 90000-0000

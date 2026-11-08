@@ -448,3 +448,87 @@ section { position: relative; }
 .quote { max-width: 860px; }
 .quote .lead { max-width: 720px; }
 ::selection { background: rgba(77, 141, 255, 0.35); color: #fff; }
+
+/* ── Cenas que seguram a tela (GSAP + ScrollTrigger). Sem JS, tudo aparece no estado final. ── */
+
+/* Cena 1: prato */
+.qr-mesa { display: none; align-items: center; gap: 18px; margin-top: 34px; padding: 14px 20px 14px 14px; max-width: 470px; border-radius: 20px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.03); }
+.qr-mesa img { width: 104px; height: 104px; border-radius: 12px; background: #fff; padding: 5px; flex-shrink: 0; }
+.qr-mesa p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.45; }
+.qr-mesa b { display: block; margin-bottom: 4px; color: var(--text); font-size: 18px; }
+/* Só em tela grande com mouse: no celular e no iPad o botão "Ver na minha mesa" faz isso. */
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) { .qr-mesa { display: flex; } .ar-btn { display: none; } }
+.ia-tag { position: absolute; right: 14px; top: 14px; margin: 0; padding: 4px 10px; border-radius: 999px; background: rgba(6, 8, 13, 0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--dim); pointer-events: none; }
+.drag-hint .hint-b { display: none; }
+.stage.turned .drag-hint .hint-a { display: none; }
+.stage.turned .drag-hint .hint-b { display: inline; }
+@media (hover: none), (pointer: coarse) {
+  .ar-btn { position: absolute; left: 14px; right: 14px; top: auto; bottom: 14px; justify-content: center; min-height: 54px; font-size: 16px; box-shadow: 0 14px 30px -12px rgba(8, 101, 254, 0.9); }
+  .stage .drag-hint { bottom: 80px; }
+  .ia-tag { top: 14px; bottom: auto; }
+}
+
+/* Título das cenas */
+.scene-title { font-size: clamp(40px, 6vw, 84px); line-height: 1.02; font-weight: 800; letter-spacing: -0.04em; text-wrap: balance; }
+.scene-src { margin: 0; font-size: 13px; line-height: 1.5; color: var(--dim); max-width: 620px; }
+.scene-src a { color: var(--blue-soft); text-underline-offset: 3px; }
+
+/* Cena 2: sobremesa */
+.scene-sobremesa { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; background: radial-gradient(60% 55% at 70% 60%, rgba(8, 101, 254, 0.18), transparent 70%), var(--bg); }
+.scene-inner { width: 100%; padding-top: 90px; padding-bottom: 60px; }
+.scene-sobremesa .scene-title { max-width: 14ch; }
+.race { margin-top: clamp(40px, 7vh, 72px); display: grid; gap: clamp(22px, 4vh, 36px); max-width: 1040px; }
+.race-row { display: grid; grid-template-columns: 180px 1fr 170px; align-items: center; gap: 28px; }
+.race-name { font-size: 20px; color: var(--muted); }
+.race-track { height: 28px; border-radius: 99px; background: rgba(255, 255, 255, 0.07); overflow: hidden; }
+.race-track i { display: block; height: 100%; border-radius: 99px; background: var(--dim); }
+.race-track i[data-w='18'] { width: 18%; }
+.race-track i[data-w='41'] { width: 41%; }
+.race-row.hi .race-track i { background: var(--blue-bright); box-shadow: 0 0 32px rgba(77, 141, 255, 0.6); }
+.race-row b { font-size: clamp(48px, 6vw, 84px); font-weight: 800; letter-spacing: -0.05em; text-align: right; font-variant-numeric: tabular-nums; line-height: 1; }
+.race-row.hi b { color: var(--blue-bright); }
+.scene-sobremesa .scene-src { margin-top: clamp(28px, 5vh, 48px); }
+@media (max-width: 700px) {
+  .race-row { grid-template-columns: 1fr auto; gap: 8px 16px; }
+  .race-track { grid-column: 1 / -1; grid-row: 2; height: 20px; }
+  .race-name { font-size: 16px; }
+}
+
+/* Cena 3: WhatsApp */
+.scene-zap { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; background: var(--bg); }
+.zap-grid { width: 100%; display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: clamp(40px, 7vw, 110px); align-items: center; padding-top: 90px; padding-bottom: 50px; }
+.zap-phone { position: relative; height: min(640px, 72vh); border-radius: 44px; background: #0b141a; border: 9px solid #1c2433; box-shadow: 0 50px 100px -40px rgba(8, 101, 254, 0.6); overflow: hidden; display: flex; flex-direction: column; }
+.zap-head { display: flex; align-items: center; gap: 12px; padding: 26px 18px 12px; background: #1f2c34; }
+.zap-head b { display: block; font-size: 16px; }
+.zap-head small { color: #8fa1ad; font-size: 13px; }
+.zap-av { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--blue); font-weight: 800; }
+.zap-msgs { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 9px; padding: 14px; }
+.zm { position: relative; margin: 0; max-width: 84%; padding: 10px 13px 19px; border-radius: 14px; font-size: 15px; line-height: 1.42; }
+.zm i { position: absolute; right: 10px; bottom: 4px; font-style: normal; font-size: 11px; color: #8fa1ad; }
+.zm.in { align-self: flex-start; background: #1f2c34; border-top-left-radius: 4px; }
+.zm.out { align-self: flex-end; background: #005c4b; border-top-right-radius: 4px; }
+.zm.out i { color: #9fd6c8; }
+.zm.typing { display: none; align-self: flex-start; gap: 5px; padding: 13px 15px; background: #1f2c34; }
+.zm.typing span { width: 7px; height: 7px; border-radius: 50%; background: #8fa1ad; animation: tip 1s ease-in-out infinite; }
+.zm.typing span:nth-child(2) { animation-delay: 0.15s; } .zm.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes tip { 0%, 100% { opacity: 0.35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+.scene-zap.live .zm.typing { display: flex; }
+.zap-fic { position: absolute; left: 0; right: 0; bottom: 6px; margin: 0; text-align: center; font-size: 11px; color: #6b7a86; }
+.zap-lead { margin: 22px 0 0; max-width: 520px; color: var(--muted); font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; }
+.seven { margin-top: clamp(26px, 5vh, 44px); display: flex; align-items: center; gap: 22px; }
+.seven b { font-size: clamp(96px, 12vw, 168px); line-height: 0.85; font-weight: 800; letter-spacing: -0.06em; color: var(--blue-bright); text-shadow: 0 0 60px rgba(77, 141, 255, 0.45); }
+.seven span { max-width: 320px; font-size: clamp(17px, 1.6vw, 21px); line-height: 1.4; color: var(--text-soft); }
+.zap-src { margin-top: 18px; }
+@media (max-width: 860px) {
+  .zap-grid { grid-template-columns: 1fr; gap: 22px; padding-top: 84px; }
+  .zap-copy { order: -1; }
+  .zap-lead { display: none; }
+  .seven { margin-top: 14px; gap: 14px; }
+  .seven b { font-size: 76px; }
+  .seven span { font-size: 15px; }
+  .zap-src { font-size: 11px; margin-top: 8px; }
+  .zap-phone { height: min(380px, 45svh); border-width: 7px; border-radius: 30px; }
+  .zm.in, .zm.out { padding-bottom: 17px; }
+  .zap-head { padding-top: 14px; }
+  .zm { font-size: 13.5px; }
+}

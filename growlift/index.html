@@ -100,37 +100,61 @@
     </div>
   </section>
 
-  <!-- Restaurantes: o hambúrguer que gira com o dedo -->
+  <!-- Cena 1: o hambúrguer no prato. A rolagem vira o prato de frente; depois o controle é da pessoa -->
   <section class="section spot" id="restaurantes" aria-labelledby="rest-titulo">
     <div class="wrap spot-grid">
       <div>
         <p class="eyebrow reveal">Para restaurantes</p>
-        <h2 id="rest-titulo" class="h2 reveal d2" style="margin-top:16px">Encoste o dedo. Gire o prato.</h2>
-        <p class="lead reveal d2">É assim que o seu cliente vê o cardápio no celular, e ainda coloca o prato na mesa pela câmera, do tamanho real. Depois do prato principal, o celular sugere a sobremesa e a tela do garçom avisa qual mesa ainda não pediu doce.</p>
-        <p class="proofline reveal d3">Num estudo dentro de um restaurante, <b>41%</b> de quem viu a sobremesa em 3D pediu sobremesa, contra <b>18%</b> de quem viu a foto comum.<small>Fritz, Hadi e Stephen, <i>Journal of the Academy of Marketing Science</i>, 2023, com 101 clientes. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9792938/" target="_blank" rel="noopener">Ler o estudo</a>. Resultado de um estudo, não garantia: o painel mede o antes e o depois no seu.</small></p>
-        <div class="actions reveal d3" style="margin-top:30px">
-          <a class="btn btn-ghost" href="https://painel-lojas-sportelo.vercel.app/cardapio-exemplo" target="_blank" rel="noopener">Abrir o exemplo no celular</a>
+        <h2 id="rest-titulo" class="h2 reveal d2" style="margin-top:16px">Encoste o dedo.<br>Gire o prato.</h2>
+        <p class="lead reveal d2">É assim que o seu cliente vê o cardápio no celular, e ainda coloca o prato na mesa pela câmera, do tamanho real.</p>
+        <div class="qr-mesa reveal d3">
+          <img src="img/qr-mesa.svg" alt="" width="120" height="120">
+          <p><b>Veja na sua mesa</b>Aponte a câmera do celular para o código e coloque o prato na sua frente.</p>
         </div>
       </div>
       <figure class="stage3d reveal d2" id="palco3d">
         <div class="stage">
-          <model-viewer id="burger3d" src="img/burger-3d.glb" poster="img/burger-real.webp" alt="Hambúrguer de exemplo em 3D. Arraste para girar." camera-controls touch-action="pan-y" disable-zoom auto-rotate auto-rotate-delay="1500" rotation-per-second="20deg" interaction-prompt="none" camera-orbit="25deg 72deg 0.42m" tone-mapping="neutral" shadow-intensity="1.1" shadow-softness="0.85" exposure="1" environment-image="neutral" ar ar-modes="scene-viewer quick-look" ar-scale="fixed" ar-placement="floor" loading="lazy">
+          <model-viewer id="burger3d" src="img/burger-3d.glb" poster="img/burger-real.webp" alt="Hambúrguer de exemplo em 3D em cima de um prato. Arraste para girar e use dois dedos para aproximar." camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="0" rotation-per-second="14deg" interaction-prompt="none" camera-orbit="110deg 78deg 0.62m" min-camera-orbit="auto 20deg 0.24m" max-camera-orbit="auto 88deg 0.8m" field-of-view="30deg" min-field-of-view="30deg" max-field-of-view="30deg" zoom-sensitivity="2.2" interpolation-decay="120" tone-mapping="neutral" shadow-intensity="1.2" shadow-softness="0.8" exposure="1" environment-image="neutral" ar ar-modes="scene-viewer quick-look" ar-scale="fixed" ar-placement="floor" loading="lazy">
             <button slot="ar-button" class="ar-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20.5 7.5v9L12 21.2 3.5 16.5v-9L12 2.8Z"/><path d="M3.8 7.6 12 12.2l8.2-4.6M12 12.2v8.8"/></svg>Ver na minha mesa</button>
           </model-viewer>
-          <p class="drag-hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5V4.5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.6-2.2L3.5 15a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/></svg>Arraste para girar</p>
+          <p class="drag-hint" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-.5V4.5a1.5 1.5 0 0 1 3 0v5m0-1a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-.6a6 6 0 0 1-4.6-2.2L3.5 15a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/></svg><span class="hint-a">Role e o prato vira para você</span><span class="hint-b">Arraste para girar · dois dedos para aproximar</span></p>
+          <p class="ia-tag">Criado por IA</p>
         </div>
-        <figcaption>Exemplo criado por IA a partir de uma foto, não é prato de um cliente.</figcaption>
       </figure>
     </div>
   </section>
 
-  <!-- WhatsApp: uma frase e a pesquisa, sem caixa -->
-  <section class="section" id="whatsapp" aria-labelledby="zap-titulo" style="padding-top:0">
-    <div class="wrap quote">
-      <p class="eyebrow reveal">Para quem vive no WhatsApp</p>
-      <h2 id="zap-titulo" class="h2 reveal d2" style="margin-top:16px">Ninguém mais esperando resposta.</h2>
-      <p class="lead reveal d2">A atendente de IA fala do jeito do seu negócio, usa só as suas informações (serviços, preços, horários e área que você atende), monta o orçamento, agenda e chama você quando precisa de gente. No WhatsApp oficial, com o seu número.</p>
-      <p class="proofline reveal d3">Uma pesquisa da Harvard Business Review mostrou que quem respondeu o contato em até 1 hora teve cerca de <b>7 vezes</b> mais chance de levar a conversa adiante.<small>Oldroyd, McElheran e Elkington, 2011. <a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">Ler o artigo</a>. Resultado de uma pesquisa, não garantia para o seu negócio.</small></p>
+  <!-- Cena 2: a pesquisa da sobremesa. A tela para e os números sobem com a rolagem -->
+  <section class="scene-sobremesa" id="pesquisa-3d" aria-labelledby="sob-titulo">
+    <div class="wrap scene-inner">
+      <h2 id="sob-titulo" class="scene-title">Quem vê em 3D pede mais sobremesa.</h2>
+      <div class="race" role="img" aria-label="Clientes que pediram sobremesa: 18% com a foto comum e 41% com o cardápio em 3D">
+        <div class="race-row"><span class="race-name">Foto comum</span><div class="race-track"><i data-w="18"></i></div><b data-to="18">18%</b></div>
+        <div class="race-row hi"><span class="race-name">Em 3D</span><div class="race-track"><i data-w="41"></i></div><b data-to="41">41%</b></div>
+      </div>
+      <p class="scene-src">Clientes que pediram sobremesa num restaurante. Fritz, Hadi e Stephen, <i>Journal of the Academy of Marketing Science</i>, 2023. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9792938/" target="_blank" rel="noopener">Ler o estudo</a>. Resultado de um estudo, não garantia.</p>
+    </div>
+  </section>
+
+  <!-- Cena 3: WhatsApp. A conversa acontece com a rolagem e o 7x fecha a cena -->
+  <section class="scene-zap" id="whatsapp" aria-labelledby="zap-titulo">
+    <div class="wrap zap-grid">
+      <div class="zap-phone" role="img" aria-label="Exemplo fictício: às 23h41 um cliente pergunta o preço da limpeza de um ar-condicionado, a atendente de IA responde na hora com o preço e dois horários, e às 23h42 a visita fica agendada">
+        <div class="zap-head"><span class="zap-av" aria-hidden="true">R</span><div><b>Refrigeração Exemplo</b><small>exemplo fictício · preços ilustrativos</small></div></div>
+        <div class="zap-msgs">
+          <p class="zm in">Boa noite! Quanto fica a limpeza de um split de 12 mil?<i>23:41</i></p>
+          <p class="zm typing" aria-hidden="true"><span></span><span></span><span></span></p>
+          <p class="zm out">Boa noite! A limpeza do split de 12.000 BTUs sai por R$ 180, com a visita inclusa. Tenho quinta às 9h ou sexta às 14h. Qual fica melhor?<i>23:41</i></p>
+          <p class="zm in">Sexta às 14h<i>23:42</i></p>
+          <p class="zm out">Fechado: sexta, 14h. Me manda o endereço que eu já deixo anotado para o técnico.<i>23:42</i></p>
+        </div>
+      </div>
+      <div class="zap-copy">
+        <h2 id="zap-titulo" class="scene-title">Nunca mais espere resposta.</h2>
+        <p class="zap-lead">A atendente de IA responde na hora, com os seus preços e horários, e chama você quando precisa de gente. No WhatsApp oficial, com o seu número.</p>
+        <div class="seven"><b>7x</b><span>mais chance de levar a conversa adiante respondendo em até 1 hora.</span></div>
+        <p class="scene-src zap-src">Oldroyd, McElheran e Elkington, <i>Harvard Business Review</i>, 2011. <a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">Ler o artigo</a>. Resultado de uma pesquisa, não garantia.</p>
+      </div>
     </div>
   </section>
 
@@ -372,6 +396,8 @@
   </div>
 </footer>
 
+<script src="vendor/gsap-3.15.0.min.js" defer></script>
+<script src="vendor/ScrollTrigger-3.15.0.min.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>
