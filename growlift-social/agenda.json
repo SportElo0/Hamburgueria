@@ -636,6 +636,34 @@
    "quando": "2026-11-09T15:00:00-03:00",
    "ia": true,
    "palavra": "RELATÓRIO"
+  },
+  {
+   "id": "2026-11-17-reel-21",
+   "titulo": "Reel 21 · A mesma noite, duas vezes (Comenta CLÍNICA)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/21-a-mesma-noite.mp4"
+   ],
+   "capa": "05-reels/21-a-mesma-noite-capa.png",
+   "legenda": "Comenta CLÍNICA que a gente te mostra como funciona 📩\n\n23h12. Dor de dente. A Bia manda um áudio pra clínica perto de casa… e ninguém responde. Ela marca em outra.\n\nAgora, a mesma noite com uma atendente de inteligência artificial no WhatsApp da clínica: ela ouve o áudio, responde, olha a agenda, marca o horário e, um dia antes, manda o lembrete pra paciente confirmar.\n\nA clínica dorme. O atendimento, não.\n\nA atendente responde só com as informações da própria clínica (horários, serviços, agenda) e chama alguém da equipe quando precisa.\n\nNarração com voz gerada por inteligência artificial.\n#clinicaodontologica #dentista #consultorio #atendimento #inteligenciaartificial",
+   "quando": "2026-11-17T15:00:00-03:00",
+   "ia": true,
+   "palavra": "CLÍNICA",
+   "chave": "05-reels/roteiros.md#21-a-mesma-noite-duas-vezes-clinica"
+  },
+  {
+   "id": "2026-11-19-reel-22",
+   "titulo": "Reel 22 · O site no celular (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/22-o-site-no-celular.mp4"
+   ],
+   "capa": "05-reels/22-o-site-no-celular-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nO lanche se monta na tela, camada por camada. O cardápio vem com foto, descrição e preço. O cliente escolhe entrega ou retirada e paga no Pix ali mesmo. Endereço, horário e WhatsApp num toque.\n\nA Brasa Burger é um projeto conceito da Growlift (nome fictício, preços de exemplo). Cada site de cliente é feito do zero, com a cara do negócio.\n\nNarração com voz gerada por inteligência artificial.\n#hamburgueria #sitepararestaurante #cardapiodigital #delivery #growlift",
+   "quando": "2026-11-19T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE",
+   "chave": "05-reels/roteiros.md#22-o-site-no-celular-hamburgueria"
   }
  ]
 }

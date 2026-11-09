@@ -378,3 +378,44 @@ Narração com voz gerada por inteligência artificial.
 - Antes de postar, um de vocês põe o Reel de referência ao lado de cada um e confere se nada ficou parecido demais (título, frase de efeito, ordem das cenas, cores). Não marquem nem citem o outro perfil.
 - Confirmem que o link da bio abre o growlift.com.br com o CNPJ no rodapé.
 - A voz "Andre" é da biblioteca do Higgsfield/ElevenLabs; guardem o comprovante do plano com uso comercial.
+
+## 21. A mesma noite, duas vezes (clínica)
+- **Formato:** maquete 3D feita em código (Three.js, `_fonte/reels/novos/diorama21.js`), sem imagem gerada por IA: a rua à noite, o prédio da Bia, a clínica perto de casa e outra clínica. Na primeira noite o áudio dela cai na clínica apagada e ela marca em outra; a fita rebobina; na segunda noite uma luz azul (a atendente de IA) ouve o áudio, responde, marca quinta às 9h e manda o lembrete na quarta às 18h. Bia, clínicas e horários são inventados; a placa diz só "Clínica odontológica", sem nome. Fonte: `_fonte/reels/novos/reel21.mjs`.
+- **Vídeos:** `21-a-mesma-noite.mp4` (com narração), `21-a-mesma-noite-mudo.mp4`, capa `21-a-mesma-noite-capa.png`. 31,6 s.
+- **Narração** (voz "Andre", 2,07 créditos em 09/11, custo conferido antes; `_fonte/reels/narracao-21-eleven.mp3`):
+"Onze e doze da noite. A Bia acorda com dor de dente e manda um áudio pra clínica perto de casa... Nada. Ela procura outra clínica, e marca lá. Agora, a mesma noite, com uma atendente de inteligência artificial. Ela ouve o áudio, responde na hora, olha a agenda e marca o horário. E um dia antes, lembra a Bia da consulta, pra ela não faltar. A clínica dorme. O atendimento, não. Quer uma atendente assim na sua clínica? Comenta CLÍNICA!"
+- **Antes de postar:** a palavra CLÍNICA precisa ocupar uma das vagas do ManyChat. E a atendente precisa estar pronta para entregar (ouvir áudio, mexer na agenda, mandar lembrete) antes de alguma clínica pedir. No produto real, "dor de dente" é dado de saúde (LGPD): guardar o mínimo e ter contrato com a clínica.
+
+**Legenda**
+```
+Comenta CLÍNICA que a gente te mostra como funciona 📩
+
+23h12. Dor de dente. A Bia manda um áudio pra clínica perto de casa… e ninguém responde. Ela marca em outra.
+
+Agora, a mesma noite com uma atendente de inteligência artificial no WhatsApp da clínica: ela ouve o áudio, responde, olha a agenda, marca o horário e, um dia antes, manda o lembrete pra paciente confirmar.
+
+A clínica dorme. O atendimento, não.
+
+A atendente responde só com as informações da própria clínica (horários, serviços, agenda) e chama alguém da equipe quando precisa.
+
+Narração com voz gerada por inteligência artificial.
+#clinicaodontologica #dentista #consultorio #atendimento #inteligenciaartificial
+```
+
+## 22. O site no celular (hamburgueria)
+- **Formato:** um site de hamburgueria completo (Brasa Burger, projeto conceito, nome fictício, preços de exemplo) dentro de um celular que gira em 3D, com ingredientes flutuando em volta. O lanche se monta camada por camada, o cardápio rola, o pedido vai para a sacola, entrega ou retirada, Pix de demonstração (o QR diz "PIX DE DEMONSTRAÇÃO") e a seção de endereço, horário e WhatsApp. Os lanches e ingredientes são renders 3D feitos pela Growlift (`public/renders`, "procedural 3D render, not AI-generated"); os nomes e descrições do cardápio são novos. Fonte: `_fonte/reels/novos/reel22.mjs`.
+- **Vídeos:** `22-o-site-no-celular.mp4` (com narração), `22-o-site-no-celular-mudo.mp4`, capa `22-o-site-no-celular-capa.png`. 26 s.
+- **Narração** (voz "Andre", 2,07 créditos em 09/11, custo conferido antes; `_fonte/reels/narracao-22-eleven.mp3`):
+"Olha o site da Brasa Burger no celular. O lanche se monta na tela, camada por camada. O cardápio vem com foto, descrição e preço. Escolheu? Monta o pedido, escolhe entrega ou retirada, e paga no Pix ali mesmo. Endereço, horário e WhatsApp, num toque só. É assim que a sua hamburgueria pode aparecer no celular do cliente. Quer um site assim? Comenta SITE!"
+
+**Legenda**
+```
+Comenta SITE que a gente te mostra como ficaria o seu 📩
+
+O lanche se monta na tela, camada por camada. O cardápio vem com foto, descrição e preço. O cliente escolhe entrega ou retirada e paga no Pix ali mesmo. Endereço, horário e WhatsApp num toque.
+
+A Brasa Burger é um projeto conceito da Growlift (nome fictício, preços de exemplo). Cada site de cliente é feito do zero, com a cara do negócio.
+
+Narração com voz gerada por inteligência artificial.
+#hamburgueria #sitepararestaurante #cardapiodigital #delivery #growlift
+```
