@@ -1,0 +1,65 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "inter tight",
+        "createdAt": "2026-11-09T02:36:00.588Z",
+        "reason": "user brief for the Lumivale concept site specifies Inter Tight with Helvetica Neue fallback"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter tight",
+        "createdAt": "2026-11-09T02:49:15.872Z",
+        "reason": "user brief for Lumivale specifies Inter Tight"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T02:49:25.078Z",
+        "reason": "the radial glow is the sun itself (preloader, hero, final glow) in the Lumivale solar concept brief"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T02:49:25.087Z",
+        "reason": "soft brand-blue shadow on the CTA dot and drag cursor, part of the sky-and-sun look the Lumivale brief asks for"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "full-bleed section color bands and the accordion's top divider line; text is inset by .wrap padding (checked in screenshots at 390-1440 px)"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "measured without the stylesheet; real sizes are h2 clamp up to ~80px, h3 20-26px, body 16-18px"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "lumivale/styles.css"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "the font is Inter Tight, which the Lumivale brief specifies"
+      }
+    ]
+  }
+}
