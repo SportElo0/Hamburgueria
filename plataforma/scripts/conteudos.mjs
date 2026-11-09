@@ -165,6 +165,9 @@ for (const name of folderNames) {
       // Files starting with _ are kept in the repository only (old versions, "do not publish"): they stay out of the
       // panel bundle, which has to fit the Vercel function size.
       if (e.name.startsWith('_') && !e.isDirectory()) continue;
+      // Reels without voice (name-mudo.mp4) stay in the repository only: the narrated version is the one that goes to
+      // the Agenda, and the panel bundle has to stay under the Vercel function size (09/11: 241 MB with them).
+      if (/-mudo\.mp4$/i.test(e.name)) continue;
       const full = path.join(dir, e.name);
       if (e.isDirectory()) walk(full);
       else if (IMAGE.test(e.name) || VIDEO.test(e.name)) {
