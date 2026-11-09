@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
         headers: [{ key: 'Content-Type', value: 'model/vnd.usdz+zip' }],
       },
       {
+        // Demo dishes are public files: other Growlift pages (sales demos) may load them in their 3D viewer.
+        source: '/3d/:file*',
+        headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
+      },
+      {
         // Read-only and public (tables free or taken, nothing personal): any site may frame it.
         source: '/movimento/:slug/embed',
         headers: [
@@ -42,7 +47,20 @@ const nextConfig: NextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         ],
       },
+      {
+        // Caixa Portugal (pessoal, ver src/lib/viagem.ts): fora do Google.
+        source: '/viagem',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'Cache-Control', value: 'no-store' },
+        ],
+      },
     ];
+  },
+  // /viagem serve a página estática public/viagem.html (o Caixa Portugal).
+  async rewrites() {
+    return [{ source: '/viagem', destination: '/viagem.html' }];
   },
   // Image uploads go through a Server Function; menu photos are small, but phones shoot big files.
   experimental: { serverActions: { bodySizeLimit: '6mb' } },

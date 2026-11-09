@@ -5,6 +5,7 @@ import { getDraft } from '@/lib/stores';
 import { orderingOf, brl } from '@/lib/ordering';
 import { seatingHistory } from '@/lib/mesas';
 import { duration, stayStats, RELIABLE, type StayGroup } from '@/lib/salao';
+import { DESSERT_RELIABLE, dessertStats, type DessertGroup } from '@/lib/sobremesa';
 import { isSlug } from '@/lib/slug';
 import { MapaBoard } from '@/components/salao/MapaBoard';
 
@@ -65,7 +66,9 @@ export default async function MapaPage({ params, searchParams }: { params: Promi
 }
 
 async function Tempo({ slug, days }: { slug: string; days: number }) {
-  const s = stayStats(await seatingHistory(slug, days));
+  const history = await seatingHistory(slug, days);
+  const s = stayStats(history);
+  const d = dessertStats(history);
   const diff = s.drinks.count && s.noDrinks.count ? s.drinks.avgMinutes - s.noDrinks.avgMinutes : null;
   return (
     <div className="space-y-4">
@@ -106,6 +109,32 @@ async function Tempo({ slug, days }: { slug: string; days: number }) {
             <p className="mt-2 text-xs text-ink-mute">Conta só o que foi pedido pelo QR. Quais categorias são bebida: Configurar → Pedido na mesa.</p>
           </section>
 
+          <section className="card p-5">
+            <h2 className="font-bold">Hora da sobremesa: quantas mesas pedem doce?</h2>
+            {d.all.tables === 0 ? (
+              <p className="mt-2 text-sm text-ink-mute">A conta de sobremesas começa a valer nas contas fechadas a partir de agora.</p>
+            ) : (
+              <>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <DessertBox title="Mesas com o aviso" g={d.com} />
+                  <DessertBox title="Mesas sem o aviso" g={d.sem} />
+                </div>
+                {d.diff !== null && (
+                  <p className="mt-3 text-sm text-ink-soft">
+                    {d.diff === 0
+                      ? 'Os dois grupos pedem sobremesa na mesma proporção.'
+                      : `Com o aviso, a parte das mesas que pede sobremesa foi de ${pct(d.sem.rate * 100)} para ${pct(d.com.rate * 100)} (${d.diff > 0 ? '+' : '−'}${String(Math.abs(d.diff)).replace('.', ',')} pontos).`}{' '}
+                    {d.reliable ? 'Os dois grupos já têm mesas suficientes para comparar.' : `Ainda é pouco: espere ter ${DESSERT_RELIABLE} mesas em cada grupo antes de concluir.`}
+                  </p>
+                )}
+                <p className="mt-2 text-xs text-ink-mute">
+                  Conta só o que foi pedido pelo painel (QR da mesa ou lançado pelo garçom). &quot;Sem o aviso&quot; são as mesas pares no teste de metade e as contas de quando estava desligado. Configurar
+                  → Pedido na mesa → Hora da sobremesa.
+                </p>
+              </>
+            )}
+          </section>
+
           <div className="grid gap-4 md:grid-cols-2">
             <Table title="Por dia da semana" rows={s.byWeekday.map((d) => ({ label: d.name, g: d }))} />
             <Table title="Por horário de chegada" rows={s.byHour.map((h) => ({ label: `${String(h.hour).padStart(2, '0')}h`, g: h }))} />
@@ -113,6 +142,29 @@ async function Tempo({ slug, days }: { slug: string; days: number }) {
             {s.reserved.count > 0 && <Table title="Com reserva" rows={[{ label: 'Mesas reservadas', g: s.reserved }]} />}
           </div>
         </>
+      )}
+    </div>
+  );
+}
+
+const pct = (points: number) => `${String(Math.round(points * 10) / 10).replace('.', ',')}%`;
+
+function DessertBox({ title, g }: { title: string; g: DessertGroup }) {
+  return (
+    <div className="rounded-lg border border-line p-4">
+      <p className="text-sm font-semibold">{title}</p>
+      {g.tables ? (
+        <>
+          <p className="mt-1 text-2xl font-bold tabular-nums">
+            {pct(g.rate * 100)} <span className="text-sm font-semibold text-ink-mute">pediram sobremesa · {g.withDessert} de {g.tables} mesas</span>
+          </p>
+          <p className="mt-1 text-xs text-ink-mute">
+            {g.units} {g.units === 1 ? 'sobremesa' : 'sobremesas'} · {brl(g.revenue)}
+            {g.offered ? ` · garçom ofereceu em ${g.offered}` : ''}
+          </p>
+        </>
+      ) : (
+        <p className="mt-1 text-sm text-ink-mute">Nenhuma mesa ainda.</p>
       )}
     </div>
   );

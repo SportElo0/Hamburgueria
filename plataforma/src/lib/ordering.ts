@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { Item, Store } from './schema';
+import { DEFAULT_SOBREMESA, sobremesaSchema } from './sobremesa';
 
 /**
  * Online ordering: the store's settings, the order a site sends, and the order as kept.
@@ -155,6 +156,8 @@ export const orderingSchema = z.object({
   tables: z.object({ enabled: z.boolean(), count: z.number().int().min(1).max(200) }).default({ enabled: false, count: 10 }),
   /** Floor map and which categories count as drinks in the time-at-table analysis. */
   salao: z.object({ layout: z.array(tableSpotSchema).max(200), drinkCategories: z.array(z.string().min(1).max(40)).max(40) }).default({ layout: [], drinkCategories: [] }),
+  /** "Hora da sobremesa": the desserts after the main course, on the table's phone and the waiter's screen (see sobremesa.ts). */
+  sobremesa: sobremesaSchema.default(DEFAULT_SOBREMESA),
   reservations: reservationSettingsSchema.default(DEFAULT_RESERVATIONS),
   /** Walk-in waiting list: QR at the door, the customer's phone is told when the table is ready. */
   waitlist: z.object({ enabled: z.boolean(), maxParties: z.number().int().min(5).max(200) }).default({ enabled: false, maxParties: 60 }),
@@ -197,6 +200,7 @@ export const DEFAULT_ORDERING: Ordering = {
   coupons: [],
   tables: { enabled: false, count: 10 },
   salao: { layout: [], drinkCategories: [] },
+  sobremesa: DEFAULT_SOBREMESA,
   reservations: DEFAULT_RESERVATIONS,
   waitlist: { enabled: false, maxParties: 60 },
   pdv: { provider: 'nenhum', codStore: '', codes: {}, city: '', state: '' },

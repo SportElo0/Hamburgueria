@@ -103,7 +103,52 @@ export async function createDiagnosisRequest(raw: unknown, source: string, now =
     if (sender && list.filter((r) => r.sender === sender).length >= MAX_PER_SENDER) throw new DiagnosisError('Você já mandou vários pedidos hoje. Se precisar corrigir algo, fale com contato@growlift.com.br.');
     return [...list, request];
   });
+  // The red badge in the panel. The request is already saved: a failure here only delays the badge (it rebuilds).
+  await updateNew((ids) => [...ids, request.id], now).catch((err) => console.error('diagnostico: aviso de novo', err));
   return request;
+}
+
+// ───────────── Badge: requests nobody has handled yet (status "novo") ─────────────
+
+/** One small document with the ids still "novo", so every panel page reads one key instead of 60 days. */
+const NEW_KEY = 'diagnosticos/novos.json';
+/** Same window as the panel's list: older requests drop out of the badge too. */
+export const NEW_WINDOW_DAYS = 60;
+
+const dayOfId = (id: string) => {
+  const m = /^(\d{4})(\d{2})(\d{2})-/.exec(id);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : null;
+};
+const inWindow = (id: string, now: Date) => {
+  const d = dayOfId(id);
+  return Boolean(d && d >= dayOf(new Date(now.getTime() - (NEW_WINDOW_DAYS - 1) * 86_400_000)));
+};
+
+/** From the requests themselves: used when the index does not exist yet (first run, or after a failure). */
+async function rebuildNew(now: Date) {
+  return (await listDiagnosisRequests(NEW_WINDOW_DAYS, now)).filter((r) => r.status === 'novo').map((r) => r.id);
+}
+
+async function updateNew(fn: (ids: string[]) => string[], now: Date) {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const doc = await storage().readJSON<{ ids: string[] }>(NEW_KEY);
+    const base = doc ? doc.data.ids : await rebuildNew(now);
+    const ids = [...new Set(fn(base))].filter((id) => inWindow(id, now));
+    try {
+      await storage().writeJSON(NEW_KEY, { ids }, doc ? doc.etag : null);
+      return ids;
+    } catch (err) {
+      if (!(err instanceof ConflictError) || attempt === 4) throw err;
+    }
+  }
+  return [];
+}
+
+/** How many requests are still "novo" (nobody answered them yet). */
+export async function countNewDiagnoses(now = new Date()): Promise<number> {
+  const doc = await storage().readJSON<{ ids: string[] }>(NEW_KEY);
+  if (!doc) return (await updateNew((ids) => ids, now)).length;
+  return doc.data.ids.filter((id) => inWindow(id, now)).length;
 }
 
 async function updateDay(day: string, fn: (list: DiagnosisRequest[]) => DiagnosisRequest[]) {
@@ -131,8 +176,9 @@ export async function saveDiagnosisAnalysis(id: string, analysis: DiagnosisAnaly
   await updateDay(`${day[1]}-${day[2]}-${day[3]}`, (list) => list.map((r) => (r.id === id ? { ...r, analysis } : r)));
 }
 
-export async function setDiagnosisStatus(id: string, status: DiagnosisStatus) {
+export async function setDiagnosisStatus(id: string, status: DiagnosisStatus, now = new Date()) {
   const day = /^(\d{4})(\d{2})(\d{2})-/.exec(id);
   if (!day || !DIAGNOSIS_STATUSES.includes(status)) throw new DiagnosisError('Pedido inválido.');
   await updateDay(`${day[1]}-${day[2]}-${day[3]}`, (list) => list.map((r) => (r.id === id ? { ...r, status } : r)));
+  await updateNew((ids) => (status === 'novo' ? [...ids, id] : ids.filter((x) => x !== id)), now);
 }

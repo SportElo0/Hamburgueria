@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { setDiagnosisStatusAction } from '@/app/painel/actions';
 import type { DiagnosisRequest, DiagnosisStatus } from '@/lib/diagnostics';
 
 const STATUS: { id: DiagnosisStatus; label: string; chip: string }[] = [
-  { id: 'novo', label: 'Novo', chip: 'bg-accent-soft text-accent' },
-  { id: 'em-andamento', label: 'Fazendo a prévia', chip: 'bg-line text-ink' },
-  { id: 'enviado', label: 'Enviado', chip: 'bg-ok/10 text-ok' },
+  { id: 'novo', label: 'Novo, sem resposta', chip: 'bg-bad text-white' },
+  { id: 'em-andamento', label: 'Conversando / montando o plano', chip: 'bg-line text-ink' },
+  { id: 'enviado', label: 'Plano enviado', chip: 'bg-ok/10 text-ok' },
   { id: 'descartado', label: 'Descartado', chip: 'bg-line text-ink-mute' },
 ];
 
@@ -18,19 +19,26 @@ export function DiagnosisList({ requests }: { requests: DiagnosisRequest[] }) {
   const [items, setItems] = useState(requests);
   const [error, setError] = useState('');
   const [, start] = useTransition();
+  const router = useRouter();
 
   const change = (id: string, status: DiagnosisStatus) => {
     setItems((list) => list.map((r) => (r.id === id ? { ...r, status } : r)));
     start(async () => {
       const res = await setDiagnosisStatusAction(id, status);
       if (!res.ok) setError(res.error ?? 'Não foi possível salvar.');
+      // The red badge in the menu comes from the server: refresh it.
+      router.refresh();
     });
   };
+  const novos = items.filter((r) => r.status === 'novo').length;
 
   if (items.length === 0) return <p className="card mt-6 px-5 py-10 text-center text-ink-mute">Nenhum pedido ainda. Eles aparecem aqui assim que alguém preenche o formulário do site.</p>;
 
   return (
     <div className="mt-6 space-y-3">
+      <p className={`text-sm font-semibold ${novos ? 'text-bad' : 'text-ok'}`}>
+        {novos ? `${novos} ${novos === 1 ? 'pedido novo esperando' : 'pedidos novos esperando'} resposta no WhatsApp. Ao abrir o WhatsApp, ele sai da contagem.` : 'Todos os pedidos já foram vistos.'}
+      </p>
       {error && (
         <p role="alert" className="text-sm font-semibold text-bad">
           {error}
@@ -39,7 +47,7 @@ export function DiagnosisList({ requests }: { requests: DiagnosisRequest[] }) {
       {items.map((r) => {
         const status = STATUS.find((s) => s.id === r.status) ?? STATUS[0];
         return (
-          <article key={r.id} className="card p-5">
+          <article key={r.id} className={`card p-5 ${r.status === 'novo' ? 'border-bad/50 ring-1 ring-bad/30' : ''}`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold">
@@ -61,7 +69,13 @@ export function DiagnosisList({ requests }: { requests: DiagnosisRequest[] }) {
                     </option>
                   ))}
                 </select>
-                <a className="btn min-h-10 border border-ok/40 bg-ok/5 text-ok hover:bg-ok hover:text-white" href={`https://wa.me/55${r.whatsapp}`} target="_blank" rel="noreferrer">
+                <a
+                  className="btn min-h-10 border border-ok/40 bg-ok/5 text-ok hover:bg-ok hover:text-white"
+                  href={`https://wa.me/55${r.whatsapp}?text=${encodeURIComponent(`Oi! Aqui é da Growlift. Recebemos o diagnóstico do ${r.business} e já estamos montando o seu plano.`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => r.status === 'novo' && change(r.id, 'em-andamento')}
+                >
                   WhatsApp {fmtPhone(r.whatsapp)}
                 </a>
               </div>
@@ -72,7 +86,7 @@ export function DiagnosisList({ requests }: { requests: DiagnosisRequest[] }) {
                 <dd className="break-words">{r.presence || <span className="text-ink-mute">Não tem ou não informou</span>}</dd>
               </div>
               <div>
-                <dt className="label">O que quer melhorar</dt>
+                <dt className="label">Respostas do diagnóstico</dt>
                 <dd className="whitespace-pre-line">{r.wishes || <span className="text-ink-mute">Não informou</span>}</dd>
               </div>
             </dl>

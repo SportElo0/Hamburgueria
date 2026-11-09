@@ -23,3 +23,11 @@ Sem IA e sem API paga. Quem não tem site (ou só tem Instagram) aparece como "N
 
 Código: `src/lib/diagnostico-auto.ts`; testes: `test/diagnostico-auto.test.ts`. Revisão de segurança feita em 03/11
 (ajustes aplicados: sem texto livre no Telegram; mensagem cortada por pedido inteiro).
+
+## Bolinha vermelha de diagnósticos novos (08/11/2026)
+
+- O menu do painel mostra "Diagnósticos" com uma bolinha vermelha e o número de pedidos ainda em **Novo, sem resposta**. O número também aparece no título da aba e é conferido a cada 1 minuto (`/api/painel/diagnosticos-novos`, só equipe).
+- **Sai da contagem quando:**
+  - alguém toca no botão do WhatsApp do pedido (ele passa para "Conversando / montando o plano", e o WhatsApp abre com uma mensagem inicial pronta);
+  - ou alguém muda a situação.
+- **Índice:** `diagnosticos/novos.json` guarda só os ids em "novo" (últimos 60 dias). Se sumir ou falhar, é refeito a partir dos pedidos. Código: `countNewDiagnoses` em `src/lib/diagnostics.ts`; testes em `test/diagnostics.test.ts`.

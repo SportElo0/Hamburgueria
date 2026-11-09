@@ -141,6 +141,7 @@
     const slides = ramos.querySelector('.slides');
     const imgs = slides.querySelectorAll('img');
     const words = ramos.querySelector('.spin .track');
+    const url = ramos.querySelector('.bar .url');
     const dots = ramos.querySelectorAll('.ramos-dots i');
     const n = imgs.length;
     let target = 0;
@@ -164,6 +165,7 @@
         current = k;
         words.style.transform = `translateY(${-k * 1.15}em)`;
         dots.forEach((d, j) => d.classList.toggle('on', j === k));
+        if (url && imgs[k]?.dataset.url) url.textContent = imgs[k].dataset.url;
       }
     };
     const tick = () => {
@@ -191,6 +193,114 @@
     render();
   }
 
+  // Mobile: one small "plan" button stays at the bottom after the cover, and steps aside at the form.
+  const sticky = document.querySelector('.sticky-cta');
+  const diag = document.getElementById('diagnostico');
+  const heroEl = document.querySelector('.hero');
+  if (sticky && diag && heroEl && 'IntersectionObserver' in window) {
+    let pastHero = false;
+    let atForm = false;
+    const inScene = new Set();
+    const show = () => sticky.classList.toggle('on', pastHero && !atForm && inScene.size === 0);
+    new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting; show(); }).observe(heroEl);
+    new IntersectionObserver(([e]) => { atForm = e.isIntersecting; show(); }, { rootMargin: '0px 0px -30% 0px' }).observe(diag);
+    // The pinned scenes use the whole screen: the button steps aside while one is on screen.
+    const sceneIO = new IntersectionObserver((es) => {
+      es.forEach((e) => (e.isIntersecting ? inScene.add(e.target) : inScene.delete(e.target)));
+      show();
+    }, { threshold: 0.35 });
+    document.querySelectorAll('.scene-sobremesa, .scene-zap, #palco3d').forEach((el) => sceneIO.observe(el));
+  }
+
+  // Cena 1: the burger on the plate. The viewer (self-hosted, ~1 MB) loads only when the section gets near.
+  // While the visitor scrolls in, the scroll turns the plate to face them; the first touch hands control over
+  // (rotation stops, zoom stays where they leave it).
+  const palco = document.getElementById('palco3d');
+  let mvTaken = false;
+  if (palco) {
+    const load = () => {
+      if (document.querySelector('script[data-mv]')) return;
+      const sc = document.createElement('script');
+      sc.type = 'module';
+      sc.src = 'vendor/model-viewer-4.4.0.min.js';
+      sc.dataset.mv = '1';
+      document.head.appendChild(sc);
+    };
+    if ('IntersectionObserver' in window) {
+      const near = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { near.disconnect(); load(); } }, { rootMargin: '600px 0px' });
+      near.observe(palco);
+    } else load();
+    const stage = palco.querySelector('.stage');
+    const mv = document.getElementById('burger3d');
+    const take = () => {
+      if (mvTaken) return;
+      mvTaken = true;
+      stage.classList.add('touched');
+    };
+    ['pointerdown', 'touchstart'].forEach((t) => mv.addEventListener(t, take, { passive: true }));
+    // Until the visitor grabs the plate, the mouse wheel scrolls the page instead of zooming the 3D.
+    mv.addEventListener('wheel', (e) => { if (!mvTaken && !e.ctrlKey) e.stopPropagation(); }, { capture: true, passive: true });
+  }
+
+  // Cenas 2 e 3: the screen holds while the numbers climb and the chat plays. Without GSAP, everything shows.
+  const gsap = window.gsap;
+  const ST = window.ScrollTrigger;
+  if (gsap && ST) {
+    gsap.registerPlugin(ST);
+    const small = window.matchMedia('(max-width: 860px)').matches;
+
+    // Cena 2: pinned; the grey bar climbs to 18%, then the blue one to 41%.
+    const sob = document.getElementById('pesquisa-3d');
+    if (sob) {
+      const bars = sob.querySelectorAll('.race-track i');
+      const nums = sob.querySelectorAll('.race-row b');
+      const src = sob.querySelector('.scene-src');
+      const counter = (el) => ({ v: 0, el, to: Number(el.dataset.to) });
+      const c = [counter(nums[0]), counter(nums[1])];
+      const show = (x) => () => { x.el.textContent = `${Math.round(x.v)}%`; };
+      gsap.set(bars, { scaleX: 0, transformOrigin: 'left center' });
+      gsap.set(src, { autoAlpha: 0, y: 12 });
+      c.forEach((x) => show(x)());
+      const tl = gsap.timeline({ scrollTrigger: { trigger: sob, start: 'top top', end: small ? '+=100%' : '+=140%', pin: true, scrub: 0.8 } });
+      tl.from(sob.querySelector('.scene-title'), { y: 40, autoAlpha: 0, duration: 0.6 })
+        .to(bars[0], { scaleX: 1, duration: 1, ease: 'power2.out' }, '+=0.1')
+        .to(c[0], { v: c[0].to, duration: 1, ease: 'power2.out', onUpdate: show(c[0]) }, '<')
+        .to(bars[1], { scaleX: 1, duration: 1.4, ease: 'power2.out' }, '+=0.15')
+        .to(c[1], { v: c[1].to, duration: 1.4, ease: 'power2.out', onUpdate: show(c[1]) }, '<')
+        .to(src, { autoAlpha: 1, y: 0, duration: 0.5 })
+        .to({}, { duration: 0.4 });
+    }
+
+    // Cena 3: pinned; four full-screen steps replace each other with the scroll, the rail shows where we are.
+    const zap = document.getElementById('whatsapp');
+    if (zap) {
+      const panels = zap.querySelectorAll('.zpanel');
+      const rail = zap.querySelectorAll('.zrail li');
+      const sevenB = zap.querySelector('.seven b');
+      zap.querySelector('.zap2').classList.add('js-zap');
+      gsap.set(panels, { autoAlpha: 0, y: 40 });
+      gsap.set(panels[0], { autoAlpha: 1, y: 0 });
+      gsap.set(sevenB, { scale: 0.4, transformOrigin: 'left center' });
+      const mark = (p) => {
+        const k = Math.min(panels.length - 1, Math.floor(p * panels.length * 0.999 + 0.0001));
+        rail.forEach((li, n) => { li.classList.toggle('on', n === k); li.classList.toggle('past', n < k); });
+      };
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: zap, start: 'top top', end: small ? '+=260%' : '+=320%', pin: true, scrub: 0.6, onUpdate: (self) => mark(self.progress) },
+      });
+      tl.to({}, { duration: 0.6 });
+      for (let i = 1; i < panels.length; i++) {
+        tl.to(panels[i - 1], { autoAlpha: 0, y: -40, duration: 0.4, ease: 'power2.in' })
+          .to(panels[i], { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.1');
+        if (i === panels.length - 1) tl.to(sevenB, { scale: 1, duration: 0.6, ease: 'back.out(1.4)' }, '-=0.1');
+        tl.to({}, { duration: 0.6 });
+      }
+    }
+
+    // The 3D viewer and fonts change heights after load: keep the pins measured right.
+    window.addEventListener('load', () => ST.refresh());
+  }
+
   // Phone mask: (11) 90000-0000
   const phone = document.getElementById('f-zap');
   // The English page has no form: everything below is the diagnosis form.
@@ -205,6 +315,12 @@
   const msg = document.getElementById('form-msg');
   const ok = document.getElementById('form-ok');
   const button = form.querySelector('button[type=submit]');
+  const steps = Array.from(form.querySelectorAll('.wstep'));
+  const count = document.getElementById('step-count');
+  const bar = form.querySelector('.progress i');
+  const other = form.querySelector('.other');
+  const otherInput = document.getElementById('f-ramo');
+  const picked = (name) => Array.from(form.querySelectorAll(`input[name=${name}]:checked`), (i) => i.value);
 
   const fail = (text, field) => {
     msg.textContent = text;
@@ -215,18 +331,87 @@
       field.setAttribute('aria-invalid', 'true');
       field.focus();
     }
+    return false;
   };
+  const clear = () => { msg.hidden = true; };
+
+  // One step at a time (only with JS: without it, the whole form shows at once).
+  let current = 0;
+  const go = (n) => {
+    current = n;
+    steps.forEach((st, i) => (st.hidden = i !== n));
+    count.textContent = `Passo ${n + 1} de ${steps.length}`;
+    bar.style.transform = `scaleX(${(n + 1) / steps.length})`;
+    clear();
+  };
+  form.classList.add('steps-on');
+  go(0);
+
+  // "O que mais atrapalha": up to 3.
+  form.querySelectorAll('input[name=dor]').forEach((box) =>
+    box.addEventListener('change', () => {
+      if (box.checked && picked('dor').length > 3) {
+        box.checked = false;
+        fail('Marque até 3: as que mais pesam hoje.');
+      } else clear();
+    }),
+  );
+  form.querySelectorAll('input[name=ramo]').forEach((r) =>
+    r.addEventListener('change', () => {
+      other.hidden = r.value !== 'Outro' || !r.checked;
+      if (!other.hidden) otherInput.focus();
+    }),
+  );
+
+  const valid = (n) => {
+    if (n === 0 && !picked('dor').length) return fail('Marque pelo menos uma coisa que atrapalha hoje.', form.querySelector('input[name=dor]'));
+    if (n === 1) {
+      const ramo = picked('ramo')[0];
+      if (!ramo) return fail('Escolha o ramo do negócio.', form.querySelector('input[name=ramo]'));
+      if (ramo === 'Outro' && otherInput.value.trim().length < 2) return fail('Conte qual é o ramo.', otherInput);
+    }
+    return true;
+  };
+  const toForm = () => form.getBoundingClientRect().top < 80 && form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  form.querySelectorAll('[data-next]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (!valid(current)) return;
+      go(current + 1);
+      toForm();
+      steps[current].querySelector('input:not([type=hidden])')?.focus({ preventScroll: true });
+    }),
+  );
+  form.querySelectorAll('[data-back]').forEach((b) => b.addEventListener('click', () => { go(current - 1); toForm(); }));
+
+  // The answers travel as plain lines in the free-text field the panel already keeps (1000 characters).
+  const segment = () => {
+    const r = picked('ramo')[0] || '';
+    return (r === 'Outro' ? otherInput.value.trim() : r.replace(/ \(.*\)$/, '')).slice(0, 60);
+  };
+  const answers = (f) =>
+    [
+      ['Maior dor', picked('dor').join('; ')],
+      ['Ramo', picked('ramo')[0] === 'Outro' ? otherInput.value.trim() : picked('ramo')[0]],
+      ['Atendimentos por dia', picked('volume').join('')],
+      ['Quem responde o WhatsApp', picked('quem').join('')],
+      ['Mais', f.wishes.value.trim()],
+    ]
+      .filter(([, v]) => v)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join('\n')
+      .slice(0, 1000);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const f = form.elements;
     const digits = f.whatsapp.value.replace(/\D/g, '');
+    if (!valid(0)) return go(0);
+    if (!valid(1)) return go(1);
     if (f.business.value.trim().length < 2) return fail('Informe o nome do negócio.', f.business);
-    if (f.segment.value.trim().length < 2) return fail('Informe o ramo do negócio.', f.segment);
     if (digits.length < 10) return fail('Informe um WhatsApp com DDD.', f.whatsapp);
-    if (!f.consent.checked) return fail('Marque a autorização para podermos mandar o diagnóstico no WhatsApp.', f.consent);
+    if (!f.consent.checked) return fail('Marque a autorização para podermos mandar o plano no WhatsApp.', f.consent);
 
-    msg.hidden = true;
+    clear();
     button.disabled = true;
     button.textContent = 'Enviando…';
     try {
@@ -235,11 +420,11 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           business: f.business.value,
-          segment: f.segment.value,
-          city: f.city.value,
+          segment: segment(),
+          city: '',
           whatsapp: digits,
           presence: f.presence.value,
-          wishes: f.wishes.value,
+          wishes: answers(f),
           consent: f.consent.checked,
           website: f.website.value,
         }),
@@ -254,7 +439,7 @@
       const offline = err instanceof TypeError || (err && err.name === 'TimeoutError');
       fail(offline ? 'Sem conexão. Confira a internet e tente de novo.' : err.message);
       button.disabled = false;
-      button.textContent = 'Quero meu diagnóstico';
+      button.textContent = 'Receber meu plano grátis';
     }
   });
 })();

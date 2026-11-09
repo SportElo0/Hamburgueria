@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { semSistemaCompleto } from '@/lib/produto-servidor';
 import { notFound } from 'next/navigation';
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { resumoDoDono } from '@/lib/dono';
@@ -42,6 +43,7 @@ export default async function ResumoPage({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
   const user = await requireStoreAccess(slug, DONO);
+  await semSistemaCompleto(slug);
   const now = new Date();
   const d = await resumoDoDono(slug, now);
   const r = d.resumo;

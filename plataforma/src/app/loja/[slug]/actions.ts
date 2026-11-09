@@ -7,7 +7,7 @@ import { OPERATOR_ACTIONS, PAYMENT_METHODS, type OperatorAction, type PaymentMet
 import { isSlug } from '@/lib/slug';
 import { setOptOut } from '@/lib/customers';
 import { ItemEditError, addPedido, editItemByStore, listPedidos } from '@/lib/stores';
-import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, orderByStaff, seatTable, setServico } from '@/lib/mesas';
+import { TableError, answerCall, closeTable, confirmTable, dismissTable, freeTable, offerDessert, orderByStaff, seatTable, setServico } from '@/lib/mesas';
 import { QueueError, addByStaff, queueOfDay, updateQueue, type QueueAction } from '@/lib/fila';
 import { markRefundDone } from '@/lib/mesa-pagamento';
 import { ReservationError, cancelByStore, markArrived, markFinished, markNoShow, undoArrived } from '@/lib/reservas';
@@ -53,7 +53,7 @@ export async function setOptOutAction(slug: string, phone: string, out: boolean)
   return { ok: true };
 }
 
-export type TableAction = 'confirmar' | 'dispensar' | 'atender-garcom' | 'atender-conta' | 'fechar';
+export type TableAction = 'confirmar' | 'dispensar' | 'atender-garcom' | 'atender-conta' | 'sobremesa' | 'fechar';
 
 /** The waiter's floor screen: confirm a table, free an empty one, answer a call, close the bill. */
 export async function tableAction(slug: string, number: number, action: TableAction, method?: PaymentMethod): Promise<OrderActionResult> {
@@ -65,6 +65,7 @@ export async function tableAction(slug: string, number: number, action: TableAct
     else if (action === 'dispensar') await dismissTable(slug, number, by);
     else if (action === 'atender-garcom') await answerCall(slug, number, 'garcom');
     else if (action === 'atender-conta') await answerCall(slug, number, 'conta');
+    else if (action === 'sobremesa') await offerDessert(slug, number, by);
     else if (action === 'fechar' && method && PAYMENT_METHODS.includes(method)) {
       const closed = await closeTable(slug, number, method, by);
       if (closed.reservationId) await markFinished(slug, closed.reservationId).catch((err) => console.error('reserva concluida', err));

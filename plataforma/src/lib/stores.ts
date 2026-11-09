@@ -226,6 +226,12 @@ async function ownerLog(slug: string, description: string, by: string) {
   }
 }
 
+/** A equipe escolhe o produto contratado (ver produto.ts). Muda o rascunho e o publicado; não mexe em nada mais. */
+export async function setProdutoContratado(slug: string, produto: 'completo' | 'conselheiro', by: string) {
+  await updateBoth(slug, by, (store) => ({ ...store, extra: { ...store.extra, produto } }));
+  await logChange(slug, { description: `Produto contratado: ${produto === 'conselheiro' ? 'só Conselheiro + sobremesa 3D' : 'sistema completo'}`, counted: false, reason: 'Equipe' }, by);
+}
+
 /** The owner says how many tables the restaurant has (1 to 200), never fewer than a table open right now. */
 export async function setTablesCount(slug: string, count: number, by: string, highestOpen = 0) {
   if (!Number.isInteger(count) || count < 1 || count > 200) throw new ItemEditError('Informe de 1 a 200 mesas.');

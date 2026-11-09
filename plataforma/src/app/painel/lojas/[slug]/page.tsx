@@ -12,6 +12,8 @@ import { getSecrets } from '@/lib/pix';
 import { orderingOf } from '@/lib/ordering';
 import { getOperation } from '@/lib/orders';
 import { recentSends, saiposReady } from '@/lib/pdv';
+import { NOME_PRODUTO, PRODUTOS, produtoDa } from '@/lib/produto';
+import { produtoContratadoAction } from './produto-actions';
 
 const PAYMENT_HISTORY_MONTHS = 6;
 
@@ -66,6 +68,18 @@ export default async function LojaPage({
           Inteligência da loja →
         </Link>
       </div>
+      <form action={produtoContratadoAction.bind(null, slug)} className="card mt-3 flex flex-wrap items-end gap-3 p-4">
+        <div>
+          <label htmlFor="produto" className="label">Produto contratado</label>
+          <select id="produto" name="produto" className="field w-auto" defaultValue={produtoDa(draft.data.store)}>
+            {PRODUTOS.map((p) => (
+              <option key={p} value={p}>{NOME_PRODUTO[p]}</option>
+            ))}
+          </select>
+        </div>
+        <button type="submit" className="btn-ghost">Salvar</button>
+        <p className="max-w-md text-xs text-ink-mute">&quot;Só Conselheiro&quot; esconde do dono mesas, pedidos, equipe e clientes: o painel dele abre na conversa do Conselheiro e na sobremesa 3D. Recarregue esta página antes de salvar outras mudanças da loja.</p>
+      </form>
       <StoreEditor
         record={record}
         etag={draft.etag}

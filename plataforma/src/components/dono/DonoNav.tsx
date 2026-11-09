@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-type Icon = 'resumo' | 'precos' | 'mesas' | 'pedidos' | 'equipe' | 'clientes';
+type Icon = 'resumo' | 'conselheiro' | 'sobremesa' | 'precos' | 'mesas' | 'pedidos' | 'equipe' | 'clientes';
 
 function Svg({ name }: { name: Icon }) {
   const paths: Record<Icon, string> = {
     resumo: 'M4 19V10M10 19V5M16 19v-6M22 19H2',
+    sobremesa: 'M12 3 4 7.5v9L12 21l8-4.5v-9L12 3ZM4 7.5l8 4.5 8-4.5M12 12v9',
+    conselheiro: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z',
     precos: 'M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8ZM7.5 7.5h.01',
     mesas: 'M3 8h18M5 8v11M19 8v11M8 4h8',
     pedidos: 'M6 3h12v18l-3-2-3 2-3-2-3 2V3ZM9 8h6M9 12h6',
@@ -22,25 +24,39 @@ function Svg({ name }: { name: Icon }) {
 }
 
 /** The dark bar of the owner's panel. On a narrow screen it becomes a bar on top with the sections side by side. */
-export function DonoNav(props: { slug: string; storeName: string; logo: string; userName: string; team: boolean; tables: boolean; logout: () => Promise<void> }) {
+export function DonoNav(props: { slug: string; storeName: string; logo: string; userName: string; team: boolean; tables: boolean; produto: 'completo' | 'conselheiro'; logout: () => Promise<void> }) {
   const path = usePathname();
   const base = `/loja/${props.slug}/dono`;
-  const live: { href: string; label: string; icon: Icon }[] = [
+  const soConselheiro = props.produto === 'conselheiro';
+  const completo: { href: string; label: string; icon: Icon }[] = [
     { href: base, label: 'Resumo geral', icon: 'resumo' },
+    { href: `${base}/conselheiro`, label: 'Conselheiro', icon: 'conselheiro' },
     { href: `${base}/precos`, label: 'Preços e custos', icon: 'precos' },
     { href: `${base}/mesas`, label: 'Mesas', icon: 'mesas' },
     { href: `${base}/pedidos`, label: 'Pedidos e delivery', icon: 'pedidos' },
     { href: `${base}/equipe`, label: 'Equipe', icon: 'equipe' },
     { href: `${base}/clientes`, label: 'Clientes e avaliações', icon: 'clientes' },
   ];
+  // Loja que contratou só o Conselheiro: conversa e sobremesa 3D; mesas, pedidos e equipe ficam fora.
+  const live = soConselheiro
+    ? [
+        { href: `${base}/conselheiro`, label: 'Conselheiro', icon: 'conselheiro' as Icon },
+        { href: `${base}/conselheiro/3d`, label: 'Sobremesa 3D', icon: 'sobremesa' as Icon },
+      ]
+    : completo;
   const soon: { label: string; icon: Icon }[] = [];
-  const screens = [
-    { href: `/loja/${props.slug}`, label: 'Tela da cozinha' },
-    { href: `/loja/${props.slug}/salao`, label: 'Tela do salão (garçom)' },
-    { href: `/loja/${props.slug}/fechamento`, label: 'Fechamento do dia' },
-    { href: `/loja/${props.slug}/cardapio`, label: 'Cardápio completo' },
-    { href: `/loja/${props.slug}/cardapio-qr`, label: 'QR do cardápio' },
-  ];
+  const screens = soConselheiro
+    ? [
+        { href: `/loja/${props.slug}/sobremesa-qr`, label: 'Cartão da sobremesa (QR)' },
+        { href: `/loja/${props.slug}/cardapio-qr`, label: 'QR do cardápio' },
+      ]
+    : [
+        { href: `/loja/${props.slug}`, label: 'Tela da cozinha' },
+        { href: `/loja/${props.slug}/salao`, label: 'Tela do salão (garçom)' },
+        { href: `/loja/${props.slug}/fechamento`, label: 'Fechamento do dia' },
+        { href: `/loja/${props.slug}/cardapio`, label: 'Cardápio completo' },
+        { href: `/loja/${props.slug}/cardapio-qr`, label: 'QR do cardápio' },
+      ];
 
   return (
     <aside className="bg-[#0b1220] text-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col">
@@ -64,7 +80,7 @@ export function DonoNav(props: { slug: string; storeName: string; logo: string; 
 
       <nav aria-label="Seções do painel" className="flex gap-1 overflow-x-auto px-3 pb-3 lg:mt-4 lg:flex-col lg:overflow-visible lg:pb-0">
         {live.map((l) => {
-          const active = l.href === base ? path === base : path.startsWith(l.href);
+          const active = l.href === base ? path === base : path.startsWith(l.href) && !(soConselheiro && l.label === 'Conselheiro' && path.startsWith(`${base}/conselheiro/3d`));
           return (
             <Link
               key={l.href}

@@ -5,6 +5,7 @@ import { orderingOf } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
 import { isTeam } from '@/lib/session';
 import { DonoNav } from '@/components/dono/DonoNav';
+import { produtoDa } from '@/lib/produto';
 import { logout } from '@/app/login/actions';
 
 export const metadata = { title: 'Painel do dono' };
@@ -27,6 +28,7 @@ export default async function DonoLayout({ children, params }: { children: React
         userName={user.name || user.email}
         team={isTeam(user)}
         tables={o.enabled && o.tables.enabled}
+        produto={produtoDa(draft.data.store)}
         logout={logout}
       />
       <main className="min-w-0 flex-1 px-4 py-6 lg:px-9 lg:py-8">{children}</main>

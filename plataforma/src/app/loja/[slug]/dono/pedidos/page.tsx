@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { semSistemaCompleto } from '@/lib/produto-servidor';
 import { notFound } from 'next/navigation';
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { getDraft } from '@/lib/stores';
@@ -40,6 +41,7 @@ export default async function PedidosDonoPage({ params, searchParams }: { params
   const { slug } = await params;
   if (!isSlug(slug)) notFound();
   await requireStoreAccess(slug, DONO);
+  await semSistemaCompleto(slug);
   const draft = await getDraft(slug);
   if (!draft) notFound();
   const o = orderingOf(draft.data.store);
