@@ -32,6 +32,33 @@
         ],
         "createdAt": "2026-11-09T02:49:25.087Z",
         "reason": "soft brand-blue shadow on the CTA dot and drag cursor, part of the sky-and-sun look the Lumivale brief asks for"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "full-bleed section color bands and the accordion's top divider line; text is inset by .wrap padding (checked in screenshots at 390-1440 px)"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "measured without the stylesheet; real sizes are h2 clamp up to ~80px, h3 20-26px, body 16-18px"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "lumivale/styles.css"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "the font is Inter Tight, which the Lumivale brief specifies"
       }
     ]
   }
