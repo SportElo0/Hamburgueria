@@ -201,6 +201,11 @@ No cardápio da mesa (QR), o prato com 3D ganha um selo **3D**. O cliente toca, 
 - **Série de Reels "Casa Cheia"** (Reels 17 a 20): restaurante e personagens inventados (Rosa, Mel, Beto, Seu Juca, Dona Cida), um nome difícil por episódio (CMV, engenharia de cardápio, CRM, fechamento do mês). Roteiros, legendas, respostas do direct (MARGEM, CLIENTE, RELATÓRIO) e próximos 6 episódios em `growlift-social/05-reels/casa-cheia.md`. Fonte: `growlift-social/_fonte/reels/novos/reel17.mjs` a `reel20.mjs` e o elenco em `elenco.mjs`. As palavras novas precisam ser cadastradas no ManyChat.
 - O ambiente da sessão ganhou o host `d8j0ntlcm91z4.cloudfront.net` (arquivos do Higgsfield) para baixar as narrações.
 
+## Lumivale Energia Solar, site conceito (09/11/2026)
+
+- Site one-page de uma instaladora de energia solar **fictícia** para o portfólio: https://lumivale-conceito.vercel.app (aberto, `noindex`). Projeto Vercel `prj_fNpaVGA4Mg240asPTrD0gbHjCgzK`, pasta `lumivale/` (HTML, CSS e JS puros; GSAP 3.12.5, ScrollTrigger, MotionPathPlugin e Lenis guardados em `lumivale/vendor/`).
+- Imagens geradas no Higgsfield (9,25 créditos). Números com etiqueta "exemplo", depoimentos "ilustrativos", WhatsApp fictício (`CONFIG.whatsapp` em `main.js`). Revisado pelo `revisor-legal`; o título da capa e a chamada final ("conta de luz menor", "deixar o sol pagar a conta") ficaram como pedido no briefing, e o README avisa que num site real viram estimativa.
+
 ## Pendências
 
 El Patron (aguardando o dono):
