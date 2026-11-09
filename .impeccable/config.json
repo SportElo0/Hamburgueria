@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "inter tight",
+        "createdAt": "2026-11-09T02:36:00.588Z",
+        "reason": "user brief for the Lumivale concept site specifies Inter Tight with Helvetica Neue fallback"
+      }
+    ]
+  }
+}
