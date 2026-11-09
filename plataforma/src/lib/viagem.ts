@@ -23,7 +23,7 @@ interface Acesso {
 
 export const SEED = {
   versao: 1,
-  config: { nomes: ['Antônio', 'Amigo'], ticketSite: 120000 },
+  config: { nomes: ['Antônio', 'Amigo'], ticketSite: 120000, meta: 1000000 },
   entradas: [] as unknown[],
   contatos: [] as unknown[],
   custos: (
@@ -112,7 +112,7 @@ export function validar(d: unknown) {
   while (nomes.length < 2) nomes.push('Pessoa');
   return {
     versao: 1,
-    config: { nomes, ticketSite: cent(config.ticketSite) },
+    config: { nomes, ticketSite: cent(config.ticketSite), meta: cent(config.meta) || 1000000 },
     entradas: lista(o.entradas, 500).map((x) => ({ id: id(x.id), valor: cent(x.valor), data: dia(x.data), pessoa: [0, 1, 2].includes(x.pessoa as number) ? x.pessoa : 2, origem: ORIGENS.includes(x.origem as string) ? x.origem : 'outro', descricao: txt(x.descricao, 80), criadoEm: txt(x.criadoEm, 40) })),
     contatos: lista(o.contatos, 500).map((x) => ({ id: id(x.id), empresa: txt(x.empresa, 70) || 'Empresa', etapa: ETAPAS.includes(x.etapa as string) ? x.etapa : 'contato', nota: txt(x.nota, 120), atualizadoEm: txt(x.atualizadoEm, 40) })),
     custos: lista(o.custos, 60).map((x, i) => ({ id: id(x.id), item: txt(x.item, 60) || 'Custo', valor: cent(x.valor), pago: x.pago === true, ordem: Number.isInteger(x.ordem) ? x.ordem : i + 1 })),

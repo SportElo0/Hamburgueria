@@ -229,7 +229,7 @@ details summary { cursor: pointer; font-weight: 700; color: var(--azulejo); font
   <div class="grid2">
     <section class="card" aria-labelledby="h-custos">
       <h2 id="h-custos">Custos da viagem (os dois)</h2>
-      <p class="muted">A meta é a soma destes custos. Mude um valor e saia do campo para salvar. Marque o que já foi pago.</p>
+      <p class="muted">Previsão completa da viagem. A meta mínima fica em Ajustes; o que passar dela é folga. Mude um valor e saia do campo para salvar. Marque o que já foi pago.</p>
       <div class="list" id="l-custos"></div>
       <details>
         <summary>Adicionar custo</summary>
@@ -261,12 +261,13 @@ details summary { cursor: pointer; font-weight: 700; color: var(--azulejo); font
 
   <section class="card" aria-labelledby="h-ajustes">
     <details>
-      <summary id="h-ajustes">Ajustes: nomes e preço do site</summary>
+      <summary id="h-ajustes">Ajustes: meta, nomes e preço do site</summary>
       <form id="f-config" style="margin-top:10px">
         <div class="row">
           <label for="g-nome1">Pessoa 1<input id="g-nome1" maxlength="30"></label>
           <label for="g-nome2">Pessoa 2<input id="g-nome2" maxlength="30"></label>
           <label for="g-ticket">Preço médio do site (R$)<input id="g-ticket" inputmode="decimal"></label>
+          <label for="g-meta">Meta mínima (R$)<input id="g-meta" inputmode="decimal"></label>
         </div>
         <div class="row" style="align-items:center"><button class="btn" type="submit">Salvar ajustes</button><p class="msg" id="g-msg" role="status"></p></div>
       </form>
@@ -374,14 +375,16 @@ details summary { cursor: pointer; font-weight: 700; color: var(--azulejo); font
     [[0, nomes[0]], [1, nomes[1]], [2, 'Dos dois']].forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o); });
     sel.value = keep || '2';
 
-    const meta = state.custos.reduce((s, x) => s + (x.valor || 0), 0);
+    const somaCustos = state.custos.reduce((s, x) => s + (x.valor || 0), 0);
+    // Meta própria (padrão R$ 10.000: passagens e o essencial); os custos são a previsão completa.
+    const meta = Number.isInteger(c.meta) && c.meta > 0 ? c.meta : 1000000;
     const arrec = state.entradas.reduce((s, x) => s + (x.valor || 0), 0);
     const pago = state.custos.filter((x) => x.pago).reduce((s, x) => s + (x.valor || 0), 0);
     const falta = Math.max(0, meta - arrec);
     const pct = meta ? Math.min(100, (arrec / meta) * 100) : 0;
     const semanas = Math.max(1, diasAte(IDA) / 7);
     $('m-arrec').textContent = brl(arrec);
-    $('m-meta').textContent = meta ? brl(meta) : 'meta ainda sem custos';
+    $('m-meta').textContent = brl(meta) + (somaCustos ? ' (previsão completa: ' + brl(somaCustos) + ')' : '');
     $('m-fill').style.width = pct + '%';
     $('m-plane').style.left = pct + '%';
     $('s-falta').textContent = brl(falta);
@@ -519,6 +522,7 @@ details summary { cursor: pointer; font-weight: 700; color: var(--azulejo); font
       $('g-nome1').value = nomes[0];
       $('g-nome2').value = nomes[1];
       $('g-ticket').value = ((c.ticketSite || 0) / 100).toFixed(2).replace('.', ',');
+      $('g-meta').value = (meta / 100).toFixed(2).replace('.', ',');
     }
   }
 
@@ -581,7 +585,9 @@ details summary { cursor: pointer; font-weight: 700; color: var(--azulejo); font
     const t = reais($('g-ticket').value);
     if (t === null || Number.isNaN(t)) return msg($('g-msg'), 'Preço inválido.', false);
     const nomes = [$('g-nome1').value.trim().slice(0, 30) || 'Pessoa 1', $('g-nome2').value.trim().slice(0, 30) || 'Pessoa 2'];
-    await mudar((d) => { d.config = { nomes, ticketSite: t }; }, $('g-msg'), 'Ajustes salvos.');
+    const m = reais($('g-meta').value);
+    if (m === null || Number.isNaN(m) || m <= 0) return msg($('g-msg'), 'Meta inválida.', false);
+    await mudar((d) => { d.config = { nomes, ticketSite: t, meta: m }; }, $('g-msg'), 'Ajustes salvos.');
   });
 
   carregar();
