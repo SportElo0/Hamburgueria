@@ -93,7 +93,7 @@ const CONFIG = {
       next.classList.add('is-active');
     }
   }
-  function setPanel(item, open) {
+  function setPanel(item, open, refresh = true) {
     const btn = $('button', item);
     const panel = $('.acc-panel', item);
     btn.setAttribute('aria-expanded', String(open));
@@ -102,17 +102,29 @@ const CONFIG = {
     gsap.killTweensOf(panel);
     if (open) {
       panel.hidden = false;
-      gsap.fromTo(panel, { height: 0, opacity: 0 }, { height: 'auto', opacity: 1, duration: 0.45, ease: 'power3.out', clearProps: 'height', onComplete: () => window.ScrollTrigger?.refresh() });
+      gsap.fromTo(panel, { height: 0, opacity: 0 }, { height: 'auto', opacity: 1, duration: 0.45, ease: 'power3.out', clearProps: 'height', onComplete: () => { if (refresh) window.ScrollTrigger?.refresh(); } });
     } else {
-      gsap.to(panel, { height: 0, opacity: 0, duration: 0.35, ease: 'power3.inOut', onComplete: () => { panel.hidden = true; gsap.set(panel, { clearProps: 'height,opacity' }); window.ScrollTrigger?.refresh(); } });
+      gsap.to(panel, { height: 0, opacity: 0, duration: 0.35, ease: 'power3.inOut', onComplete: () => { panel.hidden = true; gsap.set(panel, { clearProps: 'height,opacity' }); if (refresh) window.ScrollTrigger?.refresh(); } });
     }
+  }
+  // Serviços: abre um item e troca a foto (usado pelo clique e pela rolagem)
+  let servScrollTo = null; // telas largas: a rolagem comanda os serviços (ver "5. Serviços" abaixo)
+  function openService(i, refresh = true) {
+    const items = $$('.services .acc-item');
+    items.forEach((other, k) => { if (k !== i && other.classList.contains('is-open')) setPanel(other, false, refresh); });
+    if (!items[i].classList.contains('is-open')) setPanel(items[i], true, refresh);
+    showServiceImage(i);
   }
   $$('.acc').forEach((acc) => {
     const items = $$('.acc-item', acc);
-    items.forEach((item) => {
+    items.forEach((item, idx) => {
       $('button', item).addEventListener('click', (e) => {
         const isOpen = item.classList.contains('is-open');
-        if (acc.dataset.acc === 'servicos' && isOpen) return; // sempre um serviço aberto
+        if (acc.dataset.acc === 'servicos') {
+          if (servScrollTo) servScrollTo(idx); // seção presa: o clique rola até o trecho daquele serviço
+          else if (!isOpen) openService(idx);
+          return; // sempre um serviço aberto
+        }
         items.forEach((other) => { if (other !== item && other.classList.contains('is-open')) setPanel(other, false); });
         setPanel(item, !isOpen);
         const img = e.currentTarget.dataset.img;
@@ -305,8 +317,10 @@ const CONFIG = {
   const rise = (targets, trigger, extra = {}) => gsap.from(targets, { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger, start: 'top 82%' }, ...extra });
 
   const mm = gsap.matchMedia();
-  mm.add({ desktop: '(min-width: 769px)', mobile: '(max-width: 768px)' }, (ctx) => {
-    const { desktop } = ctx.conditions;
+  mm.add({ desktop: '(min-width: 769px)', mobile: '(max-width: 768px)', wide: '(min-width: 961px)' }, (ctx) => {
+    const { desktop, wide } = ctx.conditions;
+
+    const cleanup = [() => { servScrollTo = null; }];
 
     /* ---------- 1. Capa ao rolar: a ilha gira, aproxima e sobe; o céu escurece e o semicírculo vira sol ---------- */
     gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } })
@@ -340,6 +354,26 @@ const CONFIG = {
         .to('.how-progress span', { scaleX: 1, ease: 'none' }, 0)
         .to('.how-sun', { motionPath: { path: '#sun-path', align: '#sun-path', alignOrigin: [0.5, 0.5] }, ease: 'none' }, 0);
 
+      /* ---------- 5. Serviços (telas largas): seção presa; cada trecho da rolagem abre um serviço e revela a foto ---------- */
+      if (wide) {
+        const items = $$('.services .acc-item');
+        const n = items.length;
+        let shown = Math.max(0, items.findIndex((it) => it.classList.contains('is-open')));
+        const st = ScrollTrigger.create({
+          trigger: '.services', start: 'top top', end: `+=${n * 60}%`, pin: true, anticipatePin: 1,
+          onUpdate: (self) => {
+            gsap.set('.services-progress span', { scaleX: self.progress });
+            const i = Math.min(n - 1, Math.floor(self.progress * n));
+            if (i !== shown) { shown = i; openService(i, false); }
+          },
+        });
+        servScrollTo = (i) => {
+          const y = st.start + ((i + 0.5) / n) * (st.end - st.start);
+          if (lenis) lenis.scrollTo(y, { duration: 0.9 }); else window.scrollTo({ top: y, behavior: 'smooth' });
+        };
+        // a foto acompanha a rolagem com um leve deslocamento
+        gsap.fromTo('.services-media', { yPercent: 3 }, { yPercent: -3, ease: 'none', scrollTrigger: { trigger: '.services', start: 'top top', end: () => st.end, scrub: true } });
+      }
       /* ---------- 6. Obras: galeria horizontal presa, com parallax nas fotos ---------- */
       const wTrack = $('.works-track');
       const wDist = () => Math.max(0, wTrack.scrollWidth - window.innerWidth);
@@ -372,10 +406,10 @@ const CONFIG = {
         window.addEventListener('pointerup', up);
         vp.addEventListener('dragstart', (e) => e.preventDefault());
         vp.style.cursor = 'none';
-        return () => {
+        cleanup.push(() => {
           vp.removeEventListener('pointerenter', enter); vp.removeEventListener('pointerleave', leave); vp.removeEventListener('pointerdown', down);
           window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); vp.style.cursor = '';
-        };
+        });
       }
     } else {
       /* ---------- Celular: sem pin pesado, só entradas leves ---------- */
@@ -385,7 +419,7 @@ const CONFIG = {
       rise('.how-head > *', '.how-head');
       rise('.work', '.works-viewport', { x: 40, y: 0 });
     }
-    return undefined;
+    return () => cleanup.forEach((f) => f());
   });
 
   // Títulos e blocos das seções que não ficam presas

@@ -15,6 +15,7 @@ Site one-page de uma **empresa fictícia** de energia solar, feito pela Growlift
 
 - O pré-carregamento e a entrada da capa são em CSS, para aparecerem antes de o JavaScript carregar.
 - `gsap.matchMedia()`: no computador as seções "Por que solar", "Como funciona" e "Obras" ficam presas na tela; no celular (até 768 px) viram listas com entradas leves.
+- "Soluções para cada telhado": em telas a partir de 961 px a seção fica presa e cada trecho da rolagem abre um serviço e troca a foto (com barra de progresso); clicar num serviço rola até ele. Abaixo disso, e com movimento reduzido, abre só no toque.
 - Com "reduzir movimento" ligado no aparelho: sem rolagem suave, sem seções presas, conteúdo parado e visível.
 - O formulário não calcula economia nem guarda dados: só monta a mensagem e abre o WhatsApp (`CONFIG.whatsapp` em `main.js`, hoje um número fictício).
 
