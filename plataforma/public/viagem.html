@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1846b8">
+<title>Caixa Portugal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: bilhete de embarque GRU→LIS no topo, trilho do avião como barra de progresso, depois blocos de trabalho em uma coluna (celular) ou duas (computador). */
+:root {
+  --bg: #f3f5f9;
+  --card: #ffffff;
+  --ink: #142033;
+  --soft: #4b5872;
+  --mute: #75819a;
+  --line: #dde3ee;
+  --azulejo: #1846b8;
+  --azulejo-soft: #e7eefc;
+  --ocre: #d98a1c;
+  --ok: #1b7f45;
+  --warn: #b25a07;
+  --bad: #c42b2b;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1320; --card: #151d2e; --ink: #eef2f9; --soft: #b8c3d8; --mute: #8592ab; --line: #26314a;
+    --azulejo: #7ea4ff; --azulejo-soft: #1a2747; --ocre: #f0a640; --ok: #4fc483; --warn: #f0a640; --bad: #ff7676;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1320; --card: #151d2e; --ink: #eef2f9; --soft: #b8c3d8; --mute: #8592ab; --line: #26314a;
+  --azulejo: #7ea4ff; --azulejo-soft: #1a2747; --ocre: #f0a640; --ok: #4fc483; --warn: #f0a640; --bad: #ff7676;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 20px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 20px; }
+h1, h2 { font-family: var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+h2 { font-size: 20px; font-weight: 800; }
+.num { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); }
+.muted { color: var(--mute); font-size: 13px; }
+.status { font-size: 13px; color: var(--mute); }
+
+/* Bilhete */
+.ticket { background: var(--azulejo); color: #fff; border-radius: 18px; padding: 20px; display: grid; gap: 16px; position: relative; overflow: hidden; }
+.ticket::after { content: ""; position: absolute; right: -40px; top: -40px; width: 180px; height: 180px; opacity: .13; background:
+  radial-gradient(circle at 50% 50%, transparent 30%, #fff 31%, #fff 34%, transparent 35%),
+  conic-gradient(from 45deg, #fff 0 25%, transparent 0 50%, #fff 0 75%, transparent 0);
+  background-size: 60px 60px; pointer-events: none; }
+.route { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.iata { font-family: var(--display); font-weight: 800; font-size: 40px; line-height: 1; }
+.iata small { display: block; font-family: var(--body); font-size: 12px; font-weight: 600; opacity: .8; letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+.route .dash { flex: 1; min-width: 40px; border-top: 2px dashed rgba(255,255,255,.55); }
+.ticket .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 13px; }
+.ticket .meta b { display: block; font-size: 18px; font-family: var(--display); font-weight: 800; }
+.ticket .meta span { opacity: .82; text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 600; }
+
+/* Trilho */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.big { display: flex; gap: 20px; flex-wrap: wrap; align-items: baseline; }
+.big .v { font-family: var(--display); font-weight: 800; font-size: 38px; line-height: 1.1; }
+.big .of { color: var(--soft); font-size: 15px; }
+.rail { position: relative; height: 34px; }
+.rail .track { position: absolute; left: 0; right: 0; top: 15px; height: 4px; border-radius: 4px; background: var(--line); }
+.rail .fill { position: absolute; left: 0; top: 15px; height: 4px; border-radius: 4px; background: var(--azulejo); transition: width .6s ease; }
+.rail .plane { position: absolute; top: 3px; width: 28px; height: 28px; margin-left: -14px; color: var(--azulejo); transition: left .6s ease; }
+.rail .end { position: absolute; top: 9px; font-family: var(--mono); font-size: 11px; color: var(--mute); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.stat .k { font-size: 12px; color: var(--mute); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.stat .v { font-family: var(--display); font-weight: 800; font-size: 22px; }
+.stat .h { font-size: 12px; color: var(--soft); }
+.people { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.person { display: grid; gap: 6px; }
+.bar { height: 8px; border-radius: 8px; background: var(--line); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ocre); border-radius: 8px; transition: width .6s ease; }
+
+.grid2 { display: grid; gap: 20px; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .grid2 { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+/* Formulários */
+form { display: grid; gap: 10px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.row > * { flex: 1 1 140px; min-width: 0; }
+label { display: grid; gap: 4px; font-size: 12px; font-weight: 600; color: var(--soft); }
+input, select, textarea { font: inherit; font-size: 15px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; width: 100%; min-height: 42px; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--azulejo); outline-offset: 2px; }
+button { font: inherit; font-weight: 700; font-size: 14px; border-radius: 10px; border: 1px solid transparent; padding: 9px 14px; min-height: 42px; cursor: pointer; }
+.btn { background: var(--azulejo); color: #fff; }
+:root[data-theme="dark"] .btn { color: #0d1320; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn { color: #0d1320; } }
+.ghost { background: transparent; color: var(--soft); border-color: var(--line); }
+.danger { background: transparent; color: var(--bad); border-color: var(--line); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.msg { font-size: 13px; font-weight: 600; min-height: 1em; }
+.msg.ok { color: var(--ok); } .msg.err { color: var(--bad); }
+
+/* Listas */
+.list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.item { display: flex; gap: 10px; align-items: center; justify-content: space-between; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.item .main { min-width: 0; flex: 1; }
+.item .t { font-weight: 600; overflow-wrap: anywhere; }
+.item .s { font-size: 12px; color: var(--mute); }
+.item .val { font-family: var(--display); font-weight: 800; white-space: nowrap; }
+.chip { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--azulejo-soft); color: var(--azulejo); text-transform: uppercase; letter-spacing: .05em; }
+.chip.paid { background: transparent; color: var(--ok); border: 1px solid var(--ok); }
+.chip.late { background: transparent; color: var(--bad); border: 1px solid var(--bad); }
+.empty { border: 1px dashed var(--line); border-radius: 12px; padding: 14px; color: var(--soft); font-size: 14px; }
+.tasks .item { cursor: pointer; }
+.tasks .item.done .t { text-decoration: line-through; color: var(--mute); }
+.check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line); flex: none; display: grid; place-items: center; color: #fff; }
+.done .check { background: var(--ok); border-color: var(--ok); }
+.funnel { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.funnel div { border: 1px solid var(--line); border-radius: 10px; padding: 8px 6px; text-align: center; }
+.funnel b { display: block; font-family: var(--display); font-size: 20px; }
+.funnel span { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--mute); font-weight: 700; }
+.costrow { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; }
+.costrow input[type=checkbox] { width: 20px; height: 20px; min-height: 0; }
+.costval { width: 120px; text-align: right; }
+details summary { cursor: pointer; font-weight: 700; color: var(--azulejo); font-size: 14px; }
+@media (max-width: 520px) { .iata { font-size: 32px; } .big .v { font-size: 30px; } .funnel b { font-size: 16px; } .costval { width: 96px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+.gate { min-height: 70vh; display: grid; place-items: center; }
+.gate .card { max-width: 380px; width: 100%; }
+.pinput { font-family: var(--mono); font-size: 24px; letter-spacing: .3em; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap gate" id="gate">
+  <section class="card" aria-labelledby="h-pin">
+    <h2 id="h-pin">Caixa Portugal</h2>
+    <p class="muted" id="pin-texto">Carregando…</p>
+    <form id="f-pin" hidden>
+      <label for="pin">PIN<input id="pin" class="pinput" type="password" inputmode="numeric" autocomplete="current-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required></label>
+      <label for="pin2" id="pin2-label" hidden>Repita o PIN<input id="pin2" class="pinput" type="password" inputmode="numeric" autocomplete="new-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}"></label>
+      <button class="btn" type="submit" id="pin-btn">Entrar</button>
+      <p class="msg" id="pin-msg" role="status"></p>
+    </form>
+  </section>
+</div>
+<div class="wrap" id="app" hidden>
+  <header class="ticket">
+    <div class="route">
+      <div class="iata">GRU<small>São Paulo</small></div>
+      <div class="dash" aria-hidden="true"></div>
+      <div class="iata">LIS<small>Lisboa</small></div>
+    </div>
+    <div class="meta">
+      <div><span>Ida</span><b class="num">15 jan 2027</b></div>
+      <div><span>Volta</span><b class="num">05 fev 2027</b></div>
+      <div><span>Faltam</span><b class="num" id="t-dias">—</b></div>
+      <div><span>Passageiros</span><b id="t-nomes">2</b></div>
+    </div>
+  </header>
+
+  <section class="card" aria-labelledby="h-meta">
+    <h2 id="h-meta">Caixa da viagem</h2>
+    <div class="big">
+      <div><div class="v num" id="m-arrec">R$ 0</div><div class="of">arrecadado de <span class="num" id="m-meta">—</span></div></div>
+    </div>
+    <div class="rail" aria-hidden="true">
+      <div class="track"></div>
+      <div class="fill" id="m-fill" style="width:0%"></div>
+      <svg class="plane" id="m-plane" style="left:0%" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5Z" transform="rotate(90 12 12)"/></svg>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">Falta</div><div class="v num" id="s-falta">—</div><div class="h" id="s-pct">—</div></div>
+      <div class="stat"><div class="k">Por semana</div><div class="v num" id="s-semana">—</div><div class="h">para chegar a tempo</div></div>
+      <div class="stat"><div class="k">Sites a vender</div><div class="v num" id="s-sites">—</div><div class="h" id="s-ticket">—</div></div>
+      <div class="stat"><div class="k">Já pago</div><div class="v num" id="s-pago">—</div><div class="h">custos marcados como pagos</div></div>
+    </div>
+    <div class="people" id="people"></div>
+    <p class="status" id="status" role="status">Carregando os dados…</p>
+  </section>
+
+  <div class="grid2">
+    <section class="card" aria-labelledby="h-entrada">
+      <h2 id="h-entrada">Registrar dinheiro</h2>
+      <form id="f-entrada">
+        <div class="row">
+          <label for="e-valor">Valor (R$)<input id="e-valor" inputmode="decimal" placeholder="1.200,00" required></label>
+          <label for="e-data">Data<input id="e-data" type="date" required></label>
+        </div>
+        <div class="row">
+          <label for="e-pessoa">É de quem<select id="e-pessoa"></select></label>
+          <label for="e-origem">De onde veio<select id="e-origem">
+            <option value="site">Site vendido</option>
+            <option value="3d">Cadastro 3D</option>
+            <option value="outro">Outro</option>
+          </select></label>
+        </div>
+        <label for="e-desc">Descrição<input id="e-desc" maxlength="80" placeholder="Ex.: site da Clima Frio Ar-Condicionado"></label>
+        <div class="row" style="align-items:center"><button class="btn" type="submit" id="e-btn">Registrar</button><p class="msg" id="e-msg" role="status"></p></div>
+      </form>
+      <ul class="list" id="l-entradas"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="h-funil">
+      <h2 id="h-funil">Empresas contatadas</h2>
+      <div class="funnel" id="funnel"></div>
+      <form id="f-contato">
+        <div class="row">
+          <label for="c-empresa">Empresa<input id="c-empresa" maxlength="70" placeholder="Nome da empresa" required></label>
+          <label for="c-etapa">Etapa<select id="c-etapa">
+            <option value="contato">Contato feito</option>
+            <option value="conversa">Conversando</option>
+            <option value="proposta">Proposta enviada</option>
+            <option value="fechou">Fechou</option>
+            <option value="perdeu">Não quis</option>
+          </select></label>
+        </div>
+        <label for="c-nota">Observação<input id="c-nota" maxlength="120" placeholder="Ex.: pediu para voltar a falar dia 20"></label>
+        <div class="row" style="align-items:center"><button class="btn" type="submit">Adicionar empresa</button><p class="msg" id="c-msg" role="status"></p></div>
+      </form>
+      <p class="muted">Só o nome da empresa e a etapa. Não anote telefone ou dados pessoais aqui.</p>
+      <ul class="list" id="l-contatos"></ul>
+    </section>
+  </div>
+
+  <div class="grid2">
+    <section class="card" aria-labelledby="h-custos">
+      <h2 id="h-custos">Custos da viagem (os dois)</h2>
+      <p class="muted">A meta é a soma destes custos. Mude um valor e saia do campo para salvar. Marque o que já foi pago.</p>
+      <div class="list" id="l-custos"></div>
+      <details>
+        <summary>Adicionar custo</summary>
+        <form id="f-custo" style="margin-top:10px">
+          <div class="row">
+            <label for="k-item">Item<input id="k-item" maxlength="60" required></label>
+            <label for="k-valor">Valor (R$)<input id="k-valor" inputmode="decimal" required></label>
+          </div>
+          <div class="row" style="align-items:center"><button class="btn" type="submit">Adicionar</button><p class="msg" id="k-msg" role="status"></p></div>
+        </form>
+      </details>
+    </section>
+
+    <section class="card tasks" aria-labelledby="h-tarefas">
+      <h2 id="h-tarefas">Antes de embarcar</h2>
+      <ul class="list" id="l-tarefas"></ul>
+      <details>
+        <summary>Adicionar tarefa</summary>
+        <form id="f-tarefa" style="margin-top:10px">
+          <div class="row">
+            <label for="t-titulo">Tarefa<input id="t-titulo" maxlength="90" required></label>
+            <label for="t-prazo">Prazo<input id="t-prazo" type="date"></label>
+          </div>
+          <div class="row" style="align-items:center"><button class="btn" type="submit">Adicionar</button><p class="msg" id="t-msg" role="status"></p></div>
+        </form>
+      </details>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="h-ajustes">
+    <details>
+      <summary id="h-ajustes">Ajustes: nomes e preço do site</summary>
+      <form id="f-config" style="margin-top:10px">
+        <div class="row">
+          <label for="g-nome1">Pessoa 1<input id="g-nome1" maxlength="30"></label>
+          <label for="g-nome2">Pessoa 2<input id="g-nome2" maxlength="30"></label>
+          <label for="g-ticket">Preço médio do site (R$)<input id="g-ticket" inputmode="decimal"></label>
+        </div>
+        <div class="row" style="align-items:center"><button class="btn" type="submit">Salvar ajustes</button><p class="msg" id="g-msg" role="status"></p></div>
+      </form>
+    </details>
+  </section>
+</div>
+
+<script>
+(() => {
+  const IDA = '2027-01-15';
+  const $ = (id) => document.getElementById(id);
+  const brl = (c) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: c % 100 ? 2 : 0 }).format((c || 0) / 100).replace(/ /g, ' ');
+  const dataBR = (d) => (d ? d.split('-').reverse().join('/') : '');
+  const hojeISO = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
+  const novoId = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  function reais(t) {
+    const s = String(t || '').replace(/R\$|\s/g, '');
+    if (!s) return null;
+    const n = s.includes(',') ? s.replace(/\./g, '').replace(',', '.') : s;
+    if (!/^\d+(\.\d{1,2})?$/.test(n)) return NaN;
+    return Math.round(Number(n) * 100);
+  }
+  const diasAte = (iso) => Math.max(0, Math.ceil((Date.parse(iso + 'T12:00:00Z') - Date.parse(hojeISO() + 'T12:00:00Z')) / 86400000));
+  const msg = (el, texto, ok) => { el.textContent = texto; el.className = 'msg ' + (ok ? 'ok' : 'err'); if (ok) setTimeout(() => { if (el.textContent === texto) el.textContent = ''; }, 3000); };
+
+  // PIN guardado só neste aparelho, para não pedir toda vez.
+  const guardar = { get: () => { try { return localStorage.getItem('caixa-pin') || ''; } catch { return ''; } }, set: (v) => { try { v ? localStorage.setItem('caixa-pin', v) : localStorage.removeItem('caixa-pin'); } catch { /* sem armazenamento */ } } };
+  let pin = guardar.get();
+  let etag = null;
+  let state = null;
+
+  async function api(method, body) {
+    const r = await fetch('/api/viagem', { method, headers: { 'content-type': 'application/json', 'x-pin': pin }, body: body ? JSON.stringify(body) : undefined, cache: 'no-store' });
+    let j = {};
+    try { j = await r.json(); } catch { /* resposta vazia */ }
+    return { status: r.status, j };
+  }
+
+  function mostrarGate(modo, texto) {
+    $('app').hidden = true;
+    $('gate').hidden = false;
+    $('f-pin').hidden = false;
+    $('pin2-label').hidden = modo !== 'criar';
+    $('pin2').required = modo === 'criar';
+    $('pin-btn').textContent = modo === 'criar' ? 'Criar PIN' : 'Entrar';
+    $('pin-texto').textContent = texto;
+    $('f-pin').dataset.modo = modo;
+    $('pin').value = '';
+    $('pin2').value = '';
+    setTimeout(() => $('pin').focus(), 50);
+  }
+
+  async function carregar(silencioso) {
+    let r;
+    try { r = await api('GET'); } catch { if (!silencioso) $('status').textContent = 'Sem conexão. Tentando de novo…'; return false; }
+    if (r.j.semPin) { mostrarGate('criar', 'Primeira vez: crie um PIN de 6 a 12 números. Combine com seu amigo; ele vai usar o mesmo.'); return false; }
+    if (r.status === 401) { guardar.set(''); mostrarGate('entrar', 'Digite o PIN combinado.'); if (pin) msg($('pin-msg'), 'PIN errado.', false); pin = ''; return false; }
+    if (r.status === 429) { mostrarGate('entrar', r.j.erro); return false; }
+    if (r.status !== 200) { $('status').textContent = r.j.erro || 'Não foi possível carregar.'; return false; }
+    state = r.j.dados;
+    etag = r.j.etag;
+    $('gate').hidden = true;
+    $('app').hidden = false;
+    $('status').textContent = 'Atualizado às ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + '. A página confere mudanças a cada 20 segundos.';
+    render();
+    return true;
+  }
+
+  /** Aplica uma mudança e salva. Se o outro salvou no meio, busca de novo e reaplica. */
+  async function mudar(fn, el, okTexto) {
+    for (let tentativa = 0; tentativa < 3; tentativa++) {
+      const copia = JSON.parse(JSON.stringify(state));
+      fn(copia);
+      let r;
+      try { r = await api('PUT', { dados: copia, etag }); } catch { if (el) msg(el, 'Sem conexão. Tente de novo.', false); else $('status').textContent = 'Sem conexão. Tente de novo.'; return false; }
+      if (r.status === 200) {
+        state = r.j.dados;
+        etag = r.j.etag;
+        render();
+        if (el && okTexto) msg(el, okTexto, true);
+        else if (okTexto) $('status').textContent = okTexto;
+        return true;
+      }
+      if (r.status === 409) { await carregar(true); continue; }
+      if (r.status === 401) { await carregar(); return false; }
+      const t = r.j.erro || 'Não foi possível salvar.';
+      if (el) msg(el, t, false); else $('status').textContent = t;
+      return false;
+    }
+    if (el) msg(el, 'Muita gente salvando ao mesmo tempo. Tente de novo.', false);
+    return false;
+  }
+
+  $('e-data').value = hojeISO();
+  $('t-dias').textContent = diasAte(IDA) + ' dias';
+
+  function render() {
+    if (!state) return;
+    const c = state.config;
+    const nomes = c.nomes || ['Antônio', 'Amigo'];
+    $('t-nomes').textContent = nomes.join(' + ');
+    const sel = $('e-pessoa');
+    const keep = sel.value;
+    sel.innerHTML = '';
+    [[0, nomes[0]], [1, nomes[1]], [2, 'Dos dois']].forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; sel.appendChild(o); });
+    sel.value = keep || '2';
+
+    const meta = state.custos.reduce((s, x) => s + (x.valor || 0), 0);
+    const arrec = state.entradas.reduce((s, x) => s + (x.valor || 0), 0);
+    const pago = state.custos.filter((x) => x.pago).reduce((s, x) => s + (x.valor || 0), 0);
+    const falta = Math.max(0, meta - arrec);
+    const pct = meta ? Math.min(100, (arrec / meta) * 100) : 0;
+    const semanas = Math.max(1, diasAte(IDA) / 7);
+    $('m-arrec').textContent = brl(arrec);
+    $('m-meta').textContent = meta ? brl(meta) : 'meta ainda sem custos';
+    $('m-fill').style.width = pct + '%';
+    $('m-plane').style.left = pct + '%';
+    $('s-falta').textContent = brl(falta);
+    $('s-pct').textContent = meta ? Math.floor(pct) + '% da meta' : '—';
+    $('s-semana').textContent = falta ? brl(Math.ceil(falta / semanas / 100) * 100) : 'Meta batida';
+    const ticket = c.ticketSite || 0;
+    $('s-sites').textContent = ticket ? String(Math.ceil(falta / ticket)) : '—';
+    $('s-ticket').textContent = ticket ? 'a ' + brl(ticket) + ' cada' : 'defina o preço em Ajustes';
+    $('s-pago').textContent = brl(pago);
+
+    const ppl = $('people');
+    ppl.innerHTML = '';
+    [0, 1].forEach((i) => {
+      const meu = state.entradas.reduce((s, x) => s + (Number(x.pessoa) === i ? x.valor : Number(x.pessoa) === 2 ? x.valor / 2 : 0), 0);
+      const metaP = meta / 2;
+      const d = document.createElement('div');
+      d.className = 'person';
+      d.innerHTML = '<div class="row" style="justify-content:space-between;flex-wrap:nowrap"><b></b><span class="num muted"></span></div><div class="bar"><i></i></div>';
+      d.querySelector('b').textContent = nomes[i];
+      d.querySelector('span').textContent = brl(Math.round(meu)) + ' de ' + brl(Math.round(metaP));
+      d.querySelector('i').style.width = (metaP ? Math.min(100, (meu / metaP) * 100) : 0) + '%';
+      ppl.appendChild(d);
+    });
+
+    const le = $('l-entradas');
+    le.innerHTML = '';
+    if (!state.entradas.length) {
+      le.innerHTML = '<li class="empty">Nenhum dinheiro registrado ainda. Vendeu o primeiro site? Registre o valor acima e a barra anda.</li>';
+    } else {
+      [...state.entradas].sort((a, b) => (b.data || '').localeCompare(a.data || '')).forEach((x) => {
+        const li = document.createElement('li');
+        li.className = 'item';
+        const origem = { site: 'Site', '3d': '3D', outro: 'Outro' }[x.origem] || 'Outro';
+        const quem = Number(x.pessoa) === 2 ? 'Dos dois' : nomes[Number(x.pessoa)] || '';
+        li.innerHTML = '<div class="main"><div class="t"></div><div class="s"></div></div><div class="val num"></div>';
+        li.querySelector('.t').textContent = x.descricao || origem;
+        li.querySelector('.s').textContent = dataBR(x.data) + ' · ' + origem + ' · ' + quem;
+        li.querySelector('.val').textContent = brl(x.valor);
+        li.appendChild(botaoApagar('entradas', x.id));
+        le.appendChild(li);
+      });
+    }
+
+    const etapas = [['contato', 'Contato'], ['conversa', 'Conversa'], ['proposta', 'Proposta'], ['fechou', 'Fechou'], ['perdeu', 'Não quis']];
+    const fn = $('funnel');
+    fn.innerHTML = '';
+    etapas.forEach(([k, t]) => { const d = document.createElement('div'); d.innerHTML = '<b class="num"></b><span></span>'; d.querySelector('b').textContent = state.contatos.filter((x) => x.etapa === k).length; d.querySelector('span').textContent = t; fn.appendChild(d); });
+    const lc = $('l-contatos');
+    lc.innerHTML = '';
+    if (!state.contatos.length) {
+      lc.innerHTML = '<li class="empty">Nenhuma empresa ainda. Adicione cada empresa que vocês procurarem e mudem a etapa conforme a conversa anda.</li>';
+    } else {
+      const ordem = Object.fromEntries(etapas.map(([k], i) => [k, i]));
+      [...state.contatos].sort((a, b) => (ordem[a.etapa] - ordem[b.etapa]) || (b.atualizadoEm || '').localeCompare(a.atualizadoEm || '')).forEach((x) => {
+        const li = document.createElement('li');
+        li.className = 'item';
+        li.innerHTML = '<div class="main"><div class="t"></div><div class="s"></div></div>';
+        li.querySelector('.t').textContent = x.empresa;
+        li.querySelector('.s').textContent = x.nota || '';
+        const s = document.createElement('select');
+        s.setAttribute('aria-label', 'Etapa de ' + x.empresa);
+        s.style.width = 'auto';
+        etapas.forEach(([k, t]) => { const o = document.createElement('option'); o.value = k; o.textContent = t; s.appendChild(o); });
+        s.value = x.etapa;
+        s.addEventListener('change', () => mudar((d) => { const y = d.contatos.find((z) => z.id === x.id); if (y) { y.etapa = s.value; y.atualizadoEm = new Date().toISOString(); } }, null, s.value === 'fechou' ? 'Fechou! Registre o dinheiro quando entrar.' : null));
+        li.appendChild(s);
+        li.appendChild(botaoApagar('contatos', x.id));
+        lc.appendChild(li);
+      });
+    }
+
+    const lk = $('l-custos');
+    lk.innerHTML = '';
+    if (!state.custos.length) {
+      lk.innerHTML = '<div class="empty">Sem custos ainda. Adicione passagem, comida, seguro… A meta é a soma deles.</div>';
+    } else {
+      [...state.custos].sort((a, b) => (a.ordem || 0) - (b.ordem || 0)).forEach((x) => {
+        const d = document.createElement('div');
+        d.className = 'costrow';
+        const nome = document.createElement('label');
+        nome.style.cssText = 'display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink);font-weight:500';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.id = 'pago-' + x.id;
+        cb.checked = Boolean(x.pago);
+        cb.addEventListener('change', () => mudar((dd) => { const y = dd.custos.find((z) => z.id === x.id); if (y) y.pago = cb.checked; }));
+        const span = document.createElement('span');
+        span.textContent = x.item;
+        nome.append(cb, span);
+        if (x.pago) { const ch = document.createElement('span'); ch.className = 'chip paid'; ch.textContent = 'pago'; nome.appendChild(ch); }
+        const v = document.createElement('input');
+        v.className = 'costval num';
+        v.id = 'valor-' + x.id;
+        v.setAttribute('aria-label', 'Valor de ' + x.item);
+        v.inputMode = 'decimal';
+        v.value = ((x.valor || 0) / 100).toFixed(2).replace('.', ',');
+        v.addEventListener('change', () => {
+          const c2 = reais(v.value);
+          if (c2 === null || Number.isNaN(c2)) { v.value = ((x.valor || 0) / 100).toFixed(2).replace('.', ','); return; }
+          if (c2 !== x.valor) mudar((dd) => { const y = dd.custos.find((z) => z.id === x.id); if (y) y.valor = c2; });
+        });
+        d.append(nome, v, botaoApagar('custos', x.id));
+        lk.appendChild(d);
+      });
+    }
+
+    const lt = $('l-tarefas');
+    lt.innerHTML = '';
+    if (!state.tarefas.length) {
+      lt.innerHTML = '<li class="empty">Nenhuma tarefa ainda.</li>';
+    } else {
+      const hoje = hojeISO();
+      [...state.tarefas].sort((a, b) => Number(a.feito) - Number(b.feito) || (a.prazo || '9').localeCompare(b.prazo || '9')).forEach((x) => {
+        const li = document.createElement('li');
+        li.className = 'item' + (x.feito ? ' done' : '');
+        li.tabIndex = 0;
+        li.setAttribute('role', 'checkbox');
+        li.setAttribute('aria-checked', String(Boolean(x.feito)));
+        li.innerHTML = '<span class="check" aria-hidden="true">✓</span><div class="main"><div class="t"></div><div class="s"></div></div>';
+        li.querySelector('.t').textContent = x.titulo;
+        const s = li.querySelector('.s');
+        if (x.prazo) {
+          s.textContent = 'até ' + dataBR(x.prazo) + ' ';
+          if (!x.feito && x.prazo < hoje) { const ch = document.createElement('span'); ch.className = 'chip late'; ch.textContent = 'atrasada'; s.appendChild(ch); }
+        }
+        const toggle = () => mudar((d) => { const y = d.tarefas.find((z) => z.id === x.id); if (y) y.feito = !y.feito; });
+        li.addEventListener('click', (e) => { if (!e.target.closest('button')) toggle(); });
+        li.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); } });
+        li.appendChild(botaoApagar('tarefas', x.id));
+        lt.appendChild(li);
+      });
+    }
+
+    if (document.activeElement?.closest?.('#f-config') == null) {
+      $('g-nome1').value = nomes[0];
+      $('g-nome2').value = nomes[1];
+      $('g-ticket').value = ((c.ticketSite || 0) / 100).toFixed(2).replace('.', ',');
+    }
+  }
+
+  function botaoApagar(col, id) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'danger';
+    b.textContent = 'Apagar';
+    let armado = false;
+    b.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!armado) { armado = true; b.textContent = 'Confirmar'; setTimeout(() => { armado = false; b.textContent = 'Apagar'; }, 3000); return; }
+      mudar((d) => { d[col] = d[col].filter((z) => z.id !== id); });
+    });
+    return b;
+  }
+
+  $('f-pin').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const p = $('pin').value.trim();
+    if (!/^\d{6,12}$/.test(p)) return msg($('pin-msg'), 'Use de 6 a 12 números.', false);
+    if ($('f-pin').dataset.modo === 'criar') {
+      if (p !== $('pin2').value.trim()) return msg($('pin-msg'), 'Os dois PINs não são iguais.', false);
+      const r = await fetch('/api/viagem', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ acao: 'criar-pin', pin: p }) });
+      if (!r.ok) { const j = await r.json().catch(() => ({})); return msg($('pin-msg'), j.erro || 'Não foi possível criar o PIN.', false); }
+    }
+    pin = p;
+    guardar.set(p);
+    await carregar();
+  });
+
+  $('f-entrada').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const v = reais($('e-valor').value);
+    if (v === null || Number.isNaN(v) || v <= 0) return msg($('e-msg'), 'Valor inválido. Use o formato 1.200,00.', false);
+    const nova = { id: novoId(), valor: v, data: $('e-data').value || hojeISO(), pessoa: Number($('e-pessoa').value), origem: $('e-origem').value, descricao: $('e-desc').value.trim().slice(0, 80), criadoEm: new Date().toISOString() };
+    if (await mudar((d) => d.entradas.push(nova), $('e-msg'), 'Registrado: ' + brl(v))) { $('e-valor').value = ''; $('e-desc').value = ''; }
+  });
+  $('f-contato').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nome = $('c-empresa').value.trim().slice(0, 70);
+    if (!nome) return;
+    const novo = { id: novoId(), empresa: nome, etapa: $('c-etapa').value, nota: $('c-nota').value.trim().slice(0, 120), atualizadoEm: new Date().toISOString() };
+    if (await mudar((d) => d.contatos.push(novo), $('c-msg'), 'Empresa adicionada.')) { $('c-empresa').value = ''; $('c-nota').value = ''; }
+  });
+  $('f-custo').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const v = reais($('k-valor').value);
+    if (v === null || Number.isNaN(v)) return msg($('k-msg'), 'Valor inválido.', false);
+    const item = $('k-item').value.trim().slice(0, 60);
+    if (await mudar((d) => d.custos.push({ id: novoId(), item, valor: v, pago: false, ordem: d.custos.reduce((m, x) => Math.max(m, x.ordem || 0), 0) + 1 }), $('k-msg'), 'Custo adicionado.')) { $('k-item').value = ''; $('k-valor').value = ''; }
+  });
+  $('f-tarefa').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nova = { id: novoId(), titulo: $('t-titulo').value.trim().slice(0, 90), prazo: $('t-prazo').value || null, feito: false };
+    if (await mudar((d) => d.tarefas.push(nova), $('t-msg'), 'Tarefa adicionada.')) { $('t-titulo').value = ''; $('t-prazo').value = ''; }
+  });
+  $('f-config').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const t = reais($('g-ticket').value);
+    if (t === null || Number.isNaN(t)) return msg($('g-msg'), 'Preço inválido.', false);
+    const nomes = [$('g-nome1').value.trim().slice(0, 30) || 'Pessoa 1', $('g-nome2').value.trim().slice(0, 30) || 'Pessoa 2'];
+    await mudar((d) => { d.config = { nomes, ticketSite: t }; }, $('g-msg'), 'Ajustes salvos.');
+  });
+
+  carregar();
+  // Confere mudanças do outro a cada 20 s, só com a página aberta e sem ninguém digitando.
+  setInterval(() => {
+    if (document.hidden || !state || !pin) return;
+    if (document.activeElement && /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    carregar(true);
+  }, 20000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && state && pin) carregar(true); });
+})();
+</script>
+</body>
+</html>

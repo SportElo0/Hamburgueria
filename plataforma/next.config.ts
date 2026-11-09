@@ -47,7 +47,20 @@ const nextConfig: NextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
         ],
       },
+      {
+        // Caixa Portugal (pessoal, ver src/lib/viagem.ts): fora do Google.
+        source: '/viagem',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'Cache-Control', value: 'no-store' },
+        ],
+      },
     ];
+  },
+  // /viagem serve a página estática public/viagem.html (o Caixa Portugal).
+  async rewrites() {
+    return [{ source: '/viagem', destination: '/viagem.html' }];
   },
   // Image uploads go through a Server Function; menu photos are small, but phones shoot big files.
   experimental: { serverActions: { bodySizeLimit: '6mb' } },
