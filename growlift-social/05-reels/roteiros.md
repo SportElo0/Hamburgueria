@@ -392,7 +392,7 @@ Comenta CLÍNICA que a gente te mostra como funciona 📩
 
 23h12. Dor de dente. A Bia manda um áudio pra clínica perto de casa… e ninguém responde. Ela marca em outra.
 
-Agora, a mesma noite com uma atendente de inteligência artificial no WhatsApp da clínica: ela ouve o áudio, responde, olha a agenda, marca o horário e, um dia antes, manda o lembrete pra paciente confirmar.
+Agora, a mesma noite com uma atendente de inteligência artificial no WhatsApp da clínica: ela pode ouvir o áudio, responder, olhar a agenda da clínica, marcar o horário e, um dia antes, mandar o lembrete pra paciente confirmar.
 
 A clínica dorme. O atendimento, não.
 
@@ -414,7 +414,7 @@ Comenta SITE que a gente te mostra como ficaria o seu 📩
 
 O lanche se monta na tela, camada por camada. O cardápio vem com foto, descrição e preço. O cliente escolhe entrega ou retirada e paga no Pix ali mesmo. Endereço, horário e WhatsApp num toque.
 
-A Brasa Burger é um projeto conceito da Growlift (nome fictício, preços de exemplo). Cada site de cliente é feito do zero, com a cara do negócio.
+A Brasa Burger é um projeto conceito da Growlift (nome fictício, preços de exemplo). Cada site de cliente é feito sob medida, com a cara do negócio.
 
 Narração com voz gerada por inteligência artificial.
 #hamburgueria #sitepararestaurante #cardapiodigital #delivery #growlift

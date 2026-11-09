@@ -186,7 +186,7 @@ body{background:#0a0705;color:#f3f5f9}
 #glare{position:absolute;inset:0;border-radius:72px;z-index:61;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 32%,rgba(255,255,255,0) 70%,rgba(255,255,255,.06) 100%)}
 #shadow{position:absolute;left:290px;top:1470px;width:500px;height:70px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.75),rgba(0,0,0,0));z-index:2}
 .fl{position:absolute;pointer-events:none}
-#tagc{position:absolute;left:84px;top:200px;z-index:41;padding:8px 18px;border-radius:999px;background:rgba(10,7,5,.8);border:1px dashed rgba(255,255,255,.3);font-size:23px;font-weight:700;color:#e6dcd2}
+#tagc{position:absolute;left:84px;top:204px;z-index:41;padding:8px 18px;border-radius:999px;background:rgba(10,7,5,.8);border:1px dashed rgba(255,255,255,.3);font-size:30px;font-weight:800;color:#f1e7dc}
 #cap{top:1478px}
 #cap .hl{background:${ORANGE};color:#160b04}
 #closing{position:absolute;left:60px;right:60px;top:300px;text-align:center;font-weight:900;letter-spacing:-.04em;line-height:1.02;font-size:84px;z-index:20}
