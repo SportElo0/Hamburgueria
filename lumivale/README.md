@@ -18,6 +18,12 @@ Site one-page de uma **empresa fictícia** de energia solar, feito pela Growlift
 - Com "reduzir movimento" ligado no aparelho: sem rolagem suave, sem seções presas, conteúdo parado e visível.
 - O formulário não calcula economia nem guarda dados: só monta a mensagem e abre o WhatsApp (`CONFIG.whatsapp` em `main.js`, hoje um número fictício).
 
+## Antes de reaproveitar para um cliente real
+
+- Garantia, responsável técnico (ART), visita sem custo, área atendida, números e depoimentos são exemplos: trocar por dados reais, com contrato, ou tirar.
+- Pôr CNPJ, endereço, contato e política de privacidade, e trocar o número do WhatsApp.
+- O título da capa e a chamada final falam em conta menor: num site real, a revisão legal pede que virem estimativa ("pode reduzir").
+
 ## Testar
 
 ```
