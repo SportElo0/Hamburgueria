@@ -376,3 +376,36 @@ Comenta CARDÁPIO que a gente te manda exemplos de site com cardápio no direct.
 ```
 Capa de carrossel: "6 erros no cardápio que afastam o cliente", com a ilustração de um cardápio de exemplo com marcações de erro.
 ```
+
+## Qua 18/11 · Atendente de IA com voz, 24 horas, para clínica odontológica
+
+Pasta `20-atendente-ia-clinica/` (7 slides). Palavra no ManyChat: **CLÍNICA** (a mesma do Reel 21). Público: donos de clínica odontológica. Fonte: `_fonte/carrosseis-v2.mjs 20`.
+
+**Antes de postar:** a atendente ainda está sendo montada. O texto diz o que ela "pode" fazer; só postem quando vocês conseguirem entregar (ouvir áudio, responder com voz, marcar na agenda e mandar o lembrete) para a primeira clínica que comentar.
+
+**Legenda**
+
+```
+Sua clínica fecha às 18h. A dor de dente, não. 🦷
+
+Quem tem dor manda mensagem à noite, no fim de semana, na hora do almoço. Se ninguém responde, procura a próxima clínica da lista.
+
+Uma atendente de inteligência artificial no WhatsApp da clínica pode:
+1. Ouvir o áudio da paciente e responder com voz ou texto, a qualquer hora.
+2. Olhar a agenda e marcar o horário.
+3. Mandar o lembrete um dia antes, pra paciente confirmar.
+
+Ela responde só com as informações da sua clínica, não dá diagnóstico e chama alguém da equipe quando precisa.
+
+Quer ver como fica na sua clínica? Comenta CLÍNICA que a gente te explica no direct.
+
+(Nomes, conversas e agenda dos slides são exemplos ilustrativos.)
+
+#clinicaodontologica #dentista #consultorioodontologico #atendimento #inteligenciaartificial
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Carrossel ilustrado para donos de clínica odontológica: uma paciente com dor de dente manda áudio à noite e ninguém responde; depois, três passos de uma atendente de IA no WhatsApp da clínica (ouve o áudio e responde com voz, marca na agenda, lembra um dia antes), os limites dela e o convite "Comenta CLÍNICA".
+```

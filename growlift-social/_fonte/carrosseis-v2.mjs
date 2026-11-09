@@ -162,6 +162,26 @@ const convite = ({ titulo = 'Quer um teste <em>mais profundo?</em>', texto }) =>
 // ---------------------------------------------------------------------------------------------
 // Os carrosséis
 
+// Carrossel 20 (clínicas): passo a passo e fecho com "Comenta CLÍNICA" em vez do diagnóstico.
+const passo = ({ n, titulo, texto, cena }) =>
+  `<span class="chip">Ela pode · passo ${n} de 3</span>
+   <h2 class="h" style="font-size:76px;margin-top:30px">${titulo}</h2>
+   <p class="p" style="margin-top:24px;font-size:36px;max-width:900px">${texto}</p>
+   <div style="position:absolute;left:-84px;right:-84px;bottom:0;height:560px">${cena}</div>`;
+const audioMsg = (dur, cor = '#4b5568') =>
+  `<span style="display:inline-flex;align-items:center;gap:10px"><span style="width:38px;height:38px;border-radius:50%;background:${BLUE};color:#fff;display:inline-grid;place-items:center;font-size:16px">▶</span><span style="display:inline-flex;gap:3px;align-items:center">${[10, 20, 14, 26, 16, 22, 12, 24, 14, 8].map((h) => `<i style="display:block;width:4px;height:${h}px;border-radius:2px;background:${cor}"></i>`).join('')}</span><span style="font-size:18px;color:#6b7588">${dur}</span></span>`;
+const agendaCard = () => {
+  const dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'], horas = ['8h', '9h', '10h', '14h'];
+  const ocup = new Set(['0-0', '0-2', '1-1', '1-3', '2-0', '2-1', '2-3', '3-2', '4-0', '4-1', '4-3', '3-3']);
+  return `<div class="card" style="position:absolute;left:110px;top:30px;width:620px;padding:30px 32px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:30px;font-weight:900">Agenda da clínica</span><span style="font-size:22px;font-weight:700;color:#6b7588">exemplo</span></div>
+    <div style="display:grid;grid-template-columns:62px repeat(5,1fr);gap:8px;margin-top:20px">
+      <span></span>${dias.map((d) => `<span style="text-align:center;font-size:22px;font-weight:800;color:${d === 'Qui' ? BLUE : '#6b7588'}">${d}</span>`).join('')}
+      ${horas.map((h, r) => `<span style="font-size:21px;font-weight:700;color:#6b7588;align-self:center">${h}</span>${dias.map((_, c) => (`${c}-${r}` === '3-1' ? `<span style="height:52px;border-radius:12px;background:${BLUE};color:#fff;font-size:19px;font-weight:800;display:grid;place-items:center">Bia ✓</span>` : `<span style="height:52px;border-radius:12px;${ocup.has(`${c}-${r}`) ? 'background:#e6eaf2' : 'border:2px dashed #d5dceb'}"></span>`)).join('')}`).join('')}
+    </div>
+    <div style="margin-top:20px;display:flex;align-items:center;gap:12px;font-size:26px;font-weight:800;color:${GREEN}"><span class="ok" style="width:38px;height:38px;font-size:22px">✓</span>Marcado: quinta, 9h</div></div>`;
+};
+
 const LEGENDA_FIM =
   'Quer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)';
 
@@ -687,6 +707,91 @@ ${LEGENDA_FIM}
 
 #restaurante #googlemeunegocio #feriado #hamburgueria #growlift`,
     alt: 'Carrossel ilustrado sobre o horário de feriado do dia 20 de novembro: celular com busca mostrando "aberto", calendário do dia 20, o campo Horário especial do Google vazio, horários diferentes no Google, Instagram e WhatsApp, e uma porta fechada. Resumo com três ajustes e convite para o diagnóstico grátis pelo link da bio.',
+  },
+  {
+    slug: '20-atendente-ia-clinica',
+    titulo: 'Atendente de IA com voz, 24 horas, para clínica odontológica',
+    temas: ['escuro', 'claro', 'azul', 'claro', 'escuro', 'claro', 'azul'],
+    slides: [
+      () =>
+        capa({
+          gancho: 'Sua clínica fecha às 18h. <em>A dor de dente, não.</em>',
+          sub: 'Como uma atendente de IA, com voz, pode cuidar do WhatsApp da clínica 24 horas.',
+          tamanho: 96,
+          cena: `${celular(conversa([['out', audioMsg('0:12'), '23:12'], ['out', 'Tem horário essa semana? 😣', '23:12']], { topo: 'Clínica perto de casa' }), { x: 420, y: 40, w: 420, h: 600, rot: 3 })}
+            <span style="position:absolute;right:250px;bottom:-6px;font-size:22px;font-weight:800;letter-spacing:.04em;padding:8px 16px;border-radius:999px;background:rgba(11,18,32,.75);color:#fff">Exemplo ilustrativo</span>
+            ${boneco('k1', { x: 80, y: 280, size: 290, shirt: '#e85d75', cara: 'triste' })}
+            ${balao('Ninguém responde… 🦷', { x: 60, y: 170, rot: -4 })}`,
+        }),
+      () =>
+        porque({
+          frase: 'Quem tem dor <em>não espera a manhã.</em>',
+          apoio: 'A mensagem chega à noite, no fim de semana, na hora do almoço. Se ninguém responde, ela procura a próxima clínica da lista.',
+          cena: `${celular(busca('dentista perto de mim') + resultado({ nome: 'Clínica A', nota: '', linha: 'Fechado · abre às 8h', cor: '#e8eefc' }) + resultado({ nome: 'Clínica B', nota: '', linha: 'Respondeu agora', cor: '#dcfce7' }), { x: 300, y: 40, w: 440, h: 460 })}
+            ${boneco('k2', { x: 740, y: 230, size: 260, shirt: '#e85d75' })}`,
+        }),
+      () =>
+        passo({
+          n: 1,
+          titulo: 'Ouve o áudio e <em>responde com voz.</em>',
+          texto: 'A paciente manda áudio. A atendente entende e responde em áudio ou texto, com o nome e o jeito da sua clínica.',
+          cena: `${celular(conversa([['out', audioMsg('0:12'), '23:12'], ['in', audioMsg('0:09', '#2b3a55'), '23:12'], ['in', 'Oi! Sinto muito pela dor. Tenho quinta às 9h, posso marcar?', '23:12']], { topo: 'Clínica · atendente' }), { x: 140, y: 10, w: 480, h: 540, rot: -2 })}
+            <span style="position:absolute;left:110px;bottom:24px;font-size:22px;font-weight:800;letter-spacing:.04em;padding:8px 16px;border-radius:999px;background:rgba(11,18,32,.75);color:#fff">Exemplo ilustrativo</span>
+            ${boneco('k3', { x: 680, y: 220, size: 270, shirt: '#e85d75', cara: 'feliz' })}`,
+        }),
+      () =>
+        passo({
+          n: 2,
+          titulo: 'Olha a agenda e <em>marca o horário.</em>',
+          texto: 'Mostra os horários livres, a paciente escolhe e já fica marcado na agenda da clínica.',
+          cena: `${agendaCard()}${boneco('k4', { x: 760, y: 250, size: 250, shirt: BLUE, cara: 'feliz' })}`,
+        }),
+      () =>
+        passo({
+          n: 3,
+          titulo: 'Lembra um dia antes, <em>pra ela não esquecer.</em>',
+          texto: 'Mensagem de confirmação só pra quem marcou. Se precisar remarcar, ela resolve ali mesmo.',
+          cena: `${celular(conversa([['in', 'Oi, Bia! Lembrete: amanhã, quinta, às 9h, você tem consulta. Confirma?', 'qua 18:00'], ['out', 'Confirmo! 🙌', 'qua 18:02']], { topo: 'Clínica · atendente' }), { x: 140, y: 10, w: 480, h: 540, rot: 2 })}
+            <span style="position:absolute;left:110px;bottom:24px;font-size:22px;font-weight:800;letter-spacing:.04em;padding:8px 16px;border-radius:999px;background:rgba(11,18,32,.75);color:#fff">Exemplo ilustrativo</span>
+            ${boneco('k5', { x: 680, y: 220, size: 270, shirt: '#e85d75', cara: 'feliz' })}`,
+        }),
+      ({ tema }) =>
+        `<span class="chip">Com limites claros</span>
+         <h2 class="h" style="font-size:84px;margin-top:30px">O que ela pode fazer <em>(e o que não faz)</em></h2>
+         <div style="margin-top:56px">${lista(
+           [
+             ['Responde só com o que é da sua clínica:', 'horários, serviços, convênios e endereço.'],
+             ['Chama alguém da equipe', 'quando não sabe a resposta ou quando parece urgência. Não dá diagnóstico.'],
+             ['Roda no WhatsApp oficial da clínica,', 'com cuidado com os dados das pacientes (LGPD).'],
+           ],
+           tema,
+         )}</div>`,
+      () =>
+        `<h2 class="h" style="font-size:96px;margin-top:10px">Quer ver como fica <em>na sua clínica?</em></h2>
+         <p class="p" style="margin-top:30px;max-width:900px">A gente monta a atendente com as informações da sua clínica: horários, serviços e o jeito de falar de vocês.</p>
+         <div style="margin-top:50px;display:flex;align-items:center;gap:22px">
+           <span style="font-size:44px;font-weight:900;color:#fff">Comenta</span>
+           <span style="display:inline-flex;align-items:center;height:110px;padding:0 46px;border-radius:999px;background:#fff;color:${BLUE};font-size:60px;font-weight:900;box-shadow:0 30px 60px -24px rgba(0,0,0,.45)">CLÍNICA</span></div>
+         <p class="p" style="margin-top:26px;font-size:32px">que a gente te explica no direct.</p>
+         <div style="position:absolute;right:-30px;bottom:-30px;height:420px;width:520px">${boneco('kc', { x: 220, y: 40, size: 300, shirt: '#ffffff', cara: 'feliz' })}${balao('Oi! Me conta da sua clínica 👋', { x: -200, y: 84, rot: -4, size: 28 })}</div>`,
+    ],
+    legenda: `Sua clínica fecha às 18h. A dor de dente, não. 🦷
+
+Quem tem dor manda mensagem à noite, no fim de semana, na hora do almoço. Se ninguém responde, procura a próxima clínica da lista.
+
+Uma atendente de inteligência artificial no WhatsApp da clínica pode:
+1. Ouvir o áudio da paciente e responder com voz ou texto, a qualquer hora.
+2. Olhar a agenda e marcar o horário.
+3. Mandar o lembrete um dia antes, pra paciente confirmar.
+
+Ela responde só com as informações da sua clínica, não dá diagnóstico e chama alguém da equipe quando precisa.
+
+Quer ver como fica na sua clínica? Comenta CLÍNICA que a gente te explica no direct.
+
+(Nomes, conversas e agenda dos slides são exemplos ilustrativos.)
+
+#clinicaodontologica #dentista #consultorioodontologico #atendimento #inteligenciaartificial`,
+    alt: 'Carrossel ilustrado para donos de clínica odontológica: uma paciente com dor de dente manda áudio à noite e ninguém responde; depois, três passos de uma atendente de IA no WhatsApp da clínica (ouve o áudio e responde com voz, marca na agenda, lembra um dia antes), os limites dela e o convite "Comenta CLÍNICA".',
   },
 ];
 

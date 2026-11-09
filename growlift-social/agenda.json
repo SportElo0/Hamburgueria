@@ -664,6 +664,24 @@
    "ia": true,
    "palavra": "SITE",
    "chave": "05-reels/roteiros.md#22-o-site-no-celular-hamburgueria"
+  },
+  {
+   "id": "2026-11-18-carrossel-atendente-clinica",
+   "titulo": "Carrossel · Atendente de IA com voz para clínica odontológica (Comenta CLÍNICA)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/20-atendente-ia-clinica/01.png",
+    "09-carrosseis/20-atendente-ia-clinica/02.png",
+    "09-carrosseis/20-atendente-ia-clinica/03.png",
+    "09-carrosseis/20-atendente-ia-clinica/04.png",
+    "09-carrosseis/20-atendente-ia-clinica/05.png",
+    "09-carrosseis/20-atendente-ia-clinica/06.png",
+    "09-carrosseis/20-atendente-ia-clinica/07.png"
+   ],
+   "legenda": "Sua clínica fecha às 18h. A dor de dente, não. 🦷\n\nQuem tem dor manda mensagem à noite, no fim de semana, na hora do almoço. Se ninguém responde, procura a próxima clínica da lista.\n\nUma atendente de inteligência artificial no WhatsApp da clínica pode:\n1. Ouvir o áudio da paciente e responder com voz ou texto, a qualquer hora.\n2. Olhar a agenda e marcar o horário.\n3. Mandar o lembrete um dia antes, pra paciente confirmar.\n\nEla responde só com as informações da sua clínica, não dá diagnóstico e chama alguém da equipe quando precisa.\n\nQuer ver como fica na sua clínica? Comenta CLÍNICA que a gente te explica no direct.\n\n(Nomes, conversas e agenda dos slides são exemplos ilustrativos.)\n\n#clinicaodontologica #dentista #consultorioodontologico #atendimento #inteligenciaartificial",
+   "quando": "2026-11-18T15:00:00-03:00",
+   "ia": false,
+   "palavra": "CLÍNICA"
   }
  ]
 }
