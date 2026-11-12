@@ -1,5 +1,6 @@
 import { betterAuth } from 'better-auth';
 import { nextCookies } from 'better-auth/next-js';
+import { segredoSessao } from './chaves';
 import { ambiente } from './config';
 import { pool, q } from './db';
 
@@ -9,7 +10,7 @@ function criar() {
   return betterAuth({
     database: pool(),
     baseURL: process.env.APP_URL ?? 'http://localhost:3100',
-    secret: process.env.BETTER_AUTH_SECRET,
+    secret: segredoSessao(),
     emailAndPassword: {
       enabled: true,
       // Accounts are created only by invitation or by the Growlift admin, never by open sign-up.

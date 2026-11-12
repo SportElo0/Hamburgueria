@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { cache } from 'react';
 import { auth } from './auth';
+import { segredoSessao } from './chaves';
 import { contextoDe, type Ctx } from './contexto';
 import { NaoEncontrado } from './erros';
 
@@ -43,7 +44,7 @@ export async function ipHash(): Promise<string> {
   // The platform's own header first (the browser cannot set it); a client-supplied list is the last resort, and then its last entry.
   const xff = h.get('x-forwarded-for')?.split(',').map((x) => x.trim()).filter(Boolean);
   const ip = h.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() || h.get('x-real-ip') || xff?.at(-1) || 'local';
-  return createHash('sha256').update(`${process.env.BETTER_AUTH_SECRET}:${ip}`).digest('hex').slice(0, 24);
+  return createHash('sha256').update(`${segredoSessao()}:${ip}`).digest('hex').slice(0, 24);
 }
 
 /** A record of another company (or a wrong id) is simply "not found": the page says nothing about it. */

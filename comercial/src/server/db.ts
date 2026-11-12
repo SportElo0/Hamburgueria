@@ -1,12 +1,13 @@
 import { Pool, type PoolClient, type QueryResultRow } from 'pg';
+import { enderecoBanco } from './chaves';
 
 /** One pool per process (Next dev reloads modules; keep it on globalThis). */
 const g = globalThis as unknown as { __growliftPool?: Pool };
 
 export function pool(): Pool {
   if (!g.__growliftPool) {
-    const url = process.env.DATABASE_URL;
-    if (!url) throw new Error('DATABASE_URL não configurada. Copie .env.example para .env.local.');
+    const url = enderecoBanco();
+    if (!url) throw new Error('Banco não configurado: defina DATABASE_URL (ou ligue a integração do Supabase, que cria POSTGRES_URL).');
     const local = /@(localhost|127\.0\.0\.1)[:/]/.test(url);
     // Hosted databases need TLS. Their pooler certificates are not always in Node's trust store: DATABASE_SSL=no-verify accepts them (encrypted, not verified).
     const ssl = local ? undefined : process.env.DATABASE_SSL === 'no-verify' ? { rejectUnauthorized: false } : true;

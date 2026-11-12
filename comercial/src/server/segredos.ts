@@ -1,8 +1,9 @@
+import { chaveCredenciais } from './chaves';
 import { createCipheriv, createDecipheriv, createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 
 /** Company credentials are stored encrypted (AES-256-GCM, Node's own crypto) with a key that lives only in the environment. */
 function chave(): Buffer {
-  const k = Buffer.from(process.env.CHAVE_CREDENCIAIS ?? '', 'base64');
+  const k = Buffer.from(chaveCredenciais() ?? '', 'base64');
   if (k.length !== 32) throw new Error('CHAVE_CREDENCIAIS ausente ou inválida (32 bytes em base64).');
   return k;
 }

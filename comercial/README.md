@@ -44,12 +44,21 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 77 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
+| `npm test` | 80 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
 
 Logins de demonstração (senha `demonstracao-2026`, tudo fictício): `equipe@growlift.demo`, `admin@lumivale.demo`, `vendas@lumivale.demo`, `admin@soldovale.demo`, `vendas@soldovale.demo`.
+
+## Publicar na Vercel (demonstração)
+
+Projeto `growlift-comercial` (time da Growlift), protegido: só quem tem acesso à conta Vercel abre. Banco: projeto Supabase `growlift-comercial` (plano gratuito), separado do banco do painel dos restaurantes.
+
+1. Na Vercel, ligar o banco Supabase `growlift-comercial` ao projeto `growlift-comercial` (Storage › growlift-comercial › Connect Project). Isso cria `POSTGRES_URL`, `SUPABASE_JWT_SECRET` e outras variáveis, sem ninguém copiar senha.
+2. Publicar. O build cria as tabelas e os dados de demonstração.
+
+Sem `BETTER_AUTH_SECRET`, `CHAVE_CREDENCIAIS` e `CRON_SECRET`, as três são derivadas de `SUPABASE_JWT_SECRET` (uma chave diferente para cada uso). Serve para demonstração. Para cliente real, defina as três: se o segredo do Supabase for trocado, as derivadas mudam (todos saem do login e os tokens de WhatsApp precisam ser salvos de novo).
 
 ## Ambientes
 
