@@ -6,6 +6,7 @@ import { ator, criarTarefa, dentroDoLimite, registrar, type Ctx } from './contex
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, type Empresa } from './empresas';
 import { ErroDeUso, NaoEncontrado } from './erros';
+import { dispararFluxos } from './fluxos';
 import { agendar, cancelarPendentes, executar, pegar, type Resultado, type Trabalho } from './fila';
 import { adaptadorIA, modeloPadrao } from './ia';
 import { MOTIVOS_ENCAMINHAMENTO, type ContextoIA } from './ia/tipos';
@@ -361,6 +362,7 @@ async function sincronizar(db: Db, empresa: Empresa, v: Conversa): Promise<Conve
       v.oportunidade_id = o!.id;
       await registrar(db, empresa.id, { oportunidadeId: o!.id, contatoId: v.contato_id, conversaId: v.id, ator: { tipo: 'visitante' }, tipo: 'pedido_recebido', dados: { origem } });
       await abrirAtendimento(db, empresa, o!.id, resp, `${d.nome || 'Contato'} escreveu pelo ${v.canal === 'whatsapp' ? 'WhatsApp' : 'chat do site'}`);
+      await dispararFluxos(db, empresa.id, { tipo: 'pedido_recebido' }, { id: o!.id, contatoId: v.contato_id!, etapa: 'novo' });
     }
     await q('update conversas set oportunidade_id = $2 where id = $1', [v.id, v.oportunidade_id], db);
   }

@@ -2,6 +2,8 @@ import { criarTarefa, registrar } from './contexto';
 import { despachar, responderComIA, JANELA_WHATSAPP_MS, type Conversa } from './conversas';
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, type Empresa } from './empresas';
+import { nomeSeguro } from './trabalhos-texto';
+import { executarPassoFluxo } from './fluxos-exec';
 import { agendar, processarPendentes, type Executor, type Resultado, type Trabalho } from './fila';
 import { canalDa } from './integracoes';
 import { hashToken, novoToken } from './segredos';
@@ -27,7 +29,9 @@ export function proximoHorarioPermitido(regras: Empresa['config']['regras'], ago
 interface Iniciada {
   oportunidadeId: string;
   corpo: string;
-  finalidade: 'confirmacao' | 'retorno' | 'avaliacao';
+  finalidade: 'confirmacao' | 'retorno' | 'avaliacao' | 'fluxo';
+  /** Approved template name chosen by a flow step; empty = free text only inside the 24-hour window. */
+  modelo?: string;
   /** For follow-ups: cancel when the customer wrote after this moment. */
   agendadoEm?: Date;
 }
@@ -36,14 +40,14 @@ interface Iniciada {
  * A message the company starts (confirmation, follow-up, review invitation). Everything is checked again here,
  * at send time, with the conversation locked: consent, opt-out, who holds the conversation, replies, hours, channel rules.
  */
-async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultado> {
+export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultado> {
   const empresa = await empresaPorId(t.empresa_id);
   if (!empresa) return { tipo: 'cancelado', motivo: 'Empresa não existe mais.' };
   const adiar = proximoHorarioPermitido(empresa.config.regras);
   if (adiar) return { tipo: 'adiar', para: adiar, nota: 'Fora do horário de envio da empresa.' };
   const { canal, config, motivo } = await canalDa(empresa.id);
   if (!canal) return { tipo: 'cancelado', motivo: motivo ?? 'Canal indisponível.' };
-  const modelo = { confirmacao: config.modelo_confirmacao, retorno: config.modelo_retorno, avaliacao: config.modelo_avaliacao }[i.finalidade];
+  const modelo = i.finalidade === 'fluxo' ? i.modelo ?? '' : { confirmacao: config.modelo_confirmacao, retorno: config.modelo_retorno, avaliacao: config.modelo_avaliacao }[i.finalidade];
   return tx(async (db): Promise<Resultado> => {
     const o = await um<{ id: string; etapa: string; contato_id: string; responsavel_id: string | null; nome: string; nao_contatar_em: Date | null }>(
       `select o.id, o.etapa, o.contato_id, o.responsavel_id, c.nome, c.nao_contatar_em from oportunidades o join contatos c on c.id = o.contato_id
@@ -65,7 +69,7 @@ async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultado> {
     const naJanela = !!v.ultima_entrada_em && Date.now() - v.ultima_entrada_em.getTime() < JANELA_WHATSAPP_MS;
     if (!naJanela && !modelo) {
       // Outside the 24-hour window WhatsApp only accepts a template approved by Meta. Without one, a person does it.
-      await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'contato_manual', titulo: { confirmacao: 'Confirmar o recebimento do pedido com o cliente', retorno: 'Retornar ao cliente sobre a proposta', avaliacao: 'Enviar o convite de avaliação ao cliente' }[i.finalidade], detalhe: 'Envio automático não feito: falta um modelo de mensagem aprovado no WhatsApp.', responsavelId: o.responsavel_id, chave: `manual:${t.id}` });
+      await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'contato_manual', titulo: { confirmacao: 'Confirmar o recebimento do pedido com o cliente', retorno: 'Retornar ao cliente sobre a proposta', avaliacao: 'Enviar o convite de avaliação ao cliente', fluxo: 'Enviar ao cliente a mensagem de um fluxo de automação' }[i.finalidade], detalhe: 'Envio automático não feito: falta um modelo de mensagem aprovado no WhatsApp.', responsavelId: o.responsavel_id, chave: `manual:${t.id}` });
       return { tipo: 'cancelado', motivo: 'Fora da janela de 24 horas e sem modelo aprovado: virou tarefa.' };
     }
     const m = await um<{ id: string }>(
@@ -80,14 +84,14 @@ async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultado> {
   });
 }
 
-/** First name, letters only and short: free text from a form must never carry a link or odd characters into a message sent from the company's number. */
-export const nomeSeguro = (nome: string) => (nome.trim().split(/\s+/)[0] ?? '').replace(/[^\p{L}'-]/gu, '').slice(0, 20);
-
 const nomeDe = async (db: Db | undefined, empresaId: string, oportunidadeId: string) =>
   (await um<{ nome: string }>('select c.nome from oportunidades o join contatos c on c.id = o.contato_id where o.empresa_id = $1 and o.id = $2', [empresaId, oportunidadeId], db))?.nome ?? '';
 
+export { nomeSeguro };
+
 export const executores: Record<string, Executor> = {
   responder_ia: responderComIA,
+  fluxo_passo: (t) => executarPassoFluxo(t, (tr, i) => enviarIniciada(tr, i)),
   enviar_mensagem: despachar,
 
   /** A new request nobody attended within the company's deadline: internal alert only. */
@@ -151,6 +155,7 @@ export const NOME_TRABALHO: Record<string, string> = {
   confirmacao_pedido: 'Confirmação do pedido ao cliente',
   retorno_cliente: 'Retorno ao cliente depois da proposta',
   convite_avaliacao: 'Convite de avaliação',
+  fluxo_passo: 'Passo de um fluxo de automação',
 };
 
 export interface Execucao {

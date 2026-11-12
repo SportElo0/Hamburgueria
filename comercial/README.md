@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 49 testes de serviço contra o banco de teste |
+| `npm test` | 60 testes de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -71,6 +71,19 @@ Tela **Automações** (administrador): o que está ligado, o que está agendado 
 | Convite de avaliação | serviço marcado como concluído | convite neutro com o link público |
 
 Toda mensagem iniciada pela empresa respeita o horário configurado e a regra do WhatsApp: sem conversa nas últimas 24 horas, só sai com **modelo aprovado pela Meta** cadastrado em Configurações › WhatsApp. Sem modelo, vira tarefa para uma pessoa em vez de falhar em silêncio.
+
+### Construtor de fluxos (automações próprias)
+
+Em **Automações › Seus fluxos**, o administrador monta fluxos no estilo do HighLevel, sem assinatura de terceiros:
+
+- **Gatilho:** pedido novo, oportunidade entrou em uma etapa (a escolher) ou serviço concluído.
+- **Passos** (até 12 por fluxo, até 20 fluxos por empresa): esperar (minutos, horas ou dias), **parar se** (o cliente respondeu / a etapa mudou / a oportunidade foi ganha ou perdida / uma pessoa assumiu a conversa), enviar WhatsApp (com `{{nome}}` e `{{empresa}}`), criar tarefa, avisar a equipe e anotar no histórico.
+- **Modelos prontos** (nascem desligados): proposta sem resposta, boas-vindas ao pedido e pós-venda.
+- **Histórico** de cada execução, passo a passo, com o motivo de cada pulo ou parada.
+
+Regras que valem para todo fluxo, no servidor e conferidas de novo a cada passo: mensagem só sai para quem autorizou o WhatsApp, dentro do horário da empresa, sem pessoa na conversa e sem pedido de parar (SAIR); fora das 24 horas da última mensagem do cliente só com modelo aprovado pela Meta (sem modelo, vira tarefa para uma pessoa); cada passo é um trabalho da fila com chave única (reiniciar não repete nada); editar um fluxo não muda as execuções em andamento, e desligar para as que estão rodando. **Nenhum passo marca venda como ganha ou perdida, nem muda valor ou etapa**: isso continua sendo decisão de uma pessoa.
+
+Limites desta versão: o fluxo é uma linha reta com condições de parar (não há ramificações do tipo "se... então... senão"), não há gatilho por mensagem recebida nem por data, e o editor é uma lista de campos, não um desenho com setas.
 
 ## Configurar uma empresa nova
 

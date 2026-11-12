@@ -4,6 +4,7 @@ import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, membroAtivo } from './empresas';
 import { ErroDeUso, NaoAutorizado, NaoEncontrado } from './erros';
 import { agendar, cancelarPendentes } from './fila';
+import { dispararFluxos } from './fluxos';
 
 export interface Oportunidade {
   id: string;
@@ -144,6 +145,7 @@ export async function mudarEtapa(ctx: Ctx, id: string, m: MudancaEtapa): Promise
       dados: { de: o.etapa, para: m.etapa, ...(m.etapa === 'perdido' ? { motivo } : {}), ...(m.valorCentavos != null ? { valor_centavos: m.valorCentavos } : {}) },
     });
 
+    await dispararFluxos(db, ctx.empresaId, { tipo: 'etapa_alterada', etapa: m.etapa }, { id, contatoId: o.contato_id, etapa: m.etapa });
     // Leaving "proposta" (or closing) ends the follow-ups that the proposal had scheduled.
     if (o.etapa === 'proposta' || fechando) {
       await cancelarPendentes(db, ctx.empresaId, { oportunidadeId: id, tipos: fechando ? ['retorno_cliente', 'alerta_sla', 'confirmacao_pedido'] : ['retorno_cliente'] }, fechando ? 'Oportunidade encerrada.' : `Etapa mudou para ${NOME_ETAPA[m.etapa]}.`);
@@ -232,6 +234,7 @@ export async function marcarServicoConcluido(ctx: Ctx, id: string): Promise<void
     const empresa = (await empresaPorId(ctx.empresaId, db))!;
     await q('update oportunidades set servico_concluido_em = now() where empresa_id = $1 and id = $2', [ctx.empresaId, id], db);
     await registrar(db, ctx.empresaId, { oportunidadeId: id, contatoId: o.contato_id, ator: ator(ctx), tipo: 'servico_concluido' });
+    await dispararFluxos(db, ctx.empresaId, { tipo: 'servico_concluido' }, { id, contatoId: o.contato_id, etapa: 'ganho' });
     if (empresa.config.regras.avaliacao_auto && empresa.config.avaliacao.link) {
       await agendar(db, ctx.empresaId, { tipo: 'convite_avaliacao', chave: `avaliacao:${id}`, oportunidadeId: id, em: new Date(Date.now() + 60_000) });
     }

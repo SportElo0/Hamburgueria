@@ -13,6 +13,7 @@ import { dentroDoLimite } from '@/server/contexto';
 import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, simularEntradaWhatsApp } from '@/server/conversas';
 import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig } from '@/server/empresas';
 import { ErroDeUso } from '@/server/erros';
+import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
@@ -285,3 +286,69 @@ export const ativarEmpresaAcao = async (_: Retorno, fd: FormData) =>
     await definirAtiva(s.userId, t(fd, 'empresa'), t(fd, 'ativa') === 'sim');
     return { ok: 'Atualizado.' };
   });
+
+/* ---------- Automation builder ---------- */
+
+const MINUTOS: Record<string, number> = { min: 1, h: 60, dia: 1440 };
+
+/** Reads the step rows of the editor (parallel lists, one entry per row) into flow steps. Empty rows are ignored. */
+function lerPassos(fd: FormData): { passos: EntradaFluxo['passos']; linhas: number[] } {
+  const col = (k: string) => fd.getAll(k).map(String);
+  const [tipo, qtd, unidade, condicao, texto, modelo] = ['passo_tipo', 'passo_qtd', 'passo_unidade', 'passo_condicao', 'passo_texto', 'passo_modelo'].map(col);
+  const passos: EntradaFluxo['passos'] = [];
+  const linhas: number[] = [];
+  tipo.forEach((tp, i) => {
+    if (tp) linhas.push(i + 1);
+    const n = Number((qtd[i] ?? '').replace(',', '.'));
+    const num = Number.isFinite(n) && (qtd[i] ?? '').trim() !== '' ? Math.round(n) : 0;
+    const txt = (texto[i] ?? '').trim();
+    if (tp === 'esperar') passos.push({ tipo: 'esperar', minutos: num * (MINUTOS[unidade[i]] ?? 1) });
+    else if (tp === 'parar_se') passos.push({ tipo: 'parar_se', condicao: (CONDICOES as readonly string[]).includes(condicao[i]) ? (condicao[i] as (typeof CONDICOES)[number]) : 'cliente_respondeu' });
+    else if (tp === 'enviar_whatsapp') passos.push({ tipo: 'enviar_whatsapp', texto: txt, modelo: (modelo[i] ?? '').trim() });
+    else if (tp === 'criar_tarefa') passos.push({ tipo: 'criar_tarefa', titulo: txt, prazo_horas: num });
+    else if (tp === 'avisar_equipe') passos.push({ tipo: 'avisar_equipe', titulo: txt });
+    else if (tp === 'anotar') passos.push({ tipo: 'anotar', texto: txt });
+  });
+  return { passos, linhas };
+}
+
+export const criarFluxoAcao = async (_: Retorno, fd: FormData) => {
+  let id = '';
+  const r = await tentar(async () => {
+    const modelo = MODELOS_DE_FLUXO.find((m) => m.id === t(fd, 'modelo'));
+    id = await salvarFluxo(await exigirCtx(), null, modelo?.fluxo ?? { nome: 'Novo fluxo', ativo: false, gatilho: { tipo: 'pedido_recebido' }, passos: [{ tipo: 'avisar_equipe', titulo: 'Escreva o aviso' }] });
+  });
+  if (r.erro || !id) return r;
+  redirect(`/painel/automacoes/fluxos/${id}`);
+};
+
+export const salvarFluxoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const gatilho = t(fd, 'gatilho');
+    const { passos, linhas } = lerPassos(fd);
+    try {
+      await salvarFluxo(await exigirCtx(), t(fd, 'id'), { nome: t(fd, 'nome'), ativo: fd.get('ativo') === 'on', gatilho: { tipo: gatilho, ...(gatilho === 'etapa_alterada' ? { etapa: t(fd, 'etapa') } : {}) }, passos });
+    } catch (err) {
+      // The validation counts filled steps; the screen counts rows. Point to the row the person sees.
+      if (err instanceof ErroDeUso) throw new ErroDeUso(err.message.replace(/^Passo (\d+):/, (_m, n) => `Linha ${linhas[Number(n) - 1] ?? n}:`), err.status);
+      throw err;
+    }
+    return { ok: fd.get('ativo') === 'on' ? 'Fluxo salvo e ligado.' : 'Fluxo salvo (desligado).' };
+  });
+
+export const alternarFluxoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const ctx = await exigirCtx();
+    const { obterFluxo } = await import('@/server/fluxos');
+    const f = await obterFluxo(ctx, t(fd, 'id'));
+    await salvarFluxo(ctx, f.id, { nome: f.nome, ativo: !f.ativo, gatilho: f.gatilho, passos: f.passos });
+    return { ok: f.ativo ? 'Fluxo desligado.' : 'Fluxo ligado.' };
+  });
+
+export const excluirFluxoAcao = async (_: Retorno, fd: FormData) => {
+  const r = await tentar(async () => {
+    await excluirFluxo(await exigirCtx(), t(fd, 'id'));
+  });
+  if (r.erro) return r;
+  redirect('/painel/automacoes');
+};

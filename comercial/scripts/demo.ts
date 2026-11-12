@@ -19,6 +19,7 @@ async function main() {
   const { mudarEtapa, anotar, definirProximaAcao } = await import('../src/server/oportunidades');
   const { escreverNoChatSite } = await import('../src/server/conversas');
   const { salvarWhatsApp } = await import('../src/server/integracoes');
+  const { salvarFluxo, MODELOS_DE_FLUXO } = await import('../src/server/fluxos');
 
   if (await um(`select 1 from empresas where slug = 'lumivale-demo'`)) {
     console.log('Os dados de demonstração já existem. Para recomeçar do zero: npm run reiniciar-banco');
@@ -41,6 +42,8 @@ async function main() {
     await salvarConhecimento(a, conhecimento);
     await definirResponsavelPadrao(a, vendedor);
     await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao' });
+    // Two of the ready-made flows start switched on in the demonstration (the third stays off, to show the switch).
+    for (const m of MODELOS_DE_FLUXO) await salvarFluxo(a, null, { ...m.fluxo, ativo: m.id !== 'boas-vindas' });
     return { empresa: (await empresaPorId(e.id))!, a, v };
   }
 
@@ -69,7 +72,7 @@ async function main() {
       endereco: 'Campinas, SP (endereço fictício)',
       responsavel_dados: 'Carla (fictícia) · contato@lumivale.demo',
       razao_social: 'Lumivale Energia Solar Ltda (fictícia)',
-      cnpj: '00.000.000/0001-00 (fictício)',
+      cnpj: '00.000.000/0001-00',
       privacidade: 'Texto de exemplo de uma empresa fictícia. Uma empresa real escreve aqui a sua política, revisada por um advogado.',
     },
     {

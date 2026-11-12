@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { alternarFluxoAcao, criarFluxoAcao } from '@/app/acoes';
 import { Atualizar } from '@/componentes/atualizar';
+import { Enviar, Formulario } from '@/componentes/formulario';
+import { MODELOS_DE_FLUXO, descreverGatilho, descreverPasso, listarFluxos } from '@/server/fluxos';
 import { dataHora } from '@/componentes/formato';
 import { empresaPorId } from '@/server/empresas';
 import { adaptadorIA } from '@/server/ia';
@@ -38,7 +41,7 @@ function Linha({ e }: { e: Execucao }) {
 export default async function Automacoes() {
   const ctx = await exigirCtx();
   if (ctx.papel !== 'admin') redirect('/painel');
-  const [empresa, x, { canal }] = await Promise.all([empresaPorId(ctx.empresaId), execucoes(ctx.empresaId), canalDa(ctx.empresaId)]);
+  const [empresa, x, { canal }, fluxos] = await Promise.all([empresaPorId(ctx.empresaId), execucoes(ctx.empresaId), canalDa(ctx.empresaId), listarFluxos(ctx)]);
   const r = empresa!.config.regras;
   const ia = adaptadorIA();
   const conta = (tipo: string, estado: string) => x.resumo.filter((s) => s.tipo === tipo && s.estado === estado).reduce((n, s) => n + s.total, 0);
@@ -56,6 +59,37 @@ export default async function Automacoes() {
         <h1 className="text-2xl font-bold">Automações</h1>
         <p className="text-[15px] text-suave">O que a plataforma faz sozinha, o que está agendado e o que já rodou. Mensagens automáticas saem das {r.hora_inicio}h às {r.hora_fim}h. {canal?.simulado ? 'WhatsApp em simulação: nenhuma mensagem externa é enviada.' : ''}</p>
       </div>
+      <section className="space-y-3" aria-labelledby="t-fluxos">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div><h2 id="t-fluxos" className="text-xl font-bold">Seus fluxos</h2><p className="text-[15px] text-suave">Monte automações próprias: um gatilho, esperas, condições e ações. Novos fluxos nascem desligados.</p></div>
+        </div>
+        {fluxos.length === 0 && <p className="cartao p-4 text-[15px] text-suave">Nenhum fluxo ainda. Comece por um modelo pronto ou em branco.</p>}
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {fluxos.map((f) => (
+            <li key={f.id} className="cartao p-4">
+              <div className="flex items-start justify-between gap-2"><h3 className="font-bold"><Link className="underline" href={`/painel/automacoes/fluxos/${f.id}`}>{f.nome}</Link></h3><span className={`etiqueta ${f.ativo ? 'etiqueta-ok' : ''}`}>{f.ativo ? 'Ligado' : 'Desligado'}</span></div>
+              <p className="text-sm font-semibold text-suave">{descreverGatilho(f.gatilho)}</p>
+              <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-sm">{f.passos.map((p, i) => <li key={i}>{descreverPasso(p)}</li>)}</ol>
+              <p className="mt-2 text-[13px] text-suave">{f.execucoes} execução(ões) · {f.ativas} rodando agora</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Link className="botao-2 min-h-10 px-3 py-1 text-sm" href={`/painel/automacoes/fluxos/${f.id}`}>Editar</Link>
+                <Formulario acao={alternarFluxoAcao}><input type="hidden" name="id" value={f.id} /><Enviar secundario className="min-h-10 px-3 py-1 text-sm">{f.ativo ? 'Desligar' : 'Ligar'}</Enviar></Formulario>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <Formulario acao={criarFluxoAcao} className="cartao grid gap-3 p-4 sm:grid-cols-3">
+          <div className="sm:col-span-2"><label className="rotulo" htmlFor="modelo">Criar um fluxo novo</label>
+            <select className="campo" id="modelo" name="modelo" defaultValue="">
+              <option value="">Em branco</option>
+              {MODELOS_DE_FLUXO.map((m) => <option key={m.id} value={m.id}>{m.nome}: {m.descricao}</option>)}
+            </select>
+          </div>
+          <div className="flex items-end"><Enviar>Criar e editar</Enviar></div>
+        </Formulario>
+      </section>
+
+      <h2 className="pt-2 text-xl font-bold">Automações prontas</h2>
       <ul className="grid gap-3 sm:grid-cols-2">
         {lista.map((a) => (
           <li key={a.tipo} className="cartao p-4">
