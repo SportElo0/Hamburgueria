@@ -409,7 +409,7 @@ async function executarAcao(empresa: Empresa, conversaId: string, nome: string, 
       v.dados = { ...v.dados, _visita: pref };
       await q('update conversas set dados = $2 where id = $1', [v.id, JSON.stringify(v.dados)], db);
       if (v.oportunidade_id) {
-        await q('update oportunidades set interesse_visita = $3 where empresa_id = $1 and id = $2', [empresa.id, v.oportunidade_id, pref], db);
+        await q(`update oportunidades set interesse_visita = $3 where empresa_id = $1 and id = $2 and interesse_visita = ''`, [empresa.id, v.oportunidade_id, pref], db);
         await criarTarefa(db, empresa.id, { oportunidadeId: v.oportunidade_id, conversaId: v.id, tipo: 'confirmar_visita', titulo: 'Cliente quer visita: confirmar dia e horário', detalhe: pref, chave: `visita:${v.id}:${pref.length}` });
       }
       await registrar(db, empresa.id, { conversaId: v.id, oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: { tipo: 'ia' }, tipo: 'interesse_visita', dados: { preferencia: pref } });
@@ -526,6 +526,9 @@ export async function responderComIA(t: Trabalho): Promise<Resultado> {
       await registrar(db, empresa.id, { ...base, tipo: 'resposta_ia_descartada', dados: { motivo: `Conversa em estado ${atual?.estado}.` } });
       return { tipo: 'cancelado', motivo: 'Uma pessoa assumiu antes da resposta ficar pronta.' } as Resultado;
     }
+    if (await um(`select 1 from mensagens where conversa_id = $1 and autor = 'ia' and criado_em > (select criado_em from mensagens where id = $2)`, [v.id, m.id], db)) {
+      return { tipo: 'cancelado', motivo: 'Já existe resposta da assistente para esta mensagem.' } as Resultado;
+    }
     await inserirSaida(db, atual!, { autor: 'ia', corpo: resposta.texto, automatica: true, iaSimulada: adaptador.simulada, versaoConhecimento: k.versao });
     await registrar(db, empresa.id, { ...base, tipo: 'ia_respondeu', dados: { versao_conhecimento: k.versao, modelo: resposta.modelo, simulada: adaptador.simulada, tokens_entrada: resposta.tokensEntrada, tokens_saida: resposta.tokensSaida } });
     return { tipo: 'concluido' } as Resultado;
@@ -634,19 +637,16 @@ export async function processarWebhookWhatsApp(payload: unknown): Promise<{ trab
       ignorados += entrada.mensagens.length + entrada.estados.length;
       continue;
     }
+    // No separate "seen" table: a message is deduplicated by its provider id inside the same transaction that stores it,
+    // so a failure midway leaves nothing behind and the provider's retry is processed normally.
     for (const m of entrada.mensagens) {
-      const novo = await um(`insert into eventos_webhook (provedor, id_evento) values ('whatsapp', $1) on conflict do nothing returning id_evento`, [`msg:${m.id}`]);
-      if (!novo) {
-        ignorados++;
-        continue;
-      }
       const r = await receberWhatsApp(empresaId, { de: m.de, nome: m.nome, texto: m.texto, idProvedor: m.id, quando: m.quando });
-      if (r.trabalhoId) trabalhos.push(r.trabalhoId);
+      if (r.duplicada) ignorados++;
+      else if (r.trabalhoId) trabalhos.push(r.trabalhoId);
     }
+    // Delivery reports only move a message forward, so repeating one changes nothing.
     for (const s of entrada.estados) {
-      const novo = await um(`insert into eventos_webhook (provedor, id_evento) values ('whatsapp', $1) on conflict do nothing returning id_evento`, [`st:${s.id}:${s.estado}`]);
-      if (!novo) ignorados++;
-      else await atualizarEstado(empresaId, s.id, s.estado, s.erro);
+      if (!(await atualizarEstado(empresaId, s.id, s.estado, s.erro))) ignorados++;
     }
   }
   return { trabalhos, ignorados };

@@ -80,8 +80,11 @@ async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultado> {
   });
 }
 
+/** First name, letters only and short: free text from a form must never carry a link or odd characters into a message sent from the company's number. */
+export const nomeSeguro = (nome: string) => (nome.trim().split(/\s+/)[0] ?? '').replace(/[^\p{L}'-]/gu, '').slice(0, 20);
+
 const nomeDe = async (db: Db | undefined, empresaId: string, oportunidadeId: string) =>
-  (await um<{ nome: string }>('select c.nome from oportunidades o join contatos c on c.id = o.contato_id where o.empresa_id = $1 and o.id = $2', [empresaId, oportunidadeId], db))?.nome.split(' ')[0] ?? '';
+  (await um<{ nome: string }>('select c.nome from oportunidades o join contatos c on c.id = o.contato_id where o.empresa_id = $1 and o.id = $2', [empresaId, oportunidadeId], db))?.nome ?? '';
 
 export const executores: Record<string, Executor> = {
   responder_ia: responderComIA,
@@ -104,14 +107,14 @@ export const executores: Record<string, Executor> = {
 
   async confirmacao_pedido(t) {
     const empresa = await empresaPorId(t.empresa_id);
-    const nome = await nomeDe(undefined, t.empresa_id, t.oportunidade_id!);
+    const nome = nomeSeguro(await nomeDe(undefined, t.empresa_id, t.oportunidade_id!));
     return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'confirmacao', corpo: `Olá${nome ? `, ${nome}` : ''}! Recebemos seu pedido de orçamento na ${empresa?.nome}. Uma pessoa da equipe vai falar com você. Para não receber mensagens, responda SAIR.` });
   },
 
   async retorno_cliente(t) {
     const empresa = await empresaPorId(t.empresa_id);
     if (!empresa?.config.regras.retorno_auto_cliente) return { tipo: 'cancelado', motivo: 'O retorno automático foi desligado nas regras da empresa.' };
-    const nome = await nomeDe(undefined, t.empresa_id, t.oportunidade_id!);
+    const nome = nomeSeguro(await nomeDe(undefined, t.empresa_id, t.oportunidade_id!));
     const corpo = Number(t.dados.passo ?? 1) >= 2
       ? `Olá${nome ? `, ${nome}` : ''}! Passando para saber se você conseguiu ver a proposta da ${empresa.nome}. Se quiser, é só responder por aqui que uma pessoa da equipe fala com você. Para não receber mensagens, responda SAIR.`
       : `Olá${nome ? `, ${nome}` : ''}! Aqui é da ${empresa.nome}. Ficou alguma dúvida sobre a proposta que enviamos? Para não receber mensagens, responda SAIR.`;
@@ -123,7 +126,7 @@ export const executores: Record<string, Executor> = {
     const empresa = await empresaPorId(t.empresa_id);
     if (!empresa?.config.avaliacao.link) return { tipo: 'cancelado', motivo: 'Sem link de avaliação configurado.' };
     const token = await criarConviteAvaliacao(empresa.id, t.oportunidade_id!);
-    const nome = await nomeDe(undefined, t.empresa_id, t.oportunidade_id!);
+    const nome = nomeSeguro(await nomeDe(undefined, t.empresa_id, t.oportunidade_id!));
     return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'avaliacao', corpo: `Olá${nome ? `, ${nome}` : ''}! Obrigado por contratar a ${empresa.nome}. Se puder, conte como foi sua experiência: ${process.env.APP_URL ?? ''}/avaliar/${token} Para não receber mensagens, responda SAIR.` });
   },
 };

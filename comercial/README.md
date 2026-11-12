@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 46 testes de serviço contra o banco de teste |
+| `npm test` | 49 testes de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -159,6 +159,16 @@ Nenhuma mensalidade é necessária para rodar o núcleo no computador. Em produ�
 - Um só segredo de aplicativo da Meta para todas as empresas (modelo de um aplicativo Growlift).
 - Avisos de entrega que chegarem antes de a plataforma gravar o identificador da mensagem são ignorados.
 - A resistência da assistente a mensagens maliciosas foi testada no simulador e na camada do servidor (que recusa qualquer ação fora da lista); o comportamento do modelo real não foi avaliado.
+
+## Revisões feitas e o que ficou aberto
+
+Em 12/11/2026 rodaram as revisões de segurança e legal do repositório (automáticas; **não substituem advogado nem teste de invasão**). O que era correção de código foi feito. O que continua aberto:
+
+- **Número do cliente não é verificado:** quem marca a autorização no formulário com o telefone de outra pessoa pode fazer a empresa mandar a mensagem de confirmação para ela. Mitigado (nome limpo na mensagem, limite de envios, texto fixo, um só envio), não resolvido. A solução de verdade é confirmar o número antes (por exemplo, a pessoa responde primeiro). Decisão de produto.
+- **Assistente se declara ou não automática:** o código sempre se identifica como assistente virtual; a regra do `CLAUDE.md` permite nome e voz de pessoa, desde que não negue ser robô quando perguntarem sério. Decisão de vocês; hoje vale o código.
+- **Login de apoio da Growlift** tem poderes de administrador da empresa na hora de apoio (inclusive convidar gente e trocar o token do WhatsApp); fica tudo registrado.
+- Sem CSP nos cabeçalhos, sem CAPTCHA, limites por empresa que um robô pode esgotar, avisos de entrega que chegam antes da gravação do identificador da mensagem são ignorados.
+- Jurídico, antes de vender: contrato com cláusulas de operador (LGPD), termos de uso, política da Growlift, encarregado, prazo de guarda com apagamento automático, busca de marca no INPI para "Lumivale" e "Sol do Vale", e conferir a política da Meta sobre IA no atendimento.
 
 ## Fora desta versão (sem telas que finjam funcionar)
 

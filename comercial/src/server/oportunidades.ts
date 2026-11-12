@@ -46,7 +46,7 @@ export async function listar(ctx: Ctx, f: Filtro = {}): Promise<Oportunidade[]> 
   let w = '';
   if (f.etapa && ETAPAS.includes(f.etapa)) w += ` and o.etapa = $${p.push(f.etapa)}`;
   if (f.responsavel === 'fila') w += ' and o.responsavel_id is null';
-  else if (f.responsavel) w += ` and o.responsavel_id = $${p.push(f.responsavel)}`;
+  else if (f.responsavel && /^[0-9a-zA-Z_-]{1,64}$/.test(f.responsavel)) w += ` and o.responsavel_id = $${p.push(f.responsavel)}`;
   if (f.busca?.trim()) w += ` and (c.nome ilike $${p.push(`%${f.busca.trim().replace(/[%_\\]/g, '\\$&')}%`)} or c.telefone like $${p.length} or c.cidade ilike $${p.length})`;
   return q<Oportunidade>(`${SELECAO} where o.empresa_id = $1${w} order by o.ultima_interacao_em desc limit 500`, p);
 }
@@ -263,7 +263,7 @@ export async function tarefas(ctx: Ctx, f: { de?: 'minhas' | 'fila' | 'todas'; e
   if (f.estado === 'concluidas') w += ' and t.concluida_em is not null';
   else w += ' and t.concluida_em is null';
   if (f.estado === 'vencidas') w += ' and t.prazo < now()';
-  if (f.oportunidadeId) w += ` and t.oportunidade_id = $${p.push(f.oportunidadeId)}`;
+  if (f.oportunidadeId && /^[0-9a-f-]{36}$/i.test(f.oportunidadeId)) w += ` and t.oportunidade_id = $${p.push(f.oportunidadeId)}`;
   return q<Tarefa>(
     `select t.*, u.name as responsavel_nome, c.nome as contato_nome from tarefas t
        left join "user" u on u.id = t.responsavel_id

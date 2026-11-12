@@ -10,7 +10,7 @@ const SENHA = 'demonstracao-2026';
  * Every name, phone and number here is invented. Never run against a production database.
  */
 async function main() {
-  if (process.env.AMBIENTE === 'producao') throw new Error('Recusado: dados de demonstração não entram em produção.');
+  if (!['desenvolvimento', 'demonstracao'].includes(process.env.AMBIENTE ?? '')) throw new Error('Recusado: dados de demonstração só entram com AMBIENTE=desenvolvimento ou demonstracao definido.');
   const { q, um, fecharPool } = await import('../src/server/db');
   const { criarUsuario } = await import('../src/server/auth');
   const { criarEmpresa, empresaPorId, salvarConfig, definirResponsavelPadrao } = await import('../src/server/empresas');

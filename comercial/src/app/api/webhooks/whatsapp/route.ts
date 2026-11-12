@@ -17,6 +17,7 @@ export async function GET(req: Request) {
  * each event goes to the company that owns the receiving number, once. Replies are produced by the worker.
  */
 export async function POST(req: Request) {
+  if (Number(req.headers.get('content-length') ?? 0) > 500_000) return new Response('Grande demais.', { status: 413 });
   const bruto = await req.text();
   if (bruto.length > 500_000) return new Response('Grande demais.', { status: 413 });
   if (!assinaturaValida(bruto, req.headers.get('x-hub-signature-256'), process.env.WHATSAPP_APP_SECRET)) return new Response('Assinatura inválida.', { status: 401 });

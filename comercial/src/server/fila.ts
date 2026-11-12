@@ -59,7 +59,7 @@ export async function cancelarPendentes(
 /** Claims the next due job (or one whose worker died mid-run), safely among several workers. */
 export async function pegar(apenasId?: string): Promise<Trabalho | null> {
   return um<Trabalho>(
-    `update trabalhos set estado = 'executando', tentativas = tentativas + 1, bloqueado_ate = now() + interval '2 minutes'
+    `update trabalhos set estado = 'executando', tentativas = tentativas + 1, bloqueado_ate = now() + interval '6 minutes'
      where id = (
        select id from trabalhos
        where ((estado = 'pendente' and executar_em <= now()) or (estado = 'executando' and bloqueado_ate < now()))

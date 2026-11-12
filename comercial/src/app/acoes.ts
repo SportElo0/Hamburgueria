@@ -45,6 +45,7 @@ function centavos(v: string): number | null {
 
 export async function entrar(_: Retorno, fd: FormData): Promise<Retorno> {
   if (!(await dentroDoLimite(`login:${await ipHash()}`, 10, 300))) return { erro: 'Muitas tentativas. Aguarde alguns minutos.' };
+  if (!(await dentroDoLimite(`login:email:${t(fd, 'email').toLowerCase().slice(0, 120)}`, 8, 900))) return { erro: 'Muitas tentativas para este e-mail. Aguarde alguns minutos.' };
   try {
     await auth().api.signInEmail({ body: { email: t(fd, 'email').toLowerCase(), password: String(fd.get('senha') ?? '') }, headers: await headers() });
   } catch {

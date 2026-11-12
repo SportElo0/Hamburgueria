@@ -275,7 +275,8 @@ describe('8 e 9. WhatsApp oficial (API da Meta, com a rede simulada)', () => {
   };
   beforeAll(async () => {
     process.env.WHATSAPP_GRAPH_VERSION = 'v0.0-teste';
-    await salvarWhatsApp(A.admin, { modo: 'oficial', phone_number_id: NUMERO }, 'token-secreto-da-empresa-A-1234');
+    await expect(salvarWhatsApp(A.admin, { modo: 'oficial', phone_number_id: NUMERO }, 'token-secreto-da-empresa-A-1234')).rejects.toThrow('equipe Growlift');
+    await salvarWhatsApp({ ...A.admin, acessoAdmin: 'suporte' }, { modo: 'oficial', phone_number_id: NUMERO }, 'token-secreto-da-empresa-A-1234');
   });
 
   it('a assinatura do webhook é verificada com o segredo do app', () => {
@@ -292,7 +293,7 @@ describe('8 e 9. WhatsApp oficial (API da Meta, com a rede simulada)', () => {
     expect(i.token).toBe('••••1234');
     const bruto = (await um<{ segredo_cifrado: string }>(`select segredo_cifrado from integracoes where empresa_id = $1`, [A.empresa.id]))!.segredo_cifrado;
     expect(bruto).not.toContain('token-secreto');
-    await expect(salvarWhatsApp(B.admin, { modo: 'oficial', phone_number_id: NUMERO }, 'x')).rejects.toThrow('outra empresa');
+    await expect(salvarWhatsApp({ ...B.admin, acessoAdmin: 'suporte' }, { modo: 'oficial', phone_number_id: NUMERO }, 'x')).rejects.toThrow('outra empresa');
   });
 
   it('webhook duplicado não duplica mensagem nem tarefa; número desconhecido é ignorado', async () => {
@@ -318,6 +319,18 @@ describe('8 e 9. WhatsApp oficial (API da Meta, com a rede simulada)', () => {
     const fora = await processarWebhookWhatsApp(corpo(de, `wamid.in.${unico()}`, 'oi', '000111'));
     expect(fora).toEqual({ trabalhos: [], ignorados: 1 });
     expect(await contar('mensagens where conversa_id = $1', [v.id])).toBe(2);
+  });
+
+  it('se o processamento falhar uma vez, o reenvio da Meta é processado (a mensagem não se perde)', async () => {
+    rede(() => Response.json({ messages: [{ id: `wamid.out.${unico()}` }] }));
+    const de = `55${telefone()}`;
+    const payload = corpo(de, `wamid.in.${unico()}`, 'Olá');
+    await q('alter table contatos rename to contatos_off');
+    await expect(processarWebhookWhatsApp(payload)).rejects.toThrow();
+    await q('alter table contatos_off rename to contatos');
+    const r = await processarWebhookWhatsApp(payload);
+    expect(r.trabalhos).toHaveLength(1);
+    expect(await contar('mensagens m join conversas v on v.id = m.conversa_id join contatos c on c.id = v.contato_id where c.telefone = $1', [de])).toBe(1);
   });
 
   it('estados de entrega fora de ordem não fazem a mensagem andar para trás', async () => {

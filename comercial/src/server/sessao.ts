@@ -40,7 +40,9 @@ export async function exigirPlataforma(): Promise<Sessao> {
 /** Visitor address, hashed with a server secret: used only to limit abuse, never stored with a request. */
 export async function ipHash(): Promise<string> {
   const h = await headers();
-  const ip = h.get('x-forwarded-for')?.split(',')[0]?.trim() || h.get('x-real-ip') || 'local';
+  // The platform's own header first (the browser cannot set it); a client-supplied list is the last resort, and then its last entry.
+  const xff = h.get('x-forwarded-for')?.split(',').map((x) => x.trim()).filter(Boolean);
+  const ip = h.get('x-vercel-forwarded-for')?.split(',')[0]?.trim() || h.get('x-real-ip') || xff?.at(-1) || 'local';
   return createHash('sha256').update(`${process.env.BETTER_AUTH_SECRET}:${ip}`).digest('hex').slice(0, 24);
 }
 

@@ -10,7 +10,7 @@ export async function migrar(zerar = false) {
   const { auth } = await import('../src/server/auth');
   const { getMigrations } = await import('better-auth/db/migration');
   if (zerar) {
-    if (process.env.AMBIENTE === 'producao') throw new Error('Recusado: --zerar não roda com AMBIENTE=producao.');
+    if (!['desenvolvimento', 'demonstracao'].includes(process.env.AMBIENTE ?? '')) throw new Error('Recusado: --zerar só roda com AMBIENTE=desenvolvimento ou demonstracao definido.');
     await q('drop schema public cascade');
     await q('create schema public');
   }

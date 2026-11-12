@@ -23,6 +23,7 @@ async function main() {
         ultimaLimpeza = Date.now();
         await q(`delete from limites where janela < now() - interval '1 day'`);
         await q(`delete from eventos_webhook where recebido_em < now() - interval '30 days'`);
+        await q(`delete from emails_simulados where criado_em < now() - interval '1 day'`);
       }
     } catch (err) {
       console.error('Erro no worker (segue tentando):', err instanceof Error ? err.message : err);

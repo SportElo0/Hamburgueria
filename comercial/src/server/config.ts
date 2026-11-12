@@ -127,7 +127,9 @@ export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
 export type Ambiente = 'desenvolvimento' | 'demonstracao' | 'producao';
 export function ambiente(): Ambiente {
   const a = process.env.AMBIENTE;
-  return a === 'producao' || a === 'demonstracao' ? a : 'desenvolvimento';
+  if (a === 'producao' || a === 'demonstracao' || a === 'desenvolvimento') return a;
+  // Not set: a production server must never fall back to the simulators and demo tools.
+  return process.env.NODE_ENV === 'production' ? 'producao' : 'desenvolvimento';
 }
 
 /** Brazilian phone → digits with country code (5511999998888), or null when it is not a valid number. */

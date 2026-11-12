@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { criarUsuario } from './auth';
-import { ConfigEmpresa, SEGMENTOS, lerConfig } from './config';
+import { ConfigEmpresa, SEGMENTOS, ambiente, lerConfig } from './config';
 import { ator, exigirAdmin, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
 import { ErroDeUso, NaoAutorizado, NaoEncontrado } from './erros';
@@ -132,7 +132,7 @@ export async function convidar(ctx: Ctx, entrada: z.input<typeof Convite>): Prom
   await tx(async (db) => {
     await q('delete from convites where empresa_id = $1 and email = $2 and aceito_em is null', [ctx.empresaId, c.email], db);
     await q(`insert into convites (empresa_id, email, papel, token_hash, expira_em, criado_por) values ($1, $2, $3, $4, now() + interval '7 days', $5)`, [ctx.empresaId, c.email, c.papel, hashToken(token), ctx.userId], db);
-    await q('insert into emails_simulados (para, assunto, corpo) values ($1, $2, $3)', [c.email, 'Convite para a plataforma', `Crie seu acesso em: ${link}`], db);
+    if (ambiente() !== 'producao') await q('insert into emails_simulados (para, assunto, corpo) values ($1, $2, $3)', [c.email, 'Convite para a plataforma', `Crie seu acesso em: ${link}`], db);
     await registrar(db, ctx.empresaId, { ator: ator(ctx), tipo: 'convite_criado', dados: { papel: c.papel } });
   });
   return { link };

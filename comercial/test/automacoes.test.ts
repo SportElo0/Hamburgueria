@@ -5,6 +5,7 @@ import { empresaPorId, salvarConfig } from '@/server/empresas';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { marcarServicoConcluido, mudarEtapa, notificacoes, obter } from '@/server/oportunidades';
 import { receberPedido, type PedidoSalvo } from '@/server/pedidos';
+import { nomeSeguro } from '@/server/trabalhos';
 import { execucoes, processarFila } from '@/server/trabalhos';
 import { contar, meta, novaEmpresa, pedido, telefone, type Cenario } from './apoio';
 
@@ -22,6 +23,17 @@ beforeAll(async () => {
   C.empresa = (await empresaPorId(C.empresa.id))!;
 });
 afterAll(fecharPool);
+
+describe('mensagem enviada do número da empresa', () => {
+  it('o nome digitado no formulário nunca leva link nem símbolos para a mensagem', async () => {
+    for (const nome of ['http://site-malicioso.com/x', 'www.golpe.com.br/pix', 'Ana: clique aqui', 'João da Silva']) {
+      const n = nomeSeguro(nome);
+      expect(n).not.toMatch(/[:/.@ ]/);
+      expect(n.length).toBeLessThanOrEqual(20);
+    }
+    expect(nomeSeguro('João da Silva')).toBe('João');
+  });
+});
 
 describe('automações de ponta a ponta (WhatsApp simulado)', () => {
   it('pedido novo: confirmação ao cliente sai sozinha e conta no tempo de confirmação', async () => {

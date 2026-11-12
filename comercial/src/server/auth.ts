@@ -1,5 +1,6 @@
 import { betterAuth } from 'better-auth';
 import { nextCookies } from 'better-auth/next-js';
+import { ambiente } from './config';
 import { pool, q } from './db';
 
 const g = globalThis as unknown as { __growliftAuth?: ReturnType<typeof criar> };
@@ -17,6 +18,8 @@ function criar() {
       revokeSessionsOnPasswordReset: true,
       // No e-mail provider yet: the message is stored and shown to the Growlift admin as a simulation.
       sendResetPassword: async ({ user, url }) => {
+        // Without an e-mail provider the link would only sit in the database: in production it is not stored at all.
+        if (ambiente() === 'producao') return;
         await q('insert into emails_simulados (para, assunto, corpo) values ($1, $2, $3)', [
           user.email,
           'Redefinir a senha',

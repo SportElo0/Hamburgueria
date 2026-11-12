@@ -46,6 +46,11 @@ export async function salvarWhatsApp(ctx: Ctx, entrada: unknown, novoToken?: str
   if (!r.success) throw new ErroDeUso(r.error.issues[0]?.message ?? 'Configuração inválida.');
   await tx(async (db) => {
     const atual = await linha(ctx.empresaId, db);
+    const antes = ConfigWhatsApp.safeParse(atual?.config ?? {}).data;
+    // Which number a company owns is a fact only the Growlift team can establish (against the company's Meta account).
+    if (!ctx.acessoAdmin && (r.data.phone_number_id !== (antes?.phone_number_id ?? '') || r.data.waba_id !== (antes?.waba_id ?? '') || novoToken?.trim())) {
+      throw new ErroDeUso('O número e o token do WhatsApp são configurados pela equipe Growlift.');
+    }
     const segredo = novoToken?.trim() ? cifrar({ access_token: novoToken.trim() }) : atual?.segredo_cifrado ?? null;
     if (r.data.phone_number_id && (await um(`select 1 from integracoes where tipo = 'whatsapp' and config ->> 'phone_number_id' = $1 and empresa_id <> $2`, [r.data.phone_number_id, ctx.empresaId], db))) {
       throw new ErroDeUso('Este número já está ligado a outra empresa.');
