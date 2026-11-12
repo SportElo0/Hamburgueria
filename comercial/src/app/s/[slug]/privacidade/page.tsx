@@ -22,11 +22,13 @@ export default async function Privacidade({ params }: { params: Promise<{ slug: 
       <h2 className="mt-8 text-xl font-bold">O que este site guarda quando você pede um orçamento</h2>
       <ul className="mt-3 list-disc space-y-1 pl-5 text-[17px]">
         <li>Os dados que você escreve no formulário ou no chat: nome, telefone, cidade e a descrição do que precisa.</li>
-        <li>Se você marcou a autorização, o texto que aceitou, a data e por onde aceitou, para falar com você pelo WhatsApp.</li>
+        <li>Se você marcou a autorização (ou apertou 1 no menu de uma ligação), o texto que aceitou, a data e por onde aceitou, para falar com você pelo WhatsApp.</li>
         <li>De qual anúncio ou página você veio, quando o endereço traz essa informação.</li>
         <li>O histórico do atendimento: etapas, anotações e mensagens trocadas.</li>
       </ul>
       <p className="mt-3 text-[17px]">Usamos esses dados para responder e acompanhar o seu pedido. Não pedimos CPF, documentos, dados bancários nem endereço completo nesta etapa. Para parar de receber mensagens, responda SAIR.</p>
+      <h2 className="mt-8 text-xl font-bold">Quando você liga e ninguém atende</h2>
+      <p className="mt-3 text-[17px]">Guardamos o número de quem ligou, a data e a hora da ligação e se você apertou 1 para receber nosso retorno pelo WhatsApp. Usamos isso para retornar a sua ligação. A mensagem pelo WhatsApp só é enviada se você apertou 1 naquela ligação ou já tinha autorizado antes; para parar, responda SAIR. As ligações passam por um serviço de telefonia contratado pela empresa, que atua em nome dela.</p>
       <h2 className="mt-8 text-xl font-bold">Seus direitos</h2>
       <p className="mt-3 text-[17px]">Você pode pedir acesso, correção ou exclusão dos seus dados e revogar a autorização quando quiser (LGPD, art. 18). {(s.responsavel_dados || s.email) ? `Fale com: ${s.responsavel_dados || s.email}.` : 'A empresa ainda não informou o canal para esses pedidos.'}</p>
     </main>

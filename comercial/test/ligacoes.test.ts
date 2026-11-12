@@ -85,7 +85,30 @@ describe('ligação não atendida', () => {
     await processarFila();
     await q(`update contatos set nao_contatar_em = now() where empresa_id = $1 and telefone = $2`, [A.empresa.id, `55${tel}`]);
     await q(`update ligacoes set recebida_em = now() - interval '3 hours' where empresa_id = $1 and telefone = $2`, [A.empresa.id, `55${tel}`]);
-    expect((await ligacao(tel)).resultado).toBe('sem_autorizacao');
+    expect((await ligacao(tel)).resultado).toBe('pediu_sair');
+    // pressing 1 after SAIR does not record a new authorization
+    expect(await contar(`consentimentos k join contatos c on c.id = k.contato_id where c.telefone = $1 and k.origem = 'ligacao'`, [`55${tel}`])).toBe(1);
+  });
+
+  it('apertar 1 vale só para aquela ligação: não autoriza a próxima nem outras mensagens', async () => {
+    const tel = telefone();
+    const r = await ligacao(tel);
+    await processarFila();
+    expect(await doSistema(A.empresa.id, tel)).toHaveLength(1);
+    // the same day, pressing 1 again: at most one answer per 24 hours
+    await q(`update ligacoes set recebida_em = now() - interval '3 hours' where empresa_id = $1 and telefone = $2`, [A.empresa.id, `55${tel}`]);
+    expect((await ligacao(tel)).resultado).toBe('ja_respondida_hoje');
+    // the next day, without pressing 1: no message
+    await q(`update ligacoes set recebida_em = now() - interval '30 hours', resultado = 'mensagem_agendada' where empresa_id = $1 and telefone = $2`, [A.empresa.id, `55${tel}`]);
+    await q(`update ligacoes set resultado = 'repetida' where empresa_id = $1 and telefone = $2 and resultado = 'mensagem_agendada' and recebida_em > now() - interval '24 hours'`, [A.empresa.id, `55${tel}`]);
+    expect((await ligacao(tel, { aceiteWhatsapp: false })).resultado).toBe('sem_autorizacao');
+    // a flow message or a request confirmation never uses the call's authorization
+    const { enviarIniciada } = await import('@/server/trabalhos');
+    const t = { id: unico(), empresa_id: A.empresa.id, tipo: 'teste', dados: {}, executar_em: new Date(), estado: 'executando', tentativas: 1, max_tentativas: 3, chave: null, conversa_id: null, oportunidade_id: r.oportunidadeId!, criado_em: new Date() } as const;
+    expect(await enviarIniciada({ ...t }, { oportunidadeId: r.oportunidadeId!, corpo: 'Oferta qualquer. Para não receber mensagens, responda SAIR.', finalidade: 'fluxo', modelo: 'qualquer' })).toMatchObject({ tipo: 'cancelado', motivo: expect.stringMatching(/Sem autorização/) });
+    const aceite = await um<{ texto: string }>(`select k.texto from consentimentos k join contatos c on c.id = k.contato_id where c.telefone = $1 and k.origem = 'ligacao' order by k.criado_em limit 1`, [`55${tel}`]);
+    expect(aceite!.texto).toMatch(/apertou 1: autorizou uma mensagem da Solar Ligações pelo WhatsApp sobre esta ligação/);
+    expect(aceite!.texto).toMatch(/chamada call_/);
   });
 
   it('resposta que ficou parada mais de 2 horas na fila não sai (fica a tarefa)', async () => {
@@ -97,9 +120,11 @@ describe('ligação não atendida', () => {
     expect(await contar(`ligacoes where empresa_id = $1 and telefone = $2 and resultado = 'nao_enviada'`, [A.empresa.id, `55${tel}`])).toBe(1);
   });
 
-  it('fora do horário usa o outro texto, com a hora de abertura', () => {
-    const t = textoRetornoLigacao({ ...A.empresa, config: { ...A.empresa.config, regras: { ...A.empresa.config.regras, hora_inicio: 8 } } }, true);
-    expect(t).toMatch(/^Oi! Aqui é Ana, da Solar Ligações\. Recebemos sua ligação fora do nosso horário\. Assim que abrirmos, às 8h/);
+  it('fora do horário usa o outro texto, sem prometer hora; {{abertura}} continua disponível', () => {
+    const t = textoRetornoLigacao(A.empresa, true);
+    expect(t).toMatch(/^Oi! Aqui é Ana, da Solar Ligações\. Recebemos sua ligação fora do nosso horário de atendimento\. Assim que a equipe estiver disponível, ela te responde\./);
+    const r = A.empresa.config.regras;
+    expect(textoRetornoLigacao({ ...A.empresa, nome: 'Loja $& Cia', config: { ...A.empresa.config, regras: { ...r, hora_inicio: 9, ligacao_texto_fora: 'Abrimos às {{abertura}} na {{empresa}}.' } } }, true)).toBe('Abrimos às 9h na Loja $& Cia. Para não receber mensagens, responda SAIR.');
     expect(t).toMatch(/responda SAIR\.$/);
   });
 
@@ -143,8 +168,11 @@ describe('ligação não atendida', () => {
     // form fields of common telephony services, key as the password of basic auth
     const tel2 = telefone();
     const basic = `Basic ${Buffer.from(`growlift:${chave}`).toString('base64')}`;
-    const f = await chamar(new URLSearchParams({ From: `+55${tel2}`, CallSid: `CA${unico()}`, DialCallStatus: 'no-answer', Digits: '1' }).toString(), 'application/x-www-form-urlencoded', basic);
+    const f = await chamar(new URLSearchParams({ From: `+55${tel2}`, CallSid: `CA${unico()}`, DialCallStatus: 'no-answer', aceite_whatsapp: 'true' }).toString(), 'application/x-www-form-urlencoded', basic);
     expect(await f.json()).toEqual({ ok: true, resultado: 'mensagem_agendada' });
+    // a "1" pressed in some other menu is not consent
+    const d = await chamar(new URLSearchParams({ From: `+55${telefone()}`, CallSid: `CA${unico()}`, DialCallStatus: 'no-answer', Digits: '1' }).toString(), 'application/x-www-form-urlencoded', basic);
+    expect(await d.json()).toEqual({ ok: true, resultado: 'sem_autorizacao' });
     expect((await chamar(JSON.stringify({ de: 'abc', id: unico(), status: 'missed' }))).status).toBe(422);
     expect((await chamar('nao é json')).status).toBe(400);
     // nothing of company A shows up in company B

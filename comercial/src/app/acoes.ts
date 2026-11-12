@@ -421,6 +421,9 @@ const RESULTADO_LIGACAO: Record<string, string> = {
   sem_autorizacao: 'Quem ligou não autorizou o WhatsApp: só a tarefa de retornar a ligação foi criada.',
   telefone_fixo: 'É telefone fixo: só a tarefa de retornar a ligação foi criada.',
   repetida: 'O mesmo número ligou há pouco: não mandou outra mensagem nem criou outra tarefa.',
+  pediu_sair: 'Esse número tinha pedido para não receber mensagens: só a tarefa de retornar a ligação foi criada.',
+  ja_respondida_hoje: 'Esse número já recebeu uma resposta nas últimas 24 horas: só a tarefa foi criada.',
+  limite: 'Limite de respostas automáticas da hora atingido: só a tarefa foi criada.',
   desligado: 'A resposta automática está desligada nas regras: só a tarefa foi criada.',
 };
 

@@ -62,11 +62,12 @@ export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultad
     if (o.nao_contatar_em) return { tipo: 'cancelado', motivo: 'O contato pediu para não receber mensagens.' };
     if (i.finalidade === 'retorno' && o.etapa !== 'proposta') return { tipo: 'cancelado', motivo: 'A oportunidade saiu da etapa de proposta.' };
     if (i.finalidade === 'confirmacao' && o.etapa !== 'novo') return { tipo: 'cancelado', motivo: 'O pedido já está em atendimento.' };
-    if (!(await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null`, [empresa.id, o.contato_id], db))) {
+    // Pressing 1 in a call authorizes only the answer to that call: every other message needs the form's authorization.
+    if (!(await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null and ($3 or origem <> 'ligacao')`, [empresa.id, o.contato_id, i.finalidade === 'ligacao'], db))) {
       return { tipo: 'cancelado', motivo: 'Sem autorização de contato pelo WhatsApp.' };
     }
     // The maintenance reminder needs an acceptance of the text that mentions it.
-    if (i.finalidade === 'manutencao' && !(await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null and versao >= 2`, [empresa.id, o.contato_id], db))) {
+    if (i.finalidade === 'manutencao' && !(await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null and origem <> 'ligacao' and versao >= 2`, [empresa.id, o.contato_id], db))) {
       return { tipo: 'cancelado', motivo: 'A autorização deste cliente não inclui o lembrete de manutenção.' };
     }
     if (i.finalidade === 'manutencao' && o.etapa !== 'ganho') return { tipo: 'cancelado', motivo: 'A venda não está mais como ganha.' };

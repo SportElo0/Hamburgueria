@@ -35,7 +35,7 @@ async function condicaoVale(db: Db, e: Execucao, c: Condicao): Promise<boolean> 
     return !!(await um(`select 1 from conversas where empresa_id = $1 and contato_id = $2 and ultima_entrada_em > $3`, [e.empresa_id, e.contato_id, e.criado_em], db));
   }
   if (c === 'tem_autorizacao') {
-    return !!(await um(`select 1 from consentimentos k join contatos ct on ct.id = k.contato_id where k.empresa_id = $1 and k.contato_id = $2 and k.canal = 'whatsapp' and k.revogado_em is null and ct.nao_contatar_em is null`, [e.empresa_id, e.contato_id], db));
+    return !!(await um(`select 1 from consentimentos k join contatos ct on ct.id = k.contato_id where k.empresa_id = $1 and k.contato_id = $2 and k.canal = 'whatsapp' and k.revogado_em is null and k.origem <> 'ligacao' and ct.nao_contatar_em is null`, [e.empresa_id, e.contato_id], db));
   }
   if (c === 'tem_responsavel') {
     return !!(await um('select 1 from oportunidades where empresa_id = $1 and id = $2 and responsavel_id is not null', [e.empresa_id, e.oportunidade_id], db));

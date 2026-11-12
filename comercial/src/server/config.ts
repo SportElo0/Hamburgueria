@@ -93,7 +93,7 @@ export const ConfigEmpresa = z.object({
       /** Missed call: answer by WhatsApp right away (with the caller's consent) and create the call-back task. */
       ligacao_auto: z.boolean().default(true),
       ligacao_texto: z.string().trim().min(10).max(500).default('Oi! Aqui é {{atendente}}, da {{empresa}}. Vi que você ligou e não conseguimos atender agora. Como posso te ajudar? Se preferir, a equipe retorna a ligação.'),
-      ligacao_texto_fora: z.string().trim().min(10).max(500).default('Oi! Aqui é {{atendente}}, da {{empresa}}. Recebemos sua ligação fora do nosso horário. Assim que abrirmos, às {{abertura}}, a equipe te responde. Se quiser, já pode contar por aqui o que precisa.'),
+      ligacao_texto_fora: z.string().trim().min(10).max(500).default('Oi! Aqui é {{atendente}}, da {{empresa}}. Recebemos sua ligação fora do nosso horário de atendimento. Assim que a equipe estiver disponível, ela te responde. Se quiser, já pode contar por aqui o que precisa.'),
       hora_inicio: z.number().int().min(0).max(23).default(8),
       hora_fim: z.number().int().min(1).max(24).default(20),
       fuso: z.string().default('America/Sao_Paulo'),
@@ -134,14 +134,18 @@ export type Conhecimento = z.infer<typeof Conhecimento>;
 
 /** Consent text shown next to the WhatsApp checkbox; stored with each acceptance. */
 /** Version of the consent text below. Version 2 added the maintenance reminder; older acceptances do not cover it. */
-export const VERSAO_CONSENTIMENTO = 2;
+export const VERSAO_CONSENTIMENTO = 3;
 export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
-  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
+  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta, para retornar minhas ligações e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
 
-/** What the phone menu asks before the call rings (said by the telephony service), and what is recorded when the caller presses 1. */
-export const FRASE_MENU_LIGACAO = 'Se ninguém puder atender, quer receber nosso retorno pelo WhatsApp? Aperte 1.';
-export const TEXTO_ACEITE_LIGACAO = (empresa: string) =>
-  `Na ligação para a ${empresa}, ouvi "${FRASE_MENU_LIGACAO}" e apertei 1: aceito receber o retorno desta ligação pelo WhatsApp. Posso pedir para parar a qualquer momento respondendo SAIR.`;
+/**
+ * What the phone menu says before the call rings (configured, word for word, in the telephony service) and what is
+ * recorded when the caller presses 1. A new wording gets a new version, so each record says exactly what was heard.
+ */
+export const VERSAO_FRASE_LIGACAO = 1;
+export const FRASE_MENU_LIGACAO = (empresa: string) => `Se ninguém puder atender, quer receber uma mensagem da ${empresa} no WhatsApp, neste número? Aperte 1.`;
+export const TEXTO_ACEITE_LIGACAO = (empresa: string, idChamada: string, quando: Date) =>
+  `Na ligação de ${quando.toISOString()} (chamada ${idChamada}), quem ligou ouviu "${FRASE_MENU_LIGACAO(empresa)}" (frase versão ${VERSAO_FRASE_LIGACAO}) e apertou 1: autorizou uma mensagem da ${empresa} pelo WhatsApp sobre esta ligação.`;
 
 export type Ambiente = 'desenvolvimento' | 'demonstracao' | 'producao';
 export function ambiente(): Ambiente {

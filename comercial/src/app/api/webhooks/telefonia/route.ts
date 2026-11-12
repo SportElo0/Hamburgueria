@@ -25,7 +25,7 @@ function chaveDe(req: Request): string {
 
 /**
  * Notice from the company's telephony service that a call was not answered.
- * JSON or form fields: de (or From), id (or CallSid), status (or DialCallStatus / CallStatus), aceite_whatsapp (or Digits = 1), quando.
+ * JSON or form fields: de (or From), id (or CallSid), status (or DialCallStatus / CallStatus), aceite_whatsapp (true only when the caller pressed 1 in the consent menu), quando.
  */
 export async function POST(req: Request) {
   if (Number(req.headers.get('content-length') ?? 0) > 20_000) return responder({ erro: 'Grande demais.' }, 413);
@@ -47,7 +47,8 @@ export async function POST(req: Request) {
     const txt = (...k: string[]) => String(k.map((x) => d[x]).find((v) => v !== undefined && v !== null && v !== '') ?? '').trim();
     const status = txt('status', 'DialCallStatus', 'CallStatus').toLowerCase();
     if (!NAO_ATENDIDA.has(status)) return responder({ ok: true, ignorado: 'A ligação foi atendida ou o status não é de ligação perdida.' });
-    const aceite = d.aceite_whatsapp === true || ['true', '1', 'sim'].includes(txt('aceite_whatsapp').toLowerCase()) || txt('Digits') === '1';
+    // Only the explicit field, sent by the rule of the consent menu: a "1" pressed in some other menu is never consent.
+    const aceite = d.aceite_whatsapp === true || ['true', 'sim'].includes(txt('aceite_whatsapp').toLowerCase());
     const quando = txt('quando') ? new Date(txt('quando')) : undefined;
     const r = await registrarLigacaoPerdida(empresa, { telefone: txt('de', 'From', 'from', 'caller'), idExterno: txt('id', 'CallSid', 'call_id'), quando, aceiteWhatsapp: aceite });
     // The WhatsApp answer and the phone alerts go out right after this response.
