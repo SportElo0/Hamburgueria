@@ -242,3 +242,13 @@ Outros:
 - Não criar PR sem pedido. Commits terminam com as linhas de coautoria do Claude.
 - Não usar as senhas pessoais dos usuários para entrar no painel.
 - Campanhas só para quem marcou o aceite; nada de "sorteio" falso.
+
+## Growlift Comercial (`comercial/`), 12/11/2026
+
+Produto novo e próprio (não é o painel dos restaurantes): site com formulário de orçamento, chat com assistente virtual, painel de oportunidades, atendimento, tarefas e métricas, para várias empresas com dados separados. Primeiro segmento: energia solar.
+
+- **Estado:** primeira versão funcional, só local. Nada publicado, nada contratado.
+- **Testado:** 38 testes de serviço e o percurso principal no navegador em tela de celular.
+- **Simulado:** assistente de IA e WhatsApp (aparece “Simulação” na tela). Os adaptadores reais existem, mas não foram testados: faltam a chave da API de IA e uma conta do WhatsApp Business; a documentação da Meta não abriu do ambiente de desenvolvimento.
+- **Como rodar, logins de demonstração, custos e próximos passos:** `comercial/README.md`. Roteiro de apresentação: `comercial/DEMONSTRACAO.md`.
+- **Antes de publicar:** rodar `revisor-seguranca` e `revisor-legal`, ligar e-mail, conferir o WhatsApp na documentação da Meta.
