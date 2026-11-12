@@ -12,9 +12,20 @@ export function pool(): Pool {
     // Hosted databases need TLS. Their pooler certificates are not always in Node's trust store: DATABASE_SSL=no-verify accepts them (encrypted, not verified).
     const ssl = local ? undefined : process.env.DATABASE_SSL === 'no-verify' ? { rejectUnauthorized: false } : true;
     // Serverless: many short-lived instances, so each keeps few connections.
-    g.__growliftPool = new Pool({ connectionString: url.replace(/[?&]sslmode=[^&]*/, ''), max: process.env.VERCEL ? 3 : 10, ssl });
+    g.__growliftPool = new Pool({ connectionString: semSslmode(url), max: process.env.VERCEL ? 3 : 10, ssl });
   }
   return g.__growliftPool;
+}
+
+/** pg would let sslmode in the URL override the ssl option above, so it is removed (other parameters stay). */
+export function semSslmode(url: string): string {
+  try {
+    const u = new URL(url);
+    u.searchParams.delete('sslmode');
+    return u.toString();
+  } catch {
+    return url;
+  }
 }
 
 export interface Db {

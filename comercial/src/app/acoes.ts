@@ -220,7 +220,7 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
     if (secao === 'regras') {
       await salvarConfig(ctx, 'regras', { ...atual.regras, sla_minutos: num('sla_minutos'), retorno_proposta_dias: num('retorno_proposta_dias'), retorno_auto_cliente: fd.get('retorno_auto_cliente') === 'on', retorno_auto_horas: num('retorno_auto_horas'), retorno_auto_horas_2: num('retorno_auto_horas_2'), avaliacao_auto: fd.get('avaliacao_auto') === 'on', hora_inicio: num('hora_inicio'), hora_fim: num('hora_fim'), escalar_horas: num('escalar_horas'), manutencao_auto: fd.get('manutencao_auto') === 'on', manutencao_meses: num('manutencao_meses'), resumo_diario: fd.get('resumo_diario') === 'on', resumo_hora: num('resumo_hora') });
     } else if (secao === 'ia') {
-      await salvarConfig(ctx, 'ia', { ...atual.ia, ativa: fd.get('ativa') === 'on', nome: t(fd, 'nome') || 'Assistente virtual', modelo: t(fd, 'modelo'), limite_respostas_mes: num('limite_respostas_mes'), max_mensagens_contexto: num('max_mensagens_contexto') });
+      await salvarConfig(ctx, 'ia', { ...atual.ia, ativa: fd.get('ativa') === 'on', nome: t(fd, 'nome') || 'Ana', modelo: t(fd, 'modelo'), limite_respostas_mes: num('limite_respostas_mes'), max_mensagens_contexto: num('max_mensagens_contexto') });
     } else if (secao === 'avaliacao') {
       const link = t(fd, 'link');
       if (link && !/^https:\/\/[^\s]+$/.test(link)) throw new ErroDeUso('O link de avaliação precisa começar com https://');

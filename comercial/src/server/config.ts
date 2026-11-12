@@ -98,7 +98,7 @@ export const ConfigEmpresa = z.object({
   ia: z
     .object({
       ativa: z.boolean().default(true),
-      nome: z.string().trim().max(40).default('Assistente virtual'),
+      nome: z.string().trim().max(40).default('Ana'),
       modelo: Texto(60),
       limite_respostas_mes: z.number().int().min(0).max(100000).default(500),
       max_mensagens_contexto: z.number().int().min(4).max(60).default(20),

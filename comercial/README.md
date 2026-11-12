@@ -129,7 +129,7 @@ Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `
 
 ## Ativar a IA
 
-Sem chave, a assistente roda no **simulador** (respostas por regras, marcadas como simulação). Para o modelo real: `IA_ANTHROPIC_API_KEY` no servidor (chave da API da Anthropic contratada para este fim; o acesso usado para programar não serve para atender clientes). Modelo padrão em `IA_MODELO_PADRAO`, e cada empresa pode escolher o seu em Configurações › Assistente, junto com o limite mensal de respostas.
+Sem chave, a assistente roda no **simulador** (respostas por regras, marcadas como simulação). Para o modelo real: `IA_ANTHROPIC_API_KEY` no servidor (chave da API da Anthropic contratada para este fim; o acesso usado para programar não serve para atender clientes). Modelo padrão: `claude-haiku-5-5`, o mais barato (decidido em 12/11/2026; troca em `IA_MODELO_PADRAO`), e cada empresa pode escolher o seu em Configurações › Assistente, junto com o limite mensal de respostas.
 
 O adaptador real (`src/server/ia/anthropic.ts`) já foi testado **contra uma API falsa local** (pedido montado, chave enviada, prompt com cache, só as 3 ações permitidas, telefone fora do pedido, ação executada no servidor, recusa e erro da API viram atendimento humano). **Ainda não foi exercitado contra a API real:** este ambiente de desenvolvimento não aceita chave para os endereços da Anthropic, e o acesso usado para programar não é usado para atender clientes.
 
@@ -196,7 +196,7 @@ Nenhuma mensalidade é necessária para rodar o núcleo no computador. Em produ�
 Em 12/11/2026 rodaram as revisões de segurança e legal do repositório (automáticas; **não substituem advogado nem teste de invasão**). O que era correção de código foi feito. O que continua aberto:
 
 - **Número do cliente não é verificado:** quem marca a autorização no formulário com o telefone de outra pessoa pode fazer a empresa mandar a mensagem de confirmação para ela. Mitigado (nome limpo na mensagem, limite de envios, texto fixo, um só envio), não resolvido. A solução de verdade é confirmar o número antes (por exemplo, a pessoa responde primeiro). Decisão de produto.
-- **Assistente se declara ou não automática:** o código sempre se identifica como assistente virtual; a regra do `CLAUDE.md` permite nome e voz de pessoa, desde que não negue ser robô quando perguntarem sério. Decisão de vocês; hoje vale o código.
+- **Como a assistente se apresenta (decidido em 12/11/2026):** tem nome (padrão "Ana", muda em Configurações › Assistente), fala como alguém da equipe e não anuncia que é robô. Se perguntarem a sério, não mente: diz que é a assistente da empresa e oferece chamar uma pessoa. O aviso de que o atendimento usa IA de empresa terceira fica na página de Privacidade.
 - **Login de apoio da Growlift** tem poderes de administrador da empresa na hora de apoio (inclusive convidar gente e trocar o token do WhatsApp); fica tudo registrado.
 - Sem CSP nos cabeçalhos, sem CAPTCHA, limites por empresa que um robô pode esgotar, avisos de entrega que chegam antes da gravação do identificador da mensagem são ignorados.
 - Jurídico, antes de vender: contrato com cláusulas de operador (LGPD), termos de uso, política da Growlift, encarregado, prazo de guarda com apagamento automático, busca de marca no INPI para "Lumivale" e "Sol do Vale", e conferir a política da Meta sobre IA no atendimento.

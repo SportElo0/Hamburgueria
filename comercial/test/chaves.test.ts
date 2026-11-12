@@ -39,3 +39,11 @@ describe('chaves do servidor', () => {
     expect(enderecoBanco()).toBe('postgres://proprio');
   });
 });
+
+describe('endereço do banco', () => {
+  it('tira só o sslmode e mantém os outros parâmetros', async () => {
+    const { semSslmode } = await import('../src/server/db');
+    expect(semSslmode('postgres://u:p@h:6543/postgres?sslmode=require&supa=base-pooler.x')).toBe('postgres://u:p@h:6543/postgres?supa=base-pooler.x');
+    expect(semSslmode('postgres://u:p@h:5432/postgres')).toBe('postgres://u:p@h:5432/postgres');
+  });
+});

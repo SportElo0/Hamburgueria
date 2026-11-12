@@ -99,7 +99,7 @@ export default async function Configuracoes() {
           <div><label className="rotulo" htmlFor="modelo">Modelo (em branco = padrão: {modeloPadrao()})</label><input className="campo" id="modelo" name="modelo" defaultValue={c.ia.modelo} placeholder={modeloPadrao()} /></div>
           <Num id="limite_respostas_mes" rotulo="Limite de respostas por mês" valor={c.ia.limite_respostas_mes} min={0} max={100000} />
           <Num id="max_mensagens_contexto" rotulo="Mensagens da conversa que o modelo lê" valor={c.ia.max_mensagens_contexto} min={4} max={60} />
-          <p className="text-sm text-suave sm:col-span-2">Ao atingir o limite, a assistente para e as conversas vão para a equipe, sem perder mensagens. O conteúdo que ela usa fica em “Conhecimento”.</p>
+          <p className="text-sm text-suave sm:col-span-2">Ela se apresenta por esse nome e fala como alguém da equipe, sem dizer que é robô. Se o cliente perguntar a sério, ela não mente: diz que é a assistente da empresa e oferece chamar uma pessoa. Ao atingir o limite, a assistente para e as conversas vão para a equipe, sem perder mensagens. O conteúdo que ela usa fica em “Conhecimento”.</p>
           <div className="sm:col-span-2"><Enviar>Salvar assistente</Enviar></div>
         </Formulario>
       </Secao>

@@ -17,12 +17,16 @@ export const iaSimulada: AdaptadorIA = {
     const anterior = [...p.historico].reverse().find((m) => m.de === 'assistente')?.texto ?? '';
     const t = limpo(ultima);
     const primeira = !p.historico.some((m) => m.de === 'assistente');
-    const ola = primeira ? `Olá! Sou ${/assistente virtual/i.test(c.assistente) ? 'a' : `${c.assistente}, a`} assistente virtual da ${c.empresa}. ` : '';
+    const ola = primeira ? `Oi! Aqui é ${c.assistente}, da ${c.empresa}. ` : '';
     const fim = (texto: string): RespostaIA => ({ texto: (ola + texto).trim(), tokensEntrada: 0, tokensSaida: 0, modelo: 'simulador' });
     let faltando = [...c.faltando];
 
     if (/(ignor|desconsider|esquec).{0,30}(instruc|regra|orient)|prompt|senha|token|chave de api|api key|outra empresa|outros clientes|system/.test(t)) {
       return fim(`Só consigo ajudar com informações sobre os serviços da ${c.empresa}. Como posso ajudar no seu orçamento?`);
+    }
+    // Asked seriously whether it is a robot: never deny it; offer a person (does not hand off on its own).
+    if (/\b(robo|bot|maquina|inteligencia artificial)\b/.test(t) && /(voce|vc|e um|e uma|eh)/.test(t)) {
+      return fim(`Sou a assistente da ${c.empresa}. Quer que eu chame alguém da equipe para falar com você?`);
     }
     if (/(atendente|humano|uma pessoa|pessoa de verdade|vendedor|alguem da equipe|falar com alguem)/.test(t)) {
       await executar('encaminhar_para_pessoa', { motivo: 'pedido_do_cliente', resumo: resumo(p) });
