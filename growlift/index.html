@@ -25,8 +25,9 @@
   <div class="wrap">
     <a class="logo" href="#conteudo" aria-label="Growlift, início"><svg aria-hidden="true"><use href="#marca"/></svg><span class="logo-word">GROWLIFT</span></a>
     <nav class="nav" aria-label="Principal">
-      <a href="#ramos">O que fazemos</a>
-      <a href="#restaurantes">Restaurantes</a>
+      <a href="#ramos" class="so-ramos">O que fazemos</a>
+      <a href="#restaurantes" class="so-rest">Restaurantes</a>
+      <a class="ramo-chip" href="#escolha" hidden><span class="ramo-nome"></span><small>trocar</small></a>
       <a href="#subida">Como funciona</a>
       <a href="#quem-somos">Quem somos</a>
       <a class="lang" href="en/" hreflang="en" lang="en" aria-label="English version">EN</a>
@@ -39,7 +40,7 @@
 <main id="conteudo">
 
   <!-- Capa: marca em vidro, vídeo em loop (Higgsfield) -->
-  <section class="hero" aria-labelledby="titulo">
+  <section class="hero" id="escolha" aria-labelledby="titulo">
     <div class="hero-media" aria-hidden="true">
       <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="img/hero.webp" width="1600" height="900">
         <source src="img/hero.webm" type="video/webm">
@@ -48,15 +49,35 @@
     </div>
     <div class="fade" aria-hidden="true"></div>
     <div class="wrap" style="width:100%">
-      <div class="copy">
+      <div class="copy copy-pick">
         <p class="eyebrow rise">IA, automação e 3D para negócios locais</p>
-        <h1 id="titulo" class="rise d2">Tecnologia de empresa grande, <span class="blue">sob medida</span> para o seu negócio.</h1>
-        <p class="lead rise d3">Atendimento com IA no WhatsApp, cardápio com o prato em 3D, um painel que mostra o que dá lucro e, quando faz sentido, o site. A gente começa pela sua maior dor e monta um plano só seu.</p>
-        <div class="actions rise d4">
-          <a class="btn btn-primary" href="#diagnostico">Quero meu plano grátis <span aria-hidden="true">→</span></a>
-          <a class="btn btn-ghost" href="#ramos">Ver o que a gente faz</a>
+        <h1 id="titulo" class="rise d2">Qual é o seu <span class="blue">negócio?</span></h1>
+        <p class="lead rise d3">Escolha e veja o que a gente faz pelo seu.</p>
+        <div class="pick rise d4" role="group" aria-label="Escolha o seu ramo">
+          <a class="pick-card" href="/clinicas" data-ramo="clinica">
+            <img src="img/ramo-clinica.webp" alt="" width="640" height="800" fetchpriority="high">
+            <span class="pick-badge">Vagas para piloto</span>
+            <span class="pick-txt"><b>Clínica</b><small>Atendimento no WhatsApp e agenda</small></span>
+            <span class="pick-ok" aria-hidden="true"></span>
+          </a>
+          <a class="pick-card" href="/restaurantes" data-ramo="restaurante">
+            <img src="img/ramo-restaurante.webp" alt="" width="640" height="800" fetchpriority="high">
+            <span class="pick-txt"><b>Restaurante</b><small>Cardápio 3D, pedidos e Pix</small></span>
+            <span class="pick-ok" aria-hidden="true"></span>
+          </a>
+          <a class="pick-card" href="/imobiliarias" data-ramo="imobiliaria">
+            <img src="img/ramo-imobiliaria.webp" alt="" width="640" height="800" fetchpriority="high">
+            <span class="pick-badge">Vagas para piloto</span>
+            <span class="pick-txt"><b>Imobiliária</b><small>Carteira de imóveis em dia</small></span>
+            <span class="pick-ok" aria-hidden="true"></span>
+          </a>
+          <a class="pick-card" href="/outros" data-ramo="outro">
+            <img src="img/ramo-outro.webp" alt="" width="640" height="800" fetchpriority="high">
+            <span class="pick-txt"><b>Outro negócio</b><small>Site e atendimento sob medida</small></span>
+            <span class="pick-ok" aria-hidden="true"></span>
+          </a>
         </div>
-        <p class="note rise d4">3 perguntas, 1 minuto. O plano chega no seu WhatsApp em até 2 dias úteis, sem compromisso.</p>
+        <p class="note rise d4">Fotos ilustrativas, criadas por IA. Ou <a href="#diagnostico">peça o seu plano grátis</a> direto: 3 perguntas, 1 minuto.</p>
       </div>
     </div>
   </section>
@@ -141,6 +162,7 @@
     <div class="wrap zap2">
       <div class="zap-side">
         <h2 id="zap-titulo" class="zap-kicker">Atendimento com IA no WhatsApp</h2>
+        <p class="zpiloto" hidden>Vagas para clientes piloto: a gente monta com você e ajusta junto.</p>
         <ol class="zrail" aria-hidden="true">
           <li class="on">Cliente chama</li><li>IA responde</li><li>Fica agendado</li><li>Você vê de manhã</li>
         </ol>
@@ -244,6 +266,8 @@
               <label class="opt"><input type="checkbox" name="dor" value="Pago muita comissão para aplicativo de entrega"><span>Pago muita comissão para aplicativo de entrega</span></label>
               <label class="opt"><input type="checkbox" name="dor" value="Não sei quais produtos dão lucro"><span>Não sei quais produtos dão lucro</span></label>
               <label class="opt"><input type="checkbox" name="dor" value="Perco tempo com tarefa repetida (orçamento, agenda, confirmação)"><span>Perco tempo com tarefa repetida (orçamento, agenda, confirmação)</span></label>
+              <label class="opt so-imob" hidden><input type="checkbox" name="dor" value="Perco tempo confirmando com os proprietários se o imóvel ainda está disponível"><span>Perco tempo confirmando com os proprietários se o imóvel ainda está disponível</span></label>
+              <label class="opt so-clin" hidden><input type="checkbox" name="dor" value="Paciente falta ou esquece a consulta"><span>Paciente falta ou esquece a consulta</span></label>
             </div>
             <div class="wnav"><button class="btn btn-primary" type="button" data-next>Continuar <span aria-hidden="true">→</span></button></div>
           </fieldset>
@@ -255,6 +279,7 @@
               <label class="opt"><input type="radio" name="ramo" value="Restaurante ou delivery"><span>Restaurante ou delivery</span></label>
               <label class="opt"><input type="radio" name="ramo" value="Serviços (ar-condicionado, limpeza, reforma…)"><span>Serviços (ar-condicionado, limpeza, reforma…)</span></label>
               <label class="opt"><input type="radio" name="ramo" value="Saúde ou beleza"><span>Saúde ou beleza</span></label>
+              <label class="opt"><input type="radio" name="ramo" value="Imobiliária"><span>Imobiliária</span></label>
               <label class="opt"><input type="radio" name="ramo" value="Loja"><span>Loja</span></label>
               <label class="opt"><input type="radio" name="ramo" value="Outro"><span>Outro</span></label>
             </div>

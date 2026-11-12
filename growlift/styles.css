@@ -574,3 +574,51 @@ section { position: relative; }
   .zpanel .seven b { font-size: 72px; }
   .zfic { left: var(--pad); right: auto; }
 }
+
+/* Capa: "Qual é o seu negócio?" com os 4 ramos. A escolha adapta o resto da página (main.js). */
+.hero .copy-pick { max-width: 780px; }
+.hero .copy-pick .lead { margin-top: 16px; font-size: clamp(18px, 1.6vw, 22px); color: var(--text-soft); }
+.pick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 34px; }
+.pick-card { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; isolation: isolate; background: var(--surface); border: 1px solid var(--line-strong); color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.25s, box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+.pick-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), filter 0.4s; }
+.pick-card::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(6, 8, 13, 0) 30%, rgba(6, 8, 13, 0.55) 62%, rgba(6, 8, 13, 0.94) 100%); }
+.pick-txt { position: absolute; left: 14px; right: 14px; bottom: 14px; }
+.pick-txt b { display: block; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.pick-txt small { display: block; margin-top: 5px; font-size: 13px; line-height: 1.35; color: #d5dceb; }
+.pick-badge { position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 999px; background: rgba(6, 8, 13, 0.78); border: 1px solid rgba(242, 193, 78, 0.45); color: var(--warn); font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+.pick-ok { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: var(--blue); opacity: 0; transform: scale(0.6); transition: opacity 0.25s, transform 0.35s cubic-bezier(0.23, 1, 0.32, 1); }
+.pick-ok::before { content: ''; position: absolute; left: 10px; top: 7px; width: 7px; height: 12px; border: solid #fff; border-width: 0 3px 3px 0; transform: rotate(45deg); }
+.pick-card:focus-visible { outline: 3px solid var(--blue-bright); outline-offset: 3px; }
+.pick-card:active { transform: scale(0.97); }
+.pick-card[aria-current='true'] { border: 2px solid var(--blue-bright); }
+.pick-card[aria-current='true'] .pick-ok { opacity: 1; transform: none; }
+.pick.has-sel .pick-card:not([aria-current]) img { filter: saturate(0.55) brightness(0.65); }
+@media (hover: hover) and (pointer: fine) {
+  .pick-card:hover { transform: translateY(-6px); border-color: var(--blue-bright); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9); }
+  .pick-card:hover img { transform: scale(1.06); }
+  .pick.has-sel .pick-card:hover img { filter: none; }
+}
+.hero .copy-pick .note a { color: var(--blue-soft); }
+@media (min-width: 861px) and (max-width: 1180px) { .hero .copy-pick { max-width: 640px; } }
+@media (max-width: 860px) {
+  .hero:has(.copy-pick) .hero-media { height: min(44vw, 230px); }
+  .pick { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
+  .pick-card { border-radius: 16px; }
+  .pick-txt { left: 11px; right: 11px; bottom: 11px; }
+  .pick-txt b { font-size: 17px; }
+  .pick-txt small { font-size: 12px; }
+  .pick-badge { top: 8px; left: 8px; font-size: 10px; padding: 4px 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .pick-card, .pick-card img, .pick-ok { transition: none; } }
+/* O ramo escolhido no menu, para trocar */
+.ramo-chip { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: rgba(8, 101, 254, 0.12); color: var(--text); font-size: 14px; font-weight: 700; text-decoration: none; }
+.ramo-chip small { font-size: 12px; font-weight: 600; color: var(--blue-soft); }
+@media (max-width: 860px) { .nav a.ramo-chip:not(.btn) { display: inline-flex; } .nav a.ramo-chip[hidden] { display: none; } .ramo-chip { height: 36px; padding: 0 10px; font-size: 13px; } .ramo-chip small { display: none; } }
+.zpiloto { margin: -14px 0 26px; max-width: 240px; font-size: 13px; line-height: 1.45; color: var(--warn); }
+.zb em { display: block; margin-top: 6px; font-size: 0.86em; color: var(--muted); }
+/* Links do menu que levam a seções escondidas para o ramo escolhido */
+body[data-ramo='clinica'] .so-rest, body[data-ramo='imobiliaria'] .so-rest, body[data-ramo='outro'] .so-rest,
+body[data-ramo='clinica'] .so-ramos, body[data-ramo='imobiliaria'] .so-ramos { display: none; }
+@media (min-width: 1181px) { .hero .copy-pick { max-width: 880px; } }
+@media (max-width: 860px) { .hero:has(.copy-pick) .hero-media { height: min(36vw, 170px); } }
+@media (max-width: 480px) { .top:has(.ramo-chip:not([hidden])) .lang { display: none; } }

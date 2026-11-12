@@ -99,3 +99,11 @@ Editorial surf action photograph, vertical 2:3. Turquoise-blue ocean on a sunny 
 ## Reels 21 e 22, narração (09/11/2026)
 - Higgsfield, modelo `elevenlabs_v4`, voz preset "Andre" (`f1e8226e-2248-4d5f-b43c-0a79e9949dbf`), stability 0,35, similarity 0,8. Custo conferido antes: 2,07 créditos cada (4,14 no total). Textos em `05-reels/roteiros.md`.
 - Vídeo feito em código: Reel 21 com a maquete em Three.js (`_fonte/reels/novos/diorama21.js`), Reel 22 com os renders 3D da Growlift (`public/renders`). Nenhuma imagem ou vídeo gerado no Higgsfield.
+
+## Capa do site: fotos dos 4 ramos (12/11/2026)
+- Higgsfield, `gpt_image_2_6`, 4:5, 0,25 crédito cada (1 crédito no total, conferido antes). Viraram `growlift/img/ramo-*.webp` (640×800).
+- Estilo comum: foto editorial, noite, luz azul-marinho com um toque quente, sem pessoas, sem texto, sem marcas.
+- Clínica: "Cinematic editorial photograph of a modern, clean dental clinic treatment room at night: a white dental chair with its overhead lamp softly lit, glossy surfaces, a monitor glowing, deep navy-blue ambient light with a soft cool-white highlight, shallow depth of field, calm and premium mood. No people, no text, no logos, no brand names."
+- Restaurante: "Cinematic editorial food photograph of a juicy gourmet cheeseburger with fries on a dark wooden table in a cozy restaurant at night, warm amber accent light on the food, deep navy-blue shadows in the background with soft bokeh lights, shallow depth of field, premium mood. No people, no text, no logos, no brand names."
+- Imobiliária: "Cinematic editorial photograph of a set of house keys with a small house-shaped keychain resting on a wooden table in front of a bright, modern empty apartment living room with large windows at dusk, deep navy-blue evening light outside and a soft warm interior glow, shallow depth of field, premium mood. No people, no text, no logos, no brand names."
+- Outro negócio: "Cinematic editorial photograph of a small local business storefront at blue hour: a charming street-level shop with a glowing window display and an open door, neutral generic shop with plants and a simple wooden sign without any lettering, deep navy-blue sky, warm light from inside, shallow depth of field, premium mood. No people, no text, no logos, no brand names."

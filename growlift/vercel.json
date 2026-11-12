@@ -26,5 +26,23 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/clinicas",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/restaurantes",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/imobiliarias",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/outros",
+      "destination": "/index.html"
+    }
   ]
 }

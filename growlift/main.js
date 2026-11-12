@@ -134,6 +134,121 @@
     update();
   }
 
+  // Ramo: the cover asks "Qual é o seu negócio?". The choice adapts the page (sections, the WhatsApp story, the
+  // x-ray example and the diagnosis) and lives in the address (/clinicas…) and in this browser, so a link or a
+  // return visit opens the right version. Without a choice the page shows everything, as before.
+  const RAMOS = {
+    clinica: { path: '/clinicas', nome: 'Clínica', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Saúde ou beleza', piloto: true },
+    restaurante: { path: '/restaurantes', nome: 'Restaurante', hide: [], first: 'ramos', form: 'Restaurante ou delivery' },
+    imobiliaria: { path: '/imobiliarias', nome: 'Imobiliária', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Imobiliária', piloto: true },
+    outro: { path: '/outros', nome: 'Outro negócio', hide: ['restaurantes', 'pesquisa-3d'], first: 'ramos', form: '' },
+  };
+  const zb = (side, text, time) => `<p class="zb ${side}">${text}<i>${time}</i></p>`;
+  const zcal = (head, title, ...lines) => `<div class="zcal"><p class="zcal-h">${head}</p><p class="zcal-b"><b>${title}</b>${lines.map((l) => `<span>${l}</span>`).join('')}</p></div>`;
+  const panel = (time, what, body) => `<article class="zpanel"><p class="ztime">${time}</p><h3 class="zwhat">${what}</h3>${body}</article>`;
+  const zapEl = document.getElementById('whatsapp');
+  const zapBase = zapEl && {
+    kicker: zapEl.querySelector('.zap-kicker').textContent,
+    rail: Array.from(zapEl.querySelectorAll('.zrail li'), (li) => li.textContent),
+    panels: zapEl.querySelector('.zpanels').innerHTML,
+  };
+  const seven = zapEl ? zapEl.querySelector('.seven').outerHTML + zapEl.querySelector('.zap-src').outerHTML : '';
+  const ZAP = {
+    clinica: {
+      kicker: 'Para clínicas · atendente de IA no WhatsApp',
+      rail: ['Paciente chama', 'IA responde', 'Fica agendado', 'Lembrete na véspera'],
+      panels: [
+        panel('23h12', 'A paciente manda um áudio com dor de dente. A clínica já fechou.', zb('in', '🎙️ Áudio · 0:12<br><em>“Tô com muita dor de dente, tem horário essa semana?”</em>', '23:12')),
+        panel('23h12', 'A IA ouve o áudio e responde na hora, com os horários livres da clínica.', zb('out', 'Oi, Bia! Sinto muito pela dor. Tenho quinta às 9h ou às 14h30. Qual fica melhor?', '23:12')),
+        panel('23h13', 'Ela escolhe e a consulta entra na agenda.', zcal('Agenda · quinta-feira', '09:00 · Avaliação', 'Bia · marcou pelo WhatsApp às 23h13', 'Lembrete programado para quarta, 18h')),
+        panel('Quarta, 18h', 'Um dia antes, a IA lembra a paciente, pra ela não faltar.', zb('out', 'Oi, Bia! Lembrete: amanhã, quinta, às 9h, você tem consulta. Confirma?', '18:00') + zb('in', 'Confirmo!', '18:02')),
+      ].join(''),
+    },
+    restaurante: {
+      kicker: 'Para restaurantes · atendente de IA no WhatsApp',
+      rail: ['Cliente chama', 'IA responde', 'Pedido na cozinha', 'Todo mundo atendido'],
+      panels: [
+        panel('22h50', 'O cliente pergunta no WhatsApp. A cozinha está a mil.', zb('in', 'Boa noite! Ainda dá pra pedir? Entrega no Jardim Europa?', '22:50')),
+        panel('22h50', 'A IA responde na hora, com o seu cardápio e a sua área de entrega.', zb('out', 'Dá sim! Entregamos no Jardim Europa, taxa de R$ 6. O cardápio está aqui: seunegocio.com.br/cardapio. Quer que eu monte o pedido?', '22:50')),
+        panel('22h53', 'O pedido chega na tela da cozinha, já com o Pix.', zcal('Pedido #128 · entrega', '1 Duplo da casa + 1 batata', 'Pix confirmado', 'Jardim Europa · taxa R$ 6')),
+        panel('Fim da noite', 'Você fecha a cozinha com todo mundo atendido.', seven),
+      ].join(''),
+    },
+    imobiliaria: {
+      kicker: 'Para imobiliárias · carteira em dia',
+      rail: ['A pergunta do mês', 'O dono responde', 'Carteira atualizada', 'Resumo do mês'],
+      panels: [
+        panel('Dia 1, 9h', 'Todo mês, cada proprietário recebe uma mensagem da imobiliária.', zb('out', 'Oi, Carlos! Seu apartamento na Rua das Acácias continua à venda por R$ 450 mil? Responda: 1) Sim · 2) Já vendi ou aluguei · 3) Mudou o preço', '09:00')),
+        panel('Dia 1, 9h20', 'Ele responde do jeito dele, até por áudio. A IA entende.', zb('in', 'Vendi semana passada, pode tirar!', '09:20')),
+        panel('Dia 1, 9h20', 'O imóvel sai da carteira e o corretor é avisado.', zcal('Carteira · atualizada agora', 'Rua das Acácias · 2 dormitórios', 'Situação: vendido pelo proprietário', 'Tirar dos portais: avisado ao corretor')),
+        panel('Fim do mês', 'Você recebe o resumo da carteira inteira.', zcal('Resumo do mês · exemplo', '312 confirmados · 41 vendidos ou alugados', '18 com preço novo', '25 sem resposta: lista para o corretor ligar')),
+      ].join(''),
+    },
+  };
+  const XRAY = {
+    clinica: ['Clínica fictícia', [['Resposta no WhatsApp', 'Só no horário comercial', 'warn', 35], ['Atendimento à noite e no fim de semana', 'Nenhum', 'bad', 8], ['Lembrete de consulta', 'Manual', 'warn', 30], ['Faltas', 'Sem controle', 'bad', 12], ['Google e avaliações', 'Bons', 'ok', 78]]],
+    imobiliaria: ['Imobiliária fictícia', [['Carteira atualizada', 'Parte desatualizada', 'warn', 40], ['Confirmação com proprietários', 'Ligação um a um', 'bad', 15], ['Resposta aos interessados', 'Demora horas', 'warn', 35], ['Imóveis nos portais', 'Vendidos ainda no ar', 'bad', 20], ['Fotos e anúncios', 'Bons', 'ok', 80]]],
+    outro: ['Negócio fictício', [['Resposta no WhatsApp', 'Demora horas', 'warn', 40], ['Orçamento e agenda', 'Manual', 'bad', 15], ['Cliente que volta', 'Sem controle', 'bad', 10], ['Aparece no Google', 'Pouco', 'warn', 35], ['Fotos e site', 'Bons', 'ok', 78]]],
+  };
+  const xray = document.querySelector('.xray');
+  const xrayBase = xray && { head: xray.querySelector('.head span').textContent, checks: xray.querySelector('.checks').innerHTML };
+  const cards = document.querySelectorAll('.pick-card');
+  const chip = document.querySelector('.ramo-chip');
+  const store = (v) => { try { v ? localStorage.setItem('growlift-ramo', v) : localStorage.removeItem('growlift-ramo'); } catch { /* private mode */ } };
+  const stored = () => { try { return localStorage.getItem('growlift-ramo'); } catch { return null; } };
+  let rebuildScenes = null;
+  let killScenes = null;
+  let autoRadio = null;
+
+  const applyRamo = (ramo) => {
+    const cfg = RAMOS[ramo];
+    document.body.dataset.ramo = cfg ? ramo : '';
+    const allHide = ['restaurantes', 'pesquisa-3d', 'ramos'];
+    allHide.forEach((id) => { const el = document.getElementById(id); if (el) el.hidden = !!cfg && cfg.hide.includes(id); });
+    cards.forEach((c) => (c.dataset.ramo === ramo ? c.setAttribute('aria-current', 'true') : c.removeAttribute('aria-current')));
+    cards[0]?.parentElement.classList.toggle('has-sel', !!cfg);
+    if (chip) { chip.hidden = !cfg; chip.querySelector('.ramo-nome').textContent = cfg ? cfg.nome : ''; }
+    if (zapEl) {
+      const story = ZAP[ramo] || zapBase;
+      zapEl.querySelector('.zap-kicker').textContent = story.kicker;
+      zapEl.querySelectorAll('.zrail li').forEach((li, i) => (li.textContent = story.rail[i]));
+      zapEl.querySelector('.zpanels').innerHTML = story.panels;
+      zapEl.querySelector('.zpiloto').hidden = !(cfg && cfg.piloto);
+    }
+    if (xray) {
+      const x = XRAY[ramo];
+      xray.querySelector('.head span').textContent = x ? x[0] : xrayBase.head;
+      xray.querySelector('.checks').innerHTML = x
+        ? x[1].map(([k, v, c, w]) => `<li><div class="row"><span>${k}</span><b class="c-${c}">${v}</b></div><div class="track-bar"><i class="b-${c}" style="width:${w}%"></i></div></li>`).join('')
+        : xrayBase.checks;
+    }
+    document.querySelectorAll('.so-imob').forEach((el) => (el.hidden = ramo !== 'imobiliaria'));
+    document.querySelectorAll('.so-clin').forEach((el) => (el.hidden = ramo !== 'clinica'));
+    // The diagnosis starts with the trade already marked (only if the visitor has not picked one there).
+    if (autoRadio && autoRadio.checked) autoRadio.checked = false;
+    autoRadio = null;
+    const radio = cfg && cfg.form && document.querySelector(`input[name=ramo][value="${cfg.form}"]`);
+    if (radio && !document.querySelector('input[name=ramo]:checked')) { radio.checked = true; autoRadio = radio; }
+  };
+
+  const fromPath = Object.keys(RAMOS).find((k) => location.pathname.replace(/\/$/, '') === RAMOS[k].path);
+  const initial = fromPath || (RAMOS[stored()] ? stored() : '');
+  if (initial) applyRamo(initial);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  cards.forEach((card) =>
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const ramo = card.dataset.ramo;
+      const cfg = RAMOS[ramo];
+      if (killScenes) killScenes();
+      applyRamo(ramo);
+      store(ramo);
+      history.replaceState(null, '', cfg.path);
+      if (rebuildScenes) rebuildScenes();
+      requestAnimationFrame(() => document.getElementById(cfg.first)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }));
+    }),
+  );
+
   // Ramos: the section holds still while the browser slides sideways through one site per trade;
   // each site rests a moment, and the word in the title follows the site on screen.
   const ramos = document.getElementById('ramos');
@@ -248,54 +363,68 @@
   if (gsap && ST) {
     gsap.registerPlugin(ST);
     const small = window.matchMedia('(max-width: 860px)').matches;
+    // Built again when the trade changes: sections come and go, and the WhatsApp story gets new panels.
+    let built = [];
+    killScenes = () => {
+      built.forEach((tl) => { tl.scrollTrigger?.kill(true); tl.kill(); });
+      built = [];
+    };
+    const buildScenes = () => {
+      killScenes();
 
-    // Cena 2: pinned; the grey bar climbs to 18%, then the blue one to 41%.
-    const sob = document.getElementById('pesquisa-3d');
-    if (sob) {
-      const bars = sob.querySelectorAll('.race-track i');
-      const nums = sob.querySelectorAll('.race-row b');
-      const src = sob.querySelector('.scene-src');
-      const counter = (el) => ({ v: 0, el, to: Number(el.dataset.to) });
-      const c = [counter(nums[0]), counter(nums[1])];
-      const show = (x) => () => { x.el.textContent = `${Math.round(x.v)}%`; };
-      gsap.set(bars, { scaleX: 0, transformOrigin: 'left center' });
-      gsap.set(src, { autoAlpha: 0, y: 12 });
-      c.forEach((x) => show(x)());
-      const tl = gsap.timeline({ scrollTrigger: { trigger: sob, start: 'top top', end: small ? '+=100%' : '+=140%', pin: true, scrub: 0.8 } });
-      tl.from(sob.querySelector('.scene-title'), { y: 40, autoAlpha: 0, duration: 0.6 })
-        .to(bars[0], { scaleX: 1, duration: 1, ease: 'power2.out' }, '+=0.1')
-        .to(c[0], { v: c[0].to, duration: 1, ease: 'power2.out', onUpdate: show(c[0]) }, '<')
-        .to(bars[1], { scaleX: 1, duration: 1.4, ease: 'power2.out' }, '+=0.15')
-        .to(c[1], { v: c[1].to, duration: 1.4, ease: 'power2.out', onUpdate: show(c[1]) }, '<')
-        .to(src, { autoAlpha: 1, y: 0, duration: 0.5 })
-        .to({}, { duration: 0.4 });
-    }
-
-    // Cena 3: pinned; four full-screen steps replace each other with the scroll, the rail shows where we are.
-    const zap = document.getElementById('whatsapp');
-    if (zap) {
-      const panels = zap.querySelectorAll('.zpanel');
-      const rail = zap.querySelectorAll('.zrail li');
-      const sevenB = zap.querySelector('.seven b');
-      zap.querySelector('.zap2').classList.add('js-zap');
-      gsap.set(panels, { autoAlpha: 0, y: 40 });
-      gsap.set(panels[0], { autoAlpha: 1, y: 0 });
-      gsap.set(sevenB, { scale: 0.4, transformOrigin: 'left center' });
-      const mark = (p) => {
-        const k = Math.min(panels.length - 1, Math.floor(p * panels.length * 0.999 + 0.0001));
-        rail.forEach((li, n) => { li.classList.toggle('on', n === k); li.classList.toggle('past', n < k); });
-      };
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: zap, start: 'top top', end: small ? '+=260%' : '+=320%', pin: true, scrub: 0.6, onUpdate: (self) => mark(self.progress) },
-      });
-      tl.to({}, { duration: 0.6 });
-      for (let i = 1; i < panels.length; i++) {
-        tl.to(panels[i - 1], { autoAlpha: 0, y: -40, duration: 0.4, ease: 'power2.in' })
-          .to(panels[i], { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.1');
-        if (i === panels.length - 1) tl.to(sevenB, { scale: 1, duration: 0.6, ease: 'back.out(1.4)' }, '-=0.1');
-        tl.to({}, { duration: 0.6 });
+      // Cena 2: pinned; the grey bar climbs to 18%, then the blue one to 41%.
+      const sob = document.getElementById('pesquisa-3d');
+      if (sob && !sob.hidden) {
+        const bars = sob.querySelectorAll('.race-track i');
+        const nums = sob.querySelectorAll('.race-row b');
+        const src = sob.querySelector('.scene-src');
+        const counter = (el) => ({ v: 0, el, to: Number(el.dataset.to) });
+        const c = [counter(nums[0]), counter(nums[1])];
+        const show = (x) => () => { x.el.textContent = `${Math.round(x.v)}%`; };
+        gsap.set(bars, { scaleX: 0, transformOrigin: 'left center' });
+        gsap.set(src, { autoAlpha: 0, y: 12 });
+        c.forEach((x) => show(x)());
+        const tl = gsap.timeline({ scrollTrigger: { trigger: sob, start: 'top top', end: small ? '+=100%' : '+=140%', pin: true, scrub: 0.8 } });
+        tl.from(sob.querySelector('.scene-title'), { y: 40, autoAlpha: 0, duration: 0.6 })
+          .to(bars[0], { scaleX: 1, duration: 1, ease: 'power2.out' }, '+=0.1')
+          .to(c[0], { v: c[0].to, duration: 1, ease: 'power2.out', onUpdate: show(c[0]) }, '<')
+          .to(bars[1], { scaleX: 1, duration: 1.4, ease: 'power2.out' }, '+=0.15')
+          .to(c[1], { v: c[1].to, duration: 1.4, ease: 'power2.out', onUpdate: show(c[1]) }, '<')
+          .to(src, { autoAlpha: 1, y: 0, duration: 0.5 })
+          .to({}, { duration: 0.4 });
+        built.push(tl);
       }
-    }
+
+      // Cena 3: pinned; four full-screen steps replace each other with the scroll, the rail shows where we are.
+      const zap = document.getElementById('whatsapp');
+      if (zap) {
+        const panels = zap.querySelectorAll('.zpanel');
+        const rail = zap.querySelectorAll('.zrail li');
+        const sevenB = zap.querySelector('.seven b');
+        zap.querySelector('.zap2').classList.add('js-zap');
+        gsap.set(panels, { autoAlpha: 0, y: 40 });
+        gsap.set(panels[0], { autoAlpha: 1, y: 0 });
+        if (sevenB) gsap.set(sevenB, { scale: 0.4, transformOrigin: 'left center' });
+        const mark = (p) => {
+          const k = Math.min(panels.length - 1, Math.floor(p * panels.length * 0.999 + 0.0001));
+          rail.forEach((li, n) => { li.classList.toggle('on', n === k); li.classList.toggle('past', n < k); });
+        };
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: zap, start: 'top top', end: small ? '+=260%' : '+=320%', pin: true, scrub: 0.6, onUpdate: (self) => mark(self.progress) },
+        });
+        tl.to({}, { duration: 0.6 });
+        for (let i = 1; i < panels.length; i++) {
+          tl.to(panels[i - 1], { autoAlpha: 0, y: -40, duration: 0.4, ease: 'power2.in' })
+            .to(panels[i], { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.1');
+          if (i === panels.length - 1 && sevenB) tl.to(sevenB, { scale: 1, duration: 0.6, ease: 'back.out(1.4)' }, '-=0.1');
+          tl.to({}, { duration: 0.6 });
+        }
+        built.push(tl);
+      }
+      ST.refresh();
+    };
+    buildScenes();
+    rebuildScenes = buildScenes;
 
     // The 3D viewer and fonts change heights after load: keep the pins measured right.
     window.addEventListener('load', () => ST.refresh());
