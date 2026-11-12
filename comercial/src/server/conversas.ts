@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { lerWebhook } from './canais/whatsapp-cloud';
-import { normalizarTelefone, type EstadoConversa } from './config';
+import { normalizarTelefone, type EstadoConversa, type Etapa } from './config';
 import { conhecimentoAtual } from './conhecimento';
 import { ator, criarTarefa, dentroDoLimite, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
@@ -591,6 +591,10 @@ export async function receberWhatsApp(empresaId: string, e: EntradaWhatsApp): Pr
       await criarTarefa(db, empresaId, { conversaId: v.id, oportunidadeId: v.oportunidade_id, tipo: 'descadastro', titulo: 'Um contato pediu para não receber mais mensagens', chave: `sair:${m!.id}` });
       return { duplicada: false, mensagemId: m!.id, trabalhoId: null, conversaId: v.id };
     }
+    if (e.texto?.trim() && v.oportunidade_id) {
+      const op = await um<{ etapa: Etapa }>('select etapa from oportunidades where empresa_id = $1 and id = $2', [empresaId, v.oportunidade_id], db);
+      if (op) await dispararFluxos(db, empresaId, { tipo: 'mensagem_recebida', texto: e.texto }, { id: v.oportunidade_id, contatoId: contato!.id, etapa: op.etapa });
+    }
     if (v.estado !== 'ia_ativa') {
       const resp = v.assumida_por ?? (await um<{ responsavel_id: string | null }>('select responsavel_id from oportunidades where id = $1', [v.oportunidade_id], db))?.responsavel_id ?? null;
       await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresaId, resp, 'Nova mensagem do cliente', corpo.slice(0, 120), `/painel/atendimento/${v.id}`], db);
@@ -704,7 +708,11 @@ export async function escreverNoChatSite(empresa: Empresa, token: string | null,
     const m = await um<{ id: string }>(`insert into mensagens (empresa_id, conversa_id, direcao, autor, corpo, estado) values ($1, $2, 'entrada', 'contato', $3, 'recebida') returning id`, [empresa.id, v.id, corpo], db);
     if (v.estado === 'encerrada') v.estado = 'ia_ativa';
     await q('update conversas set ultima_entrada_em = now(), estado = $2, atualizado_em = now() where id = $1', [v.id, v.estado], db);
-    if (v.oportunidade_id) await q('update oportunidades set ultima_interacao_em = now() where id = $1', [v.oportunidade_id], db);
+    if (v.oportunidade_id) {
+      await q('update oportunidades set ultima_interacao_em = now() where id = $1', [v.oportunidade_id], db);
+      const op = await um<{ etapa: Etapa }>('select etapa from oportunidades where empresa_id = $1 and id = $2', [empresa.id, v.oportunidade_id], db);
+      if (op && v.contato_id) await dispararFluxos(db, empresa.id, { tipo: 'mensagem_recebida', texto: corpo }, { id: v.oportunidade_id, contatoId: v.contato_id, etapa: op.etapa });
+    }
     if (v.estado !== 'ia_ativa') {
       await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresa.id, v.assumida_por, 'Nova mensagem no chat do site', corpo.slice(0, 120), `/painel/atendimento/${v.id}`], db);
       return null;

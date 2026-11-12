@@ -9,7 +9,7 @@ import { exigirCtx, ouNaoEncontrado } from '@/server/sessao';
 
 export const metadata = { title: 'Fluxo de automação' };
 
-const TIPOS: [string, string][] = [['', '— vazio —'], ['esperar', 'Esperar'], ['parar_se', 'Parar o fluxo se…'], ['enviar_whatsapp', 'Enviar WhatsApp'], ['criar_tarefa', 'Criar tarefa'], ['avisar_equipe', 'Avisar a equipe'], ['anotar', 'Anotar no histórico']];
+const TIPOS: [string, string][] = [['', '— vazio —'], ['esperar', 'Esperar'], ['parar_se', 'Parar o fluxo se…'], ['se', 'Se… ir para o passo'], ['ir_para', 'Ir para o passo'], ['enviar_whatsapp', 'Enviar WhatsApp'], ['criar_tarefa', 'Criar tarefa'], ['avisar_equipe', 'Avisar a equipe'], ['anotar', 'Anotar no histórico']];
 
 /** A step as the editor's fields: quantity + unit for waits, text for messages and tasks. */
 function linha(p: Passo | undefined) {
@@ -18,6 +18,8 @@ function linha(p: Passo | undefined) {
   v.tipo = p.tipo;
   if (p.tipo === 'esperar') { const dia = p.minutos > 0 && p.minutos % 1440 === 0; const h = p.minutos > 0 && p.minutos % 60 === 0; v.unidade = dia ? 'dia' : h ? 'h' : 'min'; v.qtd = String(dia ? p.minutos / 1440 : h ? p.minutos / 60 : p.minutos); }
   if (p.tipo === 'parar_se') v.condicao = p.condicao;
+  if (p.tipo === 'se') { v.condicao = p.condicao; v.qtd = String(p.ir_para); }
+  if (p.tipo === 'ir_para') v.qtd = String(p.passo);
   if (p.tipo === 'enviar_whatsapp') { v.texto = p.texto; v.modelo = p.modelo; }
   if (p.tipo === 'criar_tarefa') { v.texto = p.titulo; v.qtd = String(p.prazo_horas); }
   if (p.tipo === 'avisar_equipe') v.texto = p.titulo;
@@ -48,6 +50,7 @@ export default async function EditorDeFluxo({ params }: { params: Promise<{ id: 
           <div className="sm:col-span-2"><label className="rotulo" htmlFor="nome">Nome do fluxo</label><input className="campo" id="nome" name="nome" defaultValue={f.nome} required maxLength={80} /></div>
           <div><label className="rotulo" htmlFor="gatilho">Gatilho</label><select className="campo" id="gatilho" name="gatilho" defaultValue={f.gatilho.tipo}>{GATILHOS.map((g) => <option key={g} value={g}>{NOME_GATILHO[g]}</option>)}</select></div>
           <div><label className="rotulo" htmlFor="etapa">Etapa (só para o gatilho de etapa)</label><select className="campo" id="etapa" name="etapa" defaultValue={f.gatilho.etapa ?? 'proposta'}>{ETAPAS.map((e) => <option key={e} value={e}>{NOME_ETAPA[e]}</option>)}</select></div>
+          <div className="sm:col-span-2"><label className="rotulo" htmlFor="palavra">Palavra-chave (só para o gatilho de mensagem; em branco = qualquer mensagem)</label><input className="campo" id="palavra" name="palavra" defaultValue={f.gatilho.palavra ?? ''} maxLength={40} placeholder="visita" /></div>
           <label className="flex min-h-11 items-start gap-3 text-[15px] sm:col-span-2"><input type="checkbox" name="ativo" defaultChecked={f.ativo} className="mt-1 h-5 w-5 accent-[#175cd3]" /><span><span className="font-semibold text-tinta">Fluxo ligado</span><span className="block text-sm text-suave">Desligado, não começa em nenhuma oportunidade nova e para as que estão rodando.</span></span></label>
         </section>
 
@@ -61,7 +64,7 @@ export default async function EditorDeFluxo({ params }: { params: Promise<{ id: 
                   <div className="sm:col-span-2"><label className="rotulo" htmlFor={`t${i}`}>{i + 1}. Tipo</label><select className="campo" id={`t${i}`} name="passo_tipo" defaultValue={l.tipo}>{TIPOS.map(([v, n]) => <option key={v} value={v}>{n}</option>)}</select></div>
                   <div><label className="rotulo" htmlFor={`q${i}`}>Quantidade</label><input className="campo" id={`q${i}`} name="passo_qtd" inputMode="numeric" defaultValue={l.qtd} placeholder="2" /></div>
                   <div><label className="rotulo" htmlFor={`u${i}`}>Unidade</label><select className="campo" id={`u${i}`} name="passo_unidade" defaultValue={l.unidade}><option value="min">minutos</option><option value="h">horas</option><option value="dia">dias</option></select></div>
-                  <div className="sm:col-span-2"><label className="rotulo" htmlFor={`c${i}`}>Parar se…</label><select className="campo" id={`c${i}`} name="passo_condicao" defaultValue={l.condicao}>{CONDICOES.map((c) => <option key={c} value={c}>{NOME_CONDICAO[c]}</option>)}</select></div>
+                  <div className="sm:col-span-2"><label className="rotulo" htmlFor={`c${i}`}>Condição</label><select className="campo" id={`c${i}`} name="passo_condicao" defaultValue={l.condicao}>{CONDICOES.map((c) => <option key={c} value={c}>{NOME_CONDICAO[c]}</option>)}</select></div>
                   <div className="sm:col-span-4"><label className="rotulo" htmlFor={`x${i}`}>Mensagem, título da tarefa, aviso ou anotação</label><input className="campo" id={`x${i}`} name="passo_texto" defaultValue={l.texto} maxLength={600} /></div>
                   <div className="sm:col-span-2"><label className="rotulo" htmlFor={`m${i}`}>Modelo aprovado do WhatsApp (opcional)</label><input className="campo" id={`m${i}`} name="passo_modelo" defaultValue={l.modelo} /></div>
                 </div>
@@ -69,7 +72,7 @@ export default async function EditorDeFluxo({ params }: { params: Promise<{ id: 
               </li>
             ))}
           </ol>
-          <p className="mt-3 text-sm text-suave">Para a quantidade de tarefa, vale “horas de prazo”. Mensagens só saem para quem autorizou o WhatsApp, dentro do horário da empresa e sem uma pessoa na conversa. Fora das 24 horas da última mensagem do cliente, só com modelo aprovado: sem modelo, vira tarefa para uma pessoa. Nenhum passo marca venda como ganha ou perdida.</p>
+          <p className="mt-3 text-sm text-suave">Na quantidade: horas de prazo, para tarefa; número da linha de destino, para “Se…” e “Ir para” (0 = terminar o fluxo; só dá para ir para uma linha mais abaixo). Mensagens só saem para quem autorizou o WhatsApp, dentro do horário da empresa e sem uma pessoa na conversa. Fora das 24 horas da última mensagem do cliente, só com modelo aprovado: sem modelo, vira tarefa para uma pessoa. Nenhum passo marca venda como ganha ou perdida.</p>
           <div className="mt-4"><Enviar>Salvar fluxo</Enviar></div>
         </section>
       </Formulario>

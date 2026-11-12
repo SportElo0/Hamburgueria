@@ -303,6 +303,8 @@ function lerPassos(fd: FormData): { passos: EntradaFluxo['passos']; linhas: numb
     const num = Number.isFinite(n) && (qtd[i] ?? '').trim() !== '' ? Math.round(n) : 0;
     const txt = (texto[i] ?? '').trim();
     if (tp === 'esperar') passos.push({ tipo: 'esperar', minutos: num * (MINUTOS[unidade[i]] ?? 1) });
+    else if (tp === 'se') passos.push({ tipo: 'se', condicao: (CONDICOES as readonly string[]).includes(condicao[i]) ? (condicao[i] as (typeof CONDICOES)[number]) : 'cliente_respondeu', ir_para: num });
+    else if (tp === 'ir_para') passos.push({ tipo: 'ir_para', passo: num });
     else if (tp === 'parar_se') passos.push({ tipo: 'parar_se', condicao: (CONDICOES as readonly string[]).includes(condicao[i]) ? (condicao[i] as (typeof CONDICOES)[number]) : 'cliente_respondeu' });
     else if (tp === 'enviar_whatsapp') passos.push({ tipo: 'enviar_whatsapp', texto: txt, modelo: (modelo[i] ?? '').trim() });
     else if (tp === 'criar_tarefa') passos.push({ tipo: 'criar_tarefa', titulo: txt, prazo_horas: num });
@@ -327,7 +329,9 @@ export const salvarFluxoAcao = async (_: Retorno, fd: FormData) =>
     const gatilho = t(fd, 'gatilho');
     const { passos, linhas } = lerPassos(fd);
     try {
-      await salvarFluxo(await exigirCtx(), t(fd, 'id'), { nome: t(fd, 'nome'), ativo: fd.get('ativo') === 'on', gatilho: { tipo: gatilho, ...(gatilho === 'etapa_alterada' ? { etapa: t(fd, 'etapa') } : {}) }, passos });
+      // Jump targets are typed as screen rows; the flow stores step numbers (empty rows do not count).
+      const passosNum = passos.map((p) => (p.tipo === 'se' && p.ir_para ? { ...p, ir_para: linhas.indexOf(p.ir_para) + 1 || 99 } : p.tipo === 'ir_para' && p.passo ? { ...p, passo: linhas.indexOf(p.passo) + 1 || 99 } : p));
+      await salvarFluxo(await exigirCtx(), t(fd, 'id'), { nome: t(fd, 'nome'), ativo: fd.get('ativo') === 'on', gatilho: { tipo: gatilho, ...(gatilho === 'etapa_alterada' ? { etapa: t(fd, 'etapa') } : {}), ...(gatilho === 'mensagem_recebida' ? { palavra: t(fd, 'palavra') } : {}) }, passos: passosNum });
     } catch (err) {
       // The validation counts filled steps; the screen counts rows. Point to the row the person sees.
       if (err instanceof ErroDeUso) throw new ErroDeUso(err.message.replace(/^Passo (\d+):/, (_m, n) => `Linha ${linhas[Number(n) - 1] ?? n}:`), err.status);

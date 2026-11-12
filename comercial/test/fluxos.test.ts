@@ -179,6 +179,51 @@ describe('construtor de automações', () => {
     expect(log.find((l) => l.tipo === 'enviar_whatsapp')!.resultado).toMatch(/autorização/);
   });
 
+  it('ramificação: “se tem responsável, ir para o passo 4”; senão segue para o passo 3', async () => {
+    const G = await novaEmpresa('Solar Ramos');
+    await salvarConfig(G.admin, 'regras', { ...G.empresa.config.regras, hora_inicio: 0, hora_fim: 24 });
+    const modelo = MODELOS_DE_FLUXO.find((m) => m.id === 'pediu-visita')!;
+    await salvarFluxo(G.admin, null, { ...modelo.fluxo, ativo: true });
+    const emp = (await empresaPorId(G.empresa.id))!;
+    // without assignee -> step 3 (choose who visits), then step 4 too (linear after the branch)
+    const semResp = (await receberPedido(emp, pedido({ telefone: telefone() }), meta())) as PedidoSalvo;
+    const tel1 = (await um<{ telefone: string }>('select telefone from contatos where id = $1', [semResp.contatoId]))!.telefone;
+    await simularEntradaWhatsApp(G.admin, tel1, '', 'Quero agendar uma VISITA técnica');
+    await rodarTudo(semResp.oportunidadeId);
+    const t1 = (await tarefas(G.admin, { de: 'todas', oportunidadeId: semResp.oportunidadeId })).map((t) => t.titulo);
+    expect(t1).toContain('Escolher quem vai fazer a visita');
+    // with assignee -> jumps over step 3 straight to step 4
+    const comResp = (await receberPedido(emp, pedido({ telefone: telefone() }), meta())) as PedidoSalvo;
+    await q('update oportunidades set responsavel_id = $2 where id = $1', [comResp.oportunidadeId, G.vendedor.userId]);
+    const tel2 = (await um<{ telefone: string }>('select telefone from contatos where id = $1', [comResp.contatoId]))!.telefone;
+    await simularEntradaWhatsApp(G.admin, tel2, '', 'pode marcar a visita?');
+    await rodarTudo(comResp.oportunidadeId);
+    const t2 = (await tarefas(G.admin, { de: 'todas', oportunidadeId: comResp.oportunidadeId })).map((t) => t.titulo);
+    expect(t2).toContain('Confirmar dia e horário da visita com o cliente');
+    expect(t2).not.toContain('Escolher quem vai fazer a visita');
+    const log = (await q<{ log: { tipo: string; resultado: string }[] }>(`select log from fluxo_execucoes where oportunidade_id = $1`, [comResp.oportunidadeId]))[0].log;
+    expect(log.map((l) => l.tipo)).toEqual(['avisar_equipe', 'se', 'criar_tarefa']);
+    expect(log[1].resultado).toMatch(/foi para o passo 4/);
+    // a message without the keyword does not start it
+    const outro = (await receberPedido(emp, pedido({ telefone: telefone() }), meta())) as PedidoSalvo;
+    const tel3 = (await um<{ telefone: string }>('select telefone from contatos where id = $1', [outro.contatoId]))!.telefone;
+    await simularEntradaWhatsApp(G.admin, tel3, '', 'Qual o horário de vocês?');
+    expect(await contar('fluxo_execucoes where oportunidade_id = $1', [outro.oportunidadeId])).toBe(0);
+  });
+
+  it('ir para / terminar, e só se pode pular para frente', async () => {
+    await expect(salvarFluxo(C.admin, null, { nome: 'Volta', ativo: true, gatilho: { tipo: 'pedido_recebido' }, passos: [{ tipo: 'anotar', texto: 'um' }, { tipo: 'ir_para', passo: 1 }] })).rejects.toThrow('Passo 2: só dá para ir para um passo mais abaixo');
+    await expect(salvarFluxo(C.admin, null, { nome: 'Longe', ativo: true, gatilho: { tipo: 'pedido_recebido' }, passos: [{ tipo: 'se', condicao: 'tem_autorizacao', ir_para: 9 }, { tipo: 'anotar', texto: 'dois' }] })).rejects.toThrow('Passo 1');
+    const id = await salvarFluxo(C.admin, null, { nome: 'Pulo', ativo: true, gatilho: { tipo: 'etapa_alterada', etapa: 'negociacao' }, passos: [{ tipo: 'se', condicao: 'tem_autorizacao', ir_para: 3 }, { tipo: 'anotar', texto: 'sem autorização' }, { tipo: 'anotar', texto: 'com autorização' }, { tipo: 'ir_para', passo: 0 }, { tipo: 'anotar', texto: 'nunca roda' }] });
+    const comAut = (await receberPedido(C.empresa, pedido(), meta())) as PedidoSalvo;
+    const semAut = (await receberPedido(C.empresa, pedido({ aceite_whatsapp: false }), meta())) as PedidoSalvo;
+    for (const p of [comAut, semAut]) { await mudarEtapa(C.vendedor, p.oportunidadeId, { etapa: 'negociacao' }); await rodarTudo(p.oportunidadeId); }
+    const notas = async (op: string) => (await q<{ t: string }>(`select dados ->> 'texto' as t from eventos where oportunidade_id = $1 and tipo = 'anotacao' order by id`, [op])).map((x) => x.t).filter((t) => t !== 'Fluxo de boas-vindas rodou');
+    expect(await notas(comAut.oportunidadeId)).toEqual(['com autorização']);
+    expect(await notas(semAut.oportunidadeId)).toEqual(['sem autorização', 'com autorização']);
+    await excluirFluxo(C.admin, id);
+  });
+
   it('isolamento: outra empresa não vê, edita, apaga nem dispara os fluxos desta', async () => {
     const D = await novaEmpresa('Solar Outra');
     const meu = (await listarFluxos(C.admin))[0];

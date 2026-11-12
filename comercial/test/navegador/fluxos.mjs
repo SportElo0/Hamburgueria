@@ -17,7 +17,7 @@ const a = await entrar(await b.newContext({ viewport: { width: 390, height: 844 
 await a.goto(`${BASE}/painel/automacoes`);
 await a.locator('#t-fluxos').waitFor();
 ok(await a.getByText('Seus fluxos').isVisible(), 'tela de automações mostra "Seus fluxos"');
-ok((await a.locator('section[aria-labelledby=t-fluxos] > ul > li').count()) === 3, 'os 3 fluxos de exemplo aparecem');
+ok((await a.locator('section[aria-labelledby=t-fluxos] > ul > li').count()) === 4, 'os 4 fluxos de exemplo aparecem');
 ok((await a.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)), 'sem rolagem lateral no celular');
 await a.screenshot({ path: `${pasta}/20-automacoes-fluxos.png`, fullPage: true });
 
@@ -43,6 +43,17 @@ await a.locator('select[name=passo_tipo]').nth(3).selectOption('enviar_whatsapp'
 await a.getByRole('button', { name: 'Salvar fluxo' }).click();
 await a.getByText(/Linha 4: Escreva a mensagem/).waitFor();
 ok(true, 'erro aponta a linha da tela');
+
+// branching flow from the "visit" model: the "Se…" row keeps its target after saving
+await a.goto(`${BASE}/painel/automacoes`); await a.locator('#t-fluxos').waitFor();
+const visita = await a.locator('a', { hasText: 'Cliente pediu visita' }).first().getAttribute('href');
+await a.goto(`${BASE}${visita}`);
+ok((await a.locator('#gatilho').inputValue()) === 'mensagem_recebida' && (await a.locator('#palavra').inputValue()) === 'visita', 'gatilho por mensagem com palavra-chave aparece no editor');
+ok((await a.locator('select[name=passo_tipo]').nth(1).inputValue()) === 'se' && (await a.locator('input[name=passo_qtd]').nth(1).inputValue()) === '4', 'passo "Se… ir para o passo 4" aparece no editor');
+await a.locator('input[name=passo_qtd]').nth(1).fill('1');
+await a.getByRole('button', { name: 'Salvar fluxo' }).click();
+await a.getByText(/Linha 2: só dá para ir para um passo mais abaixo/).waitFor();
+ok(true, 'pular para trás é recusado com a linha certa');
 
 // a vendor cannot reach the builder
 const v = await entrar(await b.newContext(), 'vendas@lumivale.demo');

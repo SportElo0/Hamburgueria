@@ -33,6 +33,12 @@ async function condicaoVale(db: Db, e: Execucao, c: Condicao): Promise<boolean> 
   if (c === 'cliente_respondeu') {
     return !!(await um(`select 1 from conversas where empresa_id = $1 and contato_id = $2 and ultima_entrada_em > $3`, [e.empresa_id, e.contato_id, e.criado_em], db));
   }
+  if (c === 'tem_autorizacao') {
+    return !!(await um(`select 1 from consentimentos k join contatos ct on ct.id = k.contato_id where k.empresa_id = $1 and k.contato_id = $2 and k.canal = 'whatsapp' and k.revogado_em is null and ct.nao_contatar_em is null`, [e.empresa_id, e.contato_id], db));
+  }
+  if (c === 'tem_responsavel') {
+    return !!(await um('select 1 from oportunidades where empresa_id = $1 and id = $2 and responsavel_id is not null', [e.empresa_id, e.oportunidade_id], db));
+  }
   if (c === 'pessoa_assumiu') {
     return !!(await um(`select 1 from conversas where empresa_id = $1 and contato_id = $2 and estado = 'humano_atendendo'`, [e.empresa_id, e.contato_id], db));
   }
@@ -70,12 +76,15 @@ export async function executarPassoFluxo(t: Trabalho, enviar: EnviarIniciada): P
   if (!o) return { tipo: 'cancelado', motivo: 'A oportunidade não existe mais.' };
 
   // Moves on: records what this step did and schedules the next one in the same transaction.
-  const seguir = (db: Db, passo: number, resultado: string, atrasoMin = 0) =>
+  // `proximo` is a 0-based step index; at or past the end, the execution finishes.
+  const seguir = (db: Db, passo: number, resultado: string, atrasoMin = 0, proximo = passo + 1) =>
     (async () => {
       await anotarLog(db, e.id, passo, p.tipo, resultado);
-      if (passo + 1 >= e.passos.length) await encerrar(db, e.id, 'concluida');
-      else await agendar(db, e.empresa_id, { tipo: 'fluxo_passo', chave: `fluxo:${e.id}:${passo + 1}`, oportunidadeId: e.oportunidade_id, em: new Date(Date.now() + atrasoMin * 60_000), dados: { execucao: e.id, passo: passo + 1 } });
+      if (proximo >= e.passos.length) await encerrar(db, e.id, 'concluida');
+      else await agendar(db, e.empresa_id, { tipo: 'fluxo_passo', chave: `fluxo:${e.id}:${proximo}`, oportunidadeId: e.oportunidade_id, em: new Date(Date.now() + atrasoMin * 60_000), dados: { execucao: e.id, passo: proximo } });
     })();
+  /** 1-based target of a jump (0 = end) as a 0-based index; only forward targets are ever stored. */
+  const alvo = (n: number) => (n === 0 ? e.passos.length : Math.max(i + 1, n - 1));
 
   try {
     if (p.tipo === 'esperar') {
@@ -92,6 +101,17 @@ export async function executarPassoFluxo(t: Trabalho, enviar: EnviarIniciada): P
         await seguir(db, i, 'Condição não aconteceu: seguiu');
         return { tipo: 'concluido' };
       });
+    }
+    if (p.tipo === 'se') {
+      await tx(async (db) => {
+        const vale = await condicaoVale(db, e, p.condicao);
+        await seguir(db, i, vale ? `Sim: ${p.ir_para ? `foi para o passo ${p.ir_para}` : 'terminou'}` : 'Não: seguiu', 0, vale ? alvo(p.ir_para) : i + 1);
+      });
+      return { tipo: 'concluido' };
+    }
+    if (p.tipo === 'ir_para') {
+      await tx(async (db) => seguir(db, i, p.passo ? `Foi para o passo ${p.passo}` : 'Terminou', 0, alvo(p.passo)));
+      return { tipo: 'concluido' };
     }
     if (p.tipo === 'enviar_whatsapp') {
       const corpo = p.texto.replace(/\{\{\s*nome\s*\}\}/g, nomeSeguro(o.nome) || 'tudo bem').replace(/\{\{\s*empresa\s*\}\}/g, o.empresa);
