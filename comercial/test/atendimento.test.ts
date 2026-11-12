@@ -231,6 +231,17 @@ describe('7. retorno automático cancelado', () => {
     expect((await mensagensDe(C.empresa.id, c.conversaId)).at(-1)!.direcao).toBe('entrada');
   });
 
+  it('frases claras de pedido para parar também valem como SAIR, e conversa normal não', async () => {
+    for (const frase of ['Não quero mais receber mensagens', 'me tire dessa lista', 'pare de me mandar mensagem', 'quero me descadastrar']) {
+      const c = await comWhatsApp(C);
+      await simularEntradaWhatsApp(C.admin, c.tel, '', frase);
+      expect(await contar('contatos where id = $1 and nao_contatar_em is not null', [c.contatoId])).toBe(1);
+    }
+    const ok = await comWhatsApp(C);
+    await simularEntradaWhatsApp(C.admin, ok.tel, '', 'Quero receber a proposta por aqui, pode mandar?');
+    expect(await contar('contatos where id = $1 and nao_contatar_em is not null', [ok.contatoId])).toBe(0);
+  });
+
   it('oportunidade encerrada ou fora da etapa de proposta cancela o retorno', async () => {
     const c = await comWhatsApp(C);
     await mudarEtapa(C.vendedor, c.oportunidadeId, { etapa: 'proposta' });

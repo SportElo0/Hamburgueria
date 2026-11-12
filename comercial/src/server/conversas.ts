@@ -54,7 +54,8 @@ export const JANELA_WHATSAPP_MS = 24 * 3_600_000;
 export const naJanelaWhatsApp = (ultimaEntrada: Date | null) => !!ultimaEntrada && Date.now() - ultimaEntrada.getTime() < JANELA_WHATSAPP_MS;
 const TELEFONE = /(?:\+?55[\s.-]?)?\(?\d{2}\)?[\s.-]?9?\d{4}[\s.-]?\d{4}/;
 const TELEFONE_G = new RegExp(TELEFONE.source, 'g');
-const SAIR = /^\s*(sair|parar|pare|stop|cancelar|descadastrar|nao quero mais|não quero mais)\s*[.!]?\s*$/i;
+/** Opt-out: the single word, or a clear phrase asking to stop receiving messages. */
+const SAIR = /^\s*(sair|parar|pare|stop|cancelar|descadastrar|descadastro|nao quero mais|não quero mais)\s*[.!]?\s*$|(n[aã]o\s+quero\s+(mais\s+)?(receber|mensagem|contato)|me\s+(tire|tira|remova|remove|exclua|exclui)\s+(d[ae]sta|d[ae]ssa|da|de)\s+lista|pare\s+de\s+(me\s+)?(mandar|enviar|escrever)|descadastr|n[aã]o\s+me\s+(mande|envie|escreva)\s+mais|parem\s+de\s+(me\s+)?(mandar|enviar))/i;
 
 const travar = async (db: Db, empresaId: string, id: string) => um<Conversa>('select * from conversas where empresa_id = $1 and id = $2 for update', [empresaId, id], db);
 

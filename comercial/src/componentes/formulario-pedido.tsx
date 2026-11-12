@@ -29,7 +29,7 @@ export function FormularioPedido({ chave, empresa, campos, textoConsentimento, l
   const [erros, setErros] = useState<Record<string, string>>({});
   const [geral, setGeral] = useState('');
   const [enviando, setEnviando] = useState(false);
-  const [feito, setFeito] = useState<{ chat: string | null; whatsapp: string; resumo: string } | null>(null);
+  const [feito, setFeito] = useState<{ chat: string | null; whatsapp: string; resumo: string; aceite: boolean } | null>(null);
   // One key per form fill: sending twice (double click, retry after a network error) cannot create two requests.
   const idem = useRef('');
   const topoErros = useRef<HTMLParagraphElement>(null);
@@ -76,7 +76,7 @@ export function FormularioPedido({ chave, empresa, campos, textoConsentimento, l
         return;
       }
       if (!r.ok) throw new Error(j.erro ?? 'Não foi possível enviar agora.');
-      setFeito({ chat: j.chat ?? null, whatsapp: j.whatsapp ?? '', resumo: `Olá! Acabei de pedir um orçamento pelo site. Meu nome é ${v('nome')}, sou de ${v('cidade')}. ${v('necessidade')}` });
+      setFeito({ chat: j.chat ?? null, whatsapp: j.whatsapp ?? '', aceite: fd.get('aceite_whatsapp') === 'on', resumo: `Olá! Acabei de pedir um orçamento pelo site. Meu nome é ${v('nome')}, sou de ${v('cidade')}. ${v('necessidade')}` });
     } catch (err) {
       setGeral(`${err instanceof Error ? err.message : 'Não foi possível enviar agora.'} Seus dados continuam no formulário: tente de novo.`);
       topoErros.current?.focus();
@@ -91,7 +91,7 @@ export function FormularioPedido({ chave, empresa, campos, textoConsentimento, l
       <div className="space-y-4" role="status">
         <div className="rounded-xl bg-ok-clara p-4 text-ok">
           <p className="text-lg font-bold">Pedido recebido.</p>
-          <p className="mt-1 text-[15px]">A {empresa} recebeu seus dados e uma pessoa da equipe vai falar com você.</p>
+          <p className="mt-1 text-[15px]">A {empresa} recebeu seus dados e uma pessoa da equipe vai falar com você{feito.aceite ? '.' : ', por ligação: como você não marcou a autorização, não enviaremos mensagens pelo WhatsApp.'}</p>
         </div>
         {feito.whatsapp && (
           <div>
@@ -102,7 +102,7 @@ export function FormularioPedido({ chave, empresa, campos, textoConsentimento, l
         {feito.chat && (
           <div>
             <p className="mb-2 text-[15px] font-semibold text-tinta">Ficou alguma dúvida? Pergunte agora:</p>
-            <ChatSite chave={chave} empresa={empresa} tokenInicial={feito.chat} aberto flutuante={false} />
+            <ChatSite chave={chave} empresa={empresa} tokenInicial={feito.chat} aberto flutuante={false} linkPrivacidade={linkPrivacidade} />
           </div>
         )}
       </div>
@@ -142,7 +142,7 @@ export function FormularioPedido({ chave, empresa, campos, textoConsentimento, l
       {/* Hidden from people; robots fill it and are discarded. */}
       <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden"><label>Site<input name="site_url" tabIndex={-1} autoComplete="off" /></label></div>
       <button className="botao w-full" disabled={enviando}>{enviando ? 'Enviando…' : 'Pedir orçamento'}</button>
-      <p className="text-[13px] text-suave">Usamos seus dados só para responder a este pedido. <a className="underline" href={linkPrivacidade} target="_blank" rel="noopener noreferrer">Privacidade</a>.</p>
+      <p className="text-[13px] text-suave">Usamos seus dados para responder e acompanhar este pedido de orçamento, inclusive com mensagens de retorno, e guardamos de qual anúncio ou página você veio. Se tiver menos de 18 anos, peça a um responsável. <a className="underline" href={linkPrivacidade} target="_blank" rel="noopener noreferrer">Privacidade</a>.</p>
     </form>
   );
 }

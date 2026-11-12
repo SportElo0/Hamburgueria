@@ -224,7 +224,7 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
       if (link && !/^https:\/\/[^\s]+$/.test(link)) throw new ErroDeUso('O link de avaliação precisa começar com https://');
       await salvarConfig(ctx, 'avaliacao', { link });
     } else if (secao === 'site') {
-      await salvarConfig(ctx, 'site', { ...atual.site, chamada: t(fd, 'chamada'), descricao: t(fd, 'descricao'), servicos: itens(t(fd, 'servicos')), projetos: itens(t(fd, 'projetos')), areas: t(fd, 'areas').split(/[\n,]/).map((a) => a.trim()).filter(Boolean), whatsapp: t(fd, 'whatsapp').replace(/\D/g, ''), email: t(fd, 'email'), endereco: t(fd, 'endereco'), responsavel_dados: t(fd, 'responsavel_dados'), privacidade: t(fd, 'privacidade') });
+      await salvarConfig(ctx, 'site', { ...atual.site, chamada: t(fd, 'chamada'), descricao: t(fd, 'descricao'), servicos: itens(t(fd, 'servicos')), projetos: itens(t(fd, 'projetos')), areas: t(fd, 'areas').split(/[\n,]/).map((a) => a.trim()).filter(Boolean), whatsapp: t(fd, 'whatsapp').replace(/\D/g, ''), email: t(fd, 'email'), endereco: t(fd, 'endereco'), responsavel_dados: t(fd, 'responsavel_dados'), razao_social: t(fd, 'razao_social'), cnpj: t(fd, 'cnpj'), privacidade: t(fd, 'privacidade') });
     } else throw new ErroDeUso('Seção desconhecida.');
     return { ok: 'Configuração salva.' };
   });

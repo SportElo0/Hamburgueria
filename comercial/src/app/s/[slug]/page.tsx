@@ -40,7 +40,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
             </div>
             {s.imagem && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={s.imagem} alt="" width={900} height={1125} className="aspect-[4/3] w-full rounded-2xl object-cover" />
+              <img src={s.imagem} alt={empresa.demonstracao ? 'Imagem ilustrativa de telhado com painéis solares' : ''} width={900} height={1125} className="aspect-[4/3] w-full rounded-2xl object-cover" />
             )}
           </div>
         </section>
@@ -110,11 +110,11 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
 
       <footer className="border-t border-linha bg-fundo">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-sm">
-          <span>{empresa.nome}{empresa.demonstracao ? ' · empresa fictícia de demonstração' : ''}</span>
+          <span>{s.razao_social || empresa.nome}{s.cnpj ? ` · CNPJ ${s.cnpj}` : ''}{empresa.demonstracao ? ' · empresa fictícia de demonstração' : ''}</span>
           <Link className="underline" href={`/s/${empresa.slug}/privacidade`}>Privacidade</Link>
         </div>
       </footer>
-      {empresa.config.ia.ativa && <ChatSite chave={empresa.chave_publica} empresa={empresa.nome} />}
+      {empresa.config.ia.ativa && <ChatSite chave={empresa.chave_publica} empresa={empresa.nome} linkPrivacidade={`/s/${empresa.slug}/privacidade`} />}
     </div>
   );
 }

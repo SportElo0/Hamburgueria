@@ -10,7 +10,7 @@ interface Msg {
 }
 
 /** Chat with the company's virtual assistant. The conversation token lives only in this tab's memory and storage. */
-export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial = false, flutuante = true }: { chave: string; empresa: string; tokenInicial?: string | null; aberto?: boolean; flutuante?: boolean }) {
+export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial = false, flutuante = true, linkPrivacidade }: { chave: string; empresa: string; tokenInicial?: string | null; aberto?: boolean; flutuante?: boolean; linkPrivacidade?: string }) {
   const guarda = `chat:${chave}`;
   const [aberto, setAberto] = useState(abertoInicial);
   const [token, setToken] = useState<string | null>(tokenInicial ?? null);
@@ -105,6 +105,10 @@ export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial =
           <input id={`chat-${chave}`} className="campo" value={texto} onChange={(e) => setTexto(e.target.value)} maxLength={1000} placeholder="Escreva aqui" autoComplete="off" />
           <button className="botao shrink-0" disabled={enviando || !texto.trim()}>{enviando ? '…' : 'Enviar'}</button>
         </div>
+        <p className="mt-1.5 px-1 text-[12px] leading-snug text-suave">
+          Ao escrever, você concorda que a conversa seja guardada pela {empresa} para atender seu pedido. Parte do atendimento é feita por assistente virtual com IA, de empresa terceira.
+          {linkPrivacidade && <> <a className="underline" href={linkPrivacidade} target="_blank" rel="noopener noreferrer">Privacidade</a>.</>}
+        </p>
       </form>
     </section>
   );

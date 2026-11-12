@@ -68,6 +68,8 @@ async function main() {
       email: 'contato@lumivale.demo',
       endereco: 'Campinas, SP (endereço fictício)',
       responsavel_dados: 'Carla (fictícia) · contato@lumivale.demo',
+      razao_social: 'Lumivale Energia Solar Ltda (fictícia)',
+      cnpj: '00.000.000/0001-00 (fictício)',
       privacidade: 'Texto de exemplo de uma empresa fictícia. Uma empresa real escreve aqui a sua política, revisada por um advogado.',
     },
     {

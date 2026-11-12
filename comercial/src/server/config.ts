@@ -64,6 +64,8 @@ export const ConfigEmpresa = z.object({
       email: Texto(120),
       endereco: Texto(200),
       responsavel_dados: Texto(200),
+      razao_social: Texto(120),
+      cnpj: Texto(20),
       privacidade: Texto(6000),
     })
     .prefault({}),
@@ -120,7 +122,7 @@ export type Conhecimento = z.infer<typeof Conhecimento>;
 
 /** Consent text shown next to the WhatsApp checkbox; stored with each acceptance. */
 export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
-  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento. Posso pedir para parar a qualquer momento respondendo SAIR.`;
+  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta e, depois do serviço, para me convidar a avaliar o atendimento. Posso pedir para parar a qualquer momento respondendo SAIR.`;
 
 export type Ambiente = 'desenvolvimento' | 'demonstracao' | 'producao';
 export function ambiente(): Ambiente {
