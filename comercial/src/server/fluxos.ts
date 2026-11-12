@@ -15,6 +15,9 @@ export const NOME_GATILHO: Record<(typeof GATILHOS)[number], string> = {
   sem_interacao: 'Quando a oportunidade fica parada (sem interação)',
 };
 
+/** Stages a flow may move an opportunity to: never won or lost, which stay a person's decision. */
+export const ETAPAS_MOVIVEIS = ['novo', 'atendimento', 'qualificado', 'proposta', 'negociacao'] as const;
+
 /** Conditions a flow can check before going on. */
 export const CONDICOES = ['cliente_respondeu', 'etapa_mudou', 'encerrada', 'pessoa_assumiu', 'tem_autorizacao', 'tem_responsavel'] as const;
 export type Condicao = (typeof CONDICOES)[number];
@@ -53,6 +56,9 @@ const Passo = z.discriminatedUnion('tipo', [
   z.object({ tipo: z.literal('criar_tarefa'), titulo: z.string().trim().min(3, 'Escreva o título da tarefa.').max(160), prazo_horas: z.number().int().min(0).max(24 * 60) }),
   z.object({ tipo: z.literal('avisar_equipe'), titulo: z.string().trim().min(3, 'Escreva o aviso.').max(160) }),
   z.object({ tipo: z.literal('anotar'), texto: z.string().trim().min(2, 'Escreva a anotação.').max(500) }),
+  /** Assign: to the active seller with the fewest open opportunities, or to a given member. */
+  z.object({ tipo: z.literal('atribuir'), modo: z.enum(['menos_ocupado', 'pessoa']), user_id: z.string().max(64).default(''), so_sem_responsavel: z.boolean().default(true) }),
+  z.object({ tipo: z.literal('mover_etapa'), etapa: z.enum(ETAPAS_MOVIVEIS, 'Fluxos só movem para etapas do meio: ganho e perda são sempre de uma pessoa.') }),
 ]);
 export type Passo = z.infer<typeof Passo>;
 export type GatilhoFluxo = z.infer<typeof Gatilho>;
@@ -102,6 +108,8 @@ export function descreverPasso(p: Passo): string {
     case 'criar_tarefa': return `Criar tarefa: ${p.titulo}${p.prazo_horas ? ` (prazo ${p.prazo_horas} h)` : ''}`;
     case 'avisar_equipe': return `Avisar a equipe: ${p.titulo}`;
     case 'anotar': return `Anotar no histórico: ${p.texto}`;
+    case 'atribuir': return `${p.modo === 'pessoa' ? 'Atribuir a uma pessoa escolhida' : 'Atribuir ao vendedor com menos oportunidades abertas'}${p.so_sem_responsavel ? ' (só se ainda não tiver responsável)' : ''}`;
+    case 'mover_etapa': return `Mover para “${NOME_ETAPA[p.etapa]}”`;
   }
 }
 
@@ -137,6 +145,11 @@ export async function salvarFluxo(ctx: Ctx, id: string | null, entrada: unknown)
   exigirAdmin(ctx);
   const f = validar(entrada);
   return tx(async (db) => {
+    for (const [i, p] of f.passos.entries()) {
+      if (p.tipo === 'atribuir' && p.modo === 'pessoa' && !(await um('select 1 from membros where empresa_id = $1 and user_id = $2 and ativo', [ctx.empresaId, p.user_id], db))) {
+        throw new ErroDeUso(`Passo ${i + 1}: escolha alguém ativo da equipe.`);
+      }
+    }
     await db.query('select pg_advisory_xact_lock(hashtext($1))', [`fluxos:${ctx.empresaId}`]);
     if (!id) {
       const n = await um<{ n: number }>('select count(*)::int as n from fluxos where empresa_id = $1', [ctx.empresaId], db);
@@ -271,12 +284,13 @@ export const MODELOS_DE_FLUXO: { id: string; nome: string; descricao: string; fl
   {
     id: 'boas-vindas',
     nome: 'Boas-vindas ao pedido',
-    descricao: 'Assim que chega um pedido, manda uma mensagem de boas-vindas e, se ninguém falar com o cliente em 2 horas, avisa a equipe.',
+    descricao: 'Assim que chega um pedido, distribui para o vendedor com menos oportunidades abertas (se ainda não tiver responsável), manda uma mensagem de boas-vindas e, se ninguém falar com o cliente em 2 horas, avisa a equipe.',
     fluxo: {
       nome: 'Boas-vindas ao pedido',
       ativo: false,
       gatilho: { tipo: 'pedido_recebido' },
       passos: [
+        { tipo: 'atribuir', modo: 'menos_ocupado', user_id: '', so_sem_responsavel: true },
         { tipo: 'enviar_whatsapp', texto: 'Olá, {{nome}}! Recebemos seu pedido na {{empresa}}. Já avisamos a equipe e logo uma pessoa fala com você.', modelo: '' },
         { tipo: 'esperar', minutos: 120 },
         { tipo: 'parar_se', condicao: 'pessoa_assumiu' },

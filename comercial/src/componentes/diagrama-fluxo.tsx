@@ -1,6 +1,7 @@
+import { NOME_ETAPA } from '@/server/config';
 import { NOME_CONDICAO, descreverGatilho, type GatilhoFluxo, type Passo } from '@/server/fluxos';
 
-const ICONE: Record<Passo['tipo'], string> = { esperar: '⏱', parar_se: '■', se: '◆', ir_para: '↪', enviar_whatsapp: '✉', criar_tarefa: '☑', avisar_equipe: '🔔', anotar: '✎' };
+const ICONE: Record<Passo['tipo'], string> = { esperar: '⏱', parar_se: '■', se: '◆', ir_para: '↪', enviar_whatsapp: '✉', criar_tarefa: '☑', avisar_equipe: '🔔', anotar: '✎', atribuir: '👤', mover_etapa: '⇢' };
 const COR: Record<Passo['tipo'], string> = {
   esperar: 'border-linha bg-fundo',
   parar_se: 'border-erro/30 bg-erro-clara',
@@ -10,6 +11,8 @@ const COR: Record<Passo['tipo'], string> = {
   criar_tarefa: 'border-marca/30 bg-marca-clara',
   avisar_equipe: 'border-marca/30 bg-marca-clara',
   anotar: 'border-linha bg-white',
+  atribuir: 'border-marca/30 bg-marca-clara',
+  mover_etapa: 'border-marca/30 bg-marca-clara',
 };
 
 function texto(p: Passo): { titulo: string; detalhe?: string } {
@@ -22,6 +25,8 @@ function texto(p: Passo): { titulo: string; detalhe?: string } {
     case 'criar_tarefa': return { titulo: 'Criar tarefa', detalhe: `${p.titulo}${p.prazo_horas ? ` · prazo ${p.prazo_horas} h` : ''}` };
     case 'avisar_equipe': return { titulo: 'Avisar a equipe', detalhe: p.titulo };
     case 'anotar': return { titulo: 'Anotar no histórico', detalhe: p.texto };
+    case 'atribuir': return { titulo: 'Atribuir responsável', detalhe: `${p.modo === 'pessoa' ? 'Pessoa escolhida' : 'Vendedor com menos oportunidades abertas'}${p.so_sem_responsavel ? ' · só se ainda não tiver' : ''}` };
+    case 'mover_etapa': return { titulo: 'Mover etapa', detalhe: `Para “${NOME_ETAPA[p.etapa]}”` };
   }
 }
 

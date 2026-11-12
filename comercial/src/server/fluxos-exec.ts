@@ -2,6 +2,7 @@ import { criarTarefa, registrar } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
 import { agendar, type Resultado, type Trabalho } from './fila';
 import type { Condicao, Passo } from './fluxos';
+import { atribuirPorFluxo, moverEtapaPorFluxo } from './oportunidades';
 import { nomeSeguro } from './trabalhos-texto';
 
 /** Sends a message the company starts (checked again for consent, hours, who holds the conversation, channel rules). */
@@ -134,6 +135,14 @@ export async function executarPassoFluxo(t: Trabalho, enviar: EnviarIniciada): P
         await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [e.empresa_id, o.responsavel_id, p.titulo, o.nome, `/painel/oportunidades/${e.oportunidade_id}`], db);
         await seguir(db, i, 'Equipe avisada');
       });
+      return { tipo: 'concluido' };
+    }
+    if (p.tipo === 'atribuir') {
+      await tx(async (db) => seguir(db, i, await atribuirPorFluxo(db, e.empresa_id, e.oportunidade_id, { modo: p.modo, userId: p.user_id, soSemResponsavel: p.so_sem_responsavel }, e.fluxo_id)));
+      return { tipo: 'concluido' };
+    }
+    if (p.tipo === 'mover_etapa') {
+      await tx(async (db) => seguir(db, i, await moverEtapaPorFluxo(db, e.empresa_id, e.oportunidade_id, p.etapa, e.fluxo_id)));
       return { tipo: 'concluido' };
     }
     // anotar

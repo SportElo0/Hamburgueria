@@ -1,10 +1,10 @@
 import { ETAPAS, ETAPAS_FECHADAS, NOME_ETAPA, type Etapa } from './config';
 import { ator, criarTarefa, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
-import { empresaPorId, membroAtivo } from './empresas';
+import { empresaPorId, membroAtivo, type Empresa } from './empresas';
 import { ErroDeUso, NaoAutorizado, NaoEncontrado } from './erros';
 import { agendar, cancelarPendentes } from './fila';
-import { dispararFluxos } from './fluxos';
+import { ETAPAS_MOVIVEIS, dispararFluxos } from './fluxos';
 
 export interface Oportunidade {
   id: string;
@@ -146,37 +146,98 @@ export async function mudarEtapa(ctx: Ctx, id: string, m: MudancaEtapa): Promise
     });
 
     await dispararFluxos(db, ctx.empresaId, { tipo: 'etapa_alterada', etapa: m.etapa }, { id, contatoId: o.contato_id, etapa: m.etapa });
-    // Leaving "proposta" (or closing) ends the follow-ups that the proposal had scheduled.
-    if (o.etapa === 'proposta' || fechando) {
-      await cancelarPendentes(db, ctx.empresaId, { oportunidadeId: id, tipos: fechando ? ['retorno_cliente', 'alerta_sla', 'confirmacao_pedido'] : ['retorno_cliente'] }, fechando ? 'Oportunidade encerrada.' : `Etapa mudou para ${NOME_ETAPA[m.etapa]}.`);
-      await q(`update tarefas set concluida_em = now(), concluida_por = $3 where empresa_id = $1 and oportunidade_id = $2 and tipo = 'retorno_proposta' and concluida_em is null`, [ctx.empresaId, id, ctx.userId], db);
-    }
-    if (m.etapa === 'proposta') {
-      const marca = Date.now();
-      const regras = empresa.config.regras;
-      await criarTarefa(db, ctx.empresaId, {
-        oportunidadeId: id,
-        tipo: 'retorno_proposta',
-        titulo: 'Retornar sobre a proposta enviada',
-        prazo: new Date(marca + regras.retorno_proposta_dias * 86_400_000),
-        responsavelId: o.responsavel_id ?? ctx.userId,
-        chave: `retorno:${id}:${marca}`,
-      });
-      if (regras.retorno_auto_cliente) {
-        // A short sequence: each step is checked again when it is due, and any reply, take-over or stage change cancels what is left.
-        const passos = [regras.retorno_auto_horas, regras.retorno_auto_horas_2].filter((h, i) => h > 0 && (i === 0 || h > regras.retorno_auto_horas));
-        for (const [i, horas] of passos.entries()) {
-          await agendar(db, ctx.empresaId, {
-            tipo: 'retorno_cliente',
-            chave: `retorno_cliente:${id}:${marca}:${i + 1}`,
-            em: new Date(marca + horas * 3_600_000),
-            oportunidadeId: id,
-            dados: { agendado_em: new Date(marca).toISOString(), passo: i + 1 },
-          });
-        }
+    await efeitosDaEtapa(db, ctx.empresaId, empresa, { id, de: o.etapa, para: m.etapa, responsavelId: o.responsavel_id, quem: ctx.userId });
+  });
+}
+
+/** What a stage change sets off, whoever made it: the proposal follow-ups start or end. */
+async function efeitosDaEtapa(db: Db, empresaId: string, empresa: Empresa, x: { id: string; de: Etapa; para: Etapa; responsavelId: string | null; quem: string | null }) {
+  const { id, de, para, responsavelId, quem } = x;
+  const fechando = ETAPAS_FECHADAS.includes(para);
+  // Leaving "proposta" (or closing) ends the follow-ups that the proposal had scheduled.
+  if (de === 'proposta' || fechando) {
+    await cancelarPendentes(db, empresaId, { oportunidadeId: id, tipos: fechando ? ['retorno_cliente', 'alerta_sla', 'confirmacao_pedido'] : ['retorno_cliente'] }, fechando ? 'Oportunidade encerrada.' : `Etapa mudou para ${NOME_ETAPA[para]}.`);
+    await q(`update tarefas set concluida_em = now(), concluida_por = $3 where empresa_id = $1 and oportunidade_id = $2 and tipo = 'retorno_proposta' and concluida_em is null`, [empresaId, id, quem], db);
+  }
+  if (para === 'proposta') {
+    const marca = Date.now();
+    const regras = empresa.config.regras;
+    await criarTarefa(db, empresaId, {
+      oportunidadeId: id,
+      tipo: 'retorno_proposta',
+      titulo: 'Retornar sobre a proposta enviada',
+      prazo: new Date(marca + regras.retorno_proposta_dias * 86_400_000),
+      responsavelId: responsavelId ?? quem,
+      chave: `retorno:${id}:${marca}`,
+    });
+    if (regras.retorno_auto_cliente) {
+      // A short sequence: each step is checked again when it is due, and any reply, take-over or stage change cancels what is left.
+      const passos = [regras.retorno_auto_horas, regras.retorno_auto_horas_2].filter((h, i) => h > 0 && (i === 0 || h > regras.retorno_auto_horas));
+      for (const [i, horas] of passos.entries()) {
+        await agendar(db, empresaId, {
+          tipo: 'retorno_cliente',
+          chave: `retorno_cliente:${id}:${marca}:${i + 1}`,
+          em: new Date(marca + horas * 3_600_000),
+          oportunidadeId: id,
+          dados: { agendado_em: new Date(marca).toISOString(), passo: i + 1 },
+        });
       }
     }
-  });
+  }
+}
+
+/**
+ * A flow moves the opportunity. Same follow-ups as a person's change, but it is not a human attendance,
+ * it does not count as an interaction with the customer, and it does not start other flows (no chains or loops).
+ */
+export async function moverEtapaPorFluxo(db: Db, empresaId: string, id: string, para: Etapa, fluxo: string): Promise<string> {
+  if (!ETAPAS_MOVIVEIS.includes(para as (typeof ETAPAS_MOVIVEIS)[number])) return 'Etapa não permitida para fluxos.';
+  const o = await um<{ etapa: Etapa; contato_id: string; responsavel_id: string | null }>('select etapa, contato_id, responsavel_id from oportunidades where empresa_id = $1 and id = $2 for update', [empresaId, id], db);
+  if (!o) return 'Oportunidade não encontrada.';
+  if (ETAPAS_FECHADAS.includes(o.etapa)) return 'Oportunidade já encerrada: etapa mantida.';
+  if (o.etapa === para) return `Já estava em ${NOME_ETAPA[para]}.`;
+  const empresa = (await empresaPorId(empresaId, db))!;
+  await q(`update oportunidades set etapa = $3, proposta_em = case when $3 = 'proposta' then now() else proposta_em end where empresa_id = $1 and id = $2`, [empresaId, id, para], db);
+  await registrar(db, empresaId, { oportunidadeId: id, contatoId: o.contato_id, ator: { tipo: 'sistema' }, tipo: 'etapa_alterada', dados: { de: o.etapa, para, fluxo } });
+  await efeitosDaEtapa(db, empresaId, empresa, { id, de: o.etapa, para, responsavelId: o.responsavel_id, quem: null });
+  return `Etapa: ${NOME_ETAPA[o.etapa]} → ${NOME_ETAPA[para]}`;
+}
+
+/**
+ * A flow assigns the opportunity: to a given active member, or to the active seller with the fewest open opportunities
+ * (ties broken by who received one longest ago). Keeps the current assignee unless told otherwise.
+ */
+export async function atribuirPorFluxo(db: Db, empresaId: string, id: string, a: { modo: 'menos_ocupado' | 'pessoa'; userId?: string; soSemResponsavel: boolean }, fluxo: string): Promise<string> {
+  const o = await um<{ contato_id: string; responsavel_id: string | null }>('select contato_id, responsavel_id from oportunidades where empresa_id = $1 and id = $2 for update', [empresaId, id], db);
+  if (!o) return 'Oportunidade não encontrada.';
+  if (a.soSemResponsavel && o.responsavel_id) return 'Já tinha responsável: mantido.';
+  let escolhido: string | null = null;
+  if (a.modo === 'pessoa') {
+    escolhido = a.userId && (await membroAtivo(db, empresaId, a.userId)) ? a.userId : null;
+    if (!escolhido) return 'A pessoa escolhida não está ativa na equipe: nada mudou.';
+  } else {
+    // Serialize choices of the same company so two requests at once do not both land on the same person.
+    await db.query('select pg_advisory_xact_lock(hashtext($1))', [`distribuir:${empresaId}`]);
+    const r = await um<{ user_id: string }>(
+      `select m.user_id from membros m
+       where m.empresa_id = $1 and m.ativo and m.papel = 'vendedor'
+       order by (select count(*) from oportunidades x where x.empresa_id = m.empresa_id and x.responsavel_id = m.user_id and x.etapa not in ('ganho', 'perdido')),
+                (select max(e.criado_em) from eventos e where e.empresa_id = m.empresa_id and e.tipo = 'responsavel_alterado' and e.dados ->> 'para' = m.user_id) nulls first,
+                m.user_id
+       limit 1`,
+      [empresaId],
+      db,
+    );
+    escolhido = r?.user_id ?? null;
+    if (!escolhido) return 'Nenhum vendedor ativo na equipe: ficou na fila.';
+  }
+  if (escolhido === o.responsavel_id) return 'Responsável mantido.';
+  await q('update oportunidades set responsavel_id = $3 where empresa_id = $1 and id = $2', [empresaId, id, escolhido], db);
+  await q('update tarefas set responsavel_id = $3 where empresa_id = $1 and oportunidade_id = $2 and concluida_em is null', [empresaId, id, escolhido], db);
+  await registrar(db, empresaId, { oportunidadeId: id, contatoId: o.contato_id, ator: { tipo: 'sistema' }, tipo: 'responsavel_alterado', dados: { de: o.responsavel_id, para: escolhido, fluxo } });
+  await q('insert into notificacoes (empresa_id, user_id, titulo, link) values ($1, $2, $3, $4)', [empresaId, escolhido, 'Uma oportunidade foi atribuída a você', `/painel/oportunidades/${id}`], db);
+  const nome = await um<{ name: string }>('select name from "user" where id = $1', [escolhido], db);
+  return `Atribuída a ${nome?.name ?? 'um vendedor'}`;
 }
 
 /** Assigns to someone of the same company, or back to the unassigned queue (null). */

@@ -4,7 +4,8 @@ import { fecharPool, q, um } from '@/server/db';
 import { empresaPorId, salvarConfig } from '@/server/empresas';
 import { varrerParadas, excluirFluxo, execucoesDoFluxo, listarFluxos, MODELOS_DE_FLUXO, obterFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { salvarWhatsApp } from '@/server/integracoes';
-import { marcarServicoConcluido, mudarEtapa, tarefas } from '@/server/oportunidades';
+import { marcarServicoConcluido, mudarEtapa, obter, tarefas } from '@/server/oportunidades';
+import { criarUsuario } from '@/server/auth';
 import { receberPedido, type PedidoSalvo } from '@/server/pedidos';
 import { processarFila } from '@/server/trabalhos';
 import { contar, meta, novaEmpresa, pedido, telefone, type Cenario } from './apoio';
@@ -252,6 +253,56 @@ describe('construtor de automações', () => {
     expect(await contar('fluxo_execucoes where fluxo_id = $1 and oportunidade_id = $2', [id, parada.oportunidadeId])).toBe(2);
     // never touches another company's opportunities
     expect(await contar('fluxo_execucoes e join oportunidades o on o.id = e.oportunidade_id where e.fluxo_id = $1 and o.empresa_id <> $2', [id, H.empresa.id])).toBe(0);
+  });
+
+  it('atribuir: distribui para o vendedor com menos oportunidades abertas e respeita quem já tem responsável', async () => {
+    const J = await novaEmpresa('Solar Distribui');
+    const v2 = await criarUsuario(`v2-${Date.now()}@teste.local`, 'Vendedor Dois', 'senha-de-teste-123');
+    await q(`insert into membros (user_id, empresa_id, papel) values ($1, $2, 'vendedor')`, [v2, J.empresa.id]);
+    await salvarFluxo(J.admin, null, { nome: 'Distribuir', ativo: true, gatilho: { tipo: 'pedido_recebido' }, passos: [{ tipo: 'atribuir', modo: 'menos_ocupado', user_id: '', so_sem_responsavel: true }] });
+    const emp = (await empresaPorId(J.empresa.id))!;
+    const ops: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      const p = (await receberPedido(emp, pedido(), meta())) as PedidoSalvo;
+      await processarFila();
+      ops.push((await obter(J.admin, p.oportunidadeId)).responsavel_id!);
+    }
+    // alternates between the two sellers, never the admin
+    expect(ops.filter((x) => x === J.vendedor.userId)).toHaveLength(2);
+    expect(ops.filter((x) => x === v2)).toHaveLength(2);
+    expect(ops).not.toContain(J.admin.userId);
+    // with a default assignee the request already has someone: kept
+    await q('update empresas set responsavel_padrao = $2 where id = $1', [J.empresa.id, v2]);
+    const p = (await receberPedido((await empresaPorId(J.empresa.id))!, pedido(), meta())) as PedidoSalvo;
+    await processarFila();
+    expect((await obter(J.admin, p.oportunidadeId)).responsavel_id).toBe(v2);
+    const log = (await q<{ log: { resultado: string }[] }>(`select log from fluxo_execucoes where oportunidade_id = $1`, [p.oportunidadeId]))[0].log;
+    expect(log[0].resultado).toMatch(/mantido/);
+    // a person from another company cannot be chosen
+    await expect(salvarFluxo(J.admin, null, { nome: 'Outra pessoa', ativo: true, gatilho: { tipo: 'pedido_recebido' }, passos: [{ tipo: 'atribuir', modo: 'pessoa', user_id: C.vendedor.userId, so_sem_responsavel: false }] })).rejects.toThrow('Passo 1: escolha alguém ativo');
+  });
+
+  it('mover etapa: só etapas do meio, sem contar como atendimento, sem reabrir encerrada e sem começar outros fluxos', async () => {
+    const K = await novaEmpresa('Solar Move');
+    await expect(salvarFluxo(K.admin, null, { nome: 'Ganhar', ativo: true, gatilho: { tipo: 'pedido_recebido' }, passos: [{ tipo: 'mover_etapa', etapa: 'ganho' as never }] })).rejects.toThrow('ganho e perda são sempre de uma pessoa');
+    await salvarFluxo(K.admin, null, { nome: 'Para atendimento', ativo: true, gatilho: { tipo: 'pedido_recebido' }, passos: [{ tipo: 'mover_etapa', etapa: 'proposta' }] });
+    // would start if moving the stage triggered flows: it must not
+    const encadeado = await salvarFluxo(K.admin, null, { nome: 'Encadeado', ativo: true, gatilho: { tipo: 'etapa_alterada', etapa: 'proposta' }, passos: [{ tipo: 'anotar', texto: 'não deveria rodar' }] });
+    const emp = (await empresaPorId(K.empresa.id))!;
+    const p = (await receberPedido(emp, pedido(), meta())) as PedidoSalvo;
+    await processarFila();
+    const o = await obter(K.admin, p.oportunidadeId);
+    expect(o.etapa).toBe('proposta');
+    expect(o.primeiro_humano_em).toBeNull();
+    expect(o.proposta_em).not.toBeNull();
+    // the proposal's own follow-up task exists, like when a person moves it
+    expect((await tarefas(K.admin, { de: 'todas', oportunidadeId: p.oportunidadeId })).map((t) => t.tipo)).toContain('retorno_proposta');
+    expect(await contar('fluxo_execucoes where fluxo_id = $1', [encadeado])).toBe(0);
+    // a closed opportunity is never reopened by a flow
+    const q2 = (await receberPedido(emp, pedido(), meta())) as PedidoSalvo;
+    await mudarEtapa(K.vendedor, q2.oportunidadeId, { etapa: 'perdido', motivoPerda: 'Desistiu do projeto' });
+    await processarFila();
+    expect((await obter(K.admin, q2.oportunidadeId)).etapa).toBe('perdido');
   });
 
   it('isolamento: outra empresa não vê, edita, apaga nem dispara os fluxos desta', async () => {

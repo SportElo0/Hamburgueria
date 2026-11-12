@@ -5,16 +5,17 @@ import { dataHora } from '@/componentes/formato';
 import { DiagramaFluxo } from '@/componentes/diagrama-fluxo';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { ETAPAS, NOME_ETAPA } from '@/server/config';
-import { CONDICOES, GATILHOS, NOME_CONDICAO, NOME_GATILHO, descreverGatilho, execucoesDoFluxo, obterFluxo, type Passo } from '@/server/fluxos';
+import { equipe } from '@/server/empresas';
+import { CONDICOES, ETAPAS_MOVIVEIS, GATILHOS, NOME_CONDICAO, NOME_GATILHO, descreverGatilho, execucoesDoFluxo, obterFluxo, type Passo } from '@/server/fluxos';
 import { exigirCtx, ouNaoEncontrado } from '@/server/sessao';
 
 export const metadata = { title: 'Fluxo de automação' };
 
-const TIPOS: [string, string][] = [['', '— vazio —'], ['esperar', 'Esperar'], ['parar_se', 'Parar o fluxo se…'], ['se', 'Se… ir para o passo'], ['ir_para', 'Ir para o passo'], ['enviar_whatsapp', 'Enviar WhatsApp'], ['criar_tarefa', 'Criar tarefa'], ['avisar_equipe', 'Avisar a equipe'], ['anotar', 'Anotar no histórico']];
+const TIPOS: [string, string][] = [['', '— vazio —'], ['esperar', 'Esperar'], ['parar_se', 'Parar o fluxo se…'], ['se', 'Se… ir para o passo'], ['ir_para', 'Ir para o passo'], ['enviar_whatsapp', 'Enviar WhatsApp'], ['criar_tarefa', 'Criar tarefa'], ['avisar_equipe', 'Avisar a equipe'], ['anotar', 'Anotar no histórico'], ['atribuir', 'Atribuir responsável'], ['mover_etapa', 'Mover para a etapa']];
 
 /** A step as the editor's fields: quantity + unit for waits, text for messages and tasks. */
 function linha(p: Passo | undefined) {
-  const v = { tipo: '', qtd: '', unidade: 'h', condicao: 'cliente_respondeu', texto: '', modelo: '' };
+  const v = { tipo: '', qtd: '', unidade: 'h', condicao: 'cliente_respondeu', texto: '', modelo: '', etapa: 'atendimento', pessoa: '', soVazio: 'sim' };
   if (!p) return v;
   v.tipo = p.tipo;
   if (p.tipo === 'esperar') { const dia = p.minutos > 0 && p.minutos % 1440 === 0; const h = p.minutos > 0 && p.minutos % 60 === 0; v.unidade = dia ? 'dia' : h ? 'h' : 'min'; v.qtd = String(dia ? p.minutos / 1440 : h ? p.minutos / 60 : p.minutos); }
@@ -25,6 +26,8 @@ function linha(p: Passo | undefined) {
   if (p.tipo === 'criar_tarefa') { v.texto = p.titulo; v.qtd = String(p.prazo_horas); }
   if (p.tipo === 'avisar_equipe') v.texto = p.titulo;
   if (p.tipo === 'anotar') v.texto = p.texto;
+  if (p.tipo === 'atribuir') { v.pessoa = p.modo === 'pessoa' ? p.user_id : ''; v.soVazio = p.so_sem_responsavel ? 'sim' : 'nao'; }
+  if (p.tipo === 'mover_etapa') v.etapa = p.etapa;
   return v;
 }
 
@@ -36,7 +39,7 @@ export default async function EditorDeFluxo({ params }: { params: Promise<{ id: 
   if (ctx.papel !== 'admin') redirect('/painel');
   const { id } = await params;
   const f = await ouNaoEncontrado(obterFluxo(ctx, id));
-  const exec = await execucoesDoFluxo(ctx, id);
+  const [exec, pessoas] = await Promise.all([execucoesDoFluxo(ctx, id), equipe(ctx)]);
   const linhas = [...f.passos.map(linha), ...Array.from({ length: Math.max(0, Math.min(3, 12 - f.passos.length)) }, () => linha(undefined))];
   return (
     <div className="max-w-4xl space-y-4">
@@ -74,12 +77,15 @@ export default async function EditorDeFluxo({ params }: { params: Promise<{ id: 
                   <div className="sm:col-span-2"><label className="rotulo" htmlFor={`c${i}`}>Condição</label><select className="campo" id={`c${i}`} name="passo_condicao" defaultValue={l.condicao}>{CONDICOES.map((c) => <option key={c} value={c}>{NOME_CONDICAO[c]}</option>)}</select></div>
                   <div className="sm:col-span-4"><label className="rotulo" htmlFor={`x${i}`}>Mensagem, título da tarefa, aviso ou anotação</label><input className="campo" id={`x${i}`} name="passo_texto" defaultValue={l.texto} maxLength={600} /></div>
                   <div className="sm:col-span-2"><label className="rotulo" htmlFor={`m${i}`}>Modelo aprovado do WhatsApp (opcional)</label><input className="campo" id={`m${i}`} name="passo_modelo" defaultValue={l.modelo} /></div>
+                  <div className="sm:col-span-2"><label className="rotulo" htmlFor={`e${i}`}>Etapa (para “Mover”)</label><select className="campo" id={`e${i}`} name="passo_etapa" defaultValue={l.etapa}>{ETAPAS_MOVIVEIS.map((e) => <option key={e} value={e}>{NOME_ETAPA[e]}</option>)}</select></div>
+                  <div className="sm:col-span-2"><label className="rotulo" htmlFor={`p${i}`}>Atribuir a (para “Atribuir”)</label><select className="campo" id={`p${i}`} name="passo_pessoa" defaultValue={l.pessoa}><option value="">Vendedor com menos oportunidades abertas</option>{pessoas.filter((p) => p.ativo).map((p) => <option key={p.user_id} value={p.user_id}>{p.nome}</option>)}</select></div>
+                  <div className="sm:col-span-2"><label className="rotulo" htmlFor={`v${i}`}>Se já tiver responsável (para “Atribuir”)</label><select className="campo" id={`v${i}`} name="passo_so_vazio" defaultValue={l.soVazio}><option value="sim">Manter quem já está</option><option value="nao">Trocar mesmo assim</option></select></div>
                 </div>
                 {l.tipo && <p className="mt-2 text-[13px] text-suave">Passo atual: {l.tipo.replace(/_/g, ' ')}.</p>}
               </li>
             ))}
           </ol>
-          <p className="mt-3 text-sm text-suave">Na quantidade: horas de prazo, para tarefa; número da linha de destino, para “Se…” e “Ir para” (0 = terminar o fluxo; só dá para ir para uma linha mais abaixo). Mensagens só saem para quem autorizou o WhatsApp, dentro do horário da empresa e sem uma pessoa na conversa. Fora das 24 horas da última mensagem do cliente, só com modelo aprovado: sem modelo, vira tarefa para uma pessoa. Nenhum passo marca venda como ganha ou perdida.</p>
+          <p className="mt-3 text-sm text-suave">Na quantidade: horas de prazo, para tarefa; número da linha de destino, para “Se…” e “Ir para” (0 = terminar o fluxo; só dá para ir para uma linha mais abaixo). Mensagens só saem para quem autorizou o WhatsApp, dentro do horário da empresa e sem uma pessoa na conversa. Fora das 24 horas da última mensagem do cliente, só com modelo aprovado: sem modelo, vira tarefa para uma pessoa. Nenhum passo marca venda como ganha ou perdida. Mudar a etapa por fluxo não conta como atendimento e não começa outros fluxos.</p>
           <div className="mt-4"><Enviar>Salvar fluxo</Enviar></div>
         </section>
       </Formulario>

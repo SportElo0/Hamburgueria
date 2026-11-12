@@ -294,7 +294,7 @@ const MINUTOS: Record<string, number> = { min: 1, h: 60, dia: 1440 };
 /** Reads the step rows of the editor (parallel lists, one entry per row) into flow steps. Empty rows are ignored. */
 function lerPassos(fd: FormData): { passos: EntradaFluxo['passos']; linhas: number[] } {
   const col = (k: string) => fd.getAll(k).map(String);
-  const [tipo, qtd, unidade, condicao, texto, modelo] = ['passo_tipo', 'passo_qtd', 'passo_unidade', 'passo_condicao', 'passo_texto', 'passo_modelo'].map(col);
+  const [tipo, qtd, unidade, condicao, texto, modelo, etapa, pessoa, soVazio] = ['passo_tipo', 'passo_qtd', 'passo_unidade', 'passo_condicao', 'passo_texto', 'passo_modelo', 'passo_etapa', 'passo_pessoa', 'passo_so_vazio'].map(col);
   const passos: EntradaFluxo['passos'] = [];
   const linhas: number[] = [];
   tipo.forEach((tp, i) => {
@@ -310,6 +310,8 @@ function lerPassos(fd: FormData): { passos: EntradaFluxo['passos']; linhas: numb
     else if (tp === 'criar_tarefa') passos.push({ tipo: 'criar_tarefa', titulo: txt, prazo_horas: num });
     else if (tp === 'avisar_equipe') passos.push({ tipo: 'avisar_equipe', titulo: txt });
     else if (tp === 'anotar') passos.push({ tipo: 'anotar', texto: txt });
+    else if (tp === 'atribuir') passos.push({ tipo: 'atribuir', modo: pessoa[i] ? 'pessoa' : 'menos_ocupado', user_id: pessoa[i] ?? '', so_sem_responsavel: soVazio[i] !== 'nao' });
+    else if (tp === 'mover_etapa') passos.push({ tipo: 'mover_etapa', etapa: (etapa[i] ?? 'atendimento') as 'atendimento' });
   });
   return { passos, linhas };
 }
