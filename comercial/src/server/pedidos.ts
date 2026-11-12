@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PREFERENCIAS, TEXTO_CONSENTIMENTO_WHATSAPP, normalizarTelefone, type Campo } from './config';
+import { PREFERENCIAS, TEXTO_CONSENTIMENTO_WHATSAPP, VERSAO_CONSENTIMENTO, normalizarTelefone, type Campo } from './config';
 import { criarTarefa, dentroDoLimite, registrar } from './contexto';
 import { tx, um, q, type Db } from './db';
 import { membroAtivo, type Empresa } from './empresas';
@@ -114,7 +114,7 @@ export async function receberPedido(empresa: Empresa, entrada: unknown, meta: Me
     const contatoId = contato!.id;
 
     if (e.aceite_whatsapp) {
-      await q(`insert into consentimentos (empresa_id, contato_id, canal, texto, origem) values ($1, $2, 'whatsapp', $3, $4)`, [empresa.id, contatoId, TEXTO_CONSENTIMENTO_WHATSAPP(empresa.nome), meta.origem], db);
+      await q(`insert into consentimentos (empresa_id, contato_id, canal, texto, origem, versao) values ($1, $2, 'whatsapp', $3, $4, $5)`, [empresa.id, contatoId, TEXTO_CONSENTIMENTO_WHATSAPP(empresa.nome), meta.origem, VERSAO_CONSENTIMENTO], db);
     }
 
     // Same person, same need, a moment ago (double click, back button): do not open a second opportunity.

@@ -80,6 +80,9 @@ export const ConfigEmpresa = z.object({
       retorno_auto_horas: z.number().int().min(1).max(30 * 24).default(48),
       /** Second (and last) follow-up, counted from the proposal. 0 = only one message. */
       retorno_auto_horas_2: z.number().int().min(0).max(60 * 24).default(0),
+      /** Maintenance reminder, months after the service was marked as done (needs the version 2 consent). */
+      manutencao_auto: z.boolean().default(false),
+      manutencao_meses: z.number().int().min(1).max(36).default(12),
       /** Neutral review invitation when a service is marked as done. */
       avaliacao_auto: z.boolean().default(false),
       /** Hours past the deadline before an open task is reported to the company admins (0 = off). */
@@ -126,8 +129,10 @@ export const Conhecimento = z.object({
 export type Conhecimento = z.infer<typeof Conhecimento>;
 
 /** Consent text shown next to the WhatsApp checkbox; stored with each acceptance. */
+/** Version of the consent text below. Version 2 added the maintenance reminder; older acceptances do not cover it. */
+export const VERSAO_CONSENTIMENTO = 2;
 export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
-  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta e, depois do serviço, para me convidar a avaliar o atendimento. Posso pedir para parar a qualquer momento respondendo SAIR.`;
+  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
 
 export type Ambiente = 'desenvolvimento' | 'demonstracao' | 'producao';
 export function ambiente(): Ambiente {

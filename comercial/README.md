@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 73 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
+| `npm test` | 77 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -69,6 +69,7 @@ Tela **Automações** (administrador): o que está ligado, o que está agendado 
 | Assistente virtual | a cada mensagem do cliente | responde, anota dados, chama uma pessoa |
 | Retorno da proposta | etapa “Proposta enviada” | tarefa do vendedor e até duas mensagens ao cliente, canceladas se ele responder, pedir SAIR, alguém assumir ou a etapa mudar |
 | Convite de avaliação | serviço marcado como concluído | convite neutro com o link público |
+| Lembrete de manutenção | N meses depois do serviço concluído (padrão 12; desligado por padrão) | uma mensagem por serviço perguntando se o cliente quer agendar a manutenção; só para quem aceitou a autorização versão 2 (que inclui a manutenção); ligar a regra não manda nada para serviços concluídos há mais de N meses + 30 dias |
 | Tarefa vencida sobe | tarefa aberta passou do prazo há mais de X horas (padrão 4; 0 desliga) | aviso aos administradores com o nome do responsável, uma vez por tarefa |
 | Resumo do dia | todo dia a partir da hora escolhida (padrão 8h) | aviso no painel: pedidos novos (24 h), tarefas de hoje e vencidas de cada pessoa; para administradores, da empresa toda e quantas estão sem responsável; nada quando não há nada |
 
@@ -145,6 +146,7 @@ Regras já aplicadas no servidor: assinatura do webhook verificada antes de ler 
 ## Dados pessoais, exportação, exclusão e guarda
 
 - O formulário não pede CPF, documentos, dados bancários nem endereço completo.
+- Cada autorização de WhatsApp guarda o texto exato aceito, a data, a origem e a versão do texto. A versão 2 inclui avaliação e lembrete de manutenção; quem aceitou a versão 1 não recebe o lembrete.
 - **Exportar**: Configurações › Dados (só administrador da empresa; fica registrado).
 - **Excluir**: na oportunidade, “Excluir este contato” apaga contato, oportunidades, conversas, tarefas e histórico ligados a ele, e cancela envios pendentes. Fica só o registro anônimo de que houve uma exclusão.
 - **Guarda**: esta versão não apaga nada sozinha. O prazo de guarda é decisão de cada empresa com orientação jurídica; a limpeza automática por prazo é um próximo passo. Contadores de abuso e identificadores de webhook são apagados pelo worker (1 e 30 dias).

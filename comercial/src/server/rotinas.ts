@@ -1,6 +1,7 @@
 import type { ConfigEmpresa } from './config';
 import { lerConfig } from './config';
 import { q, tx, um } from './db';
+import { agendar } from './fila';
 
 /**
  * Routines that run on the clock (every few minutes, with the queue): late tasks go up to the admins,
@@ -102,6 +103,32 @@ export async function enviarResumos(agora = new Date()): Promise<number> {
       }
       return enviados;
     });
+  }
+  return n;
+}
+
+/**
+ * Maintenance reminder: services marked as done N months ago get one reminder each. Only services that reached the date
+ * in the last 30 days are picked, so switching the rule on never sends a batch to customers served long ago.
+ */
+export async function agendarManutencoes(): Promise<number> {
+  let n = 0;
+  for (const e of await empresasAtivas()) {
+    const r = e.config.regras;
+    if (!r.manutencao_auto) continue;
+    const ops = await q<{ id: string; concluido: Date }>(
+      `select o.id, o.servico_concluido_em as concluido from oportunidades o
+       where o.empresa_id = $1 and o.etapa = 'ganho' and o.servico_concluido_em is not null
+         and o.servico_concluido_em <= now() - make_interval(months => $2)
+         and o.servico_concluido_em > now() - make_interval(months => $2) - interval '30 days'
+       limit 200`,
+      [e.id, r.manutencao_meses],
+    );
+    for (const o of ops) {
+      // One reminder per completed service, whatever happens to the rule afterwards (unique key).
+      const id = await tx((db) => agendar(db, e.id, { tipo: 'lembrete_manutencao', chave: `manutencao:${o.id}:${o.concluido.getTime()}`, oportunidadeId: o.id, dados: { meses: r.manutencao_meses } }));
+      if (id) n++;
+    }
   }
   return n;
 }

@@ -3,7 +3,11 @@ import { fecharPool, q, um } from '@/server/db';
 import { empresaPorId, salvarConfig } from '@/server/empresas';
 import { atribuir, criarTarefaManual, notificacoes, tarefas } from '@/server/oportunidades';
 import { receberPedido, type PedidoSalvo } from '@/server/pedidos';
-import { enviarResumos, escalarTarefas } from '@/server/rotinas';
+import { agendarManutencoes, enviarResumos, escalarTarefas } from '@/server/rotinas';
+import { processarFila } from '@/server/trabalhos';
+import { salvarWhatsApp } from '@/server/integracoes';
+import { mudarEtapa, marcarServicoConcluido } from '@/server/oportunidades';
+import { simularEntradaWhatsApp } from '@/server/conversas';
 import { contar, meta, novaEmpresa, pedido, type Cenario } from './apoio';
 
 let A: Cenario;
@@ -95,5 +99,75 @@ describe('resumo do dia', () => {
     expect(await contar(`notificacoes where empresa_id = $1 and titulo like '%resumo%'`, [E.empresa.id])).toBe(0);
     expect((await um<{ n: number }>(`select count(*)::int as n from notificacoes where empresa_id = $1`, [E.empresa.id]))!.n).toBe(0);
     expect(await tarefas(E.admin)).toEqual([]);
+  });
+});
+
+describe('lembrete de manutenção', () => {
+  let M: Cenario;
+  const servico = async (extra = {}) => {
+    const p = (await receberPedido((await empresaPorId(M.empresa.id))!, pedido(extra), meta())) as PedidoSalvo;
+    await mudarEtapa(M.vendedor, p.oportunidadeId, { etapa: 'ganho', valorCentavos: 100 });
+    await marcarServicoConcluido(M.vendedor, p.oportunidadeId);
+    return p;
+  };
+  const voltarNoTempo = (op: string, meses: number, dias = 0) => q(`update oportunidades set servico_concluido_em = now() - make_interval(months => $2, days => $3) where id = $1`, [op, meses, dias]);
+  const lembretes = (contato: string) => q<{ corpo: string; estado: string }>(`select m.corpo, m.estado from mensagens m join conversas v on v.id = m.conversa_id where v.contato_id = $1 and m.corpo like '%manutenção%'`, [contato]);
+  const rodar = async () => { await agendarManutencoes(); await q(`update trabalhos set executar_em = now() - interval '1 second' where estado = 'pendente' and tipo in ('lembrete_manutencao', 'enviar_mensagem')`); await processarFila(); await processarFila(); };
+
+  beforeAll(async () => {
+    M = await novaEmpresa('Solar Manutenção');
+    await salvarConfig(M.admin, 'regras', { ...M.empresa.config.regras, manutencao_auto: true, manutencao_meses: 12, hora_inicio: 0, hora_fim: 24 });
+    await salvarWhatsApp(M.admin, { modo: 'simulador', modelo_manutencao: 'lembrete_manutencao_aprovado' });
+  });
+
+  it('o texto de autorização novo inclui a manutenção e fica guardado com a versão', async () => {
+    const p = (await receberPedido((await empresaPorId(M.empresa.id))!, pedido(), meta())) as PedidoSalvo;
+    const k = await um<{ texto: string; versao: number }>('select texto, versao from consentimentos where contato_id = $1', [p.contatoId]);
+    expect(k?.versao).toBe(2);
+    expect(k?.texto).toMatch(/lembrar da manutenção/);
+  });
+
+  it('12 meses depois do serviço: uma mensagem, uma vez só, com o modelo aprovado', async () => {
+    const p = await servico();
+    await voltarNoTempo(p.oportunidadeId, 11);
+    await rodar();
+    expect(await lembretes(p.contatoId)).toHaveLength(0);
+    await voltarNoTempo(p.oportunidadeId, 12, 2);
+    await rodar();
+    const ms = await lembretes(p.contatoId);
+    expect(ms).toHaveLength(1);
+    expect(ms[0].estado).toBe('enviada');
+    expect(ms[0].corpo).toMatch(/^Olá, Marina! Aqui é da Solar Manutenção\. Já faz 12 meses do serviço/);
+    expect(ms[0].corpo).toMatch(/responda SAIR\.$/);
+    await rodar();
+    expect(await lembretes(p.contatoId)).toHaveLength(1);
+  });
+
+  it('não manda para autorização antiga (sem a manutenção), para quem pediu para parar, nem para serviço feito há muito tempo', async () => {
+    const antigo = await servico();
+    await q('update consentimentos set versao = 1 where contato_id = $1', [antigo.contatoId]);
+    await voltarNoTempo(antigo.oportunidadeId, 12, 1);
+    const tel = '11' + String(910000000 + Math.floor(Math.random() * 89999999));
+    const parou = await servico({ telefone: tel });
+    await simularEntradaWhatsApp(M.admin, tel, '', 'SAIR');
+    await voltarNoTempo(parou.oportunidadeId, 12, 1);
+    const velho = await servico();
+    await voltarNoTempo(velho.oportunidadeId, 30);
+    await rodar();
+    expect(await lembretes(antigo.contatoId)).toHaveLength(0);
+    expect(await lembretes(parou.contatoId)).toHaveLength(0);
+    expect(await lembretes(velho.contatoId)).toHaveLength(0);
+    expect((await um<{ resultado: string }>(`select resultado from trabalhos where oportunidade_id = $1 and tipo = 'lembrete_manutencao'`, [antigo.oportunidadeId]))!.resultado).toMatch(/não inclui o lembrete/);
+    expect(await contar(`trabalhos where oportunidade_id = $1 and tipo = 'lembrete_manutencao'`, [velho.oportunidadeId])).toBe(0);
+  });
+
+  it('com a regra desligada, nada é agendado', async () => {
+    const N = await novaEmpresa('Solar Sem Manutenção');
+    const p = (await receberPedido((await empresaPorId(N.empresa.id))!, pedido(), meta())) as PedidoSalvo;
+    await mudarEtapa(N.vendedor, p.oportunidadeId, { etapa: 'ganho' });
+    await marcarServicoConcluido(N.vendedor, p.oportunidadeId);
+    await q(`update oportunidades set servico_concluido_em = now() - interval '12 months 1 day' where id = $1`, [p.oportunidadeId]);
+    await agendarManutencoes();
+    expect(await contar(`trabalhos where oportunidade_id = $1 and tipo = 'lembrete_manutencao'`, [p.oportunidadeId])).toBe(0);
   });
 });

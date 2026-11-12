@@ -77,6 +77,9 @@ export default async function Configuracoes() {
           <Num id="retorno_auto_horas" rotulo="Primeira mensagem depois de (horas)" valor={c.regras.retorno_auto_horas} min={1} max={720} />
           <Num id="retorno_auto_horas_2" rotulo="Segunda mensagem depois de (horas; 0 = não enviar)" valor={c.regras.retorno_auto_horas_2} min={0} max={1440} />
           <div className="sm:col-span-2"><Marcar id="avaliacao_auto" rotulo="Convidar para avaliar quando o serviço for marcado como concluído" ajuda="O mesmo convite para todos os clientes, sem recompensa." marcado={c.regras.avaliacao_auto} /></div>
+          <div className="sm:col-span-2"><Marcar id="manutencao_auto" rotulo="Lembrar o cliente da manutenção depois do serviço" ajuda="Uma mensagem por serviço concluído, só para quem aceitou o texto de autorização que inclui a manutenção. Ligar a regra não manda nada para quem fez o serviço há muito tempo." marcado={c.regras.manutencao_auto} /></div>
+          <Num id="manutencao_meses" rotulo="Lembrar depois de (meses)" valor={c.regras.manutencao_meses} min={1} max={36} />
+          <div />
           <Num id="escalar_horas" rotulo="Avisar os administradores quando uma tarefa vencer há mais de (horas; 0 = não avisar)" valor={c.regras.escalar_horas} min={0} max={168} />
           <div />
           <div className="sm:col-span-2"><Marcar id="resumo_diario" rotulo="Resumo do dia no painel" ajuda="Cada pessoa recebe um aviso com os pedidos novos, as tarefas de hoje e as vencidas dela; os administradores, os da empresa toda. Se não houver nada, não manda." marcado={c.regras.resumo_diario} /></div>
@@ -113,6 +116,7 @@ export default async function Configuracoes() {
           <div><label className="rotulo" htmlFor="modelo_confirmacao">Modelo aprovado: confirmação do pedido</label><input className="campo" id="modelo_confirmacao" name="modelo_confirmacao" defaultValue={zap.config.modelo_confirmacao} /></div>
           <div><label className="rotulo" htmlFor="modelo_retorno">Modelo aprovado: retorno da proposta</label><input className="campo" id="modelo_retorno" name="modelo_retorno" defaultValue={zap.config.modelo_retorno} /></div>
           <div><label className="rotulo" htmlFor="modelo_avaliacao">Modelo aprovado: convite de avaliação</label><input className="campo" id="modelo_avaliacao" name="modelo_avaliacao" defaultValue={zap.config.modelo_avaliacao} /></div>
+          <div><label className="rotulo" htmlFor="modelo_manutencao">Modelo aprovado: lembrete de manutenção</label><input className="campo" id="modelo_manutencao" name="modelo_manutencao" defaultValue={zap.config.modelo_manutencao} /></div>
           <div><label className="rotulo" htmlFor="idioma_modelos">Idioma dos modelos</label><input className="campo" id="idioma_modelos" name="idioma_modelos" defaultValue={zap.config.idioma_modelos} /></div>
           <p className="text-sm text-suave sm:col-span-2">Fora das 24 horas depois da última mensagem do cliente, o WhatsApp só aceita modelos aprovados pela Meta. Sem modelo, o envio automático vira tarefa para uma pessoa. Endereço para os avisos da Meta (webhook): <code className="break-all">{base}/api/webhooks/whatsapp</code></p>
           <div className="sm:col-span-2"><Enviar>Salvar WhatsApp</Enviar></div>

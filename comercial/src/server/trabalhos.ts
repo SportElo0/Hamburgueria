@@ -29,7 +29,7 @@ export function proximoHorarioPermitido(regras: Empresa['config']['regras'], ago
 interface Iniciada {
   oportunidadeId: string;
   corpo: string;
-  finalidade: 'confirmacao' | 'retorno' | 'avaliacao' | 'fluxo';
+  finalidade: 'confirmacao' | 'retorno' | 'avaliacao' | 'manutencao' | 'fluxo';
   /** Approved template name chosen by a flow step; empty = free text only inside the 24-hour window. */
   modelo?: string;
   /** For follow-ups: cancel when the customer wrote after this moment. */
@@ -47,7 +47,7 @@ export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultad
   if (adiar) return { tipo: 'adiar', para: adiar, nota: 'Fora do horário de envio da empresa.' };
   const { canal, config, motivo } = await canalDa(empresa.id);
   if (!canal) return { tipo: 'cancelado', motivo: motivo ?? 'Canal indisponível.' };
-  const modelo = i.finalidade === 'fluxo' ? i.modelo ?? '' : { confirmacao: config.modelo_confirmacao, retorno: config.modelo_retorno, avaliacao: config.modelo_avaliacao }[i.finalidade];
+  const modelo = i.finalidade === 'fluxo' ? i.modelo ?? '' : { confirmacao: config.modelo_confirmacao, retorno: config.modelo_retorno, avaliacao: config.modelo_avaliacao, manutencao: config.modelo_manutencao }[i.finalidade];
   return tx(async (db): Promise<Resultado> => {
     const o = await um<{ id: string; etapa: string; contato_id: string; responsavel_id: string | null; nome: string; nao_contatar_em: Date | null }>(
       `select o.id, o.etapa, o.contato_id, o.responsavel_id, c.nome, c.nao_contatar_em from oportunidades o join contatos c on c.id = o.contato_id
@@ -62,6 +62,11 @@ export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultad
     if (!(await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null`, [empresa.id, o.contato_id], db))) {
       return { tipo: 'cancelado', motivo: 'Sem autorização de contato pelo WhatsApp.' };
     }
+    // The maintenance reminder needs an acceptance of the text that mentions it.
+    if (i.finalidade === 'manutencao' && !(await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null and versao >= 2`, [empresa.id, o.contato_id], db))) {
+      return { tipo: 'cancelado', motivo: 'A autorização deste cliente não inclui o lembrete de manutenção.' };
+    }
+    if (i.finalidade === 'manutencao' && o.etapa !== 'ganho') return { tipo: 'cancelado', motivo: 'A venda não está mais como ganha.' };
     let v = await um<Conversa>(`select * from conversas where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' for update`, [empresa.id, o.contato_id], db);
     if (!v) v = (await um<Conversa>(`insert into conversas (empresa_id, contato_id, oportunidade_id, canal, dados) values ($1, $2, $3, 'whatsapp', $4) returning *`, [empresa.id, o.contato_id, o.id, JSON.stringify(o.nome ? { nome: o.nome } : {})], db))!;
     if (v.estado !== 'ia_ativa') return { tipo: 'cancelado', motivo: v.estado === 'humano_atendendo' ? 'Uma pessoa assumiu a conversa.' : 'A conversa está aguardando uma pessoa.' };
@@ -69,7 +74,7 @@ export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultad
     const naJanela = !!v.ultima_entrada_em && Date.now() - v.ultima_entrada_em.getTime() < JANELA_WHATSAPP_MS;
     if (!naJanela && !modelo) {
       // Outside the 24-hour window WhatsApp only accepts a template approved by Meta. Without one, a person does it.
-      await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'contato_manual', titulo: { confirmacao: 'Confirmar o recebimento do pedido com o cliente', retorno: 'Retornar ao cliente sobre a proposta', avaliacao: 'Enviar o convite de avaliação ao cliente', fluxo: 'Enviar ao cliente a mensagem de um fluxo de automação' }[i.finalidade], detalhe: 'Envio automático não feito: falta um modelo de mensagem aprovado no WhatsApp.', responsavelId: o.responsavel_id, chave: `manual:${t.id}` });
+      await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'contato_manual', titulo: { confirmacao: 'Confirmar o recebimento do pedido com o cliente', retorno: 'Retornar ao cliente sobre a proposta', avaliacao: 'Enviar o convite de avaliação ao cliente', manutencao: 'Lembrar o cliente da manutenção', fluxo: 'Enviar ao cliente a mensagem de um fluxo de automação' }[i.finalidade], detalhe: 'Envio automático não feito: falta um modelo de mensagem aprovado no WhatsApp.', responsavelId: o.responsavel_id, chave: `manual:${t.id}` });
       return { tipo: 'cancelado', motivo: 'Fora da janela de 24 horas e sem modelo aprovado: virou tarefa.' };
     }
     const m = await um<{ id: string }>(
@@ -125,6 +130,14 @@ export const executores: Record<string, Executor> = {
     return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'retorno', agendadoEm: new Date(String(t.dados.agendado_em ?? t.criado_em)), corpo });
   },
 
+  async lembrete_manutencao(t) {
+    const empresa = await empresaPorId(t.empresa_id);
+    if (!empresa?.config.regras.manutencao_auto) return { tipo: 'cancelado', motivo: 'O lembrete de manutenção foi desligado nas regras da empresa.' };
+    const nome = nomeSeguro(await nomeDe(undefined, t.empresa_id, t.oportunidade_id!));
+    const meses = Number(t.dados.meses ?? empresa.config.regras.manutencao_meses);
+    return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'manutencao', corpo: `Olá${nome ? `, ${nome}` : ''}! Aqui é da ${empresa.nome}. Já faz ${meses} ${meses === 1 ? 'mês' : 'meses'} do serviço que fizemos. Quer agendar a manutenção? É só responder por aqui que uma pessoa da equipe combina com você. Para não receber mensagens, responda SAIR.` });
+  },
+
   /** The same neutral invitation for every eligible customer. */
   async convite_avaliacao(t) {
     const empresa = await empresaPorId(t.empresa_id);
@@ -151,8 +164,8 @@ export const processarFila = (max?: number) => processarPendentes(executores, ma
 /** Time-based automations: started here, every few minutes, then run by the queue like any other step. */
 export async function varrerAutomacoes(): Promise<number> {
   const { varrerParadas } = await import('./fluxos');
-  const { escalarTarefas, enviarResumos } = await import('./rotinas');
-  return (await varrerParadas()) + (await escalarTarefas()) + (await enviarResumos());
+  const { escalarTarefas, enviarResumos, agendarManutencoes } = await import('./rotinas');
+  return (await varrerParadas()) + (await escalarTarefas()) + (await enviarResumos()) + (await agendarManutencoes());
 }
 
 export const NOME_TRABALHO: Record<string, string> = {
@@ -163,6 +176,7 @@ export const NOME_TRABALHO: Record<string, string> = {
   retorno_cliente: 'Retorno ao cliente depois da proposta',
   convite_avaliacao: 'Convite de avaliação',
   fluxo_passo: 'Passo de um fluxo de automação',
+  lembrete_manutencao: 'Lembrete de manutenção',
 };
 
 export interface Execucao {
