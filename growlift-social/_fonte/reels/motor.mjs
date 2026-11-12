@@ -16,7 +16,7 @@ export const H = 1920;
 
 let browser = null;
 export async function launch() {
-  browser ??= await chromium.launch({ executablePath: CHROME, args: ['--autoplay-policy=no-user-gesture-required'] });
+  browser ??= await chromium.launch({ executablePath: CHROME, args: ['--autoplay-policy=no-user-gesture-required', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   return browser;
 }
 export async function close() {
