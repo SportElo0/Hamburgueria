@@ -3,7 +3,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 import { simulador } from '@/server/canais/simulador';
 import { assinaturaValida } from '@/server/canais/whatsapp-cloud';
 import { conviteAberto, gerarLinkAvaliacao, registrarFeedbackPrivado } from '@/server/avaliacoes';
-import { assumir, devolverParaIA, enviarComoHumano, escreverNoChatSite, lerChatSite, mensagensDe, obterConversa, processarWebhookWhatsApp, receberWhatsApp, simularEntradaWhatsApp } from '@/server/conversas';
+import { assumir, devolverParaIA, enviarComoHumano, escreverNoChatSite, lerChatSite, mensagensDe, obterConversa, processarWebhookWhatsApp, simularEntradaWhatsApp } from '@/server/conversas';
 import { fecharPool, q, um } from '@/server/db';
 import { empresaPorId, salvarConfig } from '@/server/empresas';
 import { usarIaDeTeste } from '@/server/ia';

@@ -1,0 +1,160 @@
+# Growlift Comercial
+
+Plataforma própria da Growlift para empresas de serviços: recebe pedidos de orçamento, atende interessados (com assistente virtual e pessoas) e acompanha as negociações. O primeiro segmento configurado é energia solar.
+
+O objetivo é melhorar o atendimento e o acompanhamento da procura que a empresa já tem. A plataforma não promete clientes, vendas nem posição no Google.
+
+**Estado: primeira versão funcional, testada localmente. Não está em produção e não deve ser declarada segura ou pronta para produção sem os passos do fim deste arquivo.**
+
+## O que existe
+
+| Parte | Onde |
+| --- | --- |
+| Site da empresa com formulário, chat e privacidade | `/s/<endereço>` |
+| Formulário para colocar em um site que já existe | `/incorporar/<chave>` |
+| Painel: visão geral, oportunidades (quadro e lista), atendimento, tarefas, conhecimento, configurações | `/painel` |
+| Administração Growlift (cadastro de empresas, saúde das integrações) | `/admin` |
+| Convite de avaliação | `/avaliar/<token>` |
+
+Perfis: **administrador Growlift** (cadastra empresas; só vê dados de uma empresa entrando com motivo, por 1 hora, com registro no histórico dela), **administrador da empresa** e **vendedor**.
+
+## Escolhas técnicas (em poucas linhas)
+
+- **Next.js 16 + TypeScript**, um só aplicativo (monólito): é a mesma base dos outros projetos deste repositório.
+- **PostgreSQL**: toda tabela de negócio tem `empresa_id`, e as chaves estrangeiras compostas impedem, no próprio banco, que um registro aponte para outra empresa.
+- **Better Auth** para login, sessão e redefinição de senha (biblioteca mantida; nada de criptografia própria). Contas só nascem por convite.
+- **Fila de trabalhos no próprio banco** + um worker simples (`npm run worker`). Sem filas pagas, sem microsserviços.
+- **Adaptadores** para IA e WhatsApp, cada um com um simulador que segue a mesma interface.
+- Pasta separada do `plataforma/` (painel dos restaurantes), que é outro produto e usa outro tipo de armazenamento.
+
+## Rodar no seu computador
+
+Precisa de Node 22 e PostgreSQL 16 (instalado direto ou via Docker: `docker run -d --name growlift-pg -e POSTGRES_USER=growlift -e POSTGRES_PASSWORD=growlift -e POSTGRES_DB=growlift_dev -p 5432:5432 -v growlift-pg:/var/lib/postgresql/data postgres:16`). Os testes usam um segundo banco, `growlift_test`.
+
+```
+cd comercial
+npm install
+cp .env.example .env.local      # preencha BETTER_AUTH_SECRET e CHAVE_CREDENCIAIS (openssl rand -base64 32)
+npm run migrar                  # cria as tabelas
+npm run demo                    # dados fictícios de duas empresas
+npm run dev                     # aplicação em http://localhost:3100
+npm run worker                  # em outro terminal: envios, alertas e retornos agendados
+```
+
+| Comando | O que faz |
+| --- | --- |
+| `npm test` | 38 testes de serviço contra o banco de teste |
+| `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
+| `npm run typecheck` / `npm run lint` | conferências de código |
+| `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
+
+Logins de demonstração (senha `demonstracao-2026`, tudo fictício): `equipe@growlift.demo`, `admin@lumivale.demo`, `vendas@lumivale.demo`, `admin@soldovale.demo`, `vendas@soldovale.demo`.
+
+## Ambientes
+
+`AMBIENTE` vale `desenvolvimento`, `demonstracao` ou `producao`, cada um com o seu banco (`DATABASE_URL`).
+
+- Em **produção** os simuladores ficam desligados: sem chave de IA, a conversa vai direto para a equipe; sem WhatsApp oficial, nada é enviado. Os dados de demonstração e o `--zerar` são recusados.
+- Fora de produção, o que é simulado aparece na tela como “Simulação — nenhuma mensagem externa enviada”.
+
+## Configurar uma empresa nova
+
+1. Entrar como equipe Growlift em `/admin` e cadastrar a empresa (nome, endereço, segmento). Ela nasce com o formulário do segmento e conteúdo em branco; nada é copiado de outra empresa.
+2. Entrar na empresa com um motivo e, em Configurações › Equipe, criar o convite do administrador dela. Enquanto o envio de e-mail não está ligado, o link aparece na tela para copiar.
+3. O administrador preenche **Conhecimento** (o que a assistente pode dizer), **Configurações › Site**, as **regras de acompanhamento** e quem recebe os pedidos novos.
+
+Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as perguntas extras do formulário; o resto do sistema não muda.
+
+## Ligar ao site que a empresa já tem
+
+**Formulário incorporado**: colar o `<iframe>` mostrado em Configurações › Formulário no seu site.
+
+**Integração** (`POST /api/publico/pedidos`, JSON):
+
+```json
+{
+  "chave": "pk_... (chave pública da empresa)",
+  "nome": "Nome", "telefone": "(11) 91234-5678", "cidade": "Campinas",
+  "necessidade": "O que a pessoa precisa",
+  "preferencia_contato": "WhatsApp",
+  "aceite_whatsapp": true,
+  "chave_idempotencia": "um-identificador-unico-por-envio",
+  "extras": { "tipo_imovel": "Casa", "gasto_mensal": "450" },
+  "campanha": { "utm_source": "google" }
+}
+```
+
+Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
+
+## Ativar a IA
+
+Sem chave, a assistente roda no **simulador** (respostas por regras, marcadas como simulação). Para o modelo real: `IA_ANTHROPIC_API_KEY` no servidor (chave da API da Anthropic contratada para este fim; o acesso usado para programar não serve para atender clientes). Modelo padrão em `IA_MODELO_PADRAO`, e cada empresa pode escolher o seu em Configurações › Assistente, junto com o limite mensal de respostas.
+
+O adaptador real (`src/server/ia/anthropic.ts`) **não foi exercitado contra a API** nesta versão: falta a chave.
+
+O que a assistente pode fazer está limitado no servidor a três ações (guardar dados do orçamento, registrar interesse em visita, chamar uma pessoa). Ela não muda etapa, não fecha venda e não informa preço que não esteja em “Preços autorizados”. O telefone do cliente não é enviado ao modelo.
+
+## Ativar o WhatsApp
+
+Só a API oficial (WhatsApp Business Platform, da Meta), com o número da própria empresa, que paga a Meta. Passos:
+
+1. Criar o aplicativo e a conta do WhatsApp Business na Meta e aprovar os modelos de mensagem (confirmação, retorno, avaliação).
+2. No servidor: `WHATSAPP_APP_SECRET`, `WHATSAPP_VERIFY_TOKEN` e `WHATSAPP_GRAPH_VERSION` (a versão atual da Graph API, conferida na documentação da Meta no dia).
+3. Na Meta, apontar o webhook para `<APP_URL>/api/webhooks/whatsapp` com o mesmo token de verificação.
+4. Na empresa, Configurações › WhatsApp: modo Oficial, ID do número, token de acesso (guardado cifrado) e os nomes dos modelos.
+
+**Limite importante:** o adaptador (`src/server/canais/whatsapp-cloud.ts`) foi escrito conforme o formato conhecido da API e testado com a rede simulada. A documentação da Meta não pôde ser aberta do ambiente em que isto foi construído e **nenhum envio real foi feito**. Antes do primeiro cliente: conferir endereço, campos, assinatura do webhook e regras de janela na documentação atual, e testar só com números próprios ou destinatários de teste autorizados.
+
+Regras já aplicadas no servidor: assinatura do webhook verificada antes de ler o conteúdo; cada evento processado uma vez; mensagem só vira “enviada” com o identificador devolvido pela Meta; sem resposta da Meta vira “sem confirmação” e não é reenviada; texto livre só até 24 horas depois da última mensagem do cliente (fora disso, modelo aprovado ou tarefa para uma pessoa); SAIR bloqueia envios automáticos e revoga a autorização.
+
+## Dados pessoais, exportação, exclusão e guarda
+
+- O formulário não pede CPF, documentos, dados bancários nem endereço completo.
+- **Exportar**: Configurações › Dados (só administrador da empresa; fica registrado).
+- **Excluir**: na oportunidade, “Excluir este contato” apaga contato, oportunidades, conversas, tarefas e histórico ligados a ele, e cancela envios pendentes. Fica só o registro anônimo de que houve uma exclusão.
+- **Guarda**: esta versão não apaga nada sozinha. O prazo de guarda é decisão de cada empresa com orientação jurídica; a limpeza automática por prazo é um próximo passo. Contadores de abuso e identificadores de webhook são apagados pelo worker (1 e 30 dias).
+- A política de privacidade é o texto que a empresa escrever. A plataforma não garante adequação à lei.
+
+## Backup e restauração
+
+Local: `pg_dump -Fc growlift_dev > backup.dump` e `pg_restore --clean -d growlift_dev backup.dump`. Em produção, usar um Postgres gerenciado com backup diário e restauração por ponto no tempo, e **testar uma restauração** antes do primeiro cliente. Guardar `CHAVE_CREDENCIAIS` fora do banco: sem ela, os tokens das empresas não podem ser lidos (e precisariam ser cadastrados de novo).
+
+## Dependências externas e custos
+
+Nenhuma mensalidade é necessária para rodar o núcleo no computador. Em produção:
+
+| Item | Tipo | O que se sabe |
+| --- | --- | --- |
+| Hospedagem da aplicação + processo do worker | fixo | Não cotado. O worker precisa de um processo que fique ligado (ou uma chamada agendada frequente). |
+| PostgreSQL gerenciado | fixo | Não cotado. |
+| IA (Anthropic) | variável, por uso | Preços de tabela por milhão de tokens (entrada / saída), referência de 03/11/2026 do material da Anthropic usado no desenvolvimento: Opus 5.5 US$ 4 / US$ 20; Sonnet 5.5 US$ 2 / US$ 10; Haiku 5.5 US$ 0,10 / US$ 0,50. Conferir a página de preços antes de fechar valores. |
+| WhatsApp (Meta) | variável, por mensagem | Pago pela empresa cliente à Meta. Preços não verificados (documentação inacessível daqui). |
+| E-mail transacional (convites, senha) | fixo ou por uso | Ainda não integrado. |
+| Domínio | fixo | Não cotado. |
+
+**Ainda desconhecido** (por isso não há estimativa de custo por cliente): quantas conversas por mês cada empresa terá, quantas mensagens por conversa, o tamanho do conteúdo de cada empresa e quantas mensagens iniciadas pela empresa (modelos) serão enviadas. O painel já mede respostas e tokens por empresa por mês, para calcular isso com dados reais do primeiro cliente. A oferta de R$ 1.200 por mês é contexto comercial e não foi validada contra esses custos.
+
+## Limitações de segurança conhecidas
+
+- Não há revisão de segurança independente nem teste de invasão.
+- O isolamento entre empresas é feito pelo código (toda consulta leva a empresa da sessão) e pelas chaves estrangeiras; não há políticas de linha (RLS) no banco como segunda barreira.
+- Sem verificação em duas etapas no login.
+- Os limites contra abuso usam o endereço IP informado pelo servidor de borda; atrás de um proxy mal configurado, podem ser contornados. Não há CAPTCHA.
+- O envio de e-mail não existe: convites e links de senha aparecem para copiar (e, fora de produção, na lista de e-mails simulados).
+- Um só segredo de aplicativo da Meta para todas as empresas (modelo de um aplicativo Growlift).
+- Avisos de entrega que chegarem antes de a plataforma gravar o identificador da mensagem são ignorados.
+- A resistência da assistente a mensagens maliciosas foi testada no simulador e na camada do servidor (que recusa qualquer ação fora da lista); o comportamento do modelo real não foi avaliado.
+
+## Fora desta versão (sem telas que finjam funcionar)
+
+Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanhas de anúncios, central telefônica, chamadas perdidas, gestão financeira, contratos, pagamentos e cobrança automática de assinaturas. Também: arrastar cartões no quadro, envio de mídia, agenda de visitas.
+
+## Próximos passos para o primeiro cliente em produção
+
+1. Escolher e contratar hospedagem e Postgres gerenciado (decisão e custo de vocês); configurar as variáveis e rodar `npm run migrar`.
+2. Ligar um serviço de e-mail para convites e redefinição de senha.
+3. Conferir o adaptador do WhatsApp na documentação atual da Meta e testar com número próprio.
+4. Contratar a chave da API de IA, escolher o modelo e testar a assistente real com o conteúdo do cliente (incluindo tentativas de burlar as regras).
+5. Rodar as revisões de segurança e legal do repositório (`revisor-seguranca`, `revisor-legal`) e corrigir o que apontarem.
+6. Testar backup e restauração.
+7. Com o cliente: texto de privacidade revisado por advogado, conteúdo aprovado, modelos de mensagem aprovados na Meta, equipe convidada.

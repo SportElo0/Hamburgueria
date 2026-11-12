@@ -17,7 +17,7 @@ export const iaSimulada: AdaptadorIA = {
     const anterior = [...p.historico].reverse().find((m) => m.de === 'assistente')?.texto ?? '';
     const t = limpo(ultima);
     const primeira = !p.historico.some((m) => m.de === 'assistente');
-    const ola = primeira ? `Olá! Sou ${c.assistente}, assistente virtual da ${c.empresa}. ` : '';
+    const ola = primeira ? `Olá! Sou ${/assistente virtual/i.test(c.assistente) ? 'a' : `${c.assistente}, a`} assistente virtual da ${c.empresa}. ` : '';
     const fim = (texto: string): RespostaIA => ({ texto: (ola + texto).trim(), tokensEntrada: 0, tokensSaida: 0, modelo: 'simulador' });
     let faltando = [...c.faltando];
 

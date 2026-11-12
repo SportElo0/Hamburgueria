@@ -50,6 +50,8 @@ export interface Mensagem {
 /** Automatic sends that a human take-over, a reply or an opt-out must stop. */
 const AUTOMATICOS = ['responder_ia', 'retorno_cliente', 'convite_avaliacao', 'confirmacao_pedido'];
 export const JANELA_WHATSAPP_MS = 24 * 3_600_000;
+/** WhatsApp accepts free text only up to 24 hours after the customer's last message. */
+export const naJanelaWhatsApp = (ultimaEntrada: Date | null) => !!ultimaEntrada && Date.now() - ultimaEntrada.getTime() < JANELA_WHATSAPP_MS;
 const TELEFONE = /(?:\+?55[\s.-]?)?\(?\d{2}\)?[\s.-]?9?\d{4}[\s.-]?\d{4}/;
 const TELEFONE_G = new RegExp(TELEFONE.source, 'g');
 const SAIR = /^\s*(sair|parar|pare|stop|cancelar|descadastrar|nao quero mais|não quero mais)\s*[.!]?\s*$/i;

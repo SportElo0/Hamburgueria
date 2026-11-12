@@ -1,0 +1,286 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
+import { redirect, unstable_rethrow } from 'next/navigation';
+import type { Retorno } from '@/componentes/formulario';
+import { deCampoData } from '@/componentes/formato';
+import { auth } from '@/server/auth';
+import { gerarLinkAvaliacao } from '@/server/avaliacoes';
+import type { Etapa } from '@/server/config';
+import { salvarConhecimento } from '@/server/conhecimento';
+import { dentroDoLimite } from '@/server/contexto';
+import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, simularEntradaWhatsApp } from '@/server/conversas';
+import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig } from '@/server/empresas';
+import { ErroDeUso } from '@/server/erros';
+import { salvarWhatsApp } from '@/server/integracoes';
+import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
+import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
+import { processarFila } from '@/server/trabalhos';
+
+const t = (fd: FormData, k: string) => String(fd.get(k) ?? '').trim();
+
+/** Runs an action and turns expected errors into a message for the form. Unexpected ones are logged, not shown. */
+async function tentar(fn: () => Promise<Retorno | void>): Promise<Retorno> {
+  try {
+    const r = await fn();
+    revalidatePath('/', 'layout');
+    return r ?? { ok: 'Salvo.' };
+  } catch (err) {
+    unstable_rethrow(err);
+    if (err instanceof ErroDeUso) return { erro: err.message };
+    console.error('[acao]', err);
+    return { erro: 'Não foi possível concluir agora. Tente de novo em instantes.' };
+  }
+}
+
+function centavos(v: string): number | null {
+  if (!v) return null;
+  const n = Number(v.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.'));
+  if (!Number.isFinite(n) || n < 0) throw new ErroDeUso('Valor inválido. Exemplo: 18.500,00');
+  return Math.round(n * 100);
+}
+
+/* ---------- Access ---------- */
+
+export async function entrar(_: Retorno, fd: FormData): Promise<Retorno> {
+  if (!(await dentroDoLimite(`login:${await ipHash()}`, 10, 300))) return { erro: 'Muitas tentativas. Aguarde alguns minutos.' };
+  try {
+    await auth().api.signInEmail({ body: { email: t(fd, 'email').toLowerCase(), password: String(fd.get('senha') ?? '') }, headers: await headers() });
+  } catch {
+    return { erro: 'E-mail ou senha incorretos.' };
+  }
+  redirect('/');
+}
+
+export async function sair() {
+  await auth().api.signOut({ headers: await headers() }).catch(() => {});
+  redirect('/login');
+}
+
+export async function pedirNovaSenha(_: Retorno, fd: FormData): Promise<Retorno> {
+  if (!(await dentroDoLimite(`senha:${await ipHash()}`, 5, 900))) return { erro: 'Muitas tentativas. Aguarde alguns minutos.' };
+  await auth().api.requestPasswordReset({ body: { email: t(fd, 'email').toLowerCase(), redirectTo: '/redefinir' } }).catch(() => {});
+  // Same answer whether the e-mail exists or not.
+  return { ok: 'Se este e-mail tiver acesso, as instruções para criar uma senha nova foram geradas. Enquanto o envio de e-mail não está configurado, peça o link à equipe Growlift.' };
+}
+
+export async function redefinirSenha(_: Retorno, fd: FormData): Promise<Retorno> {
+  const senha = String(fd.get('senha') ?? '');
+  if (senha.length < 10) return { erro: 'A senha precisa de pelo menos 10 caracteres.' };
+  try {
+    await auth().api.resetPassword({ body: { newPassword: senha, token: t(fd, 'token') } });
+  } catch {
+    return { erro: 'Link inválido ou vencido. Peça um novo.' };
+  }
+  redirect('/login?senha=ok');
+}
+
+export async function aceitarConviteAcao(_: Retorno, fd: FormData): Promise<Retorno> {
+  const r = await tentar(async () => {
+    await aceitarConvite(t(fd, 'token'), t(fd, 'nome'), String(fd.get('senha') ?? ''));
+  });
+  if (r.erro) return r;
+  redirect('/login?convite=ok');
+}
+
+/* ---------- Opportunities ---------- */
+
+export const mudarEtapaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const valor = centavos(t(fd, 'valor'));
+    await mudarEtapa(await exigirCtx(), t(fd, 'id'), { etapa: t(fd, 'etapa') as Etapa, motivoPerda: t(fd, 'motivo'), valorCentavos: valor });
+    return { ok: 'Etapa atualizada.' };
+  });
+
+export const atribuirAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await atribuir(await exigirCtx(), t(fd, 'id'), t(fd, 'responsavel') || null);
+    return { ok: 'Responsável atualizado.' };
+  });
+
+export const proximaAcaoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await definirProximaAcao(await exigirCtx(), t(fd, 'id'), t(fd, 'texto'), deCampoData(t(fd, 'quando')));
+    return { ok: 'Próxima ação salva.' };
+  });
+
+export const anotarAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await anotar(await exigirCtx(), t(fd, 'id'), t(fd, 'texto'));
+    return { ok: 'Anotação salva.' };
+  });
+
+export const valorAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await definirValor(await exigirCtx(), t(fd, 'id'), centavos(t(fd, 'valor')));
+    return { ok: 'Valor salvo.' };
+  });
+
+export const servicoConcluidoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await marcarServicoConcluido(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Serviço marcado como concluído.' };
+  });
+
+export const linkAvaliacaoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => ({ copiar: await gerarLinkAvaliacao(await exigirCtx(), t(fd, 'id')) }));
+
+export const excluirContatoAcao = async (_: Retorno, fd: FormData) => {
+  const r = await tentar(async () => {
+    if (t(fd, 'confirmar') !== 'EXCLUIR') throw new ErroDeUso('Para confirmar, escreva EXCLUIR.');
+    await excluirContato(await exigirCtx(), t(fd, 'contato'));
+  });
+  if (r.erro) return r;
+  redirect('/painel/oportunidades');
+};
+
+/* ---------- Tasks ---------- */
+
+export const tarefaManualAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await criarTarefaManual(await exigirCtx(), { titulo: t(fd, 'titulo'), prazo: deCampoData(t(fd, 'prazo')), oportunidadeId: t(fd, 'oportunidade') || null, responsavelId: t(fd, 'responsavel') || null });
+    return { ok: 'Tarefa criada.' };
+  });
+
+export const concluirTarefaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await concluirTarefa(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Concluída.' };
+  });
+
+export async function lerNotificacoesAcao() {
+  await marcarNotificacoesLidas(await exigirCtx());
+  revalidatePath('/', 'layout');
+}
+
+/* ---------- Conversations ---------- */
+
+export const assumirAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await assumir(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Você assumiu a conversa. A assistente parou de responder.' };
+  });
+
+export const devolverAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await devolverParaIA(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Conversa devolvida para a assistente.' };
+  });
+
+export const encerrarAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await encerrarConversa(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Conversa encerrada.' };
+  });
+
+export const enviarMensagemAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await enviarComoHumano(await exigirCtx(), t(fd, 'id'), t(fd, 'texto'));
+    // Sends right away when the worker is not running (it would pick the job up anyway).
+    await processarFila(5).catch(() => {});
+    return { ok: 'Mensagem registrada.' };
+  });
+
+export const simularWhatsAppAcao = async (_: Retorno, fd: FormData) => {
+  let conversa = '';
+  const r = await tentar(async () => {
+    const x = await simularEntradaWhatsApp(await exigirCtx(), t(fd, 'telefone'), t(fd, 'nome'), t(fd, 'texto'));
+    await processarFila(5).catch(() => {});
+    conversa = x.conversaId ?? '';
+  });
+  if (r.erro || !conversa) return r;
+  redirect(`/painel/atendimento/${conversa}`);
+};
+
+/* ---------- Knowledge and settings ---------- */
+
+export const salvarConhecimentoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const perguntas = fd.getAll('pergunta').map(String);
+    const respostas = fd.getAll('resposta').map(String);
+    const faq = perguntas.map((p, i) => ({ pergunta: p.trim(), resposta: (respostas[i] ?? '').trim() })).filter((f) => f.pergunta && f.resposta);
+    const versao = await salvarConhecimento(await exigirCtx(), {
+      descricao: t(fd, 'descricao'), servicos: t(fd, 'servicos'), horarios: t(fd, 'horarios'), regioes: t(fd, 'regioes'), faq,
+      precos_autorizados: t(fd, 'precos_autorizados'), regras_comerciais: t(fd, 'regras_comerciais'), criterios_encaminhamento: t(fd, 'criterios_encaminhamento'),
+    });
+    return { ok: `Conteúdo salvo (versão ${versao}). A assistente já usa esta versão.` };
+  });
+
+const itens = (v: string) => v.split('\n').map((l) => l.trim()).filter(Boolean).map((l) => { const [titulo, ...resto] = l.split('|'); return { titulo: titulo.trim(), texto: resto.join('|').trim() }; });
+
+export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const ctx = await exigirCtx();
+    const atual = (await empresaPorId(ctx.empresaId))!.config;
+    const secao = t(fd, 'secao');
+    const num = (k: string) => Number(t(fd, k));
+    if (secao === 'regras') {
+      await salvarConfig(ctx, 'regras', { ...atual.regras, sla_minutos: num('sla_minutos'), retorno_proposta_dias: num('retorno_proposta_dias'), retorno_auto_cliente: fd.get('retorno_auto_cliente') === 'on', retorno_auto_horas: num('retorno_auto_horas'), avaliacao_auto: fd.get('avaliacao_auto') === 'on', hora_inicio: num('hora_inicio'), hora_fim: num('hora_fim') });
+    } else if (secao === 'ia') {
+      await salvarConfig(ctx, 'ia', { ...atual.ia, ativa: fd.get('ativa') === 'on', nome: t(fd, 'nome') || 'Assistente virtual', modelo: t(fd, 'modelo'), limite_respostas_mes: num('limite_respostas_mes'), max_mensagens_contexto: num('max_mensagens_contexto') });
+    } else if (secao === 'avaliacao') {
+      const link = t(fd, 'link');
+      if (link && !/^https:\/\/[^\s]+$/.test(link)) throw new ErroDeUso('O link de avaliação precisa começar com https://');
+      await salvarConfig(ctx, 'avaliacao', { link });
+    } else if (secao === 'site') {
+      await salvarConfig(ctx, 'site', { ...atual.site, chamada: t(fd, 'chamada'), descricao: t(fd, 'descricao'), servicos: itens(t(fd, 'servicos')), projetos: itens(t(fd, 'projetos')), areas: t(fd, 'areas').split(/[\n,]/).map((a) => a.trim()).filter(Boolean), whatsapp: t(fd, 'whatsapp').replace(/\D/g, ''), email: t(fd, 'email'), endereco: t(fd, 'endereco'), responsavel_dados: t(fd, 'responsavel_dados'), privacidade: t(fd, 'privacidade') });
+    } else throw new ErroDeUso('Seção desconhecida.');
+    return { ok: 'Configuração salva.' };
+  });
+
+export const salvarWhatsAppAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await salvarWhatsApp(await exigirCtx(), { modo: t(fd, 'modo'), phone_number_id: t(fd, 'phone_number_id'), waba_id: t(fd, 'waba_id'), modelo_confirmacao: t(fd, 'modelo_confirmacao'), modelo_retorno: t(fd, 'modelo_retorno'), modelo_avaliacao: t(fd, 'modelo_avaliacao'), idioma_modelos: t(fd, 'idioma_modelos') || 'pt_BR' }, String(fd.get('token') ?? ''));
+    return { ok: 'Configuração do WhatsApp salva.' };
+  });
+
+export const convidarAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const { link } = await convidar(await exigirCtx(), { email: t(fd, 'email'), papel: t(fd, 'papel') as 'admin' | 'vendedor' });
+    return { ok: 'Convite criado (vale 7 dias).', copiar: link };
+  });
+
+export const membroAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const acao = t(fd, 'acao');
+    await alterarMembro(await exigirCtx(), t(fd, 'membro'), acao === 'desativar' ? { ativo: false } : acao === 'reativar' ? { ativo: true } : { papel: acao === 'tornar_admin' ? 'admin' : 'vendedor' });
+    return { ok: 'Equipe atualizada.' };
+  });
+
+export const responsavelPadraoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await definirResponsavelPadrao(await exigirCtx(), t(fd, 'responsavel') || null);
+    return { ok: 'Responsável padrão salvo.' };
+  });
+
+/* ---------- Growlift admin ---------- */
+
+export const criarEmpresaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const s = await exigirPlataforma();
+    const e = await criarEmpresa(s.userId, { nome: t(fd, 'nome'), slug: t(fd, 'slug'), segmento: t(fd, 'segmento'), demonstracao: fd.get('demonstracao') === 'on' });
+    return { ok: `Empresa "${e.nome}" criada. Entre nela (com motivo) para convidar o administrador.` };
+  });
+
+export const entrarEmpresaAcao = async (_: Retorno, fd: FormData) => {
+  const r = await tentar(async () => {
+    const s = await exigirPlataforma();
+    await abrirAcessoAdmin(s.userId, t(fd, 'empresa'), t(fd, 'motivo'));
+  });
+  if (r.erro) return r;
+  redirect('/painel');
+};
+
+export async function sairEmpresaAcao() {
+  const s = await exigirPlataforma();
+  await encerrarAcessoAdmin(s.userId);
+  redirect('/admin');
+}
+
+export const ativarEmpresaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const s = await exigirPlataforma();
+    await definirAtiva(s.userId, t(fd, 'empresa'), t(fd, 'ativa') === 'sim');
+    return { ok: 'Atualizado.' };
+  });

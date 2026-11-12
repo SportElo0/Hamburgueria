@@ -55,6 +55,7 @@ export const ConfigEmpresa = z.object({
   site: z
     .object({
       chamada: Texto(120),
+      imagem: Texto(200),
       descricao: Texto(600),
       servicos: z.array(Item).max(8).default([]),
       areas: z.array(z.string().trim().min(1).max(60)).max(30).default([]),

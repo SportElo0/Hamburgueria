@@ -16,6 +16,7 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 | `pousada/` | Pousada Villa Verano | Vercel (`pousada-villa-verano` ou `villa-verano`: confirme no projeto antes) |
 | `bacchi/` | Site e catálogo da Bacchi (Next.js), versão de teste | Vercel `prj_UVUjMXxWuY4y3p8k0hGGgWhsuPJm` (bacchi-teste.vercel.app, fora do Google; ver `bacchi/README.md`) |
 | `lumivale/` | Lumivale Energia Solar, site conceito (empresa fictícia) do portfólio, HTML + GSAP | Vercel `prj_fNpaVGA4Mg240asPTrD0gbHjCgzK` (lumivale-conceito.vercel.app, fora do Google; ver `lumivale/README.md`) |
+| `comercial/` | Growlift Comercial: pedidos de orçamento, atendimento com IA e acompanhamento de negociações para empresas de serviços (Next.js + PostgreSQL) | não publicado; roda local (ver `comercial/README.md`) |
 | `growlift-social/` | Instagram e WhatsApp da Growlift (imagens, Reels, textos) | aparece no painel, aba Conteúdos |
 
 - Time da Vercel: `team_YoPHQ4Hb11W9RPG1cwvdMC3G`. Deploy a partir do GitHub `SportElo0/Hamburgueria`, branch `claude/downtown-burger-site`.
@@ -25,7 +26,7 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 
 ## Checagens antes de publicar
 
-- Raiz e `plataforma/`: `npm test`, `npm run typecheck`, `npm run lint` (na pasta do app que mudou).
+- Raiz, `plataforma/` e `comercial/`: `npm test`, `npm run typecheck`, `npm run lint` (na pasta do app que mudou). O `comercial/` precisa do PostgreSQL local ligado para os testes.
 - `growlift/`: abrir no navegador (Playwright) em celular e computador; não há build.
 - `plataforma/`: `npm run build` roda antes `scripts/conteudos.mjs`, que copia `../growlift-social` para o painel.
 
