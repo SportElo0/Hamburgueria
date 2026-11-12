@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 69 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
+| `npm test` | 73 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -69,6 +69,8 @@ Tela **Automações** (administrador): o que está ligado, o que está agendado 
 | Assistente virtual | a cada mensagem do cliente | responde, anota dados, chama uma pessoa |
 | Retorno da proposta | etapa “Proposta enviada” | tarefa do vendedor e até duas mensagens ao cliente, canceladas se ele responder, pedir SAIR, alguém assumir ou a etapa mudar |
 | Convite de avaliação | serviço marcado como concluído | convite neutro com o link público |
+| Tarefa vencida sobe | tarefa aberta passou do prazo há mais de X horas (padrão 4; 0 desliga) | aviso aos administradores com o nome do responsável, uma vez por tarefa |
+| Resumo do dia | todo dia a partir da hora escolhida (padrão 8h) | aviso no painel: pedidos novos (24 h), tarefas de hoje e vencidas de cada pessoa; para administradores, da empresa toda e quantas estão sem responsável; nada quando não há nada |
 
 Toda mensagem iniciada pela empresa respeita o horário configurado e a regra do WhatsApp: sem conversa nas últimas 24 horas, só sai com **modelo aprovado pela Meta** cadastrado em Configurações › WhatsApp. Sem modelo, vira tarefa para uma pessoa em vez de falhar em silêncio.
 
@@ -76,7 +78,7 @@ Toda mensagem iniciada pela empresa respeita o horário configurado e a regra do
 
 Em **Automações › Seus fluxos**, o administrador monta fluxos no estilo do HighLevel, sem assinatura de terceiros:
 
-- **Gatilho:** pedido novo, oportunidade entrou em uma etapa (a escolher), serviço concluído, o cliente mandou uma mensagem (com palavra-chave opcional, sem diferença de acento ou maiúscula) ou a oportunidade aberta ficou N dias sem interação (verificado a cada 5 minutos; de novo só depois de uma nova interação seguida de outro período parado).
+- **Gatilho:** pedido novo, oportunidade entrou em uma etapa (a escolher), serviço concluído, o cliente mandou uma mensagem (com palavra-chave opcional, sem diferença de acento ou maiúscula) ou a oportunidade aberta ficou N dias sem interação (verificado a cada 5 minutos, junto com as rotinas de tarefa vencida e resumo do dia; de novo só depois de uma nova interação seguida de outro período parado).
 - **Passos** (até 12 por fluxo, até 20 fluxos por empresa): esperar (minutos, horas ou dias), **parar se** e **se… ir para o passo N** (ramificação: se a condição vale, pula; senão, segue), **ir para o passo N** ou terminar, com as condições: o cliente respondeu / a etapa mudou / a oportunidade foi ganha ou perdida / uma pessoa assumiu a conversa / tem autorização de WhatsApp / tem responsável; enviar WhatsApp (com `{{nome}}` e `{{empresa}}`), criar tarefa, avisar a equipe, anotar no histórico, **atribuir responsável** (a uma pessoa escolhida ou ao vendedor com menos oportunidades abertas, mantendo quem já está se você quiser) e **mover para uma etapa do meio** (novo, em atendimento, qualificado, proposta enviada, negociação).
 - **Modelos prontos** (nascem desligados): proposta sem resposta, boas-vindas ao pedido, pós-venda, cliente pediu visita e orçamento parado (com ramificação).
 - **Desenho do fluxo** no editor: o gatilho no topo, cada passo em uma caixa ligada à próxima e os desvios marcados (“Sim → passo 4”, “Sim → para aqui”).

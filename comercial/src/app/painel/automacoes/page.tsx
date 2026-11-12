@@ -50,6 +50,8 @@ export default async function Automacoes() {
     { tipo: 'confirmacao_pedido', nome: 'Confirmação ao cliente', quando: 'Logo depois do pedido', ligada: true, detalhe: 'Mensagem pelo WhatsApp dizendo que o pedido chegou. Só para quem marcou a autorização no formulário.' },
     { tipo: 'responder_ia', nome: 'Assistente virtual', quando: 'A cada mensagem do cliente', ligada: empresa!.config.ia.ativa && !!ia, detalhe: `Responde com o conteúdo aprovado, anota os dados do orçamento e chama uma pessoa quando precisa.${ia?.simulada ? ' Hoje em simulação (sem modelo de IA).' : ''}` },
     { tipo: 'retorno_cliente', nome: 'Retorno da proposta', quando: 'Quando a oportunidade entra em “Proposta enviada”', ligada: r.retorno_auto_cliente, detalhe: `Cria a tarefa de retorno do vendedor em ${r.retorno_proposta_dias} dia(s).${r.retorno_auto_cliente ? ` Mensagem ao cliente depois de ${r.retorno_auto_horas} h${r.retorno_auto_horas_2 > r.retorno_auto_horas ? ` e de ${r.retorno_auto_horas_2} h` : ''}, cancelada se ele responder, pedir para parar, se alguém assumir ou se a etapa mudar.` : ' A mensagem automática ao cliente está desligada (só a tarefa).'}` },
+    { tipo: 'escalar', nome: 'Tarefa vencida sobe', quando: `Quando uma tarefa passa do prazo há mais de ${r.escalar_horas} h`, ligada: r.escalar_horas > 0, detalhe: 'Os administradores recebem um aviso com o nome do responsável. Cada tarefa avisa uma vez só.' },
+    { tipo: 'resumo', nome: 'Resumo do dia', quando: `Todo dia a partir das ${r.resumo_hora}h`, ligada: r.resumo_diario, detalhe: 'Aviso no painel: pedidos novos, tarefas de hoje e vencidas de cada pessoa; para os administradores, da empresa toda e quantas estão sem responsável.' },
     { tipo: 'convite_avaliacao', nome: 'Convite de avaliação', quando: 'Quando o serviço é marcado como concluído', ligada: r.avaliacao_auto && !!empresa!.config.avaliacao.link, detalhe: empresa!.config.avaliacao.link ? 'O mesmo convite neutro para todos os clientes, com o link público de avaliação.' : 'Falta configurar o link público de avaliação.' },
   ];
   return (
@@ -96,7 +98,7 @@ export default async function Automacoes() {
             <div className="flex items-start justify-between gap-2"><h2 className="font-bold">{a.nome}</h2><span className={`etiqueta ${a.ligada ? 'etiqueta-ok' : ''}`}>{a.ligada ? 'Ligada' : 'Desligada'}</span></div>
             <p className="text-sm font-semibold text-suave">{a.quando}</p>
             <p className="mt-1 text-[15px]">{a.detalhe}</p>
-            <p className="mt-2 text-[13px] text-suave">Últimos 30 dias: {conta(a.tipo, 'concluido')} feita(s) · {conta(a.tipo, 'cancelado')} cancelada(s) · {conta(a.tipo, 'falhou') + conta(a.tipo, 'incerto')} com problema · {conta(a.tipo, 'pendente')} agendada(s)</p>
+            {!['escalar', 'resumo'].includes(a.tipo) && <p className="mt-2 text-[13px] text-suave">Últimos 30 dias: {conta(a.tipo, 'concluido')} feita(s) · {conta(a.tipo, 'cancelado')} cancelada(s) · {conta(a.tipo, 'falhou') + conta(a.tipo, 'incerto')} com problema · {conta(a.tipo, 'pendente')} agendada(s)</p>}
           </li>
         ))}
       </ul>

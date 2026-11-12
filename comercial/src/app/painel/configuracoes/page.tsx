@@ -77,6 +77,11 @@ export default async function Configuracoes() {
           <Num id="retorno_auto_horas" rotulo="Primeira mensagem depois de (horas)" valor={c.regras.retorno_auto_horas} min={1} max={720} />
           <Num id="retorno_auto_horas_2" rotulo="Segunda mensagem depois de (horas; 0 = não enviar)" valor={c.regras.retorno_auto_horas_2} min={0} max={1440} />
           <div className="sm:col-span-2"><Marcar id="avaliacao_auto" rotulo="Convidar para avaliar quando o serviço for marcado como concluído" ajuda="O mesmo convite para todos os clientes, sem recompensa." marcado={c.regras.avaliacao_auto} /></div>
+          <Num id="escalar_horas" rotulo="Avisar os administradores quando uma tarefa vencer há mais de (horas; 0 = não avisar)" valor={c.regras.escalar_horas} min={0} max={168} />
+          <div />
+          <div className="sm:col-span-2"><Marcar id="resumo_diario" rotulo="Resumo do dia no painel" ajuda="Cada pessoa recebe um aviso com os pedidos novos, as tarefas de hoje e as vencidas dela; os administradores, os da empresa toda. Se não houver nada, não manda." marcado={c.regras.resumo_diario} /></div>
+          <Num id="resumo_hora" rotulo="Hora do resumo" valor={c.regras.resumo_hora} min={0} max={23} />
+          <div />
           <Num id="hora_inicio" rotulo="Mensagens automáticas a partir das (hora)" valor={c.regras.hora_inicio} min={0} max={23} />
           <Num id="hora_fim" rotulo="Até as (hora)" valor={c.regras.hora_fim} min={1} max={24} />
           <div className="sm:col-span-2"><Enviar>Salvar regras</Enviar></div>

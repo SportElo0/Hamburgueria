@@ -151,7 +151,8 @@ export const processarFila = (max?: number) => processarPendentes(executores, ma
 /** Time-based automations: started here, every few minutes, then run by the queue like any other step. */
 export async function varrerAutomacoes(): Promise<number> {
   const { varrerParadas } = await import('./fluxos');
-  return varrerParadas();
+  const { escalarTarefas, enviarResumos } = await import('./rotinas');
+  return (await varrerParadas()) + (await escalarTarefas()) + (await enviarResumos());
 }
 
 export const NOME_TRABALHO: Record<string, string> = {

@@ -82,6 +82,11 @@ export const ConfigEmpresa = z.object({
       retorno_auto_horas_2: z.number().int().min(0).max(60 * 24).default(0),
       /** Neutral review invitation when a service is marked as done. */
       avaliacao_auto: z.boolean().default(false),
+      /** Hours past the deadline before an open task is reported to the company admins (0 = off). */
+      escalar_horas: z.number().int().min(0).max(168).default(4),
+      /** Daily summary in the panel, at this local hour. */
+      resumo_diario: z.boolean().default(true),
+      resumo_hora: z.number().int().min(0).max(23).default(8),
       hora_inicio: z.number().int().min(0).max(23).default(8),
       hora_fim: z.number().int().min(1).max(24).default(20),
       fuso: z.string().default('America/Sao_Paulo'),
