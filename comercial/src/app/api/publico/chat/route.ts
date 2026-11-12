@@ -1,7 +1,9 @@
+import { after } from 'next/server';
 import { escreverNoChatSite, lerChatSite } from '@/server/conversas';
 import { empresaPorChave } from '@/server/empresas';
 import { ErroDeUso } from '@/server/erros';
 import { CORS, json, lerCorpo, respostaDeErro } from '@/server/publico';
+import { enviarAvisosCelular } from '@/server/push';
 import { ipHash } from '@/server/sessao';
 
 export const OPTIONS = () => new Response(null, { status: 204, headers: CORS });
@@ -17,7 +19,10 @@ export async function POST(req: Request) {
       if (!token) throw new ErroDeUso('Conversa não encontrada.', 404);
       return json(await lerChatSite(empresa, token));
     }
-    return json(await escreverNoChatSite(empresa, token, String(corpo.texto ?? ''), await ipHash()));
+    const r = await escreverNoChatSite(empresa, token, String(corpo.texto ?? ''), await ipHash());
+    // A hand-off to a person creates a notification: alert the phones right after answering.
+    after(() => enviarAvisosCelular().catch(() => {}));
+    return json(r);
   } catch (err) {
     return respostaDeErro(err);
   }

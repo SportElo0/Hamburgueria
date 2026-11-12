@@ -127,6 +127,17 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+## App no celular (avisos)
+
+O painel instala como aplicativo no celular (PWA): em **App no celular**, cada pessoa vê o passo a passo (iPhone: Safari › Compartilhar › Adicionar à Tela de Início; Android: Chrome › Instalar app) e liga os avisos daquele aparelho.
+
+- Toda notificação do painel (pedido novo, cliente esperando uma pessoa, tarefa, oportunidade atribuída, resumo do dia) também vai como aviso para os celulares de quem ela é; sem responsável, para os administradores ativos da empresa.
+- A tela bloqueada mostra só o assunto (o que vem antes de “:” no título, como “Novo pedido”) e o nome da empresa. Nome e mensagens do cliente ficam no painel.
+- Os avisos saem logo depois de cada ação (`after()`) e sempre que a fila roda. Aviso com mais de 1 hora não é mandado.
+- iPhone: só no app instalado e com iOS 16.4 ou mais novo.
+- Chaves: `VAPID_PUBLIC_KEY` e `VAPID_PRIVATE_KEY` (gere com `npx web-push generate-vapid-keys`). Sem elas, saem do segredo do Supabase, como as outras chaves. Trocar as chaves obriga cada pessoa a ligar os avisos de novo.
+- Arquivos: `public/manifest.webmanifest`, `public/sw.js` (só mostra avisos, não guarda nada), `src/server/push.ts`, `src/componentes/app-celular.tsx`.
+
 ## Ativar a IA
 
 Sem chave, a assistente roda no **simulador** (respostas por regras, marcadas como simulação). Para o modelo real: `IA_ANTHROPIC_API_KEY` no servidor (chave da API da Anthropic contratada para este fim; o acesso usado para programar não serve para atender clientes). Modelo padrão: `claude-haiku-5-5`, o mais barato (decidido em 12/11/2026; troca em `IA_MODELO_PADRAO`), e cada empresa pode escolher o seu em Configurações › Assistente, junto com o limite mensal de respostas.

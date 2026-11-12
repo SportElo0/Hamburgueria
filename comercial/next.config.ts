@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
       // Only the embeddable form may be framed by other sites.
       { source: '/:path((?!incorporar/).*)', headers: [...base, { key: 'X-Frame-Options', value: 'DENY' }] },
       { source: '/incorporar/:path*', headers: base },
+      // The service worker must always be fetched fresh, so a new version reaches installed phones.
+      { source: '/sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }] },
     ];
   },
 };

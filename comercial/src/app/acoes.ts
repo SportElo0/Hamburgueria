@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
+import { after } from 'next/server';
 import { redirect, unstable_rethrow } from 'next/navigation';
 import type { Retorno } from '@/componentes/formulario';
 import { deCampoData } from '@/componentes/formato';
@@ -17,6 +18,7 @@ import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFlu
 import { salvarWhatsApp } from '@/server/integracoes';
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
+import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, type InscricaoEntrada } from '@/server/push';
 import { processarFila } from '@/server/trabalhos';
 
 const t = (fd: FormData, k: string) => String(fd.get(k) ?? '').trim();
@@ -26,6 +28,8 @@ async function tentar(fn: () => Promise<Retorno | void>): Promise<Retorno> {
   try {
     const r = await fn();
     revalidatePath('/', 'layout');
+    // Notifications created by this action go to the phones right after the answer.
+    after(() => enviarAvisosCelular().catch((err) => console.error('[avisos celular]', err)));
     return r ?? { ok: 'Salvo.' };
   } catch (err) {
     unstable_rethrow(err);
@@ -375,4 +379,30 @@ export async function testarAssistenteAcao(_: import('@/componentes/testar-assis
     console.error('[testar-ia]', err instanceof Error ? err.message : err);
     return { erro: 'Não foi possível falar com a API da IA agora. Confira a chave e tente de novo.' };
   }
+}
+
+/* ---------- Phone app (alerts) ---------- */
+
+export async function ligarAvisosAcao(sub: InscricaoEntrada, aparelho: string): Promise<Retorno> {
+  return tentar(async () => {
+    const ctx = await exigirCtx();
+    await salvarInscricao(ctx, sub, String(aparelho ?? ''));
+    return { ok: 'Avisos ligados neste celular.' };
+  });
+}
+
+export async function desligarAvisosAcao(endpoint: string): Promise<Retorno> {
+  return tentar(async () => {
+    const ctx = await exigirCtx();
+    await removerInscricao(ctx, String(endpoint ?? ''));
+    return { ok: 'Avisos desligados neste celular.' };
+  });
+}
+
+export async function testarAvisoAcao(): Promise<Retorno> {
+  return tentar(async () => {
+    const ctx = await exigirCtx();
+    const n = await avisoDeTeste(ctx);
+    return n ? { ok: 'Aviso de teste enviado. Ele chega em alguns segundos.' } : { erro: 'O aviso não saiu. Desligue e ligue os avisos de novo neste celular.' };
+  });
 }

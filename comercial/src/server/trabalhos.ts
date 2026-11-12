@@ -1,4 +1,5 @@
 import { criarTarefa, registrar } from './contexto';
+import { enviarAvisosCelular } from './push';
 import { despachar, responderComIA, JANELA_WHATSAPP_MS, type Conversa } from './conversas';
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, type Empresa } from './empresas';
@@ -159,7 +160,12 @@ export async function criarConviteAvaliacao(empresaId: string, oportunidadeId: s
   return token;
 }
 
-export const processarFila = (max?: number) => processarPendentes(executores, max);
+export async function processarFila(max?: number): Promise<number> {
+  const n = await processarPendentes(executores, max);
+  // Phone alerts of the notifications these jobs (and the request that triggered them) created.
+  await enviarAvisosCelular().catch((err) => console.error('[avisos celular]', err));
+  return n;
+}
 
 /** Time-based automations: started here, every few minutes, then run by the queue like any other step. */
 export async function varrerAutomacoes(): Promise<number> {
