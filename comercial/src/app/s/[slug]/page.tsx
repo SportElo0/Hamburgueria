@@ -114,7 +114,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
           <Link className="underline" href={`/s/${empresa.slug}/privacidade`}>Privacidade</Link>
         </div>
       </footer>
-      {empresa.config.ia.ativa && <ChatSite chave={empresa.chave_publica} empresa={empresa.nome} linkPrivacidade={`/s/${empresa.slug}/privacidade`} />}
+      {empresa.config.ia.ativa && <ChatSite chave={empresa.chave_publica} empresa={empresa.nome} atendente={empresa.config.ia.nome} linkPrivacidade={`/s/${empresa.slug}/privacidade`} />}
     </div>
   );
 }

@@ -54,7 +54,8 @@ describe('5. assistente (simulador de IA)', () => {
     let chat = await escreverNoChatSite(A.empresa, null, 'Quanto tempo leva a instalação?', unico());
     const fala = () => chat.mensagens.at(-1)!;
     expect(fala().de).toBe('assistente');
-    expect(fala().texto).toContain('assistente virtual da Solar A');
+    expect(fala().texto).toContain('Aqui é Ana, da Solar A');
+    expect(fala().texto).not.toMatch(/rob[ôo]|assistente virtual|mensagem automática/i);
     expect(fala().texto).toContain('2 a 3 dias');
     expect(fala().texto).toContain('qual é o seu nome?');
     expect(fala().simulada).toBe(true);
@@ -121,6 +122,16 @@ describe('5. assistente (simulador de IA)', () => {
     expect(c2.estado).toBe('aguardando_humano');
     expect(c2.mensagens[0].texto).toBe('Quero um orçamento');
     expect(c2.mensagens.at(-1)!.texto).toMatch(/pessoa da equipe/);
+  });
+});
+
+describe('5b. pergunta se é robô', () => {
+  it('não mente: diz que é a assistente e oferece chamar alguém da equipe', async () => {
+    const chat = await escreverNoChatSite(A.empresa, null, 'Sério, você é um robô?', unico());
+    const t = chat.mensagens.at(-1)!.texto;
+    expect(t).toContain('Sou a assistente da Solar A');
+    expect(t).toMatch(/chame alguém da equipe/);
+    expect(t).not.toMatch(/sou (uma )?pessoa|não sou (um )?robô/i);
   });
 });
 

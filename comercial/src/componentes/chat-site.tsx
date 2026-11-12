@@ -10,7 +10,7 @@ interface Msg {
 }
 
 /** Chat with the company's virtual assistant. The conversation token lives only in this tab's memory and storage. */
-export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial = false, flutuante = true, linkPrivacidade }: { chave: string; empresa: string; tokenInicial?: string | null; aberto?: boolean; flutuante?: boolean; linkPrivacidade?: string }) {
+export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial = false, flutuante = true, linkPrivacidade, atendente = 'Ana' }: { chave: string; empresa: string; atendente?: string; tokenInicial?: string | null; aberto?: boolean; flutuante?: boolean; linkPrivacidade?: string }) {
   const guarda = `chat:${chave}`;
   const [aberto, setAberto] = useState(abertoInicial);
   const [token, setToken] = useState<string | null>(tokenInicial ?? null);
@@ -81,17 +81,17 @@ export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial =
     <section aria-label={`Chat com a ${empresa}`} className={`flex flex-col overflow-hidden rounded-2xl border border-linha bg-white ${flutuante ? 'h-[min(70dvh,520px)] w-[min(92vw,380px)] shadow-2xl' : 'h-[420px] w-full'}`}>
       <header className="flex items-center justify-between gap-2 bg-tinta px-4 py-3 text-white">
         <div>
-          <p className="font-bold">Assistente virtual da {empresa}</p>
-          <p className="text-[12.5px] text-white/75">{estado === 'ia_ativa' ? 'Respostas automáticas. Peça “atendente” para falar com uma pessoa.' : estado === 'humano_atendendo' ? 'Uma pessoa da equipe está neste atendimento.' : 'A equipe foi avisada e vai responder por aqui.'}</p>
+          <p className="font-bold">Atendimento {empresa}</p>
+          <p className="text-[12.5px] text-white/75">{estado === 'ia_ativa' ? `${atendente} responde por aqui. Se preferir, peça para falar com alguém da equipe.` : estado === 'humano_atendendo' ? 'Uma pessoa da equipe está neste atendimento.' : 'A equipe foi avisada e vai responder por aqui.'}</p>
         </div>
         {flutuante && <button type="button" onClick={() => setAberto(false)} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/15 text-lg" aria-label="Fechar o chat">×</button>}
       </header>
       <div className="flex-1 space-y-2 overflow-y-auto p-3" aria-live="polite">
-        {msgs.length === 0 && <p className="p-2 text-sm text-suave">Escreva sua dúvida ou diga o que você precisa. A assistente responde com as informações da empresa e chama uma pessoa quando for preciso.</p>}
+        {msgs.length === 0 && <p className="p-2 text-sm text-suave">Escreva sua dúvida ou diga o que você precisa. Respondemos com as informações da empresa e chamamos alguém da equipe quando for preciso.</p>}
         {msgs.map((m) => (
           <div key={m.id} className={`flex ${m.de === 'voce' ? 'justify-end' : 'justify-start'}`}>
             <p className={`max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-[15px] ${m.de === 'voce' ? 'bg-marca text-white' : 'bg-[#eef1f5] text-tinta'}`}>
-              {m.de !== 'voce' && <span className="mb-0.5 block text-[12px] font-semibold text-suave">{m.de === 'equipe' ? 'Equipe' : `Assistente virtual${m.simulada ? ' · simulação' : ''}`}</span>}
+              {m.de !== 'voce' && <span className="mb-0.5 block text-[12px] font-semibold text-suave">{m.de === 'equipe' ? 'Equipe' : `${atendente}${m.simulada ? ' · simulação' : ''}`}</span>}
               {m.texto}
             </p>
           </div>
@@ -106,8 +106,8 @@ export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial =
           <button className="botao shrink-0" disabled={enviando || !texto.trim()}>{enviando ? '…' : 'Enviar'}</button>
         </div>
         <p className="mt-1.5 px-1 text-[12px] leading-snug text-suave">
-          Ao escrever, você concorda que a conversa seja guardada pela {empresa} para atender seu pedido. Parte do atendimento é feita por assistente virtual com IA, de empresa terceira.
-          {linkPrivacidade && <> <a className="underline" href={linkPrivacidade} target="_blank" rel="noopener noreferrer">Privacidade</a>.</>}
+          Ao escrever, você concorda que a conversa seja guardada pela {empresa} para atender seu pedido.
+          {linkPrivacidade && <> Saiba como usamos seus dados em <a className="underline" href={linkPrivacidade} target="_blank" rel="noopener noreferrer">Privacidade</a>.</>}
         </p>
       </form>
     </section>

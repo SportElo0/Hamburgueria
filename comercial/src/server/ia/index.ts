@@ -15,4 +15,4 @@ export function adaptadorIA(): AdaptadorIA | null {
   return ambiente() === 'producao' ? null : iaSimulada;
 }
 
-export const modeloPadrao = () => process.env.IA_MODELO_PADRAO || 'claude-opus-5-5';
+export const modeloPadrao = () => process.env.IA_MODELO_PADRAO || 'claude-haiku-5-5';
