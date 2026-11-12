@@ -28,7 +28,7 @@
       <a href="#ramos" class="so-ramos">O que fazemos</a>
       <a href="#restaurantes" class="so-rest">Restaurantes</a>
       <a class="ramo-chip" href="#escolha" hidden><span class="ramo-nome"></span><small>trocar</small></a>
-      <a href="#subida">Como funciona</a>
+      <a href="#subida" class="so-subida">Como funciona</a>
       <a href="#quem-somos">Quem somos</a>
       <a class="lang" href="en/" hreflang="en" lang="en" aria-label="English version">EN</a>
       <a class="btn btn-ghost btn-wa" href="https://wa.me/5511942279336?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Growlift%20e%20tenho%20uma%20d%C3%BAvida." target="_blank" rel="noopener" aria-label="Tirar dúvidas no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29z"/></svg><span>WhatsApp</span></a>
@@ -56,7 +56,7 @@
         <div class="pick rise d4" role="group" aria-label="Escolha o seu ramo">
           <a class="pick-card" href="/clinicas" data-ramo="clinica">
             <img src="img/ramo-clinica.webp" alt="" width="640" height="800" fetchpriority="high">
-            <span class="pick-badge">Vagas para piloto</span>
+            <span class="pick-badge">Em piloto</span>
             <span class="pick-txt"><b>Clínica</b><small>Atendimento no WhatsApp e agenda</small></span>
             <span class="pick-ok" aria-hidden="true"></span>
           </a>
@@ -67,7 +67,7 @@
           </a>
           <a class="pick-card" href="/imobiliarias" data-ramo="imobiliaria">
             <img src="img/ramo-imobiliaria.webp" alt="" width="640" height="800" fetchpriority="high">
-            <span class="pick-badge">Vagas para piloto</span>
+            <span class="pick-badge">Em piloto</span>
             <span class="pick-txt"><b>Imobiliária</b><small>Carteira de imóveis em dia</small></span>
             <span class="pick-ok" aria-hidden="true"></span>
           </a>
@@ -79,6 +79,24 @@
         </div>
         <p class="note rise d4">Fotos ilustrativas, criadas por IA. Ou <a href="#diagnostico">peça o seu plano grátis</a> direto: 3 perguntas, 1 minuto.</p>
       </div>
+    </div>
+  </section>
+
+
+  <!-- Outro negócio: tudo o que a gente faz, rápido, e o diagnóstico logo depois -->
+  <section class="section ramo-sec" id="funcoes" data-so="outro" aria-labelledby="funcoes-titulo" hidden>
+    <div class="wrap">
+      <p class="eyebrow">Para qualquer negócio</p>
+      <h2 id="funcoes-titulo" class="h2" style="margin-top:16px">O que a gente pode montar <span class="blue">pra você.</span></h2>
+      <p class="lead">Padaria, confeitaria, oficina, escola, loja: o plano junta só o que resolve o seu caso.</p>
+      <div class="fx">
+        <article class="fx-card"><img src="img/tela-whatsapp.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.2-4.6A9 9 0 1 1 21 12z"/></svg></span><h3>Atendente de IA no WhatsApp</h3><p>Responde de dia e de noite, com os seus preços e horários, faz orçamento e marca na agenda.</p></div></article>
+        <article class="fx-card"><img src="img/tela-3d.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20.5 7.5v9L12 21.2 3.5 16.5v-9L12 2.8Z"/><path d="M3.8 7.6 12 12.2l8.2-4.6M12 12.2v8.8"/></svg></span><h3>Produto em 3D</h3><p>O cliente gira o bolo, o pão ou o prato no celular e vê na mesa, do tamanho real.</p></div></article>
+        <article class="fx-card"><img src="img/site-confeitaria.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></svg></span><h3>Site com pedido e Pix</h3><p>O seu catálogo com foto e preço, e o pedido chega direto pra você, sem comissão.</p></div></article>
+        <article class="fx-card"><img src="img/tela-painel.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><h3>Painel que mostra o lucro</h3><p>Quanto sobra de cada produto e o que testar, com um agente de IA que conhece os seus números.</p></div></article>
+      </div>
+      <div class="ramo-cta"><a class="btn btn-primary" href="#diagnostico">Quero saber o que serve pro meu negócio <span aria-hidden="true">→</span></a><p>3 perguntas, 1 minuto. O plano chega no seu WhatsApp em até 2 dias úteis, sem compromisso.</p></div>
+      <p class="fx-note">Telas ilustrativas, com dados fictícios.</p>
     </div>
   </section>
 
@@ -162,7 +180,7 @@
     <div class="wrap zap2">
       <div class="zap-side">
         <h2 id="zap-titulo" class="zap-kicker">Atendimento com IA no WhatsApp</h2>
-        <p class="zpiloto" hidden>Vagas para clientes piloto: a gente monta com você e ajusta junto.</p>
+        <p class="zpiloto" hidden>Em desenvolvimento: estamos montando esta solução com os primeiros clientes (piloto). Funções, prazos e preço são combinados por escrito antes de fechar.</p>
         <ol class="zrail" aria-hidden="true">
           <li class="on">Cliente chama</li><li>IA responde</li><li>Fica agendado</li><li>Você vê de manhã</li>
         </ol>
@@ -192,6 +210,59 @@
       </div>
     </div>
     <p class="zfic">Exemplo fictício · preços ilustrativos</p>
+  </section>
+
+
+  <!-- Clínicas: vários exemplos do que a atendente resolve -->
+  <section class="section ramo-sec" id="clinica-exemplos" data-so="clinica" aria-labelledby="clin-titulo" hidden>
+    <div class="wrap">
+      <p class="eyebrow">Para clínicas · em desenvolvimento, vagas para piloto</p>
+      <h2 id="clin-titulo" class="h2" style="margin-top:16px">O que a atendente resolve <span class="blue">no dia a dia.</span></h2>
+      <p class="lead">Ela conversa no WhatsApp da clínica com o nome e o jeito de vocês, responde só com as informações da clínica e chama alguém da equipe quando precisa.</p>
+      <p class="ex-tag">Simulação com dados fictícios. Preços, horários e imóveis não são ofertas da Growlift nem de nenhum cliente.</p>
+      <div class="exs">
+<article class="ex"><p class="ex-sit">Sábado, 21h · preço</p><p class="ex-b in">Quanto custa uma limpeza?</p><p class="ex-b out">A limpeza com avaliação fica R$ 180. Tenho horário terça às 10h ou quarta às 17h. Quer que eu reserve?</p></article><article class="ex"><p class="ex-sit">Domingo · convênio</p><p class="ex-b in">Vocês aceitam o meu convênio?</p><p class="ex-b out">Me manda o nome do convênio e do plano que eu confiro na lista da clínica pra você.</p></article><article class="ex"><p class="ex-sit">Segunda, 7h · remarcar</p><p class="ex-b in">Não vou conseguir ir hoje às 9h 😕</p><p class="ex-b out">Sem problema! Posso passar para amanhã às 9h ou quinta às 14h. Qual fica melhor?</p></article><article class="ex"><p class="ex-sit">Áudio de 40 segundos</p><p class="ex-b in">🎙️ Áudio · 0:40</p><p class="ex-b out">Entendi: você quer fazer clareamento e saber se precisa de avaliação antes. Precisa sim, tenho sexta às 11h. Posso marcar?</p></article><article class="ex"><p class="ex-sit">Urgência</p><p class="ex-b in">Tô com o rosto muito inchado</p><p class="ex-b out">Vou avisar a equipe agora pra falar com você. Em emergência, ligue 192 (SAMU) ou vá a um pronto atendimento.</p></article><article class="ex"><p class="ex-sit">Véspera da consulta</p><p class="ex-b out">Lembrete: amanhã, 9h, consulta com a dra. Paula. Confirma?</p><p class="ex-b in">Confirmo!</p><p class="ex-ok">Confirmada e anotada na agenda</p></article>
+      </div>
+      <ul class="ex-list">
+        <li>Ouve áudio e entende o pedido</li><li>Mostra os horários livres e marca</li><li>Remarca e confirma na véspera</li><li>Avisa a equipe quando o assunto é urgente</li><li>Não faz triagem nem dá orientação de saúde</li>
+      </ul>
+      <div class="ramo-cta"><a class="btn btn-primary" href="#diagnostico">Quero meu diagnóstico grátis <span aria-hidden="true">→</span></a><p>3 perguntas, 1 minuto. O plano chega no seu WhatsApp em até 2 dias úteis, sem compromisso.</p></div>
+      <p class="fx-note">Conversas de exemplo, com nomes e valores fictícios.</p><p class="dev-note">Solução em desenvolvimento, montada junto com os primeiros clientes. O que ela faz hoje, o prazo e o valor ficam por escrito no contrato.</p>
+    </div>
+  </section>
+
+  <!-- Imobiliárias: o sistema (painel, site que se atualiza, aviso no WhatsApp) e a atendente -->
+  <section class="section ramo-sec" id="imob-sistema" data-so="imobiliaria" aria-labelledby="imob-titulo" hidden>
+    <div class="wrap">
+      <p class="eyebrow">Para imobiliárias · em desenvolvimento, vagas para piloto</p>
+      <h2 id="imob-titulo" class="h2" style="margin-top:16px">Um site sempre <span class="blue">atualizado.</span></h2>
+      <p class="lead">O site da imobiliária, um painel pra editar tudo e a carteira conversando com os proprietários. Alugou ou vendeu? Você fica sabendo no WhatsApp e, com um toque, o imóvel sai do site.</p>
+      <div class="imob">
+        <ol class="imob-steps">
+          <li><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/></svg></span><div><b>Você edita tudo num painel</b><span>Cadastra o imóvel, troca foto e preço. O site muda na hora.</span></div></li>
+          <li><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg></span><div><b>Os proprietários são consultados todo mês</b><span>Uma vez por mês, para os proprietários que autorizaram, uma mensagem pergunta se o imóvel continua disponível e por quanto. Quem não quiser mais responde SAIR.</span></div></li>
+          <li><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg></span><div><b>Alugou ou vendeu? O corretor confirma e sai do site</b><span>A resposta do proprietário marca o imóvel como “a confirmar” e avisa o corretor no WhatsApp. Com um toque, ele sai do site e fica a lembrança de tirar dos portais.</span></div></li>
+          <li><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.2-4.6A9 9 0 1 1 21 12z"/></svg></span><div><b>A atendente cuida de quem procura imóvel</b><span>Responde de dia e de noite e marca a visita com o corretor.</span></div></li>
+        </ol>
+        <div class="imob-mock" aria-hidden="true">
+          <div class="mock-panel">
+            <p class="mock-h">Painel · seus imóveis <span>exemplo</span></p>
+            <div class="mock-row"><span><b>Rua das Acácias, 120</b><small>2 dorm. · aluguel R$ 2.300</small></span><i class="st off">A confirmar</i></div>
+            <div class="mock-row"><span><b>Av. das Palmeiras, 85</b><small>3 dorm. · venda R$ 680 mil</small></span><i class="st on">No site</i></div>
+            <div class="mock-row"><span><b>Rua do Bosque, 41</b><small>1 dorm. · aluguel R$ 1.700</small></span><i class="st on">No site</i></div>
+            <div class="mock-row"><span><b>Rua Ipê, 300</b><small>Casa · venda R$ 920 mil</small></span><i class="st new">Preço novo</i></div>
+          </div>
+          <div class="mock-push"><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg></span><p><b>Exemplo · Rua das Acácias, 120: alugado?</b>O proprietário avisou. Confirme e o imóvel sai do site.</p></div>
+        </div>
+      </div>
+      <h3 class="ex-h">E a atendente responde quem procura:</h3>
+      <p class="ex-tag">Simulação com dados fictícios. Preços, horários e imóveis não são ofertas da Growlift nem de nenhum cliente.</p>
+      <div class="exs">
+<article class="ex"><p class="ex-sit">Domingo, 22h · disponibilidade</p><p class="ex-b in">Esse apê da Rua do Bosque ainda tá disponível?</p><p class="ex-b out">Está sim! 1 dormitório, aluguel de R$ 1.700. Quer visitar sábado às 10h ou às 15h?</p></article><article class="ex"><p class="ex-sit">Pergunta comum</p><p class="ex-b in">Aceita pet?</p><p class="ex-b out">Esse aceita pet de pequeno porte. Quer ver outros que também aceitam?</p></article><article class="ex"><p class="ex-sit">Documentos</p><p class="ex-b in">O que precisa pra alugar?</p><p class="ex-b out">RG, CPF, comprovante de renda e de residência. Te mando a lista completa por aqui?</p></article><article class="ex"><p class="ex-sit">Busca</p><p class="ex-b in">Tem algo até R$ 2.000 perto do metrô?</p><p class="ex-b out">Tenho 3 opções no site com esse valor. Te mando os links com fotos?</p></article>
+      </div>
+      <div class="ramo-cta"><a class="btn btn-primary" href="#diagnostico">Quero meu diagnóstico grátis <span aria-hidden="true">→</span></a><p>3 perguntas, 1 minuto. O plano chega no seu WhatsApp em até 2 dias úteis, sem compromisso.</p></div>
+      <p class="fx-note">Telas e conversas de exemplo, com endereços e valores fictícios. A imobiliária colhe a autorização de cada proprietário para a consulta mensal (no contrato de administração, por exemplo).</p><p class="dev-note">Solução em desenvolvimento, montada junto com os primeiros clientes. O que ela faz hoje, o prazo e o valor ficam por escrito no contrato.</p>
+    </div>
   </section>
 
   <!-- Sites: continua, com menos peso -->

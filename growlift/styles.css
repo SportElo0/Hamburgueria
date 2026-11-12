@@ -622,3 +622,62 @@ body[data-ramo='clinica'] .so-ramos, body[data-ramo='imobiliaria'] .so-ramos { d
 @media (min-width: 1181px) { .hero .copy-pick { max-width: 880px; } }
 @media (max-width: 860px) { .hero:has(.copy-pick) .hero-media { height: min(36vw, 170px); } }
 @media (max-width: 480px) { .top:has(.ramo-chip:not([hidden])) .lang { display: none; } }
+body[data-ramo='outro'] .so-ramos, body[data-ramo='outro'] .so-subida { display: none; }
+
+/* Seções de cada ramo (aparecem só depois da escolha na capa) */
+.ramo-sec .lead { max-width: 680px; }
+.ramo-cta { margin-top: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 22px; }
+.ramo-cta p { margin: 0; font-size: 15px; color: var(--dim); max-width: 360px; }
+.fx-note { margin: 18px 0 0; font-size: 13px; color: var(--dim); }
+.fx-ico { display: inline-grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 12px; background: rgba(8, 101, 254, 0.16); color: var(--blue-soft); }
+.fx-ico svg { width: 22px; height: 22px; }
+/* Outro negócio: 4 funções em cartões */
+.fx { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 40px; }
+.fx-card { border-radius: var(--radius); overflow: hidden; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; }
+.fx-card img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-bottom: 1px solid var(--line); }
+.fx-card > div { padding: 18px 18px 22px; }
+.fx-card h3 { margin: 14px 0 0; font-size: 19px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; }
+.fx-card p { margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: var(--muted); }
+@media (max-width: 1080px) { .fx { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .fx { grid-template-columns: 1fr; gap: 12px; } .fx-card { flex-direction: row; } .fx-card img { width: 38%; height: auto; aspect-ratio: auto; align-self: stretch; border-bottom: 0; border-right: 1px solid var(--line); } .fx-card > div { padding: 14px; } .fx-card .fx-ico { display: none; } .fx-card h3 { margin: 0; font-size: 16px; } .fx-card p { font-size: 13.5px; } }
+/* Exemplos de conversa (clínica e imobiliária) */
+.exs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 40px; }
+.ex { padding: 18px; border-radius: var(--radius); background: #0b141a; border: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.ex-sit { margin: 0 0 4px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-soft); }
+.ex-b { margin: 0; max-width: 88%; padding: 10px 14px; border-radius: 16px; font-size: 15px; line-height: 1.45; }
+.ex-b.in { align-self: flex-start; background: #202c33; color: #e9edef; border-bottom-left-radius: 6px; }
+.ex-b.out { align-self: flex-end; background: #005c4b; color: #e9edef; border-bottom-right-radius: 6px; }
+.ex-ok { margin: 2px 0 0; font-size: 13px; font-weight: 700; color: var(--ok); }
+.ex-h { margin: 64px 0 0; font-size: clamp(22px, 2.4vw, 30px); font-weight: 800; letter-spacing: -0.02em; }
+.ex-h + .exs { margin-top: 24px; }
+#imob-sistema .exs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ex-list { list-style: none; margin: 30px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.ex-list li { padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: 14px; font-weight: 600; color: var(--text-soft); }
+@media (max-width: 1080px) { .exs, #imob-sistema .exs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .exs, #imob-sistema .exs { grid-template-columns: 1fr; gap: 12px; } .ex-b { font-size: 14.5px; } }
+/* Imobiliária: passos + painel de exemplo */
+.imob { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 70px); align-items: center; margin-top: 44px; }
+.imob-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.imob-steps li { display: flex; gap: 16px; align-items: flex-start; }
+.imob-steps b { display: block; font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
+.imob-steps li > div > span { display: block; margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.imob-mock { position: relative; padding-bottom: 54px; }
+.mock-panel { border-radius: var(--radius); background: #f4f6fa; color: #121826; padding: 20px; box-shadow: 0 40px 80px -40px rgba(8, 101, 254, 0.55); }
+.mock-h { margin: 0 0 12px; display: flex; justify-content: space-between; font-size: 15px; font-weight: 800; }
+.mock-h span { font-size: 12px; font-weight: 700; color: #6b7588; }
+.mock-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #e3e8f0; }
+.mock-row b { display: block; font-size: 14.5px; }
+.mock-row small { display: block; margin-top: 2px; font-size: 12.5px; color: #5d6679; }
+.st { flex-shrink: 0; font-style: normal; font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px; }
+.st.on { background: #dcfce7; color: #166534; }
+.st.off { background: #fee2e2; color: #991b1b; }
+.st.new { background: #fef3c7; color: #92400e; }
+.mock-push { position: absolute; left: -18px; right: 36px; bottom: 0; display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 18px; background: rgba(15, 21, 32, 0.96); border: 1px solid var(--line-strong); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8); }
+.mock-push p { margin: 0; font-size: 13px; line-height: 1.4; color: var(--muted); }
+.mock-push b { display: block; font-size: 14px; color: var(--text); }
+@media (max-width: 900px) { .imob { grid-template-columns: 1fr; } .mock-push { left: 10px; right: 10px; } }
+.ramo-chip { white-space: nowrap; }
+.ex-tag { margin: 34px 0 0; display: inline-block; padding: 7px 14px; border-radius: 999px; border: 1px dashed var(--line-strong); font-size: 13px; color: var(--muted); }
+.ex-tag + .exs { margin-top: 16px; }
+.dev-note { margin: 8px 0 0; font-size: 13px; color: var(--warn); max-width: 720px; }
+.zpiloto { max-width: 260px; }

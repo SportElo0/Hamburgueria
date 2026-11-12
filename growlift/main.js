@@ -141,7 +141,7 @@
     clinica: { path: '/clinicas', nome: 'Clínica', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Saúde ou beleza', piloto: true },
     restaurante: { path: '/restaurantes', nome: 'Restaurante', hide: [], first: 'ramos', form: 'Restaurante ou delivery' },
     imobiliaria: { path: '/imobiliarias', nome: 'Imobiliária', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Imobiliária', piloto: true },
-    outro: { path: '/outros', nome: 'Outro negócio', hide: ['restaurantes', 'pesquisa-3d'], first: 'ramos', form: '' },
+    outro: { path: '/outros', nome: 'Outro negócio', hide: ['ramos', 'restaurantes', 'pesquisa-3d', 'whatsapp', 'modelos', 'subida'], first: 'funcoes', form: '' },
   };
   const zb = (side, text, time) => `<p class="zb ${side}">${text}<i>${time}</i></p>`;
   const zcal = (head, title, ...lines) => `<div class="zcal"><p class="zcal-h">${head}</p><p class="zcal-b"><b>${title}</b>${lines.map((l) => `<span>${l}</span>`).join('')}</p></div>`;
@@ -178,9 +178,9 @@
       kicker: 'Para imobiliárias · carteira em dia',
       rail: ['A pergunta do mês', 'O dono responde', 'Carteira atualizada', 'Resumo do mês'],
       panels: [
-        panel('Dia 1, 9h', 'Todo mês, cada proprietário recebe uma mensagem da imobiliária.', zb('out', 'Oi, Carlos! Seu apartamento na Rua das Acácias continua à venda por R$ 450 mil? Responda: 1) Sim · 2) Já vendi ou aluguei · 3) Mudou o preço', '09:00')),
+        panel('Dia 1, 9h', 'Uma vez por mês, cada proprietário que autorizou recebe uma mensagem da imobiliária.', zb('out', 'Oi, Carlos! Seu apartamento na Rua das Acácias continua à venda por R$ 450 mil? Responda: 1) Sim · 2) Já vendi ou aluguei · 3) Mudou o preço. Para não receber mais, responda SAIR.', '09:00')),
         panel('Dia 1, 9h20', 'Ele responde do jeito dele, até por áudio. A IA entende.', zb('in', 'Vendi semana passada, pode tirar!', '09:20')),
-        panel('Dia 1, 9h20', 'O imóvel sai da carteira e o corretor é avisado.', zcal('Carteira · atualizada agora', 'Rua das Acácias · 2 dormitórios', 'Situação: vendido pelo proprietário', 'Tirar dos portais: avisado ao corretor')),
+        panel('Dia 1, 9h20', 'O corretor é avisado e, com um toque, o imóvel sai do site.', zcal('Carteira · a confirmar', 'Rua das Acácias · 2 dormitórios', 'Proprietário disse: vendido', 'Corretor avisado no WhatsApp para confirmar e tirar dos portais')),
         panel('Fim do mês', 'Você recebe o resumo da carteira inteira.', zcal('Resumo do mês · exemplo', '312 confirmados · 41 vendidos ou alugados', '18 com preço novo', '25 sem resposta: lista para o corretor ligar')),
       ].join(''),
     },
@@ -203,8 +203,10 @@
   const applyRamo = (ramo) => {
     const cfg = RAMOS[ramo];
     document.body.dataset.ramo = cfg ? ramo : '';
-    const allHide = ['restaurantes', 'pesquisa-3d', 'ramos'];
+    const allHide = ['ramos', 'restaurantes', 'pesquisa-3d', 'whatsapp', 'modelos', 'subida'];
     allHide.forEach((id) => { const el = document.getElementById(id); if (el) el.hidden = !!cfg && cfg.hide.includes(id); });
+    // Sections made for one trade only (data-so="clinica"…) show up just for it.
+    document.querySelectorAll('[data-so]').forEach((el) => (el.hidden = !cfg || !el.dataset.so.split(' ').includes(ramo)));
     cards.forEach((c) => (c.dataset.ramo === ramo ? c.setAttribute('aria-current', 'true') : c.removeAttribute('aria-current')));
     cards[0]?.parentElement.classList.toggle('has-sel', !!cfg);
     if (chip) { chip.hidden = !cfg; chip.querySelector('.ramo-nome').textContent = cfg ? cfg.nome : ''; }
@@ -397,7 +399,7 @@
 
       // Cena 3: pinned; four full-screen steps replace each other with the scroll, the rail shows where we are.
       const zap = document.getElementById('whatsapp');
-      if (zap) {
+      if (zap && !zap.hidden) {
         const panels = zap.querySelectorAll('.zpanel');
         const rail = zap.querySelectorAll('.zrail li');
         const sevenB = zap.querySelector('.seven b');
