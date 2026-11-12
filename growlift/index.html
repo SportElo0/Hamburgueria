@@ -42,7 +42,7 @@
   <!-- Capa: marca em vidro, vídeo em loop (Higgsfield) -->
   <section class="hero" id="escolha" aria-labelledby="titulo">
     <div class="hero-media" aria-hidden="true">
-      <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="img/hero.webp" width="1600" height="900">
+      <video class="hero-video" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback" preload="metadata" poster="img/hero.webp" width="1600" height="900">
         <source src="img/hero.webm" type="video/webm">
         <source src="img/hero.mp4" type="video/mp4">
       </video>
@@ -56,7 +56,6 @@
         <div class="pick rise d4" role="group" aria-label="Escolha o seu ramo">
           <a class="pick-card" href="/clinicas" data-ramo="clinica">
             <img src="img/ramo-clinica.webp" alt="" width="640" height="800" fetchpriority="high">
-            <span class="pick-badge">Em piloto</span>
             <span class="pick-txt"><b>Clínica</b><small>Atendimento no WhatsApp e agenda</small></span>
             <span class="pick-ok" aria-hidden="true"></span>
           </a>
@@ -67,7 +66,6 @@
           </a>
           <a class="pick-card" href="/imobiliarias" data-ramo="imobiliaria">
             <img src="img/ramo-imobiliaria.webp" alt="" width="640" height="800" fetchpriority="high">
-            <span class="pick-badge">Em piloto</span>
             <span class="pick-txt"><b>Imobiliária</b><small>Carteira de imóveis em dia</small></span>
             <span class="pick-ok" aria-hidden="true"></span>
           </a>
@@ -180,7 +178,6 @@
     <div class="wrap zap2">
       <div class="zap-side">
         <h2 id="zap-titulo" class="zap-kicker">Atendimento com IA no WhatsApp</h2>
-        <p class="zpiloto" hidden>Em desenvolvimento: estamos montando esta solução com os primeiros clientes (piloto). Funções, prazos e preço são combinados por escrito antes de fechar.</p>
         <ol class="zrail" aria-hidden="true">
           <li class="on">Cliente chama</li><li>IA responde</li><li>Fica agendado</li><li>Você vê de manhã</li>
         </ol>
@@ -216,7 +213,7 @@
   <!-- Clínicas: vários exemplos do que a atendente resolve -->
   <section class="section ramo-sec" id="clinica-exemplos" data-so="clinica" aria-labelledby="clin-titulo" hidden>
     <div class="wrap">
-      <p class="eyebrow">Para clínicas · em desenvolvimento, vagas para piloto</p>
+      <p class="eyebrow">Para clínicas</p>
       <h2 id="clin-titulo" class="h2" style="margin-top:16px">O que a atendente resolve <span class="blue">no dia a dia.</span></h2>
       <p class="lead">Ela conversa no WhatsApp da clínica com o nome e o jeito de vocês, responde só com as informações da clínica e chama alguém da equipe quando precisa.</p>
       <p class="ex-tag">Simulação com dados fictícios. Preços, horários e imóveis não são ofertas da Growlift nem de nenhum cliente.</p>
@@ -227,14 +224,14 @@
         <li>Ouve áudio e entende o pedido</li><li>Mostra os horários livres e marca</li><li>Remarca e confirma na véspera</li><li>Avisa a equipe quando o assunto é urgente</li><li>Não faz triagem nem dá orientação de saúde</li>
       </ul>
       <div class="ramo-cta"><a class="btn btn-primary" href="#diagnostico">Quero meu diagnóstico grátis <span aria-hidden="true">→</span></a><p>3 perguntas, 1 minuto. O plano chega no seu WhatsApp em até 2 dias úteis, sem compromisso.</p></div>
-      <p class="fx-note">Conversas de exemplo, com nomes e valores fictícios.</p><p class="dev-note">Solução em desenvolvimento, montada junto com os primeiros clientes. O que ela faz hoje, o prazo e o valor ficam por escrito no contrato.</p>
+      <p class="fx-note">Conversas de exemplo, com nomes e valores fictícios.</p>
     </div>
   </section>
 
   <!-- Imobiliárias: o sistema (painel, site que se atualiza, aviso no WhatsApp) e a atendente -->
   <section class="section ramo-sec" id="imob-sistema" data-so="imobiliaria" aria-labelledby="imob-titulo" hidden>
     <div class="wrap">
-      <p class="eyebrow">Para imobiliárias · em desenvolvimento, vagas para piloto</p>
+      <p class="eyebrow">Para imobiliárias</p>
       <h2 id="imob-titulo" class="h2" style="margin-top:16px">Um site sempre <span class="blue">atualizado.</span></h2>
       <p class="lead">O site da imobiliária, um painel pra editar tudo e a carteira conversando com os proprietários. Alugou ou vendeu? Você fica sabendo no WhatsApp e, com um toque, o imóvel sai do site.</p>
       <div class="imob">
@@ -261,7 +258,7 @@
 <article class="ex"><p class="ex-sit">Domingo, 22h · disponibilidade</p><p class="ex-b in">Esse apê da Rua do Bosque ainda tá disponível?</p><p class="ex-b out">Está sim! 1 dormitório, aluguel de R$ 1.700. Quer visitar sábado às 10h ou às 15h?</p></article><article class="ex"><p class="ex-sit">Pergunta comum</p><p class="ex-b in">Aceita pet?</p><p class="ex-b out">Esse aceita pet de pequeno porte. Quer ver outros que também aceitam?</p></article><article class="ex"><p class="ex-sit">Documentos</p><p class="ex-b in">O que precisa pra alugar?</p><p class="ex-b out">RG, CPF, comprovante de renda e de residência. Te mando a lista completa por aqui?</p></article><article class="ex"><p class="ex-sit">Busca</p><p class="ex-b in">Tem algo até R$ 2.000 perto do metrô?</p><p class="ex-b out">Tenho 3 opções no site com esse valor. Te mando os links com fotos?</p></article>
       </div>
       <div class="ramo-cta"><a class="btn btn-primary" href="#diagnostico">Quero meu diagnóstico grátis <span aria-hidden="true">→</span></a><p>3 perguntas, 1 minuto. O plano chega no seu WhatsApp em até 2 dias úteis, sem compromisso.</p></div>
-      <p class="fx-note">Telas e conversas de exemplo, com endereços e valores fictícios. A imobiliária colhe a autorização de cada proprietário para a consulta mensal (no contrato de administração, por exemplo).</p><p class="dev-note">Solução em desenvolvimento, montada junto com os primeiros clientes. O que ela faz hoje, o prazo e o valor ficam por escrito no contrato.</p>
+      <p class="fx-note">Telas e conversas de exemplo, com endereços e valores fictícios. A imobiliária colhe a autorização de cada proprietário para a consulta mensal (no contrato de administração, por exemplo).</p>
     </div>
   </section>
 

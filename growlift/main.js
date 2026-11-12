@@ -11,6 +11,11 @@
   // block autoplay, so the first touch or scroll starts it.
   const heroVideo = document.querySelector('.hero-video');
   if (heroVideo) {
+    // While the video is not actually playing, it stays invisible and the still picture behind it shows
+    // (no play button on iPhones in Low Power Mode).
+    const media = heroVideo.closest('.hero-media');
+    heroVideo.addEventListener('playing', () => media.classList.add('playing'));
+    heroVideo.addEventListener('pause', () => media.classList.remove('playing'));
     const play = () => heroVideo.play().catch(() => {});
     play();
     const kick = () => {
@@ -138,9 +143,9 @@
   // x-ray example and the diagnosis) and lives in the address (/clinicas…) and in this browser, so a link or a
   // return visit opens the right version. Without a choice the page shows everything, as before.
   const RAMOS = {
-    clinica: { path: '/clinicas', nome: 'Clínica', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Saúde ou beleza', piloto: true },
+    clinica: { path: '/clinicas', nome: 'Clínica', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Saúde ou beleza' },
     restaurante: { path: '/restaurantes', nome: 'Restaurante', hide: [], first: 'ramos', form: 'Restaurante ou delivery' },
-    imobiliaria: { path: '/imobiliarias', nome: 'Imobiliária', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Imobiliária', piloto: true },
+    imobiliaria: { path: '/imobiliarias', nome: 'Imobiliária', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Imobiliária' },
     outro: { path: '/outros', nome: 'Outro negócio', hide: ['ramos', 'restaurantes', 'pesquisa-3d', 'whatsapp', 'modelos', 'subida'], first: 'funcoes', form: '' },
   };
   const zb = (side, text, time) => `<p class="zb ${side}">${text}<i>${time}</i></p>`;
@@ -215,7 +220,6 @@
       zapEl.querySelector('.zap-kicker').textContent = story.kicker;
       zapEl.querySelectorAll('.zrail li').forEach((li, i) => (li.textContent = story.rail[i]));
       zapEl.querySelector('.zpanels').innerHTML = story.panels;
-      zapEl.querySelector('.zpiloto').hidden = !(cfg && cfg.piloto);
     }
     if (xray) {
       const x = XRAY[ramo];

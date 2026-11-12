@@ -681,3 +681,11 @@ body[data-ramo='outro'] .so-ramos, body[data-ramo='outro'] .so-subida { display:
 .ex-tag + .exs { margin-top: 16px; }
 .dev-note { margin: 8px 0 0; font-size: 13px; color: var(--warn); max-width: 720px; }
 .zpiloto { max-width: 260px; }
+/* Capa: a imagem parada fica atrás; o vídeo só aparece quando está rodando (sem botão de play no iPhone) */
+.hero-media { background: var(--bg) url('img/hero.webp') 72% 50% / cover no-repeat; }
+.hero-video { opacity: 0; transition: opacity 0.6s; }
+.hero-media.playing .hero-video { opacity: 1; }
+.hero-video::-webkit-media-controls, .hero-video::-webkit-media-controls-start-playback-button, .hero-video::-webkit-media-controls-overlay-play-button { display: none !important; -webkit-appearance: none; }
+@media (max-width: 860px) { .hero-media { background-position: 74% 50%; } }
+@media (min-width: 861px) and (max-width: 1180px) { .hero-media { background-position: 90% 50%; } }
+@media (prefers-reduced-motion: reduce) { .hero-video { transition: none; } }
