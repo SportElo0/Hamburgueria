@@ -228,8 +228,12 @@
         ? x[1].map(([k, v, c, w]) => `<li><div class="row"><span>${k}</span><b class="c-${c}">${v}</b></div><div class="track-bar"><i class="b-${c}" style="width:${w}%"></i></div></li>`).join('')
         : xrayBase.checks;
     }
-    document.querySelectorAll('.so-imob').forEach((el) => (el.hidden = ramo !== 'imobiliaria'));
-    document.querySelectorAll('.so-clin').forEach((el) => (el.hidden = ramo !== 'clinica'));
+    // "O que mais atrapalha": 7 pains that make sense for the chosen trade (outro / no choice: the general list).
+    const key = ['restaurante', 'clinica', 'imobiliaria'].includes(ramo) ? ramo : 'base';
+    document.querySelectorAll('label[data-r]').forEach((el) => {
+      el.hidden = !el.dataset.r.split(' ').includes(key);
+      if (el.hidden) el.querySelector('input').checked = false;
+    });
     // The diagnosis starts with the trade already marked (only if the visitor has not picked one there).
     if (autoRadio && autoRadio.checked) autoRadio.checked = false;
     autoRadio = null;
