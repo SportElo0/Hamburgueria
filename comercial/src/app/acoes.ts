@@ -16,6 +16,7 @@ import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa
 import { ErroDeUso } from '@/server/erros';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { salvarWhatsApp } from '@/server/integracoes';
+import { gerarChaveTelefonia, simularLigacaoPerdida } from '@/server/ligacoes';
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
 import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, type InscricaoEntrada } from '@/server/push';
@@ -222,7 +223,7 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
     const secao = t(fd, 'secao');
     const num = (k: string) => Number(t(fd, k));
     if (secao === 'regras') {
-      await salvarConfig(ctx, 'regras', { ...atual.regras, sla_minutos: num('sla_minutos'), retorno_proposta_dias: num('retorno_proposta_dias'), retorno_auto_cliente: fd.get('retorno_auto_cliente') === 'on', retorno_auto_horas: num('retorno_auto_horas'), retorno_auto_horas_2: num('retorno_auto_horas_2'), avaliacao_auto: fd.get('avaliacao_auto') === 'on', hora_inicio: num('hora_inicio'), hora_fim: num('hora_fim'), escalar_horas: num('escalar_horas'), manutencao_auto: fd.get('manutencao_auto') === 'on', manutencao_meses: num('manutencao_meses'), resumo_diario: fd.get('resumo_diario') === 'on', resumo_hora: num('resumo_hora') });
+      await salvarConfig(ctx, 'regras', { ...atual.regras, sla_minutos: num('sla_minutos'), retorno_proposta_dias: num('retorno_proposta_dias'), retorno_auto_cliente: fd.get('retorno_auto_cliente') === 'on', retorno_auto_horas: num('retorno_auto_horas'), retorno_auto_horas_2: num('retorno_auto_horas_2'), avaliacao_auto: fd.get('avaliacao_auto') === 'on', hora_inicio: num('hora_inicio'), hora_fim: num('hora_fim'), escalar_horas: num('escalar_horas'), manutencao_auto: fd.get('manutencao_auto') === 'on', manutencao_meses: num('manutencao_meses'), resumo_diario: fd.get('resumo_diario') === 'on', resumo_hora: num('resumo_hora'), ligacao_auto: fd.get('ligacao_auto') === 'on', ligacao_texto: t(fd, 'ligacao_texto') || atual.regras.ligacao_texto, ligacao_texto_fora: t(fd, 'ligacao_texto_fora') || atual.regras.ligacao_texto_fora });
     } else if (secao === 'ia') {
       await salvarConfig(ctx, 'ia', { ...atual.ia, ativa: fd.get('ativa') === 'on', nome: t(fd, 'nome') || 'Ana', modelo: t(fd, 'modelo'), limite_respostas_mes: num('limite_respostas_mes'), max_mensagens_contexto: num('max_mensagens_contexto') });
     } else if (secao === 'avaliacao') {
@@ -237,7 +238,7 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
 
 export const salvarWhatsAppAcao = async (_: Retorno, fd: FormData) =>
   tentar(async () => {
-    await salvarWhatsApp(await exigirCtx(), { modo: t(fd, 'modo'), phone_number_id: t(fd, 'phone_number_id'), waba_id: t(fd, 'waba_id'), modelo_confirmacao: t(fd, 'modelo_confirmacao'), modelo_retorno: t(fd, 'modelo_retorno'), modelo_avaliacao: t(fd, 'modelo_avaliacao'), modelo_manutencao: t(fd, 'modelo_manutencao'), idioma_modelos: t(fd, 'idioma_modelos') || 'pt_BR' }, String(fd.get('token') ?? ''));
+    await salvarWhatsApp(await exigirCtx(), { modo: t(fd, 'modo'), phone_number_id: t(fd, 'phone_number_id'), waba_id: t(fd, 'waba_id'), modelo_confirmacao: t(fd, 'modelo_confirmacao'), modelo_retorno: t(fd, 'modelo_retorno'), modelo_avaliacao: t(fd, 'modelo_avaliacao'), modelo_manutencao: t(fd, 'modelo_manutencao'), modelo_ligacao: t(fd, 'modelo_ligacao'), idioma_modelos: t(fd, 'idioma_modelos') || 'pt_BR' }, String(fd.get('token') ?? ''));
     return { ok: 'Configuração do WhatsApp salva.' };
   });
 
@@ -406,3 +407,26 @@ export async function testarAvisoAcao(): Promise<Retorno> {
     return n ? { ok: 'Aviso de teste enviado. Ele chega em alguns segundos.' } : { erro: 'O aviso não saiu. Desligue e ligue os avisos de novo neste celular.' };
   });
 }
+
+/* ---------- Missed calls ---------- */
+
+export const gerarChaveTelefoniaAcao = async () =>
+  tentar(async () => {
+    const chave = await gerarChaveTelefonia(await exigirCtx());
+    return { ok: 'Chave criada. Ela aparece só agora: copie e cole no serviço de telefonia. A chave anterior parou de valer.', copiar: chave };
+  });
+
+const RESULTADO_LIGACAO: Record<string, string> = {
+  mensagem_agendada: 'A mensagem saiu pelo WhatsApp (simulado) e a tarefa de retornar foi criada.',
+  sem_autorizacao: 'Quem ligou não autorizou o WhatsApp: só a tarefa de retornar a ligação foi criada.',
+  telefone_fixo: 'É telefone fixo: só a tarefa de retornar a ligação foi criada.',
+  repetida: 'O mesmo número ligou há pouco: não mandou outra mensagem nem criou outra tarefa.',
+  desligado: 'A resposta automática está desligada nas regras: só a tarefa foi criada.',
+};
+
+export const simularLigacaoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const r = await simularLigacaoPerdida(await exigirCtx(), t(fd, 'telefone'), fd.get('aceite') === 'on');
+    await processarFila(5).catch(() => {});
+    return { ok: RESULTADO_LIGACAO[r.resultado] ?? 'Ligação registrada.' };
+  });

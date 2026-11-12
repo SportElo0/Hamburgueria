@@ -1,12 +1,13 @@
 import { redirect } from 'next/navigation';
-import { convidarAcao, membroAcao, responsavelPadraoAcao, salvarConfigAcao, salvarWhatsAppAcao } from '@/app/acoes';
+import { convidarAcao, gerarChaveTelefoniaAcao, membroAcao, responsavelPadraoAcao, salvarConfigAcao, salvarWhatsAppAcao, simularLigacaoAcao } from '@/app/acoes';
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { feedbacks } from '@/server/avaliacoes';
-import { ambiente } from '@/server/config';
+import { FRASE_MENU_LIGACAO, ambiente, formatarTelefone } from '@/server/config';
 import { empresaPorId, equipe } from '@/server/empresas';
 import { adaptadorIA, modeloPadrao } from '@/server/ia';
 import { integracaoWhatsApp } from '@/server/integracoes';
+import { telefoniaDa, ultimasLigacoes } from '@/server/ligacoes';
 import { exigirCtx } from '@/server/sessao';
 
 export const metadata = { title: 'Configurações' };
@@ -28,7 +29,7 @@ const Marcar = ({ id, rotulo, ajuda, marcado }: { id: string; rotulo: string; aj
 export default async function Configuracoes() {
   const ctx = await exigirCtx();
   if (ctx.papel !== 'admin') redirect('/painel');
-  const [empresa, pessoas, zap, notas] = await Promise.all([empresaPorId(ctx.empresaId), equipe(ctx), integracaoWhatsApp(ctx.empresaId), feedbacks(ctx)]);
+  const [empresa, pessoas, zap, notas, telefonia, ligacoes] = await Promise.all([empresaPorId(ctx.empresaId), equipe(ctx), integracaoWhatsApp(ctx.empresaId), feedbacks(ctx), telefoniaDa(ctx.empresaId), ultimasLigacoes(ctx)]);
   const c = empresa!.config;
   const ia = adaptadorIA();
   const base = process.env.APP_URL ?? '';
@@ -37,7 +38,7 @@ export default async function Configuracoes() {
     <div className="max-w-3xl space-y-4">
       <h1 className="text-2xl font-bold">Configurações e integrações</h1>
       <nav aria-label="Seções" className="flex flex-wrap gap-x-4 gap-y-1 text-[15px]">
-        {[['equipe', 'Equipe'], ['regras', 'Regras de acompanhamento'], ['ia', 'Assistente'], ['whatsapp', 'WhatsApp'], ['avaliacao', 'Avaliações'], ['site', 'Site'], ['integrar', 'Formulário no seu site'], ['dados', 'Dados']].map(([id, n]) => <a key={id} className="underline" href={`#${id}`}>{n}</a>)}
+        {[['equipe', 'Equipe'], ['regras', 'Regras de acompanhamento'], ['ia', 'Assistente'], ['whatsapp', 'WhatsApp'], ['ligacoes', 'Ligações não atendidas'], ['avaliacao', 'Avaliações'], ['site', 'Site'], ['integrar', 'Formulário no seu site'], ['dados', 'Dados']].map(([id, n]) => <a key={id} className="underline" href={`#${id}`}>{n}</a>)}
       </nav>
 
       <Secao id="equipe" titulo="Equipe" nota="Administradores gerenciam equipe, conteúdo e configurações. Vendedores atendem e movimentam oportunidades.">
@@ -85,6 +86,9 @@ export default async function Configuracoes() {
           <div className="sm:col-span-2"><Marcar id="resumo_diario" rotulo="Resumo do dia no painel" ajuda="Cada pessoa recebe um aviso com os pedidos novos, as tarefas de hoje e as vencidas dela; os administradores, os da empresa toda. Se não houver nada, não manda." marcado={c.regras.resumo_diario} /></div>
           <Num id="resumo_hora" rotulo="Hora do resumo" valor={c.regras.resumo_hora} min={0} max={23} />
           <div />
+          <div className="sm:col-span-2"><Marcar id="ligacao_auto" rotulo="Responder pelo WhatsApp quem ligou e não foi atendido" ajuda="Sai na hora, também à noite (com o texto de fora do horário), só para celular de quem autorizou o WhatsApp. Uma mensagem por pessoa a cada 2 horas, mesmo que ligue várias vezes. Sempre cria a tarefa de retornar a ligação." marcado={c.regras.ligacao_auto} /></div>
+          <div className="sm:col-span-2"><label className="rotulo" htmlFor="ligacao_texto">Mensagem dentro do horário</label><textarea className="campo" id="ligacao_texto" name="ligacao_texto" rows={3} maxLength={500} defaultValue={c.regras.ligacao_texto} /></div>
+          <div className="sm:col-span-2"><label className="rotulo" htmlFor="ligacao_texto_fora">Mensagem fora do horário</label><textarea className="campo" id="ligacao_texto_fora" name="ligacao_texto_fora" rows={3} maxLength={500} defaultValue={c.regras.ligacao_texto_fora} /><p className="mt-1 text-sm text-suave">Use {'{{atendente}}'} (nome da assistente), {'{{empresa}}'} e {'{{abertura}}'} (hora em que a empresa abre). O “Para não receber mensagens, responda SAIR.” vai no fim automaticamente. Não escreva que é mensagem automática.</p></div>
           <Num id="hora_inicio" rotulo="Mensagens automáticas a partir das (hora)" valor={c.regras.hora_inicio} min={0} max={23} />
           <Num id="hora_fim" rotulo="Até as (hora)" valor={c.regras.hora_fim} min={1} max={24} />
           <div className="sm:col-span-2"><Enviar>Salvar regras</Enviar></div>
@@ -117,10 +121,47 @@ export default async function Configuracoes() {
           <div><label className="rotulo" htmlFor="modelo_retorno">Modelo aprovado: retorno da proposta</label><input className="campo" id="modelo_retorno" name="modelo_retorno" defaultValue={zap.config.modelo_retorno} /></div>
           <div><label className="rotulo" htmlFor="modelo_avaliacao">Modelo aprovado: convite de avaliação</label><input className="campo" id="modelo_avaliacao" name="modelo_avaliacao" defaultValue={zap.config.modelo_avaliacao} /></div>
           <div><label className="rotulo" htmlFor="modelo_manutencao">Modelo aprovado: lembrete de manutenção</label><input className="campo" id="modelo_manutencao" name="modelo_manutencao" defaultValue={zap.config.modelo_manutencao} /></div>
+          <div><label className="rotulo" htmlFor="modelo_ligacao">Modelo aprovado: resposta a ligação não atendida</label><input className="campo" id="modelo_ligacao" name="modelo_ligacao" defaultValue={zap.config.modelo_ligacao} /></div>
           <div><label className="rotulo" htmlFor="idioma_modelos">Idioma dos modelos</label><input className="campo" id="idioma_modelos" name="idioma_modelos" defaultValue={zap.config.idioma_modelos} /></div>
           <p className="text-sm text-suave sm:col-span-2">Fora das 24 horas depois da última mensagem do cliente, o WhatsApp só aceita modelos aprovados pela Meta. Sem modelo, o envio automático vira tarefa para uma pessoa. Endereço para os avisos da Meta (webhook): <code className="break-all">{base}/api/webhooks/whatsapp</code></p>
           <div className="sm:col-span-2"><Enviar>Salvar WhatsApp</Enviar></div>
         </Formulario>
+      </Secao>
+
+      <Secao id="ligacoes" titulo="Ligações não atendidas" nota="A empresa usa um número de um serviço de telefonia na internet, que toca nos celulares da equipe. Quando ninguém atende, o serviço avisa a plataforma: ela responde pelo WhatsApp quem autorizou, abre a oportunidade e cria a tarefa de retornar a ligação.">
+        <div className="space-y-3 text-[15px]">
+          <p className={`aviso ${telefonia ? 'bg-ok-clara text-ok' : 'bg-alerta-clara text-alerta'}`}>
+            {telefonia ? `Serviço de telefonia ligado (chave terminando em ${telefonia.final}). ${telefonia.ultimo_aviso_em ? `Último aviso: ${dataHora(new Date(telefonia.ultimo_aviso_em))}.` : 'Nenhum aviso recebido ainda.'}` : 'Nenhum serviço de telefonia ligado ainda.'}
+          </p>
+          <p><strong>Pedir autorização na ligação:</strong> configure no menu do número a frase “{FRASE_MENU_LIGACAO}”. Quem aperta 1 autoriza a resposta pelo WhatsApp. Sem isso, a mensagem só vai para quem já autorizou antes (no formulário); para os outros, fica só a tarefa de retornar a ligação.</p>
+          <p className="text-suave">Endereço para os avisos do serviço: <code className="break-all">{base}/api/webhooks/telefonia</code>, com a chave em “Authorization: Bearer” (ou como senha do acesso básico). Campos: de, id, status (nao_atendida, no-answer, busy…) e aceite_whatsapp.</p>
+          {ctx.acessoAdmin ? (
+            <Formulario acao={gerarChaveTelefoniaAcao}><Enviar secundario>{telefonia ? 'Trocar a chave do serviço' : 'Criar a chave do serviço'}</Enviar></Formulario>
+          ) : (
+            <p className="text-sm text-suave">A chave do serviço de telefonia é criada pela equipe Growlift.</p>
+          )}
+          {ambiente() !== 'producao' && (
+            <Formulario acao={simularLigacaoAcao} className="grid gap-3 border-t border-linha pt-4 sm:grid-cols-2">
+              <p className="font-semibold text-tinta sm:col-span-2">Simular uma ligação não atendida</p>
+              <div><label className="rotulo" htmlFor="sim_tel">Telefone de quem ligou</label><input className="campo" id="sim_tel" name="telefone" inputMode="tel" placeholder="(11) 91234-5678" required /></div>
+              <label className="flex min-h-11 items-center gap-3 self-end text-[15px]"><input type="checkbox" name="aceite" defaultChecked className="h-5 w-5 accent-[#175cd3]" /> Apertou 1 no menu (aceitou o WhatsApp)</label>
+              <div className="sm:col-span-2"><Enviar secundario>Simular ligação</Enviar> <span className="ml-2 text-sm text-suave">Simulação — nenhuma mensagem externa enviada.</span></div>
+            </Formulario>
+          )}
+          {ligacoes.length > 0 && (
+            <div className="border-t border-linha pt-4">
+              <p className="font-semibold text-tinta">Últimas ligações não atendidas</p>
+              <ul className="mt-2 divide-y divide-linha">
+                {ligacoes.map((l, i) => (
+                  <li key={i} className="py-2">
+                    <a className="underline" href={`/painel/oportunidades/${l.oportunidade_id}`}>{l.nome || formatarTelefone(l.telefone)}</a>
+                    <span className="block text-sm text-suave">{dataHora(l.recebida_em)} · {({ mensagem_agendada: 'respondida pelo WhatsApp', sem_autorizacao: 'sem autorização de WhatsApp', telefone_fixo: 'telefone fixo', repetida: 'ligou de novo (sem nova mensagem)', desligado: 'resposta desligada', nao_enviada: 'mensagem não enviada', ja_recebida: '' } as Record<string, string>)[l.resultado] ?? l.resultado}{l.simulada ? ' · simulação' : ''}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </Secao>
 
       <Secao id="avaliacao" titulo="Avaliações" nota="Depois de um serviço concluído, o cliente recebe um convite neutro. A página do convite sempre mostra o link público, mesmo para quem deixar nota baixa no retorno privado.">

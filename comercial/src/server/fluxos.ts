@@ -6,13 +6,14 @@ import { ErroDeUso, NaoEncontrado } from './erros';
 import { agendar } from './fila';
 
 /** What starts a flow. */
-export const GATILHOS = ['pedido_recebido', 'etapa_alterada', 'servico_concluido', 'mensagem_recebida', 'sem_interacao'] as const;
+export const GATILHOS = ['pedido_recebido', 'etapa_alterada', 'servico_concluido', 'mensagem_recebida', 'sem_interacao', 'ligacao_perdida'] as const;
 export const NOME_GATILHO: Record<(typeof GATILHOS)[number], string> = {
   pedido_recebido: 'Quando chega um pedido novo',
   etapa_alterada: 'Quando a oportunidade entra em uma etapa',
   servico_concluido: 'Quando o serviço é marcado como concluído',
   mensagem_recebida: 'Quando o cliente manda uma mensagem',
   sem_interacao: 'Quando a oportunidade fica parada (sem interação)',
+  ligacao_perdida: 'Quando uma ligação não é atendida',
 };
 
 /** Stages a flow may move an opportunity to: never won or lost, which stay a person's decision. */
@@ -326,6 +327,23 @@ export const MODELOS_DE_FLUXO: { id: string; nome: string; descricao: string; fl
         { tipo: 'se', condicao: 'tem_responsavel', ir_para: 4 },
         { tipo: 'criar_tarefa', titulo: 'Escolher quem vai fazer a visita', prazo_horas: 4 },
         { tipo: 'criar_tarefa', titulo: 'Confirmar dia e horário da visita com o cliente', prazo_horas: 24 },
+      ],
+    },
+  },
+  {
+    id: 'ligacao-nao-atendida',
+    nome: 'Ligação não atendida',
+    descricao: 'Quem ligou e não foi atendido já recebe a resposta pelo WhatsApp (automação pronta, em Regras). Este fluxo cuida da equipe: distribui a oportunidade e, se em 30 minutos ninguém assumiu a conversa, avisa a equipe.',
+    fluxo: {
+      nome: 'Ligação não atendida',
+      ativo: false,
+      gatilho: { tipo: 'ligacao_perdida' },
+      passos: [
+        { tipo: 'atribuir', modo: 'menos_ocupado', user_id: '', so_sem_responsavel: true },
+        { tipo: 'esperar', minutos: 30 },
+        { tipo: 'parar_se', condicao: 'pessoa_assumiu' },
+        { tipo: 'parar_se', condicao: 'encerrada' },
+        { tipo: 'avisar_equipe', titulo: 'Ligação não atendida há 30 minutos sem retorno' },
       ],
     },
   },

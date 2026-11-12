@@ -90,6 +90,10 @@ export const ConfigEmpresa = z.object({
       /** Daily summary in the panel, at this local hour. */
       resumo_diario: z.boolean().default(true),
       resumo_hora: z.number().int().min(0).max(23).default(8),
+      /** Missed call: answer by WhatsApp right away (with the caller's consent) and create the call-back task. */
+      ligacao_auto: z.boolean().default(true),
+      ligacao_texto: z.string().trim().min(10).max(500).default('Oi! Aqui é {{atendente}}, da {{empresa}}. Vi que você ligou e não conseguimos atender agora. Como posso te ajudar? Se preferir, a equipe retorna a ligação.'),
+      ligacao_texto_fora: z.string().trim().min(10).max(500).default('Oi! Aqui é {{atendente}}, da {{empresa}}. Recebemos sua ligação fora do nosso horário. Assim que abrirmos, às {{abertura}}, a equipe te responde. Se quiser, já pode contar por aqui o que precisa.'),
       hora_inicio: z.number().int().min(0).max(23).default(8),
       hora_fim: z.number().int().min(1).max(24).default(20),
       fuso: z.string().default('America/Sao_Paulo'),
@@ -133,6 +137,11 @@ export type Conhecimento = z.infer<typeof Conhecimento>;
 export const VERSAO_CONSENTIMENTO = 2;
 export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
   `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
+
+/** What the phone menu asks before the call rings (said by the telephony service), and what is recorded when the caller presses 1. */
+export const FRASE_MENU_LIGACAO = 'Se ninguém puder atender, quer receber nosso retorno pelo WhatsApp? Aperte 1.';
+export const TEXTO_ACEITE_LIGACAO = (empresa: string) =>
+  `Na ligação para a ${empresa}, ouvi "${FRASE_MENU_LIGACAO}" e apertei 1: aceito receber o retorno desta ligação pelo WhatsApp. Posso pedir para parar a qualquer momento respondendo SAIR.`;
 
 export type Ambiente = 'desenvolvimento' | 'demonstracao' | 'producao';
 export function ambiente(): Ambiente {

@@ -127,6 +127,18 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+## Ligação não atendida → WhatsApp
+
+Quando alguém liga para a empresa e ninguém atende, a plataforma responde pelo WhatsApp, abre a oportunidade e cria a tarefa de retornar a ligação (Configurações › Ligações não atendidas; texto e liga/desliga em Regras).
+
+- **Precisa de um serviço de telefonia na internet** com um número que toca nos celulares da equipe e avisa quando a ligação não foi atendida. O WhatsApp não avisa sobre ligações perdidas no telefone comum. Ainda não há serviço escolhido nem adaptador específico: a entrada aceita um formato simples e os campos mais comuns desses serviços.
+- **Entrada:** `POST /api/webhooks/telefonia` com a chave da empresa em `Authorization: Bearer <chave>` (ou como senha do acesso básico). A chave é criada pela equipe Growlift dentro da empresa e aparece uma vez só. Campos (JSON ou formulário): `de` (ou `From`), `id` (ou `CallSid`), `status` (ou `DialCallStatus`/`CallStatus`: `nao_atendida`, `no-answer`, `busy`, `missed`, `canceled`, `failed`) e `aceite_whatsapp` (ou `Digits=1`). Outros status são ignorados.
+- **Autorização:** a mensagem só vai para celular de quem apertou 1 no menu da ligação (“Se ninguém puder atender, quer receber nosso retorno pelo WhatsApp? Aperte 1.”, gravado como autorização, origem “ligacao”) ou já tinha autorizado no formulário. Sem isso, telefone fixo ou quem pediu SAIR: só a tarefa.
+- Sai na hora, também à noite, com o texto de fora do horário. Uma mensagem por número a cada 2 horas; o mesmo aviso repetido não faz nada; resposta parada mais de 2 horas na fila não sai.
+- Fora da janela de 24 horas precisa do modelo aprovado “resposta a ligação não atendida” (Configurações › WhatsApp).
+- Gatilho “Quando uma ligação não é atendida” no construtor de fluxos, com o modelo pronto “Ligação não atendida” (distribui e avisa a equipe se ninguém assumir em 30 minutos).
+- Na demonstração, “Simular ligação” em Configurações mostra tudo sem serviço de telefonia.
+
 ## App no celular (avisos)
 
 O painel instala como aplicativo no celular (PWA): em **App no celular**, cada pessoa vê o passo a passo (iPhone: Safari › Compartilhar › Adicionar à Tela de Início; Android: Chrome › Instalar app) e liga os avisos daquele aparelho.

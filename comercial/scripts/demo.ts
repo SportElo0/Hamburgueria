@@ -41,7 +41,7 @@ async function main() {
     await salvarConfig(a, 'regras', { ...e.config.regras, retorno_auto_cliente: true, retorno_auto_horas: 24, retorno_auto_horas_2: 72, avaliacao_auto: true });
     await salvarConhecimento(a, conhecimento);
     await definirResponsavelPadrao(a, vendedor);
-    await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao' });
+    await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao', modelo_ligacao: 'demo_ligacao' });
     // Two of the ready-made flows start switched on in the demonstration (the third stays off, to show the switch).
     for (const m of MODELOS_DE_FLUXO) await salvarFluxo(a, null, { ...m.fluxo, ativo: m.id !== 'boas-vindas' });
     return { empresa: (await empresaPorId(e.id))!, a, v };

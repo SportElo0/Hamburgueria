@@ -8,6 +8,7 @@ import { executarPassoFluxo } from './fluxos-exec';
 import { agendar, processarPendentes, type Executor, type Resultado, type Trabalho } from './fila';
 import { canalDa } from './integracoes';
 import { hashToken, novoToken } from './segredos';
+import { textoRetornoLigacao } from './ligacoes';
 
 /** Local hour (0-23) in the company's time zone. */
 function horaLocal(fuso: string, d = new Date()): number {
@@ -30,7 +31,7 @@ export function proximoHorarioPermitido(regras: Empresa['config']['regras'], ago
 interface Iniciada {
   oportunidadeId: string;
   corpo: string;
-  finalidade: 'confirmacao' | 'retorno' | 'avaliacao' | 'manutencao' | 'fluxo';
+  finalidade: 'confirmacao' | 'retorno' | 'avaliacao' | 'manutencao' | 'fluxo' | 'ligacao';
   /** Approved template name chosen by a flow step; empty = free text only inside the 24-hour window. */
   modelo?: string;
   /** For follow-ups: cancel when the customer wrote after this moment. */
@@ -44,11 +45,12 @@ interface Iniciada {
 export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultado> {
   const empresa = await empresaPorId(t.empresa_id);
   if (!empresa) return { tipo: 'cancelado', motivo: 'Empresa não existe mais.' };
-  const adiar = proximoHorarioPermitido(empresa.config.regras);
+  // The answer to a missed call goes right away, also at night: the person just called, and the text says when the team opens.
+  const adiar = i.finalidade === 'ligacao' ? null : proximoHorarioPermitido(empresa.config.regras);
   if (adiar) return { tipo: 'adiar', para: adiar, nota: 'Fora do horário de envio da empresa.' };
   const { canal, config, motivo } = await canalDa(empresa.id);
   if (!canal) return { tipo: 'cancelado', motivo: motivo ?? 'Canal indisponível.' };
-  const modelo = i.finalidade === 'fluxo' ? i.modelo ?? '' : { confirmacao: config.modelo_confirmacao, retorno: config.modelo_retorno, avaliacao: config.modelo_avaliacao, manutencao: config.modelo_manutencao }[i.finalidade];
+  const modelo = i.finalidade === 'fluxo' ? i.modelo ?? '' : { confirmacao: config.modelo_confirmacao, retorno: config.modelo_retorno, avaliacao: config.modelo_avaliacao, manutencao: config.modelo_manutencao, ligacao: config.modelo_ligacao }[i.finalidade];
   return tx(async (db): Promise<Resultado> => {
     const o = await um<{ id: string; etapa: string; contato_id: string; responsavel_id: string | null; nome: string; nao_contatar_em: Date | null }>(
       `select o.id, o.etapa, o.contato_id, o.responsavel_id, c.nome, c.nao_contatar_em from oportunidades o join contatos c on c.id = o.contato_id
@@ -73,9 +75,13 @@ export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultad
     if (v.estado !== 'ia_ativa') return { tipo: 'cancelado', motivo: v.estado === 'humano_atendendo' ? 'Uma pessoa assumiu a conversa.' : 'A conversa está aguardando uma pessoa.' };
     if (i.agendadoEm && v.ultima_entrada_em && v.ultima_entrada_em > i.agendadoEm) return { tipo: 'cancelado', motivo: 'O cliente respondeu depois do agendamento.' };
     const naJanela = !!v.ultima_entrada_em && Date.now() - v.ultima_entrada_em.getTime() < JANELA_WHATSAPP_MS;
+    if (!naJanela && !modelo && i.finalidade === 'ligacao') {
+      // The "call back" task already exists: nothing else to create.
+      return { tipo: 'cancelado', motivo: 'Fora da janela de 24 horas e sem modelo aprovado: fica a tarefa de retornar a ligação.' };
+    }
     if (!naJanela && !modelo) {
       // Outside the 24-hour window WhatsApp only accepts a template approved by Meta. Without one, a person does it.
-      await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'contato_manual', titulo: { confirmacao: 'Confirmar o recebimento do pedido com o cliente', retorno: 'Retornar ao cliente sobre a proposta', avaliacao: 'Enviar o convite de avaliação ao cliente', manutencao: 'Lembrar o cliente da manutenção', fluxo: 'Enviar ao cliente a mensagem de um fluxo de automação' }[i.finalidade], detalhe: 'Envio automático não feito: falta um modelo de mensagem aprovado no WhatsApp.', responsavelId: o.responsavel_id, chave: `manual:${t.id}` });
+      await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'contato_manual', titulo: { confirmacao: 'Confirmar o recebimento do pedido com o cliente', retorno: 'Retornar ao cliente sobre a proposta', avaliacao: 'Enviar o convite de avaliação ao cliente', manutencao: 'Lembrar o cliente da manutenção', ligacao: 'Retornar a ligação', fluxo: 'Enviar ao cliente a mensagem de um fluxo de automação' }[i.finalidade], detalhe: 'Envio automático não feito: falta um modelo de mensagem aprovado no WhatsApp.', responsavelId: o.responsavel_id, chave: `manual:${t.id}` });
       return { tipo: 'cancelado', motivo: 'Fora da janela de 24 horas e sem modelo aprovado: virou tarefa.' };
     }
     const m = await um<{ id: string }>(
@@ -131,6 +137,22 @@ export const executores: Record<string, Executor> = {
     return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'retorno', agendadoEm: new Date(String(t.dados.agendado_em ?? t.criado_em)), corpo });
   },
 
+  /** WhatsApp answer to a missed call (scheduled only for mobile numbers with consent; checked again here). */
+  async retorno_ligacao(t) {
+    const empresa = await empresaPorId(t.empresa_id);
+    if (!empresa?.config.regras.ligacao_auto) return { tipo: 'cancelado', motivo: 'A resposta a ligações não atendidas foi desligada nas regras da empresa.' };
+    const l = await um<{ recebida_em: Date }>('select recebida_em from ligacoes where empresa_id = $1 and id = $2', [t.empresa_id, String(t.dados.ligacao ?? '')]);
+    if (!l) return { tipo: 'cancelado', motivo: 'Ligação não encontrada.' };
+    // Hours later the message no longer makes sense: the call-back task stays.
+    if (Date.now() - l.recebida_em.getTime() > 2 * 3_600_000) {
+      await q(`update ligacoes set resultado = 'nao_enviada' where empresa_id = $1 and id = $2`, [t.empresa_id, String(t.dados.ligacao)]);
+      return { tipo: 'cancelado', motivo: 'Passou muito tempo desde a ligação: fica a tarefa de retornar.' };
+    }
+    const r = await enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'ligacao', corpo: textoRetornoLigacao(empresa, !!proximoHorarioPermitido(empresa.config.regras)) });
+    if (r.tipo === 'cancelado') await q(`update ligacoes set resultado = 'nao_enviada' where empresa_id = $1 and id = $2`, [t.empresa_id, String(t.dados.ligacao)]);
+    return r;
+  },
+
   async lembrete_manutencao(t) {
     const empresa = await empresaPorId(t.empresa_id);
     if (!empresa?.config.regras.manutencao_auto) return { tipo: 'cancelado', motivo: 'O lembrete de manutenção foi desligado nas regras da empresa.' };
@@ -183,6 +205,7 @@ export const NOME_TRABALHO: Record<string, string> = {
   convite_avaliacao: 'Convite de avaliação',
   fluxo_passo: 'Passo de um fluxo de automação',
   lembrete_manutencao: 'Lembrete de manutenção',
+  retorno_ligacao: 'Resposta pelo WhatsApp a uma ligação não atendida',
 };
 
 export interface Execucao {
