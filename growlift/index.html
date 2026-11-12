@@ -327,15 +327,27 @@
           <fieldset class="wstep group" data-step="1">
             <legend>O que mais atrapalha hoje? <span>(marque até 3)</span></legend>
             <div class="opts">
-              <label class="opt"><input type="checkbox" name="dor" value="Demoro para responder no WhatsApp e perco cliente"><span>Demoro para responder no WhatsApp e perco cliente</span></label>
-              <label class="opt"><input type="checkbox" name="dor" value="Pouca gente me acha no Google ou no Instagram"><span>Pouca gente me acha no Google ou no Instagram</span></label>
-              <label class="opt"><input type="checkbox" name="dor" value="O cliente compra uma vez e não volta"><span>O cliente compra uma vez e não volta</span></label>
-              <label class="opt"><input type="checkbox" name="dor" value="Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)"><span>Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)</span></label>
-              <label class="opt"><input type="checkbox" name="dor" value="Pago muita comissão para aplicativo de entrega"><span>Pago muita comissão para aplicativo de entrega</span></label>
-              <label class="opt"><input type="checkbox" name="dor" value="Não sei quais produtos dão lucro"><span>Não sei quais produtos dão lucro</span></label>
-              <label class="opt"><input type="checkbox" name="dor" value="Perco tempo com tarefa repetida (orçamento, agenda, confirmação)"><span>Perco tempo com tarefa repetida (orçamento, agenda, confirmação)</span></label>
-              <label class="opt so-imob" hidden><input type="checkbox" name="dor" value="Perco tempo confirmando com os proprietários se o imóvel ainda está disponível"><span>Perco tempo confirmando com os proprietários se o imóvel ainda está disponível</span></label>
-              <label class="opt so-clin" hidden><input type="checkbox" name="dor" value="Paciente falta ou esquece a consulta"><span>Paciente falta ou esquece a consulta</span></label>
+              <label class="opt" data-r="base restaurante"><input type="checkbox" name="dor" value="Demoro para responder no WhatsApp e perco cliente"><span>Demoro para responder no WhatsApp e perco cliente</span></label>
+              <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="Demoro para responder no WhatsApp e perco paciente"><span>Demoro para responder no WhatsApp e perco paciente</span></label>
+              <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Demoro para responder quem chega dos portais e do WhatsApp"><span>Demoro para responder quem chega dos portais e do WhatsApp</span></label>
+              <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="Ninguém atende à noite nem no fim de semana"><span>Ninguém atende à noite nem no fim de semana</span></label>
+              <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Perco tempo confirmando com os proprietários se o imóvel ainda está disponível"><span>Perco tempo confirmando com os proprietários se o imóvel ainda está disponível</span></label>
+              <label class="opt" data-r="base restaurante clinica imobiliaria"><input type="checkbox" name="dor" value="Pouca gente me acha no Google ou no Instagram"><span>Pouca gente me acha no Google ou no Instagram</span></label>
+              <label class="opt" data-r="base restaurante"><input type="checkbox" name="dor" value="O cliente compra uma vez e não volta"><span>O cliente compra uma vez e não volta</span></label>
+              <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="Paciente falta ou esquece a consulta"><span>Paciente falta ou esquece a consulta</span></label>
+              <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Tem imóvel vendido ou alugado ainda anunciado"><span>Tem imóvel vendido ou alugado ainda anunciado</span></label>
+              <label class="opt" data-r="base restaurante"><input type="checkbox" name="dor" value="Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)"><span>Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)</span></label>
+              <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="Perco tempo remarcando e confirmando consulta"><span>Perco tempo remarcando e confirmando consulta</span></label>
+              <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Atualizar o site e os portais dá muito trabalho"><span>Atualizar o site e os portais dá muito trabalho</span></label>
+              <label class="opt" data-r="base restaurante"><input type="checkbox" name="dor" value="Pago muita comissão para aplicativo de entrega"><span>Pago muita comissão para aplicativo de entrega</span></label>
+              <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="A agenda fica com horários vagos"><span>A agenda fica com horários vagos</span></label>
+              <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Marcar visita com o corretor vira bagunça"><span>Marcar visita com o corretor vira bagunça</span></label>
+              <label class="opt" data-r="base"><input type="checkbox" name="dor" value="Não sei quais produtos dão lucro"><span>Não sei quais produtos dão lucro</span></label>
+              <label class="opt" data-r="restaurante" hidden><input type="checkbox" name="dor" value="Não sei quais pratos dão lucro"><span>Não sei quais pratos dão lucro</span></label>
+              <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="O paciente não volta para o retorno"><span>O paciente não volta para o retorno</span></label>
+              <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Muito curioso e pouco cliente pronto pra fechar"><span>Muito curioso e pouco cliente pronto pra fechar</span></label>
+              <label class="opt" data-r="base"><input type="checkbox" name="dor" value="Perco tempo com tarefa repetida (orçamento, agenda, confirmação)"><span>Perco tempo com tarefa repetida (orçamento, agenda, confirmação)</span></label>
+              <label class="opt" data-r="restaurante" hidden><input type="checkbox" name="dor" value="No horário de pico, o atendimento não dá conta dos pedidos"><span>No horário de pico, o atendimento não dá conta dos pedidos</span></label>
             </div>
             <div class="wnav"><button class="btn btn-primary" type="button" data-next>Continuar <span aria-hidden="true">→</span></button></div>
           </fieldset>

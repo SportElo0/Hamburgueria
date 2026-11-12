@@ -143,10 +143,10 @@
   // x-ray example and the diagnosis) and lives in the address (/clinicas…) and in this browser, so a link or a
   // return visit opens the right version. Without a choice the page shows everything, as before.
   const RAMOS = {
-    clinica: { path: '/clinicas', nome: 'Clínica', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Saúde ou beleza' },
-    restaurante: { path: '/restaurantes', nome: 'Restaurante', hide: [], first: 'ramos', form: 'Restaurante ou delivery' },
-    imobiliaria: { path: '/imobiliarias', nome: 'Imobiliária', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp', form: 'Imobiliária' },
-    outro: { path: '/outros', nome: 'Outro negócio', hide: ['ramos', 'restaurantes', 'pesquisa-3d', 'whatsapp', 'modelos', 'subida'], first: 'funcoes', form: '' },
+    clinica: { path: '/clinicas', nome: 'Clínica', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp' },
+    restaurante: { path: '/restaurantes', nome: 'Restaurante', hide: [], first: 'ramos' },
+    imobiliaria: { path: '/imobiliarias', nome: 'Imobiliária', hide: ['restaurantes', 'pesquisa-3d', 'ramos'], first: 'whatsapp' },
+    outro: { path: '/outros', nome: 'Outro negócio', hide: ['ramos', 'restaurantes', 'pesquisa-3d', 'whatsapp', 'modelos', 'subida'], first: 'funcoes' },
   };
   const zb = (side, text, time) => `<p class="zb ${side}">${text}<i>${time}</i></p>`;
   const zcal = (head, title, ...lines) => `<div class="zcal"><p class="zcal-h">${head}</p><p class="zcal-b"><b>${title}</b>${lines.map((l) => `<span>${l}</span>`).join('')}</p></div>`;
@@ -203,7 +203,39 @@
   const stored = () => { try { return localStorage.getItem('growlift-ramo'); } catch { return null; } };
   let rebuildScenes = null;
   let killScenes = null;
-  let autoRadio = null;
+
+  const FORM_Q = {
+    clinica: {
+      ramo: { title: 'Que tipo de clínica?', opts: ['Odontológica', 'Estética', 'Fisioterapia', 'Médica ou consultório', 'Psicologia', 'Outro'] },
+      volume: { title: 'Consultas por dia, mais ou menos', opts: ['Até 10', 'De 10 a 30', 'De 30 a 60', 'Mais de 60'] },
+      quem: { title: 'Quem responde o WhatsApp hoje?', opts: ['A recepção', 'Eu mesmo', 'Ninguém dá conta direito', 'Já uso resposta automática'] },
+      legend: 'Sobre a sua clínica',
+      other: 'Ex.: clínica veterinária',
+    },
+    restaurante: {
+      ramo: { title: 'Que tipo de restaurante?', opts: ['Hamburgueria', 'Pizzaria', 'Restaurante ou self-service', 'Lanchonete ou delivery', 'Doceria ou cafeteria', 'Outro'] },
+      volume: { title: 'Pedidos por dia, mais ou menos', opts: ['Até 30', 'De 30 a 100', 'De 100 a 300', 'Mais de 300'] },
+      quem: { title: 'Quem responde o WhatsApp hoje?', opts: ['Eu mesmo', 'Alguém do caixa ou da equipe', 'Ninguém dá conta direito', 'Já uso resposta automática'] },
+      legend: 'Sobre o seu restaurante',
+      other: 'Ex.: comida japonesa',
+    },
+    imobiliaria: {
+      ramo: { title: 'Com o que a imobiliária mais trabalha?', opts: ['Aluguel', 'Venda', 'Aluguel e venda', 'Lançamentos', 'Outro'] },
+      volume: { title: 'Imóveis na carteira, mais ou menos', opts: ['Até 50', 'De 50 a 200', 'De 200 a 500', 'Mais de 500'] },
+      quem: { title: 'Quem responde o WhatsApp hoje?', opts: ['Os corretores', 'A recepção', 'Ninguém dá conta direito', 'Já uso resposta automática'] },
+      legend: 'Sobre a sua imobiliária',
+      other: 'Ex.: imóveis rurais',
+    },
+  };
+  // What the page brings for "outro" / no choice, kept to put back after a trade is switched.
+  const formBase = (() => {
+    const get = (name) => { const p = document.getElementById(`q-${name}`); return p && { title: p.textContent, html: p.nextElementSibling.innerHTML }; };
+    const legend = document.querySelector('#form-diagnostico [data-step="2"] legend');
+    const b = { ramo: get('ramo'), volume: get('volume'), quem: get('quem'), other: document.getElementById('f-ramo')?.placeholder || '', legend: legend?.textContent || '' };
+    return b.ramo ? b : null;
+  })();
+  // In the diagnosis the visitor's line says what was picked on the cover too (e.g. "Clínica: Odontológica").
+  window.__ramoNome = () => RAMOS[document.body.dataset.ramo]?.nome || '';
 
   const applyRamo = (ramo) => {
     const cfg = RAMOS[ramo];
@@ -228,13 +260,29 @@
         ? x[1].map(([k, v, c, w]) => `<li><div class="row"><span>${k}</span><b class="c-${c}">${v}</b></div><div class="track-bar"><i class="b-${c}" style="width:${w}%"></i></div></li>`).join('')
         : xrayBase.checks;
     }
-    document.querySelectorAll('.so-imob').forEach((el) => (el.hidden = ramo !== 'imobiliaria'));
-    document.querySelectorAll('.so-clin').forEach((el) => (el.hidden = ramo !== 'clinica'));
-    // The diagnosis starts with the trade already marked (only if the visitor has not picked one there).
-    if (autoRadio && autoRadio.checked) autoRadio.checked = false;
-    autoRadio = null;
-    const radio = cfg && cfg.form && document.querySelector(`input[name=ramo][value="${cfg.form}"]`);
-    if (radio && !document.querySelector('input[name=ramo]:checked')) { radio.checked = true; autoRadio = radio; }
+    // "O que mais atrapalha": 7 pains that make sense for the chosen trade (outro / no choice: the general list).
+    const key = ['restaurante', 'clinica', 'imobiliaria'].includes(ramo) ? ramo : 'base';
+    document.querySelectorAll('label[data-r]').forEach((el) => {
+      el.hidden = !el.dataset.r.split(' ').includes(key);
+      if (el.hidden) el.querySelector('input').checked = false;
+    });
+    // "Sobre o seu negócio": the questions follow the trade picked on the cover (a clinic is asked what kind of
+    // clinic, never "restaurante ou delivery"). Outro / no choice: the general questions, as written in the page.
+    const q = FORM_Q[ramo] || formBase;
+    if (q) {
+      ['ramo', 'volume', 'quem'].forEach((name) => {
+        const p = document.getElementById(`q-${name}`);
+        if (!p) return;
+        p.textContent = q[name].title;
+        p.nextElementSibling.innerHTML = q[name].html || q[name].opts.map((v) => `<label class="opt"><input type="radio" name="${name}" value="${v}"><span>${v}</span></label>`).join('');
+      });
+      const otherField = document.querySelector('#form-diagnostico .other');
+      const otherInput = document.getElementById('f-ramo');
+      if (otherField) otherField.hidden = true;
+      if (otherInput) { otherInput.value = ''; otherInput.placeholder = q.other; }
+      const lg = document.querySelector('#form-diagnostico [data-step="2"] legend');
+      if (lg) lg.textContent = q.legend;
+    }
   };
 
   const fromPath = Object.keys(RAMOS).find((k) => location.pathname.replace(/\/$/, '') === RAMOS[k].path);
@@ -491,12 +539,13 @@
       } else clear();
     }),
   );
-  form.querySelectorAll('input[name=ramo]').forEach((r) =>
-    r.addEventListener('change', () => {
-      other.hidden = r.value !== 'Outro' || !r.checked;
-      if (!other.hidden) otherInput.focus();
-    }),
-  );
+  // The trade options are rebuilt when the cover choice changes: listen on the form.
+  form.addEventListener('change', (e) => {
+    const r = e.target;
+    if (r.name !== 'ramo') return;
+    other.hidden = r.value !== 'Outro' || !r.checked;
+    if (!other.hidden) otherInput.focus();
+  });
 
   const valid = (n) => {
     if (n === 0 && !picked('dor').length) return fail('Marque pelo menos uma coisa que atrapalha hoje.', form.querySelector('input[name=dor]'));
@@ -521,13 +570,15 @@
   // The answers travel as plain lines in the free-text field the panel already keeps (1000 characters).
   const segment = () => {
     const r = picked('ramo')[0] || '';
-    return (r === 'Outro' ? otherInput.value.trim() : r.replace(/ \(.*\)$/, '')).slice(0, 60);
+    const own = r === 'Outro' ? otherInput.value.trim() : r.replace(/ \(.*\)$/, '');
+    const cover = ['restaurante', 'clinica', 'imobiliaria'].includes(document.body.dataset.ramo) ? window.__ramoNome() : '';
+    return (cover && own ? `${cover}: ${own}` : own).slice(0, 60);
   };
   const answers = (f) =>
     [
       ['Maior dor', picked('dor').join('; ')],
-      ['Ramo', picked('ramo')[0] === 'Outro' ? otherInput.value.trim() : picked('ramo')[0]],
-      ['Atendimentos por dia', picked('volume').join('')],
+      ['Ramo', segment()],
+      [document.getElementById('q-volume').textContent.replace(/, mais ou menos$/, ''), picked('volume').join('')],
       ['Quem responde o WhatsApp', picked('quem').join('')],
       ['Mais', f.wishes.value.trim()],
     ]
