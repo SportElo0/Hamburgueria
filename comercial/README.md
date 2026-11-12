@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 63 testes de serviço contra o banco de teste |
+| `npm test` | 67 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -119,7 +119,11 @@ Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `
 
 Sem chave, a assistente roda no **simulador** (respostas por regras, marcadas como simulação). Para o modelo real: `IA_ANTHROPIC_API_KEY` no servidor (chave da API da Anthropic contratada para este fim; o acesso usado para programar não serve para atender clientes). Modelo padrão em `IA_MODELO_PADRAO`, e cada empresa pode escolher o seu em Configurações › Assistente, junto com o limite mensal de respostas.
 
-O adaptador real (`src/server/ia/anthropic.ts`) **não foi exercitado contra a API** nesta versão: falta a chave.
+O adaptador real (`src/server/ia/anthropic.ts`) já foi testado **contra uma API falsa local** (pedido montado, chave enviada, prompt com cache, só as 3 ações permitidas, telefone fora do pedido, ação executada no servidor, recusa e erro da API viram atendimento humano). **Ainda não foi exercitado contra a API real:** este ambiente de desenvolvimento não aceita chave para os endereços da Anthropic, e o acesso usado para programar não é usado para atender clientes.
+
+Para conferir com o modelo real, depois de pôr `IA_ANTHROPIC_API_KEY` no servidor:
+- na área da equipe Growlift (`/admin`), botão **Testar a assistente real**: 8 situações (pergunta do conteúdo, uma pergunta por vez, preço, desconto, dúvida técnica, visita, tentativa de burlar, “você é robô?”), com a resposta de cada uma e o custo estimado (limite de 4 testes por hora);
+- ou no terminal: `npm run testar-ia [modelo]`.
 
 O que a assistente pode fazer está limitado no servidor a três ações (guardar dados do orçamento, registrar interesse em visita, chamar uma pessoa). Ela não muda etapa, não fecha venda e não informa preço que não esteja em “Preços autorizados”. O telefone do cliente não é enviado ao modelo.
 

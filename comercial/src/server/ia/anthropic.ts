@@ -11,7 +11,8 @@ const COM_FALLBACK = /^claude-(opus-5|sonnet-5-5|fable-5)/;
  */
 export function iaAnthropic(apiKey: string): AdaptadorIA {
   // Explicit key and address: the app must not inherit credentials from the environment of whoever runs it.
-  const client = new Anthropic({ apiKey, baseURL: 'https://api.anthropic.com', maxRetries: 1, timeout: 40_000 });
+  // Explicit address (IA_ANTHROPIC_BASE_URL only for local tests against a fake server).
+  const client = new Anthropic({ apiKey, baseURL: process.env.IA_ANTHROPIC_BASE_URL || 'https://api.anthropic.com', maxRetries: 1, timeout: 40_000 });
   return {
     simulada: false,
     async responder(p: PedidoIA, executar: Executar): Promise<RespostaIA> {

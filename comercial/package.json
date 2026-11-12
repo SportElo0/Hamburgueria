@@ -12,7 +12,8 @@
     "reiniciar-banco": "tsx scripts/migrar.ts --zerar && tsx scripts/demo.ts",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "testar-ia": "tsx scripts/testar-ia.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

@@ -356,3 +356,21 @@ export const excluirFluxoAcao = async (_: Retorno, fd: FormData) => {
   if (r.erro) return r;
   redirect('/painel/automacoes');
 };
+
+/* ---------- Growlift: real assistant check ---------- */
+
+export async function testarAssistenteAcao(_: import('@/componentes/testar-assistente').EstadoTeste, fd: FormData): Promise<import('@/componentes/testar-assistente').EstadoTeste> {
+  const s = await exigirPlataforma();
+  if (!process.env.IA_ANTHROPIC_API_KEY) return { erro: 'A chave da IA (IA_ANTHROPIC_API_KEY) não está configurada neste servidor: a assistente está em simulação.' };
+  // Each run costs money: a few per hour at most.
+  if (!(await dentroDoLimite(`testar-ia:${s.userId}`, 4, 3600))) return { erro: 'Limite de 4 testes por hora atingido (cada teste tem custo).' };
+  const modelo = t(fd, 'modelo') || (await import('@/server/ia')).modeloPadrao();
+  if (!/^claude-[a-z0-9-]{3,40}$/.test(modelo)) return { erro: 'Nome de modelo inválido.' };
+  try {
+    const { checarAssistente } = await import('@/server/ia/checagem');
+    return { resultado: await checarAssistente(modelo) };
+  } catch (err) {
+    console.error('[testar-ia]', err instanceof Error ? err.message : err);
+    return { erro: 'Não foi possível falar com a API da IA agora. Confira a chave e tente de novo.' };
+  }
+}

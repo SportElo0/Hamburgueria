@@ -1,4 +1,6 @@
-import { ativarEmpresaAcao, criarEmpresaAcao, entrarEmpresaAcao, sair } from '@/app/acoes';
+import { ativarEmpresaAcao, criarEmpresaAcao, entrarEmpresaAcao, sair, testarAssistenteAcao } from '@/app/acoes';
+import { TestarAssistente } from '@/componentes/testar-assistente';
+import { modeloPadrao } from '@/server/ia';
 import { Marca } from '@/componentes/acesso';
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
@@ -20,11 +22,12 @@ export default async function Admin() {
     <div className="min-h-dvh">
       <header className="border-b border-linha bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
-          <span className="flex items-center gap-3"><Marca /><span className="border-l border-linha pl-3 font-semibold text-tinta">Administração Growlift</span></span>
+          <span className="flex min-w-0 items-center gap-3"><Marca className="shrink-0" /><span className="hidden border-l border-linha pl-3 font-semibold text-tinta sm:inline">Administração Growlift</span></span>
           <form action={sair}><button className="botao-2 min-h-9 px-3 py-1 text-sm">Sair</button></form>
         </div>
       </header>
       <main className="mx-auto max-w-5xl space-y-4 px-4 py-6">
+        <p className="text-sm font-semibold text-suave sm:hidden">Administração Growlift</p>
         <h1 className="text-2xl font-bold">Empresas</h1>
         <p className="text-[15px] text-suave">Aqui aparecem só o cadastro e a saúde das integrações. Para ver contatos e conversas de uma empresa é preciso entrar nela com um motivo, que fica registrado no histórico dela.</p>
         {empresas.length === 0 ? <p className="cartao p-6 text-center text-suave">Nenhuma empresa cadastrada.</p> : (
@@ -69,6 +72,15 @@ export default async function Admin() {
             <label className="flex min-h-11 items-center gap-2 text-[15px] sm:col-span-2"><input type="checkbox" name="demonstracao" className="h-5 w-5" /> Empresa de demonstração (dados fictícios)</label>
             <div><Enviar>Cadastrar</Enviar></div>
           </Formulario>
+        </section>
+
+        <section className="cartao p-4" aria-labelledby="t-ia">
+          <h2 id="t-ia" className="font-bold">Assistente de IA</h2>
+          <p className={`aviso mt-2 ${process.env.IA_ANTHROPIC_API_KEY ? 'bg-ok-clara text-ok' : 'bg-alerta-clara text-alerta'}`}>
+            {process.env.IA_ANTHROPIC_API_KEY ? 'Chave da IA configurada: as empresas usam o modelo real.' : 'Sem chave da IA neste servidor: as empresas usam o simulador (fora de produção) ou passam direto para a equipe (em produção).'}
+          </p>
+          <p className="mt-2 text-sm text-suave">O teste conversa com o modelo real em 8 situações (pergunta do conteúdo, preço, desconto, dúvida técnica, visita, tentativa de burlar, “você é robô?”) usando uma empresa fictícia, e mostra o custo. Cada teste custa alguns centavos de dólar.</p>
+          <div className="mt-3"><TestarAssistente acao={testarAssistenteAcao} modeloPadrao={modeloPadrao()} /></div>
         </section>
 
         <section className="cartao p-4" aria-labelledby="t-acessos">

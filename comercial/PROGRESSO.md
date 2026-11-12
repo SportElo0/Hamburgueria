@@ -9,6 +9,7 @@ Atualizado em 12/11/2026.
 
 - [x] Automações: fila embutida na aplicação, sequência de retorno, tela Automações, 46 testes.
 - [x] Construtor de fluxos (gatilho, esperas, condições, ações), histórico de execuções; ramificações (se/ir para) e gatilho por mensagem; gatilho por tempo parado e desenho do fluxo; 63 testes.
+- [x] IA real: adaptador testado contra API falsa local; botão "Testar a assistente real" em /admin e `npm run testar-ia`. Falta a chave para rodar contra a API real.
 
 Ponto de retomada: seguir "Próximos passos para o primeiro cliente em produção" do README.
 Não feito de propósito: publicar, contratar serviços, testar IA e WhatsApp reais (faltam credenciais).
