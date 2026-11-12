@@ -110,6 +110,27 @@ export const ConfigEmpresa = z.object({
     })
     .prefault({}),
   avaliacao: z.object({ link: Texto(300) }).prefault({}),
+  /** Visit calendar: when visits can happen, how long they take and how many at the same time. */
+  agenda: z
+    .object({
+      ativa: z.boolean().default(false),
+      /** Weekdays with visits (0 = Sunday). */
+      dias: z.array(z.number().int().min(0).max(6)).max(7).default([1, 2, 3, 4, 5]),
+      hora_inicio: z.number().int().min(0).max(23).default(8),
+      hora_fim: z.number().int().min(1).max(24).default(17),
+      duracao_min: z.number().int().min(15).max(480).default(60),
+      /** Visits at the same time (people who go to the visits). */
+      capacidade: z.number().int().min(1).max(20).default(1),
+      /** Minimum notice, in hours, for the assistant to book. */
+      antecedencia_horas: z.number().int().min(0).max(168).default(4),
+      /** How many days ahead the assistant offers. */
+      janela_dias: z.number().int().min(1).max(60).default(14),
+      /** The assistant offers the free times and books the visit (otherwise it only records the wish). */
+      ia_marca: z.boolean().default(true),
+      /** WhatsApp reminder one day before (only for who agreed). */
+      lembrete: z.boolean().default(true),
+    })
+    .prefault({}),
   campos: z.array(Campo).max(10).default([]),
 });
 export type ConfigEmpresa = z.infer<typeof ConfigEmpresa>;
@@ -134,9 +155,9 @@ export type Conhecimento = z.infer<typeof Conhecimento>;
 
 /** Consent text shown next to the WhatsApp checkbox; stored with each acceptance. */
 /** Version of the consent text below. Version 2 added the maintenance reminder; older acceptances do not cover it. */
-export const VERSAO_CONSENTIMENTO = 3;
+export const VERSAO_CONSENTIMENTO = 4;
 export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
-  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta, para retornar minhas ligações e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
+  `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta, para retornar minhas ligações, me lembrar das visitas marcadas e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
 
 /**
  * What the phone menu says before the call rings (configured, word for word, in the telephony service) and what is

@@ -38,7 +38,7 @@ export default async function Configuracoes() {
     <div className="max-w-3xl space-y-4">
       <h1 className="text-2xl font-bold">Configurações e integrações</h1>
       <nav aria-label="Seções" className="flex flex-wrap gap-x-4 gap-y-1 text-[15px]">
-        {[['equipe', 'Equipe'], ['regras', 'Regras de acompanhamento'], ['ia', 'Assistente'], ['whatsapp', 'WhatsApp'], ['ligacoes', 'Ligações não atendidas'], ['avaliacao', 'Avaliações'], ['site', 'Site'], ['integrar', 'Formulário no seu site'], ['dados', 'Dados']].map(([id, n]) => <a key={id} className="underline" href={`#${id}`}>{n}</a>)}
+        {[['equipe', 'Equipe'], ['regras', 'Regras de acompanhamento'], ['agenda', 'Agenda'], ['ia', 'Assistente'], ['whatsapp', 'WhatsApp'], ['ligacoes', 'Ligações não atendidas'], ['avaliacao', 'Avaliações'], ['site', 'Site'], ['integrar', 'Formulário no seu site'], ['dados', 'Dados']].map(([id, n]) => <a key={id} className="underline" href={`#${id}`}>{n}</a>)}
       </nav>
 
       <Secao id="equipe" titulo="Equipe" nota="Administradores gerenciam equipe, conteúdo e configurações. Vendedores atendem e movimentam oportunidades.">
@@ -95,6 +95,27 @@ export default async function Configuracoes() {
         </Formulario>
       </Secao>
 
+      <Secao id="agenda" titulo="Agenda de visitas" nota="Os horários livres saem destes dias e horários, menos as visitas já marcadas. A assistente oferece só horários livres e cria a tarefa de confirmar o endereço; uma pessoa confirma a visita.">
+        <Formulario acao={salvarConfigAcao} className="grid gap-4 sm:grid-cols-2">
+          <input type="hidden" name="secao" value="agenda" />
+          <div className="sm:col-span-2"><Marcar id="ativa" rotulo="Agenda ligada" marcado={c.agenda.ativa} /></div>
+          <fieldset className="sm:col-span-2"><legend className="rotulo">Dias com visita</legend>
+            <div className="flex flex-wrap gap-x-4 gap-y-1">{['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((d, i) => (
+              <label key={d} className="flex min-h-11 items-center gap-2 text-[15px]"><input type="checkbox" name="dias" value={i} defaultChecked={c.agenda.dias.includes(i)} className="h-5 w-5 accent-[#175cd3]" />{d}</label>
+            ))}</div>
+          </fieldset>
+          <Num id="hora_inicio" rotulo="Primeira visita às (hora)" valor={c.agenda.hora_inicio} min={0} max={23} />
+          <Num id="hora_fim" rotulo="Última visita termina até (hora)" valor={c.agenda.hora_fim} min={1} max={24} />
+          <Num id="duracao_min" rotulo="Duração de cada visita (minutos)" valor={c.agenda.duracao_min} min={15} max={480} />
+          <Num id="capacidade" rotulo="Visitas ao mesmo tempo (pessoas que vão)" valor={c.agenda.capacidade} min={1} max={20} />
+          <Num id="antecedencia_horas" rotulo="Antecedência mínima para a assistente marcar (horas)" valor={c.agenda.antecedencia_horas} min={0} max={168} />
+          <Num id="janela_dias" rotulo="Oferecer horários até quantos dias à frente" valor={c.agenda.janela_dias} min={1} max={60} />
+          <div className="sm:col-span-2"><Marcar id="ia_marca" rotulo="A assistente oferece horários e marca a visita" ajuda="Desligado, ela só anota a preferência do cliente e a equipe combina." marcado={c.agenda.ia_marca} /></div>
+          <div className="sm:col-span-2"><Marcar id="lembrete" rotulo="Lembrete pelo WhatsApp um dia antes" ajuda="Depois de marcar pelo WhatsApp, a assistente pergunta se o cliente quer o lembrete; só vai para quem respondeu SIM, pediu à equipe ou autorizou no formulário. É cancelado se a visita for cancelada ou remarcada." marcado={c.agenda.lembrete} /></div>
+          <div className="sm:col-span-2"><Enviar>Salvar agenda</Enviar></div>
+        </Formulario>
+      </Secao>
+
       <Secao id="ia" titulo="Assistente virtual" nota={ia ? (ia.simulada ? 'Simulação — a assistente está rodando com respostas por regras, sem modelo de IA. Para ligar o modelo real, a equipe Growlift configura a chave da API.' : 'Modelo de IA ligado.') : 'Assistente indisponível neste ambiente: as conversas vão direto para a equipe.'}>
         <Formulario acao={salvarConfigAcao} className="grid gap-4 sm:grid-cols-2">
           <input type="hidden" name="secao" value="ia" />
@@ -122,6 +143,7 @@ export default async function Configuracoes() {
           <div><label className="rotulo" htmlFor="modelo_avaliacao">Modelo aprovado: convite de avaliação</label><input className="campo" id="modelo_avaliacao" name="modelo_avaliacao" defaultValue={zap.config.modelo_avaliacao} /></div>
           <div><label className="rotulo" htmlFor="modelo_manutencao">Modelo aprovado: lembrete de manutenção</label><input className="campo" id="modelo_manutencao" name="modelo_manutencao" defaultValue={zap.config.modelo_manutencao} /></div>
           <div><label className="rotulo" htmlFor="modelo_ligacao">Modelo aprovado: resposta a ligação não atendida</label><input className="campo" id="modelo_ligacao" name="modelo_ligacao" defaultValue={zap.config.modelo_ligacao} /></div>
+          <div><label className="rotulo" htmlFor="modelo_lembrete_visita">Modelo aprovado: lembrete de visita</label><input className="campo" id="modelo_lembrete_visita" name="modelo_lembrete_visita" defaultValue={zap.config.modelo_lembrete_visita} /></div>
           <div><label className="rotulo" htmlFor="idioma_modelos">Idioma dos modelos</label><input className="campo" id="idioma_modelos" name="idioma_modelos" defaultValue={zap.config.idioma_modelos} /></div>
           <p className="text-sm text-suave sm:col-span-2">Fora das 24 horas depois da última mensagem do cliente, o WhatsApp só aceita modelos aprovados pela Meta. Sem modelo, o envio automático vira tarefa para uma pessoa. Endereço para os avisos da Meta (webhook): <code className="break-all">{base}/api/webhooks/whatsapp</code></p>
           <div className="sm:col-span-2"><Enviar>Salvar WhatsApp</Enviar></div>

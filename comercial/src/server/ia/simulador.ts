@@ -41,6 +41,20 @@ export const iaSimulada: AdaptadorIA = {
       return fim('Condições e negociação são com a equipe. Já chamei uma pessoa para falar com você.');
     }
 
+    // Answer to the visit times we offered ("1", "2", "3" or the day written out).
+    const oferecidos = [...anterior.matchAll(/^(\d)\) (.+)$/gm)].map((m) => m[2].trim());
+    if (c.horarios && oferecidos.length) {
+      const n = t.match(/^\s*(?:o |a |opcao |opção )?([1-9])\b/)?.[1];
+      const escolhido = n ? oferecidos[Number(n) - 1] : oferecidos.find((o) => t.includes(limpo(o).split(' às ')[0]));
+      const h = escolhido && c.horarios.find((x) => x.texto === escolhido);
+      if (h) {
+        const r = await executar('marcar_visita', { horario: h.id });
+        if (r.startsWith('ok')) return fim(`Reservei o horário de ${h.texto}. A equipe confirma o endereço com você e, se algo não encaixar, combinamos outro horário.`);
+        if (/telefone/.test(r)) return fim(`Para marcar, preciso de alguns dados seus. ${faltando[0]?.pergunta ?? ''}`.trim());
+        return fim(`${r.replace(/^erro: /, '').replace(/ Ofereça outro horário da lista\.$/, '')} Quer escolher outro horário?`);
+      }
+    }
+
     // Was the previous message one of our questions? Then this is the answer to it.
     const perguntado = faltando.find((f) => anterior.includes(f.pergunta));
     const pareceDuvida = /\?/.test(ultima) || /^(qual|quais|quanto|como|onde|quando|voces|vcs|tem |fazem|atendem|trabalham)/.test(t);
@@ -58,6 +72,10 @@ export const iaSimulada: AdaptadorIA = {
     }
 
     let resposta = '';
+    if (/(visita|vistoria|agendar|reuniao|ir ate)/.test(t) && c.horarios?.length) {
+      const opcoes = c.horarios.slice(0, 3);
+      return fim(`Tenho estes horários para a visita:\n${opcoes.map((h, i) => `${i + 1}) ${h.texto}`).join('\n')}\nQual fica melhor? É só responder com o número.`);
+    }
     if (/(visita|vistoria|agendar|reuniao|ir ate)/.test(t)) {
       await executar('registrar_interesse_visita', { preferencia: ultima.trim().slice(0, 200) });
       resposta = 'Anotei seu interesse em uma visita. A equipe confirma o dia e o horário com você. ';

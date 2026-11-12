@@ -123,7 +123,7 @@ describe('lembrete de manutenção', () => {
   it('o texto de autorização novo inclui a manutenção e fica guardado com a versão', async () => {
     const p = (await receberPedido((await empresaPorId(M.empresa.id))!, pedido(), meta())) as PedidoSalvo;
     const k = await um<{ texto: string; versao: number }>('select texto, versao from consentimentos where contato_id = $1', [p.contatoId]);
-    expect(k?.versao).toBe(3);
+    expect(k?.versao).toBe(4);
     expect(k?.texto).toMatch(/lembrar da manutenção/);
     expect(k?.texto).toMatch(/retornar minhas ligações/);
   });

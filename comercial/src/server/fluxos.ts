@@ -6,7 +6,7 @@ import { ErroDeUso, NaoEncontrado } from './erros';
 import { agendar } from './fila';
 
 /** What starts a flow. */
-export const GATILHOS = ['pedido_recebido', 'etapa_alterada', 'servico_concluido', 'mensagem_recebida', 'sem_interacao', 'ligacao_perdida'] as const;
+export const GATILHOS = ['pedido_recebido', 'etapa_alterada', 'servico_concluido', 'mensagem_recebida', 'sem_interacao', 'ligacao_perdida', 'visita_marcada'] as const;
 export const NOME_GATILHO: Record<(typeof GATILHOS)[number], string> = {
   pedido_recebido: 'Quando chega um pedido novo',
   etapa_alterada: 'Quando a oportunidade entra em uma etapa',
@@ -14,6 +14,7 @@ export const NOME_GATILHO: Record<(typeof GATILHOS)[number], string> = {
   mensagem_recebida: 'Quando o cliente manda uma mensagem',
   sem_interacao: 'Quando a oportunidade fica parada (sem interação)',
   ligacao_perdida: 'Quando uma ligação não é atendida',
+  visita_marcada: 'Quando uma visita é marcada',
 };
 
 /** Stages a flow may move an opportunity to: never won or lost, which stay a person's decision. */

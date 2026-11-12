@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { anotarAcao, atribuirAcao, concluirTarefaAcao, excluirContatoAcao, linkAvaliacaoAcao, mudarEtapaAcao, proximaAcaoAcao, servicoConcluidoAcao, valorAcao } from '@/app/acoes';
+import { marcarVisitaAcao, anotarAcao, atribuirAcao, concluirTarefaAcao, excluirContatoAcao, linkAvaliacaoAcao, mudarEtapaAcao, proximaAcaoAcao, servicoConcluidoAcao, valorAcao } from '@/app/acoes';
 import { NOME_EVENTO, ORIGENS, dataHora, paraCampoData, reais } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { EtiquetaEstado, EtiquetaEtapa } from '@/componentes/pedacos';
@@ -8,6 +8,8 @@ import { conversasDoContato } from '@/server/conversas';
 import { empresaPorId, equipe } from '@/server/empresas';
 import { contatoDe, historico, obter, tarefas } from '@/server/oportunidades';
 import { exigirCtx, ouNaoEncontrado } from '@/server/sessao';
+import { CartaoVisita } from '@/componentes/visita';
+import { visitas } from '@/server/agenda';
 
 export const metadata = { title: 'Oportunidade' };
 
@@ -18,6 +20,8 @@ function detalheEvento(tipo: string, d: Record<string, unknown>, nomes: Map<stri
   if (tipo === 'valor_informado') return reais((d.valor_centavos as number) ?? null);
   if (tipo === 'conversa_encaminhada') return `Motivo: ${String(d.motivo ?? '').replace(/_/g, ' ')}`;
   if (tipo === 'interesse_visita') return String(d.preferencia ?? '');
+  if (tipo === 'visita_marcada') return `${d.quando}${d.origem === 'ia' ? ' · pela assistente' : ''}`;
+  if (tipo === 'visita_alterada') return `${d.estado === 'remarcada' ? `Remarcada para ${d.quando}` : String(d.estado ?? '')}`;
   if (tipo === 'acesso_admin_growlift') return `Motivo: ${d.motivo}`;
   if (tipo === 'pedido_recebido') return `Origem: ${ORIGENS[String(d.origem)] ?? d.origem}`;
   return '';
@@ -28,6 +32,9 @@ export default async function Detalhe({ params }: { params: Promise<{ id: string
   const { id } = await params;
   const o = await ouNaoEncontrado(obter(ctx, id));
   const [contato, eventos, pessoas, abertas, conversas, empresa] = await Promise.all([contatoDe(ctx, o.contato_id), historico(ctx, id), equipe(ctx), tarefas(ctx, { oportunidadeId: id }), conversasDoContato(ctx, o.contato_id), empresaPorId(ctx.empresaId)]);
+  const vs = await visitas(ctx, new Date(0), new Date('2100-01-01'), id);
+  const fuso = empresa!.config.regras.fuso;
+  const temVisitaAtiva = vs.some((v) => (v.estado === 'marcada' || v.estado === 'confirmada') && !v.passou);
   const nomes = new Map(pessoas.map((p) => [p.user_id, p.nome]));
   const fechada = o.etapa === 'ganho' || o.etapa === 'perdido';
   const rotulos = new Map(empresa!.config.campos.map((c) => [c.id, c.rotulo]));
@@ -79,6 +86,22 @@ export default async function Detalhe({ params }: { params: Promise<{ id: string
                   </li>
                 ))}
               </ul>
+            )}
+          </section>
+
+          <section className="cartao p-4" aria-labelledby="t-visita">
+            <h2 id="t-visita" className="font-bold">Visita</h2>
+            {vs.length > 0 && <ul className="divide-y divide-linha">{vs.map((v) => <CartaoVisita key={v.id} v={v} fuso={fuso} empresa={empresa!.nome} mostrarCliente={false} />)}</ul>}
+            {!fechada && !temVisitaAtiva && (
+              <Formulario acao={marcarVisitaAcao} limpar className="mt-3 grid gap-3 sm:grid-cols-2">
+                <input type="hidden" name="oportunidade" value={id} />
+                <div><label className="rotulo" htmlFor="v-inicio">Dia e horário</label><input className="campo" id="v-inicio" name="inicio" type="datetime-local" required /></div>
+                <div><label className="rotulo" htmlFor="v-resp">Quem vai</label><select className="campo" id="v-resp" name="responsavel" defaultValue={o.responsavel_id ?? ''}><option value="">Responsável da oportunidade</option>{pessoas.filter((p) => p.ativo).map((p) => <option key={p.user_id} value={p.user_id}>{p.nome}</option>)}</select></div>
+                <div className="sm:col-span-2"><label className="rotulo" htmlFor="v-end">Endereço da visita</label><input className="campo" id="v-end" name="endereco" maxLength={300} autoComplete="off" /></div>
+                <div className="sm:col-span-2"><label className="rotulo" htmlFor="v-obs">Observação (opcional)</label><input className="campo" id="v-obs" name="observacao" maxLength={500} /></div>
+                <label className="flex items-start gap-3 text-[15px] sm:col-span-2"><input type="checkbox" name="lembrete" className="mt-0.5 h-5 w-5 shrink-0 accent-[#175cd3]" /><span>O cliente pediu o lembrete desta visita pelo WhatsApp <span className="block text-sm text-suave">Marque só se ele disse que quer: fica registrado com o seu nome. Sem isso, o lembrete só vai se ele autorizou no formulário.</span></span></label>
+                <div className="sm:col-span-2"><Enviar secundario>Marcar visita</Enviar></div>
+              </Formulario>
             )}
           </section>
 

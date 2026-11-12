@@ -26,7 +26,9 @@ export default async function Privacidade({ params }: { params: Promise<{ slug: 
         <li>De qual anúncio ou página você veio, quando o endereço traz essa informação.</li>
         <li>O histórico do atendimento: etapas, anotações e mensagens trocadas.</li>
       </ul>
-      <p className="mt-3 text-[17px]">Usamos esses dados para responder e acompanhar o seu pedido. Não pedimos CPF, documentos, dados bancários nem endereço completo nesta etapa. Para parar de receber mensagens, responda SAIR.</p>
+      <p className="mt-3 text-[17px]">Usamos esses dados para responder e acompanhar o seu pedido. Não pedimos CPF, documentos nem dados bancários, e o endereço completo só quando uma visita é marcada. Para parar de receber mensagens, responda SAIR.</p>
+      <h2 className="mt-8 text-xl font-bold">Quando você marca uma visita</h2>
+      <p className="mt-3 text-[17px]">Guardamos o dia e o horário da visita, o endereço e as observações combinadas com você. Esses dados aparecem na agenda da equipe e podem ser exibidos no Google Agenda de quem está na equipe (só o primeiro nome e o endereço), serviço de empresa terceira que pode guardar os dados em servidores fora do Brasil. O lembrete pelo WhatsApp um dia antes só é enviado se você respondeu SIM quando perguntamos, pediu à equipe ou autorizou no formulário; para parar, responda SAIR.</p>
       <h2 className="mt-8 text-xl font-bold">Quando você liga e ninguém atende</h2>
       <p className="mt-3 text-[17px]">Guardamos o número de quem ligou, a data e a hora da ligação e se você apertou 1 para receber nosso retorno pelo WhatsApp. Usamos isso para retornar a sua ligação. A mensagem pelo WhatsApp só é enviada se você apertou 1 naquela ligação ou já tinha autorizado antes; para parar, responda SAIR. As ligações passam por um serviço de telefonia contratado pela empresa, que atua em nome dela.</p>
       <h2 className="mt-8 text-xl font-bold">Seus direitos</h2>

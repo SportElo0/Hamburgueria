@@ -37,11 +37,12 @@ async function main() {
     const v = { userId: vendedor, nome: 'Rafael Vendas', empresaId: e.id, papel: 'vendedor' as const };
     await salvarConfig(a, 'site', { ...e.config.site, ...site });
     await salvarConfig(a, 'avaliacao', { link: 'https://example.com/avaliacao-ficticia' });
+    await salvarConfig(a, 'agenda', { ativa: true });
     // Every automation on, so the demonstration shows them running (WhatsApp simulated).
     await salvarConfig(a, 'regras', { ...e.config.regras, retorno_auto_cliente: true, retorno_auto_horas: 24, retorno_auto_horas_2: 72, avaliacao_auto: true });
     await salvarConhecimento(a, conhecimento);
     await definirResponsavelPadrao(a, vendedor);
-    await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao', modelo_ligacao: 'demo_ligacao' });
+    await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao', modelo_ligacao: 'demo_ligacao', modelo_lembrete_visita: 'demo_lembrete_visita' });
     // Two of the ready-made flows start switched on in the demonstration (the third stays off, to show the switch).
     for (const m of MODELOS_DE_FLUXO) await salvarFluxo(a, null, { ...m.fluxo, ativo: m.id !== 'boas-vindas' });
     return { empresa: (await empresaPorId(e.id))!, a, v };

@@ -25,6 +25,8 @@ export const ORIGENS: Record<string, string> = { site: 'Site', formulario_incorp
 export const NOME_EVENTO: Record<string, string> = {
   pedido_recebido: 'Pedido recebido',
   ligacao_nao_atendida: 'Ligação não atendida',
+  visita_marcada: 'Visita marcada',
+  visita_alterada: 'Visita alterada',
   etapa_alterada: 'Etapa alterada',
   responsavel_alterado: 'Responsável alterado',
   proxima_acao_definida: 'Próxima ação definida',

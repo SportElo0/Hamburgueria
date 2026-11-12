@@ -175,6 +175,8 @@ export async function alterarMembro(ctx: Ctx, userId: string, mudanca: { papel?:
     const outrosAdmins = await um<{ n: number }>(`select count(*)::int as n from membros where empresa_id = $1 and papel = 'admin' and ativo and user_id <> $2`, [ctx.empresaId, userId], db);
     if ((papel !== 'admin' || !ativo) && m.papel === 'admin' && (outrosAdmins?.n ?? 0) === 0) throw new ErroDeUso('A empresa precisa de pelo menos um administrador ativo.');
     await q('update membros set papel = $3, ativo = $4 where empresa_id = $1 and user_id = $2', [ctx.empresaId, userId, papel, ativo], db);
+    // Who leaves the team loses the private calendar address for good (it does not come back if reactivated).
+    if (!ativo) await q('delete from agenda_feeds where user_id = $1 and empresa_id = $2', [userId, ctx.empresaId], db);
     if (!ativo) {
       // Someone who left keeps no session, no default assignment.
       await q('delete from session where "userId" = $1', [userId], db);

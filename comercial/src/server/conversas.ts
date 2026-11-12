@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PERGUNTA_LEMBRETE, aceitarLembrete, horariosLivres, marcarVisita } from './agenda';
 import { lerWebhook } from './canais/whatsapp-cloud';
 import { normalizarTelefone, type EstadoConversa, type Etapa } from './config';
 import { conhecimentoAtual } from './conhecimento';
@@ -375,7 +376,7 @@ async function sincronizar(db: Db, empresa: Empresa, v: Conversa): Promise<Conve
  * Runs one action the assistant asked for. This is where authorization lives: the conversation and the company
  * come from the server, the input is validated, and nothing outside this list can be done, whatever the prompt said.
  */
-async function executarAcao(empresa: Empresa, conversaId: string, nome: string, entrada: unknown, marcas: { encaminhou: boolean }): Promise<string> {
+async function executarAcao(empresa: Empresa, conversaId: string, nome: string, entrada: unknown, marcas: { encaminhou: boolean; lembreteVisita?: string }): Promise<string> {
   return tx(async (db) => {
     const v = await travar(db, empresa.id, conversaId);
     if (!v || v.estado !== 'ia_ativa') return 'erro: a conversa não está mais com a assistente.';
@@ -416,6 +417,24 @@ async function executarAcao(empresa: Empresa, conversaId: string, nome: string, 
       }
       await registrar(db, empresa.id, { conversaId: v.id, oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: { tipo: 'ia' }, tipo: 'interesse_visita', dados: { preferencia: pref } });
       return 'ok: interesse anotado; a equipe confirma (não confirme data).';
+    }
+    if (nome === 'marcar_visita') {
+      const a = empresa.config.agenda;
+      if (!a.ativa || !a.ia_marca) return 'erro: a agenda não está ligada; registre a preferência com registrar_interesse_visita.';
+      if (!v.oportunidade_id) return 'erro: antes de marcar, pegue o nome e o telefone do cliente.';
+      const id = String((entrada as { horario?: unknown })?.horario ?? '');
+      const inicio = new Date(id);
+      if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(id) || Number.isNaN(inicio.getTime())) return 'erro: use um id da lista horarios_livres.';
+      try {
+        // On WhatsApp the customer is told, in the same answer, that a reminder comes one day before (and can say SAIR).
+        const r = await marcarVisita(db, empresa, { oportunidadeId: v.oportunidade_id, inicio, origem: 'ia', checarLivre: true });
+        // The reminder question is added by the system after the answer, word for word; the model never promises it.
+        if (r.lembrete && v.canal === 'whatsapp') marcas.lembreteVisita = r.id;
+        return `ok: horário reservado para ${r.texto}. Diga que reservou o horário, que a equipe confirma o endereço e que, se algo não encaixar, combinam outro horário. Não fale de lembrete.`;
+      } catch (err) {
+        if (err instanceof ErroDeUso) return `erro: ${err.message} Ofereça outro horário da lista.`;
+        throw err;
+      }
     }
     if (nome === 'encaminhar_para_pessoa') {
       const e = entrada as { motivo?: string; resumo?: string };
@@ -475,6 +494,23 @@ export async function responderComIA(t: Trabalho): Promise<Resultado> {
       if (aviso) await inserirSaida(db, atual, { autor: 'sistema', corpo: aviso, automatica: true });
     });
   };
+  // Answer to the reminder question asked right after a booking: "sim" records the consent; anything else just moves on.
+  if (typeof v.dados._lembrete === 'string' && v.contato_id) {
+    const corpo = (await um<{ corpo: string }>('select corpo from mensagens where id = $1', [m.id]))!.corpo;
+    const aceitou = /^\s*(sim|s|quero|pode|pode sim|claro|ok|aceito|isso)\b/i.test(corpo);
+    const feito = await tx(async (db) => {
+      const atual = await travar(db, empresa.id, v.id);
+      if (!atual || atual.estado !== 'ia_ativa' || typeof atual.dados._lembrete !== 'string') return false;
+      await q(`update conversas set dados = dados - '_lembrete' where id = $1`, [v.id], db);
+      if (!aceitou || !(await aceitarLembrete(db, empresa, String(atual.dados._lembrete), v.contato_id!, corpo))) return false;
+      await inserirSaida(db, atual, { autor: 'ia', corpo: 'Combinado! Te mando o lembrete da visita por aqui um dia antes.', automatica: true, iaSimulada: adaptadorIA()?.simulada ?? false });
+      await registrar(db, empresa.id, { conversaId: v.id, oportunidadeId: atual.oportunidade_id, contatoId: v.contato_id, ator: { tipo: 'visitante' }, tipo: 'lembrete_aceito', dados: {} });
+      return true;
+    });
+    if (feito) return { tipo: 'concluido', nota: 'Lembrete da visita aceito.' };
+    v.dados = { ...v.dados };
+    delete v.dados._lembrete;
+  }
   const cfg = empresa.config.ia;
   if (!cfg.ativa) {
     await passar('ia_desligada', null);
@@ -492,7 +528,7 @@ export async function responderComIA(t: Trabalho): Promise<Resultado> {
   }
 
   const k = await conhecimentoAtual(empresa.id);
-  const marcas = { encaminhou: false };
+  const marcas: { encaminhou: boolean; lembreteVisita?: string } = { encaminhou: false };
   const todas = (await mensagensDe(empresa.id, v.id)).filter((x) => x.estado !== 'cancelada' && x.estado !== 'falhou');
   // The phone is read here, on the server, and never travels to the model: the history carries only a marker.
   if (v.canal === 'site' && !v.dados.telefone) {
@@ -508,7 +544,9 @@ export async function responderComIA(t: Trabalho): Promise<Resultado> {
   while (historico[0]?.de === 'assistente') historico.shift();
   const coletado: Record<string, string | number> = {};
   for (const [id, valor] of Object.entries(v.dados)) if (!id.startsWith('_')) coletado[id] = id === 'telefone' ? 'informado' : valor;
-  const contexto: ContextoIA = { empresa: empresa.nome, assistente: cfg.nome, canal: v.canal, conhecimento: k.dados, campos: empresa.config.campos, coletado, faltando: faltando(empresa, v) };
+  const agenda = empresa.config.agenda;
+  const horarios = agenda.ativa && agenda.ia_marca ? (await horariosLivres(empresa, 6)).map((h) => ({ id: h.id, texto: h.texto })) : null;
+  const contexto: ContextoIA = { empresa: empresa.nome, assistente: cfg.nome, canal: v.canal, conhecimento: k.dados, campos: empresa.config.campos, coletado, faltando: faltando(empresa, v), horarios };
   let resposta;
   try {
     resposta = await adaptador.responder({ contexto, historico, modelo: cfg.modelo || modeloPadrao(), maxTokens: cfg.max_tokens_resposta }, (nome, entrada) => executarAcao(empresa, v.id, nome, entrada, marcas));
@@ -531,7 +569,8 @@ export async function responderComIA(t: Trabalho): Promise<Resultado> {
     if (await um(`select 1 from mensagens where conversa_id = $1 and autor = 'ia' and criado_em > (select criado_em from mensagens where id = $2)`, [v.id, m.id], db)) {
       return { tipo: 'cancelado', motivo: 'Já existe resposta da assistente para esta mensagem.' } as Resultado;
     }
-    await inserirSaida(db, atual!, { autor: 'ia', corpo: resposta.texto, automatica: true, iaSimulada: adaptador.simulada, versaoConhecimento: k.versao });
+    await inserirSaida(db, atual!, { autor: 'ia', corpo: marcas.lembreteVisita ? `${resposta.texto}\n\n${PERGUNTA_LEMBRETE}` : resposta.texto, automatica: true, iaSimulada: adaptador.simulada, versaoConhecimento: k.versao });
+    if (marcas.lembreteVisita) await q(`update conversas set dados = dados || jsonb_build_object('_lembrete', $2::text) where id = $1`, [v.id, marcas.lembreteVisita], db);
     await registrar(db, empresa.id, { ...base, tipo: 'ia_respondeu', dados: { versao_conhecimento: k.versao, modelo: resposta.modelo, simulada: adaptador.simulada, tokens_entrada: resposta.tokensEntrada, tokens_saida: resposta.tokensSaida } });
     return { tipo: 'concluido' } as Resultado;
   });

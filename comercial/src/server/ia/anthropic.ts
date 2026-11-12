@@ -33,7 +33,7 @@ export function iaAnthropic(apiKey: string): AdaptadorIA {
             { type: 'text', text: fixo, cache_control: { type: 'ephemeral' } },
             { type: 'text', text: variavel },
           ],
-          tools: FERRAMENTAS,
+          tools: p.contexto.horarios ? FERRAMENTAS : FERRAMENTAS.filter((f) => f.name !== 'marcar_visita'),
           messages,
           ...(fallback ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const } : {}),
         });

@@ -19,6 +19,7 @@ const ConfigWhatsApp = z.object({
   modelo_avaliacao: z.string().trim().max(80).default(''),
   modelo_manutencao: z.string().trim().max(80).default(''),
   modelo_ligacao: z.string().trim().max(80).default(''),
+  modelo_lembrete_visita: z.string().trim().max(80).default(''),
   idioma_modelos: z.string().trim().max(10).default('pt_BR'),
 });
 export type ConfigWhatsApp = z.infer<typeof ConfigWhatsApp>;

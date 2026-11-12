@@ -11,6 +11,8 @@ export interface ContextoIA {
   coletado: Record<string, string | number>;
   /** What is still missing for the quote, in the order to ask, one at a time. */
   faltando: { id: string; pergunta: string }[];
+  /** Free visit times the assistant may offer and book; null when the company's calendar (or booking by the assistant) is off. */
+  horarios: { id: string; texto: string }[] | null;
 }
 
 export interface PedidoIA {
@@ -37,7 +39,7 @@ export interface AdaptadorIA {
 
 export const MOTIVOS_ENCAMINHAMENTO = ['pedido_do_cliente', 'negociacao', 'reclamacao', 'fora_da_base', 'nao_entendi'] as const;
 
-/** The only actions the assistant can request. Closing a sale, prices and schedules are not among them. */
+/** The only actions the assistant can request. Closing a sale and prices are not among them; a visit only in a free time. */
 export const FERRAMENTAS = [
   {
     name: 'salvar_dados',
@@ -57,6 +59,11 @@ export const FERRAMENTAS = [
     name: 'registrar_interesse_visita',
     description: 'Registra que o cliente quer uma visita ou reunião e a preferência de dia e horário que ele disse. Não confirma a visita: a equipe confirma depois.',
     input_schema: { type: 'object' as const, properties: { preferencia: { type: 'string' } }, required: ['preferencia'] },
+  },
+  {
+    name: 'marcar_visita',
+    description: 'Marca a visita no horário que o cliente escolheu. Use só um id da lista "horarios_livres" e só depois que o cliente escolheu. Só diga que está marcado depois que esta ação responder ok.',
+    input_schema: { type: 'object' as const, properties: { horario: { type: 'string', description: 'O id do horário escolhido, exatamente como na lista.' } }, required: ['horario'] },
   },
   {
     name: 'encaminhar_para_pessoa',

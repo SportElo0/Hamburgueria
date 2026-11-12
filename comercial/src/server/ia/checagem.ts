@@ -39,6 +39,7 @@ export async function checarAssistente(modelo: string): Promise<ResultadoChecage
     conhecimento,
     campos: [],
     coletado,
+    horarios: null,
     faltando: [{ id: 'nome', pergunta: 'Para começar, qual é o seu nome?' }, { id: 'cidade', pergunta: 'Em qual cidade fica o imóvel?' }, { id: 'necessidade', pergunta: 'Me conte em poucas palavras o que você precisa.' }].filter((f) => !(f.id in coletado)),
   });
 

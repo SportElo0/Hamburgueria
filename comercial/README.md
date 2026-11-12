@@ -127,6 +127,16 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+## Agenda de visitas
+
+Menu **Agenda** (todos) e Configurações › Agenda (administrador): dias da semana, primeira e última hora, duração, quantas visitas ao mesmo tempo, antecedência mínima e quantos dias à frente.
+
+- **A assistente marca:** quando o cliente pede visita, ela oferece até 3 horários livres (só da lista calculada pelo servidor) e reserva o escolhido. Uma pessoa confirma o endereço: a reserva cria a tarefa “Confirmar a visita”. A assistente diz “reservei o horário”, nunca “confirmado”. Limites: uma visita ativa por cliente e 20 por dia pela assistente.
+- **A equipe marca** na página da oportunidade (qualquer horário), confirma, marca como realizada ou “cliente faltou”, remarca e cancela.
+- **Lembrete um dia antes** pelo WhatsApp (modelo aprovado “lembrete de visita”). Depois de reservar pelo WhatsApp, o sistema pergunta, com texto fixo, se o cliente quer o lembrete; só grava a autorização se ele responder SIM. Também vale se ele pediu à equipe (caixa na oportunidade, registrada com o nome de quem marcou) ou aceitou o texto do formulário versão 4. Visita a menos de um dia: sem lembrete. Cancelar ou remarcar cancela/refaz o lembrete.
+- **Google Agenda:** cada pessoa cria um endereço secreto (Agenda › “Criar meu link da agenda”) e assina no Google Agenda (“Do URL”). Administrador vê as visitas da empresa; vendedor, as dele. Mostra só o primeiro nome e o endereço. O Google atualiza esse tipo de agenda a cada algumas horas. Cada visita também tem “Pôr no Google Agenda”. Sincronização em tempo real com o Google (login com a conta Google) fica para depois.
+- Gatilho de fluxo “Quando uma visita é marcada”.
+
 ## Ligação não atendida → WhatsApp
 
 Quando alguém liga para a empresa e ninguém atende, a plataforma responde pelo WhatsApp, abre a oportunidade e cria a tarefa de retornar a ligação (Configurações › Ligações não atendidas; texto e liga/desliga em Regras).

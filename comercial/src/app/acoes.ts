@@ -17,6 +17,7 @@ import { ErroDeUso } from '@/server/erros';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { gerarChaveTelefonia, simularLigacaoPerdida } from '@/server/ligacoes';
+import { criarLinkAgenda, marcarVisitaManual, mudarVisita, remarcarVisita } from '@/server/agenda';
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
 import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, type InscricaoEntrada } from '@/server/push';
@@ -226,6 +227,9 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
       await salvarConfig(ctx, 'regras', { ...atual.regras, sla_minutos: num('sla_minutos'), retorno_proposta_dias: num('retorno_proposta_dias'), retorno_auto_cliente: fd.get('retorno_auto_cliente') === 'on', retorno_auto_horas: num('retorno_auto_horas'), retorno_auto_horas_2: num('retorno_auto_horas_2'), avaliacao_auto: fd.get('avaliacao_auto') === 'on', hora_inicio: num('hora_inicio'), hora_fim: num('hora_fim'), escalar_horas: num('escalar_horas'), manutencao_auto: fd.get('manutencao_auto') === 'on', manutencao_meses: num('manutencao_meses'), resumo_diario: fd.get('resumo_diario') === 'on', resumo_hora: num('resumo_hora'), ligacao_auto: fd.get('ligacao_auto') === 'on', ligacao_texto: t(fd, 'ligacao_texto') || atual.regras.ligacao_texto, ligacao_texto_fora: t(fd, 'ligacao_texto_fora') || atual.regras.ligacao_texto_fora });
     } else if (secao === 'ia') {
       await salvarConfig(ctx, 'ia', { ...atual.ia, ativa: fd.get('ativa') === 'on', nome: t(fd, 'nome') || 'Ana', modelo: t(fd, 'modelo'), limite_respostas_mes: num('limite_respostas_mes'), max_mensagens_contexto: num('max_mensagens_contexto') });
+    } else if (secao === 'agenda') {
+      const dias = fd.getAll('dias').map((d) => Number(d)).filter((d) => d >= 0 && d <= 6);
+      await salvarConfig(ctx, 'agenda', { ativa: fd.get('ativa') === 'on', dias, hora_inicio: num('hora_inicio'), hora_fim: num('hora_fim'), duracao_min: num('duracao_min'), capacidade: num('capacidade'), antecedencia_horas: num('antecedencia_horas'), janela_dias: num('janela_dias'), ia_marca: fd.get('ia_marca') === 'on', lembrete: fd.get('lembrete') === 'on' });
     } else if (secao === 'avaliacao') {
       const link = t(fd, 'link');
       if (link && !/^https:\/\/[^\s]+$/.test(link)) throw new ErroDeUso('O link de avaliação precisa começar com https://');
@@ -238,7 +242,7 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
 
 export const salvarWhatsAppAcao = async (_: Retorno, fd: FormData) =>
   tentar(async () => {
-    await salvarWhatsApp(await exigirCtx(), { modo: t(fd, 'modo'), phone_number_id: t(fd, 'phone_number_id'), waba_id: t(fd, 'waba_id'), modelo_confirmacao: t(fd, 'modelo_confirmacao'), modelo_retorno: t(fd, 'modelo_retorno'), modelo_avaliacao: t(fd, 'modelo_avaliacao'), modelo_manutencao: t(fd, 'modelo_manutencao'), modelo_ligacao: t(fd, 'modelo_ligacao'), idioma_modelos: t(fd, 'idioma_modelos') || 'pt_BR' }, String(fd.get('token') ?? ''));
+    await salvarWhatsApp(await exigirCtx(), { modo: t(fd, 'modo'), phone_number_id: t(fd, 'phone_number_id'), waba_id: t(fd, 'waba_id'), modelo_confirmacao: t(fd, 'modelo_confirmacao'), modelo_retorno: t(fd, 'modelo_retorno'), modelo_avaliacao: t(fd, 'modelo_avaliacao'), modelo_manutencao: t(fd, 'modelo_manutencao'), modelo_ligacao: t(fd, 'modelo_ligacao'), modelo_lembrete_visita: t(fd, 'modelo_lembrete_visita'), idioma_modelos: t(fd, 'idioma_modelos') || 'pt_BR' }, String(fd.get('token') ?? ''));
     return { ok: 'Configuração do WhatsApp salva.' };
   });
 
@@ -432,4 +436,32 @@ export const simularLigacaoAcao = async (_: Retorno, fd: FormData) =>
     const r = await simularLigacaoPerdida(await exigirCtx(), t(fd, 'telefone'), fd.get('aceite') === 'on');
     await processarFila(5).catch(() => {});
     return { ok: RESULTADO_LIGACAO[r.resultado] ?? 'Ligação registrada.' };
+  });
+
+/* ---------- Visit calendar ---------- */
+
+export const marcarVisitaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const texto = await marcarVisitaManual(await exigirCtx(), { oportunidadeId: t(fd, 'oportunidade'), inicio: t(fd, 'inicio'), responsavelId: t(fd, 'responsavel') || undefined, endereco: t(fd, 'endereco'), observacao: t(fd, 'observacao'), aceiteLembrete: fd.get('lembrete') === 'on' });
+    return { ok: `Visita marcada para ${texto}.` };
+  });
+
+export const visitaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const acao = t(fd, 'acao');
+    if (!['confirmada', 'realizada', 'faltou', 'cancelada'].includes(acao)) throw new ErroDeUso('Ação inválida.');
+    await mudarVisita(await exigirCtx(), t(fd, 'id'), acao as 'confirmada');
+    return { ok: 'Visita atualizada.' };
+  });
+
+export const remarcarVisitaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await remarcarVisita(await exigirCtx(), t(fd, 'id'), t(fd, 'inicio'));
+    return { ok: 'Visita remarcada. O lembrete foi ajustado para o novo horário.' };
+  });
+
+export const linkAgendaAcao = async () =>
+  tentar(async () => {
+    const token = await criarLinkAgenda(await exigirCtx());
+    return { ok: 'Link criado. Ele aparece só agora: no Google Agenda, use “Outras agendas” › “+” › “Do URL” e cole o endereço. O link anterior parou de valer.', copiar: `${process.env.APP_URL ?? ''}/api/agenda/${token}` };
   });
