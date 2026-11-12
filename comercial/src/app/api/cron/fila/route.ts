@@ -1,5 +1,5 @@
 import { iguais } from '@/server/segredos';
-import { processarFila } from '@/server/trabalhos';
+import { processarFila, varrerAutomacoes } from '@/server/trabalhos';
 
 export const maxDuration = 60;
 
@@ -11,6 +11,7 @@ export async function GET(req: Request) {
   const segredo = process.env.CRON_SECRET;
   const enviado = req.headers.get('authorization')?.replace(/^Bearer /, '') ?? '';
   if (!segredo || !iguais(enviado, segredo)) return new Response('Não autorizado.', { status: 401 });
+  const iniciados = await varrerAutomacoes();
   const n = await processarFila(50);
-  return Response.json({ processados: n });
+  return Response.json({ iniciados, processados: n });
 }

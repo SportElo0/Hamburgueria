@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { excluirFluxoAcao, salvarFluxoAcao } from '@/app/acoes';
 import { dataHora } from '@/componentes/formato';
+import { DiagramaFluxo } from '@/componentes/diagrama-fluxo';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { ETAPAS, NOME_ETAPA } from '@/server/config';
 import { CONDICOES, GATILHOS, NOME_CONDICAO, NOME_GATILHO, descreverGatilho, execucoesDoFluxo, obterFluxo, type Passo } from '@/server/fluxos';
@@ -43,6 +44,11 @@ export default async function EditorDeFluxo({ params }: { params: Promise<{ id: 
       <h1 className="text-2xl font-bold">{f.nome}</h1>
       <p className="text-[15px] text-suave">{descreverGatilho(f.gatilho)}. Cada execução segue os passos de cima para baixo. Mudar o fluxo não altera as execuções que já começaram.</p>
 
+      <details className="cartao p-4" open>
+        <summary className="cursor-pointer font-bold text-tinta">Desenho do fluxo (como está salvo)</summary>
+        <div className="mt-4"><DiagramaFluxo gatilho={f.gatilho} passos={f.passos} /></div>
+      </details>
+
       <Formulario acao={salvarFluxoAcao} className="space-y-4">
         <input type="hidden" name="id" value={f.id} />
         <section className="cartao grid gap-4 p-4 sm:grid-cols-2" aria-labelledby="t-geral">
@@ -50,6 +56,7 @@ export default async function EditorDeFluxo({ params }: { params: Promise<{ id: 
           <div className="sm:col-span-2"><label className="rotulo" htmlFor="nome">Nome do fluxo</label><input className="campo" id="nome" name="nome" defaultValue={f.nome} required maxLength={80} /></div>
           <div><label className="rotulo" htmlFor="gatilho">Gatilho</label><select className="campo" id="gatilho" name="gatilho" defaultValue={f.gatilho.tipo}>{GATILHOS.map((g) => <option key={g} value={g}>{NOME_GATILHO[g]}</option>)}</select></div>
           <div><label className="rotulo" htmlFor="etapa">Etapa (só para o gatilho de etapa)</label><select className="campo" id="etapa" name="etapa" defaultValue={f.gatilho.etapa ?? 'proposta'}>{ETAPAS.map((e) => <option key={e} value={e}>{NOME_ETAPA[e]}</option>)}</select></div>
+          <div><label className="rotulo" htmlFor="dias">Dias sem interação (só para o gatilho de oportunidade parada)</label><input className="campo" id="dias" name="dias" inputMode="numeric" defaultValue={f.gatilho.dias ?? 7} /></div>
           <div className="sm:col-span-2"><label className="rotulo" htmlFor="palavra">Palavra-chave (só para o gatilho de mensagem; em branco = qualquer mensagem)</label><input className="campo" id="palavra" name="palavra" defaultValue={f.gatilho.palavra ?? ''} maxLength={40} placeholder="visita" /></div>
           <label className="flex min-h-11 items-start gap-3 text-[15px] sm:col-span-2"><input type="checkbox" name="ativo" defaultChecked={f.ativo} className="mt-1 h-5 w-5 accent-[#175cd3]" /><span><span className="font-semibold text-tinta">Fluxo ligado</span><span className="block text-sm text-suave">Desligado, não começa em nenhuma oportunidade nova e para as que estão rodando.</span></span></label>
         </section>

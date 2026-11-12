@@ -15,10 +15,16 @@ async function main() {
   process.on('SIGTERM', parar);
   console.log('Worker iniciado. Ctrl+C para parar.');
   let ultimaLimpeza = 0;
+  let ultimaVarredura = 0;
   while (rodando) {
     try {
       const n = await processarFila(20);
       if (n) console.log(new Date().toISOString(), `${n} trabalho(s) processado(s)`);
+      if (Date.now() - ultimaVarredura > 5 * 60_000) {
+        ultimaVarredura = Date.now();
+        const { varrerAutomacoes } = await import('../src/server/trabalhos');
+        await varrerAutomacoes();
+      }
       if (Date.now() - ultimaLimpeza > 3_600_000) {
         ultimaLimpeza = Date.now();
         await q(`delete from limites where janela < now() - interval '1 day'`);

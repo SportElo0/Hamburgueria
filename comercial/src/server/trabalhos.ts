@@ -148,6 +148,12 @@ export async function criarConviteAvaliacao(empresaId: string, oportunidadeId: s
 
 export const processarFila = (max?: number) => processarPendentes(executores, max);
 
+/** Time-based automations: started here, every few minutes, then run by the queue like any other step. */
+export async function varrerAutomacoes(): Promise<number> {
+  const { varrerParadas } = await import('./fluxos');
+  return varrerParadas();
+}
+
 export const NOME_TRABALHO: Record<string, string> = {
   responder_ia: 'Resposta da assistente',
   enviar_mensagem: 'Envio de mensagem pelo WhatsApp',

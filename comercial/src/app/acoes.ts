@@ -331,7 +331,7 @@ export const salvarFluxoAcao = async (_: Retorno, fd: FormData) =>
     try {
       // Jump targets are typed as screen rows; the flow stores step numbers (empty rows do not count).
       const passosNum = passos.map((p) => (p.tipo === 'se' && p.ir_para ? { ...p, ir_para: linhas.indexOf(p.ir_para) + 1 || 99 } : p.tipo === 'ir_para' && p.passo ? { ...p, passo: linhas.indexOf(p.passo) + 1 || 99 } : p));
-      await salvarFluxo(await exigirCtx(), t(fd, 'id'), { nome: t(fd, 'nome'), ativo: fd.get('ativo') === 'on', gatilho: { tipo: gatilho, ...(gatilho === 'etapa_alterada' ? { etapa: t(fd, 'etapa') } : {}), ...(gatilho === 'mensagem_recebida' ? { palavra: t(fd, 'palavra') } : {}) }, passos: passosNum });
+      await salvarFluxo(await exigirCtx(), t(fd, 'id'), { nome: t(fd, 'nome'), ativo: fd.get('ativo') === 'on', gatilho: { tipo: gatilho, ...(gatilho === 'etapa_alterada' ? { etapa: t(fd, 'etapa') } : {}), ...(gatilho === 'mensagem_recebida' ? { palavra: t(fd, 'palavra') } : {}), ...(gatilho === 'sem_interacao' ? { dias: Number(t(fd, 'dias')) || 0 } : {}) }, passos: passosNum });
     } catch (err) {
       // The validation counts filled steps; the screen counts rows. Point to the row the person sees.
       if (err instanceof ErroDeUso) throw new ErroDeUso(err.message.replace(/^Passo (\d+):/, (_m, n) => `Linha ${linhas[Number(n) - 1] ?? n}:`), err.status);

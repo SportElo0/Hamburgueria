@@ -6,12 +6,13 @@ import { ErroDeUso, NaoEncontrado } from './erros';
 import { agendar } from './fila';
 
 /** What starts a flow. */
-export const GATILHOS = ['pedido_recebido', 'etapa_alterada', 'servico_concluido', 'mensagem_recebida'] as const;
+export const GATILHOS = ['pedido_recebido', 'etapa_alterada', 'servico_concluido', 'mensagem_recebida', 'sem_interacao'] as const;
 export const NOME_GATILHO: Record<(typeof GATILHOS)[number], string> = {
   pedido_recebido: 'Quando chega um pedido novo',
   etapa_alterada: 'Quando a oportunidade entra em uma etapa',
   servico_concluido: 'Quando o serviço é marcado como concluído',
   mensagem_recebida: 'Quando o cliente manda uma mensagem',
+  sem_interacao: 'Quando a oportunidade fica parada (sem interação)',
 };
 
 /** Conditions a flow can check before going on. */
@@ -32,7 +33,10 @@ const Gatilho = z
     etapa: z.enum(ETAPAS).optional(),
     /** Message trigger only: start just when the message contains this word (empty = any message). */
     palavra: z.string().trim().max(40, 'Palavra-chave de no máximo 40 caracteres.').optional(),
+    /** Idle trigger only: days without any interaction on an open opportunity. */
+    dias: z.number().int().min(1, 'Use pelo menos 1 dia.').max(365, 'No máximo 365 dias.').optional(),
   })
+  .refine((g) => g.tipo !== 'sem_interacao' || !!g.dias, { message: 'Diga quantos dias sem interação.' })
   .refine((g) => g.tipo !== 'etapa_alterada' || !!g.etapa, { message: 'Escolha a etapa do gatilho.' });
 
 /**
@@ -83,6 +87,7 @@ export const MAX_FLUXOS = 20;
 
 export function descreverGatilho(g: GatilhoFluxo): string {
   if (g.tipo === 'etapa_alterada') return `Quando a oportunidade entra em “${NOME_ETAPA[g.etapa as Etapa]}”`;
+  if (g.tipo === 'sem_interacao') return `Quando a oportunidade fica ${g.dias} dia(s) sem interação`;
   if (g.tipo === 'mensagem_recebida' && g.palavra) return `Quando o cliente manda uma mensagem com “${g.palavra}”`;
   return NOME_GATILHO[g.tipo];
 }
@@ -193,7 +198,12 @@ export async function dispararFluxos(db: Db, empresaId: string, evento: { tipo: 
   );
   // Message trigger: an optional keyword, compared without accents or case.
   const lista = todos.filter((f) => evento.tipo !== 'mensagem_recebida' || !f.palavra || sem(evento.texto ?? '').includes(sem(f.palavra)));
-  for (const f of lista) {
+  for (const f of lista) await iniciarExecucao(db, empresaId, f, op);
+  return lista.length;
+}
+
+async function iniciarExecucao(db: Db, empresaId: string, f: { id: string; nome: string; passos: Passo[] }, op: { id: string; contatoId: string; etapa: Etapa }) {
+  {
     const e = await um<{ id: string }>(
       `insert into fluxo_execucoes (empresa_id, fluxo_id, oportunidade_id, contato_id, passos, etapa_inicial) values ($1, $2, $3, $4, $5, $6) returning id`,
       [empresaId, f.id, op.id, op.contatoId, JSON.stringify(f.passos), op.etapa],
@@ -202,7 +212,38 @@ export async function dispararFluxos(db: Db, empresaId: string, evento: { tipo: 
     await agendar(db, empresaId, { tipo: 'fluxo_passo', chave: `fluxo:${e!.id}:0`, oportunidadeId: op.id, dados: { execucao: e!.id, passo: 0 } });
     await registrar(db, empresaId, { oportunidadeId: op.id, contatoId: op.contatoId, ator: { tipo: 'sistema' }, tipo: 'fluxo_iniciado', dados: { fluxo: f.nome } });
   }
-  return lista.length;
+}
+
+/**
+ * Time trigger: starts "idle" flows on open opportunities without any interaction for the flow's number of days.
+ * Runs every few minutes (worker, embedded queue or scheduler). A flow starts again on the same opportunity only after
+ * a new interaction followed by a new idle period, never twice for the same quiet spell.
+ */
+export async function varrerParadas(limitePorFluxo = 200): Promise<number> {
+  const fluxos = await q<{ id: string; empresa_id: string; nome: string; passos: Passo[]; dias: number }>(
+    `select f.id, f.empresa_id, f.nome, f.passos, (f.gatilho ->> 'dias')::int as dias from fluxos f join empresas em on em.id = f.empresa_id
+     where f.ativo and em.ativa and f.gatilho ->> 'tipo' = 'sem_interacao'`,
+  );
+  let n = 0;
+  for (const f of fluxos) {
+    n += await tx(async (db) => {
+      // One scanner per flow at a time (embedded queue, worker and scheduler may overlap).
+      const livre = await um<{ ok: boolean }>('select pg_try_advisory_xact_lock(hashtext($1)) as ok', [`varrer:${f.id}`], db);
+      if (!livre?.ok) return 0;
+      const ops = await q<{ id: string; contato_id: string; etapa: Etapa }>(
+        `select o.id, o.contato_id, o.etapa from oportunidades o
+         where o.empresa_id = $1 and o.etapa not in ('ganho', 'perdido') and o.ultima_interacao_em < now() - make_interval(days => $2)
+           and not exists (select 1 from fluxo_execucoes e where e.empresa_id = o.empresa_id and e.fluxo_id = $3 and e.oportunidade_id = o.id
+                           and (e.estado = 'ativa' or e.criado_em > o.ultima_interacao_em))
+         order by o.ultima_interacao_em limit $4`,
+        [f.empresa_id, f.dias, f.id, limitePorFluxo],
+        db,
+      );
+      for (const o of ops) await iniciarExecucao(db, f.empresa_id, f, { id: o.id, contatoId: o.contato_id, etapa: o.etapa });
+      return ops.length;
+    });
+  }
+  return n;
 }
 
 /** Ready-made flows the admin can start from. They are created switched off, to be read and turned on. */
@@ -271,6 +312,22 @@ export const MODELOS_DE_FLUXO: { id: string; nome: string; descricao: string; fl
         { tipo: 'se', condicao: 'tem_responsavel', ir_para: 4 },
         { tipo: 'criar_tarefa', titulo: 'Escolher quem vai fazer a visita', prazo_horas: 4 },
         { tipo: 'criar_tarefa', titulo: 'Confirmar dia e horário da visita com o cliente', prazo_horas: 24 },
+      ],
+    },
+  },
+  {
+    id: 'orcamento-parado',
+    nome: 'Orçamento parado',
+    descricao: 'Quando uma oportunidade aberta fica 7 dias sem nenhuma interação, manda uma mensagem a quem autorizou; para quem não autorizou, cria a tarefa de ligar.',
+    fluxo: {
+      nome: 'Orçamento parado',
+      ativo: false,
+      gatilho: { tipo: 'sem_interacao', dias: 7 },
+      passos: [
+        { tipo: 'se', condicao: 'tem_autorizacao', ir_para: 3 },
+        { tipo: 'ir_para', passo: 4 },
+        { tipo: 'enviar_whatsapp', texto: 'Olá, {{nome}}! Aqui é da {{empresa}}. Ainda tem interesse no orçamento? Se quiser, é só responder por aqui.', modelo: '' },
+        { tipo: 'criar_tarefa', titulo: 'Oportunidade parada há 7 dias: retomar contato', prazo_horas: 24 },
       ],
     },
   },

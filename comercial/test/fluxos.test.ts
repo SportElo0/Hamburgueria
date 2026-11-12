@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { assumir, mensagensDe, simularEntradaWhatsApp } from '@/server/conversas';
 import { fecharPool, q, um } from '@/server/db';
 import { empresaPorId, salvarConfig } from '@/server/empresas';
-import { excluirFluxo, execucoesDoFluxo, listarFluxos, MODELOS_DE_FLUXO, obterFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
+import { varrerParadas, excluirFluxo, execucoesDoFluxo, listarFluxos, MODELOS_DE_FLUXO, obterFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { marcarServicoConcluido, mudarEtapa, tarefas } from '@/server/oportunidades';
 import { receberPedido, type PedidoSalvo } from '@/server/pedidos';
@@ -222,6 +222,36 @@ describe('construtor de automações', () => {
     expect(await notas(comAut.oportunidadeId)).toEqual(['com autorização']);
     expect(await notas(semAut.oportunidadeId)).toEqual(['sem autorização', 'com autorização']);
     await excluirFluxo(C.admin, id);
+  });
+
+  it('gatilho por tempo: oportunidade parada há N dias começa o fluxo uma vez por período parado', async () => {
+    const H = await novaEmpresa('Solar Parada');
+    await salvarConfig(H.admin, 'regras', { ...H.empresa.config.regras, hora_inicio: 0, hora_fim: 24 });
+    await expect(salvarFluxo(H.admin, null, { nome: 'Sem dias', ativo: true, gatilho: { tipo: 'sem_interacao' }, passos: [{ tipo: 'anotar', texto: 'xx' }] })).rejects.toThrow('quantos dias');
+    const id = await salvarFluxo(H.admin, null, { ...MODELOS_DE_FLUXO.find((m) => m.id === 'orcamento-parado')!.fluxo, ativo: true });
+    const emp = (await empresaPorId(H.empresa.id))!;
+    const parada = (await receberPedido(emp, pedido({ aceite_whatsapp: false }), meta())) as PedidoSalvo;
+    const recente = (await receberPedido(emp, pedido(), meta())) as PedidoSalvo;
+    const fechada = (await receberPedido(emp, pedido(), meta())) as PedidoSalvo;
+    await mudarEtapa(H.vendedor, fechada.oportunidadeId, { etapa: 'perdido', motivoPerda: 'Desistiu' });
+    await q(`update oportunidades set ultima_interacao_em = now() - interval '8 days' where id = any($1)`, [[parada.oportunidadeId, fechada.oportunidadeId]]);
+    expect(await varrerParadas()).toBeGreaterThanOrEqual(1);
+    expect(await contar('fluxo_execucoes where fluxo_id = $1 and oportunidade_id = $2', [id, parada.oportunidadeId])).toBe(1);
+    expect(await contar('fluxo_execucoes where fluxo_id = $1 and oportunidade_id = any($2)', [id, [recente.oportunidadeId, fechada.oportunidadeId]])).toBe(0);
+    // no permission for WhatsApp -> branch goes straight to the call task
+    await rodarTudo(parada.oportunidadeId);
+    expect((await tarefas(H.admin, { de: 'todas', oportunidadeId: parada.oportunidadeId })).map((t) => t.titulo)).toContain('Oportunidade parada há 7 dias: retomar contato');
+    expect(await contar('mensagens m join conversas v on v.id = m.conversa_id where v.contato_id = $1', [parada.contatoId])).toBe(0);
+    // scanning again in the same quiet period starts nothing
+    await varrerParadas();
+    expect(await contar('fluxo_execucoes where fluxo_id = $1 and oportunidade_id = $2', [id, parada.oportunidadeId])).toBe(1);
+    // a new interaction, then a new idle period -> starts again
+    await q(`update fluxo_execucoes set criado_em = now() - interval '20 days' where fluxo_id = $1`, [id]);
+    await q(`update oportunidades set ultima_interacao_em = now() - interval '9 days' where id = $1`, [parada.oportunidadeId]);
+    await varrerParadas();
+    expect(await contar('fluxo_execucoes where fluxo_id = $1 and oportunidade_id = $2', [id, parada.oportunidadeId])).toBe(2);
+    // never touches another company's opportunities
+    expect(await contar('fluxo_execucoes e join oportunidades o on o.id = e.oportunidade_id where e.fluxo_id = $1 and o.empresa_id <> $2', [id, H.empresa.id])).toBe(0);
   });
 
   it('isolamento: outra empresa não vê, edita, apaga nem dispara os fluxos desta', async () => {

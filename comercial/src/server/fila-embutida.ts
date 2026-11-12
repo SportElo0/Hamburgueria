@@ -9,12 +9,18 @@ export function iniciarFilaEmbutida() {
   g.__filaEmbutida = true;
   let ocupado = false;
   let ultimaLimpeza = 0;
+  let ultimaVarredura = 0;
   const volta = async () => {
     if (ocupado) return;
     ocupado = true;
     try {
       const { processarFila } = await import('./trabalhos');
       await processarFila(20);
+      if (Date.now() - ultimaVarredura > 5 * 60_000) {
+        ultimaVarredura = Date.now();
+        const { varrerAutomacoes } = await import('./trabalhos');
+        await varrerAutomacoes();
+      }
       if (Date.now() - ultimaLimpeza > 3_600_000) {
         ultimaLimpeza = Date.now();
         const { q } = await import('./db');

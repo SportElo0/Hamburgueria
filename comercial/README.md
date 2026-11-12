@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 62 testes de serviço contra o banco de teste |
+| `npm test` | 63 testes de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -76,14 +76,15 @@ Toda mensagem iniciada pela empresa respeita o horário configurado e a regra do
 
 Em **Automações › Seus fluxos**, o administrador monta fluxos no estilo do HighLevel, sem assinatura de terceiros:
 
-- **Gatilho:** pedido novo, oportunidade entrou em uma etapa (a escolher), serviço concluído ou o cliente mandou uma mensagem (com palavra-chave opcional, sem diferença de acento ou maiúscula).
+- **Gatilho:** pedido novo, oportunidade entrou em uma etapa (a escolher), serviço concluído, o cliente mandou uma mensagem (com palavra-chave opcional, sem diferença de acento ou maiúscula) ou a oportunidade aberta ficou N dias sem interação (verificado a cada 5 minutos; de novo só depois de uma nova interação seguida de outro período parado).
 - **Passos** (até 12 por fluxo, até 20 fluxos por empresa): esperar (minutos, horas ou dias), **parar se** e **se… ir para o passo N** (ramificação: se a condição vale, pula; senão, segue), **ir para o passo N** ou terminar, com as condições: o cliente respondeu / a etapa mudou / a oportunidade foi ganha ou perdida / uma pessoa assumiu a conversa / tem autorização de WhatsApp / tem responsável; enviar WhatsApp (com `{{nome}}` e `{{empresa}}`), criar tarefa, avisar a equipe e anotar no histórico.
-- **Modelos prontos** (nascem desligados): proposta sem resposta, boas-vindas ao pedido, pós-venda e cliente pediu visita (com ramificação).
+- **Modelos prontos** (nascem desligados): proposta sem resposta, boas-vindas ao pedido, pós-venda, cliente pediu visita e orçamento parado (com ramificação).
+- **Desenho do fluxo** no editor: o gatilho no topo, cada passo em uma caixa ligada à próxima e os desvios marcados (“Sim → passo 4”, “Sim → para aqui”).
 - **Histórico** de cada execução, passo a passo, com o motivo de cada pulo ou parada.
 
 Regras que valem para todo fluxo, no servidor e conferidas de novo a cada passo: mensagem só sai para quem autorizou o WhatsApp, dentro do horário da empresa, sem pessoa na conversa e sem pedido de parar (SAIR); fora das 24 horas da última mensagem do cliente só com modelo aprovado pela Meta (sem modelo, vira tarefa para uma pessoa); cada passo é um trabalho da fila com chave única (reiniciar não repete nada); editar um fluxo não muda as execuções em andamento, e desligar para as que estão rodando. **Nenhum passo marca venda como ganha ou perdida, nem muda valor ou etapa**: isso continua sendo decisão de uma pessoa.
 
-Limites desta versão: os pulos só vão para a frente (o fluxo sempre termina e cada passo roda no máximo uma vez por execução), não há gatilho por data, e o editor é uma lista de campos, não um desenho com setas.
+Limites desta versão: os pulos só vão para a frente (o fluxo sempre termina e cada passo roda no máximo uma vez por execução), não há gatilho por data do calendário (aniversário, data marcada), e o desenho mostra o fluxo mas a edição ainda é pela lista de campos (não se arrasta caixas).
 
 ## Configurar uma empresa nova
 
