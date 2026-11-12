@@ -1,3 +1,5 @@
+import { after } from 'next/server';
+import { processarFila } from '@/server/trabalhos';
 import { assinaturaValida } from '@/server/canais/whatsapp-cloud';
 import { processarWebhookWhatsApp } from '@/server/conversas';
 import { iguais } from '@/server/segredos';
@@ -22,7 +24,8 @@ export async function POST(req: Request) {
   if (bruto.length > 500_000) return new Response('Grande demais.', { status: 413 });
   if (!assinaturaValida(bruto, req.headers.get('x-hub-signature-256'), process.env.WHATSAPP_APP_SECRET)) return new Response('Assinatura inválida.', { status: 401 });
   try {
-    await processarWebhookWhatsApp(JSON.parse(bruto));
+    const r = await processarWebhookWhatsApp(JSON.parse(bruto));
+    if (r.trabalhos.length) after(async () => { await processarFila(10).catch(() => {}); });
   } catch (err) {
     // A 5xx makes Meta deliver again later; events already stored are skipped by their id.
     console.error('[webhook whatsapp]', err instanceof Error ? err.message : err);

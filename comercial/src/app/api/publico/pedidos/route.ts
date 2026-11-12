@@ -1,3 +1,5 @@
+import { after } from 'next/server';
+import { processarFila } from '@/server/trabalhos';
 import { abrirChatDoPedido } from '@/server/conversas';
 import { empresaPorChave } from '@/server/empresas';
 import { ErroDeUso } from '@/server/erros';
@@ -26,6 +28,8 @@ export async function POST(req: Request) {
       const extras = (corpo.extras ?? {}) as Record<string, string>;
       chat = await abrirChatDoPedido(empresa, r, { nome: String(corpo.nome ?? '').trim(), telefone: 'informado no formulário', cidade: String(corpo.cidade ?? '').trim(), necessidade: String(corpo.necessidade ?? '').trim(), ...Object.fromEntries(empresa.config.campos.filter((c) => extras[c.id]).map((c) => [c.id, String(extras[c.id])])) }).catch(() => null);
     }
+    // Without a permanent worker (serverless), run what is due shortly after answering the visitor.
+    if (!r.repetido) after(async () => { await new Promise((ok) => setTimeout(ok, 6000)); await processarFila(10).catch(() => {}); });
     return json({ ok: true, repetido: r.repetido, chat, whatsapp: empresa.config.site.whatsapp }, 201);
   } catch (err) {
     return respostaDeErro(err);
