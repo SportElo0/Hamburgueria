@@ -37,13 +37,14 @@ npm install
 cp .env.example .env.local      # preencha BETTER_AUTH_SECRET e CHAVE_CREDENCIAIS (openssl rand -base64 32)
 npm run migrar                  # cria as tabelas
 npm run demo                    # dados fictícios de duas empresas
-npm run dev                     # aplicação em http://localhost:3100
-npm run worker                  # em outro terminal: envios, alertas e retornos agendados
+npm run dev                     # aplicação em http://localhost:3100 (as automações já rodam junto)
 ```
+
+A fila das automações roda dentro da própria aplicação. O `npm run worker` continua existindo para quem quiser um processo separado em produção (aí use `FILA_EMBUTIDA=0` na aplicação); os dois podem rodar juntos sem repetir nada.
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 38 testes de serviço contra o banco de teste |
+| `npm test` | 46 testes de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -56,6 +57,20 @@ Logins de demonstração (senha `demonstracao-2026`, tudo fictício): `equipe@gr
 
 - Em **produção** os simuladores ficam desligados: sem chave de IA, a conversa vai direto para a equipe; sem WhatsApp oficial, nada é enviado. Os dados de demonstração e o `--zerar` são recusados.
 - Fora de produção, o que é simulado aparece na tela como “Simulação — nenhuma mensagem externa enviada”.
+
+## Automações
+
+Tela **Automações** (administrador): o que está ligado, o que está agendado e o que já rodou, com o motivo de cada cancelamento.
+
+| Automação | Dispara quando | O que faz |
+| --- | --- | --- |
+| Pedido novo | chega um pedido | tarefa para o responsável e aviso; alerta aos administradores se ninguém atender no prazo |
+| Confirmação ao cliente | logo depois do pedido | mensagem pelo WhatsApp, só para quem autorizou |
+| Assistente virtual | a cada mensagem do cliente | responde, anota dados, chama uma pessoa |
+| Retorno da proposta | etapa “Proposta enviada” | tarefa do vendedor e até duas mensagens ao cliente, canceladas se ele responder, pedir SAIR, alguém assumir ou a etapa mudar |
+| Convite de avaliação | serviço marcado como concluído | convite neutro com o link público |
+
+Toda mensagem iniciada pela empresa respeita o horário configurado e a regra do WhatsApp: sem conversa nas últimas 24 horas, só sai com **modelo aprovado pela Meta** cadastrado em Configurações › WhatsApp. Sem modelo, vira tarefa para uma pessoa em vez de falhar em silêncio.
 
 ## Configurar uma empresa nova
 

@@ -76,6 +76,8 @@ export const ConfigEmpresa = z.object({
       /** Automatic message to the customer after a proposal (needs consent, channel rules and an idle conversation). */
       retorno_auto_cliente: z.boolean().default(false),
       retorno_auto_horas: z.number().int().min(1).max(30 * 24).default(48),
+      /** Second (and last) follow-up, counted from the proposal. 0 = only one message. */
+      retorno_auto_horas_2: z.number().int().min(0).max(60 * 24).default(0),
       /** Neutral review invitation when a service is marked as done. */
       avaliacao_auto: z.boolean().default(false),
       hora_inicio: z.number().int().min(0).max(23).default(8),

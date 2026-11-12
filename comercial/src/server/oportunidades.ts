@@ -161,13 +161,17 @@ export async function mudarEtapa(ctx: Ctx, id: string, m: MudancaEtapa): Promise
         chave: `retorno:${id}:${marca}`,
       });
       if (regras.retorno_auto_cliente) {
-        await agendar(db, ctx.empresaId, {
-          tipo: 'retorno_cliente',
-          chave: `retorno_cliente:${id}:${marca}`,
-          em: new Date(marca + regras.retorno_auto_horas * 3_600_000),
-          oportunidadeId: id,
-          dados: { agendado_em: new Date(marca).toISOString() },
-        });
+        // A short sequence: each step is checked again when it is due, and any reply, take-over or stage change cancels what is left.
+        const passos = [regras.retorno_auto_horas, regras.retorno_auto_horas_2].filter((h, i) => h > 0 && (i === 0 || h > regras.retorno_auto_horas));
+        for (const [i, horas] of passos.entries()) {
+          await agendar(db, ctx.empresaId, {
+            tipo: 'retorno_cliente',
+            chave: `retorno_cliente:${id}:${marca}:${i + 1}`,
+            em: new Date(marca + horas * 3_600_000),
+            oportunidadeId: id,
+            dados: { agendado_em: new Date(marca).toISOString(), passo: i + 1 },
+          });
+        }
       }
     }
   });

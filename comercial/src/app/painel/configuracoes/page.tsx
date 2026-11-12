@@ -74,8 +74,8 @@ export default async function Configuracoes() {
           <Num id="sla_minutos" rotulo="Alerta se o pedido ficar sem atendimento por (minutos)" valor={c.regras.sla_minutos} min={5} max={10080} />
           <Num id="retorno_proposta_dias" rotulo="Tarefa de retorno depois da proposta (dias)" valor={c.regras.retorno_proposta_dias} min={1} max={60} />
           <div className="sm:col-span-2"><Marcar id="retorno_auto_cliente" rotulo="Enviar mensagem de retorno ao cliente depois da proposta" ajuda="Só para quem autorizou o WhatsApp. É cancelada se o cliente responder, pedir para parar, se alguém assumir a conversa ou se a oportunidade sair de “Proposta enviada”." marcado={c.regras.retorno_auto_cliente} /></div>
-          <Num id="retorno_auto_horas" rotulo="Enviar esse retorno depois de (horas)" valor={c.regras.retorno_auto_horas} min={1} max={720} />
-          <div />
+          <Num id="retorno_auto_horas" rotulo="Primeira mensagem depois de (horas)" valor={c.regras.retorno_auto_horas} min={1} max={720} />
+          <Num id="retorno_auto_horas_2" rotulo="Segunda mensagem depois de (horas; 0 = não enviar)" valor={c.regras.retorno_auto_horas_2} min={0} max={1440} />
           <div className="sm:col-span-2"><Marcar id="avaliacao_auto" rotulo="Convidar para avaliar quando o serviço for marcado como concluído" ajuda="O mesmo convite para todos os clientes, sem recompensa." marcado={c.regras.avaliacao_auto} /></div>
           <Num id="hora_inicio" rotulo="Mensagens automáticas a partir das (hora)" valor={c.regras.hora_inicio} min={0} max={23} />
           <Num id="hora_fim" rotulo="Até as (hora)" valor={c.regras.hora_fim} min={1} max={24} />

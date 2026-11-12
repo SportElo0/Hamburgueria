@@ -112,7 +112,10 @@ export const executores: Record<string, Executor> = {
     const empresa = await empresaPorId(t.empresa_id);
     if (!empresa?.config.regras.retorno_auto_cliente) return { tipo: 'cancelado', motivo: 'O retorno automático foi desligado nas regras da empresa.' };
     const nome = await nomeDe(undefined, t.empresa_id, t.oportunidade_id!);
-    return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'retorno', agendadoEm: new Date(String(t.dados.agendado_em ?? t.criado_em)), corpo: `Olá${nome ? `, ${nome}` : ''}! Aqui é da ${empresa.nome}. Ficou alguma dúvida sobre a proposta que enviamos? Para não receber mensagens, responda SAIR.` });
+    const corpo = Number(t.dados.passo ?? 1) >= 2
+      ? `Olá${nome ? `, ${nome}` : ''}! Passando para saber se você conseguiu ver a proposta da ${empresa.nome}. Se quiser, é só responder por aqui que uma pessoa da equipe fala com você. Para não receber mensagens, responda SAIR.`
+      : `Olá${nome ? `, ${nome}` : ''}! Aqui é da ${empresa.nome}. Ficou alguma dúvida sobre a proposta que enviamos? Para não receber mensagens, responda SAIR.`;
+    return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'retorno', agendadoEm: new Date(String(t.dados.agendado_em ?? t.criado_em)), corpo });
   },
 
   /** The same neutral invitation for every eligible customer. */
@@ -137,3 +140,41 @@ export async function criarConviteAvaliacao(empresaId: string, oportunidadeId: s
 }
 
 export const processarFila = (max?: number) => processarPendentes(executores, max);
+
+export const NOME_TRABALHO: Record<string, string> = {
+  responder_ia: 'Resposta da assistente',
+  enviar_mensagem: 'Envio de mensagem pelo WhatsApp',
+  alerta_sla: 'Alerta de pedido sem atendimento',
+  confirmacao_pedido: 'Confirmação do pedido ao cliente',
+  retorno_cliente: 'Retorno ao cliente depois da proposta',
+  convite_avaliacao: 'Convite de avaliação',
+};
+
+export interface Execucao {
+  id: string;
+  tipo: string;
+  estado: Trabalho['estado'];
+  executar_em: Date;
+  concluido_em: Date | null;
+  resultado: string | null;
+  ultimo_erro: string | null;
+  oportunidade_id: string | null;
+  conversa_id: string | null;
+  contato: string | null;
+}
+
+/** What the automations of one company did and what is still scheduled (company admins). */
+export async function execucoes(empresaId: string): Promise<{ agendadas: Execucao[]; recentes: Execucao[]; resumo: { tipo: string; estado: string; total: number }[] }> {
+  const base = `select t.id, t.tipo, t.estado, t.executar_em, t.concluido_em, t.resultado, t.ultimo_erro, t.oportunidade_id, t.conversa_id,
+      coalesce(c.nome, c2.nome) as contato
+    from trabalhos t
+      left join oportunidades o on o.id = t.oportunidade_id left join contatos c on c.id = o.contato_id
+      left join conversas v on v.id = t.conversa_id left join contatos c2 on c2.id = v.contato_id
+    where t.empresa_id = $1`;
+  const [agendadas, recentes, resumo] = await Promise.all([
+    q<Execucao>(`${base} and t.estado in ('pendente', 'executando') order by t.executar_em limit 50`, [empresaId]),
+    q<Execucao>(`${base} and t.estado not in ('pendente', 'executando') order by t.concluido_em desc nulls last limit 60`, [empresaId]),
+    q<{ tipo: string; estado: string; total: number }>(`select tipo, estado, count(*)::int as total from trabalhos where empresa_id = $1 and criado_em > now() - interval '30 days' group by tipo, estado`, [empresaId]),
+  ]);
+  return { agendadas, recentes, resumo };
+}
