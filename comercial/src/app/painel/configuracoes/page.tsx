@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { convidarAcao, gerarChaveTelefoniaAcao, membroAcao, responsavelPadraoAcao, salvarConfigAcao, salvarWhatsAppAcao, simularLigacaoAcao } from '@/app/acoes';
+import { convidarAcao, gerarChaveGoogleAcao, gerarChaveTelefoniaAcao, membroAcao, responsavelPadraoAcao, salvarConfigAcao, salvarWhatsAppAcao, simularLigacaoAcao } from '@/app/acoes';
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { feedbacks } from '@/server/avaliacoes';
@@ -8,6 +8,7 @@ import { emailLigado } from '@/server/email';
 import { empresaPorId, equipe } from '@/server/empresas';
 import { adaptadorIA, modeloPadrao } from '@/server/ia';
 import { integracaoWhatsApp } from '@/server/integracoes';
+import { googleAdsDa } from '@/server/google-ads';
 import { telefoniaDa, ultimasLigacoes } from '@/server/ligacoes';
 import { quantosVencidos } from '@/server/limpeza';
 import { exigirCtx } from '@/server/sessao';
@@ -31,7 +32,7 @@ const Marcar = ({ id, rotulo, ajuda, marcado }: { id: string; rotulo: string; aj
 export default async function Configuracoes() {
   const ctx = await exigirCtx();
   if (ctx.papel !== 'admin') redirect('/painel');
-  const [empresa, pessoas, zap, notas, telefonia, ligacoes] = await Promise.all([empresaPorId(ctx.empresaId), equipe(ctx), integracaoWhatsApp(ctx.empresaId), feedbacks(ctx), telefoniaDa(ctx.empresaId), ultimasLigacoes(ctx)]);
+  const [empresa, pessoas, zap, notas, telefonia, ligacoes, google] = await Promise.all([empresaPorId(ctx.empresaId), equipe(ctx), integracaoWhatsApp(ctx.empresaId), feedbacks(ctx), telefoniaDa(ctx.empresaId), ultimasLigacoes(ctx), googleAdsDa(ctx.empresaId)]);
   const c = empresa!.config;
   const vencidos = await quantosVencidos(ctx, c.dados.guarda_meses);
   const ia = adaptadorIA();
@@ -196,6 +197,24 @@ export default async function Configuracoes() {
               </ul>
             </div>
           )}
+        </div>
+      </Secao>
+
+      <Secao id="google-ads" titulo="Formulários de anúncio do Google" nota="Quando alguém preenche o formulário de um anúncio do Google, o pedido entra direto no funil, com a campanha, como os pedidos do site. O formulário do Google não pede autorização de WhatsApp: a plataforma não manda mensagem sozinha, só cria a tarefa do primeiro contato.">
+        <div className="space-y-3 text-[15px]">
+          <p className={`aviso ${google?.ultimo_lead_em || google?.ultimo_teste_em ? 'bg-ok-clara text-ok' : 'bg-alerta-clara text-alerta'}`}>
+            {google
+              ? `Chave criada (terminando em ${google.final}). ${google.ultimo_lead_em ? `Último lead: ${dataHora(new Date(google.ultimo_lead_em))}.` : 'Nenhum lead recebido ainda.'}${google.ultimo_teste_em ? ` Último teste do Google: ${dataHora(new Date(google.ultimo_teste_em))}.` : ''}`
+              : 'Nenhum formulário de anúncio ligado ainda.'}
+          </p>
+          <ol className="list-decimal space-y-1 pl-5">
+            <li>Crie a chave abaixo e copie (ela aparece uma vez só).</li>
+            <li>No Google Ads, abra o formulário de lead do anúncio e, na parte de entrega dos leads, escolha a integração por webhook.</li>
+            <li>Cole o endereço <code className="break-all">{base}/api/webhooks/google-ads</code> e a chave, e use o botão de enviar dados de teste. Esta tela mostra o horário do teste.</li>
+            <li>Deixe o telefone como pergunta obrigatória no formulário: sem telefone o lead não entra.</li>
+          </ol>
+          <p className="text-suave">No relatório de anúncios, estes pedidos aparecem como fonte “google” e campanha com o número da campanha no Google Ads. Os dados de teste do Google não viram pedido.</p>
+          <Formulario acao={gerarChaveGoogleAcao}><Enviar secundario>{google ? 'Trocar a chave' : 'Criar a chave'}</Enviar></Formulario>
         </div>
       </Secao>
 

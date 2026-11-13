@@ -1,3 +1,4 @@
+import { after } from 'next/server';
 import { ambiente } from './config';
 import { q } from './db';
 
@@ -46,5 +47,15 @@ export async function enviarEmail(m: { para: string; assunto: string; texto: str
   } catch (e) {
     console.error('e-mail não enviado', (e as Error).name);
     return 'falhou';
+  }
+}
+
+/** Runs a send after the answer has gone out (inside a request), or detached elsewhere (scripts, tests). Never throws. */
+export function emSegundoPlano(fn: () => Promise<unknown>): void {
+  const rodar = () => fn().then(() => undefined, (e: unknown) => console.error('[e-mail em segundo plano]', (e as Error)?.name));
+  try {
+    after(rodar);
+  } catch {
+    void rodar();
   }
 }

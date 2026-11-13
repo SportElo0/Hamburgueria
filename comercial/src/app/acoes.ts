@@ -13,8 +13,10 @@ import { salvarConhecimento } from '@/server/conhecimento';
 import { dentroDoLimite } from '@/server/contexto';
 import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, simularEntradaWhatsApp } from '@/server/conversas';
 import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig } from '@/server/empresas';
+import { emailLigado } from '@/server/email';
 import { ErroDeUso } from '@/server/erros';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
+import { gerarChaveGoogle } from '@/server/google-ads';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { gerarChaveTelefonia, simularLigacaoPerdida } from '@/server/ligacoes';
 import { salvarInvestimento } from '@/server/anuncios';
@@ -26,6 +28,7 @@ import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, t
 import { processarFila } from '@/server/trabalhos';
 
 const t = (fd: FormData, k: string) => String(fd.get(k) ?? '').trim();
+const TEMPO_MINIMO_SENHA_MS = 800;
 
 /** Runs an action and turns expected errors into a message for the form. Unexpected ones are logged, not shown. */
 async function tentar(fn: () => Promise<Retorno | void>): Promise<Retorno> {
@@ -69,10 +72,19 @@ export async function sair() {
 }
 
 export async function pedirNovaSenha(_: Retorno, fd: FormData): Promise<Retorno> {
+  const inicio = Date.now();
+  const email = t(fd, 'email').toLowerCase().slice(0, 200);
   if (!(await dentroDoLimite(`senha:${await ipHash()}`, 5, 900))) return { erro: 'Muitas tentativas. Aguarde alguns minutos.' };
-  await auth().api.requestPasswordReset({ body: { email: t(fd, 'email').toLowerCase(), redirectTo: '/redefinir' } }).catch(() => {});
-  // Same answer whether the e-mail exists or not.
-  return { ok: 'Se este e-mail tiver acesso, as instruções para criar uma senha nova foram geradas. Enquanto o envio de e-mail não está configurado, peça o link à equipe Growlift.' };
+  if (email && (await dentroDoLimite(`senha:email:${email}`, 3, 3600))) {
+    await auth().api.requestPasswordReset({ body: { email, redirectTo: '/redefinir' } }).catch(() => {});
+  }
+  // Same answer, and about the same time, whether the e-mail exists or not (the e-mail itself goes out in the background).
+  await new Promise((r) => setTimeout(r, Math.max(0, TEMPO_MINIMO_SENHA_MS - (Date.now() - inicio))));
+  return {
+    ok: emailLigado()
+      ? 'Se este e-mail tiver acesso, mandamos um link para criar uma senha nova. Veja a caixa de entrada e o spam; o link vale por 1 hora.'
+      : 'Se este e-mail tiver acesso, as instruções para criar uma senha nova foram geradas. Enquanto o envio de e-mail não está configurado, peça o link à equipe Growlift.',
+  };
 }
 
 export async function redefinirSenha(_: Retorno, fd: FormData): Promise<Retorno> {
@@ -441,6 +453,12 @@ export const gerarChaveTelefoniaAcao = async () =>
   tentar(async () => {
     const chave = await gerarChaveTelefonia(await exigirCtx());
     return { ok: 'Chave criada. Ela aparece só agora: copie e cole no serviço de telefonia. A chave anterior parou de valer.', copiar: chave };
+  });
+
+export const gerarChaveGoogleAcao = async () =>
+  tentar(async () => {
+    const chave = await gerarChaveGoogle(await exigirCtx());
+    return { ok: 'Chave criada. Ela aparece só agora: copie e cole no formulário do anúncio, no Google Ads. A chave anterior parou de valer.', copiar: chave };
   });
 
 const RESULTADO_LIGACAO: Record<string, string> = {

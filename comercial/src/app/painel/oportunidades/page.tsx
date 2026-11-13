@@ -1,7 +1,9 @@
 import Link from 'next/link';
+import { mudarEtapaAcao } from '@/app/acoes';
 import { Atualizar } from '@/componentes/atualizar';
 import { ORIGENS, dataHora, reais } from '@/componentes/formato';
 import { EtiquetaEtapa, Vazio } from '@/componentes/pedacos';
+import { QuadroEtapas } from '@/componentes/quadro-etapas';
 import { ETAPAS, NOME_ETAPA, formatarTelefone, type Etapa } from '@/server/config';
 import { equipe } from '@/server/empresas';
 import { listar, type Oportunidade } from '@/server/oportunidades';
@@ -12,7 +14,7 @@ export const metadata = { title: 'Oportunidades' };
 function Cartao({ o }: { o: Oportunidade }) {
   const vencida = o.proxima_acao_em && o.proxima_acao_em < new Date();
   return (
-    <Link href={`/painel/oportunidades/${o.id}`} className="block rounded-lg border border-linha bg-white p-3 hover:border-marca">
+    <Link href={`/painel/oportunidades/${o.id}`} draggable={false} className="block rounded-lg border border-linha bg-white p-3 hover:border-marca">
       <span className="block font-semibold text-tinta">{o.contato_nome || formatarTelefone(o.contato_telefone)}</span>
       <span className="block text-sm text-suave">{o.contato_cidade || 'Cidade não informada'} · {ORIGENS[o.origem] ?? o.origem}</span>
       {o.necessidade && <span className="mt-1 line-clamp-2 block text-sm">{o.necessidade}</span>}
@@ -75,23 +77,19 @@ export default async function Oportunidades({ searchParams }: { searchParams: Pr
       {lista.length === 0 ? (
         <Vazio titulo="Nenhuma oportunidade encontrada.">Mude os filtros, ou aguarde o próximo pedido do site.</Vazio>
       ) : ver === 'quadro' ? (
-        <div className="-mx-4 overflow-x-auto px-4 pb-2">
-          <div className="flex gap-3">
-            {ETAPAS.map((e) => {
-              const col = lista.filter((o) => o.etapa === e);
-              return (
-                <section key={e} aria-label={NOME_ETAPA[e]} className="w-72 shrink-0 rounded-xl bg-[#eceff4] p-2">
-                  <h2 className="flex items-center justify-between px-1 pb-2 text-sm font-bold">{NOME_ETAPA[e]} <span className="etiqueta bg-white">{col.length}</span></h2>
-                  <div className="space-y-2">
-                    {col.length === 0 ? <p className="px-1 pb-2 text-sm text-suave">Vazio</p> : col.slice(0, 40).map((o) => <Cartao key={o.id} o={o} />)}
-                    {col.length > 40 && <Link className="block px-1 text-sm underline" href={qs({ ver: 'lista', etapa: e })}>Ver os {col.length}</Link>}
-                  </div>
-                </section>
-              );
-            })}
-          </div>
-          <p className="mt-2 text-[13px] text-suave">Para mudar a etapa, abra a oportunidade. Arrastar cartões não faz parte desta versão.</p>
-        </div>
+        <QuadroEtapas
+          mover={mudarEtapaAcao}
+          colunas={ETAPAS.map((e) => {
+            const col = lista.filter((o) => o.etapa === e);
+            return {
+              etapa: e,
+              nome: NOME_ETAPA[e],
+              total: col.length,
+              verTodos: col.length > 40 ? { href: qs({ ver: 'lista', etapa: e }), texto: `Ver os ${col.length}` } : undefined,
+              cartoes: col.slice(0, 40).map((o) => ({ id: o.id, nome: o.contato_nome || formatarTelefone(o.contato_telefone), conteudo: <Cartao o={o} /> })),
+            };
+          })}
+        />
       ) : (
         <ul className="cartao divide-y divide-linha">
           {lista.map((o) => (

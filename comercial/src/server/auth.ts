@@ -2,7 +2,7 @@ import { betterAuth } from 'better-auth';
 import { nextCookies } from 'better-auth/next-js';
 import { segredoSessao } from './chaves';
 import { pool } from './db';
-import { enviarEmail } from './email';
+import { emSegundoPlano, enviarEmail } from './email';
 
 const g = globalThis as unknown as { __growliftAuth?: ReturnType<typeof criar> };
 
@@ -15,16 +15,18 @@ function criar() {
       enabled: true,
       // Accounts are created only by invitation or by the Growlift admin, never by open sign-up.
       disableSignUp: true,
+      resetPasswordTokenExpiresIn: 60 * 60,
       minPasswordLength: 10,
       revokeSessionsOnPasswordReset: true,
       // Sent through the e-mail provider when configured; without one it is a simulated e-mail (never stored in production).
+      // Not awaited: the answer must take the same time whether the e-mail exists or not (see pedirNovaSenha).
       sendResetPassword: async ({ user, url }) => {
-        await enviarEmail({
+        emSegundoPlano(() => enviarEmail({
           para: user.email,
           assunto: 'Redefinir a senha · Growlift Comercial',
           link: url,
           texto: `Recebemos um pedido para criar uma senha nova para ${user.email}.\n\nPara criar a senha, abra: ${url}\n\nSe não foi você, ignore este e-mail: a senha atual continua valendo.`,
-        });
+        }));
       },
     },
     session: { expiresIn: 60 * 60 * 24 * 7, updateAge: 60 * 60 * 24 },

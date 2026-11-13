@@ -21,7 +21,7 @@ export function deCampoData(v: string): Date | null {
   const d = new Date(`${v.slice(0, 16)}:00-03:00`);
   return Number.isNaN(d.getTime()) ? null : d;
 }
-export const ORIGENS: Record<string, string> = { site: 'Site', formulario_incorporado: 'Formulário no site do cliente', api: 'Integração', whatsapp: 'WhatsApp', chat_site: 'Chat do site', ligacao: 'Ligação não atendida', desconhecida: 'Não informada' };
+export const ORIGENS: Record<string, string> = { site: 'Site', formulario_incorporado: 'Formulário no site do cliente', api: 'Integração', whatsapp: 'WhatsApp', chat_site: 'Chat do site', ligacao: 'Ligação não atendida', anuncio_google: 'Formulário de anúncio do Google', desconhecida: 'Não informada' };
 export const NOME_EVENTO: Record<string, string> = {
   pedido_recebido: 'Pedido recebido',
   ligacao_nao_atendida: 'Ligação não atendida',

@@ -12,7 +12,7 @@ O objetivo é melhorar o atendimento e o acompanhamento da procura que a empresa
 | --- | --- |
 | Site da empresa com formulário, chat e privacidade | `/s/<endereço>` |
 | Formulário para colocar em um site que já existe | `/incorporar/<chave>` |
-| Painel: visão geral, oportunidades (quadro e lista), atendimento, tarefas, conhecimento, configurações | `/painel` |
+| Painel: visão geral, oportunidades (quadro em que os cartões arrastam entre etapas, ou "Mover para" no celular; e lista), atendimento, tarefas, conhecimento, configurações | `/painel` |
 | Administração Growlift (cadastro de empresas, saúde das integrações) | `/admin` |
 | Convite de avaliação | `/avaliar/<token>` |
 
@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 125 testes (incluindo o adaptador real da IA e o envio de e-mail contra servidores falsos locais) de serviço contra o banco de teste |
+| `npm test` | 134 testes (incluindo o adaptador real da IA e o envio de e-mail contra servidores falsos locais) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -66,7 +66,7 @@ Sem `BETTER_AUTH_SECRET`, `CHAVE_CREDENCIAIS` e `CRON_SECRET`, as três são der
 
 ## E-mail (convites e senha)
 
-Com `RESEND_API_KEY` e `EMAIL_REMETENTE` (ex.: `Growlift <nao-responda@growlift.com.br>`) nas variáveis da Vercel, convites da equipe e links de redefinir senha saem pelo Resend (`src/server/email.ts`). Passos: criar a conta no Resend, adicionar o domínio e colocar no DNS os registros que ele pedir (SPF/DKIM), criar a chave de API e salvar as duas variáveis. Sem elas: fora de produção vira “e-mail simulado” (lista na área `/admin`); em produção não sai nada e o link do convite aparece na tela para copiar. Se o provedor recusar, o convite continua valendo e a tela avisa para copiar o link. No HTML, só o link da própria plataforma vira clicável. Limite: 20 convites por empresa por dia.
+Com `RESEND_API_KEY` e `EMAIL_REMETENTE` (ex.: `Growlift <nao-responda@growlift.com.br>`) nas variáveis da Vercel, convites da equipe e links de redefinir senha (válidos por 1 hora) saem pelo Resend (`src/server/email.ts`). Passos: criar a conta no Resend, adicionar o domínio e colocar no DNS os registros que ele pedir (SPF/DKIM), criar a chave de API e salvar as duas variáveis. Sem elas: fora de produção vira “e-mail simulado” (lista na área `/admin`); em produção não sai nada e o link do convite aparece na tela para copiar. Se o provedor recusar, o convite continua valendo e a tela avisa para copiar o link. No HTML, só o link da própria plataforma vira clicável. Limite: 20 convites por empresa por dia. “Esqueci a senha” responde sempre igual e no mesmo tempo (cerca de 0,8 s), exista o e-mail ou não; o e-mail sai depois da resposta; limite de 5 pedidos por 15 minutos por endereço de internet e 3 por hora por e-mail.
 
 ## Ambientes
 
@@ -177,6 +177,16 @@ Quando alguém liga para a empresa e ninguém atende, a plataforma responde pelo
 - Gatilho “Quando uma ligação não é atendida” no construtor de fluxos, com o modelo pronto “Ligação não atendida” (distribui e avisa a equipe se ninguém assumir em 30 minutos).
 - Na demonstração, “Simular ligação” em Configurações mostra tudo sem serviço de telefonia.
 
+## Formulários de anúncio do Google
+
+Quem preenche o formulário de um anúncio do Google (lead form) entra direto no funil como pedido, com origem “Formulário de anúncio do Google”, a campanha (`utm_source=google`, `utm_campaign` = número da campanha, `gclid`) e a tarefa do primeiro contato; os fluxos de “pedido recebido” disparam como num pedido do site (Configurações › Formulários de anúncio do Google; código em `src/server/google-ads.ts`).
+
+- **Entrada:** `POST /api/webhooks/google-ads`, no formato do Google Ads (`lead_id`, `google_key`, `is_test`, `campaign_id`, `gcl_id`, `user_column_data` com `FULL_NAME`/`FIRST_NAME`/`LAST_NAME`, `PHONE_NUMBER`, `CITY`, `EMAIL` e as perguntas próprias). A chave vai no campo `google_key`, como o Google exige: o administrador da empresa cria em Configurações, ela aparece uma vez só e o banco guarda só o hash. Resposta `200 {}`; erro 4xx o Google não reenvia, 5xx ele tenta de novo.
+- O mesmo `lead_id` entregue duas vezes não cria nada novo. Os “dados de teste” do Google só marcam na tela o horário do teste.
+- **Telefone obrigatório:** sem telefone válido o lead é recusado (422) com a explicação. Deixe o telefone como pergunta obrigatória no formulário do anúncio.
+- **Nenhuma mensagem automática:** o formulário do Google não pede autorização de WhatsApp, então a plataforma não confirma pelo WhatsApp; a equipe faz o primeiro contato. O e-mail fica nos dados do contato.
+- As perguntas próprias do formulário viram o texto da necessidade (“Pergunta: resposta”). Limite: 300 leads por hora por empresa.
+
 ## App no celular (avisos)
 
 O painel instala como aplicativo no celular (PWA): em **App no celular**, cada pessoa vê o passo a passo (iPhone: Safari › Compartilhar › Adicionar à Tela de Início; Android: Chrome › Instalar app) e liga os avisos daquele aparelho.
@@ -264,7 +274,7 @@ Em 12/11/2026 rodaram as revisões de segurança e legal do repositório (autom�
 
 ## Fora desta versão (sem telas que finjam funcionar)
 
-Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanhas de anúncios, central telefônica, chamadas perdidas, gestão financeira, contratos, pagamentos e cobrança automática de assinaturas. Também: arrastar cartões no quadro, envio de mídia, agenda de visitas.
+Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanhas de anúncios, central telefônica, gestão financeira, contratos, pagamentos e cobrança automática de assinaturas. Também: envio de mídia e formulários de anúncio da Meta (Facebook/Instagram).
 
 ## Próximos passos para o primeiro cliente em produção
 

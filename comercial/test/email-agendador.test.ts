@@ -3,7 +3,7 @@ import type { AddressInfo } from 'node:net';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { agendarFilaNoBanco, deveAgendar, INTERVALO, NOME_TAREFA } from '@/server/agendador-banco';
 import { fecharPool, q, um } from '@/server/db';
-import { enviarEmail, htmlDoTexto } from '@/server/email';
+import { emSegundoPlano, enviarEmail, htmlDoTexto } from '@/server/email';
 import { convidar } from '@/server/empresas';
 import { novaEmpresa, type Cenario } from './apoio';
 
@@ -87,6 +87,16 @@ describe('e-mail de convite e de senha', () => {
     expect(h).toContain('Empresa &lt;b&gt;X&lt;/b&gt; https://golpe.exemplo &amp; cia');
     expect(h).not.toContain('href="https://golpe');
     expect(h).toContain('<a href="https://exemplo.com/convite/abc">');
+  });
+
+  it('envio em segundo plano: fora de uma requisição roda solto e um erro não escapa', async () => {
+    let rodou = false;
+    emSegundoPlano(async () => {
+      rodou = true;
+      throw new Error('falha de teste');
+    });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(rodou).toBe(true);
   });
 
   it('no máximo 20 convites por dia por empresa', async () => {
