@@ -10,7 +10,7 @@ interface Msg {
 }
 
 /** Chat with the company's virtual assistant. The conversation token lives only in this tab's memory and storage. */
-export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial = false, flutuante = true, linkPrivacidade, atendente = 'Ana' }: { chave: string; empresa: string; atendente?: string; tokenInicial?: string | null; aberto?: boolean; flutuante?: boolean; linkPrivacidade?: string }) {
+export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial = false, flutuante = true, linkPrivacidade, atendente = 'Ana', incorporado = false }: { chave: string; empresa: string; atendente?: string; incorporado?: boolean; tokenInicial?: string | null; aberto?: boolean; flutuante?: boolean; linkPrivacidade?: string }) {
   const guarda = `chat:${chave}`;
   const [aberto, setAberto] = useState(abertoInicial);
   const [token, setToken] = useState<string | null>(tokenInicial ?? null);
@@ -78,12 +78,13 @@ export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial =
   }
 
   const painel = (
-    <section aria-label={`Chat com a ${empresa}`} className={`flex flex-col overflow-hidden rounded-2xl border border-linha bg-white ${flutuante ? 'h-[min(70dvh,520px)] w-[min(92vw,380px)] shadow-2xl' : 'h-[420px] w-full'}`}>
+    <section aria-label={`Chat com a ${empresa}`} className={`flex flex-col overflow-hidden bg-white ${incorporado ? 'h-dvh w-full' : `rounded-2xl border border-linha ${flutuante ? 'h-[min(70dvh,520px)] w-[min(92vw,380px)] shadow-2xl' : 'h-[420px] w-full'}`}`}>
       <header className="flex items-center justify-between gap-2 bg-tinta px-4 py-3 text-white">
         <div>
           <p className="font-bold">Atendimento {empresa}</p>
           <p className="text-[12.5px] text-white/75">{estado === 'ia_ativa' ? `${atendente} responde por aqui. Se preferir, peça para falar com alguém da equipe.` : estado === 'humano_atendendo' ? 'Uma pessoa da equipe está neste atendimento.' : 'A equipe foi avisada e vai responder por aqui.'}</p>
         </div>
+        {incorporado && <button type="button" onClick={() => window.parent.postMessage({ growlift: 'fechar' }, '*')} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/15 text-lg" aria-label="Fechar o chat">×</button>}
         {flutuante && <button type="button" onClick={() => setAberto(false)} className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/15 text-lg" aria-label="Fechar o chat">×</button>}
       </header>
       <div className="flex-1 space-y-2 overflow-y-auto p-3" aria-live="polite">

@@ -235,7 +235,11 @@ export default async function Configuracoes() {
         <h3 className="font-bold">1. Formulário incorporado</h3>
         <p className="mt-1 text-[15px]">Cole este trecho na página do seu site onde o formulário deve aparecer:</p>
         <pre className="mt-2 overflow-x-auto rounded-lg bg-tinta p-3 text-[13px] text-white"><code>{`<iframe src="${base}/incorporar/${empresa!.chave_publica}" title="Pedir orçamento" style="width:100%;max-width:560px;height:920px;border:0" loading="lazy"></iframe>`}</code></pre>
-        <h3 className="mt-4 font-bold">2. Envio por integração</h3>
+        <h3 className="mt-4 font-bold">2. Chat com {c.ia.nome || 'a assistente'} no seu site</h3>
+        <p className="mt-1 text-[15px]">Cole esta linha antes de <code>&lt;/body&gt;</code> em todas as páginas do site. Aparece um botão no canto; ao tocar, abre o chat.</p>
+        <pre className="mt-2 overflow-x-auto rounded-lg bg-tinta p-3 text-[13px] text-white"><code>{`<script src="${base}/chat.js" data-chave="${empresa!.chave_publica}" async></script>`}</code></pre>
+        <p className="mt-1 text-sm text-suave">Opcional: <code>{'data-texto="Fale com a gente"'}</code> muda o texto do botão e <code>{'data-cor="#175cd3"'}</code> a cor. {c.ia.ativa ? '' : 'A assistente está desligada: o botão não abre o chat até ela ser ligada.'}</p>
+        <h3 className="mt-4 font-bold">3. Envio por integração</h3>
         <p className="mt-1 text-[15px]">Endereço: <code className="break-all">POST {base}/api/publico/pedidos</code> · chave pública desta empresa: <code className="break-all">{empresa!.chave_publica}</code></p>
         <p className="mt-1 text-sm text-suave">A chave só identifica a empresa; não dá acesso a nenhum dado. O formato dos campos está no README.</p>
       </Secao>

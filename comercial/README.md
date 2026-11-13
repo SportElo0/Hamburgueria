@@ -110,6 +110,8 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 **Formulário incorporado**: colar o `<iframe>` mostrado em Configurações › Formulário no seu site.
 
+**Chat no site da empresa**: colar `<script src="<plataforma>/chat.js" data-chave="pk_..." async></script>` antes de `</body>` (a linha pronta está em Configurações › Formulário no seu site). Aparece um botão no canto; o chat abre num iframe da plataforma (em tela cheia no celular), então os estilos do site não interferem e nada do site é lido. Opcional: `data-texto` e `data-cor`.
+
 **Integração** (`POST /api/publico/pedidos`, JSON):
 
 ```json
