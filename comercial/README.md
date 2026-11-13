@@ -129,6 +129,10 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+## Resultado dos anúncios
+
+Menu **Anúncios** (administrador): pedidos do mês separados pelo anúncio que trouxe cada um (`utm_source` e `utm_campaign` do link, ou o identificador de clique do Google/Meta), quantos viraram venda e o valor delas. O administrador informa quanto gastou em cada anúncio no mês; o painel mostra custo por pedido, custo por venda e quanto voltou em vendas para cada R$ 1 (valor informado pelos vendedores, não é lucro). Sem o gasto, as colunas de custo ficam vazias: nada é estimado. Conta pelo mês em que o pedido chegou. Limitação: o formulário dentro de iframe não vê o link da página de fora; use o site da plataforma ou a integração para levar a marcação.
+
 ## Limpeza automática de dados
 
 Configurações › Dados: prazo em meses (padrão 24; 0 = nunca). Uma vez por dia, junto com as outras rotinas, o sistema apaga contatos que nunca fecharam negócio e não tiveram pedido, conversa, ligação nem visita nesse período, com tudo o que é deles (oportunidades, conversas, autorizações, ligações, visitas, histórico). Clientes (venda ganha) e quem tem visita marcada não são apagados. O histórico da empresa registra só quantos foram apagados. A página de privacidade mostra o prazo. Também limpa sobras técnicas (contadores, avisos da Meta com mais de 30 dias, trabalhos e avisos lidos com mais de 180 dias).

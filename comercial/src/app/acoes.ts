@@ -17,6 +17,7 @@ import { ErroDeUso } from '@/server/erros';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { gerarChaveTelefonia, simularLigacaoPerdida } from '@/server/ligacoes';
+import { salvarInvestimento } from '@/server/anuncios';
 import { criarLinkAgenda, marcarVisitaManual, mudarVisita, remarcarVisita } from '@/server/agenda';
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
@@ -484,4 +485,13 @@ export const linkAgendaAcao = async () =>
   tentar(async () => {
     const token = await criarLinkAgenda(await exigirCtx());
     return { ok: 'Link criado. Ele aparece só agora: no Google Agenda, use “Outras agendas” › “+” › “Do URL” e cole o endereço. O link anterior parou de valer.', copiar: `${process.env.APP_URL ?? ''}/api/agenda/${token}` };
+  });
+
+/* ---------- Ads ---------- */
+
+export const salvarInvestimentoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const valor = centavos(t(fd, 'valor'));
+    await salvarInvestimento(await exigirCtx(), { mes: t(fd, 'mes'), fonte: t(fd, 'fonte'), campanha: t(fd, 'campanha'), valorCentavos: valor ?? 0 });
+    return { ok: valor ? 'Gasto salvo.' : 'Gasto removido.' };
   });
