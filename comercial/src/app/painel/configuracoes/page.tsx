@@ -8,6 +8,7 @@ import { empresaPorId, equipe } from '@/server/empresas';
 import { adaptadorIA, modeloPadrao } from '@/server/ia';
 import { integracaoWhatsApp } from '@/server/integracoes';
 import { telefoniaDa, ultimasLigacoes } from '@/server/ligacoes';
+import { quantosVencidos } from '@/server/limpeza';
 import { exigirCtx } from '@/server/sessao';
 
 export const metadata = { title: 'Configurações' };
@@ -31,6 +32,7 @@ export default async function Configuracoes() {
   if (ctx.papel !== 'admin') redirect('/painel');
   const [empresa, pessoas, zap, notas, telefonia, ligacoes] = await Promise.all([empresaPorId(ctx.empresaId), equipe(ctx), integracaoWhatsApp(ctx.empresaId), feedbacks(ctx), telefoniaDa(ctx.empresaId), ultimasLigacoes(ctx)]);
   const c = empresa!.config;
+  const vencidos = await quantosVencidos(ctx, c.dados.guarda_meses);
   const ia = adaptadorIA();
   const base = process.env.APP_URL ?? '';
   const linhas = (xs: { titulo: string; texto: string }[]) => xs.map((x) => `${x.titulo}${x.texto ? ` | ${x.texto}` : ''}`).join('\n');
@@ -244,7 +246,13 @@ export default async function Configuracoes() {
         <p className="mt-1 text-sm text-suave">A chave só identifica a empresa; não dá acesso a nenhum dado. O formato dos campos está no README.</p>
       </Secao>
 
-      <Secao id="dados" titulo="Dados" nota="Exportação e exclusão ficam registradas no histórico da empresa.">
+      <Secao id="dados" titulo="Dados" nota="Exportação, exclusão e limpeza automática ficam registradas no histórico da empresa.">
+        <Formulario acao={salvarConfigAcao} className="mb-4 grid gap-3 border-b border-linha pb-4 sm:grid-cols-2">
+          <input type="hidden" name="secao" value="dados" />
+          <div className="sm:col-span-2"><Num id="guarda_meses" rotulo="Apagar sozinho quem não virou cliente depois de quantos meses sem nenhum contato (0 = nunca apagar)" valor={c.dados.guarda_meses} min={0} max={120} /></div>
+          <p className="text-sm text-suave sm:col-span-2">Uma vez por dia, o sistema apaga contatos que nunca fecharam negócio e não tiveram pedido, conversa, ligação nem visita nesse período, com tudo o que é deles. Clientes (venda ganha) não são apagados. {vencidos ? `Hoje seriam apagados ${vencidos} contato(s).` : 'Hoje nenhum contato seria apagado.'} Informe esse prazo na política de privacidade.</p>
+          <div className="sm:col-span-2"><Enviar secundario>Salvar prazo</Enviar></div>
+        </Formulario>
         <a className="botao-2" href="/api/exportar/contatos">Exportar contatos (CSV)</a>
         <p className="mt-3 text-sm text-suave">Para excluir os dados de uma pessoa, abra a oportunidade dela e use “Excluir este contato”. Prazos de guarda e o procedimento completo estão no README.</p>
       </Secao>

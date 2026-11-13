@@ -391,10 +391,15 @@ export async function excluirContato(ctx: Ctx, contatoId: string): Promise<void>
   await tx(async (db) => {
     const c = await um('select id from contatos where empresa_id = $1 and id = $2 for update', [ctx.empresaId, contatoId], db);
     if (!c) throw new NaoEncontrado('Contato não encontrado.');
-    await q(`update trabalhos set estado = 'cancelado', resultado = 'Contato excluído.', concluido_em = now() where empresa_id = $1 and estado = 'pendente'
-       and (oportunidade_id in (select id from oportunidades where contato_id = $2) or conversa_id in (select id from conversas where contato_id = $2))`, [ctx.empresaId, contatoId], db);
-    await q('delete from eventos where empresa_id = $1 and (contato_id = $2 or oportunidade_id in (select id from oportunidades where contato_id = $2))', [ctx.empresaId, contatoId], db);
-    await q('delete from contatos where empresa_id = $1 and id = $2', [ctx.empresaId, contatoId], db);
+    await apagarContato(db, ctx.empresaId, contatoId);
     await registrar(db, ctx.empresaId, { ator: ator(ctx), tipo: 'contato_excluido' });
   });
+}
+
+/** Deletes a contact and everything about it (opportunities, conversations, consents, calls, visits, history), cancelling pending jobs. */
+export async function apagarContato(db: Db, empresaId: string, contatoId: string) {
+  await q(`update trabalhos set estado = 'cancelado', resultado = 'Contato excluído.', concluido_em = now() where empresa_id = $1 and estado = 'pendente'
+     and (oportunidade_id in (select id from oportunidades where contato_id = $2) or conversa_id in (select id from conversas where contato_id = $2))`, [empresaId, contatoId], db);
+  await q('delete from eventos where empresa_id = $1 and (contato_id = $2 or oportunidade_id in (select id from oportunidades where contato_id = $2))', [empresaId, contatoId], db);
+  await q('delete from contatos where empresa_id = $1 and id = $2', [empresaId, contatoId], db);
 }

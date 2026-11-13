@@ -210,7 +210,8 @@ export async function processarFila(max?: number): Promise<number> {
 export async function varrerAutomacoes(): Promise<number> {
   const { varrerParadas } = await import('./fluxos');
   const { escalarTarefas, enviarResumos, agendarManutencoes } = await import('./rotinas');
-  return (await varrerParadas()) + (await escalarTarefas()) + (await enviarResumos()) + (await agendarManutencoes());
+  const { limparDadosAntigos } = await import('./limpeza');
+  return (await varrerParadas()) + (await escalarTarefas()) + (await enviarResumos()) + (await agendarManutencoes()) + (await limparDadosAntigos());
 }
 
 export const NOME_TRABALHO: Record<string, string> = {

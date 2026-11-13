@@ -248,6 +248,8 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
       const primeiro = por_dia[String(dias[0])];
       await salvarConfig(ctx, 'agenda', { ativa: fd.get('ativa') === 'on', dias, por_dia, bloqueios, hora_inicio: primeiro?.inicio ?? atual.agenda.hora_inicio, hora_fim: primeiro?.fim ?? atual.agenda.hora_fim, duracao_min: num('duracao_min'), capacidade: num('capacidade'), antecedencia_horas: num('antecedencia_horas'), janela_dias: num('janela_dias'), ia_marca: fd.get('ia_marca') === 'on', lembrete: fd.get('lembrete') === 'on' });
 
+    } else if (secao === 'dados') {
+      await salvarConfig(ctx, 'dados', { guarda_meses: num('guarda_meses') });
     } else if (secao === 'avaliacao') {
       const link = t(fd, 'link');
       if (link && !/^https:\/\/[^\s]+$/.test(link)) throw new ErroDeUso('O link de avaliação precisa começar com https://');

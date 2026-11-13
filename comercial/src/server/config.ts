@@ -110,6 +110,8 @@ export const ConfigEmpresa = z.object({
     })
     .prefault({}),
   avaliacao: z.object({ link: Texto(300) }).prefault({}),
+  /** Retention: contacts that never became customers are deleted after this many months without any interaction (0 = never). */
+  dados: z.object({ guarda_meses: z.number().int().min(0).max(120).default(24) }).prefault({}),
   /** Visit calendar: when visits can happen, how long they take and how many at the same time. */
   agenda: z
     .object({

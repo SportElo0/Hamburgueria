@@ -129,6 +129,10 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+## Limpeza automática de dados
+
+Configurações › Dados: prazo em meses (padrão 24; 0 = nunca). Uma vez por dia, junto com as outras rotinas, o sistema apaga contatos que nunca fecharam negócio e não tiveram pedido, conversa, ligação nem visita nesse período, com tudo o que é deles (oportunidades, conversas, autorizações, ligações, visitas, histórico). Clientes (venda ganha) e quem tem visita marcada não são apagados. O histórico da empresa registra só quantos foram apagados. A página de privacidade mostra o prazo. Também limpa sobras técnicas (contadores, avisos da Meta com mais de 30 dias, trabalhos e avisos lidos com mais de 180 dias).
+
 ## Agenda de visitas
 
 Menu **Agenda** (todos) e Configurações › Agenda (administrador): dias da semana com horário próprio para cada dia (ex.: sábado das 8 às 12), dias sem visita (feriados, férias, folgas: “25/12/2026 Natal” ou “02/01/2027 a 10/01/2027 Férias”), duração, quantas visitas ao mesmo tempo, antecedência mínima e quantos dias à frente.
