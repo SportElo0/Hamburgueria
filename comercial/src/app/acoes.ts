@@ -508,7 +508,7 @@ export const criarPropostaAcao = async (_: Retorno, fd: FormData) =>
       if (!descricao || !Number.isFinite(quantidade) || v == null) throw new ErroDeUso(`Não entendi o item “${l.slice(0, 40)}”. Use: descrição | quantidade | valor.`);
       return { descricao, quantidade, valor_unit_centavos: v };
     });
-    await criarProposta(await exigirCtx(), { oportunidadeId: t(fd, 'oportunidade'), titulo: t(fd, 'titulo'), itens, condicoes: t(fd, 'condicoes'), validadeDias: Number(t(fd, 'validade')) });
+    await criarProposta(await exigirCtx(), { oportunidadeId: t(fd, 'oportunidade'), titulo: t(fd, 'titulo'), itens, condicoes: t(fd, 'condicoes'), validadeDias: Number(t(fd, 'validade')), consumidor: t(fd, 'consumidor') !== 'empresa' });
     return { ok: 'Proposta salva como rascunho. Confira e gere o link.' };
   });
 
@@ -529,7 +529,7 @@ async function responderPublico(fd: FormData, aceitar: boolean): Promise<Retorno
   if (!(await dentroDoLimite(`proposta:${ip}`, 10, 600))) return { erro: 'Muitas tentativas. Aguarde alguns minutos.' };
   try {
     if (aceitar && fd.get('li') !== 'on') return { erro: 'Marque que leu e aceita a proposta.' };
-    await responderProposta(t(fd, 'token'), { aceitar, nome: t(fd, 'nome'), motivo: t(fd, 'motivo'), ipHash: ip });
+    await responderProposta(t(fd, 'token'), { aceitar, nome: t(fd, 'nome'), motivo: t(fd, 'motivo'), ipHash: ip, navegador: (await headers()).get('user-agent') ?? '' });
   } catch (err) {
     if (err instanceof ErroDeUso) return { erro: err.message };
     console.error('[proposta]', err instanceof Error ? err.message : err);

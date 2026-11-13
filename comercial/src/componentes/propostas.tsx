@@ -25,7 +25,7 @@ export function SecaoPropostas({ oportunidadeId, propostas, fechada }: { oportun
                 <div className="min-w-0">
                   <p className="font-semibold text-tinta">Nº {p.numero} · {p.titulo}</p>
                   <p className="text-sm text-suave">
-                    {reais(p.total_centavos)} · válida até {dataBr(p.validade)}{p.vencida && p.estado === 'enviada' ? ' (vencida)' : ''}
+                    {reais(p.total_centavos)} · {p.validade ? `válida até ${dataBr(p.validade)}` : `válida por ${p.validade_dias} dias depois de enviar`}{p.vencida && p.estado === 'enviada' ? ' (vencida)' : ''}
                     {p.vista_em ? ` · aberta ${p.visualizacoes}× (primeira em ${dataHora(p.vista_em)})` : p.estado === 'enviada' ? ' · ainda não aberta' : ''}
                   </p>
                   {p.estado === 'aceita' && <p className="text-sm text-ok">Aceita por “{p.aceite_nome}” em {dataHora(p.respondida_em!)}. Fechado o negócio, marque a oportunidade como ganha.</p>}
@@ -35,7 +35,7 @@ export function SecaoPropostas({ oportunidadeId, propostas, fechada }: { oportun
               </div>
               {(p.estado === 'rascunho' || p.estado === 'enviada') && (
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <Formulario acao={enviarPropostaAcao}><input type="hidden" name="id" value={p.id} /><Enviar secundario className="min-h-9 px-3 py-1 text-sm">{p.estado === 'rascunho' ? 'Gerar link para o cliente' : 'Gerar link novo'}</Enviar></Formulario>
+                  <Formulario acao={enviarPropostaAcao}><input type="hidden" name="id" value={p.id} /><Enviar secundario className="min-h-9 px-3 py-1 text-sm">{p.estado === 'rascunho' ? 'Gerar link para o cliente' : 'Gerar link novo (mesmo conteúdo)'}</Enviar></Formulario>
                   <Formulario acao={cancelarPropostaAcao}><input type="hidden" name="id" value={p.id} /><Enviar secundario className="min-h-9 px-3 py-1 text-sm">Cancelar</Enviar></Formulario>
                 </div>
               )}
@@ -50,9 +50,12 @@ export function SecaoPropostas({ oportunidadeId, propostas, fechada }: { oportun
             <input type="hidden" name="oportunidade" value={oportunidadeId} />
             <div><label className="rotulo" htmlFor="pr-titulo">Título</label><input className="campo" id="pr-titulo" name="titulo" required maxLength={120} placeholder="Sistema de 4,4 kWp com instalação" /></div>
             <div><label className="rotulo" htmlFor="pr-itens">Itens (um por linha: descrição | quantidade | valor unitário)</label><textarea className="campo font-mono text-[14px]" id="pr-itens" name="itens" rows={4} required placeholder={'Painel 550 W | 8 | 1.100,00\nInversor 5 kW | 1 | 4.800,00\nInstalação e projeto | 1 | 3.500,00'} /></div>
-            <div><label className="rotulo" htmlFor="pr-cond">Condições (pagamento, prazo, garantia)</label><textarea className="campo" id="pr-cond" name="condicoes" rows={3} maxLength={3000} /></div>
-            <div className="max-w-48"><label className="rotulo" htmlFor="pr-val">Válida por (dias)</label><input className="campo" id="pr-val" name="validade" type="number" min={1} max={180} defaultValue={15} required /></div>
-            <p className="text-sm text-suave">Os valores e condições são da empresa: confira antes de mandar. O cliente vê a proposta pelo link, aceita digitando o nome ou recusa; o aceite não marca a venda como ganha.</p>
+            <div><label className="rotulo" htmlFor="pr-cond">Condições</label><textarea className="campo" id="pr-cond" name="condicoes" rows={5} maxLength={3000} required defaultValue={'Pagamento: \nPrazo de execução: \nGarantia: \nNão está incluso: \nDespesas adicionais: nenhuma'} /></div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div><label className="rotulo" htmlFor="pr-val">Válida por (dias, a contar do envio)</label><input className="campo" id="pr-val" name="validade" type="number" min={1} max={180} defaultValue={15} required /></div>
+              <div><label className="rotulo" htmlFor="pr-cons">O cliente é</label><select className="campo" id="pr-cons" name="consumidor" defaultValue="pessoa"><option value="pessoa">Pessoa comprando para si (mostra o direito de desistir em 7 dias)</option><option value="empresa">Empresa (uso no negócio)</option></select></div>
+            </div>
+            <p className="text-sm text-suave">Os valores e condições são da empresa: confira antes de mandar. Proposta aceita obriga a empresa a cumprir o que está escrito (CDC, art. 30): não prometa resultado, prazo ou desconto que não vai cumprir. Depois de enviada, ela não muda; para corrigir, cancele e faça outra. O aceite do cliente não marca a venda como ganha.</p>
             <div><Enviar>Salvar proposta</Enviar></div>
           </Formulario>
         </details>

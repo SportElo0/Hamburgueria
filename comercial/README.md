@@ -129,6 +129,15 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+## Proposta online
+
+Na página da oportunidade, **Proposta online**: título, itens (descrição | quantidade | valor), condições (pagamento, prazo, garantia, o que não está incluso, despesas adicionais), validade em dias a contar do envio e se o cliente é pessoa comprando para si (mostra o direito de desistir em 7 dias, CDC art. 49) ou empresa. **Gerar link** cria um endereço secreto (só o hash fica guardado), move a oportunidade para “Proposta enviada” e grava o valor. Só funciona com razão social, CNPJ, endereço e um contato preenchidos em Configurações › Site (Decreto 7.962/2013).
+
+- O cliente abre (`/p/<link>`), vê empresa, itens, total, condições e validade, e aceita digitando o nome e marcando “Li a proposta e aceito…”, ou recusa (motivo opcional). O vendedor é avisado quando o link é aberto pela primeira vez e vê quantas vezes foi aberto.
+- Aceite: grava nome, data/hora, hash do acesso, navegador, o texto do aceite e um hash do conteúdo mostrado; move para “Negociação”, cancela os retornos automáticos e cria a tarefa de combinar o fechamento. Nunca marca a venda como ganha. O cliente pode imprimir ou salvar a página como comprovante.
+- Proposta enviada não muda (o banco recusa alterar itens, valor, condições e validade); link novo mantém o mesmo conteúdo. Para corrigir, cancele e faça outra. Proposta cancelada mostra “cancelada pela empresa”.
+- Gatilho de fluxo “Quando o cliente aceita a proposta online”.
+
 ## Resultado dos anúncios
 
 Menu **Anúncios** (administrador): pedidos do mês separados pelo anúncio que trouxe cada um (`utm_source` e `utm_campaign` do link, ou o identificador de clique do Google/Meta), quantos viraram venda e o valor delas. O administrador informa quanto gastou em cada anúncio no mês; o painel mostra custo por pedido, custo por venda e quanto voltou em vendas para cada R$ 1 (valor informado pelos vendedores, não é lucro). Sem o gasto, as colunas de custo ficam vazias: nada é estimado. Conta pelo mês em que o pedido chegou. Limitação: o formulário dentro de iframe não vê o link da página de fora; use o site da plataforma ou a integração para levar a marcação.

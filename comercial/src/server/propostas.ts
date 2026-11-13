@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { z } from 'zod';
 import { ator, criarTarefa, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um } from './db';
@@ -27,7 +28,10 @@ export interface Proposta {
   titulo: string;
   itens: ItemProposta[];
   condicoes: string;
+  /** Last day of validity (YYYY-MM-DD); empty until the link is first sent. */
   validade: string;
+  validade_dias: number;
+  consumidor: boolean;
   total_centavos: number;
   estado: 'rascunho' | 'enviada' | 'aceita' | 'recusada' | 'cancelada';
   enviada_em: Date | null;
@@ -48,13 +52,18 @@ const Entrada = z.object({
   oportunidadeId: z.uuid(),
   titulo: z.string().trim().min(3, 'Dê um título à proposta.').max(120),
   itens: z.array(Item).min(1, 'Coloque pelo menos um item.').max(30),
-  condicoes: z.string().trim().max(3000).default(''),
+  condicoes: z.string().trim().min(10, 'Escreva as condições: pagamento, prazo, garantia e o que não está incluso.').max(3000),
   validadeDias: z.number().int().min(1, 'Validade de pelo menos 1 dia.').max(180),
+  /** Customer is a person buying for themselves: shows the 7-day withdrawal right (CDC art. 49). */
+  consumidor: z.boolean().default(true),
 });
+
+/** The acceptance statement shown next to the button (recorded with each acceptance). */
+export const TEXTO_ACEITE = 'Li a proposta e aceito os itens, o valor e as condições acima.';
 
 export const totalDe = (itens: ItemProposta[]) => itens.reduce((t, i) => t + Math.round(i.quantidade * i.valor_unit_centavos), 0);
 
-const colunas = (p: string) => `${p}id, ${p}oportunidade_id, ${p}numero, ${p}titulo, ${p}itens, ${p}condicoes, to_char(${p}validade, 'YYYY-MM-DD') as validade, ${p}total_centavos::int as total_centavos, ${p}estado,
+const colunas = (p: string) => `${p}id, ${p}oportunidade_id, ${p}numero, ${p}titulo, ${p}itens, ${p}condicoes, coalesce(to_char(${p}validade, 'YYYY-MM-DD'), '') as validade, ${p}validade_dias, ${p}consumidor, ${p}total_centavos::int as total_centavos, ${p}estado,
   ${p}enviada_em, ${p}vista_em, ${p}visualizacoes, ${p}respondida_em, ${p}aceite_nome, ${p}motivo_recusa, (${p}validade < (now() at time zone 'America/Sao_Paulo')::date) as vencida`;
 
 export async function propostasDa(ctx: Ctx, oportunidadeId: string): Promise<Proposta[]> {
@@ -73,9 +82,9 @@ export async function criarProposta(ctx: Ctx, entrada: z.input<typeof Entrada>):
     if (o.etapa === 'ganho' || o.etapa === 'perdido') throw new ErroDeUso('A oportunidade já está encerrada.');
     const n = await um<{ n: number }>('select coalesce(max(numero), 0) + 1 as n from propostas where empresa_id = $1', [ctx.empresaId], db);
     const p = await um<{ id: string }>(
-      `insert into propostas (empresa_id, oportunidade_id, numero, titulo, itens, condicoes, validade, total_centavos, criado_por)
-       values ($1, $2, $3, $4, $5, $6, (now() at time zone 'America/Sao_Paulo')::date + $7::int, $8, $9) returning id`,
-      [ctx.empresaId, e.oportunidadeId, n!.n, e.titulo, JSON.stringify(e.itens), e.condicoes, e.validadeDias, totalDe(e.itens), ctx.userId],
+      `insert into propostas (empresa_id, oportunidade_id, numero, titulo, itens, condicoes, validade_dias, consumidor, total_centavos, criado_por)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id`,
+      [ctx.empresaId, e.oportunidadeId, n!.n, e.titulo, JSON.stringify(e.itens), e.condicoes, e.validadeDias, e.consumidor, totalDe(e.itens), ctx.userId],
       db,
     );
     return p!.id;
@@ -86,14 +95,25 @@ export async function criarProposta(ctx: Ctx, entrada: z.input<typeof Entrada>):
 export async function enviarProposta(ctx: Ctx, id: string): Promise<string> {
   if (!/^[0-9a-f-]{36}$/i.test(id)) throw new NaoEncontrado();
   const token = `pr_${novoToken(24)}`;
+  // The customer must see who is offering (Decreto 7.962/2013, art. 2º): no link without the company's details.
+  const s = (await empresaPorId(ctx.empresaId))!.config.site;
+  if (!s.razao_social || !s.cnpj || !s.endereco || !(s.whatsapp || s.email)) {
+    throw new ErroDeUso('Antes de mandar propostas, preencha em Configurações › Site: razão social, CNPJ, endereço e um contato (WhatsApp ou e-mail).');
+  }
   const p = await tx(async (db) => {
     const p = await um<{ oportunidade_id: string; estado: string; total_centavos: number; numero: number }>(`select oportunidade_id, estado, total_centavos::int as total_centavos, numero from propostas where empresa_id = $1 and id = $2 for update`, [ctx.empresaId, id], db);
     if (!p) throw new NaoEncontrado('Proposta não encontrada.');
     if (p.estado !== 'rascunho' && p.estado !== 'enviada') throw new ErroDeUso('Esta proposta já foi respondida ou cancelada.');
     // A new link replaces the old one (the old link stops working).
-    await q(`update propostas set token_hash = $3, estado = 'enviada', enviada_em = coalesce(enviada_em, now()) where empresa_id = $1 and id = $2`, [ctx.empresaId, id, hashToken(token)], db);
+    // Validity counts from the first send; a new link keeps the same offer and the same date.
+    await q(
+      `update propostas set token_hash = $3, estado = 'enviada', enviada_em = coalesce(enviada_em, now()),
+         validade = coalesce(validade, (now() at time zone 'America/Sao_Paulo')::date + validade_dias) where empresa_id = $1 and id = $2`,
+      [ctx.empresaId, id, hashToken(token)],
+      db,
+    );
     await q('update oportunidades set valor_proposta_centavos = $3 where empresa_id = $1 and id = $2', [ctx.empresaId, p.oportunidade_id, p.total_centavos], db);
-    await registrar(db, ctx.empresaId, { oportunidadeId: p.oportunidade_id, ator: ator(ctx), tipo: 'proposta_enviada', dados: { numero: p.numero, total_centavos: p.total_centavos } });
+    await registrar(db, ctx.empresaId, { oportunidadeId: p.oportunidade_id, ator: ator(ctx), tipo: 'proposta_enviada', dados: { numero: p.numero, total_centavos: p.total_centavos, link_novo: p.estado === 'enviada' } });
     return p;
   });
   const o = await um<{ etapa: string }>('select etapa from oportunidades where empresa_id = $1 and id = $2', [ctx.empresaId, p.oportunidade_id]);
@@ -104,7 +124,7 @@ export async function enviarProposta(ctx: Ctx, id: string): Promise<string> {
 export async function cancelarProposta(ctx: Ctx, id: string) {
   if (!/^[0-9a-f-]{36}$/i.test(id)) throw new NaoEncontrado();
   const r = await um<{ oportunidade_id: string; numero: number }>(
-    `update propostas set estado = 'cancelada', token_hash = null where empresa_id = $1 and id = $2 and estado in ('rascunho', 'enviada') returning oportunidade_id, numero`,
+    `update propostas set estado = 'cancelada' where empresa_id = $1 and id = $2 and estado in ('rascunho', 'enviada') returning oportunidade_id, numero`,
     [ctx.empresaId, id],
   );
   if (!r) throw new ErroDeUso('Só dá para cancelar uma proposta ainda sem resposta.');
@@ -124,7 +144,7 @@ export async function abrirPropostaPublica(token: string, contarVisita: boolean)
   const p = await um<Proposta & { empresa_id: string; cliente: string }>(
     `select ${colunas('p.')}, p.empresa_id, c.nome as cliente
      from propostas p join oportunidades o on o.id = p.oportunidade_id join contatos c on c.id = o.contato_id join empresas e on e.id = p.empresa_id and e.ativa
-     where p.token_hash = $1 and p.estado <> 'cancelada'`,
+     where p.token_hash = $1`,
     [hashToken(token)],
   );
   if (!p) return null;
@@ -144,24 +164,36 @@ export async function abrirPropostaPublica(token: string, contarVisita: boolean)
 }
 
 /** Accept or decline, once. Accepting creates the task to close the sale; it never marks the sale as won. */
-export async function responderProposta(token: string, r: { aceitar: boolean; nome?: string; motivo?: string; ipHash: string }): Promise<'aceita' | 'recusada'> {
+export async function responderProposta(token: string, r: { aceitar: boolean; nome?: string; motivo?: string; ipHash: string; navegador?: string }): Promise<'aceita' | 'recusada'> {
   if (!/^pr_[A-Za-z0-9_-]{20,64}$/.test(token)) throw new NaoEncontrado('Proposta não encontrada.');
   const nome = (r.nome ?? '').trim().replace(/\s+/g, ' ').slice(0, 120);
   if (r.aceitar && nome.length < 3) throw new ErroDeUso('Escreva seu nome completo para aceitar.');
   return tx(async (db) => {
-    const p = await um<{ id: string; empresa_id: string; oportunidade_id: string; numero: number; estado: string; vencida: boolean; responsavel_id: string | null; contato_id: string; etapa: string }>(
-      `select p.id, p.empresa_id, p.oportunidade_id, p.numero, p.estado, (p.validade < (now() at time zone 'America/Sao_Paulo')::date) as vencida, o.responsavel_id, o.contato_id, o.etapa
+    const p = await um<{ id: string; empresa_id: string; oportunidade_id: string; numero: number; estado: string; vencida: boolean; responsavel_id: string | null; contato_id: string; etapa: string; conteudo: unknown }>(
+      `select p.id, p.empresa_id, p.oportunidade_id, p.numero, p.estado, (p.validade < (now() at time zone 'America/Sao_Paulo')::date) as vencida, o.responsavel_id, o.contato_id, o.etapa,
+              jsonb_build_object('titulo', p.titulo, 'itens', p.itens, 'condicoes', p.condicoes, 'validade', p.validade, 'total_centavos', p.total_centavos, 'consumidor', p.consumidor) as conteudo
        from propostas p join oportunidades o on o.id = p.oportunidade_id where p.token_hash = $1 for update of p`,
       [hashToken(token)],
       db,
     );
-    if (!p || p.estado === 'cancelada') throw new NaoEncontrado('Proposta não encontrada.');
+    if (!p) throw new NaoEncontrado('Proposta não encontrada.');
+    if (p.estado === 'cancelada') throw new ErroDeUso('Esta proposta foi cancelada pela empresa.');
     if (p.estado !== 'enviada') throw new ErroDeUso('Esta proposta já foi respondida.');
     if (p.vencida && r.aceitar) throw new ErroDeUso('A validade desta proposta terminou. Fale com a empresa para receber uma nova.');
     const estado = r.aceitar ? 'aceita' : 'recusada';
     await q(
-      `update propostas set estado = $2, respondida_em = now(), aceite_nome = $3, aceite_ip_hash = $4, motivo_recusa = $5 where id = $1`,
-      [p.id, estado, r.aceitar ? nome : '', r.ipHash.slice(0, 64), r.aceitar ? '' : (r.motivo ?? '').trim().slice(0, 500)],
+      `update propostas set estado = $2, respondida_em = now(), aceite_nome = $3, aceite_ip_hash = $4, motivo_recusa = $5, conteudo_hash = $6, texto_aceite = $7, aceite_navegador = $8 where id = $1`,
+      [
+        p.id,
+        estado,
+        r.aceitar ? nome : '',
+        r.ipHash.slice(0, 64),
+        r.aceitar ? '' : (r.motivo ?? '').trim().slice(0, 500),
+        // Proof of what was shown: the content's fingerprint and the exact acceptance text.
+        createHash('sha256').update(JSON.stringify(p.conteudo)).digest('hex'),
+        r.aceitar ? TEXTO_ACEITE : '',
+        (r.navegador ?? '').slice(0, 200),
+      ],
       db,
     );
     await q('update oportunidades set ultima_interacao_em = now() where id = $1', [p.oportunidade_id], db);
