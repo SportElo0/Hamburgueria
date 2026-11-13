@@ -243,12 +243,15 @@ Outros:
 - Não usar as senhas pessoais dos usuários para entrar no painel.
 - Campanhas só para quem marcou o aceite; nada de "sorteio" falso.
 
-## Growlift Comercial (`comercial/`), 12/11/2026
+## Growlift Comercial (`comercial/`), 13/11/2026
 
-Produto novo e próprio (não é o painel dos restaurantes): site com formulário de orçamento, chat com assistente virtual, painel de oportunidades, atendimento, tarefas e métricas, para várias empresas com dados separados. Primeiro segmento: energia solar.
+Produto próprio da Growlift (parecido com o GoHighLevel) para empresas de serviços, com dados separados por empresa. Demonstração com empresas fictícias (Lumivale Energia Solar, Sol do Vale).
 
-- **Estado:** primeira versão funcional, só local. Nada publicado, nada contratado.
-- **Testado:** 38 testes de serviço e o percurso principal no navegador em tela de celular.
-- **Simulado:** assistente de IA e WhatsApp (aparece “Simulação” na tela). Os adaptadores reais existem, mas não foram testados: faltam a chave da API de IA e uma conta do WhatsApp Business; a documentação da Meta não abriu do ambiente de desenvolvimento.
-- **Como rodar, logins de demonstração, custos e próximos passos:** `comercial/README.md`. Roteiro de apresentação: `comercial/DEMONSTRACAO.md`.
-- **Antes de publicar:** rodar `revisor-seguranca` e `revisor-legal`, ligar e-mail, conferir o WhatsApp na documentação da Meta.
+- **No ar:** https://growlift-comercial.vercel.app (Vercel `prj_6OPlRbu2UXkOzM6C2eoOw4wGYiyC`, banco no Supabase `nlclevmyogssfejugcle`). Produção aberta, prévias protegidas. Último deploy: commit `4aa8890`. Login de demonstração: `comercial/README.md`.
+- **Como publicar:** deploy a partir do GitHub `SportElo0/Hamburgueria`, branch `claude/downtown-burger-site`, Node 22. O build roda `npm run migrar && npm run demo && npm run build`. Plano grátis da Vercel tem limite de ~100 deploys por dia.
+- **Pronto:** formulário e balão de chat para o site do cliente (`public/chat.js`); Ana (IA) no WhatsApp marcando, remarcando e cancelando visitas; ligação não atendida → WhatsApp (só para quem aperta 1); agenda de visitas com lembrete, bloqueios e horário por dia; funil, tarefas e fluxos; app no celular (PWA) com avisos; proposta online com aceite e comprovante; resultado dos anúncios (só Growlift); limpeza automática de dados (24 meses por padrão). 115 testes passando. Revisões de segurança e legal feitas em cada parte.
+- **Simulado até fechar o primeiro cliente:** IA (falta a chave da Anthropic), WhatsApp oficial (API da Meta do cliente + modelos aprovados), telefonia (escolher provedor), e-mail de envio.
+- **Pendências:** advogado revisar o texto de aceite da proposta; chaves VAPID próprias (hoje derivadas do segredo do Supabase); planos pagos de Supabase/Vercel para uso real.
+- **Próximos possíveis:** formulários de anúncios Google/Meta no funil, Pix do pedido (Mercado Pago), Instagram/Facebook na mesma caixa, avaliações do Google, gasto dos anúncios automático.
+- **Apresentação (slides):** https://claude.ai/artifact/EivJ2X7zttr2JW9EwCcmcR
+- **Detalhes técnicos de cada parte:** `comercial/README.md`.
