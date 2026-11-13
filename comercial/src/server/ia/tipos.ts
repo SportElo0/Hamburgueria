@@ -13,6 +13,8 @@ export interface ContextoIA {
   faltando: { id: string; pergunta: string }[];
   /** Free visit times the assistant may offer and book; null when the company's calendar (or booking by the assistant) is off. */
   horarios: { id: string; texto: string }[] | null;
+  /** The customer's next visit already booked (only with the calendar on), e.g. "sexta, 14/11 às 10h". */
+  visitaAtual?: string | null;
 }
 
 export interface PedidoIA {
@@ -66,6 +68,16 @@ export const FERRAMENTAS = [
     input_schema: { type: 'object' as const, properties: { horario: { type: 'string', description: 'O id do horário escolhido, exatamente como na lista.' } }, required: ['horario'] },
   },
   {
+    name: 'remarcar_visita',
+    description: 'Muda a visita já marcada deste cliente para outro horário que ele escolheu. Use só um id da lista "horarios_livres". Só diga que mudou depois que esta ação responder ok.',
+    input_schema: { type: 'object' as const, properties: { horario: { type: 'string', description: 'O id do novo horário, exatamente como na lista.' } }, required: ['horario'] },
+  },
+  {
+    name: 'cancelar_visita',
+    description: 'Cancela a visita já marcada deste cliente. Use só depois que ele confirmou que quer cancelar.',
+    input_schema: { type: 'object' as const, properties: {} },
+  },
+  {
     name: 'encaminhar_para_pessoa',
     description:
       'Passa a conversa para uma pessoa da equipe. Use quando o cliente pedir, em negociação de preço, reclamação, dúvida técnica fora do conteúdo aprovado ou quando você não entendeu duas vezes.',
@@ -76,3 +88,12 @@ export const FERRAMENTAS = [
     },
   },
 ];
+
+/** Tools offered in this conversation: visit tools only with the calendar on, and change/cancel only when there is a visit. */
+export function ferramentasPara(c: ContextoIA) {
+  return FERRAMENTAS.filter((f) => {
+    if (f.name === 'marcar_visita') return !!c.horarios && !c.visitaAtual;
+    if (f.name === 'remarcar_visita' || f.name === 'cancelar_visita') return !!c.horarios && !!c.visitaAtual;
+    return true;
+  });
+}

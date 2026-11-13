@@ -169,3 +169,44 @@ describe('lembrete prometido só quando existe', () => {
     expect(await contar(`consentimentos k join contatos c on c.id = k.contato_id where c.telefone = $1 and k.origem = 'agenda'`, [`55${tel}`])).toBe(0);
   });
 });
+
+describe('dias bloqueados, horário por dia e o cliente mudando a visita', () => {
+  it('não oferece dia bloqueado e respeita o horário de cada dia', async () => {
+    const agora = new Date('2026-11-16T03:00:00Z'); // Monday 0h local
+    const base = A.empresa.config.agenda;
+    const e = { ...A.empresa, config: { ...A.empresa.config, agenda: { ...base, dias: [1, 2, 6], hora_inicio: 8, hora_fim: 18, duracao_min: 60, antecedencia_horas: 0, janela_dias: 7, por_dia: { '6': { inicio: 8, fim: 12 } }, bloqueios: [{ de: '2026-11-17', ate: '2026-11-17', motivo: 'Feriado' }] } } };
+    const hs = await horariosLivres(e, 1000, agora);
+    const dias = new Set(hs.map((h) => paraCampoLocal(h.inicio, FUSO).slice(0, 10)));
+    expect(dias.has('2026-11-17')).toBe(false); // blocked Tuesday
+    const sabado = hs.filter((h) => paraCampoLocal(h.inicio, FUSO).startsWith('2026-11-21')).map((h) => paraCampoLocal(h.inicio, FUSO).slice(11));
+    expect(sabado).toEqual(['08:00', '09:00', '10:00', '11:00']);
+    expect(hs.filter((h) => paraCampoLocal(h.inicio, FUSO).startsWith('2026-11-16')).length).toBe(10);
+  });
+
+  it('o cliente remarca e cancela pelo WhatsApp; a equipe fica sabendo e o lembrete acompanha', async () => {
+    const tel = telefone();
+    const r = await simularEntradaWhatsApp(A.admin, tel, 'Lia Teste', 'Quero agendar uma visita');
+    await simularEntradaWhatsApp(A.admin, tel, 'Lia Teste', '1');
+    await simularEntradaWhatsApp(A.admin, tel, 'Lia Teste', 'sim');
+    const antes = await um<{ id: string; inicio: Date; oportunidade_id: string }>(`select v.id, v.inicio, v.oportunidade_id from visitas v join contatos c on c.id = v.contato_id where c.telefone = $1`, [`55${tel}`]);
+
+    await simularEntradaWhatsApp(A.admin, tel, 'Lia Teste', 'Preciso remarcar');
+    const oferta = (await mensagensDe(A.empresa.id, r.conversaId!)).at(-1)!.corpo;
+    expect(oferta).toMatch(/^Sua visita está marcada para .+\. Para remarcar, tenho estes horários:\n1\) /);
+    const novo = oferta.match(/^2\) (.+)$/m)![1];
+    await simularEntradaWhatsApp(A.admin, tel, 'Lia Teste', '2');
+    expect((await mensagensDe(A.empresa.id, r.conversaId!)).at(-1)!.corpo).toBe(`Pronto, mudei sua visita para ${novo}. A equipe já ficou sabendo.`);
+    const depois = await um<{ inicio: Date; estado: string }>('select inicio, estado from visitas where id = $1', [antes!.id]);
+    expect(textoHorario(depois!.inicio, FUSO)).toBe(novo);
+    expect(await contar(`trabalhos where tipo = 'lembrete_visita' and estado = 'pendente' and dados ->> 'visita' = $1 and dados ->> 'inicio' = $2`, [antes!.id, depois!.inicio.toISOString()])).toBe(1);
+    expect(await contar(`notificacoes where empresa_id = $1 and titulo = $2`, [A.empresa.id, `Cliente remarcou a visita: ${novo}`])).toBe(1);
+
+    await simularEntradaWhatsApp(A.admin, tel, 'Lia Teste', 'Quero cancelar a visita');
+    expect((await mensagensDe(A.empresa.id, r.conversaId!)).at(-1)!.corpo).toBe(`Quer mesmo cancelar a visita de ${novo}? Responda SIM para cancelar.`);
+    await simularEntradaWhatsApp(A.admin, tel, 'Lia Teste', 'Sim');
+    expect((await mensagensDe(A.empresa.id, r.conversaId!)).at(-1)!.corpo).toBe(`Pronto, cancelei a visita de ${novo}. A equipe já sabe. Se quiser marcar outro dia, é só falar.`);
+    expect((await um<{ estado: string }>('select estado from visitas where id = $1', [antes!.id]))!.estado).toBe('cancelada');
+    expect(await contar(`trabalhos where tipo = 'lembrete_visita' and estado = 'pendente' and dados ->> 'visita' = $1`, [antes!.id])).toBe(0);
+    expect(await contar(`notificacoes where empresa_id = $1 and titulo = $2`, [A.empresa.id, `Cliente cancelou a visita de ${novo}`])).toBe(1);
+  });
+});

@@ -47,12 +47,35 @@ export const iaSimulada: AdaptadorIA = {
       const n = t.match(/^\s*(?:o |a |opcao |opção )?([1-9])\b/)?.[1];
       const escolhido = n ? oferecidos[Number(n) - 1] : oferecidos.find((o) => t.includes(limpo(o).split(' às ')[0]));
       const h = escolhido && c.horarios.find((x) => x.texto === escolhido);
+      if (h && c.visitaAtual && anterior.includes('Para remarcar')) {
+        const r = await executar('remarcar_visita', { horario: h.id });
+        if (r.startsWith('ok')) return fim(`Pronto, mudei sua visita para ${h.texto}. A equipe já ficou sabendo.`);
+        return fim(`${r.replace(/^erro: /, '')} Quer escolher outro horário?`);
+      }
       if (h) {
         const r = await executar('marcar_visita', { horario: h.id });
         if (r.startsWith('ok')) return fim(`Reservei o horário de ${h.texto}. A equipe confirma o endereço com você e, se algo não encaixar, combinamos outro horário.`);
         if (/telefone/.test(r)) return fim(`Para marcar, preciso de alguns dados seus. ${faltando[0]?.pergunta ?? ''}`.trim());
         return fim(`${r.replace(/^erro: /, '').replace(/ Ofereça outro horário da lista\.$/, '')} Quer escolher outro horário?`);
       }
+    }
+
+    // The customer's visit already booked: change or cancel it.
+    if (c.visitaAtual && anterior.includes('Responda SIM para cancelar')) {
+      if (/^\s*(sim|s|pode|quero|isso|confirmo)\b/.test(t)) {
+        const r = await executar('cancelar_visita', {});
+        if (r.startsWith('ok')) return fim(`Pronto, cancelei a visita de ${c.visitaAtual}. A equipe já sabe. Se quiser marcar outro dia, é só falar.`);
+        return fim('Não consegui cancelar agora. Vou pedir para uma pessoa da equipe falar com você.');
+      }
+      return fim(`Combinado, a visita de ${c.visitaAtual} continua marcada.`);
+    }
+    if (c.visitaAtual && c.horarios && /(desmarcar|cancelar)/.test(t)) {
+      return fim(`Quer mesmo cancelar a visita de ${c.visitaAtual}? Responda SIM para cancelar.`);
+    }
+    if (c.visitaAtual && c.horarios && /(remarcar|mudar|trocar|outro dia|outro horario|adiar)/.test(t)) {
+      const opcoes = c.horarios.slice(0, 3);
+      if (!opcoes.length) return fim(`Sua visita está marcada para ${c.visitaAtual}. Não tenho outro horário livre nos próximos dias; vou pedir para a equipe combinar com você.`);
+      return fim(`Sua visita está marcada para ${c.visitaAtual}. Para remarcar, tenho estes horários:\n${opcoes.map((h, i) => `${i + 1}) ${h.texto}`).join('\n')}\nQual fica melhor? É só responder com o número.`);
     }
 
     // Was the previous message one of our questions? Then this is the answer to it.

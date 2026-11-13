@@ -229,7 +229,25 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
       await salvarConfig(ctx, 'ia', { ...atual.ia, ativa: fd.get('ativa') === 'on', nome: t(fd, 'nome') || 'Ana', modelo: t(fd, 'modelo'), limite_respostas_mes: num('limite_respostas_mes'), max_mensagens_contexto: num('max_mensagens_contexto') });
     } else if (secao === 'agenda') {
       const dias = fd.getAll('dias').map((d) => Number(d)).filter((d) => d >= 0 && d <= 6);
-      await salvarConfig(ctx, 'agenda', { ativa: fd.get('ativa') === 'on', dias, hora_inicio: num('hora_inicio'), hora_fim: num('hora_fim'), duracao_min: num('duracao_min'), capacidade: num('capacidade'), antecedencia_horas: num('antecedencia_horas'), janela_dias: num('janela_dias'), ia_marca: fd.get('ia_marca') === 'on', lembrete: fd.get('lembrete') === 'on' });
+      const por_dia: Record<string, { inicio: number; fim: number }> = {};
+      for (const d of dias) {
+        const inicio = num(`inicio_${d}`);
+        const fim = num(`fim_${d}`);
+        if (!(fim > inicio)) throw new ErroDeUso('Em cada dia, o fim das visitas precisa ser depois do começo.');
+        por_dia[String(d)] = { inicio, fim };
+      }
+      const bloqueios = t(fd, 'bloqueios').split('\n').map((l) => l.trim()).filter(Boolean).map((l) => {
+        const m = l.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s*(?:a|até|-)\s*(\d{1,2})\/(\d{1,2})\/(\d{4}))?\s*(.*)$/);
+        if (!m) throw new ErroDeUso(`Não entendi a data “${l.slice(0, 30)}”. Use 25/12/2026 ou 02/01/2027 a 10/01/2027.`);
+        const iso = (d: string, mes: string, a: string) => `${a}-${mes.padStart(2, '0')}-${d.padStart(2, '0')}`;
+        const de = iso(m[1], m[2], m[3]);
+        const ate = m[4] ? iso(m[4], m[5], m[6]) : de;
+        if (ate < de) throw new ErroDeUso(`No bloqueio “${l.slice(0, 30)}”, a segunda data vem antes da primeira.`);
+        return { de, ate, motivo: m[7].replace(/^[-–:]\s*/, '').slice(0, 60) };
+      });
+      const primeiro = por_dia[String(dias[0])];
+      await salvarConfig(ctx, 'agenda', { ativa: fd.get('ativa') === 'on', dias, por_dia, bloqueios, hora_inicio: primeiro?.inicio ?? atual.agenda.hora_inicio, hora_fim: primeiro?.fim ?? atual.agenda.hora_fim, duracao_min: num('duracao_min'), capacidade: num('capacidade'), antecedencia_horas: num('antecedencia_horas'), janela_dias: num('janela_dias'), ia_marca: fd.get('ia_marca') === 'on', lembrete: fd.get('lembrete') === 'on' });
+
     } else if (secao === 'avaliacao') {
       const link = t(fd, 'link');
       if (link && !/^https:\/\/[^\s]+$/.test(link)) throw new ErroDeUso('O link de avaliação precisa começar com https://');

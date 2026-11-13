@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { promptDoSistema } from './prompt';
-import { FERRAMENTAS, type AdaptadorIA, type Executar, type PedidoIA, type RespostaIA } from './tipos';
+import { ferramentasPara, type AdaptadorIA, type Executar, type PedidoIA, type RespostaIA } from './tipos';
 
 /** Models that take the server-side refusal fallback. */
 const COM_FALLBACK = /^claude-(opus-5|sonnet-5-5|fable-5)/;
@@ -33,7 +33,7 @@ export function iaAnthropic(apiKey: string): AdaptadorIA {
             { type: 'text', text: fixo, cache_control: { type: 'ephemeral' } },
             { type: 'text', text: variavel },
           ],
-          tools: p.contexto.horarios ? FERRAMENTAS : FERRAMENTAS.filter((f) => f.name !== 'marcar_visita'),
+          tools: ferramentasPara(p.contexto),
           messages,
           ...(fallback ? { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const } : {}),
         });

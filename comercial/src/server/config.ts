@@ -129,6 +129,10 @@ export const ConfigEmpresa = z.object({
       ia_marca: z.boolean().default(true),
       /** WhatsApp reminder one day before (only for who agreed). */
       lembrete: z.boolean().default(true),
+      /** Different hours on some weekdays (key "0"–"6"); days not listed use hora_inicio/hora_fim. */
+      por_dia: z.record(z.string().regex(/^[0-6]$/), z.object({ inicio: z.number().int().min(0).max(23), fim: z.number().int().min(1).max(24) })).default({}),
+      /** Days without visits (holidays, vacations, days off), local dates YYYY-MM-DD, inclusive. */
+      bloqueios: z.array(z.object({ de: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), ate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), motivo: z.string().trim().max(60).default('') })).max(60).default([]),
     })
     .prefault({}),
   campos: z.array(Campo).max(10).default([]),

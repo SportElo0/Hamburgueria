@@ -74,7 +74,7 @@ export interface Horario {
 export async function horariosLivres(empresa: Empresa, max = 6, agora = new Date(), db?: Db): Promise<Horario[]> {
   const a = empresa.config.agenda;
   const fuso = empresa.config.regras.fuso;
-  if (!a.ativa || !a.dias.length || a.hora_fim * 60 - a.duracao_min < a.hora_inicio * 60) return [];
+  if (!a.ativa || !a.dias.length) return [];
   const desde = new Date(agora.getTime() + a.antecedencia_horas * 3_600_000);
   const ate = new Date(agora.getTime() + a.janela_dias * 86_400_000);
   const ocupadas = await q<{ inicio: Date; fim: Date }>(`select inicio, fim from visitas where empresa_id = $1 and estado = any($2) and fim > $3 and inicio < $4`, [empresa.id, ATIVAS, desde, ate], db);
@@ -82,10 +82,13 @@ export async function horariosLivres(empresa: Empresa, max = 6, agora = new Date
   const hoje = partes(agora, fuso);
   for (let d = 0; d <= a.janela_dias; d++) {
     const base = new Date(Date.UTC(hoje.ano, hoje.mes - 1, hoje.dia + d));
+    const dataLocal = base.toISOString().slice(0, 10);
+    const semana = base.getUTCDay();
+    if (!a.dias.includes(semana) || a.bloqueios.some((b) => dataLocal >= b.de && dataLocal <= b.ate)) continue;
+    const horas = a.por_dia[String(semana)] ?? { inicio: a.hora_inicio, fim: a.hora_fim };
     const dia: Horario[] = [];
-    for (let min = a.hora_inicio * 60; min + a.duracao_min <= a.hora_fim * 60; min += a.duracao_min) {
+    for (let min = horas.inicio * 60; min + a.duracao_min <= horas.fim * 60; min += a.duracao_min) {
       const inicio = instanteLocal(base.getUTCFullYear(), base.getUTCMonth() + 1, base.getUTCDate(), Math.floor(min / 60), min % 60, fuso);
-      if (!a.dias.includes(partes(inicio, fuso).semana)) break;
       const fim = new Date(inicio.getTime() + a.duracao_min * 60_000);
       if (inicio < desde || inicio > ate) continue;
       const usadas = ocupadas.filter((o) => o.inicio < fim && o.fim > inicio).length;
@@ -216,16 +219,43 @@ export async function marcarVisitaManual(ctx: Ctx, entrada: z.input<typeof Entra
   return tx(async (db) => (await marcarVisita(db, empresa, { ...resto, inicio, origem: 'usuario', criadoPor: ctx.userId, checarLivre: false, aceiteLembreteEquipe: aceiteLembrete ? ctx.nome : null })).texto);
 }
 
+type AtorEvento = Parameters<typeof registrar>[2]['ator'];
+
+/** Cancels inside the caller's transaction: the reminder and the assistant's "confirm" task go too. */
+async function cancelarNoBanco(db: Db, empresaId: string, id: string, quem: AtorEvento) {
+  const v = await um<{ oportunidade_id: string; contato_id: string; estado: EstadoVisita }>('select oportunidade_id, contato_id, estado from visitas where empresa_id = $1 and id = $2 for update', [empresaId, id], db);
+  if (!v) throw new NaoEncontrado('Visita não encontrada.');
+  if (v.estado === 'cancelada') throw new ErroDeUso('Esta visita foi cancelada.');
+  await q(`update visitas set estado = 'cancelada', atualizado_em = now() where empresa_id = $1 and id = $2`, [empresaId, id], db);
+  await q(`update tarefas set concluida_em = now() where empresa_id = $1 and chave = $2 and concluida_em is null`, [empresaId, `visita-ia:${id}`], db);
+  await q(`update trabalhos set estado = 'cancelado', resultado = 'Visita cancelada.', concluido_em = now() where empresa_id = $1 and tipo = 'lembrete_visita' and estado = 'pendente' and dados ->> 'visita' = $2`, [empresaId, id], db);
+  await registrar(db, empresaId, { oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: quem, tipo: 'visita_alterada', dados: { estado: 'cancelada' } });
+  return v;
+}
+
+/** Moves a visit inside the caller's transaction (calendar locked); the reminder follows the new time. */
+async function remarcarNoBanco(db: Db, empresa: Empresa, id: string, inicio: Date, quem: AtorEvento, checarLivre: boolean) {
+  await db.query('select pg_advisory_xact_lock(hashtext($1))', [`agenda:${empresa.id}`]);
+  const v = await um<{ oportunidade_id: string; contato_id: string; estado: EstadoVisita }>('select oportunidade_id, contato_id, estado from visitas where empresa_id = $1 and id = $2 for update', [empresa.id, id], db);
+  if (!v) throw new NaoEncontrado('Visita não encontrada.');
+  if (!ATIVAS.includes(v.estado)) throw new ErroDeUso('Só dá para remarcar uma visita marcada ou confirmada.');
+  if (checarLivre && !(await horariosLivres(empresa, 1000, new Date(), db)).some((h) => h.inicio.getTime() === inicio.getTime())) throw new ErroDeUso('Esse horário não está mais livre.');
+  await q(`update visitas set inicio = $3, fim = $4, estado = 'marcada', atualizado_em = now() where empresa_id = $1 and id = $2`, [empresa.id, id, inicio, new Date(inicio.getTime() + empresa.config.agenda.duracao_min * 60_000)], db);
+  await q(`update trabalhos set estado = 'cancelado', resultado = 'Visita remarcada.', concluido_em = now() where empresa_id = $1 and tipo = 'lembrete_visita' and estado = 'pendente' and dados ->> 'visita' = $2`, [empresa.id, id], db);
+  await agendarLembrete(db, empresa, id, v.oportunidade_id, inicio);
+  const texto = textoHorario(inicio, empresa.config.regras.fuso);
+  await registrar(db, empresa.id, { oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: quem, tipo: 'visita_alterada', dados: { estado: 'remarcada', quando: texto } });
+  return { ...v, texto };
+}
+
 export async function mudarVisita(ctx: Ctx, id: string, acao: 'confirmada' | 'realizada' | 'faltou' | 'cancelada') {
   if (!/^[0-9a-f-]{36}$/i.test(id)) throw new NaoEncontrado();
   await tx(async (db) => {
+    if (acao === 'cancelada') return void (await cancelarNoBanco(db, ctx.empresaId, id, ator(ctx)));
     const v = await um<{ oportunidade_id: string; contato_id: string; estado: EstadoVisita }>('select oportunidade_id, contato_id, estado from visitas where empresa_id = $1 and id = $2 for update', [ctx.empresaId, id], db);
     if (!v) throw new NaoEncontrado('Visita não encontrada.');
     if (v.estado === 'cancelada') throw new ErroDeUso('Esta visita foi cancelada.');
     await q('update visitas set estado = $3, atualizado_em = now() where empresa_id = $1 and id = $2', [ctx.empresaId, id, acao], db);
-    // A cancelled visit loses its reminder (the job also checks the state before sending).
-    if (acao === 'cancelada') await q(`update tarefas set concluida_em = now() where empresa_id = $1 and chave = $2 and concluida_em is null`, [ctx.empresaId, `visita-ia:${id}`], db);
-    if (acao === 'cancelada') await q(`update trabalhos set estado = 'cancelado', resultado = 'Visita cancelada.', concluido_em = now() where empresa_id = $1 and tipo = 'lembrete_visita' and estado = 'pendente' and dados ->> 'visita' = $2`, [ctx.empresaId, id], db);
     await registrar(db, ctx.empresaId, { oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: ator(ctx), tipo: 'visita_alterada', dados: { estado: acao } });
   });
 }
@@ -235,16 +265,39 @@ export async function remarcarVisita(ctx: Ctx, id: string, novo: string) {
   const inicio = deCampoLocal(novo, empresa.config.regras.fuso);
   if (!inicio || inicio.getTime() < Date.now()) throw new ErroDeUso('Escolha um horário no futuro.');
   if (!/^[0-9a-f-]{36}$/i.test(id)) throw new NaoEncontrado();
-  await tx(async (db) => {
-    await db.query('select pg_advisory_xact_lock(hashtext($1))', [`agenda:${ctx.empresaId}`]);
-    const v = await um<{ oportunidade_id: string; contato_id: string; estado: EstadoVisita }>('select oportunidade_id, contato_id, estado from visitas where empresa_id = $1 and id = $2 for update', [ctx.empresaId, id], db);
-    if (!v) throw new NaoEncontrado('Visita não encontrada.');
-    if (!ATIVAS.includes(v.estado)) throw new ErroDeUso('Só dá para remarcar uma visita marcada ou confirmada.');
-    await q(`update visitas set inicio = $3, fim = $4, estado = 'marcada', atualizado_em = now() where empresa_id = $1 and id = $2`, [ctx.empresaId, id, inicio, new Date(inicio.getTime() + empresa.config.agenda.duracao_min * 60_000)], db);
-    await q(`update trabalhos set estado = 'cancelado', resultado = 'Visita remarcada.', concluido_em = now() where empresa_id = $1 and tipo = 'lembrete_visita' and estado = 'pendente' and dados ->> 'visita' = $2`, [ctx.empresaId, id], db);
-    await agendarLembrete(db, empresa, id, v.oportunidade_id, inicio);
-    await registrar(db, ctx.empresaId, { oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: ator(ctx), tipo: 'visita_alterada', dados: { estado: 'remarcada', quando: textoHorario(inicio, empresa.config.regras.fuso) } });
-  });
+  await tx((db) => remarcarNoBanco(db, empresa, id, inicio, ator(ctx), false));
+}
+
+/* ---------- The customer changes the visit on WhatsApp (through the assistant) ---------- */
+
+/** The contact's next active visit, if any (what the assistant may move or cancel: never another customer's). */
+export async function proximaVisitaDoContato(empresa: Empresa, contatoId: string, db?: Db): Promise<{ id: string; texto: string; responsavel_id: string | null; oportunidade_id: string } | null> {
+  const v = await um<{ id: string; inicio: Date; responsavel_id: string | null; oportunidade_id: string }>(
+    `select id, inicio, responsavel_id, oportunidade_id from visitas where empresa_id = $1 and contato_id = $2 and estado = any($3) and inicio > now() order by inicio limit 1`,
+    [empresa.id, contatoId, ATIVAS],
+    db,
+  );
+  return v ? { id: v.id, texto: textoHorario(v.inicio, empresa.config.regras.fuso), responsavel_id: v.responsavel_id, oportunidade_id: v.oportunidade_id } : null;
+}
+
+async function avisarEquipe(db: Db, empresaId: string, para: string | null, titulo: string, oportunidadeId: string) {
+  await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresaId, para, titulo, '', `/painel/oportunidades/${oportunidadeId}`], db);
+}
+
+export async function remarcarPeloCliente(db: Db, empresa: Empresa, contatoId: string, inicio: Date): Promise<string> {
+  const v = await proximaVisitaDoContato(empresa, contatoId, db);
+  if (!v) throw new ErroDeUso('Este cliente não tem visita marcada.');
+  const r = await remarcarNoBanco(db, empresa, v.id, inicio, { tipo: 'visitante' }, true);
+  await avisarEquipe(db, empresa.id, v.responsavel_id, `Cliente remarcou a visita: ${r.texto}`, v.oportunidade_id);
+  return r.texto;
+}
+
+export async function cancelarPeloCliente(db: Db, empresa: Empresa, contatoId: string): Promise<string> {
+  const v = await proximaVisitaDoContato(empresa, contatoId, db);
+  if (!v) throw new ErroDeUso('Este cliente não tem visita marcada.');
+  await cancelarNoBanco(db, empresa.id, v.id, { tipo: 'visitante' });
+  await avisarEquipe(db, empresa.id, v.responsavel_id, `Cliente cancelou a visita de ${v.texto}`, v.oportunidade_id);
+  return v.texto;
 }
 
 export interface VisitaLista {

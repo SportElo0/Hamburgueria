@@ -129,9 +129,10 @@ Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `
 
 ## Agenda de visitas
 
-Menu **Agenda** (todos) e Configurações › Agenda (administrador): dias da semana, primeira e última hora, duração, quantas visitas ao mesmo tempo, antecedência mínima e quantos dias à frente.
+Menu **Agenda** (todos) e Configurações › Agenda (administrador): dias da semana com horário próprio para cada dia (ex.: sábado das 8 às 12), dias sem visita (feriados, férias, folgas: “25/12/2026 Natal” ou “02/01/2027 a 10/01/2027 Férias”), duração, quantas visitas ao mesmo tempo, antecedência mínima e quantos dias à frente.
 
 - **A assistente marca:** quando o cliente pede visita, ela oferece até 3 horários livres (só da lista calculada pelo servidor) e reserva o escolhido. Uma pessoa confirma o endereço: a reserva cria a tarefa “Confirmar a visita”. A assistente diz “reservei o horário”, nunca “confirmado”. Limites: uma visita ativa por cliente e 20 por dia pela assistente.
+- **O cliente remarca ou cancela pelo WhatsApp:** com visita marcada, se ele pede para remarcar, a assistente oferece outros horários livres e muda a visita; se pede para cancelar, ela confirma antes. O lembrete acompanha e o responsável recebe o aviso.
 - **A equipe marca** na página da oportunidade (qualquer horário), confirma, marca como realizada ou “cliente faltou”, remarca e cancela.
 - **Lembrete um dia antes** pelo WhatsApp (modelo aprovado “lembrete de visita”). Depois de reservar pelo WhatsApp, o sistema pergunta, com texto fixo, se o cliente quer o lembrete; só grava a autorização se ele responder SIM. Também vale se ele pediu à equipe (caixa na oportunidade, registrada com o nome de quem marcou) ou aceitou o texto do formulário versão 4. Visita a menos de um dia: sem lembrete. Cancelar ou remarcar cancela/refaz o lembrete.
 - **Google Agenda:** cada pessoa cria um endereço secreto (Agenda › “Criar meu link da agenda”) e assina no Google Agenda (“Do URL”). Administrador vê as visitas da empresa; vendedor, as dele. Mostra só o primeiro nome e o endereço. O Google atualiza esse tipo de agenda a cada algumas horas. Cada visita também tem “Pôr no Google Agenda”. Sincronização em tempo real com o Google (login com a conta Google) fica para depois.

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PERGUNTA_LEMBRETE, aceitarLembrete, horariosLivres, marcarVisita } from './agenda';
+import { PERGUNTA_LEMBRETE, aceitarLembrete, cancelarPeloCliente, horariosLivres, marcarVisita, proximaVisitaDoContato, remarcarPeloCliente } from './agenda';
 import { lerWebhook } from './canais/whatsapp-cloud';
 import { normalizarTelefone, type EstadoConversa, type Etapa } from './config';
 import { conhecimentoAtual } from './conhecimento';
@@ -436,6 +436,24 @@ async function executarAcao(empresa: Empresa, conversaId: string, nome: string, 
         throw err;
       }
     }
+    if (nome === 'remarcar_visita' || nome === 'cancelar_visita') {
+      const a = empresa.config.agenda;
+      if (!a.ativa || !a.ia_marca || !v.contato_id) return 'erro: a agenda não está ligada; passe para uma pessoa.';
+      try {
+        if (nome === 'cancelar_visita') {
+          const texto = await cancelarPeloCliente(db, empresa, v.contato_id);
+          return `ok: visita de ${texto} cancelada; a equipe foi avisada.`;
+        }
+        const id = String((entrada as { horario?: unknown })?.horario ?? '');
+        const inicio = new Date(id);
+        if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(id) || Number.isNaN(inicio.getTime())) return 'erro: use um id da lista horarios_livres.';
+        const texto = await remarcarPeloCliente(db, empresa, v.contato_id, inicio);
+        return `ok: visita remarcada para ${texto}; a equipe foi avisada.`;
+      } catch (err) {
+        if (err instanceof ErroDeUso) return `erro: ${err.message}`;
+        throw err;
+      }
+    }
     if (nome === 'encaminhar_para_pessoa') {
       const e = entrada as { motivo?: string; resumo?: string };
       const motivo = (MOTIVOS_ENCAMINHAMENTO as readonly string[]).includes(e?.motivo ?? '') ? e.motivo! : 'nao_entendi';
@@ -546,7 +564,8 @@ export async function responderComIA(t: Trabalho): Promise<Resultado> {
   for (const [id, valor] of Object.entries(v.dados)) if (!id.startsWith('_')) coletado[id] = id === 'telefone' ? 'informado' : valor;
   const agenda = empresa.config.agenda;
   const horarios = agenda.ativa && agenda.ia_marca ? (await horariosLivres(empresa, 6)).map((h) => ({ id: h.id, texto: h.texto })) : null;
-  const contexto: ContextoIA = { empresa: empresa.nome, assistente: cfg.nome, canal: v.canal, conhecimento: k.dados, campos: empresa.config.campos, coletado, faltando: faltando(empresa, v), horarios };
+  const visitaAtual = horarios && v.contato_id ? ((await proximaVisitaDoContato(empresa, v.contato_id))?.texto ?? null) : null;
+  const contexto: ContextoIA = { empresa: empresa.nome, assistente: cfg.nome, canal: v.canal, conhecimento: k.dados, campos: empresa.config.campos, coletado, faltando: faltando(empresa, v), horarios, visitaAtual };
   let resposta;
   try {
     resposta = await adaptador.responder({ contexto, historico, modelo: cfg.modelo || modeloPadrao(), maxTokens: cfg.max_tokens_resposta }, (nome, entrada) => executarAcao(empresa, v.id, nome, entrada, marcas));

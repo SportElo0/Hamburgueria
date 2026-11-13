@@ -99,13 +99,23 @@ export default async function Configuracoes() {
         <Formulario acao={salvarConfigAcao} className="grid gap-4 sm:grid-cols-2">
           <input type="hidden" name="secao" value="agenda" />
           <div className="sm:col-span-2"><Marcar id="ativa" rotulo="Agenda ligada" marcado={c.agenda.ativa} /></div>
-          <fieldset className="sm:col-span-2"><legend className="rotulo">Dias com visita</legend>
-            <div className="flex flex-wrap gap-x-4 gap-y-1">{['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((d, i) => (
-              <label key={d} className="flex min-h-11 items-center gap-2 text-[15px]"><input type="checkbox" name="dias" value={i} defaultChecked={c.agenda.dias.includes(i)} className="h-5 w-5 accent-[#175cd3]" />{d}</label>
-            ))}</div>
+          <fieldset className="sm:col-span-2"><legend className="rotulo">Dias e horários de visita (de que hora a que hora)</legend>
+            <div className="divide-y divide-linha rounded-lg border border-linha">
+              {['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'].map((d, i) => {
+                const h = c.agenda.por_dia[String(i)] ?? { inicio: c.agenda.hora_inicio, fim: c.agenda.hora_fim };
+                return (
+                  <div key={d} className="flex items-center gap-2 px-3 py-1.5">
+                    <label className="flex min-h-11 min-w-0 flex-1 items-center gap-2 text-[15px]"><input type="checkbox" name="dias" value={i} defaultChecked={c.agenda.dias.includes(i)} className="h-5 w-5 shrink-0 accent-[#175cd3]" />{d}</label>
+                    <input className="campo w-16 px-2 text-center" name={`inicio_${i}`} type="number" min={0} max={23} defaultValue={h.inicio} aria-label={`${d}: primeira visita às (hora)`} />
+                    <span className="text-sm text-suave">às</span>
+                    <input className="campo w-16 px-2 text-center" name={`fim_${i}`} type="number" min={1} max={24} defaultValue={h.fim} aria-label={`${d}: última visita termina até (hora)`} />
+                    <span className="text-sm text-suave">h</span>
+                  </div>
+                );
+              })}
+            </div>
           </fieldset>
-          <Num id="hora_inicio" rotulo="Primeira visita às (hora)" valor={c.agenda.hora_inicio} min={0} max={23} />
-          <Num id="hora_fim" rotulo="Última visita termina até (hora)" valor={c.agenda.hora_fim} min={1} max={24} />
+          <div className="sm:col-span-2"><label className="rotulo" htmlFor="bloqueios">Dias sem visita (feriados, férias, folgas)</label><textarea className="campo" id="bloqueios" name="bloqueios" rows={3} placeholder={'25/12/2026 Natal\n02/01/2027 a 10/01/2027 Férias'} defaultValue={c.agenda.bloqueios.map((b) => `${b.de.split('-').reverse().join('/')}${b.ate !== b.de ? ` a ${b.ate.split('-').reverse().join('/')}` : ''}${b.motivo ? ` ${b.motivo}` : ''}`).join('\n')} /><p className="mt-1 text-sm text-suave">Um por linha: uma data, ou “data a data”, e se quiser o motivo. A assistente não oferece esses dias.</p></div>
           <Num id="duracao_min" rotulo="Duração de cada visita (minutos)" valor={c.agenda.duracao_min} min={15} max={480} />
           <Num id="capacidade" rotulo="Visitas ao mesmo tempo (pessoas que vão)" valor={c.agenda.capacidade} min={1} max={20} />
           <Num id="antecedencia_horas" rotulo="Antecedência mínima para a assistente marcar (horas)" valor={c.agenda.antecedencia_horas} min={0} max={168} />
