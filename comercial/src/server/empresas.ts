@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { criarUsuario } from './auth';
-import { ConfigEmpresa, SEGMENTOS, ambiente, lerConfig } from './config';
+import { ConfigEmpresa, SEGMENTOS, lerConfig } from './config';
 import { ator, exigirAdmin, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
 import { ErroDeUso, NaoAutorizado, NaoEncontrado } from './erros';
+import { enviarEmail, type ResultadoEmail } from './email';
 import { hashToken, novoToken } from './segredos';
 
 export interface Empresa {
@@ -123,19 +124,27 @@ export async function membroAtivo(db: Db, empresaId: string, userId: string): Pr
 const Convite = z.object({ email: z.email('E-mail inválido.').trim().toLowerCase(), papel: z.enum(['admin', 'vendedor']) });
 
 /** Invites someone to the company. The link is shown once to the admin (and stored as a simulated e-mail). */
-export async function convidar(ctx: Ctx, entrada: z.input<typeof Convite>): Promise<{ link: string }> {
+export async function convidar(ctx: Ctx, entrada: z.input<typeof Convite>): Promise<{ link: string; email: ResultadoEmail }> {
   exigirAdmin(ctx);
   const c = Convite.parse(entrada);
   if (await um('select 1 from "user" where email = $1', [c.email])) throw new ErroDeUso('Este e-mail já tem login na plataforma.');
+  const hoje = await um<{ n: number }>(`select count(*)::int as n from eventos where empresa_id = $1 and tipo = 'convite_criado' and criado_em > now() - interval '1 day'`, [ctx.empresaId]);
+  if ((hoje?.n ?? 0) >= 20) throw new ErroDeUso('Limite de 20 convites por dia nesta empresa. Tente de novo amanhã.');
   const token = novoToken();
   const link = `${process.env.APP_URL ?? ''}/convite/${token}`;
   await tx(async (db) => {
     await q('delete from convites where empresa_id = $1 and email = $2 and aceito_em is null', [ctx.empresaId, c.email], db);
     await q(`insert into convites (empresa_id, email, papel, token_hash, expira_em, criado_por) values ($1, $2, $3, $4, now() + interval '7 days', $5)`, [ctx.empresaId, c.email, c.papel, hashToken(token), ctx.userId], db);
-    if (ambiente() !== 'producao') await q('insert into emails_simulados (para, assunto, corpo) values ($1, $2, $3)', [c.email, 'Convite para a plataforma', `Crie seu acesso em: ${link}`], db);
     await registrar(db, ctx.empresaId, { ator: ator(ctx), tipo: 'convite_criado', dados: { papel: c.papel } });
   });
-  return { link };
+  const empresa = (await um<{ nome: string }>('select nome from empresas where id = $1', [ctx.empresaId]))?.nome ?? 'a empresa';
+  const email = await enviarEmail({
+    para: c.email,
+    assunto: `Convite para a equipe da ${empresa} · Growlift Comercial`,
+    link,
+    texto: `Você foi convidado para a equipe da ${empresa} no Growlift Comercial.\n\nPara criar seu acesso, abra: ${link}\n\nO convite vale por 7 dias. Se você não esperava este convite, ignore este e-mail.`,
+  });
+  return { link, email };
 }
 
 export async function conviteValido(token: string) {

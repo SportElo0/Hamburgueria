@@ -27,6 +27,8 @@ export async function migrar(zerar = false) {
     });
     console.log('migração aplicada:', nome);
   }
+  const { agendarFilaNoBanco } = await import('../src/server/agendador-banco');
+  console.log(await agendarFilaNoBanco((sql, params) => q(sql, params as unknown[])));
   return pool();
 }
 

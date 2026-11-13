@@ -4,6 +4,7 @@ import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { feedbacks } from '@/server/avaliacoes';
 import { FRASE_MENU_LIGACAO, ambiente, formatarTelefone } from '@/server/config';
+import { emailLigado } from '@/server/email';
 import { empresaPorId, equipe } from '@/server/empresas';
 import { adaptadorIA, modeloPadrao } from '@/server/ia';
 import { integracaoWhatsApp } from '@/server/integracoes';
@@ -61,7 +62,7 @@ export default async function Configuracoes() {
         <Formulario acao={convidarAcao} limpar className="mt-4 grid gap-3 border-t border-linha pt-4 sm:grid-cols-3">
           <div className="sm:col-span-2"><label className="rotulo" htmlFor="email">Convidar por e-mail</label><input className="campo" id="email" name="email" type="email" required /></div>
           <div><label className="rotulo" htmlFor="papel">Perfil</label><select className="campo" id="papel" name="papel"><option value="vendedor">Vendedor</option><option value="admin">Administrador</option></select></div>
-          <div className="sm:col-span-3"><Enviar secundario>Criar convite</Enviar> <span className="ml-2 text-sm text-suave">O envio de e-mail ainda não está ligado: copie o link que aparece e mande para a pessoa.</span></div>
+          <div className="sm:col-span-3"><Enviar secundario>Criar convite</Enviar> <span className="ml-2 text-sm text-suave">{emailLigado() ? 'O convite vai por e-mail; o link também aparece aqui, para copiar.' : 'O envio de e-mail ainda não está ligado: copie o link que aparece e mande para a pessoa.'}</span></div>
         </Formulario>
         <Formulario acao={responsavelPadraoAcao} className="mt-4 flex flex-wrap items-end gap-3 border-t border-linha pt-4">
           <div className="min-w-56 flex-1"><label className="rotulo" htmlFor="rp">Quem recebe os pedidos novos</label>

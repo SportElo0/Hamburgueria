@@ -270,8 +270,9 @@ export const salvarWhatsAppAcao = async (_: Retorno, fd: FormData) =>
 
 export const convidarAcao = async (_: Retorno, fd: FormData) =>
   tentar(async () => {
-    const { link } = await convidar(await exigirCtx(), { email: t(fd, 'email'), papel: t(fd, 'papel') as 'admin' | 'vendedor' });
-    return { ok: 'Convite criado (vale 7 dias).', copiar: link };
+    const { link, email } = await convidar(await exigirCtx(), { email: t(fd, 'email'), papel: t(fd, 'papel') as 'admin' | 'vendedor' });
+    const aviso = email === 'enviado' ? 'Convite criado e enviado por e-mail (vale 7 dias). O link também está aqui.' : email === 'falhou' ? 'Convite criado (vale 7 dias), mas o e-mail não saiu: copie o link e mande para a pessoa.' : 'Convite criado (vale 7 dias). Copie o link e mande para a pessoa.';
+    return { ok: aviso, copiar: link };
   });
 
 export const membroAcao = async (_: Retorno, fd: FormData) =>

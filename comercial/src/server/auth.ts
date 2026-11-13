@@ -1,8 +1,8 @@
 import { betterAuth } from 'better-auth';
 import { nextCookies } from 'better-auth/next-js';
 import { segredoSessao } from './chaves';
-import { ambiente } from './config';
-import { pool, q } from './db';
+import { pool } from './db';
+import { enviarEmail } from './email';
 
 const g = globalThis as unknown as { __growliftAuth?: ReturnType<typeof criar> };
 
@@ -17,15 +17,14 @@ function criar() {
       disableSignUp: true,
       minPasswordLength: 10,
       revokeSessionsOnPasswordReset: true,
-      // No e-mail provider yet: the message is stored and shown to the Growlift admin as a simulation.
+      // Sent through the e-mail provider when configured; without one it is a simulated e-mail (never stored in production).
       sendResetPassword: async ({ user, url }) => {
-        // Without an e-mail provider the link would only sit in the database: in production it is not stored at all.
-        if (ambiente() === 'producao') return;
-        await q('insert into emails_simulados (para, assunto, corpo) values ($1, $2, $3)', [
-          user.email,
-          'Redefinir a senha',
-          `Para criar uma senha nova, abra: ${url}`,
-        ]);
+        await enviarEmail({
+          para: user.email,
+          assunto: 'Redefinir a senha · Growlift Comercial',
+          link: url,
+          texto: `Recebemos um pedido para criar uma senha nova para ${user.email}.\n\nPara criar a senha, abra: ${url}\n\nSe não foi você, ignore este e-mail: a senha atual continua valendo.`,
+        });
       },
     },
     session: { expiresIn: 60 * 60 * 24 * 7, updateAge: 60 * 60 * 24 },

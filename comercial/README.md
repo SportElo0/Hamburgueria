@@ -4,7 +4,7 @@ Plataforma própria da Growlift para empresas de serviços: recebe pedidos de or
 
 O objetivo é melhorar o atendimento e o acompanhamento da procura que a empresa já tem. A plataforma não promete clientes, vendas nem posição no Google.
 
-**Estado: primeira versão funcional, testada localmente. Não está em produção e não deve ser declarada segura ou pronta para produção sem os passos do fim deste arquivo.**
+**Estado: demonstração no ar em https://growlift-comercial.vercel.app, com empresas fictícias. A IA, o WhatsApp oficial e a telefonia rodam em simulação até o primeiro cliente; antes de atender gente de verdade, siga os passos do fim deste arquivo.**
 
 ## O que existe
 
@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 80 testes (incluindo o adaptador real da IA contra uma API falsa local) de serviço contra o banco de teste |
+| `npm test` | 125 testes (incluindo o adaptador real da IA e o envio de e-mail contra servidores falsos locais) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -58,7 +58,15 @@ Projeto `growlift-comercial` (time da Growlift), protegido: só quem tem acesso 
 1. Na Vercel, ligar o banco Supabase `growlift-comercial` ao projeto `growlift-comercial` (Storage › growlift-comercial › Connect Project). Isso cria `POSTGRES_URL`, `SUPABASE_JWT_SECRET` e outras variáveis, sem ninguém copiar senha.
 2. Publicar. O build cria as tabelas e os dados de demonstração.
 
-Sem `BETTER_AUTH_SECRET`, `CHAVE_CREDENCIAIS` e `CRON_SECRET`, as três são derivadas de `SUPABASE_JWT_SECRET` (uma chave diferente para cada uso). Serve para demonstração. Para cliente real, defina as três: se o segredo do Supabase for trocado, as derivadas mudam (todos saem do login e os tokens de WhatsApp precisam ser salvos de novo).
+Sem `BETTER_AUTH_SECRET`, `CHAVE_CREDENCIAIS` e `CRON_SECRET`, as três são derivadas de `SUPABASE_JWT_SECRET` (uma chave diferente para cada uso). Para cliente real, defina as três e também `VAPID_PUBLIC_KEY` e `VAPID_PRIVATE_KEY`, só nas variáveis da Vercel (nunca no repositório). Trocar `BETTER_AUTH_SECRET` tira todos do login; trocar `CHAVE_CREDENCIAIS` obriga a salvar de novo os tokens de WhatsApp; trocar as VAPID obriga cada pessoa a ligar os avisos de novo.
+
+**Node 22** (fixado em `engines` no `package.json`).
+
+**Fila das automações de 5 em 5 minutos.** O agendamento da Vercel no plano grátis roda só uma vez por dia (`vercel.json`, fica como reserva). Por isso o `npm run migrar`, quando roda no build de produção da Vercel (`VERCEL_ENV=production`; as prévias usam o mesmo banco e não mexem na tarefa) com `APP_URL` em https, liga no Supabase o agendador do próprio banco (`pg_cron` + `pg_net`): a cada 5 minutos o banco chama `/api/cron/fila` com o `CRON_SECRET`. O log do build mostra uma linha `agendador do banco: …` dizendo se ligou ou por que não. Desligar: `FILA_NO_BANCO=0` e apagar a tarefa `growlift-fila` em `cron.job`. O segredo fica guardado na tabela de tarefas do agendador, que só o administrador do banco lê. Código: `src/server/agendador-banco.ts`.
+
+## E-mail (convites e senha)
+
+Com `RESEND_API_KEY` e `EMAIL_REMETENTE` (ex.: `Growlift <nao-responda@growlift.com.br>`) nas variáveis da Vercel, convites da equipe e links de redefinir senha saem pelo Resend (`src/server/email.ts`). Passos: criar a conta no Resend, adicionar o domínio e colocar no DNS os registros que ele pedir (SPF/DKIM), criar a chave de API e salvar as duas variáveis. Sem elas: fora de produção vira “e-mail simulado” (lista na área `/admin`); em produção não sai nada e o link do convite aparece na tela para copiar. Se o provedor recusar, o convite continua valendo e a tela avisa para copiar o link. No HTML, só o link da própria plataforma vira clicável. Limite: 20 convites por empresa por dia.
 
 ## Ambientes
 
@@ -239,7 +247,7 @@ Nenhuma mensalidade é necessária para rodar o núcleo no computador. Em produ�
 - O isolamento entre empresas é feito pelo código (toda consulta leva a empresa da sessão) e pelas chaves estrangeiras; não há políticas de linha (RLS) no banco como segunda barreira.
 - Sem verificação em duas etapas no login.
 - Os limites contra abuso usam o endereço IP informado pelo servidor de borda; atrás de um proxy mal configurado, podem ser contornados. Não há CAPTCHA.
-- O envio de e-mail não existe: convites e links de senha aparecem para copiar (e, fora de produção, na lista de e-mails simulados).
+- Sem `RESEND_API_KEY`, o e-mail não sai: convites e links de senha aparecem para copiar (e, fora de produção, na lista de e-mails simulados).
 - Um só segredo de aplicativo da Meta para todas as empresas (modelo de um aplicativo Growlift).
 - Avisos de entrega que chegarem antes de a plataforma gravar o identificador da mensagem são ignorados.
 - A resistência da assistente a mensagens maliciosas foi testada no simulador e na camada do servidor (que recusa qualquer ação fora da lista); o comportamento do modelo real não foi avaliado.
@@ -261,7 +269,7 @@ Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanh
 ## Próximos passos para o primeiro cliente em produção
 
 1. Escolher e contratar hospedagem e Postgres gerenciado (decisão e custo de vocês); configurar as variáveis e rodar `npm run migrar`.
-2. Ligar um serviço de e-mail para convites e redefinição de senha.
+2. Ligar o envio de e-mail: conta no Resend, domínio verificado e as variáveis `RESEND_API_KEY` e `EMAIL_REMETENTE` (o código já está pronto).
 3. Conferir o adaptador do WhatsApp na documentação atual da Meta e testar com número próprio.
 4. Contratar a chave da API de IA, escolher o modelo e testar a assistente real com o conteúdo do cliente (incluindo tentativas de burlar as regras).
 5. Rodar as revisões de segurança e legal do repositório (`revisor-seguranca`, `revisor-legal`) e corrigir o que apontarem.

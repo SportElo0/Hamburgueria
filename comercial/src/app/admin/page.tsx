@@ -6,6 +6,7 @@ import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { SEGMENTOS, ambiente } from '@/server/config';
 import { q } from '@/server/db';
+import { emailLigado } from '@/server/email';
 import { painelPlataforma } from '@/server/empresas';
 import { exigirPlataforma } from '@/server/sessao';
 
@@ -91,7 +92,7 @@ export default async function Admin() {
         {ambiente() !== 'producao' && (
           <section className="cartao p-4" aria-labelledby="t-emails">
             <h2 id="t-emails" className="font-bold">E-mails simulados</h2>
-            <p className="mt-1 text-sm text-suave">Simulação — nenhum e-mail externo enviado. Convites e links de senha aparecem aqui até um serviço de e-mail ser configurado. Esta lista não existe em produção.</p>
+            <p className="mt-1 text-sm text-suave">{emailLigado() ? 'O envio de e-mail está ligado (Resend): convites e links de senha saem por e-mail. Esta lista guarda só o que foi simulado antes.' : 'Simulação — nenhum e-mail externo enviado. Convites e links de senha aparecem aqui até um serviço de e-mail ser configurado. Esta lista não existe em produção.'}</p>
             {emails.length === 0 ? <p className="mt-2 text-[15px] text-suave">Nenhum.</p> : <ul className="mt-2 divide-y divide-linha text-[15px]">{emails.map((m, i) => <li key={i} className="py-2"><span className="font-semibold text-tinta">{m.assunto}</span> · para {m.para} · {dataHora(m.criado_em)}<span className="block break-all text-sm">{m.corpo}</span></li>)}</ul>}
           </section>
         )}
