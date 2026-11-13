@@ -18,6 +18,7 @@ import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFlu
 import { salvarWhatsApp } from '@/server/integracoes';
 import { gerarChaveTelefonia, simularLigacaoPerdida } from '@/server/ligacoes';
 import { salvarInvestimento } from '@/server/anuncios';
+import { cancelarProposta, criarProposta, enviarProposta, responderProposta } from '@/server/propostas';
 import { criarLinkAgenda, marcarVisitaManual, mudarVisita, remarcarVisita } from '@/server/agenda';
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
@@ -495,3 +496,47 @@ export const salvarInvestimentoAcao = async (_: Retorno, fd: FormData) =>
     await salvarInvestimento(await exigirCtx(), { mes: t(fd, 'mes'), fonte: t(fd, 'fonte'), campanha: t(fd, 'campanha'), valorCentavos: valor ?? 0 });
     return { ok: valor ? 'Gasto salvo.' : 'Gasto removido.' };
   });
+
+/* ---------- Online proposal ---------- */
+
+export const criarPropostaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const itens = t(fd, 'itens').split('\n').map((l) => l.trim()).filter(Boolean).map((l) => {
+      const [descricao, qtd, valor] = l.split('|').map((x) => x.trim());
+      const quantidade = Number((qtd || '1').replace(',', '.'));
+      const v = centavos(valor ?? '');
+      if (!descricao || !Number.isFinite(quantidade) || v == null) throw new ErroDeUso(`Não entendi o item “${l.slice(0, 40)}”. Use: descrição | quantidade | valor.`);
+      return { descricao, quantidade, valor_unit_centavos: v };
+    });
+    await criarProposta(await exigirCtx(), { oportunidadeId: t(fd, 'oportunidade'), titulo: t(fd, 'titulo'), itens, condicoes: t(fd, 'condicoes'), validadeDias: Number(t(fd, 'validade')) });
+    return { ok: 'Proposta salva como rascunho. Confira e gere o link.' };
+  });
+
+export const enviarPropostaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const link = await enviarProposta(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Link criado (aparece só agora; gerar de novo troca o link). Mande para o cliente:', copiar: link };
+  });
+
+export const cancelarPropostaAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await cancelarProposta(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Proposta cancelada: o link parou de funcionar.' };
+  });
+
+async function responderPublico(fd: FormData, aceitar: boolean): Promise<Retorno> {
+  const ip = await ipHash();
+  if (!(await dentroDoLimite(`proposta:${ip}`, 10, 600))) return { erro: 'Muitas tentativas. Aguarde alguns minutos.' };
+  try {
+    if (aceitar && fd.get('li') !== 'on') return { erro: 'Marque que leu e aceita a proposta.' };
+    await responderProposta(t(fd, 'token'), { aceitar, nome: t(fd, 'nome'), motivo: t(fd, 'motivo'), ipHash: ip });
+  } catch (err) {
+    if (err instanceof ErroDeUso) return { erro: err.message };
+    console.error('[proposta]', err instanceof Error ? err.message : err);
+    return { erro: 'Não foi possível registrar agora. Tente de novo em instantes.' };
+  }
+  revalidatePath(`/p/${t(fd, 'token')}`);
+  return { ok: aceitar ? 'Proposta aceita. A empresa vai falar com você.' : 'Resposta registrada. Obrigado por avisar.' };
+}
+export const aceitarPropostaAcao = async (_: Retorno, fd: FormData) => responderPublico(fd, true);
+export const recusarPropostaAcao = async (_: Retorno, fd: FormData) => responderPublico(fd, false);

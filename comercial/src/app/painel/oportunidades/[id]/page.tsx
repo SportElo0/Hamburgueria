@@ -10,6 +10,8 @@ import { contatoDe, historico, obter, tarefas } from '@/server/oportunidades';
 import { exigirCtx, ouNaoEncontrado } from '@/server/sessao';
 import { CartaoVisita } from '@/componentes/visita';
 import { visitas } from '@/server/agenda';
+import { SecaoPropostas } from '@/componentes/propostas';
+import { propostasDa } from '@/server/propostas';
 
 export const metadata = { title: 'Oportunidade' };
 
@@ -33,6 +35,7 @@ export default async function Detalhe({ params }: { params: Promise<{ id: string
   const o = await ouNaoEncontrado(obter(ctx, id));
   const [contato, eventos, pessoas, abertas, conversas, empresa] = await Promise.all([contatoDe(ctx, o.contato_id), historico(ctx, id), equipe(ctx), tarefas(ctx, { oportunidadeId: id }), conversasDoContato(ctx, o.contato_id), empresaPorId(ctx.empresaId)]);
   const vs = await visitas(ctx, new Date(0), new Date('2100-01-01'), id);
+  const props = await propostasDa(ctx, id);
   const fuso = empresa!.config.regras.fuso;
   const temVisitaAtiva = vs.some((v) => (v.estado === 'marcada' || v.estado === 'confirmada') && !v.passou);
   const nomes = new Map(pessoas.map((p) => [p.user_id, p.nome]));
@@ -88,6 +91,8 @@ export default async function Detalhe({ params }: { params: Promise<{ id: string
               </ul>
             )}
           </section>
+
+          <SecaoPropostas oportunidadeId={id} propostas={props} fechada={fechada} />
 
           <section className="cartao p-4" aria-labelledby="t-visita">
             <h2 id="t-visita" className="font-bold">Visita</h2>
