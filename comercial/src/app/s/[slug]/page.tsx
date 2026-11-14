@@ -19,7 +19,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
   const zap = s.whatsapp ? (s.whatsapp.length <= 11 ? `55${s.whatsapp}` : s.whatsapp) : '';
   return (
     <div className="bg-white text-texto">
-      {empresa.demonstracao && <p className="bg-tinta px-4 py-1.5 text-center text-[13.5px] text-white">Site de demonstração · empresa fictícia · nenhum dado enviado aqui chega a uma empresa real</p>}
+      {empresa.demonstracao && <p className="bg-tinta px-4 py-1.5 text-center text-[13.5px] text-white">Site de demonstração · empresa fictícia · não use seus dados reais: o que for enviado aqui fica visível para quem testa a demonstração</p>}
       <header className="border-b border-linha">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <span className="text-lg font-bold text-tinta">{empresa.nome}</span>

@@ -1,5 +1,5 @@
 import { Conhecimento } from './config';
-import { ator, exigirAdmin, registrar, type Ctx } from './contexto';
+import { ator, exigirAdmin, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { tx, um, type Db } from './db';
 import { ErroDeUso } from './erros';
 
@@ -18,6 +18,7 @@ export async function conhecimentoAtual(empresaId: string, db?: Db): Promise<Ver
 
 export async function salvarConhecimento(ctx: Ctx, entrada: unknown): Promise<number> {
   exigirAdmin(ctx);
+  exigirNaoVisitante(ctx);
   const r = Conhecimento.safeParse(entrada);
   if (!r.success) throw new ErroDeUso(`Não foi possível salvar: ${r.error.issues[0]?.path.join(' › ')} ${r.error.issues[0]?.message}`);
   return tx(async (db) => {

@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { entrar } from '@/app/acoes';
+import { entrar, entrarDemonstracao } from '@/app/acoes';
 import { TelaDeAcesso } from '@/componentes/acesso';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { ambiente } from '@/server/config';
+import { demonstracaoAberta } from '@/server/demonstracao';
 import { sessao } from '@/server/sessao';
 
 export const metadata = { title: 'Entrar' };
@@ -29,10 +30,18 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
         </div>
         <Enviar className="w-full">Entrar</Enviar>
       </Formulario>
-      {ambiente() !== 'producao' && (
-        <p className="mt-4 border-t border-linha pt-4 text-sm text-suave">
-          Ambiente de {ambiente() === 'demonstracao' ? 'demonstração' : 'desenvolvimento'}: os logins de exemplo estão no README (<code>npm run demo</code>).
-        </p>
+      {demonstracaoAberta() && (
+        <div className="mt-5 border-t border-linha pt-5">
+          <Formulario acao={entrarDemonstracao}>
+            <Enviar secundario className="w-full">Entrar na demonstração (sem senha)</Enviar>
+          </Formulario>
+          <p className="mt-2 text-sm text-suave">
+            Entra como dono da Lumivale Energia Solar, uma empresa fictícia. Dá para ver e testar o painel; ajustes, convites, chaves e o envio de propostas ficam bloqueados.
+          </p>
+          <p className="mt-3 text-sm text-suave">
+            Ambiente de {ambiente() === 'demonstracao' ? 'demonstração' : 'desenvolvimento'}: os outros logins de exemplo estão no README (<code>npm run demo</code>).
+          </p>
+        </div>
       )}
     </TelaDeAcesso>
   );

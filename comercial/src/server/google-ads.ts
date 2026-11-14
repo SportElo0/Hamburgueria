@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { normalizarTelefone } from './config';
-import { ator, dentroDoLimite, exigirAdmin, registrar, type Ctx } from './contexto';
+import { ator, dentroDoLimite, exigirAdmin, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { q, tx, um } from './db';
 import { empresaPorId, membroAtivo, type Empresa } from './empresas';
 import { ErroDeUso } from './erros';
@@ -124,6 +124,7 @@ export async function receberLeadGoogle(empresa: Empresa, entrada: unknown): Pro
 
 export async function gerarChaveGoogle(ctx: Ctx): Promise<string> {
   exigirAdmin(ctx);
+  exigirNaoVisitante(ctx);
   const chave = `gads_${novoToken(24)}`;
   await tx(async (db) => {
     await q(

@@ -1,6 +1,6 @@
 import { createECDH, hkdfSync } from 'node:crypto';
 import webpush from 'web-push';
-import { dentroDoLimite, type Ctx } from './contexto';
+import { dentroDoLimite, exigirNaoVisitante, type Ctx } from './contexto';
 import { q, um } from './db';
 import { ErroDeUso } from './erros';
 
@@ -42,6 +42,8 @@ export interface InscricaoEntrada {
 
 export async function salvarInscricao(ctx: Ctx, sub: InscricaoEntrada, aparelho: string) {
   if (ctx.acessoAdmin) throw new ErroDeUso('O acesso da equipe Growlift não liga avisos no celular.');
+  // The open demonstration login is shared: one visitor's phone would keep getting the others' alerts.
+  exigirNaoVisitante(ctx);
   const endpoint = String(sub?.endpoint ?? '');
   const p256dh = String(sub?.keys?.p256dh ?? '');
   const authKey = String(sub?.keys?.auth ?? '');
@@ -85,6 +87,7 @@ export async function aparelhosDe(ctx: Ctx) {
 
 /** Test alert to the logged-in person's own phones. */
 export async function avisoDeTeste(ctx: Ctx): Promise<number> {
+  exigirNaoVisitante(ctx);
   if (!(await dentroDoLimite(`teste-aviso:${ctx.userId}`, 5, 600))) throw new ErroDeUso('Muitos testes seguidos. Espere alguns minutos.');
   if (!(await um('select 1 from inscricoes_push where empresa_id = $1 and user_id = $2', [ctx.empresaId, ctx.userId]))) {
     throw new ErroDeUso('Nenhum celular com avisos ligados. Ligue os avisos neste aparelho primeiro.');

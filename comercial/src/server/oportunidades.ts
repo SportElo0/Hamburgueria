@@ -1,5 +1,5 @@
 import { ETAPAS, ETAPAS_FECHADAS, NOME_ETAPA, type Etapa } from './config';
-import { ator, criarTarefa, registrar, type Ctx } from './contexto';
+import { ator, criarTarefa, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, membroAtivo, type Empresa } from './empresas';
 import { ErroDeUso, NaoAutorizado, NaoEncontrado } from './erros';
@@ -368,6 +368,7 @@ export async function marcarNotificacoesLidas(ctx: Ctx) {
 /** Authorized export of the company's contacts (admin only), as CSV text. Cells are neutralized against spreadsheet formulas. */
 export async function exportarContatos(ctx: Ctx): Promise<string> {
   if (ctx.papel !== 'admin') throw new NaoAutorizado('Só o administrador da empresa exporta os contatos.');
+  exigirNaoVisitante(ctx);
   const linhas = await q<{ nome: string; telefone: string; cidade: string; preferencia_contato: string; dados: Record<string, unknown>; nao_contatar_em: Date | null; criado_em: Date; etapa: string | null; origem: string | null }>(
     `select c.nome, c.telefone, c.cidade, c.preferencia_contato, c.dados, c.nao_contatar_em, c.criado_em,
        (select o.etapa from oportunidades o where o.contato_id = c.id order by o.entrada_em desc limit 1) as etapa,
@@ -388,6 +389,7 @@ export async function exportarContatos(ctx: Ctx): Promise<string> {
 /** Documented deletion: removes a contact and everything attached to it (admin only), keeping only an anonymous record that it happened. */
 export async function excluirContato(ctx: Ctx, contatoId: string): Promise<void> {
   if (ctx.papel !== 'admin') throw new NaoAutorizado('Só o administrador da empresa exclui contatos.');
+  exigirNaoVisitante(ctx);
   await tx(async (db) => {
     const c = await um('select id from contatos where empresa_id = $1 and id = $2 for update', [ctx.empresaId, contatoId], db);
     if (!c) throw new NaoEncontrado('Contato não encontrado.');

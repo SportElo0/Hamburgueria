@@ -1,5 +1,5 @@
 import { TEXTO_ACEITE_LIGACAO, VERSAO_FRASE_LIGACAO, ambiente, formatarTelefone, normalizarTelefone, type Etapa } from './config';
-import { ator, criarTarefa, dentroDoLimite, exigirAdmin, registrar, type Ctx } from './contexto';
+import { ator, criarTarefa, dentroDoLimite, exigirAdmin, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { q, tx, um } from './db';
 import { empresaPorId, membroAtivo, type Empresa } from './empresas';
 import { ErroDeUso } from './erros';
@@ -152,6 +152,7 @@ export function textoRetornoLigacao(empresa: Empresa, foraDoHorario: boolean): s
 
 export async function gerarChaveTelefonia(ctx: Ctx): Promise<string> {
   exigirAdmin(ctx);
+  exigirNaoVisitante(ctx);
   if (!ctx.acessoAdmin) throw new ErroDeUso('A ligação com o serviço de telefonia é configurada pela equipe Growlift.');
   const chave = `tel_${novoToken(24)}`;
   await tx(async (db) => {

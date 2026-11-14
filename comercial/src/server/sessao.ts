@@ -19,7 +19,7 @@ export interface Sessao {
 export const sessao = cache(async (): Promise<Sessao | null> => {
   const s = await auth().api.getSession({ headers: await headers() });
   if (!s) return null;
-  const { ctx, adminPlataforma } = await contextoDe(s.user.id, s.user.name);
+  const { ctx, adminPlataforma } = await contextoDe(s.user.id, s.user.name, s.user.email);
   return { userId: s.user.id, nome: s.user.name, email: s.user.email, ctx, adminPlataforma };
 });
 

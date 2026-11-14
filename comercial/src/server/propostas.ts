@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
-import { ator, criarTarefa, registrar, type Ctx } from './contexto';
+import { ator, criarTarefa, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um } from './db';
 import { cancelarPendentes } from './fila';
 import { empresaPorId, type Empresa } from './empresas';
@@ -93,6 +93,8 @@ export async function criarProposta(ctx: Ctx, entrada: z.input<typeof Entrada>):
 
 /** Creates the private link, moves the opportunity to "proposal sent" (if it was before) and records the value. */
 export async function enviarProposta(ctx: Ctx, id: string): Promise<string> {
+  // The public link carries free text under the company's name: the shared demo login only drafts.
+  exigirNaoVisitante(ctx);
   if (!/^[0-9a-f-]{36}$/i.test(id)) throw new NaoEncontrado();
   const token = `pr_${novoToken(24)}`;
   // The customer must see who is offering (Decreto 7.962/2013, art. 2º): no link without the company's details.

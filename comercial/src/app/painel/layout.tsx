@@ -36,6 +36,7 @@ export default async function PainelLayout({ children }: { children: React.React
         <div className="border-b border-alerta/20 bg-alerta-clara px-4 py-1.5 text-center text-[13.5px] text-alerta">
           {empresa.demonstracao ? 'Empresa de demonstração: contatos, conversas e números são fictícios. ' : ''}
           {simulacoes.length ? `Simulação — nenhuma mensagem externa enviada (${simulacoes.join(' e ')}).` : ''}
+          {ctx.visitante ? ' Você entrou pela demonstração aberta: ajustes, convites, chaves, avisos no celular e o envio de propostas ficam bloqueados, e outras pessoas podem estar testando ao mesmo tempo.' : ''}
         </div>
       )}
       <header className="border-b border-linha bg-white">

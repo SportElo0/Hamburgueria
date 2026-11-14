@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { criarUsuario } from './auth';
 import { ConfigEmpresa, SEGMENTOS, lerConfig } from './config';
-import { ator, exigirAdmin, registrar, type Ctx } from './contexto';
+import { ator, exigirAdmin, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
 import { ErroDeUso, NaoAutorizado, NaoEncontrado } from './erros';
 import { enviarEmail, type ResultadoEmail } from './email';
@@ -126,6 +126,7 @@ const Convite = z.object({ email: z.email('E-mail inválido.').trim().toLowerCas
 /** Invites someone to the company. The link is shown once to the admin (and stored as a simulated e-mail). */
 export async function convidar(ctx: Ctx, entrada: z.input<typeof Convite>): Promise<{ link: string; email: ResultadoEmail }> {
   exigirAdmin(ctx);
+  exigirNaoVisitante(ctx);
   const c = Convite.parse(entrada);
   if (await um('select 1 from "user" where email = $1', [c.email])) throw new ErroDeUso('Este e-mail já tem login na plataforma.');
   const hoje = await um<{ n: number }>(`select count(*)::int as n from eventos where empresa_id = $1 and tipo = 'convite_criado' and criado_em > now() - interval '1 day'`, [ctx.empresaId]);
@@ -176,6 +177,7 @@ export async function aceitarConvite(token: string, nome: string, senha: string)
 
 export async function alterarMembro(ctx: Ctx, userId: string, mudanca: { papel?: 'admin' | 'vendedor'; ativo?: boolean }) {
   exigirAdmin(ctx);
+  exigirNaoVisitante(ctx);
   await tx(async (db) => {
     const m = await um<{ papel: string; ativo: boolean }>('select papel, ativo from membros where empresa_id = $1 and user_id = $2 for update', [ctx.empresaId, userId], db);
     if (!m) throw new NaoEncontrado('Pessoa não encontrada na equipe.');
@@ -207,6 +209,7 @@ export async function definirResponsavelPadrao(ctx: Ctx, userId: string | null) 
 /** Saves one section of the company settings (validated as a whole) and records which section changed. */
 export async function salvarConfig<K extends keyof ConfigEmpresa>(ctx: Ctx, secao: K, valor: unknown) {
   exigirAdmin(ctx);
+  exigirNaoVisitante(ctx);
   await tx(async (db) => {
     const l = await um<{ config: unknown }>('select config from empresas where id = $1 for update', [ctx.empresaId], db);
     const r = ConfigEmpresa.safeParse({ ...lerConfig(l?.config), [secao]: valor });

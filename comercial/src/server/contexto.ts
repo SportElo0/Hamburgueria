@@ -12,23 +12,33 @@ export interface Ctx {
   papel: 'admin' | 'vendedor';
   /** Set when a Growlift admin is inside a company through a logged access grant. */
   acessoAdmin?: string;
+  /** The open demonstration login ("Entrar na demonstração", no password): it sees everything, but cannot change settings,
+   * invite people, export or delete contacts, or create keys. */
+  visitante?: boolean;
 }
 
 export const ator = (ctx: Ctx) => ({ tipo: ctx.acessoAdmin ? ('admin_growlift' as const) : ('usuario' as const), id: ctx.userId });
+
+/** The address of the open demonstration login (see src/server/demonstracao.ts). */
+export const VISITANTE_DEMO = 'visitante@lumivale.demo';
+
+export function exigirNaoVisitante(ctx: Ctx) {
+  if (ctx.visitante) throw new NaoAutorizado('Na demonstração aberta isso fica bloqueado. Para testar tudo, peça um acesso à equipe Growlift.');
+}
 
 export function exigirAdmin(ctx: Ctx) {
   if (ctx.papel !== 'admin') throw new NaoAutorizado('Só o administrador da empresa pode fazer isso.');
 }
 
 /** Resolves the company context of a login: its own membership, or an active Growlift admin grant. */
-export async function contextoDe(userId: string, nome: string): Promise<{ ctx: Ctx | null; adminPlataforma: boolean }> {
+export async function contextoDe(userId: string, nome: string, email = ''): Promise<{ ctx: Ctx | null; adminPlataforma: boolean }> {
   const admin = !!(await um('select 1 from admins_plataforma where user_id = $1', [userId]));
   const m = await um<{ empresa_id: string; papel: 'admin' | 'vendedor' }>(
     `select m.empresa_id, m.papel from membros m join empresas e on e.id = m.empresa_id
      where m.user_id = $1 and m.ativo and e.ativa`,
     [userId],
   );
-  if (m) return { ctx: { userId, nome, empresaId: m.empresa_id, papel: m.papel }, adminPlataforma: admin };
+  if (m) return { ctx: { userId, nome, empresaId: m.empresa_id, papel: m.papel, ...(email.toLowerCase() === VISITANTE_DEMO ? { visitante: true } : {}) }, adminPlataforma: admin };
   if (admin) {
     const a = await um<{ id: string; empresa_id: string }>(
       'select id, empresa_id from acessos_admin where user_id = $1 and fim > now() order by inicio desc limit 1',

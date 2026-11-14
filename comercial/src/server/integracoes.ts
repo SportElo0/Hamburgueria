@@ -3,7 +3,7 @@ import { canalSimulado } from './canais/simulador';
 import type { CanalWhatsApp } from './canais/tipos';
 import { canalCloud } from './canais/whatsapp-cloud';
 import { ambiente } from './config';
-import { ator, exigirAdmin, registrar, type Ctx } from './contexto';
+import { ator, exigirAdmin, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { q, tx, um, type Db } from './db';
 import { ErroDeUso } from './erros';
 import { cifrar, decifrar, mascarar } from './segredos';
@@ -45,6 +45,7 @@ export async function integracaoWhatsApp(empresaId: string): Promise<IntegracaoW
 /** Saves the channel settings. The access token is encrypted; leaving it blank keeps the stored one. */
 export async function salvarWhatsApp(ctx: Ctx, entrada: unknown, novoToken?: string) {
   exigirAdmin(ctx);
+  exigirNaoVisitante(ctx);
   const r = ConfigWhatsApp.safeParse(entrada);
   if (!r.success) throw new ErroDeUso(r.error.issues[0]?.message ?? 'Configuração inválida.');
   await tx(async (db) => {

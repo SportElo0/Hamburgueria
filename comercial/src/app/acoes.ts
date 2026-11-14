@@ -10,9 +10,10 @@ import { auth } from '@/server/auth';
 import { gerarLinkAvaliacao } from '@/server/avaliacoes';
 import type { Etapa } from '@/server/config';
 import { salvarConhecimento } from '@/server/conhecimento';
-import { dentroDoLimite } from '@/server/contexto';
+import { dentroDoLimite, VISITANTE_DEMO } from '@/server/contexto';
 import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, simularEntradaWhatsApp } from '@/server/conversas';
 import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig } from '@/server/empresas';
+import { demonstracaoAberta, garantirVisitante, reporSenhaVisitante } from '@/server/demonstracao';
 import { emailLigado } from '@/server/email';
 import { ErroDeUso } from '@/server/erros';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
@@ -66,6 +67,31 @@ export async function entrar(_: Retorno, fd: FormData): Promise<Retorno> {
   redirect('/');
 }
 
+/** "Entrar na demonstração": the shared visitor login of the fictitious company, only outside production. */
+export async function entrarDemonstracao(): Promise<Retorno> {
+  if (!demonstracaoAberta()) return { erro: 'A demonstração aberta não existe neste ambiente.' };
+  if (!(await dentroDoLimite(`demo:${await ipHash()}`, 20, 3600))) return { erro: 'Muitas entradas seguidas. Aguarde alguns minutos.' };
+  const v = await garantirVisitante().catch((err) => {
+    console.error('[demonstração]', (err as Error).message);
+    return null;
+  });
+  if (!v) return { erro: 'A demonstração não está disponível agora.' };
+  const h = await headers();
+  const tentar = () => auth().api.signInEmail({ body: { email: v.email, password: v.senha }, headers: h });
+  try {
+    await tentar();
+  } catch {
+    // The session secret changed since the visitor was created: set its password again and retry once.
+    await reporSenhaVisitante();
+    try {
+      await tentar();
+    } catch {
+      return { erro: 'A demonstração não está disponível agora.' };
+    }
+  }
+  redirect('/painel');
+}
+
 export async function sair() {
   await auth().api.signOut({ headers: await headers() }).catch(() => {});
   redirect('/login');
@@ -75,7 +101,7 @@ export async function pedirNovaSenha(_: Retorno, fd: FormData): Promise<Retorno>
   const inicio = Date.now();
   const email = t(fd, 'email').toLowerCase().slice(0, 200);
   if (!(await dentroDoLimite(`senha:${await ipHash()}`, 5, 900))) return { erro: 'Muitas tentativas. Aguarde alguns minutos.' };
-  if (email && (await dentroDoLimite(`senha:email:${email}`, 3, 3600))) {
+  if (email && email !== VISITANTE_DEMO && (await dentroDoLimite(`senha:email:${email}`, 3, 3600))) {
     await auth().api.requestPasswordReset({ body: { email, redirectTo: '/redefinir' } }).catch(() => {});
   }
   // Same answer, and about the same time, whether the e-mail exists or not (the e-mail itself goes out in the background).

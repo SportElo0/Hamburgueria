@@ -44,10 +44,12 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 134 testes (incluindo o adaptador real da IA e o envio de e-mail contra servidores falsos locais) de serviço contra o banco de teste |
+| `npm test` | 139 testes (incluindo o adaptador real da IA e o envio de e-mail contra servidores falsos locais) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
+
+**Demonstração aberta (sem senha):** fora de produção, a tela de login tem o botão “Entrar na demonstração”. Ele entra num login compartilhado (`visitante@lumivale.demo`, dono da Lumivale fictícia), com senha derivada do segredo de sessão no servidor (nunca mostrada). Esse login vê e testa tudo, mas não muda ajustes nem o site, não convida pessoas, não cria chaves, não liga avisos no celular, não envia proposta (só rascunho), não exporta nem exclui contatos (`exigirNaoVisitante`, `src/server/demonstracao.ts`). Limite: 20 entradas por hora por endereço. Em produção o botão não existe. Pendente: recriar os dados da demonstração de tempos em tempos, porque os visitantes mexem no funil; não ligar chave de IA paga nem o Resend no projeto da demonstração sem um limite por visitante.
 
 Logins de demonstração (senha `demonstracao-2026`, tudo fictício): `equipe@growlift.demo`, `admin@lumivale.demo`, `vendas@lumivale.demo`, `admin@soldovale.demo`, `vendas@soldovale.demo`.
 
