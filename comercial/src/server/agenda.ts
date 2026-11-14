@@ -189,8 +189,8 @@ export async function marcarVisita(db: Db, empresa: Empresa, v: NovaVisita): Pro
   if (v.origem !== 'usuario') {
     // The public chat and the booking page cannot fill the calendar: one booking per contact at a time and a daily cap per company.
     if (await um(`select 1 from visitas where empresa_id = $1 and contato_id = $2 and estado = any($3) and inicio > now()`, [empresa.id, o.contato_id, ATIVAS], db)) throw new ErroDeUso('Este cliente já tem uma visita marcada.');
-    const hoje = await um<{ n: number }>(`select count(*)::int as n from visitas where empresa_id = $1 and origem = 'ia' and criado_em > now() - interval '24 hours'`, [empresa.id], db);
-    if ((hoje?.n ?? 0) >= MAX_VISITAS_IA_DIA) throw new ErroDeUso('Limite de visitas marcadas pela assistente hoje.');
+    const hoje = await um<{ n: number }>(`select count(*)::int as n from visitas where empresa_id = $1 and origem in ('ia', 'cliente') and criado_em > now() - interval '24 hours'`, [empresa.id], db);
+    if ((hoje?.n ?? 0) >= MAX_VISITAS_IA_DIA) throw new ErroDeUso('Limite de visitas marcadas pela internet hoje. Fale com a empresa para marcar.');
   }
   // The professional's login (when linked) takes the visit; otherwise whoever was chosen, or the opportunity's owner.
   const doProf = profissionalId ? (await um<{ user_id: string | null }>('select user_id from profissionais where id = $1', [profissionalId], db))?.user_id ?? null : null;

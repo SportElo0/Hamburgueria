@@ -602,7 +602,13 @@ export async function agendarAcao(_: Retorno, fd: FormData): Promise<Retorno> {
     );
     if (!('descartado' in r)) {
       await tx(async (db) => {
-        await marcarVisita(db, empresa, { oportunidadeId: r.oportunidadeId, inicio, profissionalId: profissional, endereco: t(fd, 'endereco'), origem: 'cliente', checarLivre: true });
+        try {
+          await marcarVisita(db, empresa, { oportunidadeId: r.oportunidadeId, inicio, profissionalId: profissional, endereco: t(fd, 'endereco'), origem: 'cliente', checarLivre: true });
+        } catch (e) {
+          // The request was saved (the team calls back); say so instead of a bare error.
+          if (e instanceof ErroDeUso) throw new ErroDeUso(`${e.message} Seu pedido foi recebido e a equipe vai entrar em contato para combinar o horário.`);
+          throw e;
+        }
         if (fd.get('aceite') === 'on') {
           await db.query(`insert into consentimentos (empresa_id, contato_id, canal, texto, origem, versao) values ($1, $2, 'whatsapp', $3, 'agenda', 3)`, [empresa.id, r.contatoId, TEXTO_ACEITE_AGENDAMENTO(empresa.nome, texto)]);
         }

@@ -62,8 +62,8 @@ export default async function Agendar({ params, searchParams }: { params: Promis
       <div className="py-6 text-center">
         <p className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-ok-clara text-2xl text-ok" aria-hidden>✓</p>
         <h1 className="mt-4 text-xl font-extrabold text-tinta">Visita marcada</h1>
-        <p className="mt-2 text-[15px] text-texto">{sp.feito.slice(0, 80)}</p>
-        <p className="mt-3 text-sm text-suave">A equipe da {empresa.nome} vai confirmar o endereço com você. Para remarcar ou cancelar, fale com a empresa.</p>
+        {/^[a-zçáéíóúâêôãõ]+, \d{2}\/\d{2} às \d{1,2}h(\d{2})?$/.test(sp.feito) && <p className="mt-2 text-[15px] text-texto">{sp.feito}</p>}
+        <p className="mt-3 text-sm text-suave">A equipe da {empresa.nome} vai confirmar o endereço com você. Se você pediu o lembrete, ele chega um dia antes, depois dessa confirmação. Para remarcar ou cancelar, fale com a empresa.</p>
       </div>
     ));
   }

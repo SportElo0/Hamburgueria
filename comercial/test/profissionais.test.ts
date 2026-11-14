@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { horariosLivres, marcarVisita, remarcarPeloCliente, visitas } from '@/server/agenda';
-import { fecharPool, tx, um } from '@/server/db';
+import { fecharPool, q, tx, um } from '@/server/db';
+import { processarFila } from '@/server/trabalhos';
 import { empresaPorId, salvarConfig } from '@/server/empresas';
 import { adicionarHorario, ativarProfissional, dataLocal, desfazerAjuste, gradeDoDia, instante, salvarProfissional, somarDias, tirarHorario, vagasLivres } from '@/server/profissionais';
 import { receberPedido } from '@/server/pedidos';
@@ -92,6 +93,17 @@ describe('agenda por profissional', () => {
     const v = (await visitas(A.admin, as(0), as(1439))).find((x) => x.oportunidade_id === o.oportunidadeId)!;
     expect(v.inicio.getTime()).toBe(as(660).getTime());
     expect(v.profissional).toBe('Carla');
+  });
+
+  it('visita marcada pela página só ganha lembrete depois que a equipe confirma', async () => {
+    const o = await novaOportunidade();
+    await marcar(o.oportunidadeId, as(600), carla);
+    const v = await um<{ id: string }>('select id from visitas where oportunidade_id = $1', [o.oportunidadeId]);
+    await q(`update trabalhos set executar_em = now() - interval '1 second' where tipo = 'lembrete_visita' and dados ->> 'visita' = $1`, [v!.id]);
+    await processarFila(50);
+    const t = await um<{ estado: string; resultado: string }>(`select estado, resultado from trabalhos where tipo = 'lembrete_visita' and dados ->> 'visita' = $1`, [v!.id]);
+    expect(t).toMatchObject({ estado: 'cancelado' });
+    expect(t!.resultado).toMatch(/não foi confirmada/);
   });
 
   it('cadastro: nome curto, horários sobrepostos, login de fora da equipe e vendedor são recusados', async () => {

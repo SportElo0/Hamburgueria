@@ -160,12 +160,14 @@ export const executores: Record<string, Executor> = {
   async lembrete_visita(t) {
     const empresa = await empresaPorId(t.empresa_id);
     if (!empresa?.config.agenda.lembrete) return { tipo: 'cancelado', motivo: 'O lembrete de visita foi desligado.' };
-    const v = await um<{ inicio: Date; estado: string; nome: string }>(
-      `select v.inicio, v.estado, c.nome from visitas v join contatos c on c.id = v.contato_id where v.empresa_id = $1 and v.id = $2`,
+    const v = await um<{ inicio: Date; estado: string; nome: string; origem: string }>(
+      `select v.inicio, v.estado, c.nome, v.origem from visitas v join contatos c on c.id = v.contato_id where v.empresa_id = $1 and v.id = $2`,
       [t.empresa_id, String(t.dados.visita ?? '')],
     );
     if (!v || !['marcada', 'confirmada'].includes(v.estado)) return { tipo: 'cancelado', motivo: 'A visita foi cancelada ou já aconteceu.' };
     if (v.inicio.toISOString() !== String(t.dados.inicio)) return { tipo: 'cancelado', motivo: 'A visita foi remarcada.' };
+    // Booked by the customer on the public page (the phone is not verified): the reminder waits for the team to confirm the visit.
+    if (v.origem === 'cliente' && v.estado !== 'confirmada') return { tipo: 'cancelado', motivo: 'A visita marcada pela página não foi confirmada pela equipe.' };
     if (v.inicio.getTime() < Date.now() + 60 * 60_000) return { tipo: 'cancelado', motivo: 'Faltava menos de 1 hora para a visita.' };
     return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'lembrete_visita', corpo: textoLembrete(empresa, nomeSeguro(v.nome), v.inicio) });
   },
