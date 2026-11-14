@@ -9,7 +9,7 @@ import { launch, close, renderReel } from '../motor.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(HERE, '../../../05-reels');
-const NAMES = { 1: '01-quatro-negocios', 2: '02-a-confeitaria', 7: '07-quem-atende', 8: '08-sabado-a-noite', 3: '03-dois-minutos', 4: '04-ela-procurou', 5: '05-aberto-no-google', 6: '06-do-zero', 9: '09-o-lanche-e-bom', 14: '14-uma-estrela', 15: '15-o-celular-nao-para', 16: '16-cardapio-em-pdf', 11: '11-dois-amigos', 12: '12-cardapio-completo', 13: '13-porta-aberta', 17: '17-cade-o-dinheiro', 18: '18-cada-prato-um-papel', 19: '19-ela-vem-toda-sexta', 20: '20-dia-31', 21: '21-a-mesma-noite', 22: '22-o-site-no-celular' };
+const NAMES = { 1: '01-quatro-negocios', 2: '02-a-confeitaria', 7: '07-quem-atende', 8: '08-sabado-a-noite', 3: '03-dois-minutos', 4: '04-ela-procurou', 5: '05-aberto-no-google', 6: '06-do-zero', 9: '09-o-lanche-e-bom', 14: '14-uma-estrela', 15: '15-o-celular-nao-para', 16: '16-cardapio-em-pdf', 11: '11-dois-amigos', 12: '12-cardapio-completo', 13: '13-porta-aberta', 17: '17-cade-o-dinheiro', 18: '18-cada-prato-um-papel', 19: '19-ela-vem-toda-sexta', 20: '20-dia-31', 21: '21-a-mesma-noite', 22: '22-o-site-no-celular', 23: '23-o-telefone-na-escada' };
 
 const id = process.argv[2];
 const stillArg = process.argv.indexOf('--still');
@@ -39,6 +39,12 @@ if (stillArg > 0) {
   await renderReel({ id: `reel-${id}`, html, duration: reel.DURATION, cover: reel.COVER, out: `${base}-mudo` });
   await close();
   const voice = path.resolve(HERE, `../narracao-${id}-eleven.mp3`);
+  if (!fs.existsSync(voice)) {
+    // No narration yet: keep the silent version and its cover only.
+    fs.renameSync(`${base}-mudo-capa.png`, `${base}-capa.png`);
+    console.log(`${base}-mudo.mp4 (sem narração: falta ${path.basename(voice)})`);
+    process.exit(0);
+  }
   // Narration on top, a short fade at the end; the silent version stays for posting with music.
   const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}-mudo.mp4`, '-i', voice, '-filter_complex', `[1:a]apad,atrim=0:${reel.DURATION},afade=t=out:st=${reel.DURATION - 0.6}:d=0.6,loudnorm=I=-14:TP=-1.5:LRA=11[a]`, '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000', '-movflags', '+faststart', '-shortest', `${base}.mp4`], { stdio: 'inherit' });
   if (r.status !== 0) throw new Error('ffmpeg (áudio) falhou');
