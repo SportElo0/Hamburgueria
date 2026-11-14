@@ -176,6 +176,11 @@ Quando alguém liga para a empresa e ninguém atende, a plataforma responde pelo
 - Fora da janela de 24 horas precisa do modelo aprovado “resposta a ligação não atendida” (Configurações › WhatsApp).
 - Gatilho “Quando uma ligação não é atendida” no construtor de fluxos, com o modelo pronto “Ligação não atendida” (distribui e avisa a equipe se ninguém assumir em 30 minutos).
 - Na demonstração, “Simular ligação” em Configurações mostra tudo sem serviço de telefonia.
+- **Provedores pesquisados (14/11/2026, preços das páginas oficiais, sem imposto; conferir antes de contratar):**
+  - **Twilio** (recomendado para o primeiro teste): número local no Brasil US$ 4,25/mês, receber ligação US$ 0,010/min, repassar para celular US$ 0,0663/min e para fixo US$ 0,031/min. O menu “aperte 1” (Gather) e o aviso de ligação não atendida (`DialCallStatus`, `CallSid`, `From`) já batem com a entrada da plataforma, sem adaptador. Número brasileiro pede cadastro com documentos e endereço, o que pode levar alguns dias. Fonte: twilio.com/en-us/voice/pricing/br.
+  - **Plivo:** número no Brasil US$ 5 a 6,17/mês, receber a partir de US$ 0,006/min; API parecida com a da Twilio. Fonte: plivo.com/voice/pricing/br.
+  - **Brasileiros com API e URA** (Agera, Callix, Directcall): cobram em reais (cerca de R$ 0,04 a 0,07/min; número de R$ 11 a 50/mês, conforme o plano), mas a documentação pública não mostra o aviso de ligação não atendida por webhook; perguntar ao comercial de cada um antes.
+  - Conta de exemplo, só com os preços acima (sem imposto e câmbio): 100 ligações de 2 min por mês repassadas para celular dão cerca de US$ 4,25 + 100 × 2 × (0,010 + 0,0663) ≈ US$ 19,50 na Twilio.
 
 ## Formulários de anúncio do Google
 
