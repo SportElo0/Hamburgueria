@@ -22,8 +22,13 @@ export default async function AgendaPage() {
   after(() => runAgenda(origin).catch((err) => console.error('agenda: ao abrir', err)));
   const [items, manifest] = await Promise.all([agendaView(), getManifest()]);
   // Small WebP previews for the cards (the full-size slide only opens in the viewer).
-  const thumbs = new Map(manifest.folders.flatMap((f) => f.groups.flatMap((g) => g.files.map((x) => [x.path, x.thumb] as const))));
-  const mini = (p: string) => (thumbs.has(p) ? fileUrl({ path: p, thumb: thumbs.get(p)! }, 'mini') : fileUrl({ path: p, thumb: p }));
+  const files = manifest.folders.flatMap((f) => f.groups.flatMap((g) => g.files));
+  const thumbs = new Map(files.map((x) => [x.path, x.thumb] as const));
+  // The size goes in the link so a file replaced under the same name (a Reel that got its voice) is not served from cache.
+  const sizes = new Map(files.map((x) => [x.path, x.size] as const));
+  // A Reel cover is not in the list on its own: it takes the size of its video, so both change together.
+  const link = (p: string, sizeOf = p) => fileUrl({ path: p, thumb: p, size: sizes.get(p) ?? sizes.get(sizeOf) });
+  const mini = (p: string) => (thumbs.has(p) ? fileUrl({ path: p, thumb: thumbs.get(p)!, size: sizes.get(p) }, 'mini') : link(p));
   const connected = instagramConfigured();
   const cards: AgendaCard[] = items.map((it) => ({
     id: it.id,
@@ -39,9 +44,9 @@ export default async function AgendaPage() {
     permalink: it.state?.permalink ?? '',
     by: it.state?.by ?? '',
     slides: it.arquivos.length,
-    thumb: it.capa ? fileUrl({ path: it.capa, thumb: it.capa }) : mini(it.arquivos[0]),
-    video: it.tipo === 'reel' ? fileUrl({ path: it.arquivos[0], thumb: it.arquivos[0] }) : '',
-    images: it.tipo === 'reel' ? [] : it.arquivos.map((p) => fileUrl({ path: p, thumb: p })),
+    thumb: it.capa ? link(it.capa, it.arquivos[0]) : mini(it.arquivos[0]),
+    video: it.tipo === 'reel' ? link(it.arquivos[0]) : '',
+    images: it.tipo === 'reel' ? [] : it.arquivos.map((p) => link(p)),
   }));
 
   return (
