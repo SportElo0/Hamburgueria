@@ -685,15 +685,15 @@
   },
   {
    "id": "2026-11-20-reel-23",
-   "titulo": "Reel 23 · O telefone na escada (Comenta AGENDA) · versão sem voz até aprovar a narração",
+   "titulo": "Reel 23 · O telefone na escada (Comenta AGENDA)",
    "tipo": "reel",
    "arquivos": [
     "05-reels/23-o-telefone-na-escada.mp4"
    ],
    "capa": "05-reels/23-o-telefone-na-escada-capa.png",
-   "legenda": "Comenta AGENDA que a gente te mostra a demonstração 📩\n\nTerça, duas da tarde. O Edu está no alto da escada trocando um ar-condicionado. O celular toca, ele não consegue atender… e o cliente liga pro próximo da lista.\n\nAgora, a mesma ligação com o atendimento da Growlift: se ninguém atende, quem ligou pode apertar 1 pra receber a resposta no WhatsApp. A atendente de IA entende o serviço, olha a agenda da empresa e marca a visita. Quando o Edu desce da escada, o aviso já está no celular dele pra confirmar o endereço com o cliente.\n\nPrecisa do número da empresa em um serviço de telefonia pela internet e do WhatsApp oficial da própria empresa. A mensagem só vai pra quem apertou 1 na ligação (ou autorizou antes, por escrito).\n\nDemonstração com dados fictícios. Ainda estamos montando as primeiras empresas; a gente combina com você o que está disponível, o prazo e o preço antes de qualquer contratação.\n#arcondicionado #climatizacao #tecnicodearcondicionado #atendimento #inteligenciaartificial",
+   "legenda": "Comenta AGENDA que a gente te mostra a demonstração 📩\n\nTerça, duas da tarde. O Edu está no alto da escada trocando um ar-condicionado. O celular toca, ele não consegue atender… e o cliente liga pro próximo da lista.\n\nAgora, a mesma ligação com o atendimento da Growlift: se ninguém atende, quem ligou pode apertar 1 pra receber a resposta no WhatsApp. A atendente de IA entende o serviço, olha a agenda da empresa e marca a visita. Quando o Edu desce da escada, o aviso já está no celular dele pra confirmar o endereço com o cliente.\n\nPrecisa do número da empresa em um serviço de telefonia pela internet e do WhatsApp oficial da própria empresa. A mensagem só vai pra quem apertou 1 na ligação (ou autorizou antes, por escrito).\n\nDemonstração com dados fictícios. Ainda estamos montando as primeiras empresas; a gente combina com você o que está disponível, o prazo e o preço antes de qualquer contratação.\n\nNarração com voz gerada por inteligência artificial.\n#arcondicionado #climatizacao #tecnicodearcondicionado #atendimento #inteligenciaartificial",
    "quando": "2026-11-20T15:00:00-03:00",
-   "ia": false,
+   "ia": true,
    "palavra": "AGENDA",
    "chave": "05-reels/roteiros.md#23-o-telefone-na-escada-tecnico-de-ar-condicionado-growlift-comercial"
   },

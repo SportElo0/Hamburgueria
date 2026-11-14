@@ -10,34 +10,34 @@ import { CSS as ESTILO, BG } from './estilo.mjs';
 
 // Timeline (seconds). Kept in one place so it can follow the narration once it exists.
 const T = {
-  ring: 3.0, // phone starts ringing
-  miss: 6.4, // missed call
-  cli: 7.3, // the customer appears
-  list: 9.4, // he calls the next one on the list
-  rw: 11.6, // rewind
-  b: 13.4, // the same call, with Growlift
-  menu: 14.6, // "press 1" menu
-  zap: 17.2, // WhatsApp answer
-  cal: 22.0, // agenda
-  down: 24.8, // Edu comes down, alert on the phone
-  end: 28.6, // "Comenta AGENDA"
+  ring: 6.0, // phone starts ringing ("O celular toca")
+  miss: 7.6, // missed call
+  cli: 9.3, // the customer appears
+  list: 11.9, // he calls the next one on the list
+  rw: 15.1, // rewind ("Agora, a mesma ligação")
+  b: 16.9, // the same call, with Growlift
+  menu: 18.9, // "press 1" menu
+  zap: 21.2, // WhatsApp answer
+  cal: 26.7, // agenda ("olha a agenda")
+  down: 29.2, // Edu comes down, alert on the phone
+  end: 33.1, // "Quer ver a demonstração? Comenta AGENDA"
 };
-export const DURATION = 32.0;
+export const DURATION = 37.2;
 export const COVER = 4.4;
 
 const CAPS = [
-  [0.15, 1.6, 'Terça, duas da tarde', 'duas da tarde'],
-  [1.6, 3.0, 'O Edu está no alto da escada', 'escada'],
-  [3.0, 4.6, 'O celular toca…', 'toca'],
-  [4.6, 6.4, '…e ele não consegue atender', 'não consegue'],
-  [7.2, 9.3, 'Era um cliente querendo instalar um ar', 'instalar'],
-  [9.4, 11.5, 'Sem resposta, ele liga pro próximo', 'próximo'],
-  [11.7, 13.3, 'Agora, a mesma ligação, com a Growlift', 'com a Growlift'],
-  [14.6, 17.0, 'Ninguém atendeu? Aperta 1', 'Aperta 1'],
-  [17.2, 19.4, 'e recebe a resposta no WhatsApp', 'WhatsApp'],
-  [19.5, 21.9, 'A atendente de IA entende o serviço', 'de IA'],
-  [22.0, 24.7, 'olha a agenda e marca a visita', 'marca a visita'],
-  [24.8, 28.4, 'Quando ele desce, o aviso já está no celular', 'aviso'],
+  [0.8, 2.2, 'Terça, duas da tarde', 'duas da tarde'],
+  [2.3, 5.85, 'O Edu está no alto da escada', 'escada'],
+  [6.08, 7.4, 'O celular toca…', 'toca'],
+  [7.43, 9.1, '…e ele não consegue atender', 'não consegue'],
+  [9.41, 11.7, 'Era um cliente querendo instalar um ar', 'instalar'],
+  [11.94, 14.95, 'Sem resposta, ele liga pro próximo', 'próximo'],
+  [15.36, 18.4, 'Agora, a mesma ligação, com a Growlift', 'com a Growlift'],
+  [18.68, 21.1, 'Ninguém atendeu? Aperta 1', 'Aperta 1'],
+  [21.24, 23.15, 'e recebe a resposta no WhatsApp', 'WhatsApp'],
+  [23.34, 26.8, 'A atendente de IA entende o serviço', 'de IA'],
+  [26.96, 29.2, 'olha a agenda e marca a visita', 'marca a visita'],
+  [29.38, 32.95, 'Quando ele desce, o aviso já está no celular', 'aviso'],
 ];
 
 const EMPRESA = 'Edu Climatização';
@@ -238,7 +238,7 @@ window.draw=(t)=>{
 
   // ending
   show('dim',t,T.end,undefined,{dy:0,fi:.6});
-  comenta(t,T.end+.1,T.end+1.2,'AGENDA');
+  comenta(t,T.end+.1,34.7,'AGENDA');
 };
 `;
 
