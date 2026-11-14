@@ -682,6 +682,40 @@
    "quando": "2026-11-18T15:00:00-03:00",
    "ia": false,
    "palavra": "CLÍNICA"
+  },
+  {
+   "id": "2026-11-20-reel-23",
+   "titulo": "Reel 23 · O telefone na escada (Comenta AGENDA) · versão sem voz até aprovar a narração",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/23-o-telefone-na-escada.mp4"
+   ],
+   "capa": "05-reels/23-o-telefone-na-escada-capa.png",
+   "legenda": "Comenta AGENDA que a gente te mostra a demonstração 📩\n\nTerça, duas da tarde. O Edu está no alto da escada trocando um ar-condicionado. O celular toca, ele não consegue atender… e o cliente liga pro próximo da lista.\n\nAgora, a mesma ligação com o atendimento da Growlift: se ninguém atende, quem ligou pode apertar 1 pra receber a resposta no WhatsApp. A atendente de IA entende o serviço, olha a agenda da empresa e marca a visita. Quando o Edu desce da escada, o aviso já está no celular dele pra confirmar o endereço com o cliente.\n\nPrecisa do número da empresa em um serviço de telefonia pela internet e do WhatsApp oficial da própria empresa. A mensagem só vai pra quem apertou 1 na ligação (ou autorizou antes, por escrito).\n\nDemonstração com dados fictícios. Ainda estamos montando as primeiras empresas; a gente combina com você o que está disponível, o prazo e o preço antes de qualquer contratação.\n#arcondicionado #climatizacao #tecnicodearcondicionado #atendimento #inteligenciaartificial",
+   "quando": "2026-11-20T15:00:00-03:00",
+   "ia": false,
+   "palavra": "AGENDA",
+   "chave": "05-reels/roteiros.md#23-o-telefone-na-escada-tecnico-de-ar-condicionado-growlift-comercial"
+  },
+  {
+   "id": "2026-11-23-carrossel-ligacao-perdida",
+   "titulo": "Carrossel · A ligação que você não conseguiu atender (Comenta AGENDA)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/21-ligacao-perdida/01.png",
+    "09-carrosseis/21-ligacao-perdida/02.png",
+    "09-carrosseis/21-ligacao-perdida/03.png",
+    "09-carrosseis/21-ligacao-perdida/04.png",
+    "09-carrosseis/21-ligacao-perdida/05.png",
+    "09-carrosseis/21-ligacao-perdida/06.png",
+    "09-carrosseis/21-ligacao-perdida/07.png"
+   ],
+   "capa": null,
+   "legenda": "Você estava na escada. O cliente, no telefone. 📞\n\nQuem liga com o ar parado no calor quer resposta agora. Se ninguém atende, ele pode voltar pra busca e ligar pro próximo técnico.\n\nDois dados pra pensar:\n• 77% dos usuários de smartphone entrevistados fazem mais ligações pelo WhatsApp do que pelo plano da operadora (Panorama Mobile Time/Opinion Box, jan. 2025, 2.099 entrevistados).\n• 65% dos smartphones pesquisados no Brasil têm o WhatsApp na tela inicial (Super Panorama Mobile Time/Opinion Box, divulgado em jun. 2026).\n\n3 coisas pra fazer hoje, sem gastar nada:\n1. Ligar a mensagem de ausência do WhatsApp Business.\n2. Retornar toda ligação perdida antes do próximo serviço.\n3. Deixar no Google o WhatsApp e o horário certos.\n\nE lembrando: mensagem pra quem ligou, só com o aceite da pessoa (a LGPD pede uma base legal e o WhatsApp oficial exige que ela tenha aceitado receber). Informação geral, não é orientação jurídica.\n\nQuer ver a ligação perdida virando visita reservada na demonstração? Comenta AGENDA que a gente te mostra a demonstração no direct.\n\nDemonstração simulada, com dados fictícios: o que está disponível, o prazo e o preço a gente combina antes de qualquer contratação. (Nomes, conversas e telas dos slides são exemplos ilustrativos.)\n\n#arcondicionado #climatizacao #tecnicodearcondicionado #whatsappbusiness #atendimento",
+   "quando": "2026-11-23T10:00:00-03:00",
+   "ia": false,
+   "palavra": "AGENDA",
+   "chave": "09-carrosseis/carrosseis.md#sugestao-junto-com-o-reel-23-a-ligacao-que-voce-nao-conseguiu-atender"
   }
  ]
 }
