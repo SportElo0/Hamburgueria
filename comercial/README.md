@@ -44,7 +44,7 @@ A fila das automações roda dentro da própria aplicação. O `npm run worker` 
 
 | Comando | O que faz |
 | --- | --- |
-| `npm test` | 139 testes (incluindo o adaptador real da IA e o envio de e-mail contra servidores falsos locais) de serviço contra o banco de teste |
+| `npm test` | 147 testes (incluindo o adaptador real da IA e o envio de e-mail contra servidores falsos locais) de serviço contra o banco de teste |
 | `node test/navegador/fluxo.mjs` | percurso principal no navegador, em tela de celular (com `npm run build && npm run start` e os dados de demonstração) |
 | `npm run typecheck` / `npm run lint` | conferências de código |
 | `npm run reiniciar-banco` | apaga tudo e recria com os dados de demonstração (recusado em produção) |
@@ -167,6 +167,17 @@ Menu **Agenda** (todos) e Configurações › Agenda (administrador): dias da se
 - **Google Agenda:** cada pessoa cria um endereço secreto (Agenda › “Criar meu link da agenda”) e assina no Google Agenda (“Do URL”). Administrador vê as visitas da empresa; vendedor, as dele. Mostra só o primeiro nome e o endereço. O Google atualiza esse tipo de agenda a cada algumas horas. Cada visita também tem “Pôr no Google Agenda”. Sincronização em tempo real com o Google (login com a conta Google) fica para depois.
 - Gatilho de fluxo “Quando uma visita é marcada”.
 
+## Agenda por profissional e página de agendamento
+
+Com profissionais cadastrados (Agenda › “Profissionais e horário de trabalho”, só o dono), a agenda passa a ser de cada um (código em `src/server/profissionais.ts`; sem profissionais, tudo continua como antes):
+
+- **Profissional:** nome, o que faz (aparece para o cliente), cor, login no painel (opcional: as visitas dele ficam como dele) e os dias e horários de trabalho, com pausa opcional. Profissionais não são apagados, só tirados da agenda (as visitas guardam com quem foram).
+- **Horários:** a duração é a mesma para todos (Configurações › Agenda de visitas). Feriados e bloqueios da empresa valem para todos.
+- **Aba “Horários” (dono):** o dia em colunas, uma por profissional. ✕ tira um horário livre; “Devolver” traz de volta; “+ horário” põe um horário a mais (fora do horário de trabalho também); “Tirar o dia” tira o dia todo do profissional (visitas já marcadas continuam). O vendedor só vê.
+- **Página de agendamento** (`/agendar/<endereço-da-empresa>`, botão “Agendar visita” no site): o cliente escolhe o dia num calendário que mostra quantos horários livres cada dia tem, depois o profissional e o horário, e confirma com nome, WhatsApp, cidade, endereço e as perguntas próprias da empresa. Vira pedido (origem “Página de agendamento”) com a visita marcada e a tarefa de confirmar o endereço. O lembrete pelo WhatsApp só vai se a pessoa marcou a caixa (ela vem desmarcada; o aceite fica guardado). Limites: 10 tentativas por hora por endereço, 1 visita futura por cliente e 20 visitas por dia marcadas de fora (página + assistente).
+- **A assistente** oferece os mesmos horários (um horário está livre se pelo menos um profissional está livre) e marca com quem estiver livre; ao remarcar, fica com o mesmo profissional quando ele está livre.
+- Demonstração: as empresas fictícias já vêm com Carla, Rafael e Bruno (seg a sex, 8h às 12h e 13h às 17h; o Bruno folga na quinta). O visitante da demonstração aberta mexe nos horários, mas não no cadastro.
+
 ## Ligação não atendida → WhatsApp
 
 Quando alguém liga para a empresa e ninguém atende, a plataforma responde pelo WhatsApp, abre a oportunidade e cria a tarefa de retornar a ligação (Configurações › Ligações não atendidas; texto e liga/desliga em Regras).
@@ -281,7 +292,7 @@ Em 12/11/2026 rodaram as revisões de segurança e legal do repositório (autom�
 
 ## Fora desta versão (sem telas que finjam funcionar)
 
-Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanhas de anúncios, central telefônica, gestão financeira, contratos, pagamentos e cobrança automática de assinaturas. Também: envio de mídia e formulários de anúncio da Meta (Facebook/Instagram).
+Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanhas de anúncios, central telefônica, gestão financeira, contratos, pagamentos e cobrança automática de assinaturas. Também: envio de mídia, formulários de anúncio da Meta (Facebook/Instagram) e duração diferente por serviço na agenda.
 
 ## Próximos passos para o primeiro cliente em produção
 

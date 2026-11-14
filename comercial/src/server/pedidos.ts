@@ -54,7 +54,7 @@ export function validarExtras(campos: Campo[], extras: Record<string, string>): 
 }
 
 export interface MetaPedido {
-  origem: 'site' | 'formulario_incorporado' | 'api';
+  origem: 'site' | 'formulario_incorporado' | 'api' | 'agenda';
   /** Hash of the visitor's address, only for abuse limits (never stored with the request). */
   ipHash: string;
 }

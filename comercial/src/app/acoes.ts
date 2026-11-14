@@ -8,21 +8,24 @@ import type { Retorno } from '@/componentes/formulario';
 import { deCampoData } from '@/componentes/formato';
 import { auth } from '@/server/auth';
 import { gerarLinkAvaliacao } from '@/server/avaliacoes';
-import type { Etapa } from '@/server/config';
+import { TEXTO_ACEITE_AGENDAMENTO, type Etapa } from '@/server/config';
 import { salvarConhecimento } from '@/server/conhecimento';
 import { dentroDoLimite, VISITANTE_DEMO } from '@/server/contexto';
 import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, simularEntradaWhatsApp } from '@/server/conversas';
-import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig } from '@/server/empresas';
+import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig, empresaPorSlug } from '@/server/empresas';
 import { demonstracaoAberta, garantirVisitante, reporSenhaVisitante } from '@/server/demonstracao';
 import { emailLigado } from '@/server/email';
 import { ErroDeUso } from '@/server/erros';
+import { tx } from '@/server/db';
+import { ErroDeFormulario, receberPedido } from '@/server/pedidos';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { gerarChaveGoogle } from '@/server/google-ads';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { gerarChaveTelefonia, simularLigacaoPerdida } from '@/server/ligacoes';
 import { salvarInvestimento } from '@/server/anuncios';
 import { cancelarProposta, criarProposta, enviarProposta, responderProposta } from '@/server/propostas';
-import { criarLinkAgenda, marcarVisitaManual, mudarVisita, remarcarVisita } from '@/server/agenda';
+import { criarLinkAgenda, marcarVisita, marcarVisitaManual, mudarVisita, remarcarVisita, textoHorario } from '@/server/agenda';
+import { adicionarHorario, ativarProfissional, CORES, desfazerAjuste, profissionalLivre, salvarProfissional, tirarHorario, type Semana } from '@/server/profissionais';
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
 import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, type InscricaoEntrada } from '@/server/push';
@@ -526,6 +529,95 @@ export const remarcarVisitaAcao = async (_: Retorno, fd: FormData) =>
     await remarcarVisita(await exigirCtx(), t(fd, 'id'), t(fd, 'inicio'));
     return { ok: 'Visita remarcada. O lembrete foi ajustado para o novo horário.' };
   });
+
+/* ---------- Agenda by professional (owner) ---------- */
+
+export const tirarHorarioAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const min = t(fd, 'minutos');
+    await tirarHorario(await exigirCtx(), t(fd, 'profissional'), t(fd, 'dia'), min === '' ? null : Number(min));
+    return { ok: min === '' ? 'Dia tirado da agenda.' : 'Horário tirado.' };
+  });
+
+export const desfazerAjusteAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await desfazerAjuste(await exigirCtx(), t(fd, 'id'));
+    return { ok: 'Pronto.' };
+  });
+
+export const adicionarHorarioAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await adicionarHorario(await exigirCtx(), t(fd, 'profissional'), t(fd, 'dia'), t(fd, 'hora'));
+    return { ok: 'Horário adicionado.' };
+  });
+
+const minutosDe = (v: string) => {
+  const m = v.match(/^(\d{1,2}):(\d{2})$/);
+  return m ? Math.min(1440, +m[1] * 60 + +m[2]) : null;
+};
+
+export const profissionalAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    // Each weekday: works or not, from–to, and an optional break (lunch).
+    const semana: Semana = {};
+    for (let d = 0; d < 7; d++) {
+      if (fd.get(`dia${d}`) !== 'on') continue;
+      const ini = minutosDe(t(fd, `ini${d}`)), fim = minutosDe(t(fd, `fim${d}`)), pi = minutosDe(t(fd, `pini${d}`)), pf = minutosDe(t(fd, `pfim${d}`));
+      if (ini === null || fim === null || fim <= ini) throw new ErroDeUso('Confira o horário de cada dia marcado (o fim depois do início).');
+      semana[String(d)] = pi !== null && pf !== null && pi > ini && pf > pi && pf < fim ? [[ini, pi], [pf, fim]] : [[ini, fim]];
+    }
+    const cor = CORES.includes(t(fd, 'cor')) ? t(fd, 'cor') : CORES[0];
+    await salvarProfissional(await exigirCtx(), { id: t(fd, 'id') || undefined, nome: t(fd, 'nome'), funcao: t(fd, 'funcao'), cor, userId: t(fd, 'login') || null, semana });
+    return { ok: 'Profissional salvo.' };
+  });
+
+export const ativarProfissionalAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const ativo = t(fd, 'ativo') === '1';
+    await ativarProfissional(await exigirCtx(), t(fd, 'id'), ativo);
+    return { ok: ativo ? 'Profissional de volta na agenda.' : 'Profissional tirado da agenda.' };
+  });
+
+/* ---------- Booking page (public: the customer books the visit) ---------- */
+
+export async function agendarAcao(_: Retorno, fd: FormData): Promise<Retorno> {
+  const slug = t(fd, 'slug');
+  const empresa = await empresaPorSlug(slug);
+  if (!empresa) return { erro: 'Empresa não encontrada.' };
+  if (!(await dentroDoLimite(`agendar:${await ipHash()}`, 10, 3600))) return { erro: 'Muitas tentativas seguidas. Aguarde alguns minutos.' };
+  const inicio = new Date(t(fd, 'h'));
+  const profissional = t(fd, 'p');
+  if (Number.isNaN(inicio.getTime()) || !/^[0-9a-f-]{36}$/i.test(profissional)) return { erro: 'Escolha o dia e o horário de novo.' };
+  let texto = '';
+  try {
+    if (!(await tx((db) => profissionalLivre(empresa, inicio, profissional, db)))) return { erro: 'Esse horário acabou de ser marcado. Volte e escolha outro.' };
+    texto = textoHorario(inicio, empresa.config.regras.fuso);
+    const r = await receberPedido(
+      empresa,
+      {
+        nome: t(fd, 'nome'), telefone: t(fd, 'telefone'), cidade: t(fd, 'cidade'), necessidade: `Marcou uma visita pela página de agendamento: ${texto}.`, preferencia_contato: 'WhatsApp', aceite_whatsapp: false, chave_idempotencia: t(fd, 'chave'), site_url: t(fd, 'site_url'),
+        extras: Object.fromEntries(empresa.config.campos.map((c) => [c.id, t(fd, `extra_${c.id}`).slice(0, 200)])),
+      },
+      { origem: 'agenda', ipHash: await ipHash() },
+    );
+    if (!('descartado' in r)) {
+      await tx(async (db) => {
+        await marcarVisita(db, empresa, { oportunidadeId: r.oportunidadeId, inicio, profissionalId: profissional, endereco: t(fd, 'endereco'), origem: 'cliente', checarLivre: true });
+        if (fd.get('aceite') === 'on') {
+          await db.query(`insert into consentimentos (empresa_id, contato_id, canal, texto, origem, versao) values ($1, $2, 'whatsapp', $3, 'agenda', 3)`, [empresa.id, r.contatoId, TEXTO_ACEITE_AGENDAMENTO(empresa.nome, texto)]);
+        }
+      });
+      after(() => processarFila(10).catch(() => {}));
+    }
+  } catch (err) {
+    unstable_rethrow(err);
+    if (err instanceof ErroDeFormulario) return { erro: Object.values(err.campos)[0] ?? err.message };
+    if (err instanceof ErroDeUso) return { erro: err.message };
+    console.error('[agendar]', err);
+    return { erro: 'Não foi possível marcar agora. Tente de novo em instantes.' };
+  }
+  redirect(`/agendar/${encodeURIComponent(slug)}?feito=${encodeURIComponent(texto)}`);
+}
 
 export const linkAgendaAcao = async () =>
   tentar(async () => {

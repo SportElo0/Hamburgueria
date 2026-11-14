@@ -162,6 +162,9 @@ export type Conhecimento = z.infer<typeof Conhecimento>;
 /** Consent text shown next to the WhatsApp checkbox; stored with each acceptance. */
 /** Version of the consent text below. Version 2 added the maintenance reminder; older acceptances do not cover it. */
 export const VERSAO_CONSENTIMENTO = 4;
+/** What the customer ticks on the booking page: the visit reminder only (stored with origin "agenda"). */
+export const FRASE_LEMBRETE_AGENDAMENTO = 'Quero receber o lembrete da visita pelo WhatsApp neste número, um dia antes. Posso cancelar respondendo SAIR.';
+export const TEXTO_ACEITE_AGENDAMENTO = (empresa: string, quando: string) => `Na página de agendamento da ${empresa}, ao marcar a visita de ${quando}, marcou: "${FRASE_LEMBRETE_AGENDAMENTO}"`;
 export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
   `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta, para retornar minhas ligações, me lembrar das visitas marcadas e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
 

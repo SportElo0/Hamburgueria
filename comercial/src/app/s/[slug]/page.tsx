@@ -5,6 +5,7 @@ import { FormularioPedido } from '@/componentes/formulario-pedido';
 import { TEXTO_CONSENTIMENTO_WHATSAPP, formatarTelefone } from '@/server/config';
 import { conhecimentoAtual } from '@/server/conhecimento';
 import { empresaPorSlug } from '@/server/empresas';
+import { usaProfissionais } from '@/server/profissionais';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const e = await empresaPorSlug((await params).slug);
@@ -16,6 +17,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
   if (!empresa) notFound();
   const s = empresa.config.site;
   const k = await conhecimentoAtual(empresa.id);
+  const podeAgendar = empresa.config.agenda.ativa && (await usaProfissionais(empresa.id));
   const zap = s.whatsapp ? (s.whatsapp.length <= 11 ? `55${s.whatsapp}` : s.whatsapp) : '';
   return (
     <div className="bg-white text-texto">
@@ -35,6 +37,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
               {s.descricao && <p className="mt-4 text-lg">{s.descricao}</p>}
               <div className="mt-6 flex flex-wrap gap-3">
                 <a href="#orcamento" className="botao">Pedir orçamento</a>
+                {podeAgendar && <Link href={`/agendar/${empresa.slug}`} className="botao-2">Agendar visita</Link>}
                 {zap && <a className="botao-2" href={`https://wa.me/${zap}`} target="_blank" rel="noopener noreferrer">Falar pelo WhatsApp</a>}
               </div>
             </div>

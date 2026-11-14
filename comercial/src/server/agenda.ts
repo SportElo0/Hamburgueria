@@ -6,6 +6,7 @@ import { empresaPorId, membroAtivo, type Empresa } from './empresas';
 import { ErroDeUso, NaoEncontrado } from './erros';
 import { agendar } from './fila';
 import { dispararFluxos } from './fluxos';
+import { profissionalLivre, usaProfissionais, vagasLivres } from './profissionais';
 import { hashToken, novoToken } from './segredos';
 
 /**
@@ -74,7 +75,9 @@ export interface Horario {
 export async function horariosLivres(empresa: Empresa, max = 6, agora = new Date(), db?: Db): Promise<Horario[]> {
   const a = empresa.config.agenda;
   const fuso = empresa.config.regras.fuso;
-  if (!a.ativa || !a.dias.length) return [];
+  if (!a.ativa) return [];
+  if (await usaProfissionais(empresa.id, db)) return espalhar(await diasDosProfissionais(empresa, agora, db), max);
+  if (!a.dias.length) return [];
   const desde = new Date(agora.getTime() + a.antecedencia_horas * 3_600_000);
   const ate = new Date(agora.getTime() + a.janela_dias * 86_400_000);
   const ocupadas = await q<{ inicio: Date; fim: Date }>(`select inicio, fim from visitas where empresa_id = $1 and estado = any($2) and fim > $3 and inicio < $4`, [empresa.id, ATIVAS, desde, ate], db);
@@ -96,7 +99,25 @@ export async function horariosLivres(empresa: Empresa, max = 6, agora = new Date
     }
     if (dia.length) porDia.push(dia);
   }
-  // A morning and an afternoon option on the first days, before more times of the same day.
+  return espalhar(porDia, max);
+}
+
+/** Professional mode: a start time is free when at least one professional is free then. */
+async function diasDosProfissionais(empresa: Empresa, agora: Date, db?: Db): Promise<Horario[][]> {
+  const fuso = empresa.config.regras.fuso;
+  const vistos = new Set<number>();
+  const porDia = new Map<string, Horario[]>();
+  for (const v of await vagasLivres(empresa, agora, db)) {
+    if (vistos.has(v.inicio.getTime())) continue;
+    vistos.add(v.inicio.getTime());
+    const chave = v.inicio.toLocaleDateString('en-CA', { timeZone: fuso });
+    porDia.set(chave, [...(porDia.get(chave) ?? []), { id: v.inicio.toISOString(), inicio: v.inicio, texto: textoHorario(v.inicio, fuso) }]);
+  }
+  return [...porDia.values()];
+}
+
+/** A morning and an afternoon option on the first days, before more times of the same day. */
+function espalhar(porDia: Horario[][], max: number): Horario[] {
   const escolhidos: Horario[] = [];
   for (let rodada = 0; escolhidos.length < max && porDia.some((d) => d.length); rodada++) {
     for (const d of porDia) {
@@ -125,7 +146,9 @@ interface NovaVisita {
   responsavelId?: string | null;
   endereco?: string;
   observacao?: string;
-  origem: 'usuario' | 'ia';
+  origem: 'usuario' | 'ia' | 'cliente';
+  /** Professional mode: who takes the visit (chosen by the customer or the team); otherwise the first free one. */
+  profissionalId?: string | null;
   criadoPor?: string | null;
   /** The customer asked a team member for the WhatsApp reminder (name of who recorded it). */
   aceiteLembreteEquipe?: string | null;
@@ -146,24 +169,37 @@ export async function marcarVisita(db: Db, empresa: Empresa, v: NovaVisita): Pro
   if (!o) throw new NaoEncontrado('Oportunidade não encontrada.');
   if (o.etapa === 'ganho' || o.etapa === 'perdido') throw new ErroDeUso('A oportunidade já está encerrada.');
   if (Number.isNaN(v.inicio.getTime()) || v.inicio.getTime() < Date.now() - 5 * 60_000) throw new ErroDeUso('Escolha um horário no futuro.');
-  if (v.checarLivre && !(await horariosLivres(empresa, 1000, new Date(), db)).some((h) => h.inicio.getTime() === v.inicio.getTime())) {
+  const modoProf = await usaProfissionais(empresa.id, db);
+  let profissionalId: string | null = null;
+  if (modoProf && (v.checarLivre || v.profissionalId)) {
+    if (v.checarLivre) {
+      profissionalId = await profissionalLivre(empresa, v.inicio, v.profissionalId ?? null, db);
+      if (!profissionalId) throw new ErroDeUso('Esse horário não está mais livre.');
+    } else {
+      // A person may book any time, but only with a professional of this company.
+      if (!(await um('select 1 from profissionais where empresa_id = $1 and id = $2 and ativo', [empresa.id, v.profissionalId], db))) throw new ErroDeUso('Profissional não encontrado.');
+      profissionalId = v.profissionalId!;
+    }
+  } else if (v.checarLivre && !(await horariosLivres(empresa, 1000, new Date(), db)).some((h) => h.inicio.getTime() === v.inicio.getTime())) {
     throw new ErroDeUso('Esse horário não está mais livre.');
   }
   if (await um(`select 1 from visitas where empresa_id = $1 and oportunidade_id = $2 and estado = any($3) and inicio > now()`, [empresa.id, o.id, ATIVAS], db)) {
     throw new ErroDeUso('Esta oportunidade já tem uma visita marcada. Remarque a que existe.');
   }
-  if (v.origem === 'ia') {
-    // The public chat cannot fill the calendar: one booking per contact at a time and a daily cap per company.
+  if (v.origem !== 'usuario') {
+    // The public chat and the booking page cannot fill the calendar: one booking per contact at a time and a daily cap per company.
     if (await um(`select 1 from visitas where empresa_id = $1 and contato_id = $2 and estado = any($3) and inicio > now()`, [empresa.id, o.contato_id, ATIVAS], db)) throw new ErroDeUso('Este cliente já tem uma visita marcada.');
     const hoje = await um<{ n: number }>(`select count(*)::int as n from visitas where empresa_id = $1 and origem = 'ia' and criado_em > now() - interval '24 hours'`, [empresa.id], db);
     if ((hoje?.n ?? 0) >= MAX_VISITAS_IA_DIA) throw new ErroDeUso('Limite de visitas marcadas pela assistente hoje.');
   }
-  const responsavel = v.responsavelId && (await membroAtivo(db, empresa.id, v.responsavelId)) ? v.responsavelId : o.responsavel_id;
+  // The professional's login (when linked) takes the visit; otherwise whoever was chosen, or the opportunity's owner.
+  const doProf = profissionalId ? (await um<{ user_id: string | null }>('select user_id from profissionais where id = $1', [profissionalId], db))?.user_id ?? null : null;
+  const responsavel = v.responsavelId && (await membroAtivo(db, empresa.id, v.responsavelId)) ? v.responsavelId : doProf && (await membroAtivo(db, empresa.id, doProf)) ? doProf : o.responsavel_id;
   const fim = new Date(v.inicio.getTime() + a.duracao_min * 60_000);
   const texto = textoHorario(v.inicio, fuso);
   const r = (await um<{ id: string }>(
-    `insert into visitas (empresa_id, oportunidade_id, contato_id, responsavel_id, inicio, fim, endereco, observacao, origem, criado_por) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id`,
-    [empresa.id, o.id, o.contato_id, responsavel, v.inicio, fim, (v.endereco ?? '').trim().slice(0, 300), (v.observacao ?? '').trim().slice(0, 500), v.origem, v.criadoPor ?? null],
+    `insert into visitas (empresa_id, oportunidade_id, contato_id, responsavel_id, inicio, fim, endereco, observacao, origem, criado_por, profissional_id) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning id`,
+    [empresa.id, o.id, o.contato_id, responsavel, v.inicio, fim, (v.endereco ?? '').trim().slice(0, 300), (v.observacao ?? '').trim().slice(0, 500), v.origem, v.criadoPor ?? null, profissionalId],
     db,
   ))!;
   await q(`update oportunidades set interesse_visita = $3, ultima_interacao_em = now() where empresa_id = $1 and id = $2`, [empresa.id, o.id, `Visita marcada: ${texto}`], db);
@@ -172,11 +208,11 @@ export async function marcarVisita(db: Db, empresa: Empresa, v: NovaVisita): Pro
     await q(`insert into consentimentos (empresa_id, contato_id, canal, texto, origem, versao) values ($1, $2, 'whatsapp', $3, 'agenda', 2)`, [empresa.id, o.contato_id, TEXTO_ACEITE_LEMBRETE_EQUIPE(empresa.nome, texto, v.aceiteLembreteEquipe)], db);
   }
   await agendarLembrete(db, empresa, r.id, o.id, v.inicio);
-  await registrar(db, empresa.id, { oportunidadeId: o.id, contatoId: o.contato_id, ator: v.origem === 'ia' ? { tipo: 'ia' } : { tipo: 'usuario', id: v.criadoPor ?? undefined }, tipo: 'visita_marcada', dados: { quando: texto, origem: v.origem } });
-  if (v.origem === 'ia') {
-    // The assistant only books the slot: a person confirms the address and the visit.
+  await registrar(db, empresa.id, { oportunidadeId: o.id, contatoId: o.contato_id, ator: v.origem === 'ia' ? { tipo: 'ia' } : v.origem === 'cliente' ? { tipo: 'visitante' } : { tipo: 'usuario', id: v.criadoPor ?? undefined }, tipo: 'visita_marcada', dados: { quando: texto, origem: v.origem } });
+  if (v.origem !== 'usuario') {
+    // The assistant (or the customer, on the booking page) only books the slot: a person confirms the address and the visit.
     const prazo = new Date(Math.min(Date.now() + empresa.config.regras.sla_minutos * 60_000, v.inicio.getTime() - 2 * 3_600_000));
-    await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'confirmar_visita', titulo: `Confirmar a visita de ${texto}: ${o.nome || formatarTelefone(o.telefone)}`, detalhe: 'Marcada pela assistente. Confirme o endereço com o cliente e marque a visita como confirmada na agenda.', prazo: prazo > new Date() ? prazo : new Date(), responsavelId: responsavel, chave: `visita-ia:${r.id}` });
+    await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'confirmar_visita', titulo: `Confirmar a visita de ${texto}: ${o.nome || formatarTelefone(o.telefone)}`, detalhe: v.origem === 'cliente' ? 'O cliente marcou pela página de agendamento. Confirme o endereço com ele e marque a visita como confirmada na agenda.' : 'Marcada pela assistente. Confirme o endereço com o cliente e marque a visita como confirmada na agenda.', prazo: prazo > new Date() ? prazo : new Date(), responsavelId: responsavel, chave: `visita-ia:${r.id}` });
   } else if (responsavel && responsavel !== v.criadoPor) {
     await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresa.id, responsavel, `Visita marcada para você: ${texto}`, o.nome, '/painel/agenda'], db);
   }
@@ -239,8 +275,14 @@ async function remarcarNoBanco(db: Db, empresa: Empresa, id: string, inicio: Dat
   const v = await um<{ oportunidade_id: string; contato_id: string; estado: EstadoVisita }>('select oportunidade_id, contato_id, estado from visitas where empresa_id = $1 and id = $2 for update', [empresa.id, id], db);
   if (!v) throw new NaoEncontrado('Visita não encontrada.');
   if (!ATIVAS.includes(v.estado)) throw new ErroDeUso('Só dá para remarcar uma visita marcada ou confirmada.');
-  if (checarLivre && !(await horariosLivres(empresa, 1000, new Date(), db)).some((h) => h.inicio.getTime() === inicio.getTime())) throw new ErroDeUso('Esse horário não está mais livre.');
-  await q(`update visitas set inicio = $3, fim = $4, estado = 'marcada', atualizado_em = now() where empresa_id = $1 and id = $2`, [empresa.id, id, inicio, new Date(inicio.getTime() + empresa.config.agenda.duracao_min * 60_000)], db);
+  let profissionalId: string | null | undefined;
+  if (checarLivre && (await usaProfissionais(empresa.id, db))) {
+    // The same professional when free at the new time, otherwise another free one.
+    const atual = (await um<{ profissional_id: string | null }>('select profissional_id from visitas where id = $1', [id], db))?.profissional_id ?? null;
+    profissionalId = (atual && (await profissionalLivre(empresa, inicio, atual, db))) || (await profissionalLivre(empresa, inicio, null, db));
+    if (!profissionalId) throw new ErroDeUso('Esse horário não está mais livre.');
+  } else if (checarLivre && !(await horariosLivres(empresa, 1000, new Date(), db)).some((h) => h.inicio.getTime() === inicio.getTime())) throw new ErroDeUso('Esse horário não está mais livre.');
+  await q(`update visitas set inicio = $3, fim = $4, estado = 'marcada', profissional_id = coalesce($5, profissional_id), atualizado_em = now() where empresa_id = $1 and id = $2`, [empresa.id, id, inicio, new Date(inicio.getTime() + empresa.config.agenda.duracao_min * 60_000), profissionalId ?? null], db);
   await q(`update trabalhos set estado = 'cancelado', resultado = 'Visita remarcada.', concluido_em = now() where empresa_id = $1 and tipo = 'lembrete_visita' and estado = 'pendente' and dados ->> 'visita' = $2`, [empresa.id, id], db);
   await agendarLembrete(db, empresa, id, v.oportunidade_id, inicio);
   const texto = textoHorario(inicio, empresa.config.regras.fuso);
@@ -308,7 +350,8 @@ export interface VisitaLista {
   estado: EstadoVisita;
   endereco: string;
   observacao: string;
-  origem: 'usuario' | 'ia';
+  origem: 'usuario' | 'ia' | 'cliente';
+  profissional: string | null;
   nome: string;
   telefone: string;
   cidade: string;
@@ -321,8 +364,8 @@ export interface VisitaLista {
 /** Visits of the company between two instants (sellers see all of the company's, like the opportunities board). */
 export async function visitas(ctx: Ctx, de: Date, ate: Date, oportunidadeId?: string): Promise<VisitaLista[]> {
   return q<VisitaLista>(
-    `select v.id, v.oportunidade_id, v.inicio, v.fim, v.estado, v.endereco, v.observacao, v.origem, c.nome, c.telefone, c.cidade, u.name as responsavel, v.responsavel_id, v.inicio < now() as passou
-     from visitas v join contatos c on c.id = v.contato_id left join "user" u on u.id = v.responsavel_id
+    `select v.id, v.oportunidade_id, v.inicio, v.fim, v.estado, v.endereco, v.observacao, v.origem, p.nome as profissional, c.nome, c.telefone, c.cidade, u.name as responsavel, v.responsavel_id, v.inicio < now() as passou
+     from visitas v join contatos c on c.id = v.contato_id left join "user" u on u.id = v.responsavel_id left join profissionais p on p.id = v.profissional_id
      where v.empresa_id = $1 and v.inicio >= $2 and v.inicio < $3 and ($4::uuid is null or v.oportunidade_id = $4)
      order by v.inicio limit 300`,
     [ctx.empresaId, de, ate, oportunidadeId ?? null],
