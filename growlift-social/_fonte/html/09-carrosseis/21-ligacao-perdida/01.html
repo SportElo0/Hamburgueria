@@ -1,0 +1,64 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>@font-face{font-family:Inter;font-weight:100 900;src:url(file:///home/user/Hamburgueria/growlift/fonts/inter-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:Inter;font-weight:100 900;src:url(file:///home/user/Hamburgueria/growlift/fonts/inter-latin-ext-wght-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}</style><style>:root{--w:1080px;--h:1350px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:var(--w);height:var(--h);overflow:hidden}
+body{position:relative;font-family:Inter,system-ui,sans-serif;color:#f3f5f9;background:#06080d;-webkit-font-smoothing:antialiased}
+.glow{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(8,101,254,.42),rgba(8,101,254,0) 70%)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:72px 72px;-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 25%,transparent 72%)}
+.eyebrow{font-size:28px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#6ea6ff}
+.h1{font-weight:800;letter-spacing:-.035em;line-height:.98}
+.blue{color:#4d8dff}
+.lead{color:#c6cede;line-height:1.4}
+.muted{color:#a9b3c7}
+.chip{display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(141,184,255,.35);color:#8db8ff;border-radius:999px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:#0865fe;color:#fff;border-radius:999px;font-weight:700;box-shadow:0 24px 50px -20px rgba(8,101,254,.9)}
+.card{background:#0f1520;border:1px solid rgba(255,255,255,0.10);border-radius:32px}
+.brand{display:flex;align-items:center;gap:16px;font-weight:700;letter-spacing:.12em}
+.brand svg{height:1.05em;width:auto}
+.browser{border-radius:26px;overflow:hidden;background:#0f1520;border:1px solid rgba(255,255,255,0.10);box-shadow:0 -30px 90px -30px rgba(8,101,254,.55),0 40px 80px -40px rgba(0,0,0,.9)}
+.browser .bar{display:flex;align-items:center;gap:10px;height:54px;padding:0 22px;border-bottom:1px solid rgba(255,255,255,.08)}
+.browser .bar i{width:14px;height:14px;border-radius:50%;background:#2a3344}
+.browser .bar span{margin-left:14px;font-size:20px;color:#7d879c;background:#161d2a;padding:6px 18px;border-radius:999px}
+.browser img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.phone{border-radius:64px;padding:16px;background:#1a2130;box-shadow:0 50px 90px -40px rgba(0,0,0,.95),0 0 0 2px rgba(255,255,255,.06)}
+.phone img{display:block;width:100%;border-radius:50px}
+.tag-conceito{display:inline-block;font-size:22px;font-weight:600;letter-spacing:.06em;color:#8790a6;border:1px dashed rgba(255,255,255,.22);border-radius:999px;padding:8px 18px}
+
+body{background:#06080d;color:#ffffff}
+.abs{position:absolute;left:0;top:0}
+.h{font-weight:900;letter-spacing:-.045em;line-height:.98;color:#ffffff}
+.h em{font-style:normal;color:#4d8dff}
+.p{font-size:40px;line-height:1.35;color:#d5dceb;font-weight:500}
+.p b{color:#ffffff}
+.chip{display:inline-flex;align-items:center;gap:12px;height:58px;padding:0 26px;border-radius:999px;font-size:26px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(8,101,254,.22);color:#cfe0ff}
+.card{background:#fff;color:#0b1220;border-radius:30px;box-shadow:0 40px 80px -40px rgba(8,30,80,.45),0 0 0 1.5px rgba(11,18,32,.06)}
+.phone{position:absolute;background:#121826;border-radius:58px;padding:14px;box-shadow:0 50px 100px -40px rgba(4,20,60,.7)}
+.screen{background:#fff;border-radius:46px;height:100%;overflow:hidden;color:#0b1220;position:relative}
+.bubble{position:absolute;background:#fff;color:#0b1220;border-radius:30px;padding:20px 26px;font-size:30px;font-weight:700;line-height:1.25;box-shadow:0 24px 50px -24px rgba(4,20,60,.55)}
+.msg{display:inline-block;max-width:78%;padding:14px 20px;border-radius:24px;font-size:25px;line-height:1.3;font-weight:600}
+.in{background:#eef1f6;color:#0b1220;border-bottom-left-radius:8px}
+.out{background:#d9fdd3;color:#0b1220;border-bottom-right-radius:8px;margin-left:auto}
+.x{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#ff5a4e;color:#fff;font-weight:900;font-size:28px}
+.ok{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#1fb85a;color:#fff;font-weight:900;font-size:26px}
+</style></head><body><div style="position:absolute;left:-420px;top:-480px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(closest-side,rgba(8,101,254,.42),rgba(8,101,254,0) 70%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:70px;display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;align-items:center;gap:14px;font-size:27px;font-weight:800;letter-spacing:.14em;color:#ffffff"><svg height="30" viewBox="50 40 530 415" xmlns="http://www.w3.org/2000/svg"><path fill="#0865fe" d="M280 48H410L190 450H55Z"/><path fill="#0865fe" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></svg>GROWLIFT</div>
+      <span style="font-size:26px;font-weight:700;color:#a9b3c7">@growlift.ai</span></div>
+    <div style="position:absolute;left:84px;right:84px;top:160px;bottom:140px"><div style="position:absolute;left:0;right:0;top:20px"><h1 class="h" style="font-size:96px">Você estava na escada. <em>O cliente, no telefone.</em></h1><p class="p" style="margin-top:26px;max-width:880px">O que fazer com a ligação que você não consegue atender (e dois dados que explicam por quê).</p></div>
+   <div style="position:absolute;left:-84px;right:-84px;bottom:0;height:640px"><style>#l1-happy{opacity:0}#l1-sad{opacity:1}</style><div style="position:absolute;left:90px;top:250px;width:300px;height:330px;"><svg id="l1" class="abs" width="300" height="330" viewBox="0 0 200 220" style="overflow:visible">
+  <path d="M22 220c4-52 36-78 78-78s74 26 78 78z" fill="#0f6c8a"/>
+  <path d="M84 132h32v22c0 9-7 14-16 14s-16-5-16-14z" fill="#c68a5e"/>
+  <circle cx="100" cy="88" r="52" fill="#c68a5e"/>
+  <path d="M48 84c0-34 22-54 52-54s54 18 54 50c-10-6-22-16-28-26-16 14-44 22-78 30z" fill="#2b2118"/>
+  <circle cx="44" cy="96" r="9" fill="#c68a5e"/><circle cx="156" cy="96" r="9" fill="#c68a5e"/>
+  <ellipse cx="80" cy="96" rx="6" ry="7.5" fill="#1a1410"/><ellipse cx="120" cy="96" rx="6" ry="7.5" fill="#1a1410"/>
+  <ellipse cx="66" cy="114" rx="9" ry="5" fill="#f08a7e" opacity=".55"/><ellipse cx="134" cy="114" rx="9" ry="5" fill="#f08a7e" opacity=".55"/>
+  <path id="l1-happy" d="M82 116c8 12 28 12 36 0" stroke="#1a1410" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path id="l1-sad" d="M84 124c8-9 24-9 32 0" stroke="#1a1410" stroke-width="5" fill="none" stroke-linecap="round" opacity="0"/>
+  <path id="l1-brow" d="M70 80l18 4M130 80l-18 4" stroke="#1a1410" stroke-width="4" stroke-linecap="round" opacity="0"/>
+</svg></div>
+            <div class="bubble" style="left:40px;top:140px;width:auto;transform:rotate(-4deg);background:#fff;color:#0b1220;font-size:30px">Tô no meio do serviço… 😬</div>
+            <div class="phone" style="left:560px;top:40px;width:380px;height:580px;transform:rotate(4deg)"><div class="screen"><div style="padding:120px 26px 0;text-align:center"><div style="width:120px;height:120px;margin:0 auto;border-radius:50%;background:#eef1f6;display:grid;place-items:center"><svg width="66" height="66" viewBox="0 0 24 24" fill="none" stroke="#6b7588" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4-7 8-7s7 2.5 8 7"/></svg></div><div style="margin-top:26px;font-size:34px;font-weight:900;color:#ff5a4e">Chamada perdida</div><div style="margin-top:10px;font-size:24px;color:#6b7588">Cliente novo · 14:02</div></div></div></div>
+            <span style="position:absolute;right:120px;bottom:-6px;font-size:22px;font-weight:800;letter-spacing:.04em;padding:8px 16px;border-radius:999px;background:rgba(11,18,32,.75);color:#fff">Exemplo ilustrativo</span></div></div>
+    <div style="position:absolute;left:84px;right:84px;bottom:62px;display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:8px"><i style="display:block;height:8px;border-radius:4px;width:46px;background:#4d8dff"></i><i style="display:block;height:8px;border-radius:4px;width:14px;background:rgba(255,255,255,.22)"></i><i style="display:block;height:8px;border-radius:4px;width:14px;background:rgba(255,255,255,.22)"></i><i style="display:block;height:8px;border-radius:4px;width:14px;background:rgba(255,255,255,.22)"></i><i style="display:block;height:8px;border-radius:4px;width:14px;background:rgba(255,255,255,.22)"></i><i style="display:block;height:8px;border-radius:4px;width:14px;background:rgba(255,255,255,.22)"></i><i style="display:block;height:8px;border-radius:4px;width:14px;background:rgba(255,255,255,.22)"></i></div>
+      <span style="font-size:26px;font-weight:800;color:#a9b3c7">Arrasta →</span></div></body></html>

@@ -793,6 +793,100 @@ Quer ver como fica na sua clínica? Comenta CLÍNICA que a gente te explica no d
 #clinicaodontologica #dentista #consultorioodontologico #atendimento #inteligenciaartificial`,
     alt: 'Carrossel ilustrado para donos de clínica odontológica: uma paciente com dor de dente manda áudio à noite e ninguém responde; depois, três passos de uma atendente de IA no WhatsApp da clínica (ouve o áudio e responde com voz, marca na agenda, lembra um dia antes), os limites dela e o convite "Comenta CLÍNICA".',
   },
+  {
+    slug: '21-ligacao-perdida',
+    titulo: 'A ligação que você não conseguiu atender',
+    temas: ['escuro', 'claro', 'azul', 'claro', 'escuro', 'claro', 'azul'],
+    slides: [
+      () =>
+        capa({
+          gancho: 'Você estava na escada. <em>O cliente, no telefone.</em>',
+          sub: 'O que fazer com a ligação que você não consegue atender (e dois dados que explicam por quê).',
+          tamanho: 96,
+          cena: `${boneco('l1', { x: 90, y: 250, size: 300, shirt: '#0f6c8a', skin: '#c68a5e', cara: 'triste' })}
+            ${balao('Tô no meio do serviço… 😬', { x: 40, y: 140, rot: -4 })}
+            ${celular(`<div style="padding:120px 26px 0;text-align:center"><div style="width:120px;height:120px;margin:0 auto;border-radius:50%;background:#eef1f6;display:grid;place-items:center">${svgIcon(ICON.user, 66, '#6b7588', 1.8)}</div><div style="margin-top:26px;font-size:34px;font-weight:900;color:${RED}">Chamada perdida</div><div style="margin-top:10px;font-size:24px;color:#6b7588">Cliente novo · 14:02</div></div>`, { x: 560, y: 40, w: 380, h: 580, rot: 4 })}
+            <span style="position:absolute;right:120px;bottom:-6px;font-size:22px;font-weight:800;letter-spacing:.04em;padding:8px 16px;border-radius:999px;background:rgba(11,18,32,.75);color:#fff">Exemplo ilustrativo</span>`,
+        }),
+      () =>
+        porque({
+          frase: 'Quem liga com o ar parado <em>liga pro próximo.</em>',
+          apoio: 'No calor, com o aparelho sem gelar ou pingando, o cliente quer resposta agora. Se ninguém atende, ele volta pra busca e tenta outro técnico.',
+          cena: `${celular(busca('conserto de ar') + resultado({ nome: 'Técnico A', nota: '', linha: 'Não atendeu', cor: '#fde2df' }) + resultado({ nome: 'Técnico B', nota: '', linha: 'Ligando…', cor: '#dcfce7' }), { x: 300, y: 90, w: 460, h: 430 })}
+            ${boneco('l2', { x: 760, y: 230, size: 260, shirt: '#e8a54b', skin: '#e2b08a', hair: '#5b5b5b' })}`,
+        }),
+      ({ tema }) =>
+        `<span class="chip">Dados de pesquisa</span>
+         <div style="margin-top:44px;display:grid;gap:48px">
+           <div><div class="h" style="font-size:190px;line-height:.9">77%</div>
+             <p class="p" style="margin-top:14px;font-size:40px;max-width:900px"><b>dos brasileiros fazem mais ligações pelo WhatsApp</b> do que pelo plano da operadora.</p>
+             <p class="p" style="margin-top:10px;font-size:24px">Panorama Mobile Time/Opinion Box, janeiro de 2025, 2.099 entrevistados.</p></div>
+           <div><div class="h" style="font-size:190px;line-height:.9">65%</div>
+             <p class="p" style="margin-top:14px;font-size:40px;max-width:900px"><b>dos celulares no Brasil têm o WhatsApp na tela inicial.</b></p>
+             <p class="p" style="margin-top:10px;font-size:24px">Super Panorama Mobile Time/Opinion Box, junho de 2026.</p></div>
+         </div>
+         <p class="p" style="position:absolute;left:0;right:0;bottom:10px;font-size:36px;color:#fff"><b>Ou seja:</b> o seu cliente vive no WhatsApp. É lá que ele espera a resposta.</p>`,
+      ({ tema }) =>
+        resumo({
+          titulo: '3 coisas pra fazer <em>hoje, sem gastar nada</em>',
+          itens: [
+            ['Ligue a mensagem de ausência do WhatsApp Business:', 'diga que você está num serviço e pergunte o que a pessoa precisa.'],
+            ['Retorne toda ligação perdida', 'assim que descer da escada, antes de começar o próximo serviço.'],
+            ['Deixe no Google o WhatsApp e o horário certos,', 'pra quem procura achar o canal em que você responde.'],
+          ],
+          tema,
+        }),
+      ({ tema }) =>
+        `<span class="chip">Antes de mandar mensagem</span>
+         <h2 class="h" style="font-size:84px;margin-top:30px">WhatsApp pra quem ligou? <em>Só com autorização.</em></h2>
+         <div style="margin-top:50px">${lista(
+           [
+             ['Pela LGPD,', 'a empresa precisa de um motivo válido pra usar o número da pessoa. O mais simples é ela aceitar.'],
+             ['Um jeito fácil de pedir:', 'na própria ligação, um menu pergunta "quer receber a resposta no WhatsApp? Aperte 1".'],
+             ['No WhatsApp oficial,', 'passadas 24 horas da última mensagem do cliente, a empresa só envia modelos aprovados pela Meta.'],
+           ],
+           tema,
+         )}</div>`,
+      () =>
+        `<span class="chip">Na demonstração da Growlift</span>
+         <h2 class="h" style="font-size:76px;margin-top:30px">Ninguém atendeu? <em>A resposta vai pro WhatsApp.</em></h2>
+         <p class="p" style="margin-top:24px;font-size:34px;max-width:900px">Quem ligou aperta 1. A atendente de IA responde, entende o serviço e marca a visita na agenda. Você recebe o aviso no celular pra confirmar o endereço.</p>
+         <div style="position:absolute;left:-84px;right:-84px;bottom:0;height:560px">
+           ${celular(conversa([['in', 'Oi! Aqui é a Ana, da Edu Climatização. Vi que você ligou e não conseguimos atender agora. Como posso te ajudar?', '14:02'], ['out', 'Quero instalar um ar no quarto.', '14:03']], { topo: 'Edu Climatização' }), { x: 130, y: 10, w: 500, h: 530, rot: -2 })}
+           <div class="card" style="position:absolute;left:640px;top:150px;width:380px;padding:22px 24px"><div style="font-size:19px;font-weight:700;color:#6b7588">Growlift Comercial · agora</div><div style="margin-top:8px;font-size:26px;font-weight:900;line-height:1.2">Confirmar a visita de quinta, 9h: Jorge</div></div>
+           <span style="position:absolute;left:660px;top:330px;font-size:22px;font-weight:800;letter-spacing:.04em;padding:8px 16px;border-radius:999px;background:rgba(11,18,32,.75);color:#fff">Exemplo ilustrativo</span></div>`,
+      () =>
+        `<h2 class="h" style="font-size:96px;margin-top:10px">Quer ver a <em>demonstração?</em></h2>
+         <p class="p" style="margin-top:30px;max-width:900px">A gente te mostra a ligação perdida virando visita marcada, com os dados de um exemplo.</p>
+         <div style="margin-top:50px;display:flex;align-items:center;gap:22px">
+           <span style="font-size:44px;font-weight:900;color:#fff">Comenta</span>
+           <span style="display:inline-flex;align-items:center;height:110px;padding:0 46px;border-radius:999px;background:#fff;color:${BLUE};font-size:60px;font-weight:900;box-shadow:0 30px 60px -24px rgba(0,0,0,.45)">AGENDA</span></div>
+         <p class="p" style="margin-top:26px;font-size:32px">que a gente te explica no direct.</p>
+         <p class="p" style="margin-top:40px;font-size:24px;max-width:560px">Demonstração com dados fictícios. O que está disponível, o prazo e o preço a gente combina antes de qualquer contratação.</p>
+         <div style="position:absolute;right:-30px;bottom:-30px;height:420px;width:520px">${boneco('lc', { x: 220, y: 40, size: 300, shirt: '#ffffff', skin: '#c68a5e', cara: 'feliz' })}${balao('Agora eu desço tranquilo 👋', { x: -170, y: 84, rot: -4, size: 28 })}</div>`,
+    ],
+    legenda: `Você estava na escada. O cliente, no telefone. 📞
+
+Quem liga com o ar parado no calor quer resposta agora. Se ninguém atende, ele volta pra busca e liga pro próximo técnico.
+
+Dois dados pra pensar:
+• 77% dos brasileiros fazem mais ligações pelo WhatsApp do que pelo plano da operadora (Panorama Mobile Time/Opinion Box, jan. 2025, 2.099 entrevistados).
+• 65% dos celulares no Brasil têm o WhatsApp na tela inicial (Super Panorama Mobile Time/Opinion Box, jun. 2026).
+
+3 coisas pra fazer hoje, sem gastar nada:
+1. Ligar a mensagem de ausência do WhatsApp Business.
+2. Retornar toda ligação perdida antes do próximo serviço.
+3. Deixar no Google o WhatsApp e o horário certos.
+
+E lembrando: mensagem pra quem ligou, só com autorização da pessoa (LGPD e regras do WhatsApp oficial).
+
+Quer ver a ligação perdida virando visita marcada? Comenta AGENDA que a gente te mostra a demonstração no direct.
+
+Demonstração com dados fictícios: o que está disponível, o prazo e o preço a gente combina antes de qualquer contratação. (Nomes, conversas e telas dos slides são exemplos ilustrativos.)
+
+#arcondicionado #climatizacao #tecnicodearcondicionado #whatsappbusiness #atendimento`,
+    alt: 'Carrossel ilustrado para técnicos de ar-condicionado: um técnico na escada com uma chamada perdida; o cliente procurando outro técnico; dois dados de pesquisa (77% dos brasileiros fazem mais ligações pelo WhatsApp; 65% dos celulares têm o WhatsApp na tela inicial); três dicas gratuitas; a regra de pedir autorização antes de mandar WhatsApp; a demonstração da Growlift em que quem ligou aperta 1, a atendente de IA marca a visita e o técnico recebe o aviso; e o convite "Comenta AGENDA".',
+  },
 ];
 
 if (process.argv.includes('--json')) {

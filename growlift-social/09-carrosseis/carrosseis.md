@@ -409,3 +409,45 @@ Quer ver como fica na sua clínica? Comenta CLÍNICA que a gente te explica no d
 ```
 Carrossel ilustrado para donos de clínica odontológica: uma paciente com dor de dente manda áudio à noite e ninguém responde; depois, três passos de uma atendente de IA no WhatsApp da clínica (ouve o áudio e responde com voz, marca na agenda, lembra um dia antes), os limites dela e o convite "Comenta CLÍNICA".
 ```
+
+
+## Sugestão: junto com o Reel 23 · A ligação que você não conseguiu atender
+
+Pasta `21-ligacao-perdida/` (7 slides). Palavra no ManyChat: **AGENDA** (a mesma do Reel 23). Público: técnicos de ar-condicionado e outros prestadores de serviço que trabalham na rua. Fonte: `_fonte/carrosseis-v2.mjs 21`.
+
+**Dados usados (conferidos em 14/11/2026):**
+- 77% dos brasileiros fazem mais ligações pelo WhatsApp do que pelo plano da operadora: Panorama Mobile Time/Opinion Box, entrevistas de 15 a 30/01/2025, 2.099 pessoas, margem de 2,1 pontos (matéria da Teletime de 28/02/2025: https://teletime.com.br/28/02/2025/77-dos-brasileiros-preferem-ligacoes-pelo-whatsapp-mostra-pesquisa/).
+- 64,8% (arredondado para 65%) dos smartphones brasileiros têm o WhatsApp na tela inicial: Super Panorama Mobile Time/Opinion Box, matéria da Mobile Time de 09/06/2026 (https://www.mobiletime.com.br/?p=855811).
+
+**Antes de postar:** o mesmo do Reel 23 (é uma demonstração; a palavra AGENDA precisa de vaga no ManyChat e a resposta oferece a demonstração, sem prometer prazo).
+
+**Legenda**
+
+```
+Você estava na escada. O cliente, no telefone. 📞
+
+Quem liga com o ar parado no calor quer resposta agora. Se ninguém atende, ele volta pra busca e liga pro próximo técnico.
+
+Dois dados pra pensar:
+• 77% dos brasileiros fazem mais ligações pelo WhatsApp do que pelo plano da operadora (Panorama Mobile Time/Opinion Box, jan. 2025, 2.099 entrevistados).
+• 65% dos celulares no Brasil têm o WhatsApp na tela inicial (Super Panorama Mobile Time/Opinion Box, jun. 2026).
+
+3 coisas pra fazer hoje, sem gastar nada:
+1. Ligar a mensagem de ausência do WhatsApp Business.
+2. Retornar toda ligação perdida antes do próximo serviço.
+3. Deixar no Google o WhatsApp e o horário certos.
+
+E lembrando: mensagem pra quem ligou, só com autorização da pessoa (LGPD e regras do WhatsApp oficial).
+
+Quer ver a ligação perdida virando visita marcada? Comenta AGENDA que a gente te mostra a demonstração no direct.
+
+Demonstração com dados fictícios: o que está disponível, o prazo e o preço a gente combina antes de qualquer contratação. (Nomes, conversas e telas dos slides são exemplos ilustrativos.)
+
+#arcondicionado #climatizacao #tecnicodearcondicionado #whatsappbusiness #atendimento
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Carrossel ilustrado para técnicos de ar-condicionado: um técnico na escada com uma chamada perdida; o cliente procurando outro técnico; dois dados de pesquisa (77% dos brasileiros fazem mais ligações pelo WhatsApp; 65% dos celulares têm o WhatsApp na tela inicial); três dicas gratuitas; a regra de pedir autorização antes de mandar WhatsApp; a demonstração da Growlift em que quem ligou aperta 1, a atendente de IA marca a visita e o técnico recebe o aviso; e o convite "Comenta AGENDA".
+```
