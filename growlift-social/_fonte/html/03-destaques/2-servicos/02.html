@@ -1,0 +1,52 @@
+<!doctype html><html lang="pt-BR"><head><base href="file:///home/user/Hamburgueria/growlift-social/_fonte/assets/"><meta charset="utf-8"><style>@font-face{font-family:Inter;font-weight:100 900;src:url(file:///home/user/Hamburgueria/growlift/fonts/inter-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:Inter;font-weight:100 900;src:url(file:///home/user/Hamburgueria/growlift/fonts/inter-latin-ext-wght-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}</style><style>:root{--w:1080px;--h:1920px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:var(--w);height:var(--h);overflow:hidden}
+body{position:relative;font-family:Inter,system-ui,sans-serif;color:#f3f5f9;background:#06080d;-webkit-font-smoothing:antialiased}
+.glow{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(8,101,254,.42),rgba(8,101,254,0) 70%)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:72px 72px;-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 25%,transparent 72%)}
+.eyebrow{font-size:28px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#6ea6ff}
+.h1{font-weight:800;letter-spacing:-.035em;line-height:.98}
+.blue{color:#4d8dff}
+.lead{color:#c6cede;line-height:1.4}
+.muted{color:#a9b3c7}
+.chip{display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(141,184,255,.35);color:#8db8ff;border-radius:999px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:#0865fe;color:#fff;border-radius:999px;font-weight:700;box-shadow:0 24px 50px -20px rgba(8,101,254,.9)}
+.card{background:#0f1520;border:1px solid rgba(255,255,255,0.10);border-radius:32px}
+.brand{display:flex;align-items:center;gap:16px;font-weight:700;letter-spacing:.12em}
+.brand svg{height:1.05em;width:auto}
+.browser{border-radius:26px;overflow:hidden;background:#0f1520;border:1px solid rgba(255,255,255,0.10);box-shadow:0 -30px 90px -30px rgba(8,101,254,.55),0 40px 80px -40px rgba(0,0,0,.9)}
+.browser .bar{display:flex;align-items:center;gap:10px;height:54px;padding:0 22px;border-bottom:1px solid rgba(255,255,255,.08)}
+.browser .bar i{width:14px;height:14px;border-radius:50%;background:#2a3344}
+.browser .bar span{margin-left:14px;font-size:20px;color:#7d879c;background:#161d2a;padding:6px 18px;border-radius:999px}
+.browser img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.phone{border-radius:64px;padding:16px;background:#1a2130;box-shadow:0 50px 90px -40px rgba(0,0,0,.95),0 0 0 2px rgba(255,255,255,.06)}
+.phone img{display:block;width:100%;border-radius:50px}
+.tag-conceito{display:inline-block;font-size:22px;font-weight:600;letter-spacing:.06em;color:#8790a6;border:1px dashed rgba(255,255,255,.22);border-radius:999px;padding:8px 18px}
+body{background:#06080d}
+.t-title{font-weight:800;letter-spacing:-.04em;line-height:.98;color:#fff}
+.t-lead{font-size:46px;line-height:1.32;color:#dfe5f0;font-weight:450}
+.pill{display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 28px;border-radius:999px;font-size:28px;font-weight:600;letter-spacing:.02em;color:#e8eefa;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);backdrop-filter:blur(18px)}
+.pill.blue{color:#cfe0ff;background:rgba(8,101,254,.22);border-color:rgba(77,141,255,.55)}
+.foot{position:absolute;left:84px;right:84px;top:1628px;display:flex;justify-content:space-between;align-items:center;font-size:28px;color:#aeb8cc}
+.foot .brand{color:#e8eefa;font-size:28px}
+.win{border-radius:30px;overflow:hidden;background:#0f1520;border:1.5px solid rgba(255,255,255,.14);box-shadow:0 60px 120px -40px rgba(0,0,0,.95),0 0 0 1px rgba(0,0,0,.4)}
+.win .bar{display:flex;align-items:center;gap:12px;height:66px;padding:0 26px;background:#121a27;border-bottom:1px solid rgba(255,255,255,.08)}
+.win .bar i{width:16px;height:16px;border-radius:50%;background:#2c3648}
+.win .bar span{margin-left:16px;font-size:24px;color:#9aa6bd;background:#1a2333;padding:8px 22px;border-radius:999px}
+.win img{display:block;width:100%}
+.feat{display:flex;align-items:center;gap:24px;font-size:44px;font-weight:600;color:#f3f6fb;line-height:1.2}
+.feat b{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#0865fe;box-shadow:0 10px 30px -8px rgba(8,101,254,.9)}
+</style></head><body>
+    <img src="hd/confeitaria.png" style="position:absolute;left:-200px;top:-200px;width:1480px;height:2320px;object-fit:cover;filter:blur(90px) saturate(1.35);opacity:.7">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,13,.6) 0%,rgba(6,8,13,.4) 40%,rgba(6,8,13,.88) 70%,rgba(6,8,13,.96) 100%)"></div>
+    <div style="position:absolute;left:84px;right:84px;top:250px;display:flex;justify-content:space-between;align-items:center">
+      <span class="pill blue">Em todos os planos</span><span style="font-size:32px;font-weight:700;color:#e8eefa">1/4</span>
+    </div>
+    <h1 class="t-title fit" style="position:absolute;left:84px;right:84px;top:360px;font-size:120px;white-space:nowrap">Site feito do zero</h1>
+    <script>for (const el of document.querySelectorAll('.fit')) { let s = 120; while (el.scrollWidth > el.clientWidth && s > 60) el.style.fontSize = (s -= 2) + 'px'; }</script>
+    <p class="t-lead" style="position:absolute;left:84px;right:84px;top:500px;font-size:42px">Com as fotos, as cores e os serviços do seu negócio.</p>
+    <div style="position:absolute;left:40px;right:40px;top:640px;height:680px"><div class="win" style="position:absolute;left:260px;right:0;top:0;opacity:.8"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="hd/restaurante.png"></div><div class="win" style="position:absolute;left:0;right:200px;top:110px"><div class="bar"><i></i><i></i><i></i><span>seunegocio.com.br</span></div><img src="hd/confeitaria.png"></div><span style="position:absolute;left:24px;top:24px;z-index:3;font-size:24px;font-weight:600;color:#e8eefa;background:rgba(6,8,13,.72);border:1.5px solid rgba(255,255,255,.2);padding:8px 18px;border-radius:999px">Projetos conceito · nomes fictícios</span></div>
+    <ul style="position:absolute;left:84px;right:84px;top:1360px;list-style:none;display:grid;gap:28px">
+      <li class="feat" style="font-size:40px"><b><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></b>Domínio e hospedagem por nossa conta</li><li class="feat" style="font-size:40px"><b><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></b>Botão de WhatsApp, mapa e horários</li><li class="feat" style="font-size:40px"><b><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></b>Pensado primeiro para o celular</li>
+    </ul>
+    <div class="foot"><div class="brand" style="font-size:28px"><svg viewBox="50 40 530 415" xmlns="http://www.w3.org/2000/svg"><path fill="#0865FE" d="M280 48H410L190 450H55Z"/><path fill="#0865FE" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></svg>GROWLIFT</div><span>growlift.com.br</span></div></body></html>

@@ -1,0 +1,551 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-17T00:00:00Z",
+  "title": "Design System: Downtown Burger",
+  "extensions": {
+    "colorMeta": {
+      "scene-red": {
+        "role": "primary",
+        "displayName": "Downtown Red",
+        "canonical": "#a3171c",
+        "oklch": "oklch(46.0% 0.173 26.2)",
+        "tonalRamp": [
+          "#2b0000",
+          "#530000",
+          "#7e0009",
+          "#a82324",
+          "#c5544d",
+          "#e17e75",
+          "#feaba3",
+          "#ffddd6"
+        ]
+      },
+      "brand": {
+        "role": "primary",
+        "displayName": "Menu Red",
+        "canonical": "#a61e22",
+        "oklch": "oklch(47.1% 0.171 25.7)",
+        "tonalRamp": [
+          "#2a0000",
+          "#520000",
+          "#7c000d",
+          "#a82325",
+          "#c5544e",
+          "#e17e76",
+          "#feaba3",
+          "#ffdcd5"
+        ]
+      },
+      "brand-deep": {
+        "role": "primary",
+        "displayName": "Menu Red Deep",
+        "canonical": "#7a1317",
+        "oklch": "oklch(37.7% 0.137 25.3)",
+        "tonalRamp": [
+          "#280000",
+          "#4f0001",
+          "#771116",
+          "#953d39",
+          "#b2645e",
+          "#ce8a84",
+          "#ebb5af",
+          "#ffe4e0"
+        ]
+      },
+      "mustard": {
+        "role": "secondary",
+        "displayName": "Mustard",
+        "canonical": "#f4b740",
+        "oklch": "oklch(81.6% 0.147 80.2)",
+        "tonalRamp": [
+          "#130900",
+          "#302104",
+          "#523b0d",
+          "#775718",
+          "#9e7525",
+          "#c79532",
+          "#f5b843",
+          "#ffe68b"
+        ]
+      },
+      "mustard-deep": {
+        "role": "secondary",
+        "displayName": "Mustard Deep",
+        "canonical": "#dc9a17",
+        "oklch": "oklch(73.2% 0.149 77.0)",
+        "tonalRamp": [
+          "#150800",
+          "#351f00",
+          "#583800",
+          "#7e5400",
+          "#a67201",
+          "#cf9112",
+          "#f4b857",
+          "#ffe599"
+        ]
+      },
+      "scene-orange": {
+        "role": "tertiary",
+        "displayName": "Burnt Orange Field",
+        "canonical": "#cf5a17",
+        "oklch": "oklch(60.7% 0.165 44.8)",
+        "tonalRamp": [
+          "#210000",
+          "#470c00",
+          "#6f2400",
+          "#9a3c00",
+          "#c85614",
+          "#e77d4b",
+          "#ffaa80",
+          "#ffdab9"
+        ]
+      },
+      "scene-green": {
+        "role": "tertiary",
+        "displayName": "Diner Green Field",
+        "canonical": "#2b6638",
+        "oklch": "oklch(45.8% 0.096 148.6)",
+        "tonalRamp": [
+          "#001100",
+          "#012d0e",
+          "#174c24",
+          "#336c3f",
+          "#5a8b62",
+          "#81ab87",
+          "#adceb1",
+          "#ddf6e0"
+        ]
+      },
+      "scene-plum": {
+        "role": "tertiary",
+        "displayName": "Plum Field",
+        "canonical": "#561534",
+        "oklch": "oklch(31.6% 0.101 355.2)",
+        "tonalRamp": [
+          "#21000d",
+          "#440826",
+          "#642742",
+          "#814a60",
+          "#9e6d7f",
+          "#bb91a0",
+          "#dabac5",
+          "#fde8ef"
+        ]
+      },
+      "scene-teal": {
+        "role": "tertiary",
+        "displayName": "Diner Teal Field",
+        "canonical": "#0c6d69",
+        "oklch": "oklch(48.4% 0.081 190.3)",
+        "tonalRamp": [
+          "#001110",
+          "#002d2a",
+          "#004b48",
+          "#0b6c68",
+          "#468b87",
+          "#72aba7",
+          "#a1cfcb",
+          "#d5f7f4"
+        ]
+      },
+      "cream": {
+        "role": "neutral",
+        "displayName": "Cream",
+        "canonical": "#f3e9d6",
+        "oklch": "oklch(93.7% 0.027 83.5)",
+        "tonalRamp": [
+          "#0d0b08",
+          "#262420",
+          "#423f3b",
+          "#615d56",
+          "#827d73",
+          "#a49e91",
+          "#cbc3b3",
+          "#f7eddb"
+        ]
+      },
+      "cream-deep": {
+        "role": "neutral",
+        "displayName": "Cream Deep",
+        "canonical": "#e9dbc0",
+        "oklch": "oklch(89.6% 0.039 83.8)",
+        "tonalRamp": [
+          "#0d0b07",
+          "#26241f",
+          "#433f37",
+          "#635d51",
+          "#847c6d",
+          "#a79d8a",
+          "#cfc3ab",
+          "#faedd3"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#fbf6ec",
+        "oklch": "oklch(97.4% 0.014 84.6)",
+        "tonalRamp": [
+          "#0c0b09",
+          "#252422",
+          "#41403d",
+          "#5f5d5a",
+          "#7f7d78",
+          "#a19e98",
+          "#c8c4bc",
+          "#f3eee4"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Charcoal Ink",
+        "canonical": "#1d1712",
+        "oklch": "oklch(21.0% 0.014 61.8)",
+        "tonalRamp": [
+          "#0f0a06",
+          "#29231e",
+          "#443f3a",
+          "#625d58",
+          "#817c79",
+          "#a19e9b",
+          "#c6c3c2",
+          "#f0eeec"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "#3d3229",
+        "oklch": "oklch(32.6% 0.022 61.2)",
+        "tonalRamp": [
+          "#110905",
+          "#2b221a",
+          "#483d35",
+          "#655c54",
+          "#847b74",
+          "#a49d97",
+          "#c9c3be",
+          "#f1eeeb"
+        ]
+      },
+      "ink-mute": {
+        "role": "neutral",
+        "displayName": "Ink Mute",
+        "canonical": "#66564a",
+        "oklch": "oklch(46.5% 0.028 58.9)",
+        "tonalRamp": [
+          "#110905",
+          "#2c221a",
+          "#4a3d33",
+          "#6a5a4e",
+          "#897a6f",
+          "#a99c92",
+          "#cdc2ba",
+          "#f5ede7"
+        ]
+      },
+      "on-dark": {
+        "role": "neutral",
+        "displayName": "On-Dark",
+        "canonical": "#fbf3e4",
+        "oklch": "oklch(96.6% 0.022 83.3)",
+        "tonalRamp": [
+          "#0c0b09",
+          "#252421",
+          "#413f3c",
+          "#605d58",
+          "#817d75",
+          "#a39e94",
+          "#cac3b7",
+          "#f5eedf"
+        ]
+      },
+      "on-dark-mute": {
+        "role": "neutral",
+        "displayName": "On-Dark Mute",
+        "canonical": "#f0dcc4",
+        "oklch": "oklch(90.4% 0.039 72.3)",
+        "tonalRamp": [
+          "#0e0b07",
+          "#27231f",
+          "#443f38",
+          "#645c52",
+          "#867b6e",
+          "#aa9c8b",
+          "#d3c1ac",
+          "#feebd4"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Story headlines and section titles; uppercase Big Shoulders 900 at opsz 72. Menu title runs up to clamp(4.4rem, 15vw, 11rem); mobile story headlines clamp(3.6rem, 15vw, 6rem)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Menu category headings, each led by a menu-red star."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product names and dialog titles (2.35 to 3.4rem); 1.5 to 1.6rem for cart lines and legends."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running copy in Barlow; descriptions cap at 46 to 52ch, long-form at 1.12rem/1.7 and 64ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Barlow Condensed uppercase for buttons, chips, taglines, list names, field labels; 0.04 to 0.14em tracking."
+      },
+      "price": {
+        "displayName": "Price",
+        "purpose": "Display figures with tabular lining numerals; currency in condensed bold at 0.42em, cents at 0.5em raised."
+      }
+    },
+    "shadows": [
+      {
+        "name": "contact-stage",
+        "value": "radial-gradient(closest-side, rgb(0 0 0 / 0.42), rgb(0 0 0 / 0.18) 55%, transparent)",
+        "purpose": "Floor shadow under the story burger; narrows and fades when the burger explodes."
+      },
+      {
+        "name": "contact-menu",
+        "value": "ellipse, rgb(29 23 18 / 0.25), blur 24px",
+        "purpose": "Contact shadow under menu renders; narrows on hover as the render lifts."
+      },
+      {
+        "name": "render-drop",
+        "value": "drop-shadow(0 18px 18px rgb(0 0 0 / 0.28))",
+        "purpose": "Floating ingredient renders on scene fields."
+      },
+      {
+        "name": "render-drop-sheet",
+        "value": "drop-shadow(0 30px 30px rgb(0 0 0 / 0.35))",
+        "purpose": "Hero render inside the product sheet."
+      },
+      {
+        "name": "floating-bar",
+        "value": "0 18px 40px -12px rgb(0 0 0 / 0.55)",
+        "purpose": "Toast and mobile cart bar (0.6 alpha)."
+      },
+      {
+        "name": "sheet-lift",
+        "value": "0 -20px 60px -20px rgb(0 0 0 / 0.5)",
+        "purpose": "Product sheet over its backdrop."
+      },
+      {
+        "name": "backdrop",
+        "value": "rgb(20 12 8 / 0.55) + backdrop-filter: blur(6px)",
+        "purpose": "Every modal dialog backdrop."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All entrances: dialogs, drawer, nav overlay, toasts, render hovers, burger explode in the sheet."
+      },
+      {
+        "name": "ease-in-quart",
+        "value": "cubic-bezier(0.5, 0, 0.75, 0)",
+        "purpose": "Exits, at roughly half the entrance duration (0.26s dialogs, 0.38s nav overlay)."
+      },
+      {
+        "name": "dialog-enter",
+        "value": "0.5s ease-out-expo via @starting-style; mobile translateY(12%), desktop sheet translateY(24px) scale(0.98), desktop drawer translateX(16%)",
+        "purpose": "Native dialog entrance, interruptible."
+      },
+      {
+        "name": "nav-reveal",
+        "value": "clip-path circle(0% to 150%) from the menu button, 0.75s ease-out-expo; links rise from 105% with 60ms stagger after 160ms",
+        "purpose": "Full-screen overlay menu."
+      },
+      {
+        "name": "story-scrub",
+        "value": "GSAP ScrollTrigger pin, scrub 0.7, +640vh desktop / +560vh mobile; field wipes power2.inOut, copy out power2.in, copy in power3.out",
+        "purpose": "Pinned five-field story."
+      },
+      {
+        "name": "bob",
+        "value": "ease-in-out infinite, 6 to 8s, -12 to -18px with slight rotation",
+        "purpose": "Idle float for the story burger and ingredients."
+      },
+      {
+        "name": "layer-stagger",
+        "value": "35ms per layer, 0.9s ease-out-expo",
+        "purpose": "Burger stack explode and restack outside the story."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all durations 0.001ms; cinematic story swapped for a static stacked story",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "380px"
+      },
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Action Pill",
+      "kind": "button",
+      "refersTo": "button-action",
+      "description": "Primary action on scene fields and ink: mustard pill, ink label.",
+      "html": "<div class=\"ds-field\"><button class=\"ds-btn-action\">Ver cardápio</button></div>",
+      "css": ".ds-field { background: var(--color-scene-red, #a3171c); padding: 32px; } .ds-btn-action { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; letter-spacing: 0.1em; font-size: 1.125rem; min-height: 56px; padding: 0 36px; border: 0; border-radius: 9999px; background: var(--color-mustard, #f4b740); color: var(--color-ink, #1d1712); cursor: pointer; transition: background-color 0.2s, transform 0.2s; } .ds-btn-action:hover { background: var(--color-on-dark, #fbf3e4); } .ds-btn-action:active { transform: scale(0.97); } .ds-btn-action:focus-visible { outline: 3px solid var(--color-mustard, #f4b740); outline-offset: 3px; }"
+    },
+    {
+      "name": "Outline Pill on Colour",
+      "kind": "button",
+      "refersTo": "button-outline-dark",
+      "description": "Secondary action on a scene field; fills on-dark on hover.",
+      "html": "<div class=\"ds-field\"><button class=\"ds-btn-outline\">Peça agora</button></div>",
+      "css": ".ds-field { background: var(--color-scene-red, #a3171c); padding: 32px; } .ds-btn-outline { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; letter-spacing: 0.1em; font-size: 1.125rem; min-height: 56px; padding: 0 36px; border: 2px solid rgb(251 243 228 / 0.7); border-radius: 9999px; background: transparent; color: var(--color-on-dark, #fbf3e4); cursor: pointer; transition: background-color 0.2s, color 0.2s, border-color 0.2s; } .ds-btn-outline:hover { background: var(--color-on-dark, #fbf3e4); border-color: var(--color-on-dark, #fbf3e4); color: var(--color-scene-red, #a3171c); } .ds-btn-outline:focus-visible { outline: 3px solid var(--color-mustard, #f4b740); outline-offset: 3px; }"
+    },
+    {
+      "name": "Commerce Button",
+      "kind": "button",
+      "refersTo": "button-commerce",
+      "description": "Add-to-bag on cream: ink pill with plus icon, hovers to menu red.",
+      "html": "<button class=\"ds-btn-commerce\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg>Adicionar</button>",
+      "css": ".ds-btn-commerce { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; display: inline-flex; align-items: center; gap: 8px; font-size: 1rem; min-height: 48px; padding: 0 24px 0 16px; border: 0; border-radius: 9999px; background: var(--color-ink, #1d1712); color: var(--color-on-dark, #fbf3e4); cursor: pointer; transition: background-color 0.2s, transform 0.2s; } .ds-btn-commerce:hover { background: var(--color-brand, #a61e22); } .ds-btn-commerce:active { transform: scale(0.97); } .ds-btn-commerce:focus-visible { outline: 3px solid var(--color-ink, #1d1712); outline-offset: 3px; }"
+    },
+    {
+      "name": "Send Order Button",
+      "kind": "button",
+      "refersTo": "button-send",
+      "description": "The single solid menu-red button: sends the order.",
+      "html": "<button class=\"ds-btn-send\"><span class=\"ds-star\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M12 1.8l2.9 6.6 7.2.6-5.5 4.7 1.7 7-6.3-3.8-6.3 3.8 1.7-7L1.9 9l7.2-.6L12 1.8Z\"/></svg></span>Enviar pedido</button>",
+      "css": ".ds-btn-send { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; letter-spacing: 0.06em; display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 420px; font-size: 1.25rem; min-height: 60px; border: 0; border-radius: 9999px; background: var(--color-brand, #a61e22); color: var(--color-on-dark, #fbf3e4); cursor: pointer; transition: background-color 0.2s, transform 0.2s; } .ds-btn-send .ds-star { color: var(--color-mustard, #f4b740); display: inline-flex; } .ds-btn-send:hover { background: var(--color-brand-deep, #7a1317); } .ds-btn-send:active { transform: scale(0.98); } .ds-btn-send:focus-visible { outline: 3px solid var(--color-ink, #1d1712); outline-offset: 3px; }"
+    },
+    {
+      "name": "Category Tabs",
+      "kind": "chip",
+      "refersTo": "chip-category",
+      "description": "Sticky menu category bar; current tab is solid ink.",
+      "html": "<nav class=\"ds-tabs\"><button class=\"ds-tab\" aria-current=\"true\">Burgers</button><button class=\"ds-tab\">Entradas</button><button class=\"ds-tab\">Bebidas</button></nav>",
+      "css": ".ds-tabs { display: flex; gap: 8px; padding: 10px 12px; background: rgb(243 233 214 / 0.92); border-bottom: 1px solid rgb(29 23 18 / 0.1); } .ds-tab { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 1.05rem; min-height: 44px; padding: 0 20px; border: 0; border-radius: 9999px; background: transparent; color: var(--color-ink, #1d1712); cursor: pointer; transition: background-color 0.2s, color 0.2s; } .ds-tab:hover { background: rgb(29 23 18 / 0.08); } .ds-tab[aria-current='true'] { background: var(--color-ink, #1d1712); color: var(--color-on-dark, #fbf3e4); } .ds-tab:focus-visible { outline: 3px solid var(--color-ink, #1d1712); outline-offset: 3px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Notes and name fields on paper; stroke turns solid ink on focus.",
+      "html": "<label class=\"ds-field-label\">Seu nome <span>(opcional)</span><input class=\"ds-input\" placeholder=\"Como te chamamos?\"></label>",
+      "css": ".ds-field-label { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; display: block; font-size: 0.875rem; letter-spacing: 0.1em; color: var(--color-ink, #1d1712); background: var(--color-paper, #fbf6ec); padding: 16px; } .ds-field-label span { font-weight: 500; text-transform: none; color: var(--color-ink-mute, #66564a); } .ds-input { display: block; width: 100%; margin-top: 8px; height: 52px; padding: 0 16px; border: 2px solid rgb(29 23 18 / 0.15); border-radius: 16px; background: rgb(255 255 255 / 0.6); font: 400 1rem/1.55 var(--font-sans, Barlow, sans-serif); color: var(--color-ink, #1d1712); outline: none; transition: border-color 0.2s; } .ds-input::placeholder { color: var(--color-ink-mute, #66564a); } .ds-input:hover { border-color: rgb(29 23 18 / 0.35); } .ds-input:focus-visible { border-color: var(--color-ink, #1d1712); }"
+    },
+    {
+      "name": "Header Controls",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Right side of the fixed header over a field: menu link, cart pill with tabular count, mustard menu disc.",
+      "html": "<div class=\"ds-head\"><a class=\"ds-head-link\" href=\"#\">Cardápio</a><button class=\"ds-head-cart\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9L5 8Z\"/><path d=\"M9 10V7a3 3 0 0 1 6 0v3\"/></svg><span>2</span></button><button class=\"ds-head-menu\" aria-label=\"Abrir menu\"><i></i><i></i></button></div>",
+      "css": ".ds-head { display: flex; align-items: center; gap: 12px; padding: 12px 24px; background: var(--color-scene-red, #a3171c); color: var(--color-on-dark, #fbf3e4); } .ds-head-link { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; letter-spacing: 0.12em; font-size: 1rem; color: inherit; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; padding: 0 16px; border-radius: 9999px; transition: background-color 0.2s; } .ds-head-link:hover { background: rgb(251 243 228 / 0.1); } .ds-head-cart { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 14px; font-size: 1.125rem; font-variant-numeric: tabular-nums; border: 2px solid rgb(251 243 228 / 0.4); border-radius: 9999px; background: transparent; color: inherit; cursor: pointer; transition: border-color 0.2s; } .ds-head-cart:hover { border-color: var(--color-on-dark, #fbf3e4); } .ds-head-menu { display: grid; place-content: center; justify-items: end; gap: 5px; width: 48px; height: 48px; border: 0; border-radius: 9999px; background: var(--color-mustard, #f4b740); color: var(--color-ink, #1d1712); cursor: pointer; transition: transform 0.3s; } .ds-head-menu i { display: block; height: 2.5px; width: 20px; border-radius: 9999px; background: currentColor; } .ds-head-menu i + i { width: 14px; transition: width 0.3s; } .ds-head-menu:hover { transform: scale(1.05); } .ds-head-menu:hover i + i { width: 20px; } .ds-head a:focus-visible, .ds-head button:focus-visible { outline: 3px solid var(--color-mustard, #f4b740); outline-offset: 3px; }"
+    },
+    {
+      "name": "Menu Board Row",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Drinks and add-ons: condensed name, dotted leader, red tabular price, round add button.",
+      "html": "<ul class=\"ds-board\"><li class=\"ds-row\"><span class=\"ds-row-name\">Coca-Cola lata</span><span class=\"ds-leader\"></span><span class=\"ds-row-price\">R$ 7,00</span><button class=\"ds-row-add\" aria-label=\"Adicionar Coca-Cola lata\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg></button></li><li class=\"ds-row\"><span class=\"ds-row-name\">Suco natural</span><span class=\"ds-leader\"></span><span class=\"ds-row-price\">R$ 12,00</span><button class=\"ds-row-add\" aria-label=\"Adicionar suco natural\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg></button></li></ul>",
+      "css": ".ds-board { list-style: none; margin: 0; padding: 0 16px; background: var(--color-cream, #f3e9d6); border-top: 2px solid var(--color-ink, #1d1712); } .ds-row { display: flex; align-items: center; gap: 12px; min-height: 64px; border-bottom: 1px solid rgb(29 23 18 / 0.12); } .ds-row-name { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; letter-spacing: 0.04em; font-size: 1.2rem; color: var(--color-ink, #1d1712); } .ds-leader { flex: 1; min-width: 24px; border-bottom: 2px dotted rgb(29 23 18 / 0.35); transform: translateY(0.2em); } .ds-row-price { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; letter-spacing: 0; font-size: 1.2rem; font-variant-numeric: tabular-nums lining-nums; color: var(--color-brand, #a61e22); white-space: nowrap; } .ds-row-add { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: var(--color-ink, #1d1712); color: var(--color-on-dark, #fbf3e4); cursor: pointer; transition: background-color 0.2s, transform 0.2s; } .ds-row-add:hover { background: var(--color-brand, #a61e22); } .ds-row-add:active { transform: scale(0.9); } .ds-row-add:focus-visible { outline: 3px solid var(--color-ink, #1d1712); outline-offset: 3px; }"
+    },
+    {
+      "name": "Double Frame and Rule",
+      "kind": "card",
+      "refersTo": "",
+      "description": "Menu furniture: double-stroke frame with concentric radii, and the double rule under headings.",
+      "html": "<div class=\"ds-paper\"><h3 class=\"ds-cat\"><span class=\"ds-cat-star\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M12 1.8l2.9 6.6 7.2.6-5.5 4.7 1.7 7-6.3-3.8-6.3 3.8 1.7-7L1.9 9l7.2-.6L12 1.8Z\"/></svg></span>Adicionais</h3><div class=\"ds-double-rule\"></div><div class=\"ds-frame\"><div class=\"ds-frame-inner\">Bacon extra · cheddar · ovo</div></div></div>",
+      "css": ".ds-paper { background: var(--color-cream, #f3e9d6); color: var(--color-ink, #1d1712); padding: 24px; } .ds-cat { font-family: var(--font-display, 'Big Shoulders', 'Arial Narrow', sans-serif); font-weight: 900; font-variation-settings: 'opsz' 72; text-transform: uppercase; letter-spacing: -0.01em; line-height: 0.86; display: flex; align-items: center; gap: 12px; margin: 0; font-size: 3rem; } .ds-cat-star { color: var(--color-brand, #a61e22); display: inline-flex; } .ds-cat-star svg { width: 22px; height: 22px; } .ds-double-rule { height: 6px; margin: 16px 0 24px; border-top: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; } .ds-frame { border: 3px solid var(--color-brand, #a61e22); border-radius: 28px; padding: 6px; } .ds-frame-inner { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border: 1.5px solid var(--color-brand, #a61e22); border-radius: 22px; padding: 24px 28px; font-size: 1.25rem; letter-spacing: 0.04em; }"
+    },
+    {
+      "name": "Toast",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Add-to-bag confirmation: floating ink pill with mustard tick and an on-dark action.",
+      "html": "<div class=\"ds-toast\" role=\"status\"><span class=\"ds-toast-tick\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m5 12 5 5 9-10\"/></svg></span><span class=\"ds-toast-msg\">The Bacon Street na sacola</span><button class=\"ds-toast-act\">Ver sacola</button></div>",
+      "css": "@keyframes ds-toast-in { from { transform: translateY(24px) scale(0.96); opacity: 0; } } .ds-toast { display: inline-flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 9999px; background: var(--color-ink, #1d1712); color: var(--color-on-dark, #fbf3e4); box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.55); animation: ds-toast-in 0.45s cubic-bezier(0.16, 1, 0.3, 1); } .ds-toast-tick { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9999px; background: var(--color-mustard, #f4b740); color: var(--color-ink, #1d1712); } .ds-toast-msg { font: 500 0.95rem/1.4 var(--font-sans, Barlow, sans-serif); } .ds-toast-act { font-family: var(--font-cond, 'Barlow Condensed', sans-serif); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; letter-spacing: 0.04em; font-size: 0.875rem; min-height: 40px; padding: 0 16px; border: 0; border-radius: 9999px; background: var(--color-on-dark, #fbf3e4); color: var(--color-ink, #1d1712); cursor: pointer; transition: background-color 0.2s; } .ds-toast-act:hover { background: var(--color-mustard, #f4b740); } .ds-toast-act:focus-visible { outline: 3px solid var(--color-mustard, #f4b740); outline-offset: 3px; } @media (prefers-reduced-motion: reduce) { .ds-toast { animation: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Menu Turned Up Loud",
+    "overview": "Downtown Burger's system is its own printed menu and badge, pushed to signage saturation. Five flat scene fields (red, burnt orange, diner green, plum, teal) carry the story; cream and paper carry the commerce. Everything that sells is set in heavy condensed skyline lettering, and everything that is read is set in a plain grotesque. The burger itself, as a layered 3D render, is the hero of every dark surface; type and rules frame it, never compete with it.\n\nThe world borrows the menu's furniture literally: double-line frames, dotted price leaders, ruled grids between products, five-point stars as the only ornament, and the circular skyline badge. Density alternates hard: the story is one object on one colour per viewport, the menu is a ruled, generous paper sheet. Motion is scroll-scrubbed and physical in the story, and short and interruptible everywhere else.\n\nConfirmed rejection, from the direction contract: the split hero with a photo on one side and a card grid below.",
+    "keyCharacteristics": [
+      "One saturated scene colour per viewport on story surfaces; cream or paper on commerce surfaces.",
+      "Uppercase heavy condensed display type, tightly leaded, at poster scale.",
+      "Menu furniture as structure: double rules, dotted leaders, 2px ink rules over hairline dividers.",
+      "Rendered burgers and ingredients float over soft contact shadows; no photography.",
+      "Pills for every control; large soft corners for sheets and frames.",
+      "Native dialogs animated with `@starting-style`; pinned GSAP story with a static reduced-motion twin."
+    ],
+    "rules": [
+      {
+        "name": "The One Field Rule",
+        "body": "A viewport shows one scene colour at a time. Fields wipe over one another; they never sit side by side as tiles.",
+        "section": "colors"
+      },
+      {
+        "name": "The Action Contrast Rule",
+        "body": "On colour or ink, the primary action is a mustard pill with ink text. On cream or paper, it is an ink pill that turns menu red on hover. The final send-the-order button alone is solid menu red.",
+        "section": "colors"
+      },
+      {
+        "name": "The Grain Rule",
+        "body": "Cream commerce surfaces (body, location, product sheet, cart drawer) carry the faint fractal-noise print grain. Scene fields and ink surfaces stay flat.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "Display face for names, headings and totals; condensed for anything a person taps or scans. Barlow body never goes uppercase.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Every price, count and total uses tabular lining numerals.",
+        "section": "typography"
+      },
+      {
+        "name": "The Food Floats Rule",
+        "body": "Shadows describe the food sitting in space. Cards, buttons and rules never cast shadows.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do give each story or overlay surface exactly one scene field, with ink and on-dark text only.",
+      "Do set every heading, name and total in uppercase Big Shoulders 900 at opsz 72 with 0.86 line height.",
+      "Do use the menu's own furniture (double rule, double frame, ruled grid, dotted leader) for structure before reaching for a container.",
+      "Do keep controls as pills of at least 44px with condensed uppercase labels.",
+      "Do label generated imagery as illustrative, give layered renders true ingredient labels, and keep decorative renders `alt=\"\"`.",
+      "Do enter with out-expo (`cubic-bezier(0.16, 1, 0.3, 1)`) and leave faster with in-quart (`cubic-bezier(0.5, 0, 0.75, 0)`), and give every scrubbed or looping motion a reduced-motion state.",
+      "Do keep supporting text on any scene field at 4.5:1 or above; switch from on-dark-mute to on-dark wherever the field is too light to hold it."
+    ],
+    "donts": [
+      "Don't build a split hero with a photo on one side and a card grid below.",
+      "Don't put product cards on tinted boxes or shadows; products live in ruled cells.",
+      "Don't add ornaments beyond the five-point star and the badge, and draw the star as SVG, not as a text glyph.",
+      "Don't use mustard as a fill on cream surfaces for primary commerce; there the action is ink.",
+      "Don't cast shadows from interface chrome; shadows belong to the food and to overlays.",
+      "Don't use photography or stock imagery; imagery is the procedural render set."
+    ]
+  }
+}

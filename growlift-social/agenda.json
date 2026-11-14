@@ -1,0 +1,721 @@
+{
+ "sobre": "Posts preparados para a agenda do painel (Conteúdos > Agenda). Só vão ao ar depois de aprovados lá. Horários de São Paulo.",
+ "itens": [
+  {
+   "id": "2026-11-03-reel-11",
+   "titulo": "Reel 11 · Dois amigos (Comenta GOOGLE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/11-dois-amigos.mp4"
+   ],
+   "capa": "05-reels/11-dois-amigos-capa.png",
+   "legenda": "Comenta GOOGLE que a gente te mostra como o seu restaurante aparece 📩\n\nDuas hamburguerias na mesma rua, mesmo lanche, mesmo preço. Só que uma aparece no celular de quem procura onde comer 🍔\n\n(História ilustrativa: personagens e lojas fictícios. Não é caso real e não garantimos clientes, vendas nem posição no Google.)\n\nMuita gente pesquisa no celular antes de escolher onde comer: olha fotos, horário e cardápio. Quem aparece com tudo em dia tem mais chance de ser encontrado.\n\nA Growlift faz o site do seu restaurante e configura o seu perfil no Google (a verificação é feita pelo Google). Valores e condições dos planos: link na bio.\nSegue a gente pra mais dicas 👉 @growlift.ai\n\nNarração com voz gerada por inteligência artificial.\n#restaurante #hamburgueria #delivery #marketingpararestaurantes #perfildaempresanogoogle",
+   "quando": "2026-11-01T15:00:00-03:00",
+   "ia": true,
+   "palavra": "GOOGLE",
+   "chave": "05-reels/roteiros.md#11-dois-amigos-duas-hamburguerias-historia"
+  },
+  {
+   "id": "2026-11-02-carrossel-antes-de-ir",
+   "titulo": "Carrossel · O que ele confere antes de ir (Comenta GOOGLE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/01-antes-de-ir/01.png",
+    "09-carrosseis/01-antes-de-ir/02.png",
+    "09-carrosseis/01-antes-de-ir/03.png",
+    "09-carrosseis/01-antes-de-ir/04.png",
+    "09-carrosseis/01-antes-de-ir/05.png",
+    "09-carrosseis/01-antes-de-ir/06.png",
+    "09-carrosseis/01-antes-de-ir/07.png",
+    "09-carrosseis/01-antes-de-ir/08.png",
+    "09-carrosseis/01-antes-de-ir/09.png"
+   ],
+   "legenda": "O que o seu cliente confere antes de sair de casa? Salve este carrossel e confira o seu 👇\n\nNuma pesquisa da Reclame AQUI com a Abrasel (agosto de 2024, mais de 400 consumidores na plataforma do Reclame AQUI), 63% disseram que escolhem bares e restaurantes pelas avaliações de outros clientes. Na mesma pesquisa, antes de ir ao restaurante, 24% buscam as avaliações, 23% a faixa de preço, 18% as fotos dos pratos e do ambiente e 13% o cardápio online (além de endereço e horário). E 40% consideram a resposta do restaurante a uma crítica um fator fundamental pra decidir.\n\nOu seja: antes da comida, o cliente prova o que encontra no celular.\n\nComenta GOOGLE que a gente te manda no direct o básico pra deixar o seu perfil em dia pra quem procura onde comer.\n\n#restaurante #marketingpararestaurantes #avaliacoesgoogle #cardapiodigital #growlift",
+   "quando": "2026-11-02T10:00:00-03:00",
+   "ia": false,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-11-reel-09",
+   "titulo": "Reel 9 · O lanche é bom, o site nem tanto (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/09-o-lanche-e-bom.mp4"
+   ],
+   "capa": "05-reels/09-o-lanche-e-bom-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nO lanche do seu Toninho é caprichado. Mas quem procura a lanchonete no celular encontra um site velho, torto e sem foto do lanche. E quem não conhece julga pelo que vê.\n\nUm site com a cara do negócio mostra o capricho antes da primeira mordida. Sua marca merece mais.\n\n#growlift #criacaodesites #sitepararestaurante #hamburgueria #negocioslocais",
+   "quando": "2026-11-02T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE",
+   "chave": "05-reels/roteiros.md#9-sua-marca-merece-mais-reel-premium"
+  },
+  {
+   "id": "2026-11-02-reel-01",
+   "titulo": "Reel 1 · Quatro negócios (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/01-quatro-negocios.mp4"
+   ],
+   "capa": "05-reels/01-quatro-negocios-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nQuatro negócios abriram as portas hoje cedo. Do outro lado da cidade, alguém pega o celular pra procurar. Quem aparece, e com a cara do negócio, tem mais chance de ser encontrado.\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\n#growlift #criacaodesites #sitepararestaurante #negocioslocais #saopaulo",
+   "quando": "2026-11-03T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE",
+   "chave": "05-reels/roteiros.md#1-o-site-que-passa-de-lado"
+  },
+  {
+   "id": "2026-11-04-carrossel-perfil-sem-pedido",
+   "titulo": "Carrossel · Entraram no seu Instagram e saíram sem pedir? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/14-perfil-sem-pedido/01.png",
+    "09-carrosseis/14-perfil-sem-pedido/02.png",
+    "09-carrosseis/14-perfil-sem-pedido/03.png",
+    "09-carrosseis/14-perfil-sem-pedido/04.png",
+    "09-carrosseis/14-perfil-sem-pedido/05.png",
+    "09-carrosseis/14-perfil-sem-pedido/06.png",
+    "09-carrosseis/14-perfil-sem-pedido/07.png"
+   ],
+   "legenda": "Entraram no seu Instagram… e saíram sem pedir? 👀\n\n3 sinais de que o perfil espanta quem já estava com fome:\n1. A bio não diz como pedir.\n2. As fotos não mostram o que tem e quanto custa.\n3. O link da bio não leva ao pedido.\n\nO resumo pra arrumar está no slide 6. Salva e confere o seu hoje.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #instagramparanegocios #marketingpararestaurantes #delivery #growlift",
+   "quando": "2026-11-04T10:00:00-03:00",
+   "ia": false
+  },
+  {
+   "id": "2026-11-04-reel-05",
+   "titulo": "Reel 5 · Aberto no Google, fechado na porta (Comenta GOOGLE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/05-aberto-no-google.mp4"
+   ],
+   "capa": "05-reels/05-aberto-no-google-capa.png",
+   "legenda": "Comenta GOOGLE que a gente te mostra como deixar o seu perfil em dia 📩\n\nSexta, dez da noite. O Google dizia \"aberto até as 23h\". A porta estava fechada. O cliente foi pra outro lugar, e o dono nem ficou sabendo.\n\nO básico do Perfil da Empresa no Google (o antigo Google Meu Negócio):\n✔ Horário certo, inclusive nos feriados\n✔ Fotos reais\n✔ Nome igual ao da fachada\n\nNos planos Start e Grow, a gente configura o seu perfil no Google e confere todo mês (a verificação é feita pelo Google). Valores e condições dos planos: link na bio.\n\n#growlift #perfildaempresanogoogle #googlemaps #marketinglocal #pizzaria",
+   "quando": "2026-11-04T15:00:00-03:00",
+   "ia": true,
+   "palavra": "GOOGLE",
+   "chave": "05-reels/roteiros.md#5-perfil-da-empresa-no-google-o-basico-educativo"
+  },
+  {
+   "id": "2026-11-05-carrossel-so-aplicativo",
+   "titulo": "Carrossel · Seu delivery depende só de aplicativo? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/15-so-aplicativo/01.png",
+    "09-carrosseis/15-so-aplicativo/02.png",
+    "09-carrosseis/15-so-aplicativo/03.png",
+    "09-carrosseis/15-so-aplicativo/04.png",
+    "09-carrosseis/15-so-aplicativo/05.png",
+    "09-carrosseis/15-so-aplicativo/06.png",
+    "09-carrosseis/15-so-aplicativo/07.png"
+   ],
+   "legenda": "Seu delivery depende só de aplicativo? O app ajuda a ser achado. Mas o cliente fiel pode pedir direto com você. 👇\n\n3 sinais de que é hora de ter um canal seu, junto com o app:\n1. Você não tem como falar com quem já pediu.\n2. O cliente fiel costuma pedir pelo app, com comissão em cada pedido.\n3. Se o app muda a regra, o seu movimento muda junto.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#delivery #restaurante #cardapiodigital #marketingpararestaurantes #growlift",
+   "quando": "2026-11-05T10:00:00-03:00",
+   "ia": false
+  },
+  {
+   "id": "2026-11-05-reel-12",
+   "titulo": "Reel 12 · Cardápio completo (Comenta CARDÁPIO)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/12-cardapio-completo.mp4"
+   ],
+   "capa": "05-reels/12-cardapio-completo-capa.png",
+   "legenda": "Comenta CARDÁPIO que a gente te manda um exemplo de site 📩\n\nCardápio de papel não responde \"tem entrega?\" às 11 da noite 😅\n\nCom um site, quem procura vê tudo antes de sair de casa:\n📸 Fotos dos pratos\n📍 Endereço e horário\n💬 Um botão que abre o WhatsApp do restaurante para pedir (pedido com Pix dentro do site é do plano Grow)\n\nA Growlift faz o site do seu restaurante e configura o seu perfil no Google. Valores e condições dos planos: link na bio.\n\n#cardapiodigital #sitepararestaurante #restaurante #delivery #hamburgueria",
+   "quando": "2026-11-05T15:00:00-03:00",
+   "ia": true,
+   "palavra": "CARDÁPIO",
+   "chave": "05-reels/roteiros.md#12-o-seu-cardapio-completo"
+  },
+  {
+   "id": "2026-11-06-carrossel-sexta-a-noite",
+   "titulo": "Carrossel · Sexta à noite: quantos pedidos ficaram sem resposta? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/16-sexta-a-noite/01.png",
+    "09-carrosseis/16-sexta-a-noite/02.png",
+    "09-carrosseis/16-sexta-a-noite/03.png",
+    "09-carrosseis/16-sexta-a-noite/04.png",
+    "09-carrosseis/16-sexta-a-noite/05.png",
+    "09-carrosseis/16-sexta-a-noite/06.png",
+    "09-carrosseis/16-sexta-a-noite/07.png"
+   ],
+   "legenda": "Sexta à noite: quantos pedidos ficaram sem resposta? 📲🔥 Pode estar acontecendo com você.\n\n3 sinais de que o WhatsApp não aguenta o pico:\n1. As mesmas perguntas, toda hora.\n2. Pedido anotado errado.\n3. A resposta chega quando já é tarde.\n\nNo slide 6 tem os 3 ajustes pra sexta que vem. Salva!\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#delivery #restaurante #whatsappbusiness #hamburgueria #growlift",
+   "quando": "2026-11-06T10:00:00-03:00",
+   "ia": false
+  },
+  {
+   "id": "2026-11-06-reel-04",
+   "titulo": "Reel 4 · Ela procurou e não achou (Comenta GOOGLE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/04-ela-procurou.mp4"
+   ],
+   "capa": "05-reels/04-ela-procurou-capa.png",
+   "legenda": "Comenta GOOGLE que a gente te mostra como o seu restaurante aparece 📩\n\nSábado, meio-dia. A Ana procurou \"hamburgueria perto de mim\". A lanchonete do seu João fica a duas quadras, mas não apareceu. Ela foi pra outro lugar, e ele nem soube que ela procurou.\n\nTrês sinais de que o seu negócio pode não estar aparecendo pra quem procura:\n1. O cardápio só existe em foto no Instagram.\n2. O horário no Google está errado.\n3. Pra pedir, só mandando mensagem.\n\n#growlift #sitepararestaurante #googlemeunegocio #hamburgueria #pequenosnegocios",
+   "quando": "2026-11-06T19:00:00-03:00",
+   "ia": true,
+   "palavra": "GOOGLE",
+   "chave": "05-reels/roteiros.md#4-tres-sinais-de-que-o-seu-negocio-precisa-de-site-educativo"
+  },
+  {
+   "id": "2026-11-07-carrossel-indicacao",
+   "titulo": "Carrossel · Seu cliente indica você, e o amigo não te acha? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/17-indicacao/01.png",
+    "09-carrosseis/17-indicacao/02.png",
+    "09-carrosseis/17-indicacao/03.png",
+    "09-carrosseis/17-indicacao/04.png",
+    "09-carrosseis/17-indicacao/05.png",
+    "09-carrosseis/17-indicacao/06.png",
+    "09-carrosseis/17-indicacao/07.png"
+   ],
+   "legenda": "Seu cliente indica você… e o amigo não te acha? 🔎\n\nPra barbearia, salão, clínica, loja: 3 sinais pra quem vive de indicação:\n1. Procuram seu nome e aparece outro lugar.\n2. Não dá pra ver serviços e preços sem perguntar.\n3. Pra marcar horário, só ligando.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#negociolocal #barbearia #salaodebeleza #marketingdigital #growlift",
+   "quando": "2026-11-07T10:00:00-03:00",
+   "ia": false
+  },
+  {
+   "id": "2026-11-12-reel-06",
+   "titulo": "Reel 6 · Do zero, linha por linha (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/06-do-zero.mp4"
+   ],
+   "capa": "05-reels/06-do-zero-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como funciona 📩\n\nA Júlia faz bolos lindos e chegou com um caderno cheio de ideias: as cores, os sabores, as fotos dos bolos. Do caderno nasce o código, escrito do zero, sem modelo pronto. Depois vem o visual, depois as fotos.\n\n#growlift #bastidores #criacaodesites #confeitaria #webdesign",
+   "quando": "2026-11-07T19:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE",
+   "chave": "05-reels/roteiros.md#6-bastidores-como-nasce-um-modelo"
+  },
+  {
+   "id": "2026-11-08-carrossel-posta-todo-dia",
+   "titulo": "Carrossel · Você posta todo dia e o movimento não muda? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/18-posta-todo-dia/01.png",
+    "09-carrosseis/18-posta-todo-dia/02.png",
+    "09-carrosseis/18-posta-todo-dia/03.png",
+    "09-carrosseis/18-posta-todo-dia/04.png",
+    "09-carrosseis/18-posta-todo-dia/05.png",
+    "09-carrosseis/18-posta-todo-dia/06.png",
+    "09-carrosseis/18-posta-todo-dia/07.png"
+   ],
+   "legenda": "Você posta todo dia… e o movimento não muda? ❤️➡️🛒\n\n3 sinais de que o post para no \"curtir\":\n1. O post não diz o que fazer.\n2. Quem vê não sabe onde fica nem quando abre.\n3. O caminho até o pedido tem passos demais.\n\nOs 3 ajustes estão no slide 6. Salva pra fazer essa semana.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #instagramparanegocios #marketingpararestaurantes #delivery #growlift",
+   "quando": "2026-11-08T10:00:00-03:00",
+   "ia": false
+  },
+  {
+   "id": "2026-11-10-reel-03",
+   "titulo": "Reel 3 · Dois minutos (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/03-dois-minutos.mp4"
+   ],
+   "capa": "05-reels/03-dois-minutos-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como funciona 📩\n\nOnze e meia, a chapa já quente. O Marcos tinha dois minutos entre um pedido e outro: pediu o diagnóstico grátis pelo celular e voltou pra chapa. Em até 2 dias úteis, a prévia do site chega no WhatsApp. Sem compromisso.\n\n#growlift #diagnosticogratis #sitepararestaurante #negocioslocais #pequenosnegocios",
+   "quando": "2026-11-08T19:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE",
+   "chave": "05-reels/roteiros.md#3-do-celular-ao-diagnostico"
+  },
+  {
+   "id": "2026-11-09-carrossel-feriado",
+   "titulo": "Carrossel · Feriado: seu horário no Google está certo? (Comenta GOOGLE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/12-feriado/01.png",
+    "09-carrosseis/12-feriado/02.png",
+    "09-carrosseis/12-feriado/03.png",
+    "09-carrosseis/12-feriado/04.png",
+    "09-carrosseis/12-feriado/05.png",
+    "09-carrosseis/12-feriado/06.png",
+    "09-carrosseis/12-feriado/07.png",
+    "09-carrosseis/12-feriado/08.png"
+   ],
+   "legenda": "Feriado chegando: o seu horário no Google está certo? Salve e confira 👇\n\nFeriados nacionais até o começo de 2027:\nDom 15/11 · Proclamação da República\nSex 20/11 · Dia Nacional de Zumbi e da Consciência Negra\nSex 25/12 · Natal\nSex 01/01 · Confraternização Universal\n(Os feriados da sua cidade e do seu estado contam também.)\n\nNo Perfil da Empresa no Google: Editar perfil, Horário, Horário especial. Escolha a data e marque fechado, ou aberto com o horário do dia. Vai abrir normal? Confirme mesmo assim: o Google pode deixar de mostrar o aviso de que o horário pode ser diferente.\n\nComenta GOOGLE que a gente te manda o básico pra deixar o seu perfil em dia.\n\n#feriado #perfildaempresanogoogle #restaurante #googlemeunegocio #growlift",
+   "quando": "2026-11-09T10:00:00-03:00",
+   "ia": false,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-09-reel-13",
+   "titulo": "Reel 13 · Porta aberta (Comenta PEDIDO)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/13-porta-aberta.mp4"
+   ],
+   "capa": "05-reels/13-porta-aberta-capa.png",
+   "legenda": "Comenta PEDIDO que a gente te mostra como funciona 📩\n\nA porta fecha. A fome não 🌙\n\nCom a loja fechada, o site continua mostrando o cardápio com foto, o horário e o endereço. Pedido não entra enquanto a loja está fechada.\n\nQuando você abre, o pedido do site cai direto na tela da loja, com Pix na hora (plano Grow). Valores e condições: link na bio.\n\n#cardapiodigital #sitepararestaurante #delivery #restaurante #lanchonete",
+   "quando": "2026-11-09T19:00:00-03:00",
+   "ia": true,
+   "palavra": "PEDIDO",
+   "chave": "05-reels/roteiros.md#13-a-porta-que-fica-aberta"
+  },
+  {
+   "id": "2026-11-10-carrossel-antes-de-contratar",
+   "titulo": "Carrossel · 7 perguntas antes de contratar um site (Comenta SITE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/07-antes-de-contratar/01.png",
+    "09-carrosseis/07-antes-de-contratar/02.png",
+    "09-carrosseis/07-antes-de-contratar/03.png",
+    "09-carrosseis/07-antes-de-contratar/04.png",
+    "09-carrosseis/07-antes-de-contratar/05.png",
+    "09-carrosseis/07-antes-de-contratar/06.png",
+    "09-carrosseis/07-antes-de-contratar/07.png",
+    "09-carrosseis/07-antes-de-contratar/08.png",
+    "09-carrosseis/07-antes-de-contratar/09.png",
+    "09-carrosseis/07-antes-de-contratar/10.png"
+   ],
+   "legenda": "Vai contratar um site pro seu negócio? Salve estas 7 perguntas e faça pra qualquer empresa, inclusive pra gente 👇\n\n1. O domínio fica em nome de quem?\n2. Funciona bem no celular?\n3. Em quanto tempo fica no ar (por escrito)?\n4. Quantas alterações por mês estão inclusas?\n5. Tem fidelidade ou multa?\n6. Quem vai te atender, e por onde?\n7. Cobra alguma taxa por pedido?\n\nAs principais respostas da Growlift estão no site e no contrato: link na bio.\n\nComenta SITE que a gente te manda exemplos e explica como funciona.\n\n#criacaodesites #sitepararestaurante #negocioslocais #dicasdenegocio #growlift",
+   "quando": "2026-11-10T10:00:00-03:00",
+   "ia": false,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-13-reel-07",
+   "titulo": "Reel 7 · Quem atende é quem faz (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/07-quem-atende.mp4"
+   ],
+   "capa": "05-reels/07-quem-atende-capa.png",
+   "legenda": "Comenta SITE que a gente te chama pra conversar 📩\n\nO Rafael precisava de um site pro restaurante. Mandou mensagem e já imaginou protocolo, fila e espera. Do outro lado, quem respondeu foi quem ia fazer o site dele.\n\nNa Growlift, quem atende é quem faz. Somos de São Paulo e criamos sites, cuidamos do Google e colocamos o pedido no site de negócios locais.\n\n#growlift #criacaodesites #sitepararestaurante #negocioslocais #saopaulo",
+   "quando": "2026-11-10T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-11-carrossel-faca-a-conta",
+   "titulo": "Carrossel · Quanto cada pedido pelo app te custa? (Comenta PEDIDO)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/08-faca-a-conta/01.png",
+    "09-carrosseis/08-faca-a-conta/02.png",
+    "09-carrosseis/08-faca-a-conta/03.png",
+    "09-carrosseis/08-faca-a-conta/04.png",
+    "09-carrosseis/08-faca-a-conta/05.png",
+    "09-carrosseis/08-faca-a-conta/06.png",
+    "09-carrosseis/08-faca-a-conta/07.png",
+    "09-carrosseis/08-faca-a-conta/08.png",
+    "09-carrosseis/08-faca-a-conta/09.png"
+   ],
+   "legenda": "Quanto cada pedido pelo app de delivery te custa de verdade? Faça a conta com os seus números 👇\n\n1. Some o que o app cobra no mês: comissão, taxa de pagamento e mensalidade, se houver.\n2. Veja quanto você vendeu pelo app no mesmo mês.\n3. Divida o custo pelas vendas: é quanto fica de cada pedido.\n\nNão é pra largar o app: ele traz cliente que ainda não te conhece. A ideia é saber o custo e ter também um canal seu, pra quem já é cliente pedir direto.\n\nNo pedido pelo próprio site (plano Grow), a Growlift não cobra comissão por pedido: você paga a mensalidade e, se a sua conta cobrar, a tarifa do Pix. Valores e condições: link na bio.\n\nComenta PEDIDO que a gente te mostra como funciona.\n\n#delivery #restaurante #pedidoonline #gestaoderestaurante #growlift",
+   "quando": "2026-11-11T10:00:00-03:00",
+   "ia": false,
+   "palavra": "PEDIDO"
+  },
+  {
+   "id": "2026-11-16-reel-08",
+   "titulo": "Reel 8 · Sábado à noite (Comenta PEDIDO)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/08-sabado-a-noite.mp4"
+   ],
+   "capa": "05-reels/08-sabado-a-noite-capa.png",
+   "legenda": "Comenta PEDIDO que a gente te mostra funcionando 📩\n\nSábado à noite, a cozinha a mil. Uma parte dos pedidos chega direto pelo site da própria loja: o cliente escolhe, paga no Pix na hora e o pedido aparece na tela da cozinha, com alerta. O Pix cai direto na conta da loja e a Growlift não cobra nada sobre o pedido.\n\nPedido no site com Pix é do plano Grow, com mensalidade fixa. Se a conta de pagamento da loja cobrar tarifa pelo Pix, a tarifa é dela. Valores e condições dos planos: link na bio.\n\n#growlift #pedidoonline #sitepararestaurante #delivery #hamburgueria",
+   "quando": "2026-11-11T15:00:00-03:00",
+   "ia": true,
+   "palavra": "PEDIDO"
+  },
+  {
+   "id": "2026-11-12-carrossel-dominio",
+   "titulo": "Carrossel · seunegocio.com.br: por que ter o seu? (Comenta SITE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/09-dominio/01.png",
+    "09-carrosseis/09-dominio/02.png",
+    "09-carrosseis/09-dominio/03.png",
+    "09-carrosseis/09-dominio/04.png",
+    "09-carrosseis/09-dominio/05.png",
+    "09-carrosseis/09-dominio/06.png",
+    "09-carrosseis/09-dominio/07.png",
+    "09-carrosseis/09-dominio/08.png"
+   ],
+   "legenda": "seunegocio.com.br: por que ter um endereço com o nome do seu negócio? 👇\n\n1. Link de rede social ou de plataforma segue as regras de outra empresa; o domínio é seu endereço.\n2. É fácil de falar: cabe na placa, na sacola e no cardápio.\n3. Quem viu a fachada digita o nome e encontra o seu site.\n\nOs domínios .com.br são registrados no Registro.br, com CPF ou CNPJ. Pergunte sempre em nome de quem o seu fica, e não deixe vencer.\n\nNo plano Start, o domínio com o nome do seu negócio e a hospedagem ficam por nossa conta. Valores e condições: link na bio.\n\nComenta SITE que a gente te manda exemplos no direct.\n\n#dominio #criacaodesites #negocioslocais #sitepararestaurante #growlift",
+   "quando": "2026-11-12T10:00:00-03:00",
+   "ia": false,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-18-reel-02",
+   "titulo": "Reel 2 · A confeitaria que ninguém achava (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/02-a-confeitaria.mp4"
+   ],
+   "capa": "05-reels/02-a-confeitaria-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nA Bia faz o bolo mais bonito do bairro. Mas a vitrine fica vazia, e quem procura confeitaria por perto não acha a dela. Então a marca ganha forma: as cores, o nome, as fotos dos bolos, num site com um botão pra encomendar.\n\n#growlift #confeitaria #criacaodesites #docesartesanais #negocioslocais",
+   "quando": "2026-11-12T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-13-carrossel-pedir-avaliacao",
+   "titulo": "Carrossel · Como pedir avaliação sem parecer chato (Comenta GOOGLE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/10-pedir-avaliacao/01.png",
+    "09-carrosseis/10-pedir-avaliacao/02.png",
+    "09-carrosseis/10-pedir-avaliacao/03.png",
+    "09-carrosseis/10-pedir-avaliacao/04.png",
+    "09-carrosseis/10-pedir-avaliacao/05.png",
+    "09-carrosseis/10-pedir-avaliacao/06.png",
+    "09-carrosseis/10-pedir-avaliacao/07.png",
+    "09-carrosseis/10-pedir-avaliacao/08.png",
+    "09-carrosseis/10-pedir-avaliacao/09.png"
+   ],
+   "legenda": "Como pedir avaliação no Google sem parecer chato 👇\n\n1. Peça a todos os clientes, do mesmo jeito (não só a quem elogiou).\n2. Na hora certa: fim da refeição, junto com a conta ou na entrega.\n3. QR no balcão e na sacola, que abre direto a tela de avaliação.\n4. Uma frase curta, sem pressão e sem nada em troca.\n\nE o que não pode: dar desconto ou brinde em troca de avaliação, pressionar alguém a apagar uma avaliação ruim ou usar avaliação de quem não foi cliente, como amigo ou funcionário. Isso vai contra as regras do Google e pode derrubar avaliações do seu perfil.\n\nNuma pesquisa da Reclame AQUI com a Abrasel (agosto de 2024), 63% disseram que escolhem onde comer pelas avaliações de outros clientes. No plano Start, o QR de avaliação pro balcão e pra sacola já está incluso.\n\nComenta GOOGLE que a gente te manda o básico do perfil no direct.\n\n#avaliacoesgoogle #restaurante #perfildaempresanogoogle #marketingpararestaurantes #growlift",
+   "quando": "2026-11-13T10:00:00-03:00",
+   "ia": false,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-13-reel-14",
+   "titulo": "Reel 14 · Uma estrela (Comenta GOOGLE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/14-uma-estrela.mp4"
+   ],
+   "capa": "05-reels/14-uma-estrela-capa.png",
+   "legenda": "Comenta GOOGLE que a gente te manda um modelo de resposta e o básico do perfil 📩\n\nSegunda de manhã, o Zé recebeu uma estrela: \"Demorou e chegou frio.\" Deu vontade de responder no calor. Ele respirou e escreveu com educação, levando a conversa pro WhatsApp. Dias depois, quem procurava onde almoçar leu a crítica e leu a resposta.\n\nQuem responde com educação mostra quem é. No carrossel de hoje: como pedir avaliação do jeito certo.\n\n#avaliacoesgoogle #restaurante #atendimentoaocliente #marketingpararestaurantes #growlift",
+   "quando": "2026-11-13T15:00:00-03:00",
+   "ia": true,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-14-carrossel-whatsapp-respostas",
+   "titulo": "Carrossel · 5 respostas prontas pro WhatsApp (Comenta SITE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/11-whatsapp-respostas/01.png",
+    "09-carrosseis/11-whatsapp-respostas/02.png",
+    "09-carrosseis/11-whatsapp-respostas/03.png",
+    "09-carrosseis/11-whatsapp-respostas/04.png",
+    "09-carrosseis/11-whatsapp-respostas/05.png",
+    "09-carrosseis/11-whatsapp-respostas/06.png",
+    "09-carrosseis/11-whatsapp-respostas/07.png",
+    "09-carrosseis/11-whatsapp-respostas/08.png",
+    "09-carrosseis/11-whatsapp-respostas/09.png"
+   ],
+   "legenda": "5 perguntas que o WhatsApp do seu restaurante responde todo dia. Deixe as respostas prontas 👇\n\n/horario: que horas abre hoje\n/cardapio: o link do cardápio com preços\n/entrega: bairros, taxa e tempo médio\n/pix: a chave e o pedido de comprovante\n/endereco: a rua e o link do mapa\n\nNo WhatsApp Business, as respostas rápidas ficam salvas e aparecem quando você digita a barra (/). Os textos do carrossel são modelos: troque o que está entre colchetes pelos seus dados (taxa e prazo de entrega só os reais; no Pix, prefira chave de CNPJ, e-mail ou aleatória).\n\nSalve e manda pra quem atende o WhatsApp aí. Se quiser um cardápio com cara de site pra mandar no /cardapio, comenta SITE.\n\n#whatsappbusiness #restaurante #atendimentoaocliente #delivery #growlift",
+   "quando": "2026-11-14T10:00:00-03:00",
+   "ia": false,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-14-reel-15",
+   "titulo": "Reel 15 · O celular não para (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/15-o-celular-nao-para.mp4"
+   ],
+   "capa": "05-reels/15-o-celular-nao-para-capa.png",
+   "legenda": "Comenta SITE que a gente te manda exemplos de site pro seu restaurante 📩\n\nSábado, nove da noite: forno cheio e o WhatsApp perguntando se tem entrega, que horas fecha, se tem cardápio. Com respostas prontas e um cardápio num link, a Carla responde rápido e volta pro forno.\n\nNo carrossel de hoje: as 5 respostas prontas pra salvar no WhatsApp Business.\n\n#whatsappbusiness #restaurante #cardapiodigital #delivery #growlift",
+   "quando": "2026-11-14T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-15-carrossel-cardapio-erros",
+   "titulo": "Carrossel · 6 erros no cardápio (Comenta CARDÁPIO)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/06-cardapio-erros/01.png",
+    "09-carrosseis/06-cardapio-erros/02.png",
+    "09-carrosseis/06-cardapio-erros/03.png",
+    "09-carrosseis/06-cardapio-erros/04.png",
+    "09-carrosseis/06-cardapio-erros/05.png",
+    "09-carrosseis/06-cardapio-erros/06.png",
+    "09-carrosseis/06-cardapio-erros/07.png",
+    "09-carrosseis/06-cardapio-erros/08.png",
+    "09-carrosseis/06-cardapio-erros/09.png",
+    "09-carrosseis/06-cardapio-erros/10.png"
+   ],
+   "legenda": "6 erros no cardápio online que afastam o cliente. Salve e confira o seu 👇\n\n1. Só foto no Instagram\n2. Sem preço\n3. PDF pesado que não abre bem no celular\n4. Preço ou prato desatualizado\n5. Nenhum botão pra pedir\n6. Sem horário e endereço por perto\n\nNuma pesquisa da Reclame AQUI com a Abrasel (agosto de 2024, mais de 400 consumidores na plataforma do Reclame AQUI), antes de ir a um restaurante, 13% buscam o cardápio online e 23% buscam a faixa de preço.\n\nComenta CARDÁPIO que a gente te manda exemplos de site com cardápio no direct.\n\n#cardapiodigital #restaurante #sitepararestaurante #marketingpararestaurantes #growlift",
+   "quando": "2026-11-15T10:00:00-03:00",
+   "ia": false,
+   "palavra": "CARDÁPIO"
+  },
+  {
+   "id": "2026-11-15-reel-16",
+   "titulo": "Reel 16 · O cardápio em PDF (Comenta CARDÁPIO)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/16-cardapio-em-pdf.mp4"
+   ],
+   "capa": "05-reels/16-cardapio-em-pdf-capa.png",
+   "legenda": "Comenta CARDÁPIO que a gente te manda exemplos de cardápio que abre na hora 📩\n\nA Lu achou uma pizzaria no Instagram, tocou no link do cardápio e veio um PDF pesado. Demorou, abriu pequeno, ela deu zoom, não achou o preço e foi pra outra. O dono nunca soube.\n\nNo carrossel de hoje: os 6 erros de cardápio que afastam o cliente.\n\n#cardapiodigital #restaurante #pizzaria #sitepararestaurante #growlift",
+   "quando": "2026-11-15T15:00:00-03:00",
+   "ia": true,
+   "palavra": "CARDÁPIO"
+  },
+  {
+   "id": "2026-11-03-carrossel-portfolio",
+   "titulo": "Carrossel fixado · Portfólio",
+   "tipo": "carrossel",
+   "arquivos": [
+    "04-posts-fixados/2-portfolio/01.png",
+    "04-posts-fixados/2-portfolio/02.png",
+    "04-posts-fixados/2-portfolio/03.png",
+    "04-posts-fixados/2-portfolio/04.png",
+    "04-posts-fixados/2-portfolio/05.png",
+    "04-posts-fixados/2-portfolio/06.png",
+    "04-posts-fixados/2-portfolio/07.png"
+   ],
+   "capa": null,
+   "legenda": "4 sites para 4 ramos: hamburgueria, restaurante, confeitaria e escritório.\n\nOs quatro primeiros são projetos conceito que criamos para mostrar o que dá para fazer em cada ramo. O último é o nosso próprio site.\n\nCada site de cliente é feito do zero, com as fotos, as cores e os serviços do negócio.\n\nQuer ver uma prévia do seu? O diagnóstico é grátis, pelo link na bio.\n\n#growlift #criacaodesites #sitepararestaurante #webdesign #saopaulo",
+   "quando": "2026-11-16T10:00:00-03:00",
+   "ia": false,
+   "palavra": "",
+   "chave": "04-posts-fixados/2-portfolio",
+   "fixar": true
+  },
+  {
+   "id": "2026-11-04-carrossel-avaliacao-ruim",
+   "titulo": "Carrossel · Recebeu 1 estrela. E agora? (Comenta GOOGLE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/02-avaliacao-ruim/01.png",
+    "09-carrosseis/02-avaliacao-ruim/02.png",
+    "09-carrosseis/02-avaliacao-ruim/03.png",
+    "09-carrosseis/02-avaliacao-ruim/04.png",
+    "09-carrosseis/02-avaliacao-ruim/05.png",
+    "09-carrosseis/02-avaliacao-ruim/06.png",
+    "09-carrosseis/02-avaliacao-ruim/07.png",
+    "09-carrosseis/02-avaliacao-ruim/08.png",
+    "09-carrosseis/02-avaliacao-ruim/09.png"
+   ],
+   "legenda": "Recebeu uma avaliação de 1 estrela? Não apaga o app. Salve estas 3 respostas prontas 👇\n\nNum estudo da Abrasel com a Harmo, só 27% das avaliações de 3.006 bares e restaurantes associados à Abrasel tinham resposta no Google (279 mil avaliações, de jan/2023 a set/2024). E, numa pesquisa da Reclame AQUI com a Abrasel (2024), 40% dos clientes consideram a resposta à crítica um fator fundamental pra decidir.\n\nQuem lê a sua resposta é o próximo cliente. Agradeça, reconheça, leve a solução pro privado e convide pra voltar.\n\nComenta GOOGLE que a gente te manda mais dicas no direct.\n\n#restaurante #avaliacoesgoogle #atendimentoaocliente #marketingpararestaurantes #growlift",
+   "quando": "2026-11-17T10:00:00-03:00",
+   "ia": false,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-05-carrossel-quem-somos",
+   "titulo": "Carrossel fixado · Quem somos",
+   "tipo": "carrossel",
+   "arquivos": [
+    "04-posts-fixados/1-quem-somos/01.png",
+    "04-posts-fixados/1-quem-somos/02.png",
+    "04-posts-fixados/1-quem-somos/03.png",
+    "04-posts-fixados/1-quem-somos/04.png",
+    "04-posts-fixados/1-quem-somos/05.png"
+   ],
+   "capa": null,
+   "legenda": "Quem atende você é quem faz o seu site.\n\nSomos a Growlift, de São Paulo: criamos sites para negócios locais, cuidamos da presença no Google e colocamos o pedido e o pagamento no próprio site do cliente.\n\nComo funciona: diagnóstico grátis pelo site, prévia no seu WhatsApp em até 2 dias úteis e, se você gostar, é só escolher o plano para o site ir ao ar com o seu domínio. Planos, valores e condições: link na bio.\n\nQuer ver como o seu negócio pode ficar? Peça o diagnóstico grátis pelo link na bio.\n\n#growlift #criacaodesites #negocioslocais #sitesprofissionais #saopaulo",
+   "quando": "2026-11-18T10:00:00-03:00",
+   "ia": false,
+   "palavra": "",
+   "chave": "04-posts-fixados/1-quem-somos",
+   "fixar": true
+  },
+  {
+   "id": "2026-11-06-carrossel-perfil-google-checklist",
+   "titulo": "Carrossel · Perfil no Google: 10 itens (Comenta GOOGLE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/03-perfil-google-checklist/01.png",
+    "09-carrosseis/03-perfil-google-checklist/02.png",
+    "09-carrosseis/03-perfil-google-checklist/03.png",
+    "09-carrosseis/03-perfil-google-checklist/04.png",
+    "09-carrosseis/03-perfil-google-checklist/05.png",
+    "09-carrosseis/03-perfil-google-checklist/06.png",
+    "09-carrosseis/03-perfil-google-checklist/07.png",
+    "09-carrosseis/03-perfil-google-checklist/08.png"
+   ],
+   "legenda": "Seu Perfil da Empresa no Google (o antigo Google Meu Negócio) tem estes 10 itens? Salve e confira hoje 👇\n\n1. Nome igual ao da fachada\n2. Categoria certa\n3. Endereço e pino do mapa no lugar\n4. Horário de cada dia\n5. Horário especial de feriado\n6. Delivery, retirada ou no local\n7. Telefone ou WhatsApp que alguém atende\n8. Link do site ou do cardápio\n9. Fotos reais da fachada, dos pratos e do ambiente\n10. Avaliações respondidas\n\nNum estudo com 3.006 bares e restaurantes associados à Abrasel (Abrasel e Harmo, 279 mil avaliações), a nota média no Google foi 4,3. A nota é só uma parte: o resto do perfil você controla hoje. A verificação é feita pelo Google.\n\nComenta GOOGLE que a gente te mostra como deixar o seu perfil em dia.\n\n#perfildaempresanogoogle #googlemeunegocio #restaurante #marketinglocal #growlift",
+   "quando": "2026-11-19T10:00:00-03:00",
+   "ia": false,
+   "palavra": "GOOGLE"
+  },
+  {
+   "id": "2026-11-07-carrossel-foto-de-prato",
+   "titulo": "Carrossel · Foto de prato com o celular (Comenta SITE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/04-foto-de-prato/01.png",
+    "09-carrosseis/04-foto-de-prato/02.png",
+    "09-carrosseis/04-foto-de-prato/03.png",
+    "09-carrosseis/04-foto-de-prato/04.png",
+    "09-carrosseis/04-foto-de-prato/05.png",
+    "09-carrosseis/04-foto-de-prato/06.png",
+    "09-carrosseis/04-foto-de-prato/07.png",
+    "09-carrosseis/04-foto-de-prato/08.png",
+    "09-carrosseis/04-foto-de-prato/09.png"
+   ],
+   "legenda": "O prato é lindo. A foto, nem sempre. 5 ajustes pra fotografar com o celular que você já tem 👇\n\n1. Luz da janela, sem flash\n2. De cima pra prato raso; a 45° pra lanche, bolo e drinque\n3. Fundo limpo, só a comida\n4. Chegue perto em vez de usar zoom (e limpe a lente)\n5. Filtro leve: o que chega na mesa tem que ser igual à foto\n\nNuma pesquisa da Reclame AQUI com a Abrasel (agosto de 2024), 18% dos consumidores disseram que olham as fotos dos pratos e do ambiente antes de escolher onde comer.\n\nSalve e manda pra quem cuida das fotos aí. E se quiser ver essas fotos num site com a cara do seu restaurante, comenta SITE.\n\n#fotografiadecomida #restaurante #dicasdefoto #marketingpararestaurantes #growlift",
+   "quando": "2026-11-20T10:00:00-03:00",
+   "ia": false,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-08-carrossel-site-ou-instagram",
+   "titulo": "Carrossel · Só o Instagram basta? (Comenta SITE)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/05-site-ou-instagram/01.png",
+    "09-carrosseis/05-site-ou-instagram/02.png",
+    "09-carrosseis/05-site-ou-instagram/03.png",
+    "09-carrosseis/05-site-ou-instagram/04.png",
+    "09-carrosseis/05-site-ou-instagram/05.png",
+    "09-carrosseis/05-site-ou-instagram/06.png",
+    "09-carrosseis/05-site-ou-instagram/07.png",
+    "09-carrosseis/05-site-ou-instagram/08.png"
+   ],
+   "legenda": "Só o Instagram basta pro seu restaurante? A resposta honesta: não é um ou outro 👇\n\nO Instagram é ótimo pra mostrar pratos, bastidores e novidades, e os Reels chegam em quem ainda não te segue. O site organiza o que o cliente procura na hora de decidir: cardápio com preço em texto, endereço, horário e um botão pra falar com você, num endereço com o nome do seu negócio.\n\nNuma pesquisa da Reclame AQUI com a Abrasel (2024), ao encontrar uma crítica, 59% leem as opiniões de outros clientes, 14% procuram o restaurante nas redes sociais e 11% vão ao site oficial. Tem gente que procura nas redes e gente que procura no site.\n\nSalve pra lembrar do combo. E se quiser ver exemplos, comenta SITE.\n\n#sitepararestaurante #instagramparanegocios #restaurante #marketingpararestaurantes #growlift",
+   "quando": "2026-11-21T10:00:00-03:00",
+   "ia": false,
+   "palavra": "SITE"
+  },
+  {
+   "id": "2026-11-03-carrossel-bom-mas-nao-vende",
+   "titulo": "Carrossel · Seu restaurante é bom, mas não vende? (link da bio)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/13-bom-mas-nao-vende/01.png",
+    "09-carrosseis/13-bom-mas-nao-vende/02.png",
+    "09-carrosseis/13-bom-mas-nao-vende/03.png",
+    "09-carrosseis/13-bom-mas-nao-vende/04.png",
+    "09-carrosseis/13-bom-mas-nao-vende/05.png",
+    "09-carrosseis/13-bom-mas-nao-vende/06.png",
+    "09-carrosseis/13-bom-mas-nao-vende/07.png"
+   ],
+   "legenda": "Seu restaurante é bom… mas não vende? Pode não ser a cozinha. 👇\n\n3 sinais pra conferir hoje:\n1. Quem procura no Google não te encontra (ou acha horário errado).\n2. O cardápio só existe em foto ou PDF.\n3. Pra pedir, só mandando mensagem e esperando.\n\nMarcou algum? Salva o post e começa pelo resumo do slide 6.\n\nQuer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)\n\n#restaurante #hamburgueria #marketingpararestaurantes #delivery #growlift",
+   "quando": "2026-11-22T10:00:00-03:00",
+   "ia": false
+  },
+  {
+   "id": "2026-11-06-casa-cheia-17",
+   "titulo": "Casa Cheia ep. 1 · Cadê o dinheiro? (Comenta MARGEM)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/17-cade-o-dinheiro.mp4"
+   ],
+   "capa": "05-reels/17-cade-o-dinheiro-capa.png",
+   "legenda": "Vender muito não é a mesma coisa que sobrar dinheiro. 🍝\n\nA parmegiana da Rosa sai toda noite. Mas, de cada R$ 39,90, R$ 22 vão embora em ingrediente. Esse número tem nome: CMV, o custo da mercadoria vendida.\n\nFaz a conta com o prato que mais sai aí: custo dos ingredientes ÷ preço. Quanto maior o resultado, menos sobra pra pagar o resto: aluguel, salários, contas e impostos (isso fica pro episódio 4).\n\nQuer a conta passo a passo? Comenta MARGEM.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #gestaoderestaurante #cmv #donoderestaurante #cardapio",
+   "quando": "2026-11-06T15:00:00-03:00",
+   "ia": true,
+   "palavra": "MARGEM"
+  },
+  {
+   "id": "2026-11-07-casa-cheia-18",
+   "titulo": "Casa Cheia ep. 2 · Cada prato tem um papel (Comenta MARGEM)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/18-cada-prato-um-papel.mp4"
+   ],
+   "capa": "05-reels/18-cada-prato-um-papel-capa.png",
+   "legenda": "Todo prato do seu cardápio tem um papel. Você sabe qual é o de cada um? ⭐🐴🧩🍍\n\n⭐ Estrela: vende muito e sobra muito. Destaque e mantém.\n🐴 Cavalo de batalha: vende muito, sobra pouco. Revê porção ou custo.\n🧩 Quebra-cabeça: sobra muito, pouca gente pede. Precisa de destaque.\n🍍 Abacaxi: vende pouco e sobra pouco. Vale testar trocar ou tirar.\n\nIsso se chama engenharia de cardápio. Quer descobrir o papel dos seus pratos? Comenta MARGEM.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #engenhariadecardapio #cardapio #gestaoderestaurante #donoderestaurante",
+   "quando": "2026-11-07T15:00:00-03:00",
+   "ia": true,
+   "palavra": "MARGEM"
+  },
+  {
+   "id": "2026-11-08-casa-cheia-19",
+   "titulo": "Casa Cheia ep. 3 · Ela vem toda sexta (Comenta CLIENTE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/19-ela-vem-toda-sexta.mp4"
+   ],
+   "capa": "05-reels/19-ela-vem-toda-sexta-capa.png",
+   "legenda": "Quantas \"donas Cida\" pararam de vir aí, e ninguém percebeu? 🪑\n\nCRM é um nome chique para uma coisa simples: a memória do restaurante. Quem é cliente, quando veio pela última vez e do que gosta. Tudo numa lista só, com a permissão de cada um.\n\nCom isso, dá pra mandar um \"sentimos sua falta\" só pra quem aceitou receber, sempre com a opção de sair.\n\nQuer um modelo dessa mensagem? Comenta CLIENTE.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #crm #fidelizacao #gestaoderestaurante #donoderestaurante",
+   "quando": "2026-11-08T15:00:00-03:00",
+   "ia": true,
+   "palavra": "CLIENTE"
+  },
+  {
+   "id": "2026-11-09-casa-cheia-20",
+   "titulo": "Casa Cheia ep. 4 · Dia 31: quanto sobrou? (Comenta RELATÓRIO)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/20-dia-31.mp4"
+   ],
+   "capa": "05-reels/20-dia-31-capa.png",
+   "legenda": "Vendeu R$ 50 mil no mês. Quanto sobrou de verdade? 📦\n\nA conta do fechamento tem que ter TUDO:\n– ingredientes\n– taxas do cartão e dos aplicativos\n– aluguel\n– salários e encargos, inclusive o seu (o dono também precisa de salário)\n– luz, gás e água\n– impostos e contador\n\nO que fica no fim é o lucro. No exemplo da Panela, R$ 3.500. Vender bem não é o mesmo que sobrar.\n\nQuer o modelo dessa conta? Comenta RELATÓRIO.\n\nCasa Cheia é a nossa série sobre gestão de restaurante.\nNarração com voz gerada por inteligência artificial.\n\n#restaurante #gestaoderestaurante #fechamentodecaixa #lucro #donoderestaurante",
+   "quando": "2026-11-09T15:00:00-03:00",
+   "ia": true,
+   "palavra": "RELATÓRIO"
+  },
+  {
+   "id": "2026-11-17-reel-21",
+   "titulo": "Reel 21 · A mesma noite, duas vezes (Comenta CLÍNICA)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/21-a-mesma-noite.mp4"
+   ],
+   "capa": "05-reels/21-a-mesma-noite-capa.png",
+   "legenda": "Comenta CLÍNICA que a gente te mostra como funciona 📩\n\n23h12. Dor de dente. A Bia manda um áudio pra clínica perto de casa… e ninguém responde. Ela marca em outra.\n\nAgora, a mesma noite com uma atendente de inteligência artificial no WhatsApp da clínica: ela pode ouvir o áudio, responder, olhar a agenda da clínica, marcar o horário e, um dia antes, mandar o lembrete pra paciente confirmar.\n\nA clínica dorme. O atendimento, não.\n\nA atendente responde só com as informações da própria clínica (horários, serviços, agenda) e chama alguém da equipe quando precisa.\n\nNarração com voz gerada por inteligência artificial.\n#clinicaodontologica #dentista #consultorio #atendimento #inteligenciaartificial",
+   "quando": "2026-11-17T15:00:00-03:00",
+   "ia": true,
+   "palavra": "CLÍNICA",
+   "chave": "05-reels/roteiros.md#21-a-mesma-noite-duas-vezes-clinica"
+  },
+  {
+   "id": "2026-11-19-reel-22",
+   "titulo": "Reel 22 · O site no celular (Comenta SITE)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/22-o-site-no-celular.mp4"
+   ],
+   "capa": "05-reels/22-o-site-no-celular-capa.png",
+   "legenda": "Comenta SITE que a gente te mostra como ficaria o seu 📩\n\nO lanche se monta na tela, camada por camada. O cardápio vem com foto, descrição e preço. O cliente escolhe entrega ou retirada e paga no Pix ali mesmo. Endereço, horário e WhatsApp num toque.\n\nA Brasa Burger é um projeto conceito da Growlift (nome fictício, preços de exemplo). Cada site de cliente é feito sob medida, com a cara do negócio.\n\nNarração com voz gerada por inteligência artificial.\n#hamburgueria #sitepararestaurante #cardapiodigital #delivery #growlift",
+   "quando": "2026-11-19T15:00:00-03:00",
+   "ia": true,
+   "palavra": "SITE",
+   "chave": "05-reels/roteiros.md#22-o-site-no-celular-hamburgueria"
+  },
+  {
+   "id": "2026-11-18-carrossel-atendente-clinica",
+   "titulo": "Carrossel · Atendente de IA com voz para clínica odontológica (Comenta CLÍNICA)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/20-atendente-ia-clinica/01.png",
+    "09-carrosseis/20-atendente-ia-clinica/02.png",
+    "09-carrosseis/20-atendente-ia-clinica/03.png",
+    "09-carrosseis/20-atendente-ia-clinica/04.png",
+    "09-carrosseis/20-atendente-ia-clinica/05.png",
+    "09-carrosseis/20-atendente-ia-clinica/06.png",
+    "09-carrosseis/20-atendente-ia-clinica/07.png"
+   ],
+   "legenda": "Sua clínica fecha às 18h. A dor de dente, não. 🦷\n\nQuem tem dor manda mensagem à noite, no fim de semana, na hora do almoço. Se ninguém responde, procura a próxima clínica da lista.\n\nUma atendente de inteligência artificial no WhatsApp da clínica pode:\n1. Ouvir o áudio da paciente e responder com voz ou texto, a qualquer hora.\n2. Olhar a agenda e marcar o horário.\n3. Mandar o lembrete um dia antes, pra paciente confirmar.\n\nEla responde só com as informações da sua clínica, não dá diagnóstico e chama alguém da equipe quando precisa.\n\nQuer ver como fica na sua clínica? Comenta CLÍNICA que a gente te explica no direct.\n\n(Nomes, conversas e agenda dos slides são exemplos ilustrativos.)\n\n#clinicaodontologica #dentista #consultorioodontologico #atendimento #inteligenciaartificial",
+   "quando": "2026-11-18T15:00:00-03:00",
+   "ia": false,
+   "palavra": "CLÍNICA"
+  },
+  {
+   "id": "2026-11-20-reel-23",
+   "titulo": "Reel 23 · O telefone na escada (Comenta AGENDA)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/23-o-telefone-na-escada.mp4"
+   ],
+   "capa": "05-reels/23-o-telefone-na-escada-capa.png",
+   "legenda": "Comenta AGENDA que a gente te mostra a demonstração 📩\n\nTerça, duas da tarde. O Edu está no alto da escada trocando um ar-condicionado. O celular toca, ele não consegue atender… e o cliente liga pro próximo da lista.\n\nAgora, a mesma ligação com o atendimento da Growlift: se ninguém atende, quem ligou pode apertar 1 pra receber a resposta no WhatsApp. A atendente de IA entende o serviço, olha a agenda da empresa e marca a visita. Quando o Edu desce da escada, o aviso já está no celular dele pra confirmar o endereço com o cliente.\n\nPrecisa do número da empresa em um serviço de telefonia pela internet e do WhatsApp oficial da própria empresa. A mensagem só vai pra quem apertou 1 na ligação (ou autorizou antes, por escrito).\n\nDemonstração com dados fictícios. Ainda estamos montando as primeiras empresas; a gente combina com você o que está disponível, o prazo e o preço antes de qualquer contratação.\n\nNarração com voz gerada por inteligência artificial.\n#arcondicionado #climatizacao #tecnicodearcondicionado #atendimento #inteligenciaartificial",
+   "quando": "2026-11-20T15:00:00-03:00",
+   "ia": true,
+   "palavra": "AGENDA",
+   "chave": "05-reels/roteiros.md#23-o-telefone-na-escada-tecnico-de-ar-condicionado-growlift-comercial"
+  },
+  {
+   "id": "2026-11-23-carrossel-ligacao-perdida",
+   "titulo": "Carrossel · A ligação que você não conseguiu atender (Comenta AGENDA)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/21-ligacao-perdida/01.png",
+    "09-carrosseis/21-ligacao-perdida/02.png",
+    "09-carrosseis/21-ligacao-perdida/03.png",
+    "09-carrosseis/21-ligacao-perdida/04.png",
+    "09-carrosseis/21-ligacao-perdida/05.png",
+    "09-carrosseis/21-ligacao-perdida/06.png",
+    "09-carrosseis/21-ligacao-perdida/07.png"
+   ],
+   "capa": null,
+   "legenda": "Você estava na escada. O cliente, no telefone. 📞\n\nQuem liga com o ar parado no calor quer resposta agora. Se ninguém atende, ele pode voltar pra busca e ligar pro próximo técnico.\n\nDois dados pra pensar:\n• 77% dos usuários de smartphone entrevistados fazem mais ligações pelo WhatsApp do que pelo plano da operadora (Panorama Mobile Time/Opinion Box, jan. 2025, 2.099 entrevistados).\n• 65% dos smartphones pesquisados no Brasil têm o WhatsApp na tela inicial (Super Panorama Mobile Time/Opinion Box, divulgado em jun. 2026).\n\n3 coisas pra fazer hoje, sem gastar nada:\n1. Ligar a mensagem de ausência do WhatsApp Business.\n2. Retornar toda ligação perdida antes do próximo serviço.\n3. Deixar no Google o WhatsApp e o horário certos.\n\nE lembrando: mensagem pra quem ligou, só com o aceite da pessoa (a LGPD pede uma base legal e o WhatsApp oficial exige que ela tenha aceitado receber). Informação geral, não é orientação jurídica.\n\nQuer ver a ligação perdida virando visita reservada na demonstração? Comenta AGENDA que a gente te mostra a demonstração no direct.\n\nDemonstração simulada, com dados fictícios: o que está disponível, o prazo e o preço a gente combina antes de qualquer contratação. (Nomes, conversas e telas dos slides são exemplos ilustrativos.)\n\n#arcondicionado #climatizacao #tecnicodearcondicionado #whatsappbusiness #atendimento",
+   "quando": "2026-11-23T10:00:00-03:00",
+   "ia": false,
+   "palavra": "AGENDA",
+   "chave": "09-carrosseis/carrosseis.md#sugestao-junto-com-o-reel-23-a-ligacao-que-voce-nao-conseguiu-atender"
+  }
+ ]
+}
