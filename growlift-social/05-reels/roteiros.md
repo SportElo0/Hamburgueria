@@ -423,19 +423,25 @@ Narração com voz gerada por inteligência artificial.
 ## 23. O telefone na escada (técnico de ar-condicionado, Growlift Comercial)
 - **Formato:** desenho em código (SVG/HTML, `_fonte/reels/novos/reel23.mjs`), sem imagem gerada por IA. O Edu está no alto da escada trocando um ar-condicionado; o celular toca na caixa de ferramentas e ninguém atende. O Jorge, que queria instalar um ar, vê "ninguém atendeu" e liga para o próximo da lista. A fita volta ("A mesma ligação"): agora a ligação toca o menu do produto, com a frase real "Se ninguém puder atender, quer receber uma mensagem da Edu Climatização no WhatsApp, neste número? Aperte 1."; o Jorge aperta 1, a Ana responde com o texto padrão do produto para ligação não atendida, marca quinta às 9h na agenda e, quando o Edu desce, o celular dele mostra o aviso que a plataforma cria de verdade: "Confirmar a visita de quinta, 9h: Jorge" (a assistente só reserva o horário; uma pessoa confirma o endereço). Edu, Jorge, "Edu Climatização" e horários são inventados.
 - **Vídeos:** `23-o-telefone-na-escada-mudo.mp4` (pronto, com legendas na tela) e capa `23-o-telefone-na-escada-capa.png`. 32 s. A versão narrada (`23-o-telefone-na-escada.mp4`) sai quando a narração for aprovada.
-- **Narração** (voz "Andre", custo conferido em 14/11: 2,3 créditos; **ainda não gerada**):
-"Terça, duas da tarde. O Edu está no alto da escada, trocando um ar-condicionado. O celular toca... e ele não consegue atender. Era um cliente querendo instalar um aparelho. Sem resposta, ele liga pro próximo da lista. Agora, a mesma ligação, com a Growlift. Ninguém atendeu? O cliente aperta um, e recebe a resposta no WhatsApp. A atendente entende o serviço, olha a agenda e marca a visita. Quando o Edu desce da escada, o aviso já está no celular. Quer isso no seu negócio? Comenta AGENDA!"
-- **Antes de postar:** a palavra AGENDA precisa ocupar uma das vagas do ManyChat. E o serviço precisa estar pronto para entregar a um cliente de verdade: número da empresa num serviço de telefonia pela internet (ainda sem provedor escolhido), WhatsApp oficial da empresa e a chave da IA.
+- **Narração** (voz "Andre", custo conferido em 14/11: cerca de 2,3 créditos; **ainda não gerada**; texto ajustado depois da revisão legal):
+"Terça, duas da tarde. O Edu está no alto da escada, trocando um ar-condicionado. O celular toca... e ele não consegue atender. Era um cliente querendo instalar um aparelho. Sem resposta, ele liga pro próximo da lista. Agora, a mesma ligação, com a Growlift. Ninguém atendeu? O cliente aperta um, e recebe a resposta no WhatsApp. A atendente de inteligência artificial entende o serviço, olha a agenda e marca a visita. Quando o Edu desce da escada, o aviso já está no celular. Quer ver a demonstração? Comenta AGENDA!"
+- **Revisão legal (14/11):** o produto ainda roda em demonstração (falta provedor de telefonia, WhatsApp oficial do cliente e chave da IA), então o Reel é apresentado como **demonstração**: fecho "Quer ver a demonstração?", legenda dizendo que é demonstração com dados fictícios e que disponibilidade, prazo e preço são combinados antes de contratar, e "atendente de IA" na tela, na narração e na legenda.
+- **Antes de postar:**
+  - a palavra AGENDA precisa ocupar uma das vagas do ManyChat, e a resposta automática dela oferece a demonstração, sem prometer entrega nem prazo;
+  - pesquisar "Edu Climatização" no INPI e no Google; se existir empresa de ar-condicionado com esse nome, trocar a constante `EMPRESA` em `reel23.mjs` e gerar de novo;
+  - ligar o rótulo "Feito com IA" no agendamento.
 
 **Legenda**
 ```
-Comenta AGENDA que a gente te mostra como funciona 📩
+Comenta AGENDA que a gente te mostra a demonstração 📩
 
 Terça, duas da tarde. O Edu está no alto da escada trocando um ar-condicionado. O celular toca, ele não consegue atender… e o cliente liga pro próximo da lista.
 
-Agora, a mesma ligação com o atendimento da Growlift: se ninguém atende, quem ligou pode apertar 1 pra receber a resposta no WhatsApp. A atendente entende o serviço, olha a agenda da empresa e marca a visita. Quando o Edu desce da escada, o aviso já está no celular dele pra confirmar o endereço com o cliente.
+Agora, a mesma ligação com o atendimento da Growlift: se ninguém atende, quem ligou pode apertar 1 pra receber a resposta no WhatsApp. A atendente de IA entende o serviço, olha a agenda da empresa e marca a visita. Quando o Edu desce da escada, o aviso já está no celular dele pra confirmar o endereço com o cliente.
 
-Funciona com o número da empresa num serviço de telefonia pela internet e com o WhatsApp oficial da própria empresa. A mensagem só vai pra quem apertou 1 na ligação.
+Precisa do número da empresa em um serviço de telefonia pela internet e do WhatsApp oficial da própria empresa. A mensagem só vai pra quem apertou 1 na ligação (ou autorizou antes, por escrito).
+
+Demonstração com dados fictícios. Ainda estamos montando as primeiras empresas; a gente combina com você o que está disponível, o prazo e o preço antes de qualquer contratação.
 
 Narração com voz gerada por inteligência artificial.
 #arcondicionado #climatizacao #tecnicodearcondicionado #atendimento #inteligenciaartificial

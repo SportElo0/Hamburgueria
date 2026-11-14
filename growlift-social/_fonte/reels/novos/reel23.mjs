@@ -35,7 +35,7 @@ const CAPS = [
   [11.7, 13.3, 'Agora, a mesma ligação, com a Growlift', 'com a Growlift'],
   [14.6, 17.0, 'Ninguém atendeu? Aperta 1', 'Aperta 1'],
   [17.2, 19.4, 'e recebe a resposta no WhatsApp', 'WhatsApp'],
-  [19.5, 21.9, 'A atendente entende o serviço', 'entende'],
+  [19.5, 21.9, 'A atendente de IA entende o serviço', 'de IA'],
   [22.0, 24.7, 'olha a agenda e marca a visita', 'marca a visita'],
   [24.8, 28.4, 'Quando ele desce, o aviso já está no celular', 'aviso'],
 ];
@@ -172,7 +172,7 @@ ${BG}
 
 <div id="rw"></div><div id="rwT">◀◀ A MESMA LIGAÇÃO</div>
 <div id="dim"></div>
-${comentaBlock('Quer isso no seu negócio?', 'AGENDA', 'dark', 470)}
+${comentaBlock('Quer ver a demonstração?', 'AGENDA', 'dark', 470)}
 `;
 
 const script = `
@@ -192,7 +192,7 @@ window.draw=(t)=>{
 
   // scenes
   show('sA',t,0,T.cli,{dy:0,fo:.3});
-  if(t>=T.down){show('sA',t,T.down,undefined,{dy:0});}
+  if(t>=T.down){show('sA',t,T.down,T.end+.7,{dy:0,fo:.5});}
   show('sB',t,T.cli,T.cal,{dy:30});
   show('sC',t,T.cal,T.down,{dy:40});
 
