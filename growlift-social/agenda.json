@@ -716,6 +716,20 @@
    "ia": false,
    "palavra": "AGENDA",
    "chave": "09-carrosseis/carrosseis.md#sugestao-junto-com-o-reel-23-a-ligacao-que-voce-nao-conseguiu-atender"
+  },
+  {
+   "id": "2026-11-25-reel-24",
+   "titulo": "Reel 24 · O funil furado (Comenta FUNIL)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/24-o-funil-furado.mp4"
+   ],
+   "capa": "05-reels/24-o-funil-furado-capa.png",
+   "legenda": "Demonstração simulada, com dados fictícios.\n\nComenta FUNIL que a gente te mostra a demonstração 📩\n\nO seu funil tá furado. Cada furo é um cliente indo embora:\n• a ligação que ninguém atendeu;\n• a mensagem das 23h que ficou sem resposta;\n• o orçamento que ninguém lembrou de retomar;\n• a visita que o cliente esqueceu.\n\nNo Growlift Comercial, cada furo tem uma peça: quem ligou e apertou 1 recebe a resposta no WhatsApp; a atendente de IA responde com as informações da empresa e chama alguém da equipe quando precisa; a proposta parada vira lembrete pro cliente e tarefa pro vendedor; e a visita ganha lembrete um dia antes, pra quem aceitou receber.\n\nDemonstração simulada, com dados fictícios: o produto ainda está em fase de demonstração. O que estará disponível, o prazo e o preço a gente combina por escrito antes de qualquer contratação. O contador do vídeo é só ilustração, não é dado de cliente nem de pesquisa.\n#atendimento #whatsappbusiness #inteligenciaartificial #pequenasempresas #growlift",
+   "quando": "2026-11-25T15:00:00-03:00",
+   "ia": true,
+   "palavra": "FUNIL",
+   "chave": "05-reels/roteiros.md#24-o-funil-furado-growlift-comercial-formato-novo-sem-bonecos"
   }
  ]
 }

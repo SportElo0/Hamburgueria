@@ -12,8 +12,10 @@ export const COVER = 2.6;
 // Funnel geometry (screen = world at the overview camera).
 const G = { rimY: 520, l: 170, r: 910, neckY: 1080, nl: 476, nr: 604, spoutY: 1330 };
 const holePt = (side, s) => (side === 'L' ? [G.l + s * (G.nl - G.l), G.rimY + s * (G.neckY - G.rimY)] : [G.r + s * (G.nr - G.r), G.rimY + s * (G.neckY - G.rimY)]);
-const Z0 = 5.4;
-const SEG = 4.45;
+// Timing synced to narracao-24-eleven.mp3: z = camera reaches the hole (problem line), c = product card (solution line), e = camera leaves.
+const Z0 = 4.0;
+const TEMPOS = [[4.0, 6.3, 9.95], [9.95, 12.75, 16.4], [16.4, 17.8, 20.7], [20.7, 22.55, 25.0]];
+const FIM = 25.0;
 const HOLES = [
   { side: 'L', s: 0.3, nome: 'LIGAÇÃO PERDIDA' },
   { side: 'R', s: 0.42, nome: 'WHATSAPP SEM RESPOSTA' },
@@ -21,23 +23,23 @@ const HOLES = [
   { side: 'R', s: 0.72, nome: 'VISITA ESQUECIDA' },
 ].map((h, k) => {
   const [x, y] = holePt(h.side, h.s);
-  const z = Z0 + k * SEG;
-  return { ...h, x, y, z, seal: z + 2.75 };
+  const [z, c, e] = TEMPOS[k];
+  return { ...h, x, y, z, c, e, seal: c + 1.6 };
 });
 
 // Kinetic captions: [start, end, lines]; a word "*x*" is the italic serif accent, "[x]" the blue box, "!x!" red.
 const FALAS = [
-  [0.35, 3.05, ['O seu funil', '*tá* *furado.*']],
-  [3.2, 5.3, ['Cada furo é um', 'cliente !indo! !embora.!']],
-  [5.6, 7.9, ['O telefone tocou', 'e *ninguém* *atendeu.*']],
-  [7.95, 9.85, ['Quem ligou aperta 1', 'e recebe no [WhatsApp.]']],
-  [10.05, 12.35, ['Mensagem às 23h,', '*sem* *resposta.*']],
-  [12.4, 14.3, ['A [atendente] [de] [IA]', 'responde no WhatsApp.']],
-  [14.5, 16.8, ['O orçamento', '*esquecido.*']],
-  [16.85, 18.75, ['Lembrete pro cliente,', '[tarefa] pro vendedor.']],
-  [18.95, 21.25, ['Marcou a visita', '*e* *esqueceu.*']],
-  [21.3, 23.25, ['Um dia antes,', 'o [lembrete] chega.']],
-  [23.55, 27.1, ['Cada pedido pode', '*chegar* *até* *alguém.*']],
+  [0.1, 1.57, ['O seu funil', '*tá* *furado.*']],
+  [1.85, 3.87, ['Cada furo é um', 'cliente !indo! !embora.!']],
+  [4.15, 6.32, ['O telefone tocou', 'e *ninguém* *atendeu.*']],
+  [6.6, 9.84, ['Quem ligou pode apertar 1', 'e receber no [WhatsApp.]']],
+  [10.12, 12.78, ['Mensagem às 23h,', '*sem* *resposta.*']],
+  [13.06, 16.32, ['A [atendente] [de] [IA]', 'responde no WhatsApp.']],
+  [16.6, 17.79, ['O orçamento', '*esquecido.*']],
+  [18.07, 20.61, ['Lembrete pro cliente,', '[tarefa] pro vendedor.']],
+  [20.89, 22.56, ['Marcou a visita', '*e* *esqueceu.*']],
+  [22.84, 24.87, ['Um dia antes,', 'o [lembrete] chega.']],
+  [25.15, 27.1, ['Cada pedido pode', '*chegar* *até* *alguém.*']],
 ];
 
 const palavra = (w) => {
@@ -65,7 +67,7 @@ body{background:#05070c;color:#f3f5f9}
 .chip{font-size:19px;font-weight:800;letter-spacing:.08em;padding:9px 16px;border-radius:999px;border:1.5px solid rgba(255,107,91,.55);color:#ffb4a8;background:rgba(255,107,91,.10);transition:none}
 .chip.ok{border-color:#4d8dff;color:#dbe8ff;background:rgba(8,101,254,.22)}
 .tagh{position:absolute;z-index:25;transform:translate(-50%,-50%);font-size:26px;font-weight:800;letter-spacing:.08em;padding:10px 18px;border-radius:999px;white-space:nowrap;background:rgba(40,8,8,.75);border:2px solid #ff6b5b;color:#ffc4bb}
-.card{position:absolute;left:110px;right:110px;top:1035px;z-index:28;background:#f6f8fc;color:#0b1220;border-radius:30px;padding:26px 28px;box-shadow:0 40px 90px -30px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.4);font-size:27px;line-height:1.35}
+.card{position:absolute;left:110px;right:110px;top:965px;z-index:28;background:#f6f8fc;color:#0b1220;border-radius:30px;padding:26px 28px;box-shadow:0 40px 90px -30px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.4);font-size:27px;line-height:1.35}
 .card .top{display:flex;align-items:center;gap:12px;font-size:21px;font-weight:800;color:#5d6b82;letter-spacing:.02em;margin-bottom:14px}
 .card .top i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;font-style:normal;font-size:18px}
 .b{max-width:88%;padding:14px 18px;border-radius:20px;font-weight:600;margin-top:10px}
@@ -104,7 +106,7 @@ window.MOTION=2;
 const G=${JSON.stringify(G)};
 const H=${JSON.stringify(HOLES)};
 const FALAS=${JSON.stringify(FALAS.map(([a, b]) => [a, b]))};
-const Z0=${Z0}, SEG=${SEG}, FIM=23.4;
+const Z0=${Z0}, FIM=${FIM};
 const cv=$('cv'), c=cv.getContext('2d');
 const L=(a,b,x)=>a+(b-a)*x;
 const hash=(n)=>{const s=Math.sin(n*127.1+311.7)*43758.5453;return s-Math.floor(s);};
@@ -114,9 +116,9 @@ function camAt(t){
   if(t<3.2) return mixC(hook,over,eioS((t-1.4)/1.8));
   for(let k=0;k<4;k++){
     const h=H[k], z=h.z, zin=[h.x+(h.side==='L'?40:-40),h.y+110,2.05];
-    if(t>=z-0.25&&t<z+SEG-0.25){
-      const a=eioS((t-(z-0.25))/0.9), b=k===3?eioS((t-(z+SEG-1.2))/1.0):0;
-      if(k<3&&t>z+SEG-0.95){const n=H[k+1], nz=[n.x+(n.side==='L'?40:-40),n.y+110,2.05]; return mixC(zin,nz,eioS((t-(z+SEG-0.95))/0.7));}
+    if(t>=z-0.25&&t<h.e-0.25){
+      const a=eioS((t-(z-0.25))/0.9), b=k===3?eioS((t-(h.e-1.2))/1.0):0;
+      if(k<3&&t>h.e-0.95){const n=H[k+1], nz=[n.x+(n.side==='L'?40:-40),n.y+110,2.05]; return mixC(zin,nz,eioS((t-(h.e-0.95))/0.7));}
       return mixC(mixC(over,zin,a),over,b);
     }
   }
@@ -217,22 +219,22 @@ window.draw=(t)=>{
   furos(t);
   $('cont').textContent=String(n);
   $('cont').style.color=t>H[3].seal?'#7fb2ff':'#fff';
-  show('hud',t,0.6,27.2,{dy:-20}); show('chips',t,3.1,27.2,{dy:-16});
+  show('hud',t,0.6,27.2,{dy:-20}); show('chips',t,1.9,27.2,{dy:-16});
   H.forEach((h,k)=>{
     $('chip'+k).className='chip'+(t>=h.seal?' ok':'');
-    const el=$('tag'+k), on=(t>3.3&&t<5.25)||(t>=h.z+0.3&&t<h.seal+0.4);
+    const el=$('tag'+k), on=(t>1.95&&t<3.85)||(t>=h.z+0.3&&t<h.seal+0.4);
     el.style.opacity=on?1:0;
     const meio=el.offsetWidth/2+30, lx=sx(h.x)+(h.side==='L'?-1:1)*(t<h.z?150:250);
     el.style.left=Math.max(meio,Math.min(1080-meio,lx))+'px'; el.style.top=Math.max(420,sy(h.y)-(t<h.z?70:150))+'px';
     // product card that patches the hole
-    show('k'+k,t,h.z+1.3,h.z+SEG-(k===3?0.35:0.75),{dy:60,fi:.5});
+    show('k'+k,t,h.c,h.e-0.35,{dy:60,fi:.5});
   });
   // card details
-  const p=(t>=H[0].z+2.1&&t<H[0].z+SEG)?1:0; $('k0a').style.background=p?'#0865fe':'#e3e8ef'; $('k0a').style.color=p?'#fff':'#0b1220';
-  show('k0b',t,H[0].z+2.5,undefined,{dy:20});
-  show('k1a',t,H[1].z+1.6,undefined,{dy:20}); show('k1b',t,H[1].z+2.4,undefined,{dy:20}); show('k1c',t,H[1].z+2.9,undefined,{dy:10});
-  show('k2a',t,H[2].z+2.1,undefined,{dy:16}); show('k2b',t,H[2].z+2.6,undefined,{dy:16}); show('k2c',t,H[2].z+3.1,undefined,{dy:10});
-  show('k3a',t,H[3].z+1.8,undefined,{dy:20}); show('k3b',t,H[3].z+2.4,undefined,{dy:20}); show('k3c',t,H[3].z+2.8,undefined,{dy:10});
+  const p=(t>=H[0].c+0.8&&t<H[0].e)?1:0; $('k0a').style.background=p?'#0865fe':'#e3e8ef'; $('k0a').style.color=p?'#fff':'#0b1220';
+  show('k0b',t,H[0].c+1.2,undefined,{dy:20});
+  show('k1a',t,H[1].c+0.3,undefined,{dy:20}); show('k1b',t,H[1].c+1.1,undefined,{dy:20}); show('k1c',t,H[1].c+1.6,undefined,{dy:10});
+  show('k2a',t,H[2].c+0.6,undefined,{dy:16}); show('k2b',t,H[2].c+1.1,undefined,{dy:16}); show('k2c',t,H[2].c+1.6,undefined,{dy:10});
+  show('k3a',t,H[3].c+0.4,undefined,{dy:20}); show('k3b',t,H[3].c+1.0,undefined,{dy:20}); show('k3c',t,H[3].c+1.4,undefined,{dy:10});
   falas(t);
   show('dim',t,27.2,undefined,{dy:0,fi:.6});
   comenta(t,27.35,28.5,'FUNIL');
