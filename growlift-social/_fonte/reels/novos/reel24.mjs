@@ -32,12 +32,12 @@ const FALAS = [
   [5.6, 7.9, ['O telefone tocou', 'e *ninguém* *atendeu.*']],
   [7.95, 9.85, ['Quem ligou aperta 1', 'e recebe no [WhatsApp.]']],
   [10.05, 12.35, ['Mensagem às 23h,', '*sem* *resposta.*']],
-  [12.4, 14.3, ['A [atendente] [de] [IA]', 'responde na hora.']],
+  [12.4, 14.3, ['A [atendente] [de] [IA]', 'responde no WhatsApp.']],
   [14.5, 16.8, ['O orçamento', '*esquecido.*']],
   [16.85, 18.75, ['Lembrete pro cliente,', '[tarefa] pro vendedor.']],
   [18.95, 21.25, ['Marcou a visita', '*e* *esqueceu.*']],
   [21.3, 23.25, ['Um dia antes,', 'o [lembrete] chega.']],
-  [23.55, 27.1, ['Cada pedido chega', '*até* *alguém.*']],
+  [23.55, 27.1, ['Cada pedido pode', '*chegar* *até* *alguém.*']],
 ];
 
 const palavra = (w) => {
@@ -58,7 +58,7 @@ body{background:#05070c;color:#f3f5f9}
 .w.it{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:92px;letter-spacing:-.01em}
 .w.hl{background:#0865fe;color:#fff;padding:0 14px;border-radius:12px;margin:0 -2px}
 .w.red{color:#ff6b5b}
-#hud{position:absolute;right:70px;top:150px;z-index:40;text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+#hud{position:absolute;right:70px;top:150px;z-index:40;text-shadow:0 2px 14px #05070c,0 0 4px #05070c;text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 #hud .t{font-size:20px;font-weight:700;letter-spacing:.18em;color:#6ea6ff}
 #hud .n{font-size:84px;font-weight:800;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
 #chips{position:absolute;left:70px;right:70px;top:300px;z-index:40;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
@@ -74,6 +74,8 @@ body{background:#05070c;color:#f3f5f9}
 .row{display:flex;align-items:center;gap:12px;margin-top:12px;font-weight:700}
 .ok2{width:34px;height:34px;border-radius:50%;background:#16a34a;color:#fff;display:grid;place-items:center;font-size:19px;flex:none}
 .key{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:30px;font-weight:800;background:#e3e8ef;color:#0b1220}
+#selo{position:absolute;left:84px;top:204px;z-index:47;font-size:19px;font-weight:800;letter-spacing:.14em;padding:8px 14px;border-radius:999px;border:1.5px solid rgba(255,255,255,.35);color:#dfe6f2;background:rgba(5,7,12,.85)}
+#hud .t2{font-size:17px;font-weight:700;letter-spacing:.18em;color:#9aa6ba;margin-bottom:6px}
 #dim{position:absolute;inset:0;z-index:44;background:rgba(3,5,10,.9)}
 #veu{position:absolute;left:0;right:0;top:1330px;bottom:0;z-index:29;background:linear-gradient(rgba(4,6,11,0),rgba(4,6,11,.82) 30%,rgba(4,6,11,.9));pointer-events:none}
 `;
@@ -83,13 +85,14 @@ const card = (id, icon, cor, titulo, inner) => `<div id="${id}" class="card"><di
 const body = `
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 <canvas id="cv" width="1080" height="1920"></canvas>
-<div id="hud"><div class="t">PEDIDOS QUE ESCAPARAM</div><div class="n" id="cont">0</div></div>
+<div id="selo">DEMONSTRAÇÃO · DADOS FICTÍCIOS</div>
+<div id="hud"><div class="t2">EXEMPLO ILUSTRATIVO</div><div class="t">PEDIDOS QUE ESCAPARAM</div><div class="n" id="cont">0</div></div>
 <div id="chips">${HOLES.map((h, k) => `<span class="chip" id="chip${k}">${['LIGAÇÃO', 'WHATSAPP', 'ORÇAMENTO', 'VISITA'][k]}</span>`).join('')}</div>
 ${HOLES.map((h, k) => `<div class="tagh" id="tag${k}">${h.nome}</div>`).join('')}
-${card('k0', '☎', '#5d6b82', 'LIGAÇÃO NÃO ATENDIDA', `<div style="font-weight:600">“Se ninguém puder atender, quer receber uma mensagem no WhatsApp, neste número? Aperte 1.”</div><div style="display:flex;gap:14px;margin-top:16px"><span class="key" id="k0a">1</span><span class="key">2</span><span class="key">3</span></div><div class="b out" id="k0b">Oi! Aqui é a Ana. Vi que você ligou e não conseguimos atender. Como posso te ajudar?</div>`)}
-${card('k1', '✆', '#16a34a', 'WHATSAPP · 23:12', `<div class="b in" id="k1a">Vocês atendem no sábado?</div><div class="b out" id="k1b">Oi! Atendemos sim, das 8h às 12h. Quer que eu veja um horário pra você?</div><div style="margin-top:10px;font-size:20px;font-weight:800;color:#0865fe" id="k1c">● ATENDENTE DE IA · RESPONDEU NA HORA</div>`)}
-${card('k2', '▤', '#0865fe', 'PROPOSTA SEM RESPOSTA · 2 DIAS', `<div class="row" id="k2a"><span class="ok2">✓</span>Lembrete enviado ao cliente</div><div class="row" id="k2b"><span class="ok2">✓</span>Tarefa: ligar para o Jorge hoje</div><div class="row" id="k2c" style="color:#5d6b82;font-weight:600">Some sozinho se o cliente responder.</div>`)}
-${card('k3', '✆', '#16a34a', 'WHATSAPP · QUARTA, 18:00', `<div class="b out" id="k3a">Oi, Jorge! Lembrete: amanhã, quinta, às 9h, sua visita está marcada. Confirma?</div><div class="b in" id="k3b">Confirmo!</div>`)}
+${card('k0', '☎', '#5d6b82', 'LIGAÇÃO NÃO ATENDIDA', `<div style="font-weight:600">“Se ninguém puder atender, quer receber uma mensagem no WhatsApp, neste número? Aperte 1.”</div><div style="display:flex;gap:14px;margin-top:16px"><span class="key" id="k0a">1</span><span class="key">2</span><span class="key">3</span></div><div class="b out" id="k0b">Oi! Aqui é a Ana, assistente virtual. Vi que você ligou e não conseguimos atender. Como posso te ajudar?</div>`)}
+${card('k1', '✆', '#16a34a', 'WHATSAPP · 23:12', `<div class="b in" id="k1a">Vocês atendem no sábado?</div><div class="b out" id="k1b">Oi! Atendemos sim, das 8h às 12h. Quer que eu veja um horário pra você?</div><div style="margin-top:10px;font-size:20px;font-weight:800;color:#0865fe" id="k1c">● ATENDENTE DE IA · EXEMPLO DE RESPOSTA</div>`)}
+${card('k2', '▤', '#0865fe', 'PROPOSTA SEM RESPOSTA · 2 DIAS', `<div class="row" id="k2a"><span class="ok2">✓</span>Lembrete ao cliente (se ele aceitou receber)</div><div class="row" id="k2b"><span class="ok2">✓</span>Tarefa: ligar para o Jorge hoje</div><div class="row" id="k2c" style="color:#5d6b82;font-weight:600">Some sozinho se o cliente responder.</div>`)}
+${card('k3', '✆', '#16a34a', 'WHATSAPP · QUARTA, 18:00', `<div class="b out" id="k3a">Oi, Jorge! Lembrete: amanhã, quinta, às 9h, sua visita está marcada. Confirma?</div><div class="b in" id="k3b">Confirmo!</div><div id="k3c" style="margin-top:12px;font-size:20px;font-weight:600;color:#5d6b82">Só para quem aceitou receber lembretes. Responda SAIR para parar.</div>`)}
 <div id="veu"></div>
 ${falasHtml}
 <div id="dim"></div>
@@ -222,14 +225,14 @@ window.draw=(t)=>{
     const meio=el.offsetWidth/2+30, lx=sx(h.x)+(h.side==='L'?-1:1)*(t<h.z?150:250);
     el.style.left=Math.max(meio,Math.min(1080-meio,lx))+'px'; el.style.top=Math.max(420,sy(h.y)-(t<h.z?70:150))+'px';
     // product card that patches the hole
-    show('k'+k,t,h.z+1.3,h.z+SEG-0.75,{dy:60,fi:.5});
+    show('k'+k,t,h.z+1.3,h.z+SEG-(k===3?0.35:0.75),{dy:60,fi:.5});
   });
   // card details
   const p=(t>=H[0].z+2.1&&t<H[0].z+SEG)?1:0; $('k0a').style.background=p?'#0865fe':'#e3e8ef'; $('k0a').style.color=p?'#fff':'#0b1220';
   show('k0b',t,H[0].z+2.5,undefined,{dy:20});
   show('k1a',t,H[1].z+1.6,undefined,{dy:20}); show('k1b',t,H[1].z+2.4,undefined,{dy:20}); show('k1c',t,H[1].z+2.9,undefined,{dy:10});
   show('k2a',t,H[2].z+2.1,undefined,{dy:16}); show('k2b',t,H[2].z+2.6,undefined,{dy:16}); show('k2c',t,H[2].z+3.1,undefined,{dy:10});
-  show('k3a',t,H[3].z+1.8,undefined,{dy:20}); show('k3b',t,H[3].z+2.8,undefined,{dy:20});
+  show('k3a',t,H[3].z+1.8,undefined,{dy:20}); show('k3b',t,H[3].z+2.4,undefined,{dy:20}); show('k3c',t,H[3].z+2.8,undefined,{dy:10});
   falas(t);
   show('dim',t,27.2,undefined,{dy:0,fi:.6});
   comenta(t,27.35,28.5,'FUNIL');

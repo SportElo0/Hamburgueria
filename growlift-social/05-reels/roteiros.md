@@ -449,13 +449,15 @@ Narração com voz gerada por inteligência artificial.
 
 ## 24. O funil furado (Growlift Comercial, formato novo sem bonecos)
 - **Formato:** metáfora visual animada em código (`_fonte/reels/novos/reel24.mjs`), sem personagens e sem imagem gerada por IA. Um funil de vidro num fundo azul-escuro recebe gotas azuis (os pedidos). Quatro furos com nome (ligação perdida, WhatsApp sem resposta, orçamento esquecido, visita esquecida) vazam gotas vermelhas, e um contador "pedidos que escaparam" sobe. A câmera vai até cada furo, uma telinha do produto mostra o que tampa o furo e ele fecha com um selo azul: menu "aperte 1" e resposta no WhatsApp; atendente de IA respondendo às 23h12; lembrete ao cliente e tarefa ao vendedor quando a proposta fica sem resposta; lembrete um dia antes da visita. No fim o funil inteiro brilha, o contador para e entra "Comenta FUNIL". Legenda grande palavra por palavra, com Inter forte e uma palavra em itálico (Instrument Serif), no estilo do vídeo de referência que o Antônio mandou em 15/11 (a metáfora do iceberg não foi copiada).
-- **Vídeos:** `24-o-funil-furado-mudo.mp4` (31,5 s, legendas na tela) e capa `24-o-funil-furado-capa.png`. O contador é ilustrativo (gotas da animação), não é número de clientes.
+- **Vídeos:** `24-o-funil-furado-mudo.mp4` (31,5 s, legendas na tela) e capa `24-o-funil-furado-capa.png`. O contador é ilustrativo (gotas da animação), não é número de clientes; na tela ele vem marcado "EXEMPLO ILUSTRATIVO" e há um selo fixo "DEMONSTRAÇÃO · DADOS FICTÍCIOS" o vídeo todo (ajustes da revisão legal de 15/11: Ana "assistente virtual", "exemplo de resposta" em vez de "respondeu na hora", lembretes só para quem aceitou, com SAIR).
 - **Narração (opcional, ainda não gerada; voz "Andre", custo a conferir antes):**
-"O seu funil tá furado. Cada furo é um cliente indo embora. O telefone tocou e ninguém atendeu? Quem ligou aperta um e recebe a resposta no WhatsApp. Mensagem às onze da noite, sem resposta? A atendente de inteligência artificial responde na hora. Orçamento esquecido? Lembrete pro cliente e tarefa pro vendedor. Marcou a visita e esqueceu? Um dia antes, o lembrete chega. Cada pedido chega até alguém. Quer ver a demonstração? Comenta FUNIL!"
-- **Antes de postar:** a palavra FUNIL precisa de uma vaga no ManyChat, com resposta que oferece a demonstração, sem prometer prazo. O produto ainda roda em demonstração (mesma situação do Reel 23).
+"O seu funil tá furado. Cada furo é um cliente indo embora. O telefone tocou e ninguém atendeu? Quem ligou pode apertar um e receber a resposta no WhatsApp. Mensagem às onze da noite, sem resposta? A atendente de inteligência artificial responde no WhatsApp, com as informações da empresa. Orçamento esquecido? Lembrete pro cliente e tarefa pro vendedor. Marcou a visita e esqueceu? Um dia antes, o lembrete chega. Cada pedido pode chegar até alguém. Quer ver a demonstração? Comenta FUNIL!"
+- **Antes de postar:** a palavra FUNIL precisa de uma vaga no ManyChat, com resposta que oferece a demonstração, sem prometer prazo nem preço e com o aviso de demonstração. O produto ainda roda em demonstração (mesma situação do Reel 23).
 
 **Legenda**
 ```
+Demonstração simulada, com dados fictícios.
+
 Comenta FUNIL que a gente te mostra a demonstração 📩
 
 O seu funil tá furado. Cada furo é um cliente indo embora:
@@ -466,6 +468,6 @@ O seu funil tá furado. Cada furo é um cliente indo embora:
 
 No Growlift Comercial, cada furo tem uma peça: quem ligou e apertou 1 recebe a resposta no WhatsApp; a atendente de IA responde com as informações da empresa e chama alguém da equipe quando precisa; a proposta parada vira lembrete pro cliente e tarefa pro vendedor; e a visita ganha lembrete um dia antes, pra quem aceitou receber.
 
-Demonstração simulada, com dados fictícios. O que está disponível, o prazo e o preço a gente combina antes de qualquer contratação.
+Demonstração simulada, com dados fictícios: o produto ainda está em fase de demonstração. O que estará disponível, o prazo e o preço a gente combina por escrito antes de qualquer contratação. O contador do vídeo é só ilustração, não é dado de cliente nem de pesquisa.
 #atendimento #whatsappbusiness #inteligenciaartificial #pequenasempresas #growlift
 ```
