@@ -68,7 +68,7 @@
       .from(palavrasTitulo, { yPercent: 115, rotate: 4, duration: 1.4, stagger: 0.07 }, 0.4)
       .from('.hero-lede', { y: 24, opacity: 0, duration: 1.1 }, 0.95)
       .from('.booking', { y: 50, opacity: 0, duration: 1.2 }, 1.05)
-      .from('.top', { y: -30, opacity: 0, duration: 1 }, 1.1)
+      .from('.top', { opacity: 0, duration: 1, clearProps: 'opacity' }, 1.1)
       .from('.concept-flag, .scroll-cue', { opacity: 0, duration: 1 }, 1.4);
   }
   if (!temGsap) abrir();
@@ -239,12 +239,12 @@
   /* Conversa de demonstração */
   const chat = $('#chat'), log = $('.chat-log', chat), rapidas = $('.chat-quick', chat);
   const RESPOSTAS = {
-    'Aceitam pet?': 'Aceitamos pet de pequeno e médio porte no Bangalô Jardim. Nas suítes Mar e Mata, infelizmente não. Quer que eu anote datas para o Bangalô?',
+    'Aceitam pet?': 'Nesta pousada de exemplo, aceitamos pet de pequeno e médio porte no Bangalô Jardim. Nas suítes Mar e Mata, infelizmente não. Quer que eu anote datas para o Bangalô?',
     'Horário de check-in': 'O check-in é a partir das 14h e o check-out até as 12h. Se você chegar mais cedo, pode deixar as malas com a gente e já ir para a praia.',
     'Tem estacionamento?': 'Temos estacionamento para hóspedes, dentro da pousada, sem custo extra.',
     'Quero uma cotação': 'Claro! Me conta as datas de entrada e saída e quantas pessoas vêm. Eu anoto e passo para a equipe, que te responde por aqui com valores e disponibilidade. Se preferir, preencha o pedido de cotação aqui no site.',
     'Você é um robô?': 'Sou a assistente virtual da Areia Clara. Quer que eu chame alguém da equipe?',
-    'Falar com alguém da equipe': 'Combinado! Avisei a equipe e alguém vai continuar a conversa por aqui. O atendimento é das 8h às 22h.',
+    'Falar com alguém da equipe': 'Combinado! Numa pousada real, eu avisaria a equipe e alguém continuaria a conversa por aqui. Nesta demonstração, ninguém foi avisado.',
   };
   let iniciou = false;
   const rolarLog = () => { log.scrollTop = log.scrollHeight; };
@@ -277,7 +277,7 @@
     if (temGsap && !reduz) gsap.fromTo(chat, { opacity: 0, y: 30, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'expo.out' });
     if (!iniciou) {
       iniciou = true;
-      await fala('Oi! Aqui é a Clara, da Pousada Areia Clara. Posso ajudar com datas, suítes ou qualquer dúvida sobre a pousada.', 'bot', 700);
+      await fala('Oi! Aqui é a Clara, assistente virtual da Pousada Areia Clara, uma pousada fictícia criada pela Growlift para demonstração. Posso mostrar como eu atenderia datas, suítes e dúvidas.', 'bot', 700);
       botoes();
     }
     return true;
@@ -296,7 +296,7 @@
     if (form.entrada.value && form.saida.value && form.saida.value <= form.entrada.value) faltam.push(form.saida);
     if (faltam.length) {
       erro.hidden = false;
-      erro.textContent = faltam.includes(form.aceite) && faltam.length === 1 ? 'Marque o aceite para receber a resposta pelo WhatsApp.' : 'Confira as datas (a saída depois da entrada), seu nome e o WhatsApp.';
+      erro.textContent = faltam.includes(form.aceite) && faltam.length === 1 ? 'Marque que entendeu que é uma demonstração.' : 'Confira as datas (a saída depois da entrada), seu nome e o WhatsApp.';
       faltam[0].focus();
       return;
     }
@@ -310,7 +310,7 @@
     await fala(`Oi! Pedi uma cotação pelo site: ${br(form.entrada.value)} a ${br(form.saida.value)}, ${pessoas}${form.pet.checked ? ', com pet' : ''}.`, 'me');
     const suite = form.suite.value === 'Ainda não sei' ? '' : ` na ${form.suite.value}`;
     const petAviso = form.pet.checked && form.suite.value !== 'Bangalô Jardim' ? ' Como você vem com pet, a opção é o Bangalô Jardim.' : '';
-    await fala(`Oi, ${nome}! Recebi seu pedido para ${pessoas}${suite}, de ${br(form.entrada.value)} a ${br(form.saida.value)}.${petAviso} Já passei para a equipe, que te responde por aqui com valores e disponibilidade.`, 'bot', 1300);
+    await fala(`Oi, ${nome}! Recebi seu pedido para ${pessoas}${suite}, de ${br(form.entrada.value)} a ${br(form.saida.value)}.${petAviso} Numa pousada real, eu passaria para a equipe, que responderia por aqui com valores e disponibilidade. Nesta demonstração, nada foi enviado.`, 'bot', 1300);
     await fala('Enquanto isso, posso ajudar com mais alguma coisa?', 'bot', 900);
     botoes();
   });

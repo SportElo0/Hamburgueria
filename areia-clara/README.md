@@ -9,8 +9,8 @@ Inspiração visual: referência de site de glamping de luxo que o Antônio mand
 - `index.html`: 8 partes numeradas (abertura, capa, a pousada, suítes, panorama, um dia aqui, como chegar, cotação), rodapé e a conversa de demonstração.
 - `styles.css`: cores no `:root`, uma parte por seção; no fim, celular e movimento reduzido.
 - `main.js`: animações (GSAP + ScrollTrigger + Lenis), conversa de demonstração (`RESPOSTAS`) e formulário.
-- `vendor/`: GSAP 3.12.5, ScrollTrigger e Lenis 1.1.13 (os mesmos do site da Lumivale).
-- `fonts/`: Fraunces (títulos, licença OFL) e Inter Tight (texto).
+- `vendor/`: GSAP 3.12.5 com ScrollTrigger (licença padrão GreenSock) e Lenis 1.1.13 (MIT), os mesmos do site da Lumivale.
+- `fonts/`: Fraunces (títulos) e Inter Tight (texto), ambas OFL; licenças na própria pasta.
 - `img/`, `video/`: 8 fotos e 1 vídeo de 4 s em loop, gerados no Higgsfield em 16/11/2026 (custo: 8 créditos nas fotos, GPT Image 2.6 média 2k, e 7,5 no vídeo, Kling 3.0 padrão sem som).
 
 ## Como funciona
