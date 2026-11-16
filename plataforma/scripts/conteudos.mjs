@@ -193,17 +193,25 @@ for (const name of folderNames) {
     const parts = dir.split('/').slice(1);
     const title = parts.length ? parts.map(pretty).join(' · ') : files.length === 1 ? pretty(path.basename(files[0]).replace(IMAGE, '')) : videos ? 'Vídeos' : 'Imagens';
     const items = [];
-    const copy = (rel) => {
+    const copy = async (rel) => {
       const dest = path.join(OUT, 'arquivos', rel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
       fs.copyFileSync(path.join(SRC, rel), dest);
+      // PNGs straight from the browser are loosely compressed. Recompressing them losslessly (same pixels) about
+      // halves them, which keeps the routes that carry these files under Vercel's function size limit (Hobby: the
+      // build fails with "No more than 12 Serverless Functions" once the files get too big to share one function).
+      if (sharp && /\.png$/i.test(rel)) {
+        const small = await sharp(dest).png({ compressionLevel: 9, effort: 1, adaptiveFiltering: false }).toBuffer();
+        if (small.length < fs.statSync(dest).size) fs.writeFileSync(dest, small);
+      }
+      return dest;
     };
     for (const rel of files) {
       const ext = rel.split('.').pop().toLowerCase();
       const isVideo = VIDEO.test(rel);
       const cover = isVideo && covers.has(coverOf(rel)) ? coverOf(rel) : '';
-      copy(rel);
-      if (cover) copy(cover);
+      const dest = await copy(rel);
+      if (cover) await copy(cover);
       const still = isVideo ? cover : rel;
       let width = 0, height = 0, thumb = still || rel;
       if (sharp && still) {
@@ -219,7 +227,7 @@ for (const name of folderNames) {
         path: rel,
         name: path.basename(rel),
         type: TYPES[ext],
-        size: fs.statSync(path.join(SRC, rel)).size,
+        size: fs.statSync(dest).size,
         width,
         height,
         format: isVideo ? 'Reel 9:16' : width ? formatOf(width, height) : '',
