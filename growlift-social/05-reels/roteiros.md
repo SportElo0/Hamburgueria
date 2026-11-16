@@ -471,3 +471,22 @@ No Growlift Comercial, cada furo tem uma peça: quem ligou e apertou 1 recebe a 
 Demonstração simulada, com dados fictícios: o produto ainda está em fase de demonstração. O que estará disponível, o prazo e o preço a gente combina por escrito antes de qualquer contratação. O contador do vídeo é só ilustração, não é dado de cliente nem de pesquisa.
 #atendimento #whatsappbusiness #inteligenciaartificial #pequenasempresas #growlift
 ```
+
+## 25. O site da pousada (Areia Clara, projeto conceito)
+- **Formato:** gravação real do site conceito `areia-clara/` (pousada fictícia) num celular, quadro a quadro (`_fonte/reels/novos/captura25.cjs`, 390×844 a 3×), editada em `_fonte/reels/novos/reel25.mjs` com as cores e a fonte do próprio site (areia, noite, Fraunces), não no visual escuro de sempre. Roteiro: sexta 23:04 num céu de noite; busca genérica "pousada pé na areia" (sem marca de buscador); a câmera entra na tela e o site ocupa o vídeo inteiro; a capa encolhe em janela enquanto o vídeo volta para dentro do celular (o mesmo movimento duas vezes); as suítes abrem em leque como cartas; o fundo do vídeo acompanha o dia do site (manhã, tarde, noite); a câmera se aproxima do chat da assistente; cartão-postal com carimbo "projeto conceito"; "Comenta SITE". Selo fixo "Projeto conceito · pousada fictícia" o vídeo todo e aviso "Nesta demonstração, nada é enviado" no trecho do pedido de cotação (ajuste da revisão legal de 16/11).
+- **Vídeos:** `25-o-site-da-pousada.mp4` (32 s, com narração), `25-o-site-da-pousada-mudo.mp4` e capa `25-o-site-da-pousada-capa.png`. Para refazer: rodar o site em `http://127.0.0.1:4173` (`python3 -m http.server 4173` em `areia-clara/`), `node captura25.cjs <pasta>` e `R25_FRAMES=<pasta> node render.mjs 25`.
+- **Narração (gerada em 16/11 com a voz "Andre", ElevenLabs v4 no Higgsfield, 2,07 créditos; `_fonte/reels/narracao-25-eleven.mp3`, 30,9 s):**
+"Sexta, onze da noite. Alguém em São Paulo procura uma pousada pelo celular. Aí abre um site assim. A praia aparece primeiro... e a capa vira janela. As suítes chegam como cartas na mão. O dia passa na tela: café, praia, fogueira. Bateu uma dúvida? A assistente responde e já organiza o pedido de cotação para a equipe. Esse é um projeto conceito da Growlift, com uma pousada fictícia. Quer um site assim para a sua pousada? Comenta SITE!"
+- **Antes de postar:** a palavra SITE precisa de resposta no ManyChat, testada com uma conta de teste (fala como "Growlift"/"a gente", sem "mensagem automática", sem preço, com SAIR; comentar não coloca ninguém em lista de campanha). Marcar "Conteúdo gerado por IA" ao publicar (fotos do site e voz são de IA). Não usar hashtag nem marcar pousadas reais.
+
+**Legenda**
+```
+Pousada fictícia, site de verdade (de demonstração). 🌴
+
+A Areia Clara não existe: é um projeto conceito da Growlift, feito do zero para mostrar como um site de pousada pode ser. A capa que vira janela, as suítes em cartas, o dia passando na tela e uma assistente que tira dúvidas e organiza o pedido de cotação.
+
+As fotos e o vídeo do site foram gerados por IA e a voz do reel é sintética. No site de demonstração, nada é enviado a ninguém.
+
+Quer um site assim para a sua pousada? Comenta SITE que a gente te chama no direct.
+#projetoconceito #sitepousada #growlift
+```
