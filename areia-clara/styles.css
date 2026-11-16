@@ -232,7 +232,7 @@ body.is-night .eyebrow, body.is-night .fine { color: rgba(250, 247, 242, .66); }
 .foot-info b { color: var(--paper); }
 
 /* Conversa de demonstração */
-.chat-fab { position: fixed; z-index: 90; right: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 20px 0 16px; border: 0; border-radius: 999px; background: #1f8a4c; color: #fff; font: 600 15px var(--sans); cursor: pointer; box-shadow: 0 16px 40px -14px rgba(0, 0, 0, .45); transform: translateY(140%); transition: transform .6s var(--ease); }
+.chat-fab { position: fixed; z-index: 90; right: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 20px 0 16px; border: 0; border-radius: 999px; background: #187640; color: #fff; font: 600 15px var(--sans); cursor: pointer; box-shadow: 0 16px 40px -14px rgba(0, 0, 0, .45); transform: translateY(140%); transition: transform .6s var(--ease); }
 .chat-fab.is-shown { transform: none; }
 .chat-fab svg { width: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
 .chat { position: fixed; z-index: 95; right: 20px; bottom: 84px; width: min(380px, calc(100vw - 24px)); max-height: min(620px, calc(100svh - 110px)); display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; background: #efe9df; box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .55); transform-origin: bottom right; }
@@ -293,7 +293,7 @@ body.is-night .eyebrow, body.is-night .fine { color: rgba(250, 247, 242, .66); }
   .logo { font-size: 19px; }
   .logo svg { width: 28px; }
   .concept-flag { display: none; }
-  .top-flag { font-size: 10px; padding: 5px 9px; letter-spacing: .08em; margin-right: 0; }
+  .top-flag { font-size: 11px; padding: 5px 9px; letter-spacing: .08em; margin-right: 0; }
   .top { justify-content: space-between; }
   .flag-long { display: none; }
   .hero-content { padding-top: 120px; padding-bottom: 22px; }

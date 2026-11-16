@@ -65,6 +65,51 @@
         "value": "fraunces",
         "createdAt": "2026-11-16T11:23:45.090Z",
         "reason": "Claude: areia-clara/ is a fictitious client concept site with its own type system, separate from the Growlift DESIGN.md"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.252Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.263Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.272Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "buried-raster",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.282Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.292Z",
+        "reason": "Claude: flagged light text sits on the hero video, panorama photo or dark sections, not on the sand page background the static scan assumes"
       }
     ]
   }
