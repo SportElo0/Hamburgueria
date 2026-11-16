@@ -2,7 +2,7 @@ import { emptyStore, type Item, type Store } from './schema';
 
 /**
  * A made-up restaurant for showing the QR menu and the 3D dish in sales visits: nothing here is a real
- * business, dish or price. The 3D file (public/3d/) was made by AI from an AI image, not scanned from a real dish.
+ * business, dish or price. The 3D files (public/3d/) were made by AI from AI images, not scanned from real dishes.
  */
 const item = (id: string, name: string, description: string, price: number, extra: Partial<Item> = {}): Item => ({
   id,
@@ -56,6 +56,20 @@ export function cardapioExemplo(): Store {
       name: 'Acompanhamentos',
       description: '',
       items: [item('fritas', 'Fritas', 'Porção individual.', 1890), item('aneis', 'Onion rings', 'Porção individual.', 2190, { available: false })],
+    },
+    {
+      // The Sobremesa 3D demo: the dessert card's QR opens straight here (/cardapio-exemplo#cat-sobremesas).
+      id: 'sobremesas',
+      name: 'Sobremesas',
+      description: '',
+      items: [
+        item('petit', 'Petit gâteau', 'Bolinho de chocolate com recheio cremoso e açúcar de confeiteiro. Toque na imagem para ver em 3D.', 3200, {
+          image: '/3d/sobremesa-exemplo.jpg',
+          imageAlt: 'Petit gâteau de chocolate com açúcar de confeiteiro (imagem gerada por IA)',
+          modelo3d: { src: '/3d/sobremesa-exemplo.glb', ios: '/3d/sobremesa-exemplo.usdz', larguraCm: 7, alturaCm: 3.5, profundidadeCm: 6.7 },
+        }),
+        item('pudim', 'Pudim de leite', 'Fatia individual.', 1800),
+      ],
     },
     {
       id: 'bebidas',
