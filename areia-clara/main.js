@@ -118,9 +118,24 @@
   }
 
   if (temGsap && !reduz) {
-    /* Capa sai devagar quando a página desce */
-    gsap.to('.hero-content', { yPercent: -18, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom 35%', scrub: true } });
-    gsap.to('.hero-media', { yPercent: 14, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    /* 1. Capa presa: o vídeo encolhe até virar uma janela no meio da areia */
+    const largo = () => innerWidth > 860;
+    gsap.set('.hero-end-title', { y: 30 });
+    const capa = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.hero', start: 'top top', end: () => '+=' + Math.round(innerHeight * 1.6), pin: true, scrub: 1, invalidateOnRefresh: true,
+        onUpdate: (st) => topo.classList.toggle('is-ink', st.progress > 0.42),
+        onLeave: () => topo.classList.remove('is-ink'),
+      },
+    });
+    capa.to('.hero-content', { y: -70, opacity: 0, filter: 'blur(6px)', ease: 'power2.in', duration: 0.35 }, 0)
+      .to('.booking', { y: 70, opacity: 0, ease: 'power2.in', duration: 0.3 }, 0)
+      .to('.scroll-cue', { opacity: 0, duration: 0.15 }, 0)
+      .to('.hero-media', { clipPath: () => (largo() ? 'inset(23% 26% 15% 26% round 30px)' : 'inset(27% 6% 20% 6% round 24px)'), ease: 'power2.inOut', duration: 1 }, 0)
+      .to('.hero-video, .hero-img', { scale: 1.14, ease: 'none', duration: 1 }, 0)
+      .to('.hero-shade', { opacity: 0.2, ease: 'none', duration: 1 }, 0)
+      .to('.hero-end-title', { opacity: 1, y: 0, ease: 'power2.out', duration: 0.4 }, 0.55)
+      .to('.hero-end-cap', { opacity: 1, ease: 'none', duration: 0.3 }, 0.75);
 
     /* 2. Frase que acende palavra por palavra */
     const ws = $$('.about-statement .w');
@@ -128,11 +143,11 @@
       trigger: '.about-statement', start: 'top 82%', end: 'bottom 45%', scrub: true,
       onUpdate: (st) => { const n = Math.round(st.progress * ws.length); ws.forEach((w, i) => { w.style.opacity = i < n ? 1 : 0.14; }); },
     });
-    /* Fotos que se abrem e flutuam */
+    /* Fotos que se abrem num recorte e dão um zoom lento, presas à rolagem */
     $$('.reveal-clip').forEach((el) => {
-      gsap.to(el, { clipPath: 'inset(0% 0% 0% 0% round 26px)', duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 85%' } });
-      const img = $('img', el);
-      if (img) gsap.fromTo(img, { yPercent: -8 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
+      gsap.to(el, { clipPath: 'inset(0% 0% 0% 0% round 26px)', ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 35%', scrub: true } });
+      const img = el.querySelector(':scope > img:not(.day-photo)');
+      if (img) gsap.fromTo(img, { scale: 1.3 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
     });
     gsap.from('.about-text > *', { y: 40, opacity: 0, duration: 1.2, stagger: 0.12, ease: 'expo.out', scrollTrigger: { trigger: '.about-text', start: 'top 85%' } });
     /* Números contando */
@@ -142,31 +157,25 @@
       gsap.to(o, { v: fim, duration: 1.8, ease: 'power2.out', scrollTrigger: { trigger: b, start: 'top 90%' }, onUpdate: () => { b.textContent = Math.round(o.v); } });
     });
 
-    const mm = gsap.matchMedia();
-    /* 3. Suítes passando de lado (computador) */
-    mm.add('(min-width: 861px)', () => {
-      const trilho = $('.suites-track');
-      const distancia = () => trilho.scrollWidth - innerWidth;
-      const anda = gsap.to(trilho, {
-        x: () => -distancia(), ease: 'none',
-        scrollTrigger: { trigger: '.suites', pin: '.suites-pin', start: 'top top', end: () => '+=' + distancia(), scrub: 1, invalidateOnRefresh: true },
+    /* 3. Suítes: a próxima carta sobe por cima e a anterior encolhe e escurece */
+    const cartas = $$('.suite-card');
+    cartas.forEach((carta, i) => {
+      const foto = carta.querySelector('.suite-photo img');
+      gsap.fromTo(foto, { scale: 1.3 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: carta, start: 'top bottom', end: 'top 20%', scrub: true } });
+      gsap.from(carta.querySelectorAll('.suite-body > *'), { y: 34, opacity: 0, stagger: 0.08, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: carta, start: 'top 65%' } });
+      const prox = cartas[i + 1];
+      if (!prox) return;
+      gsap.fromTo(carta, { scale: 1, filter: 'brightness(1)' }, {
+        scale: 0.9, filter: 'brightness(0.55)', ease: 'none',
+        scrollTrigger: { trigger: prox, start: 'top 85%', end: () => 'top ' + parseFloat(getComputedStyle(prox).top) + 'px', scrub: true, invalidateOnRefresh: true },
       });
-      gsap.to('.suites-progress span', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.suites', start: 'top top', end: () => '+=' + distancia(), scrub: true } });
-      $$('.suite-photo img').forEach((img) => {
-        gsap.fromTo(img, { xPercent: -8 }, { xPercent: 0, ease: 'none', scrollTrigger: { trigger: img.closest('.suite'), containerAnimation: anda, start: 'left right', end: 'right left', scrub: true } });
-      });
-      gsap.from('.suite-body', { y: 40, opacity: 0, stagger: 0.15, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.suites', start: 'top 60%' } });
+    });
 
-      /* 4. Panorama: a janela vira a tela inteira */
-      const tl = gsap.timeline({ scrollTrigger: { trigger: '.panorama', start: 'top top', end: 'bottom bottom', scrub: true } });
-      tl.to('.panorama-frame', { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'power2.inOut', duration: 1 }, 0)
-        .to('.panorama-frame img', { scale: 1, ease: 'power2.inOut', duration: 1 }, 0)
-        .from(palavrasPanorama, { yPercent: 115, stagger: 0.06, duration: 0.5, ease: 'power3.out' }, 0.45);
-    });
-    mm.add('(max-width: 860px)', () => {
-      gsap.from(palavrasPanorama, { yPercent: 115, stagger: 0.06, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.panorama', start: 'top 60%' } });
-      gsap.from('.suite', { y: 50, opacity: 0, stagger: 0.12, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.suites-track', start: 'top 85%' } });
-    });
+    /* 4. Panorama: a janela vira a tela inteira (computador e celular) */
+    const pano = gsap.timeline({ scrollTrigger: { trigger: '.panorama', start: 'top top', end: 'bottom bottom', scrub: true } });
+    pano.to('.panorama-frame', { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'power2.inOut', duration: 1 }, 0)
+      .to('.panorama-frame img', { scale: 1, ease: 'power2.inOut', duration: 1 }, 0)
+      .from(palavrasPanorama, { yPercent: 115, stagger: 0.06, duration: 0.5, ease: 'power3.out' }, 0.45);
 
     /* 5. Um dia aqui: manhã, tarde e noite pela rolagem; a página escurece à noite */
     const passos = $$('.day-step'), fotos = $$('.day-photo'), pontos = $$('.day-dots span');
@@ -207,7 +216,7 @@
     gsap.from('.arrive-list li', { x: -30, opacity: 0, stagger: 0.08, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.arrive-list', start: 'top 85%' } });
 
     /* Títulos de seção sobem ao aparecer */
-    $$('.arrive h2, .quote h2, .suites-head h2').forEach((h) => {
+    $$('.arrive h2, .quote h2, .suites-head h2, .suites-help').forEach((h) => {
       gsap.from(h, { y: 60, opacity: 0, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: h, start: 'top 88%' } });
     });
     /* 7. Formulário entra campo a campo */

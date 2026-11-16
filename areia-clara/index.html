@@ -45,8 +45,9 @@
 
 <main id="conteudo">
 
-<!-- 1. Capa: vídeo da pousada ao entardecer, título e barra de datas -->
+<!-- 1. Capa: vídeo em tela cheia; ao rolar, a capa fica presa e o vídeo encolhe até virar uma janela -->
 <section class="hero" id="inicio" aria-label="Início">
+  <div class="hero-end" aria-hidden="true"><p class="hero-end-title">Pé na areia, entre a serra e o <em>mar.</em></p></div>
   <div class="hero-media">
     <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="img/fachada-1800.webp" aria-hidden="true">
       <source src="video/capa.mp4" type="video/mp4">
@@ -68,6 +69,7 @@
     <button class="btn btn-dark magnetic" type="submit"><span>Pedir cotação</span></button>
   </form>
   <a class="scroll-cue" href="#pousada" aria-label="Rolar para conhecer"><span></span></a>
+  <p class="hero-end-cap" aria-hidden="true">Juquehy · Litoral norte de São Paulo · role para conhecer</p>
   <p class="concept-flag">Projeto conceito · pousada fictícia</p>
 </section>
 
@@ -93,50 +95,47 @@
 
 <div class="marquee" aria-hidden="true"><div class="marquee-track"><span>Pé na areia</span><i>·</i><span>Mata atlântica</span><i>·</i><span>Café até as 11h</span><i>·</i><span>Pet bem-vindo</span><i>·</i><span>Juquehy</span><i>·</i><span>Pé na areia</span><i>·</i><span>Mata atlântica</span><i>·</i><span>Café até as 11h</span><i>·</i><span>Pet bem-vindo</span><i>·</i><span>Juquehy</span><i>·</i></div></div>
 
-<!-- 3. Suítes: no computador a seção prende e as suítes passam de lado; no celular viram carrossel -->
+<!-- 3. Suítes: cada suíte é uma carta; ao rolar, a próxima sobe por cima e a anterior encolhe e escurece atrás -->
 <section class="suites" id="suites" aria-labelledby="suites-title">
-  <div class="suites-pin">
-    <div class="suites-head wrap">
-      <p class="eyebrow">Suítes</p>
-      <h2 id="suites-title">Três jeitos de <em>ficar.</em></h2>
-      <div class="suites-progress" aria-hidden="true"><span></span></div>
-    </div>
-    <div class="suites-track">
-      <article class="suite" data-cursor="ver">
-        <div class="suite-photo"><img src="img/suite-mar-900.webp" srcset="img/suite-mar-900.webp 900w, img/suite-mar-1400.webp 1400w" sizes="(max-width: 860px) 82vw, 34vw" alt="Suíte Mar, com varanda de frente para o mar" loading="lazy" width="900" height="1125"></div>
-        <div class="suite-body">
-          <p class="suite-num">01</p>
-          <h3>Suíte Mar</h3>
-          <p>Varanda de frente para o mar, cama king com lençóis de linho e rede para o fim da tarde.</p>
-          <p class="suite-meta">32 m² · até 2 pessoas</p>
-          <a class="link-arrow" href="#cotacao" data-suite="Suíte Mar">Pedir cotação desta suíte</a>
-        </div>
-      </article>
-      <article class="suite" data-cursor="ver">
-        <div class="suite-photo"><img src="img/suite-mata-900.webp" srcset="img/suite-mata-900.webp 900w, img/suite-mata-1400.webp 1400w" sizes="(max-width: 860px) 82vw, 34vw" alt="Suíte Mata, com banheira de pedra diante da janela para a floresta" loading="lazy" width="900" height="1125"></div>
-        <div class="suite-body">
-          <p class="suite-num">02</p>
-          <h3>Suíte Mata</h3>
-          <p>Banheira de pedra virada para a mata atlântica, para os dias de chuva fina e as manhãs de neblina.</p>
-          <p class="suite-meta">36 m² · até 2 pessoas</p>
-          <a class="link-arrow" href="#cotacao" data-suite="Suíte Mata">Pedir cotação desta suíte</a>
-        </div>
-      </article>
-      <article class="suite" data-cursor="ver">
-        <div class="suite-photo"><img src="img/bangalo-900.webp" srcset="img/bangalo-900.webp 900w, img/bangalo-1400.webp 1400w" sizes="(max-width: 860px) 82vw, 34vw" alt="Bangalô de madeira com varanda e rede no meio do jardim tropical" loading="lazy" width="900" height="1125"></div>
-        <div class="suite-body">
-          <p class="suite-num">03</p>
-          <h3>Bangalô Jardim</h3>
-          <p>Uma casinha só sua no meio do jardim, com varanda, rede e espaço para a família. O pet vem junto.</p>
-          <p class="suite-meta">45 m² · até 4 pessoas · aceita pet</p>
-          <a class="link-arrow" href="#cotacao" data-suite="Bangalô Jardim">Pedir cotação desta suíte</a>
-        </div>
-      </article>
-      <div class="suites-end">
-        <p>Não sabe qual escolher?</p>
-        <button class="btn btn-outline magnetic" type="button" data-open-chat><span>Pergunte para a Clara</span></button>
+  <div class="suites-head wrap">
+    <p class="eyebrow">Suítes</p>
+    <h2 id="suites-title">Três jeitos de <em>ficar.</em></h2>
+  </div>
+  <div class="suite-stack wrap">
+    <article class="suite-card" style="--i:0" data-cursor="ver">
+      <div class="suite-photo"><img src="img/suite-mar-900.webp" srcset="img/suite-mar-900.webp 900w, img/suite-mar-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 56vw" alt="Suíte Mar, com varanda de frente para o mar" loading="lazy" width="900" height="1125"></div>
+      <div class="suite-body">
+        <p class="suite-num">01 / 03</p>
+        <h3>Suíte Mar</h3>
+        <p>Varanda de frente para o mar, cama king com lençóis de linho e rede para o fim da tarde.</p>
+        <p class="suite-meta">32 m² · até 2 pessoas</p>
+        <a class="link-arrow" href="#cotacao" data-suite="Suíte Mar">Pedir cotação desta suíte</a>
       </div>
-    </div>
+    </article>
+    <article class="suite-card" style="--i:1" data-cursor="ver">
+      <div class="suite-photo"><img src="img/suite-mata-900.webp" srcset="img/suite-mata-900.webp 900w, img/suite-mata-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 56vw" alt="Suíte Mata, com banheira de pedra diante da janela para a floresta" loading="lazy" width="900" height="1125"></div>
+      <div class="suite-body">
+        <p class="suite-num">02 / 03</p>
+        <h3>Suíte Mata</h3>
+        <p>Banheira de pedra virada para a mata atlântica, para os dias de chuva fina e as manhãs de neblina.</p>
+        <p class="suite-meta">36 m² · até 2 pessoas</p>
+        <a class="link-arrow" href="#cotacao" data-suite="Suíte Mata">Pedir cotação desta suíte</a>
+      </div>
+    </article>
+    <article class="suite-card" style="--i:2" data-cursor="ver">
+      <div class="suite-photo"><img src="img/bangalo-900.webp" srcset="img/bangalo-900.webp 900w, img/bangalo-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 56vw" alt="Bangalô de madeira com varanda e rede no meio do jardim tropical" loading="lazy" width="900" height="1125"></div>
+      <div class="suite-body">
+        <p class="suite-num">03 / 03</p>
+        <h3>Bangalô Jardim</h3>
+        <p>Uma casinha só sua no meio do jardim, com varanda, rede e espaço para a família. O pet vem junto.</p>
+        <p class="suite-meta">45 m² · até 4 pessoas · aceita pet</p>
+        <a class="link-arrow" href="#cotacao" data-suite="Bangalô Jardim">Pedir cotação desta suíte</a>
+      </div>
+    </article>
+  </div>
+  <div class="suites-help wrap">
+    <p>Não sabe qual escolher?</p>
+    <button class="btn btn-outline magnetic" type="button" data-open-chat><span>Pergunte para a Clara</span></button>
   </div>
 </section>
 
@@ -174,7 +173,7 @@
         </ol>
         <div class="day-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
       </div>
-      <div class="day-photos">
+      <div class="day-photos reveal-clip">
         <img class="day-photo is-on" src="img/cafe-900.webp" srcset="img/cafe-900.webp 900w, img/cafe-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 46vw" alt="Café da manhã com frutas, tapioca e pão de queijo na varanda" loading="lazy" width="900" height="598">
         <img class="day-photo" src="img/praia-900.webp" srcset="img/praia-900.webp 900w, img/praia-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 46vw" alt="Cadeiras de madeira e guarda-sol na areia, com o mar e a serra" loading="lazy" width="900" height="598">
         <img class="day-photo" src="img/noite-900.webp" srcset="img/noite-900.webp 900w, img/noite-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 46vw" alt="Deck de madeira à noite com lanternas e fogueira, diante do mar" loading="lazy" width="900" height="598">
