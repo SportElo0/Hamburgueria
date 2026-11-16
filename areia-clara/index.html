@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pousada Areia Clara · Projeto conceito Growlift</title>
+<meta name="description" content="Projeto conceito da Growlift: site de uma pousada fictícia pé na areia em Juquehy, litoral norte de São Paulo, com pedido de cotação e atendimento pelo WhatsApp.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#101c21">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Pousada Areia Clara · Projeto conceito (pousada fictícia)">
+<meta property="og:description" content="Site conceito de uma pousada fictícia em Juquehy, feito pela Growlift.">
+<meta property="og:image" content="img/og.jpg">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/fraunces-latin-full-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="img/fachada-1800.webp" imagesrcset="img/fachada-900.webp 900w, img/fachada-1800.webp 1800w" imagesizes="100vw" fetchpriority="high">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- 0. Abertura: uma onda se desenha, o nome sobe e a cortina abre -->
+<div class="intro-curtain" aria-hidden="true">
+  <svg class="intro-wave" viewBox="0 0 240 40"><path d="M2 26 C 30 6, 52 6, 80 22 S 132 38, 160 22 S 212 6, 238 20"/></svg>
+  <p class="intro-name"><span>Areia</span> <em>Clara</em></p>
+</div>
+
+<div class="cursor" aria-hidden="true"><span class="cursor-label">ver</span></div>
+
+<header class="top" id="topo">
+  <a class="logo" href="#inicio" aria-label="Pousada Areia Clara, início">
+    <svg viewBox="0 0 40 24" aria-hidden="true"><path d="M2 15c5-7 9-7 14-1s9 6 14 0 6-6 8-4"/><path d="M2 21c5-5 9-5 14-1s9 4 14 0 6-4 8-3" opacity=".5"/></svg>
+    <span>Areia Clara</span>
+  </a>
+  <nav class="nav" aria-label="Principal">
+    <a href="#pousada">A pousada</a>
+    <a href="#suites">Suítes</a>
+    <a href="#dia">Um dia aqui</a>
+    <a href="#chegar">Como chegar</a>
+  </nav>
+  <a class="btn btn-light top-cta magnetic" href="#cotacao"><span>Pedir cotação</span></a>
+</header>
+
+<main id="conteudo">
+
+<!-- 1. Capa: vídeo da pousada ao entardecer, título e barra de datas -->
+<section class="hero" id="inicio" aria-label="Início">
+  <div class="hero-media">
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="img/fachada-1800.webp" aria-hidden="true">
+      <source src="video/capa.mp4" type="video/mp4">
+    </video>
+    <img class="hero-img" src="img/fachada-1800.webp" srcset="img/fachada-900.webp 900w, img/fachada-1800.webp 1800w" sizes="100vw" alt="Pousada pé na areia ao entardecer, com a serra coberta de mata ao fundo" width="1800" height="1018">
+    <div class="hero-shade"></div>
+  </div>
+  <div class="hero-content">
+    <p class="eyebrow hero-eyebrow">Juquehy · Litoral norte de São Paulo</p>
+    <h1 class="hero-title" data-split>Onde o mar <em>desacelera</em> o tempo.</h1>
+    <p class="hero-lede">Oito suítes entre a mata atlântica e a areia. Café da manhã sem pressa, rede na varanda e o barulho das ondas para dormir.</p>
+  </div>
+  <form class="booking" id="booking" aria-label="Ver datas">
+    <label class="booking-field"><span>Entrada</span><input type="date" name="entrada" required></label>
+    <label class="booking-field"><span>Saída</span><input type="date" name="saida" required></label>
+    <label class="booking-field"><span>Hóspedes</span>
+      <select name="hospedes"><option>1 adulto</option><option selected>2 adultos</option><option>2 adultos e 1 criança</option><option>2 adultos e 2 crianças</option><option>3 adultos</option><option>4 adultos</option></select>
+    </label>
+    <button class="btn btn-dark magnetic" type="submit"><span>Pedir cotação</span></button>
+  </form>
+  <a class="scroll-cue" href="#pousada" aria-label="Rolar para conhecer"><span></span></a>
+  <p class="concept-flag">Projeto conceito · pousada fictícia</p>
+</section>
+
+<!-- 2. A pousada: frase que acende palavra por palavra, foto que se abre e números -->
+<section class="about" id="pousada" aria-labelledby="about-title">
+  <div class="wrap about-grid">
+    <p class="eyebrow">A pousada</p>
+    <h2 class="about-statement" id="about-title" data-words>Uma pousada pequena de propósito. Poucas suítes, para que cada hóspede seja chamado pelo nome e para que a praia continue parecendo <em>só sua.</em></h2>
+    <figure class="about-photo reveal-clip">
+      <img src="img/suite-mar-900.webp" srcset="img/suite-mar-900.webp 900w, img/suite-mar-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 38vw" alt="Suíte com cama de linho e varanda aberta para o mar ao pôr do sol" loading="lazy" width="900" height="1125">
+    </figure>
+    <div class="about-text">
+      <p>Entre a serra e o mar, a Areia Clara foi pensada para quem chega de São Paulo querendo desligar. A gente cuida do resto: as cadeiras já estão na areia, o café espera até as onze e o WhatsApp responde quando você precisar.</p>
+      <ul class="facts">
+        <li><b data-count="8">8</b><span>suítes, todas com varanda</span></li>
+        <li><b data-count="40">40</b><span>passos até a areia</span></li>
+        <li><b data-count="11">11</b><span>horas: o café vai até lá</span></li>
+      </ul>
+      <p class="fine">Números de uma pousada fictícia, criada para demonstração.</p>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-track"><span>Pé na areia</span><i>·</i><span>Mata atlântica</span><i>·</i><span>Café até as 11h</span><i>·</i><span>Pet bem-vindo</span><i>·</i><span>Juquehy</span><i>·</i><span>Pé na areia</span><i>·</i><span>Mata atlântica</span><i>·</i><span>Café até as 11h</span><i>·</i><span>Pet bem-vindo</span><i>·</i><span>Juquehy</span><i>·</i></div></div>
+
+<!-- 3. Suítes: no computador a seção prende e as suítes passam de lado; no celular viram carrossel -->
+<section class="suites" id="suites" aria-labelledby="suites-title">
+  <div class="suites-pin">
+    <div class="suites-head wrap">
+      <p class="eyebrow">Suítes</p>
+      <h2 id="suites-title">Três jeitos de <em>ficar.</em></h2>
+      <div class="suites-progress" aria-hidden="true"><span></span></div>
+    </div>
+    <div class="suites-track">
+      <article class="suite" data-cursor="ver">
+        <div class="suite-photo"><img src="img/suite-mar-900.webp" srcset="img/suite-mar-900.webp 900w, img/suite-mar-1400.webp 1400w" sizes="(max-width: 860px) 82vw, 34vw" alt="Suíte Mar, com varanda de frente para o mar" loading="lazy" width="900" height="1125"></div>
+        <div class="suite-body">
+          <p class="suite-num">01</p>
+          <h3>Suíte Mar</h3>
+          <p>Varanda de frente para o mar, cama king com lençóis de linho e rede para o fim da tarde.</p>
+          <p class="suite-meta">32 m² · até 2 pessoas</p>
+          <a class="link-arrow" href="#cotacao" data-suite="Suíte Mar">Pedir cotação desta suíte</a>
+        </div>
+      </article>
+      <article class="suite" data-cursor="ver">
+        <div class="suite-photo"><img src="img/suite-mata-900.webp" srcset="img/suite-mata-900.webp 900w, img/suite-mata-1400.webp 1400w" sizes="(max-width: 860px) 82vw, 34vw" alt="Suíte Mata, com banheira de pedra diante da janela para a floresta" loading="lazy" width="900" height="1125"></div>
+        <div class="suite-body">
+          <p class="suite-num">02</p>
+          <h3>Suíte Mata</h3>
+          <p>Banheira de pedra virada para a mata atlântica, para os dias de chuva fina e as manhãs de neblina.</p>
+          <p class="suite-meta">36 m² · até 2 pessoas</p>
+          <a class="link-arrow" href="#cotacao" data-suite="Suíte Mata">Pedir cotação desta suíte</a>
+        </div>
+      </article>
+      <article class="suite" data-cursor="ver">
+        <div class="suite-photo"><img src="img/bangalo-900.webp" srcset="img/bangalo-900.webp 900w, img/bangalo-1400.webp 1400w" sizes="(max-width: 860px) 82vw, 34vw" alt="Bangalô de madeira com varanda e rede no meio do jardim tropical" loading="lazy" width="900" height="1125"></div>
+        <div class="suite-body">
+          <p class="suite-num">03</p>
+          <h3>Bangalô Jardim</h3>
+          <p>Uma casinha só sua no meio do jardim, com varanda, rede e espaço para a família. O pet vem junto.</p>
+          <p class="suite-meta">45 m² · até 4 pessoas · aceita pet</p>
+          <a class="link-arrow" href="#cotacao" data-suite="Bangalô Jardim">Pedir cotação desta suíte</a>
+        </div>
+      </article>
+      <div class="suites-end">
+        <p>Não sabe qual escolher?</p>
+        <button class="btn btn-outline magnetic" type="button" data-open-chat><span>Pergunte para a Clara</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Panorama: a foto da piscina cresce de uma janela até ocupar a tela -->
+<section class="panorama" aria-label="Piscina com vista para o mar">
+  <div class="panorama-frame">
+    <img src="img/piscina-1800.webp" srcset="img/piscina-900.webp 900w, img/piscina-1800.webp 1800w" sizes="100vw" alt="Piscina entre coqueiros, com o mar e a serra ao pôr do sol" loading="lazy" width="1800" height="1018">
+  </div>
+  <p class="panorama-quote" data-split>A piscina fica onde o sol <em>se põe.</em></p>
+</section>
+
+<!-- 5. Um dia aqui: a seção prende e a cor da página vai da manhã à noite -->
+<section class="day" id="dia" aria-labelledby="day-title">
+  <div class="day-pin">
+    <div class="wrap day-grid">
+      <div class="day-copy">
+        <p class="eyebrow">Um dia aqui</p>
+        <h2 id="day-title">No seu <em>ritmo.</em></h2>
+        <ol class="day-steps">
+          <li class="day-step is-on">
+            <p class="day-time">Manhã · até as 11h</p>
+            <h3>Café na varanda</h3>
+            <p>Frutas da estação, tapioca feita na hora e pão de queijo saindo do forno. Ninguém olha o relógio.</p>
+          </li>
+          <li class="day-step">
+            <p class="day-time">Tarde · areia e sombra</p>
+            <h3>A praia já arrumada</h3>
+            <p>O guarda-sol e as cadeiras esperam na areia. Toalha, água gelada e um livro da nossa estante.</p>
+          </li>
+          <li class="day-step">
+            <p class="day-time">Noite · deck e lanternas</p>
+            <h3>Fogueira baixa</h3>
+            <p>Lanternas acesas, o barulho do mar e o céu do litoral, sem pressa para acabar.</p>
+          </li>
+        </ol>
+        <div class="day-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
+      </div>
+      <div class="day-photos">
+        <img class="day-photo is-on" src="img/cafe-900.webp" srcset="img/cafe-900.webp 900w, img/cafe-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 46vw" alt="Café da manhã com frutas, tapioca e pão de queijo na varanda" loading="lazy" width="900" height="598">
+        <img class="day-photo" src="img/praia-900.webp" srcset="img/praia-900.webp 900w, img/praia-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 46vw" alt="Cadeiras de madeira e guarda-sol na areia, com o mar e a serra" loading="lazy" width="900" height="598">
+        <img class="day-photo" src="img/noite-900.webp" srcset="img/noite-900.webp 900w, img/noite-1400.webp 1400w" sizes="(max-width: 860px) 92vw, 46vw" alt="Deck de madeira à noite com lanternas e fogueira, diante do mar" loading="lazy" width="900" height="598">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Como chegar: o caminho de São Paulo até Juquehy se desenha na rolagem -->
+<section class="arrive" id="chegar" aria-labelledby="arrive-title">
+  <div class="wrap arrive-grid">
+    <div class="arrive-copy">
+      <p class="eyebrow">Como chegar</p>
+      <h2 id="arrive-title">Da cidade para o <em>mar.</em></h2>
+      <p>Juquehy fica em São Sebastião, no litoral norte de São Paulo, pela rodovia Rio-Santos. Quando você reservar, mandamos pelo WhatsApp o caminho e a localização exata.</p>
+      <ul class="arrive-list">
+        <li><span>Check-in</span><b>a partir das 14h</b></li>
+        <li><span>Check-out</span><b>até as 12h</b></li>
+        <li><span>Estacionamento</span><b>para hóspedes</b></li>
+        <li><span>Pet</span><b>no Bangalô Jardim</b></li>
+      </ul>
+      <p class="fine">Horários e regras de uma pousada fictícia.</p>
+    </div>
+    <figure class="arrive-map" aria-label="Mapa ilustrativo do caminho de São Paulo até Juquehy">
+      <svg viewBox="0 0 520 420" role="img" aria-label="Mapa ilustrativo, fora de escala">
+        <path class="map-sea" d="M0 300 C 90 280, 150 330, 230 320 S 380 300, 430 330 S 500 360, 520 350 L520 420 L0 420 Z"/>
+        <path class="map-coast" d="M0 300 C 90 280, 150 330, 230 320 S 380 300, 430 330 S 500 360, 520 350"/>
+        <g class="map-hills"><path d="M40 270 l40 -50 l40 50z"/><path d="M110 268 l50 -64 l50 64z"/><path d="M190 266 l36 -44 l36 44z"/><path d="M300 270 l46 -58 l46 58z"/><path d="M380 286 l40 -48 l40 48z"/></g>
+        <path class="map-route" d="M120 70 C 160 130, 150 190, 230 230 S 340 260, 372 300"/>
+        <g class="map-pin map-pin-a"><circle cx="120" cy="70" r="7"/><text x="136" y="66">São Paulo</text></g>
+        <g class="map-pin map-pin-b"><circle class="pulse" cx="372" cy="300" r="18"/><circle cx="372" cy="300" r="8"/><text x="292" y="352">Juquehy</text></g>
+        <text class="map-note" x="20" y="404">Mapa ilustrativo, fora de escala</text>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- 7. Cotação: formulário que mostra como o pedido chega organizado para a equipe -->
+<section class="quote" id="cotacao" aria-labelledby="quote-title">
+  <div class="wrap quote-grid">
+    <div class="quote-copy">
+      <p class="eyebrow">Cotação</p>
+      <h2 id="quote-title">Reserve seu <em>descanso.</em></h2>
+      <p>Conte as datas e quem vem com você. A equipe responde pelo WhatsApp com valores e disponibilidade.</p>
+      <div class="quote-note">
+        <b>Esta é uma demonstração da Growlift.</b>
+        <span>Num site real, o pedido entra organizado no painel da pousada, a assistente confirma os dados com o hóspede no WhatsApp e a equipe recebe um lembrete para responder.</span>
+      </div>
+    </div>
+    <form class="quote-form" id="quote-form" novalidate>
+      <div class="row">
+        <label><span>Entrada</span><input type="date" name="entrada" required></label>
+        <label><span>Saída</span><input type="date" name="saida" required></label>
+      </div>
+      <div class="row">
+        <label><span>Adultos</span><select name="adultos"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+        <label><span>Crianças</span><select name="criancas"><option selected>0</option><option>1</option><option>2</option><option>3</option></select></label>
+      </div>
+      <label><span>Suíte</span><select name="suite"><option>Ainda não sei</option><option>Suíte Mar</option><option>Suíte Mata</option><option>Bangalô Jardim</option></select></label>
+      <label class="check"><input type="checkbox" name="pet"><span>Vou levar meu pet</span></label>
+      <div class="row">
+        <label><span>Seu nome</span><input type="text" name="nome" autocomplete="name" required></label>
+        <label><span>WhatsApp</span><input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(11) 90000-0000" required></label>
+      </div>
+      <label class="check"><input type="checkbox" name="aceite" required><span>Aceito receber a resposta desta cotação pelo WhatsApp.</span></label>
+      <button class="btn btn-dark magnetic" type="submit"><span>Enviar pedido</span></button>
+      <p class="form-error" role="alert" hidden></p>
+      <div class="form-done" hidden>
+        <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg>
+        <div>
+          <p class="done-title">Pedido recebido (demonstração)</p>
+          <p class="done-text">Nada foi enviado: esta pousada é fictícia. Veja ao lado como a assistente continuaria a conversa.</p>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <p class="foot-name"><span>Areia</span> <em>Clara</em></p>
+    <div class="foot-info">
+      <p><b>Projeto conceito criado pela Growlift.</b> A Pousada Areia Clara é fictícia: suítes, números, horários e conversas são exemplos, e as fotos e o vídeo foram gerados por inteligência artificial.</p>
+      <p><a href="https://growlift.com.br" rel="noopener">growlift.com.br</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Conversa de demonstração: mostra como a assistente atenderia no WhatsApp da pousada -->
+<button class="chat-fab magnetic" type="button" data-open-chat aria-controls="chat" aria-expanded="false">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8.5z"/></svg>
+  <span>Fale com a gente</span>
+</button>
+<aside class="chat" id="chat" aria-label="Conversa de demonstração com a assistente" hidden>
+  <header class="chat-head">
+    <div class="chat-avatar" aria-hidden="true">C</div>
+    <div><p class="chat-name">Clara · Areia Clara</p><p class="chat-sub">Demonstração com dados fictícios</p></div>
+    <button class="chat-close" type="button" aria-label="Fechar conversa">×</button>
+  </header>
+  <div class="chat-log" aria-live="polite" data-lenis-prevent></div>
+  <div class="chat-quick" data-lenis-prevent></div>
+</aside>
+
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

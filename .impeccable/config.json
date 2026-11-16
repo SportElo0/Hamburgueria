@@ -59,6 +59,12 @@
         ],
         "createdAt": "2026-11-09T10:32:00.000Z",
         "reason": "the font is Inter Tight, which the Lumivale brief specifies"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "fraunces",
+        "createdAt": "2026-11-16T11:23:45.090Z",
+        "reason": "Claude: areia-clara/ is a fictitious client concept site with its own type system, separate from the Growlift DESIGN.md"
       }
     ]
   }
