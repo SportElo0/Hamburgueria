@@ -86,7 +86,7 @@ body{background:#050a1e}
 #stars{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.75) 1.3px,transparent 1.6px),radial-gradient(rgba(255,255,255,.4) 1px,transparent 1.2px);background-size:170px 190px,97px 113px;-webkit-mask-image:linear-gradient(#000 0%,#000 calc(var(--hz,50%) - 25%),transparent calc(var(--hz,50%) - 8%))}
 #gl{position:absolute;left:0;top:0;width:1080px;height:1920px}
 #vig{position:absolute;inset:0;background:radial-gradient(120% 70% at 50% 45%,rgba(0,0,0,0) 60%,rgba(0,0,0,.45) 100%);pointer-events:none}
-.brandmark{color:#e6eaf2}
+.brandmark{color:#e6eaf2;padding:10px 18px;margin:-10px 0 0 -18px;border-radius:14px;background:rgba(6,9,22,.55)}
 .tag{position:absolute;left:50%;top:268px;z-index:30;padding:12px 36px 22px;border-radius:16px;background:#0b0f1d;color:#fff;font-weight:900;font-size:50px;letter-spacing:.03em;text-align:center;box-shadow:0 24px 50px -22px #000;white-space:nowrap;visibility:hidden}
 .tag small{display:block;font-size:22px;letter-spacing:.2em;color:#8fb6ff;margin-bottom:2px}
 .tag:after{content:"";position:absolute;left:50%;bottom:10px;width:64px;height:5px;margin-left:-32px;border-radius:3px;background:#3d8bff}
@@ -185,8 +185,8 @@ const ang=(i)=>i/6*TAU;
 const near=(i,d=0)=>({th:ang(i)+0.11+d,r:SR+5.3,h:2.3,lth:ang(i),lr:SR*0.78,ly:1.1,fov:40});
 const SHOTS=[
   // [time the shot is reached, shot]
-  [0.0,{th:ang(0)-0.12,r:SR+4.6,h:1.8,lth:ang(0),lr:SR*0.9,ly:1.0,fov:42}],
-  [6.4,{th:ang(0)-0.04,r:SR+3.9,h:1.6,lth:ang(0),lr:SR*0.95,ly:0.9,fov:42}],
+  [0.0,{th:ang(0)-0.12,r:SR+4.6,h:2.6,lth:ang(0),lr:SR*0.9,ly:1.0,fov:42}],
+  [6.4,{th:ang(0)-0.04,r:SR+3.9,h:2.3,lth:ang(0),lr:SR*0.95,ly:0.9,fov:42}],
   [8.0,{th:ang(0)-0.35,r:17.5,h:9.6,lth:0,lr:0,ly:0.5,fov:44}],
   [10.2,{th:ang(0)-0.15,r:17,h:9.2,lth:0,lr:0,ly:0.5,fov:44}],
   [11.3,near(0)],[17.3,near(0,0.08)],
@@ -234,7 +234,7 @@ window.draw=(t)=>{
   mv.style.boxShadow=mk>0&&mk<1?'0 18px 30px -10px rgba(0,0,0,.45)':''; mv.style.transform='rotate('+(Math.sin(Math.PI*mk)*-4)+'deg) scale('+(1+.06*Math.sin(Math.PI*mk))+')';
   show('c5r',t,42.2,undefined,{dy:16});
   // 6 · the right person
-  chapter(6,t,43.85,49.2); show('c6a',t,46.3,undefined,{dy:16}); show('c6b',t,47.6,undefined,{dy:16}); show('c6c',t,48.4,undefined,{dy:16});
+  chapter(6,t,43.85,49.2); show('c6a',t,44.4,undefined,{dy:16}); show('c6b',t,46.4,undefined,{dy:16}); show('c6c',t,47.7,undefined,{dy:16});
   // whole world
   show('e0',t,49.25,51.8,{dy:-16}); show('e1',t,50.4,51.8,{dy:-16});
   // ending
