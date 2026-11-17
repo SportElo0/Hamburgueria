@@ -4,8 +4,8 @@
 // Patterns of the long-running ads in the Meta Ad Library (07-planejamento/pesquisa-anuncios-meta.md): niche on the
 // first frame, a scene at the moment of pain, a named assistant, a no-risk offer.
 // Real footage only (Mixkit, Free License, cleared for ads; ids 49845, 39782, 39789, same actress in 39782/39789).
-// No AI images or AI people. The chats are dramatized and say so in a small line all the time ("Cena dramatizada ·
-// dados fictícios"), as TV ads do; the legal review of 17/11 asked for the dramatization to be identified.
+// No AI images or AI people. The on-screen dramatization line was removed at the partners' request (17/11);
+// the ad text says the scene is dramatized, with fictitious data.
 // Frames: $AD1_FRAMES/{cidade,noite,liga}/00001.jpg… (1080x1350, 30 fps), cut, sharpened and graded with ffmpeg.
 import os from 'node:os';
 import path from 'node:path';
@@ -92,14 +92,14 @@ body{position:relative;font-family:Inter,'Helvetica Neue',Arial,sans-serif;backg
 `;
 
 const body = `
-<div class="brand">${MARK}GROWLIFT</div><div class="dram">Cena dramatizada com atriz · dados fictícios</div>
+<div class="brand">${MARK}GROWLIFT</div>
 <section class="sc" id="s1"><img class="bgblur" id="v1b" alt=""><div class="clip"><img class="vid" id="v1" alt=""></div><div class="fade"></div><div class="niche" id="niche">CLÍNICAS ODONTOLÓGICAS</div>
   <div class="clock" id="clk">21:47</div><div class="sign" id="sign"><b>FECHADO</b><span>Abrimos amanhã às 8h</span></div></section>
 <section class="sc" id="s2"><img class="bgblur" id="v2b" alt=""><div class="clip"><img class="vid" id="v2" alt=""></div><div class="fade"></div>
   <div class="bub out" id="q1" style="top:470px">Oi! Tô com dor de dente. Tem horário amanhã?<small>21:48 ✓</small></div><div class="chip grey" id="nr" style="top:720px">sem resposta</div></section>
 <section class="sc" id="s3"><img class="bgblur" id="v3b" alt=""><div class="clip"><img class="vid" id="v3" alt=""></div><div class="fade"></div>
   <div class="bub out" id="q2" style="top:440px">Oi! Tem horário amanhã?<small>21:52 ✓✓</small></div>
-  <div class="bub in" id="a2" style="top:650px"><span class="who">OUTRA CLÍNICA (FICTÍCIA)</span>Temos amanhã às 9h. Posso marcar?<small>21:52</small></div></section>
+  <div class="bub in" id="a2" style="top:650px"><span class="who">OUTRA CLÍNICA</span>Temos amanhã às 9h. Posso marcar?<small>21:52</small></div></section>
 <section class="sc" id="s4"><img class="bgblur" id="v4b" alt=""><div class="clip"><img class="vid" id="v4" alt=""></div><div class="fade"></div>
   <div class="booked" id="bk"><div class="ok">${CHECK}</div><div><b>Marcado · amanhã, 9h</b><span>na outra clínica</span></div></div></section>
 <section class="sc" id="s5"><div class="red"></div><div class="lost" id="l1">E se ela tivesse mandado para a <span class="hl">sua</span> clínica?</div><div class="lost2" id="l2">Você nem ficaria sabendo.</div></section>

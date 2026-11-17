@@ -5,7 +5,7 @@ Fonte de cada um em `_fonte/reels/novos/reelad*.mjs`; render: `node render.mjs a
 
 | Arquivo | O que é | Vídeos de banco | Situação |
 | --- | --- | --- | --- |
-| `anuncio-01-quantas-sem-resposta-mudo.mp4` | Clínicas odontológicas, v2 (pedido do Antônio): "Sua clínica está fechada", a paciente manda mensagem e ninguém responde, ela chama outra clínica e marca lá, "Você perdeu a paciente. E nem ficou sabendo.", a mesma noite com a Ana, "Sua clínica fecha. O atendimento, não.", demonstração gratuita e sem compromisso (25 s, sem voz). Faixa "Cena dramatizada com atriz · dados fictícios" o vídeo todo | Mixkit, Free License: 49845, 39782, 39789 | Revisão legal v2 de 17/11 aplicada (selo legível, sem afirmar fato sobre a clínica de quem vê, linha de esclarecimento no final); falta aprovação dos sócios e os itens abaixo |
+| `anuncio-01-quantas-sem-resposta-mudo.mp4` | Clínicas odontológicas, v2 (pedido do Antônio): "Fora do horário, a clínica está fechada", a paciente manda mensagem e ninguém responde, ela chama outra clínica e marca lá, "E se ela tivesse mandado para a sua clínica? Você nem ficaria sabendo.", a mesma noite com a Ana, "A clínica fecha. O atendimento, não.", demonstração gratuita e sem compromisso (25 s, sem voz). Sem faixa de cena dramatizada no vídeo (tirada a pedido do Antônio em 17/11); o aviso vai no texto do anúncio | Mixkit, Free License: 49845, 39782, 39789 | Revisão legal v2 de 17/11 aplicada (sem afirmar fato sobre a clínica de quem vê, linha de esclarecimento no final); falta aprovação dos sócios e os itens abaixo |
 
 Base: `07-planejamento/pesquisa-anuncios-meta.md`. Sem imagens nem pessoas geradas por IA (a pesquisa de 17/11 mostrou que anúncio que parece IA perde confiança em produto caro).
 Vídeos do Mixkit com "Restricted License" não podem ser usados em anúncio: só os de "Free License".
@@ -24,7 +24,7 @@ Vídeos do Mixkit com "Restricted License" não podem ser usados em anúncio: s�
 - Descrição: Demonstração pelo WhatsApp
 
 **Texto do anúncio, versão B** (revisado para a v2)
-- Texto principal: Como a sua clínica responde mensagens fora do horário? A Growlift, de São Paulo, monta atendimento com IA no WhatsApp para clínicas odontológicas: responde só com as informações da clínica, oferece até 3 horários e chama a equipe quando precisa. Veja numa demonstração com dados fictícios.
+- Texto principal: Como a sua clínica responde mensagens fora do horário? A Growlift, de São Paulo, monta atendimento com IA no WhatsApp para clínicas odontológicas: responde só com as informações da clínica, oferece até 3 horários e chama a equipe quando precisa. Veja numa demonstração com dados fictícios. A cena do vídeo é dramatizada.
 - Título: Mensagem fora do horário?
 - Descrição: Peça sua demonstração
 
