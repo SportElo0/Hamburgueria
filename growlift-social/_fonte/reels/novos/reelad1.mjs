@@ -22,7 +22,7 @@ const COUNT = { cidade: 180, noite: 359, liga: 350 };
 
 // Captions: [start, end, text]; *word* = highlighted. Words pop in one after another.
 const CAPS = [
-  [0.3, 3.35, 'Sua clínica está *fechada.*'],
+  [0.3, 3.35, 'Fora do horário, a clínica está *fechada.*'],
   [3.6, 5.5, 'A paciente manda mensagem.'],
   [5.6, 7.35, '*Ninguém* *responde.*'],
   [7.6, 10.35, 'Ela chama *outra* *clínica…*'],
@@ -49,11 +49,11 @@ body{position:relative;font-family:Inter,'Helvetica Neue',Arial,sans-serif;backg
 .red{position:absolute;inset:0;background:radial-gradient(900px 900px at 50% 40%,rgba(224,52,75,.28),transparent 70%),#07050a}
 .brand{position:absolute;left:66px;top:258px;display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:.14em;font-size:26px;color:#f3f5f9;z-index:30;text-shadow:0 2px 12px rgba(0,0,0,.6)}
 .brand svg{height:32px;width:auto}
-.dram{position:absolute;right:58px;top:259px;font-size:30px;font-weight:600;color:rgba(243,245,249,.82);z-index:30;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-.niche{position:absolute;left:50%;top:352px;padding:12px 28px;border-radius:999px;background:#ffd23f;color:#111;font-weight:900;font-size:32px;letter-spacing:.06em;z-index:30;white-space:nowrap;box-shadow:0 14px 30px -14px rgba(0,0,0,.7)}
+.dram{position:absolute;left:50%;top:312px;transform:translateX(-50%);padding:8px 22px;border-radius:12px;background:rgba(5,7,12,.72);font-size:34px;font-weight:700;color:#fff;z-index:30;white-space:nowrap}
+.niche{position:absolute;left:50%;top:392px;padding:12px 28px;border-radius:999px;background:#ffd23f;color:#111;font-weight:900;font-size:32px;letter-spacing:.06em;z-index:30;white-space:nowrap;box-shadow:0 14px 30px -14px rgba(0,0,0,.7)}
 .cap{position:absolute;left:56px;right:56px;top:1350px;text-align:center;font-weight:900;font-size:80px;line-height:1.05;letter-spacing:-.035em;text-shadow:0 4px 24px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.6);z-index:25;visibility:hidden}
 .w{display:inline-block}.hl{color:#ffd23f}
-.clock{position:absolute;left:0;right:0;top:470px;text-align:center;font-weight:200;font-size:230px;letter-spacing:-.04em;text-shadow:0 10px 40px rgba(0,0,0,.6);z-index:20}
+.clock{position:absolute;left:0;right:0;top:500px;text-align:center;font-weight:200;font-size:230px;letter-spacing:-.04em;text-shadow:0 10px 40px rgba(0,0,0,.6);z-index:20}
 .sign{position:absolute;left:50%;top:790px;padding:26px 46px;border-radius:26px;background:rgba(250,251,253,.96);color:#121826;text-align:center;z-index:20;box-shadow:0 30px 60px -24px rgba(0,0,0,.8)}
 .sign b{display:block;font-size:64px;font-weight:900;letter-spacing:.12em;color:#e0344b}
 .sign span{display:block;margin-top:6px;font-size:32px;font-weight:700;color:#4a5568}
@@ -67,11 +67,11 @@ body{position:relative;font-family:Inter,'Helvetica Neue',Arial,sans-serif;backg
 .booked{position:absolute;left:90px;right:90px;top:470px;display:flex;gap:22px;align-items:center;padding:30px 32px;border-radius:32px;background:#fff;color:#121826;z-index:20;box-shadow:0 30px 60px -24px rgba(0,0,0,.8)}
 .booked .ok{width:72px;height:72px;border-radius:50%;background:#14b89a;display:grid;place-items:center;flex:none}
 .booked b{display:block;font-size:40px;font-weight:900}.booked span{display:block;font-size:30px;color:#4a5568;margin-top:4px}
-.lost{position:absolute;left:60px;right:60px;top:640px;text-align:center;font-weight:900;font-size:112px;line-height:1.02;letter-spacing:-.04em}
+.lost{position:absolute;left:60px;right:60px;top:560px;text-align:center;font-weight:900;font-size:96px;line-height:1.02;letter-spacing:-.04em}
 .lost .hl{color:#ff5a6e}
-.lost2{position:absolute;left:60px;right:60px;top:1010px;text-align:center;font-size:52px;font-weight:700;color:#c6cede}
-.tag{position:absolute;left:50%;top:345px;padding:12px 28px;border-radius:999px;background:#0865fe;font-size:30px;font-weight:800;white-space:nowrap;z-index:20}
-.phone{position:absolute;left:50%;top:420px;width:720px;height:900px;margin-left:-360px;border-radius:72px;background:#0d1220;padding:16px;box-shadow:0 70px 140px -40px rgba(8,101,254,.75),0 0 0 2px rgba(255,255,255,.1);z-index:10}
+.lost2{position:absolute;left:60px;right:60px;top:1060px;text-align:center;font-size:52px;font-weight:700;color:#c6cede}
+.tag{position:absolute;left:50%;top:385px;padding:12px 28px;border-radius:999px;background:#0865fe;font-size:30px;font-weight:800;white-space:nowrap;z-index:20}
+.phone{position:absolute;left:50%;top:455px;width:720px;height:870px;margin-left:-360px;border-radius:72px;background:#0d1220;padding:16px;box-shadow:0 70px 140px -40px rgba(8,101,254,.75),0 0 0 2px rgba(255,255,255,.1);z-index:10}
 .scr{width:100%;height:100%;border-radius:58px;background:#eef1f6;overflow:hidden;position:relative}
 .top{background:#121a2e;color:#fff;padding:54px 30px 20px;display:flex;gap:18px;align-items:center}
 .top .av{width:70px;height:70px;border-radius:50%;background:linear-gradient(160deg,#3d8bff,#0865fe);color:#fff;font-weight:900;font-size:32px;display:grid;place-items:center}
@@ -84,30 +84,30 @@ body{position:relative;font-family:Inter,'Helvetica Neue',Arial,sans-serif;backg
 .tick{font-style:normal;color:#0865fe;font-weight:800;letter-spacing:-.15em}
 .typing{align-self:flex-end;background:#dbe8ff;border-radius:24px;padding:20px 24px;display:none;gap:9px}
 .typing i{width:12px;height:12px;border-radius:50%;background:#4b6b9a;display:block}
-.end .mark{position:absolute;left:50%;top:330px;width:150px;margin-left:-75px}
-.end .big{position:absolute;left:50px;right:50px;top:520px;text-align:center;font-weight:900;font-size:96px;line-height:1.02;letter-spacing:-.04em}
-.end .sub{position:absolute;left:96px;right:96px;top:910px;text-align:center;font-size:40px;color:#c6cede;line-height:1.35}
-.cta{position:absolute;left:50%;top:1150px;padding:30px 58px;border-radius:999px;background:#0865fe;color:#fff;font-size:52px;font-weight:900;white-space:nowrap;box-shadow:0 30px 70px -20px rgba(8,101,254,.95)}
-.cta-sub{position:absolute;left:0;right:0;top:1312px;text-align:center;font-size:34px;color:#e6eaf2}
+.end .mark{position:absolute;left:50%;top:390px;width:150px;margin-left:-75px}
+.end .big{position:absolute;left:50px;right:50px;top:570px;text-align:center;font-weight:900;font-size:96px;line-height:1.02;letter-spacing:-.04em}
+.end .sub{position:absolute;left:90px;right:90px;top:880px;text-align:center;font-size:36px;color:#c6cede;line-height:1.35}
+.cta{position:absolute;left:50%;top:1190px;padding:30px 58px;border-radius:999px;background:#0865fe;color:#fff;font-size:52px;font-weight:900;white-space:nowrap;box-shadow:0 30px 70px -20px rgba(8,101,254,.95)}
+.cta-sub{position:absolute;left:0;right:0;top:1352px;text-align:center;font-size:34px;color:#e6eaf2}
 `;
 
 const body = `
-<div class="brand">${MARK}GROWLIFT</div><div class="dram">Cena dramatizada · dados fictícios</div>
+<div class="brand">${MARK}GROWLIFT</div><div class="dram">Cena dramatizada com atriz · dados fictícios</div>
 <section class="sc" id="s1"><img class="bgblur" id="v1b" alt=""><div class="clip"><img class="vid" id="v1" alt=""></div><div class="fade"></div><div class="niche" id="niche">CLÍNICAS ODONTOLÓGICAS</div>
   <div class="clock" id="clk">21:47</div><div class="sign" id="sign"><b>FECHADO</b><span>Abrimos amanhã às 8h</span></div></section>
 <section class="sc" id="s2"><img class="bgblur" id="v2b" alt=""><div class="clip"><img class="vid" id="v2" alt=""></div><div class="fade"></div>
   <div class="bub out" id="q1" style="top:470px">Oi! Tô com dor de dente. Tem horário amanhã?<small>21:48 ✓</small></div><div class="chip grey" id="nr" style="top:720px">sem resposta</div></section>
 <section class="sc" id="s3"><img class="bgblur" id="v3b" alt=""><div class="clip"><img class="vid" id="v3" alt=""></div><div class="fade"></div>
   <div class="bub out" id="q2" style="top:440px">Oi! Tem horário amanhã?<small>21:52 ✓✓</small></div>
-  <div class="bub in" id="a2" style="top:650px"><span class="who">OUTRA CLÍNICA</span>Temos amanhã às 9h. Posso marcar?<small>21:52</small></div></section>
+  <div class="bub in" id="a2" style="top:650px"><span class="who">OUTRA CLÍNICA (FICTÍCIA)</span>Temos amanhã às 9h. Posso marcar?<small>21:52</small></div></section>
 <section class="sc" id="s4"><img class="bgblur" id="v4b" alt=""><div class="clip"><img class="vid" id="v4" alt=""></div><div class="fade"></div>
   <div class="booked" id="bk"><div class="ok">${CHECK}</div><div><b>Marcado · amanhã, 9h</b><span>na outra clínica</span></div></div></section>
-<section class="sc" id="s5"><div class="red"></div><div class="lost" id="l1">Você <span class="hl">perdeu</span><br>a paciente.</div><div class="lost2" id="l2">E nem ficou sabendo.</div></section>
+<section class="sc" id="s5"><div class="red"></div><div class="lost" id="l1">E se ela tivesse mandado para a <span class="hl">sua</span> clínica?</div><div class="lost2" id="l2">Você nem ficaria sabendo.</div></section>
 <section class="sc" id="s6"><img class="bgblur" id="v6" alt=""><div class="tag" id="tg">A mesma noite, com a Ana</div><div class="phone"><div class="scr"><div class="top"><div class="av">A</div><div><b>Ana · Clínica Exemplo</b><span>assistente virtual</span></div></div>
   <div class="msgs">${msg('m1', 'in', 'Oi! Tô com dor de dente. Tem horário amanhã?', '21:48')}${dots('ty1')}${msg('m2', 'out', 'Oi! Aqui é a Ana, assistente virtual da Clínica Exemplo. Amanhã tenho 9h, 10h ou 15h. Qual fica melhor?', '21:48')}${msg('m3', 'in', '9h', '21:49')}${dots('ty2')}${msg('m4', 'out', 'Reservei amanhã às 9h. A equipe confirma com você logo cedo.', '21:49')}</div></div></div></section>
 <section class="sc end" id="s7"><div class="dark" id="glow"></div><div class="mark" id="e0">${MARK.replace('<svg ', '<svg width="150" ')}</div>
-  <div class="big" id="e1">Sua clínica fecha.<br>O atendimento, <span class="hl">não.</span></div>
-  <div class="sub" id="e2">Atendimento com IA no WhatsApp<br>da sua clínica, configurado por nós.</div>
+  <div class="big" id="e1">A clínica fecha.<br>O atendimento, <span class="hl">não.</span></div>
+  <div class="sub" id="e2">Assistente virtual com IA no WhatsApp, configurada por nós: responde fora do horário com as informações da clínica, e a equipe confirma o horário.</div>
   <div class="cta" id="e3">Peça uma demonstração</div><div class="cta-sub" id="e4">gratuita e sem compromisso, pelo WhatsApp</div></section>
 ${capHtml}`;
 
