@@ -9,7 +9,7 @@ import { launch, close, renderReel } from '../motor.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(HERE, '../../../05-reels');
-const NAMES = { 1: '01-quatro-negocios', 2: '02-a-confeitaria', 7: '07-quem-atende', 8: '08-sabado-a-noite', 3: '03-dois-minutos', 4: '04-ela-procurou', 5: '05-aberto-no-google', 6: '06-do-zero', 9: '09-o-lanche-e-bom', 14: '14-uma-estrela', 15: '15-o-celular-nao-para', 16: '16-cardapio-em-pdf', 11: '11-dois-amigos', 12: '12-cardapio-completo', 13: '13-porta-aberta', 17: '17-cade-o-dinheiro', 18: '18-cada-prato-um-papel', 19: '19-ela-vem-toda-sexta', 20: '20-dia-31', 21: '21-a-mesma-noite', 22: '22-o-site-no-celular', 23: '23-o-telefone-na-escada', 24: '24-o-funil-furado', 25: '25-o-site-da-pousada' };
+const NAMES = { 1: '01-quatro-negocios', 2: '02-a-confeitaria', 7: '07-quem-atende', 8: '08-sabado-a-noite', 3: '03-dois-minutos', 4: '04-ela-procurou', 5: '05-aberto-no-google', 6: '06-do-zero', 9: '09-o-lanche-e-bom', 14: '14-uma-estrela', 15: '15-o-celular-nao-para', 16: '16-cardapio-em-pdf', 11: '11-dois-amigos', 12: '12-cardapio-completo', 13: '13-porta-aberta', 17: '17-cade-o-dinheiro', 18: '18-cada-prato-um-papel', 19: '19-ela-vem-toda-sexta', 20: '20-dia-31', 21: '21-a-mesma-noite', 22: '22-o-site-no-celular', 23: '23-o-telefone-na-escada', 24: '24-o-funil-furado', 25: '25-o-site-da-pousada', ad1: 'anuncio-01-quantas-sem-resposta' };
 
 const id = process.argv[2];
 const stillArg = process.argv.indexOf('--still');
@@ -35,7 +35,10 @@ if (stillArg > 0) {
   await close();
   console.log(dir);
 } else {
-  const base = path.join(OUT, NAMES[id]);
+  // Ad Reels (reelad*.mjs) export OUT: they live outside 05-reels, so they stay out of the panel's Conteúdos.
+  const outDir = reel.OUT ? path.resolve(HERE, reel.OUT) : OUT;
+  fs.mkdirSync(outDir, { recursive: true });
+  const base = path.join(outDir, NAMES[id]);
   await renderReel({ id: `reel-${id}`, html, duration: reel.DURATION, cover: reel.COVER, out: `${base}-mudo` });
   await close();
   const voice = path.resolve(HERE, `../narracao-${id}-eleven.mp3`);
