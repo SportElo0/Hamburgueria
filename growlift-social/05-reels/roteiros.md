@@ -490,3 +490,23 @@ As fotos e o vídeo do site foram gerados por IA e a voz do reel é sintética. 
 Quer um site assim para a sua pousada? Comenta SITE que a gente te chama no direct.
 #projetoconceito #sitepousada #growlift
 ```
+
+## 27. Seis passos da clínica (mundo 3D, Growlift Comercial)
+- **Formato:** um mundo 3D só (`_fonte/reels/novos/diorama27.js`, Three.js quadro a quadro), editado em `reel27.mjs`, no estilo do Reel de "estratégia em N passos" que o Antônio mandou como referência: plataforma redonda com linhas neon, dente gigante no centro e 6 estações em volta (celular, agenda, telefone tocando, relógio, quadro, sininho com alguém da equipe). Abertura: 23h, mensagem sem resposta, a paciente-bolinha vai embora. Depois a câmera sobe, as estações aparecem e passeia de uma em uma, com etiqueta "PASSO N" e um cartão que se preenche (conversa da "Clínica Exemplo", lista marcando, quadro com o cartão mudando de etapa). Fim: visão do mundo inteiro e "Comenta AGENDA". Sem faixa de "dados fictícios" na tela (desenho 3D sem dados reais; a revisão legal de 17/11 aceitou com a ressalva na legenda); "Clínica Exemplo" e "dados fictícios" aparecem nos cartões.
+- **Revisão legal (17/11), aplicada:** "uma forma de perder menos paciente" (não "não perder"); ligação perdida "com telefonia ligada ao painel"; lembrete "só pra quem aceitou receber"; a assistente não dá diagnóstico nem orientação clínica (cartão do passo 6); "ver uma demonstração" em vez de "ver funcionando".
+- **Vídeos:** `27-seis-passos-da-clinica.mp4` (58 s, com narração), `-mudo.mp4` e `-capa.png`. Refazer: `node render.mjs 27` (precisa do `npm ci` na raiz para o three).
+- **Narração (17/11, voz "Andre", ElevenLabs v4 no Higgsfield, 3,68 créditos; `_fonte/reels/narracao-27-eleven.mp3`, 55,5 s):**
+"Onze da noite. Uma paciente manda mensagem pra clínica. Ninguém responde... e ela marca em outra. Essa é uma forma de a clínica perder menos paciente no WhatsApp. Passo um: resposta na hora. A assistente responde até de madrugada, só com o que a clínica aprovou. Passo dois: agenda. Ela oferece até três horários livres e reserva. A equipe confirma. Passo três: ligação perdida. Com telefonia ligada ao painel, quem não foi atendido aperta um e recebe a resposta no WhatsApp. Passo quatro: lembrete. Um dia antes, só pra quem aceitou receber. Passo cinco: o quadro. Cada paciente numa etapa, com um responsável. Passo seis: a pessoa certa. Não sabe responder? Ela chama alguém da equipe. Seis passos, um sistema só. Quer ver uma demonstração pra sua clínica? Comenta AGENDA!"
+- **Antes de postar:** a palavra AGENDA no ManyChat responde só com o convite para a demonstração, falando como "Growlift"/"a gente", sem "mensagem automática" e sem nome de pessoa; comentar não coloca ninguém em lista de campanha. Marcar "Conteúdo gerado por IA" ao publicar (voz sintética).
+
+**Legenda**
+```
+6 passos pra clínica perder menos paciente no WhatsApp 🦷
+
+Responder na hora, oferecer horários e reservar, cuidar da ligação perdida, lembrar a consulta, acompanhar cada paciente num quadro e chamar a equipe quando precisa. Tudo num painel com uma assistente de IA.
+
+Animação com dados fictícios (Clínica Exemplo) e voz sintética. A assistente só responde com o que a clínica aprovou e chama a equipe quando não sabe. A ligação perdida depende de contratar um serviço de telefonia, e o lembrete vai só para quem aceitou receber.
+
+Quer ver uma demonstração pra sua clínica? Comenta AGENDA.
+#growlift #clinicaodontologica #atendimento
+```

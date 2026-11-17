@@ -1,6 +1,6 @@
 // Reel 27 · "A estratégia pra clínica não perder paciente no WhatsApp": one 3D world (Three.js, rendered frame by
 // frame). A round platform with neon lines, a giant tooth in the middle and six stations around it, one per thing the
-// panel really does (answer, schedule, missed call, reminder, pipeline, monthly report). Patients are little blobs.
+// panel really does (answer, schedule, missed call, reminder, pipeline, the right person). Patients are little blobs.
 // window.mundo(t, st) draws the frame for time t; st = { cam: {pos, look}, on: [station states], ... }.
 // Everything is a pure function of (t, st), so every frame is reproducible.
 import * as THREE from 'three';
@@ -230,14 +230,26 @@ const builders = [
     });
     return { cards };
   },
-  // 5 · monthly report: bars
+  // 5 · the right person: a desk bell that rings and a team member (no headset) who comes over
   (g) => {
-    const bars = [0.5, 0.8, 0.65, 1.15].map((h, i) => {
-      const b = rbox(0.26, h, 0.26, mat(i === 3 ? 0x2f7bff : 0x6b7cb8, { roughness: 0.45 }), 0.05);
-      g.add(at(b, -0.5 + i * 0.34, 0.12 + h / 2, 0));
-      return b;
+    const bell = new THREE.Group();
+    const dome = new THREE.Mesh(new THREE.LatheGeometry([[0, 0.5], [0.12, 0.49], [0.3, 0.38], [0.4, 0.2], [0.46, 0.04], [0.5, 0]].map(([r, y]) => new THREE.Vector2(r, y)), 48), mat(0xffd23f, { roughness: 0.25, metalness: 0.55 }));
+    bell.add(at(dome, 0, 0.18, 0));
+    bell.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.62, 0.12, 48), mat(0x10162e, { roughness: 0.4 })), 0, 0.12, 0));
+    bell.add(at(new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 8), mat(0xffd23f, { roughness: 0.25, metalness: 0.55 })), 0, 0.72, 0));
+    shadowy(bell);
+    g.add(at(bell, -0.35, 0.12, 0.1));
+    const waves = [0, 1, 2].map((i) => {
+      const r = new THREE.Mesh(new THREE.TorusGeometry(0.62 + i * 0.22, 0.02, 8, 64, Math.PI * 0.5), neon(0xffd23f, 2));
+      r.rotation.z = Math.PI * 0.25;
+      g.add(at(r, -0.35, 0.6, 0.1));
+      return r;
     });
-    return { bars };
+    const staff = blob(0x14b89a);
+    g.add(at(staff, 0.75, 0.12, 0.3));
+    const as = blob(0x2f7bff, { assistant: true, s: 0.85 });
+    g.add(at(as, -0.1, 0.12, 0.75));
+    return { bell, waves, staff };
   },
 ];
 for (let i = 0; i < STATIONS; i++) {
@@ -281,10 +293,22 @@ window.mundo = (t, st = {}) => {
   const p = stations[0].parts;
   p.assistant.visible = !st.hideAssistant;
   p.bubbles[1].visible = !st.hideAssistant;
-  p.bubbles.forEach((b, k) => { const k2 = ease((t - 0.3 - k * 0.5) / 0.4); b.scale.setScalar(0.001 + k2); });
+  p.bubbles[0].scale.setScalar(0.001 + ease((t - 0.3) / 0.4));
+  p.bubbles[1].scale.setScalar(0.001 + (st.ans ?? 1));
+  // the patient leaves (night without an answer): walks out and shrinks away
+  const away = st.away || 0;
+  p.patient.position.set(-0.72 - 2.6 * away, 0.12 + (away > 0 && away < 1 ? Math.abs(Math.sin(t * 10)) * 0.1 : 0), 0.35 + 1.4 * away);
+  p.patient.rotation.y = away > 0 ? -1.2 : 0;
+  p.patient.scale.setScalar(Math.max(0.001, 1 - Math.max(0, away - 0.6) * 2.5));
+  p.phoneScreen.material.emissiveIntensity = 0.9 + (st.ans ? 0.8 * st.ans : 0);
   stations[2].parts.rings.forEach((r, k) => { r.material.emissiveIntensity = 1 + 2 * Math.max(0, Math.sin(t * 6 - k * 0.8)); });
   stations[3].parts.hand1.rotation.z = -t * 1.2;
-  stations[5].parts.bars.forEach((b, k) => { const k2 = 0.15 + 0.85 * ease((t - k * 0.15) / 0.6); b.scale.y = k2; });
+  { const p5 = stations[5].parts, ring5 = st.ring5 || 0;
+    p5.bell.rotation.z = ring5 * 0.12 * Math.sin(t * 22);
+    p5.waves.forEach((r, k) => { r.visible = ring5 > 0; r.material.emissiveIntensity = ring5 * (1 + 2 * Math.max(0, Math.sin(t * 8 - k * 0.9))); });
+    const walk = st.staff5 ?? 1;
+    p5.staff.position.set(1.6 - 0.85 * walk, 0.12 + Math.abs(Math.sin(t * 9)) * 0.08 * (walk > 0 && walk < 1 ? 1 : 0), 0.3);
+    p5.staff.rotation.y = -0.5 * walk; }
   const slots = stations[1].parts.slots;
   slots.forEach((s, k) => { if (k === 6) { s.material.color.set(st.booked ? 0x2f7bff : 0xffffff); } });
   const c = st.cam || { pos: [0, 13, 15], look: [0, 1, 0] };
