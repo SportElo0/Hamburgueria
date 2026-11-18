@@ -453,3 +453,35 @@ Demonstração simulada, com dados fictícios: o que está disponível, o prazo 
 ```
 Carrossel ilustrado para técnicos de ar-condicionado: um técnico na escada com uma chamada perdida; o cliente procurando outro técnico; dois dados de pesquisa (77% dos usuários de smartphone entrevistados fazem mais ligações pelo WhatsApp; 65% dos smartphones pesquisados têm o WhatsApp na tela inicial); três dicas gratuitas; a regra de pedir autorização antes de mandar WhatsApp; a demonstração da Growlift em que quem ligou aperta 1, a atendente de IA marca a visita e o técnico recebe o aviso; e o convite "Comenta AGENDA".
 ```
+
+## Sáb 21/11 · Ficha técnica da marmita em 4 passos
+
+Pasta `22-ficha-tecnica-marmita/` (8 slides). Palavra no ManyChat: **MARGEM** (a mesma do Reel 29; o presente é a planilha de `10-presentes/`). Fonte: `_fonte/carrosseis-v2.mjs 22`. Vai junto com o Reel 29 (A conta da marmita): o Reel mostra o problema, o carrossel ensina a fazer a conta.
+
+**Números:** os mesmos do Reel 29, como exemplo (taxa do app conferida na página oficial de planos em 18/11/2026; no slide só "app grande"). Revisão legal do Reel 29 aplicada aqui também ("valores de exemplo" em todos os cartões, nota da taxa, "a Growlift te manda grátis", sem sorteio).
+
+**Antes de postar:** o link da planilha precisa estar no ManyChat (mensagem em `10-presentes/presentes.md`) e testado.
+
+**Legenda**
+
+```
+Sua marmita custa quanto, de verdade? 🍱 Salva pra fazer a conta com calma.
+
+A ficha técnica em 4 passos:
+1. Pese cada item de uma marmita (cru, que é como você compra).
+2. Multiplique pelo preço do quilo e some embalagem, talher e sacola.
+3. Some as contas do mês (gás, luz, água, salários, inclusive o seu, e aluguel) e divida pelas marmitas vendidas no mês.
+4. Desconte imposto e taxas, que saem em % do preço. O que sobra é o seu.
+
+Os números dos slides são exemplo (taxa de exemplo de 26,2%: 23% de comissão + 3,2% de pagamento online de um plano com entrega de app grande, tabela pública conferida em 18/11/2026). Refaça com os seus.
+
+Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozinha. Vale pra todo mundo que comentar, sem sorteio.
+
+#marmita #fichatecnica #restaurante #delivery #precificacao
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Carrossel sobre a ficha técnica da marmita: capa com uma marmita de R$ 22 e a pergunta "Sua marmita custa quanto, de verdade?"; preço posto "de olho"; quatro passos com exemplos (pesar cada item, peso vezes preço do quilo, dividir as contas do mês pelas marmitas, descontar imposto e taxas, sobrando R$ 3,02 no exemplo); resumo para salvar e o convite "Comenta MARGEM" para receber a planilha grátis.
+```

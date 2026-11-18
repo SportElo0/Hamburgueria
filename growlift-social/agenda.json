@@ -786,6 +786,27 @@
    "ia": true,
    "palavra": "MARGEM",
    "chave": "05-reels/roteiros.md#29-a-conta-da-marmita-quadro-quanto-sobra-episódio-1"
+  },
+  {
+   "id": "2026-11-21-carrossel-ficha-tecnica-marmita",
+   "titulo": "Carrossel · Ficha técnica da marmita em 4 passos (Comenta MARGEM)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/22-ficha-tecnica-marmita/01.png",
+    "09-carrosseis/22-ficha-tecnica-marmita/02.png",
+    "09-carrosseis/22-ficha-tecnica-marmita/03.png",
+    "09-carrosseis/22-ficha-tecnica-marmita/04.png",
+    "09-carrosseis/22-ficha-tecnica-marmita/05.png",
+    "09-carrosseis/22-ficha-tecnica-marmita/06.png",
+    "09-carrosseis/22-ficha-tecnica-marmita/07.png",
+    "09-carrosseis/22-ficha-tecnica-marmita/08.png"
+   ],
+   "capa": null,
+   "legenda": "Sua marmita custa quanto, de verdade? 🍱 Salva pra fazer a conta com calma.\n\nA ficha técnica em 4 passos:\n1. Pese cada item de uma marmita (cru, que é como você compra).\n2. Multiplique pelo preço do quilo e some embalagem, talher e sacola.\n3. Some as contas do mês (gás, luz, água, salários, inclusive o seu, e aluguel) e divida pelas marmitas vendidas no mês.\n4. Desconte imposto e taxas, que saem em % do preço. O que sobra é o seu.\n\nOs números dos slides são exemplo (taxa de exemplo de 26,2%: 23% de comissão + 3,2% de pagamento online de um plano com entrega de app grande, tabela pública conferida em 18/11/2026). Refaça com os seus.\n\nComenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozinha. Vale pra todo mundo que comentar, sem sorteio.\n\n#marmita #fichatecnica #restaurante #delivery #precificacao",
+   "quando": "2026-11-21T10:00:00-03:00",
+   "ia": false,
+   "palavra": "MARGEM",
+   "chave": "09-carrosseis/carrosseis.md#sab-2111-ficha-tecnica-da-marmita-em-4-passos"
   }
  ]
 }

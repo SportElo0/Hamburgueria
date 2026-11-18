@@ -182,6 +182,33 @@ const agendaCard = () => {
     <div style="margin-top:20px;display:flex;align-items:center;gap:12px;font-size:26px;font-weight:800;color:${GREEN}"><span class="ok" style="width:38px;height:38px;font-size:22px">✓</span>Marcado: quinta, 9h</div></div>`;
 };
 
+
+// Carrossel 22 (marmita): uma marmita de alumínio desenhada em SVG e um cartão de conta.
+const marmitaSvg = (w = 520) => `<svg width="${w}" height="${w * 0.62}" viewBox="0 0 520 322">
+  <defs><linearGradient id="alu" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f6f9"/><stop offset=".5" stop-color="#c9ced8"/><stop offset="1" stop-color="#eef1f5"/></linearGradient></defs>
+  <ellipse cx="260" cy="300" rx="240" ry="20" fill="rgba(0,0,0,.18)"/>
+  <path d="M20 40h480l-30 250H50z" fill="url(#alu)" stroke="#aab1bd" stroke-width="3"/>
+  <path d="M44 62h432l-24 206H68z" fill="#dfe3ea"/>
+  <ellipse cx="160" cy="165" rx="98" ry="78" fill="#fbf8f1"/>
+  ${Array.from({ length: 40 }, (_, i) => `<ellipse cx="${100 + ((i * 37) % 120)}" cy="${110 + ((i * 53) % 110)}" rx="5" ry="2.4" fill="#ece5d6" transform="rotate(${(i * 47) % 180} ${100 + ((i * 37) % 120)} ${110 + ((i * 53) % 110)})"/>`).join('')}
+  <ellipse cx="350" cy="210" rx="92" ry="48" fill="#4a2618"/>
+  ${Array.from({ length: 26 }, (_, i) => `<ellipse cx="${280 + ((i * 29) % 140)}" cy="${185 + ((i * 17) % 50)}" rx="9" ry="5.5" fill="#6b3622"/>`).join('')}
+  <g transform="rotate(-8 360 115)"><rect x="285" y="88" width="160" height="56" rx="26" fill="#d39552"/>${[0, 1, 2, 3, 4].map((k) => `<rect x="${302 + k * 28}" y="90" width="7" height="52" rx="3" fill="#7a4520" transform="rotate(30 ${305 + k * 28} 116)"/>`).join('')}</g>
+  <circle cx="104" cy="226" r="26" fill="#5fbf4a"/><circle cx="128" cy="236" r="22" fill="#3f9a35"/><circle cx="116" cy="214" r="13" fill="#e2442f"/>
+  <ellipse cx="455" cy="150" rx="38" ry="26" fill="#dcb46e"/>
+</svg>`;
+const conta = (linhas, { total, titulo = 'A conta da marmita', fica = true, ruim = false }) =>
+  `<div class="card" style="padding:26px 30px">
+     <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:24px;font-weight:900;letter-spacing:.06em;text-transform:uppercase">${titulo}</span><span style="font-size:20px;font-weight:700;color:#8a93a3">valores de exemplo</span></div>
+     ${linhas.map(([a, b, cor = RED]) => `<div style="display:flex;justify-content:space-between;font-size:28px;font-weight:700;padding:10px 0;border-bottom:1.5px solid #eef1f5"><span>${a}</span><b style="color:${cor}">${b}</b></div>`).join('')}
+     ${total ? `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:14px 18px;border-radius:16px;background:${ruim ? '#fde8e8' : '#e8f7f2'}"><span style="font-size:22px;font-weight:900;letter-spacing:.06em;color:${ruim ? '#b42318' : '#0f766e'}">${fica ? 'FICA PRA VOCÊ' : 'TOTAL'}</span><b style="font-size:44px;font-weight:900;color:${ruim ? RED : GREEN}">${total}</b></div>` : ''}
+   </div>`;
+const passo4 = ({ n, titulo, texto, cena }) =>
+  `<span class="chip">Passo ${n} de 4</span>
+   <h2 class="h" style="font-size:80px;margin-top:30px">${titulo}</h2>
+   <p class="p" style="margin-top:24px;font-size:36px;max-width:900px">${texto}</p>
+   <div style="position:absolute;left:0;right:0;bottom:10px">${cena}</div>`;
+
 const LEGENDA_FIM =
   'Quer um diagnóstico do seu negócio? Toca no link da bio: em até 2 dias úteis você recebe no WhatsApp o que ajustar e uma prévia do seu site. Grátis e sem compromisso.\n\n(Nomes, notas e telas dos slides são exemplos ilustrativos.)';
 
@@ -886,6 +913,89 @@ Demonstração simulada, com dados fictícios: o que está disponível, o prazo 
 
 #arcondicionado #climatizacao #tecnicodearcondicionado #whatsappbusiness #atendimento`,
     alt: 'Carrossel ilustrado para técnicos de ar-condicionado: um técnico na escada com uma chamada perdida; o cliente procurando outro técnico; dois dados de pesquisa (77% dos usuários de smartphone entrevistados fazem mais ligações pelo WhatsApp; 65% dos smartphones pesquisados têm o WhatsApp na tela inicial); três dicas gratuitas; a regra de pedir autorização antes de mandar WhatsApp; a demonstração da Growlift em que quem ligou aperta 1, a atendente de IA marca a visita e o técnico recebe o aviso; e o convite "Comenta AGENDA".',
+  },
+  {
+    slug: '22-ficha-tecnica-marmita',
+    titulo: 'Ficha técnica da marmita em 4 passos',
+    temas: ['escuro', 'claro', 'claro', 'azul', 'claro', 'escuro', 'claro', 'azul'],
+    slides: [
+      () =>
+        capa({
+          gancho: 'Sua marmita custa <em>quanto</em>, de verdade?',
+          sub: 'A ficha técnica em 4 passos. No fim, a planilha grátis que faz a conta.',
+          cena: `<div style="position:absolute;left:190px;top:200px">${marmitaSvg(700)}</div>
+            <span style="position:absolute;left:660px;top:150px;transform:rotate(-6deg);padding:14px 28px;border-radius:16px;background:${AMBER};color:${INK};font-size:52px;font-weight:900;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)">R$ 22,00</span>
+            <span style="position:absolute;left:200px;top:150px;transform:rotate(4deg);padding:12px 24px;border-radius:16px;background:#fff;color:${INK};font-size:36px;font-weight:900">Sobra quanto? 🤔</span>`,
+        }),
+      () =>
+        porque({
+          frase: 'Muita gente põe o preço <em>de olho.</em>',
+          apoio: 'Olha o vizinho, arredonda e torce. Sem saber quanto custa cada item, a marmita pode vender muito e sobrar pouco no fim do mês.',
+          cena: `<div style="position:absolute;left:150px;top:40px;width:780px">${conta([['Frango', '?'], ['Arroz e feijão', '?'], ['Embalagem', '?'], ['Taxa do app', '?']], { total: '???', ruim: true })}</div>`,
+        }),
+      () =>
+        passo4({
+          n: 1,
+          titulo: 'Pese cada item <em>uma vez.</em>',
+          texto: 'Monte uma marmita e anote quanto vai de cada coisa: frango, arroz, feijão, salada, farofa. Pese cru, que é como você compra.',
+          cena: conta([['Frango (cru)', '150 g', INK], ['Arroz (cru)', '70 g', INK], ['Feijão (cru)', '40 g', INK], ['Salada e farofa', '60 g', INK]], { titulo: 'O que vai em 1 marmita' }),
+        }),
+      () =>
+        passo4({
+          n: 2,
+          titulo: 'Multiplique pelo <em>preço do quilo.</em>',
+          texto: 'Peso em kg × preço do kg = custo do item. Depois some a embalagem, o talher e a sacola.',
+          cena: `<div class="card" style="padding:34px 36px;text-align:center"><div style="font-size:30px;font-weight:700;color:#6b7588">Exemplo do frango</div><div style="margin-top:14px;font-size:64px;font-weight:900;color:${INK};letter-spacing:-.02em">0,150 kg × R$ 22,00</div><div style="margin-top:8px;font-size:84px;font-weight:900;color:${BLUE}">= R$ 3,30</div><div style="margin-top:14px;font-size:24px;font-weight:700;color:#8a93a3">valores de exemplo: use os preços da sua última compra</div></div>`,
+        }),
+      () =>
+        passo4({
+          n: 3,
+          titulo: 'Divida as <em>contas do mês.</em>',
+          texto: 'Some gás, luz, água, salários (inclusive o seu) e aluguel. Divida pelas marmitas que você vende no mês.',
+          cena: conta([['Gás, luz e água', 'R$ 1.200'], ['Salários e encargos', 'R$ 3.600'], ['Aluguel', 'R$ 1.440'], ['÷ 1.200 marmitas no mês', '= R$ 5,20', BLUE]], { titulo: 'Contas do mês' }),
+        }),
+      () =>
+        passo4({
+          n: 4,
+          titulo: 'Desconte imposto <em>e taxas.</em>',
+          texto: 'Imposto e taxa do app saem em % do preço. O que sobra depois de tudo é o seu.',
+          cena: `${conta([['Ingredientes e embalagem', '− R$ 6,70'], ['Contas do mês (por marmita)', '− R$ 5,20'], ['Imposto (exemplo: 6%)', '− R$ 1,32'], ['Taxa do app (exemplo: 26,2%)', '− R$ 5,76']], { total: 'R$ 3,02', ruim: true, titulo: 'Marmita de R$ 22 no app' })}<p class="p" style="margin-top:14px;font-size:21px;color:#c6cede">Taxa de exemplo: 23% de comissão + 3,2% de pagamento online, plano com entrega de app grande (tabela pública conferida em 18/11/2026). Confira o seu plano.</p>`,
+        }),
+      ({ tema }) =>
+        resumo({
+          titulo: 'Salva: a ficha técnica <em>em 4 passos</em>',
+          itens: [
+            ['Pese cada item', 'de uma marmita, cru.'],
+            ['Peso × preço do kg,', 'e some a embalagem.'],
+            ['Contas do mês ÷ marmitas', 'vendidas no mês.'],
+            ['Desconte imposto e taxas.', 'O que sobra é o seu.'],
+          ],
+          tema,
+        }),
+      () =>
+        `<h2 class="h" style="font-size:92px;margin-top:10px">Quer a planilha que <em>faz a conta sozinha?</em></h2>
+         <p class="p" style="margin-top:30px;max-width:900px">Você preenche com os seus números e ela mostra quanto sobra por marmita, por dia e por mês, no app e no pedido direto.</p>
+         <div style="margin-top:50px;display:flex;align-items:center;gap:22px">
+           <span style="font-size:44px;font-weight:900;color:#fff">Comenta</span>
+           <span style="display:inline-flex;align-items:center;height:110px;padding:0 46px;border-radius:999px;background:#fff;color:${BLUE};font-size:60px;font-weight:900;box-shadow:0 30px 60px -24px rgba(0,0,0,.45)">MARGEM</span></div>
+         <p class="p" style="margin-top:26px;font-size:32px">que a Growlift te manda grátis.</p>
+         <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap">${['Grátis', 'Pra todo mundo que comentar', 'Sem sorteio'].map((x) => `<span class="chip">${x}</span>`).join('')}</div>
+         <div style="position:absolute;right:-40px;bottom:-20px">${marmitaSvg(420)}</div>`,
+    ],
+    legenda: `Sua marmita custa quanto, de verdade? 🍱 Salva pra fazer a conta com calma.
+
+A ficha técnica em 4 passos:
+1. Pese cada item de uma marmita (cru, que é como você compra).
+2. Multiplique pelo preço do quilo e some embalagem, talher e sacola.
+3. Some as contas do mês (gás, luz, água, salários, inclusive o seu, e aluguel) e divida pelas marmitas vendidas no mês.
+4. Desconte imposto e taxas, que saem em % do preço. O que sobra é o seu.
+
+Os números dos slides são exemplo (taxa de exemplo de 26,2%: 23% de comissão + 3,2% de pagamento online de um plano com entrega de app grande, tabela pública conferida em 18/11/2026). Refaça com os seus.
+
+Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozinha. Vale pra todo mundo que comentar, sem sorteio.
+
+#marmita #fichatecnica #restaurante #delivery #precificacao`,
+    alt: 'Carrossel sobre a ficha técnica da marmita: capa com uma marmita de R$ 22 e a pergunta "Sua marmita custa quanto, de verdade?"; preço posto "de olho"; quatro passos com exemplos (pesar cada item, peso vezes preço do quilo, dividir as contas do mês pelas marmitas, descontar imposto e taxas, sobrando R$ 3,02 no exemplo); resumo para salvar e o convite "Comenta MARGEM" para receber a planilha grátis.',
   },
 ];
 
