@@ -25,6 +25,16 @@ Tudo mora em `growlift-social/` e aparece no painel (`/painel/conteudos`) depois
 - **Só português do Brasil:** narração e textos sempre em português brasileiro. Nenhuma voz com sotaque de Portugal (as vozes prontas da ElevenLabs costumam soar portuguesas: os sócios já reprovaram). Antes de narrar um Reel, gere uma amostra curta com a voz escolhida e mande para os sócios ouvirem; só narre o Reel depois do "ok" deles.
 - **Nada é publicado** no Instagram nem no WhatsApp: vocês entregam a peça, quem aprova e posta são eles.
 
+## Gancho forte nos 3 primeiros segundos (todo Reel e todo anúncio)
+
+Pedido do Antônio (18/11): sem gancho forte, o resto do vídeo não importa.
+- **Abra com uma pergunta firme ou uma afirmação curiosa**, falada pela voz já na primeira palavra e escrita em letra grande na tela (ex.: "O que acontece se você gritar no espaço?", Reel 28). Nada de logo, apresentação ou "olá" antes.
+- **A imagem já responde no primeiro quadro:** a cena começa em movimento, mostrando o assunto da pergunta.
+- **A voz precisa soar viva:** tom de conversa, sem leitura robótica. Na ElevenLabs, estabilidade baixa (0,2 a 0,3) e texto com pausa e pergunta. Os sócios querem uma voz o mais humana possível (clonar só voz de quem autorizou por escrito, ex.: o Lucas).
+- **Gancho de curiosidade** (Reels orgânicos): um fato curioso e verdadeiro, com fonte, que vira metáfora do negócio. Sempre entregue a resposta antes de virar para a Growlift, senão a pessoa se sente enganada.
+- **Em anúncio**, a curiosidade fica ligada ao problema de quem compra (ex.: "O que acontece com a mensagem que chega na sua clínica às 23h?"), para não atrair só curioso.
+- Nunca afirme fato sobre o negócio de quem assiste ("você perde clientes"): use pergunta ou hipótese.
+
 ## Como produzir
 
 - **Imagens** (story 1080×1920, post 1080×1350): modelos em `_fonte/pecas.mjs`, textos em `_fonte/gerar.mjs`. Rode `node growlift-social/_fonte/gerar.mjs` e confira as imagens geradas.
