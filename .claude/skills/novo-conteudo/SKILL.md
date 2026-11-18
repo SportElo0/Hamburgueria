@@ -35,6 +35,13 @@ Pedido do Antônio (18/11): sem gancho forte, o resto do vídeo não importa.
 - **Em anúncio**, a curiosidade fica ligada ao problema de quem compra (ex.: "O que acontece com a mensagem que chega na sua clínica às 23h?"), para não atrair só curioso.
 - Nunca afirme fato sobre o negócio de quem assiste ("você perde clientes"): use pergunta ou hipótese.
 
+## Final dos Reels: "Comenta PALAVRA e ganha…" (pedido do Antônio, 18/11)
+
+- No fim dos Reels orgânicos, prefira oferecer um **presente gratuito** a quem comentar ("Comenta MARGEM que eu te mando a planilha grátis") em vez de "quer ver a demonstração?".
+- **O presente precisa existir antes do Reel ir ao ar** (PDF, planilha, checklist em `growlift-social/`), e o ManyChat precisa entregá-lo pela palavra, testado. Nada prometido que não esteja pronto.
+- Vai para **todos** que comentarem, sem sorteio, sem exigir seguir, marcar amigo ou comprar. A mensagem do ManyChat fala como "Growlift"/"a gente", sem "mensagem automática", com opção SAIR; comentar não põe ninguém em lista de campanha.
+- Anúncios continuam com o botão do WhatsApp (o "comenta" não funciona em anúncio).
+
 ## Como produzir
 
 - **Imagens** (story 1080×1920, post 1080×1350): modelos em `_fonte/pecas.mjs`, textos em `_fonte/gerar.mjs`. Rode `node growlift-social/_fonte/gerar.mjs` e confira as imagens geradas.
