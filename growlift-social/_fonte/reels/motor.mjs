@@ -34,7 +34,10 @@ export const tmpDir = (name) => {
 function encode(framesDir, out) {
   const r = spawnSync('ffmpeg', [
     '-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', path.join(framesDir, '%05d.jpg'),
-    '-c:v', 'libx264', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-crf', '21', '-preset', 'slow',
+    // High-quality master: Instagram re-encodes everything it receives, and a light source (the old CRF 21, ~2 Mbps)
+    // comes out blurry after that second compression. CRF 17 + tune animation, capped at 9 Mbps, 2 s keyframes.
+    '-c:v', 'libx264', '-profile:v', 'high', '-level', '4.1', '-pix_fmt', 'yuv420p', '-crf', '17', '-preset', 'slow', '-tune', 'animation',
+    '-maxrate', '9M', '-bufsize', '18M', '-g', '60', '-keyint_min', '30', '-x264-params', 'aq-mode=3',
     '-r', String(FPS), '-movflags', '+faststart', out,
   ], { stdio: 'inherit' });
   if (r.status !== 0) throw new Error(`ffmpeg falhou (${out})`);
@@ -53,7 +56,7 @@ export async function renderReel({ id, html, duration, cover, out }) {
   const frames = Math.round(duration * FPS);
   for (let i = 0; i < frames; i++) {
     await page.evaluate((t) => window.render(t), i / FPS);
-    await page.screenshot({ path: path.join(work, `${String(i).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 94 });
+    await page.screenshot({ path: path.join(work, `${String(i).padStart(5, '0')}.jpg`), type: 'jpeg', quality: 97 });
   }
   encode(work, `${out}.mp4`);
   await page.evaluate((t) => window.render(t), cover);
