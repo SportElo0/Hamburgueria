@@ -11,6 +11,8 @@ import { page, comentaBlock } from './base.mjs';
 
 export const DURATION = 44.2;
 export const COVER = 1.3;
+// Played at 1.2× (pedido do Antônio, 18/11): the timeline above stays in narration time.
+export const SPEED = 1.2;
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 

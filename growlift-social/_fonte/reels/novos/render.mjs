@@ -14,7 +14,11 @@ const NAMES = { 1: '01-quatro-negocios', 2: '02-a-confeitaria', 7: '07-quem-aten
 const id = process.argv[2];
 const stillArg = process.argv.indexOf('--still');
 const reel = await import(`./reel${id}.mjs`);
-const html = reel.html();
+// SPEED (e.g. 1.2): the whole reel plays faster. The timeline is sampled at t × SPEED, so every frame is still a
+// sharp render (no frame dropping), and the narration is sped up with atempo (same pitch).
+const SPEED = reel.SPEED || 1;
+const DUR = reel.DURATION / SPEED;
+const html = SPEED === 1 ? reel.html() : reel.html().replace('</body>', `<script>{const r=window.render;window.render=(t)=>r(t*${SPEED});}</script></body>`);
 
 if (stillArg > 0) {
   const times = process.argv[stillArg + 1].split(',').map(Number);
@@ -39,7 +43,7 @@ if (stillArg > 0) {
   const outDir = reel.OUT ? path.resolve(HERE, reel.OUT) : OUT;
   fs.mkdirSync(outDir, { recursive: true });
   const base = path.join(outDir, NAMES[id]);
-  await renderReel({ id: `reel-${id}`, html, duration: reel.DURATION, cover: reel.COVER, out: `${base}-mudo` });
+  await renderReel({ id: `reel-${id}`, html, duration: DUR, cover: reel.COVER / SPEED, out: `${base}-mudo` });
   await close();
   const voice = path.resolve(HERE, `../narracao-${id}-eleven.mp3`);
   if (!fs.existsSync(voice)) {
@@ -49,7 +53,7 @@ if (stillArg > 0) {
     process.exit(0);
   }
   // Narration on top, a short fade at the end; the silent version stays for posting with music.
-  const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}-mudo.mp4`, '-i', voice, '-filter_complex', `[1:a]apad,atrim=0:${reel.DURATION},afade=t=out:st=${reel.DURATION - 0.6}:d=0.6,loudnorm=I=-14:TP=-1.5:LRA=11[a]`, '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000', '-movflags', '+faststart', '-shortest', `${base}.mp4`], { stdio: 'inherit' });
+  const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}-mudo.mp4`, '-i', voice, '-filter_complex', `[1:a]${SPEED === 1 ? '' : `atempo=${SPEED},`}apad,atrim=0:${DUR},afade=t=out:st=${DUR - 0.6}:d=0.6,loudnorm=I=-14:TP=-1.5:LRA=11[a]`, '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000', '-movflags', '+faststart', '-shortest', `${base}.mp4`], { stdio: 'inherit' });
   if (r.status !== 0) throw new Error('ffmpeg (áudio) falhou');
   fs.renameSync(`${base}-mudo-capa.png`, `${base}-capa.png`);
   console.log(`${base}.mp4`);
