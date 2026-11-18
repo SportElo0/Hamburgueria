@@ -531,3 +531,24 @@ Animação com dados fictícios (Clínica Exemplo). Voz sintética (gerada por I
 Comenta AGENDA que a gente te mostra a demonstração 📩
 #growlift #clinica #curiosidades
 ```
+
+## 29. A conta da marmita (quadro "Quanto sobra?", episódio 1)
+- **Formato:** marmita de alumínio em 3D (`_fonte/reels/novos/diorama29.js`) numa plataforma com luz azul, no estilo do Reel da "jantinha" que o Antônio mandou (só a lógica da conta item por item; nada copiado). Gancho: "Marmita a R$ 22 no app?" em letra grande, etiqueta R$ 22,00. A comida sai da marmita ("bora fazer a conta") e volta item por item enquanto o cartão "A conta da marmita · valores de exemplo" desconta cada custo, com a seção "custos que muita gente esquece"; na taxa do app a luz fica vermelha e sobra R$ 3,02; quadro "40 marmitas × R$ 3,02 = R$ 120,80 pelo dia inteiro" com "resultado de exemplo, não é promessa de ganho"; depois "1. Ficha técnica" e "2. Pedido direto pelo seu site" (com a ressalva da mensalidade e das taxas); fim "Comenta MARGEM" e a planilha grátis. Em 1,2×, master em alta qualidade.
+- **Números (exemplo, R$ 22):** frango 3,30; arroz e feijão 0,80; salada e farofa 1,10; embalagem, talher e sacola 1,50; gás, luz e água 1,00; funcionário 3,00; aluguel 1,20; imposto 6% = 1,32; taxa do app 23% + 3,2% = 5,76 (página oficial de planos do iFood conferida em 18/11/2026; no vídeo só "app"). Sobra 3,02; × 40 = 120,80.
+- **Revisão legal (18/11), aplicada:** "Num exemplo, quase nada fica com você"; "custos que muita gente esquece"; "num plano com entrega, que cobra uns vinte e seis por cento"; "Neste exemplo, sobram uns três reais… dá uns cento e vinte reais"; "sem a Growlift cobrar comissão sobre o pedido" com a ressalva na tela; faixa "valores de exemplo" o cálculo todo; nota da taxa e do imposto; "a Growlift te manda grátis".
+- **Presente:** `10-presentes/planilha-quanto-sobra-na-marmita.xlsx` e a mensagem do ManyChat em `10-presentes/presentes.md`. **Só postar depois** de o link da planilha estar no ManyChat e testado.
+- **Narração (18/11, voz "Andre", ElevenLabs v4, estabilidade 0,25; `_fonte/reels/narracao-29-eleven.mp3`, 64,5 s, tocada em 1,2×).**
+
+**Legenda**
+```
+Marmita a R$ 22 no app: quanto sobra de verdade? 🍱
+
+Fizemos a conta com valores de exemplo (taxa de exemplo de 26,2%, de um plano com entrega de app grande de delivery, tabela pública conferida em 18/11/2026). Os seus custos podem ser outros.
+
+No exemplo, sobram uns R$ 3 por marmita. Refaça com os seus números.
+Pedido direto pelo seu site: a Growlift não cobra comissão sobre o pedido (mensalidade do plano e taxas de pagamento e entrega à parte).
+
+Comenta MARGEM e a Growlift te manda a planilha grátis. Sem sorteio: vai pra todo mundo que comentar.
+Voz sintética (gerada por IA).
+#marmita #restaurante #delivery
+```
