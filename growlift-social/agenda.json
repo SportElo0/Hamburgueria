@@ -807,6 +807,20 @@
    "ia": false,
    "palavra": "MARGEM",
    "chave": "09-carrosseis/carrosseis.md#sab-2111-ficha-tecnica-da-marmita-em-4-passos"
+  },
+  {
+   "id": "2026-11-22-reel-30",
+   "titulo": "Reel 30 · Quem acende o farol? 3D (Comenta FAROL)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/30-quem-acende-o-farol.mp4"
+   ],
+   "capa": "05-reels/30-quem-acende-o-farol-capa.png",
+   "legenda": "Quem acende o farol quando não há mais faroleiro? Ele acende sozinho. 🗼\nE a recepção da clínica, depois das 18h?\n\nNa demonstração da Growlift, a automação responde com as informações da clínica, oferece horários e reserva, pede o aceite do lembrete e avisa a equipe, que confirma o horário.\n\nFato: os últimos faroleiros da Trinity House, na Inglaterra, se despediram em 1998 (farol de North Foreland).\nClínica Exemplo, conversa e dados fictícios (projeto conceito). Animação 3D e voz sintética.\n\nQuer o checklist dos 7 pontos no WhatsApp da clínica? Comenta FAROL e a gente te manda, grátis. Vale pra todo mundo que comentar.\n#clinica #clinicaodontologica #atendimento #whatsapp #growlift",
+   "quando": "2026-11-22T19:00:00-03:00",
+   "ia": true,
+   "palavra": "FAROL",
+   "chave": "05-reels/roteiros.md#30-quem-acende-o-farol-gancho-de-curiosidade-automação-para-clínicas"
   }
  ]
 }

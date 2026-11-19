@@ -552,3 +552,24 @@ Comenta MARGEM e a Growlift te manda a planilha grátis. Sem sorteio: vai pra to
 Voz sintética (gerada por IA).
 #marmita #restaurante #delivery
 ```
+
+## 30. Quem acende o farol? (gancho de curiosidade, automação para clínicas)
+- **Formato:** mar à noite em 3D (`_fonte/reels/novos/diorama30.js`): farol listrado numa ilha, facho girando, lua, barquinhos, e uma clínica fictícia na praia ("Clínica Exemplo"). Gancho: "Quem acende o farol à noite, se não tem mais faroleiro?"; o facho apaga em "Ninguém" e volta em "Ele acende sozinho"; cartão "1998" com a fonte (Trinity House, North Foreland); a câmera vai para a clínica ("a recepção = o faroleiro"), as janelas apagam às 18h, a mensagem do paciente fica sem resposta; o facho fica azul e a conversa da demonstração mostra a assistente oferecendo 3 horários, reservando, pedindo o aceite do lembrete (SIM) e avisando a equipe. Fim "Comenta FAROL" e o checklist grátis. Em 1,2×, master em alta qualidade.
+- **Fato (conferido em 19/11/2026):** North Foreland foi o último farol da Trinity House a ser automatizado, em 26/11/1998; os últimos faroleiros saíram numa cerimônia e hoje ele é monitorado de Harwich (trinityhouse.co.uk). Houve farol de outra autoridade automatizado depois (Walney, 2003), por isso a fala diz "da Trinity House".
+- **Revisão legal (19/11), aplicada:** selo "Projeto conceito · dados fictícios" na conversa; "Reservei… A equipe da clínica confirma com você"; aceite do lembrete na tela; conversa só com horário; fonte do fato na tela; PDF com as ressalvas de CFO, 192 e LGPD.
+- **Presente:** `10-presentes/checklist-7-pontos-whatsapp-clinica.pdf` e a mensagem do ManyChat em `10-presentes/presentes.md`. Só postar depois de o link estar no ManyChat e testado.
+- **Narração (19/11, voz "Andre", ElevenLabs v4, estabilidade 0,25; `_fonte/reels/narracao-30-eleven.mp3`, 50,8 s, tocada em 1,2×).**
+
+**Legenda**
+```
+Quem acende o farol quando não há mais faroleiro? Ele acende sozinho. 🗼
+E a recepção da clínica, depois das 18h?
+
+Na demonstração da Growlift, a automação responde com as informações da clínica, oferece horários e reserva, pede o aceite do lembrete e avisa a equipe, que confirma o horário.
+
+Fato: os últimos faroleiros da Trinity House, na Inglaterra, se despediram em 1998 (farol de North Foreland).
+Clínica Exemplo, conversa e dados fictícios (projeto conceito). Animação 3D e voz sintética.
+
+Quer o checklist dos 7 pontos no WhatsApp da clínica? Comenta FAROL e a gente te manda, grátis. Vale pra todo mundo que comentar.
+#clinica #clinicaodontologica #atendimento #whatsapp #growlift
+```

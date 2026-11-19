@@ -20,3 +20,19 @@ Aqui está a planilha grátis pra fazer a conta da sua marmita: [LINK DA PLANILH
 
 Se quiser ajuda pra montar o pedido direto pelo site da sua loja, é só responder aqui. Se não quiser receber mais mensagens nossas, responda SAIR.
 ```
+
+## FAROL · Checklist "7 pontos onde a clínica perde paciente no WhatsApp"
+
+- **Arquivo:** `checklist-7-pontos-whatsapp-clinica.pdf` (2 páginas, A4; fonte em `_fonte/presentes/checklist-farol.html`, gerar com `node growlift-social/_fonte/presentes/pdf.cjs <html> <pdf>`).
+- **Usado no:** Reel 30, "Quem acende o farol?".
+- **O que tem:** 7 pontos com "como fechar" cada um (mensagem fora do horário, pico, valor e convênio, agendar em poucas mensagens, lembrete só para quem aceitou, ligação perdida, conversa sem responsável), cuidados (sem diagnóstico pelo WhatsApp, 192, LGPD art. 11, SAIR) e um convite discreto para a demonstração. Sem estatística. Revisão legal de 19/11 aplicada.
+- **Para entregar:** subir o PDF num link público e colar abaixo.
+
+**Mensagem do ManyChat (palavra FAROL)**
+```
+Oi! Aqui é da Growlift 👋 Valeu por comentar FAROL.
+
+Aqui está o checklist grátis com os 7 pontos onde a clínica perde paciente no WhatsApp (e como fechar cada um): [LINK DO PDF]
+
+Se quiser ver a demonstração da assistente funcionando, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
+```

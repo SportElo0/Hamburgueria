@@ -1,7 +1,9 @@
 {
   "detector": {
     "ignoreRules": [],
-    "ignoreFiles": [],
+    "ignoreFiles": [
+      "growlift-social/_fonte/presentes/checklist-farol.html"
+    ],
     "ignoreValues": [
       {
         "rule": "design-system-font",
