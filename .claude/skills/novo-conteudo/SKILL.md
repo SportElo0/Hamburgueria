@@ -37,6 +37,7 @@ Pedido do Antônio (18/11): sem gancho forte, o resto do vídeo não importa.
 
 ## Final dos Reels: "Comenta PALAVRA e ganha…" (pedido do Antônio, 18/11)
 
+- **Todo Reel termina pedindo para seguir:** na tela, o botão "＋ Seguir @growlift.ai" e "Segue e comenta PALAVRA" (já está no `comentaBlock` de `_fonte/reels/novos/base.mjs`), e na narração "Segue a Growlift e comenta PALAVRA…". O presente continua indo para todo mundo que comentar, siga ou não: seguir é um pedido, nunca condição.
 - No fim dos Reels orgânicos, prefira oferecer um **presente gratuito** a quem comentar ("Comenta MARGEM que eu te mando a planilha grátis") em vez de "quer ver a demonstração?".
 - **O presente precisa existir antes do Reel ir ao ar** (PDF, planilha, checklist em `growlift-social/`), e o ManyChat precisa entregá-lo pela palavra, testado. Nada prometido que não esteja pronto.
 - Vai para **todos** que comentarem, sem sorteio, sem exigir seguir, marcar amigo ou comprar. A mensagem do ManyChat fala como "Growlift"/"a gente", sem "mensagem automática", com opção SAIR; comentar não põe ninguém em lista de campanha.
