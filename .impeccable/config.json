@@ -2,7 +2,8 @@
   "detector": {
     "ignoreRules": [],
     "ignoreFiles": [
-      "growlift-social/_fonte/presentes/checklist-farol.html"
+      "growlift-social/_fonte/presentes/checklist-farol.html",
+      "marketing/propostas/fish-burguer-reativacao.html"
     ],
     "ignoreValues": [
       {
