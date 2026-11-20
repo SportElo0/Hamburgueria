@@ -360,7 +360,7 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
             {demo && (
               <div className="card mt-3 flex flex-wrap items-center justify-between gap-3 border-ok/30 bg-ok/5 p-4">
                 <p className="max-w-md text-sm text-ink-soft">
-                  <b className="text-ink">Mandar para todos de uma vez.</b> Com o WhatsApp oficial da loja ligado, sai tudo num toque (a Meta cobra um valor por mensagem, pago pela loja).
+                  <b className="text-ink">Mandar para todos de uma vez.</b> Com o WhatsApp oficial da loja ligado, sai tudo num toque.
                 </p>
                 <button type="button" className="btn min-h-11 bg-ok px-5 font-semibold text-white hover:bg-ok/90" onClick={enviarTodos}>
                   Enviar para todos ({daVez.length})
