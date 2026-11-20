@@ -151,11 +151,45 @@ export const LINHA_SAIR = 'Para não receber mais promoções, responda SAIR.';
 /** A message without AI: the store's own offer, honest, with the stop line. */
 export function mensagemModelo(loja: string, oferta: string) {
   const o = oferta.trim().replace(/\s+/g, ' ');
-  return `Oi! Aqui é do ${loja}. Faz tempo que você não pede com a gente${o ? `: ${o.charAt(0).toLowerCase()}${o.slice(1).replace(/[.!]?$/, '.')}` : '. Bateu saudade? Estamos te esperando!'}\n\n${LINHA_SAIR}`;
+  return `Oi! Aqui é do ${loja}. Faz tempo que você não pede com a gente${o ? `: ${/^\p{Lu}\p{Ll}/u.test(o) ? o.charAt(0).toLowerCase() + o.slice(1) : o}`.replace(/[.!]?$/, '.') : '. Bateu saudade? Estamos te esperando!'}\n\n${LINHA_SAIR}`;
 }
 
 /** Makes sure the stop line is there (and only once). */
 export function comLinhaSair(texto: string) {
   const sem = texto.replace(/\n*\s*para n[aã]o receber mais[^\n]*$/i, '').trim();
   return `${sem}\n\n${LINHA_SAIR}`;
+}
+
+/** One line of the store's customer list (the "Clientes" screen of the app). */
+export interface LinhaCrm {
+  phone: string;
+  name: string;
+  orders: number;
+  diasParado: number;
+  /** Last time a campaign link was opened for them (ISO), or null. */
+  chamadoEm: string | null;
+  saiu: boolean;
+}
+
+/** Every imported customer with today's days stopped and the campaign status, most orders first. */
+export function linhasDoCrm(clientes: readonly Importado[], f: { importadoEm: string; agora?: Date; optOuts?: readonly string[]; enviados?: Readonly<Record<string, string>> }): LinhaCrm[] {
+  const agora = f.agora ?? new Date();
+  const desde = dias(f.importadoEm, agora);
+  const fora = new Set(f.optOuts ?? []);
+  const enviados = f.enviados ?? {};
+  return clientes
+    .map((c) => ({ phone: c.phone, name: c.name, orders: c.orders, diasParado: c.inactiveDays + desde, chamadoEm: enviados[c.phone] ?? null, saiu: fora.has(c.phone) }))
+    .sort((a, b) => b.orders - a.orders || a.diasParado - b.diasParado);
+}
+
+/** Spreadsheet-safe CSV (";" for Excel in Portuguese, BOM, no formulas from names). */
+export function csvDoCrm(linhas: readonly LinhaCrm[]) {
+  const cell = (v: string | number) => {
+    let s = String(v);
+    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+    return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const head = ['Nome', 'Celular', 'Pedidos', 'Dias sem pedir', 'Último torpedo', 'Pediu para sair'];
+  const body = linhas.map((l) => [l.name, l.phone, l.orders, l.diasParado, l.chamadoEm ? l.chamadoEm.slice(0, 10) : '', l.saiu ? 'sim' : ''].map(cell).join(';'));
+  return `﻿${[head.join(';'), ...body].join('\r\n')}\r\n`;
 }

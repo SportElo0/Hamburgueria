@@ -24,7 +24,7 @@ function Svg({ name }: { name: Icon }) {
 }
 
 /** The dark bar of the owner's panel. On a narrow screen it becomes a bar on top with the sections side by side. */
-export function DonoNav(props: { slug: string; storeName: string; logo: string; userName: string; team: boolean; tables: boolean; produto: 'completo' | 'conselheiro'; logout: () => Promise<void> }) {
+export function DonoNav(props: { slug: string; storeName: string; logo: string; userName: string; team: boolean; tables: boolean; produto: 'completo' | 'conselheiro' | 'sob-medida'; logout: () => Promise<void> }) {
   const path = usePathname();
   const base = `/loja/${props.slug}/dono`;
   const soConselheiro = props.produto === 'conselheiro';

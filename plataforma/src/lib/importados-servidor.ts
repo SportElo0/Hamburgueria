@@ -9,7 +9,8 @@ import { DIAS_ENTRE_ENVIOS, comLinhaSair, mensagemModelo, type Importado } from 
  *   clientes/<slug>/importados.json   the last import (who, when, the store's consent statement, the customers)
  *   clientes/<slug>/enviados.json     phone → when the campaign link was last opened for them
  * Opt-outs ("SAIR") stay in the existing clientes/<slug>/descadastro.json, shared with the site's customers.
- * A new import replaces the old one; "Apagar lista" deletes both files.
+ * A new import replaces the old one; "Apagar lista" deletes the list (names) but keeps enviados.json (phone → date only),
+ * so deleting and importing again never lets anyone get two campaigns in 30 days.
  */
 
 export interface Importacao {
@@ -20,7 +21,7 @@ export interface Importacao {
   clientes: Importado[];
 }
 
-export const TEXTO_ACEITE = 'Confirmo que todos os clientes desta lista aceitaram receber ofertas da loja pelo WhatsApp, e que a loja guarda a prova desse aceite.';
+export const TEXTO_ACEITE = 'Confirmo que cada cliente desta lista disse que quer receber ofertas desta loja pelo WhatsApp (por exemplo, marcou isso ao pedir ou me autorizou). Se não tenho certeza de algum, não o coloquei na lista. Guardo a prova disso e sou o responsável pelos dados.';
 
 const kImport = (slug: string) => `clientes/${slug}/importados.json`;
 const kEnviados = (slug: string) => `clientes/${slug}/enviados.json`;
@@ -36,7 +37,6 @@ export async function saveImportacao(slug: string, imp: Importacao) {
 export async function apagarImportacao(slug: string) {
   // Missing files are not an error in any backend; a real failure must reach the owner (LGPD: "apagar" has to mean it).
   await storage().remove(kImport(slug));
-  await storage().remove(kEnviados(slug));
 }
 
 export async function getEnviados(slug: string): Promise<Record<string, string>> {

@@ -17,20 +17,12 @@ export default async function PainelLayout({ children }: { children: React.React
         {/* Phones: the section links take a second row instead of pushing the page wider. */}
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-1 px-4 py-2 sm:h-14 sm:flex-nowrap sm:py-0">
           <Link href="/painel" className="text-[15px] font-bold">
-            Painel das lojas
+            Painel Growlift
           </Link>
           <nav className="order-last flex w-full items-center gap-5 overflow-x-auto pb-1 whitespace-nowrap sm:order-none sm:w-auto sm:flex-1 sm:pb-0">
-            <Link href="/painel/cadastros" className="text-sm text-ink-mute hover:text-ink">
-              Cadastros
-            </Link>
-            <Link href="/painel/relatorios" className="text-sm text-ink-mute hover:text-ink">
-              Dados p/ Claude
-            </Link>
-            <Link href="/painel/inteligencia" className="text-sm text-ink-mute hover:text-ink">
-              Inteligência
-            </Link>
-            <Link href="/painel/indicacoes" className="text-sm text-ink-mute hover:text-ink">
-              Indicações
+            {/* Growlift's own panel: stores (and their apps), site leads, content and sales. The other screens still open by address. */}
+            <Link href="/painel" className="text-sm text-ink-mute hover:text-ink">
+              Lojas
             </Link>
             <DiagnosticosNav initial={novos} />
             <Link href="/painel/conteudos" className="text-sm text-ink-mute hover:text-ink">

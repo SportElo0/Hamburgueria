@@ -12,7 +12,7 @@ import { getSecrets } from '@/lib/pix';
 import { orderingOf } from '@/lib/ordering';
 import { getOperation } from '@/lib/orders';
 import { recentSends, saiposReady } from '@/lib/pdv';
-import { NOME_PRODUTO, PRODUTOS, produtoDa } from '@/lib/produto';
+import { MODULOS, NOME_MODULO, NOME_PRODUTO, PRODUTOS, modulosDa, produtoDa } from '@/lib/produto';
 import { produtoContratadoAction } from './produto-actions';
 
 const PAYMENT_HISTORY_MONTHS = 6;
@@ -77,8 +77,25 @@ export default async function LojaPage({
             ))}
           </select>
         </div>
+        <fieldset className="text-sm">
+          <legend className="label">Módulos do app sob medida</legend>
+          {MODULOS.map((m) => (
+            <label key={m} className="mt-1 flex items-center gap-2">
+              <input type="checkbox" name="modulos" value={m} defaultChecked={modulosDa(draft.data.store).includes(m)} className="h-4 w-4" />
+              {NOME_MODULO[m]}
+            </label>
+          ))}
+        </fieldset>
         <button type="submit" className="btn-ghost">Salvar</button>
-        <p className="max-w-md text-xs text-ink-mute">&quot;Só Conselheiro&quot; esconde do dono mesas, pedidos, equipe e clientes: o painel dele abre na conversa do Conselheiro e na sobremesa 3D. Recarregue esta página antes de salvar outras mudanças da loja.</p>
+        <p className="max-w-md text-xs text-ink-mute">
+          &quot;Só Conselheiro&quot; esconde do dono mesas, pedidos, equipe e clientes. &quot;App sob medida&quot;: o dono entra direto no app da loja, só com os módulos marcados
+          {produtoDa(draft.data.store) === 'sob-medida' && (
+            <>
+              {' '}(<Link href={`/loja/${slug}/app`} className="underline">abrir o app</Link>)
+            </>
+          )}
+          . Recarregue esta página antes de salvar outras mudanças da loja.
+        </p>
       </form>
       <StoreEditor
         record={record}

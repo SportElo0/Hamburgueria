@@ -73,7 +73,7 @@ export function ReativarClientes(props: { slug: string; storeName: string; ia: b
   };
 
   const apagar = () => {
-    if (!confirm('Apagar a lista importada? Os clientes somem do painel (a planilha no Anota Aí continua lá).')) return;
+    if (!confirm('Apagar a lista importada? Os nomes saem, mas guardamos a data do último torpedo e quem pediu para sair, para ninguém receber duas vezes.')) return;
     start(async () => {
       const res = await apagarImportadosAction(props.slug);
       if (!res.ok) return setErro(res.error ?? 'Não foi possível apagar.');
@@ -151,7 +151,7 @@ export function ReativarClientes(props: { slug: string; storeName: string; ia: b
               </p>
               <label className="flex items-start gap-3 text-sm">
                 <input type="checkbox" className="mt-1 h-5 w-5" checked={aceite} onChange={(e) => setAceite(e.target.checked)} />
-                <span>Confirmo que todos os clientes desta lista aceitaram receber ofertas da loja pelo WhatsApp, e que a loja guarda a prova desse aceite.</span>
+                <span>Confirmo que cada cliente desta lista disse que quer receber ofertas desta loja pelo WhatsApp (por exemplo, marcou isso ao pedir ou me autorizou). Se não tenho certeza de algum, não o coloquei na lista. Guardo a prova disso e sou o responsável pelos dados.</span>
               </label>
               <button type="button" className="btn-primary min-h-11" onClick={importar} disabled={!aceite || pending}>
                 {pending ? 'Importando…' : `Importar ${lidos.clientes.length} clientes`}

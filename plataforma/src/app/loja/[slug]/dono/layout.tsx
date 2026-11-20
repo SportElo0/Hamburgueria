@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { getDraft } from '@/lib/stores';
 import { orderingOf } from '@/lib/ordering';
@@ -17,6 +17,8 @@ export default async function DonoLayout({ children, params }: { children: React
   const user = await requireStoreAccess(slug, DONO);
   const draft = await getDraft(slug);
   if (!draft) notFound();
+  // An "App sob medida" has no owner's panel: everything the store bought lives in /loja/<slug>/app.
+  if (produtoDa(draft.data.store) === 'sob-medida') redirect(`/loja/${slug}/app`);
   const o = orderingOf(draft.data.store);
   const logo = typeof draft.data.store.extra.logo === 'string' && draft.data.store.extra.logo.startsWith('/api/midia/') ? draft.data.store.extra.logo : '';
   return (

@@ -1,4 +1,5 @@
 import 'server-only';
+import type { Modulo, Produto } from './produto';
 import { after } from 'next/server';
 import { storage, ConflictError } from './storage';
 import { monthKey, nextIsExtra } from './changes';
@@ -227,9 +228,10 @@ async function ownerLog(slug: string, description: string, by: string) {
 }
 
 /** A equipe escolhe o produto contratado (ver produto.ts). Muda o rascunho e o publicado; não mexe em nada mais. */
-export async function setProdutoContratado(slug: string, produto: 'completo' | 'conselheiro', by: string) {
-  await updateBoth(slug, by, (store) => ({ ...store, extra: { ...store.extra, produto } }));
-  await logChange(slug, { description: `Produto contratado: ${produto === 'conselheiro' ? 'só Conselheiro + sobremesa 3D' : 'sistema completo'}`, counted: false, reason: 'Equipe' }, by);
+export async function setProdutoContratado(slug: string, produto: Produto, by: string, modulos: Modulo[] = []) {
+  await updateBoth(slug, by, (store) => ({ ...store, extra: { ...store.extra, produto, modulos } }));
+  const desc = produto === 'conselheiro' ? 'só Conselheiro + sobremesa 3D' : produto === 'sob-medida' ? `app sob medida (${modulos.join(', ') || 'sem módulos'})` : 'sistema completo';
+  await logChange(slug, { description: `Produto contratado: ${desc}`, counted: false, reason: 'Equipe' }, by);
 }
 
 /** The owner says how many tables the restaurant has (1 to 200), never fewer than a table open right now. */
