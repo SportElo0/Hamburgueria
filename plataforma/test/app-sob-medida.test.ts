@@ -77,3 +77,31 @@ describe('torpedo com IA', () => {
     expect(r.ok).toBe(false);
   });
 });
+
+describe('demonstração', async () => {
+  const { DEMOS, clientesDemo, iaSimulada } = await import('@/lib/demo-app');
+  const { celularBR } = await import('@/lib/importados');
+  const demo = DEMOS['fish-burguer'];
+
+  it('makes the same made-up customers every time, with valid but fake phones', () => {
+    const a = clientesDemo();
+    expect(a).toEqual(clientesDemo());
+    expect(new Set(a.map((c) => c.phone)).size).toBe(a.length);
+    expect(a.every((c) => celularBR(c.phone) === c.phone && c.phone.startsWith('1290000'))).toBe(true);
+  });
+
+  it('asks what is missing and never invents the offer', () => {
+    const f = (...t: string[]) => t.flatMap((texto, i) => (i ? [{ quem: 'ia' as const, texto: '?' }, { quem: 'dono' as const, texto }] : [{ quem: 'dono' as const, texto }]));
+    expect(iaSimulada(f('o bacon não está saindo, quero fazer promoção'), demo)).toMatchObject({ mensagem: null, resposta: expect.stringMatching(/Por quanto/) });
+    expect(iaSimulada(f('o bacon não está saindo', 'R$ 25'), demo).resposta).toMatch(/até quando/);
+    expect(iaSimulada(f('o bacon não está saindo', 'R$ 25 hoje e amanhã'), demo).resposta).toMatch(/delivery/);
+    const pronta = iaSimulada(f('o bacon não está saindo', 'R$ 25 hoje e amanhã', 'delivery'), demo);
+    expect(pronta.mensagem).toBe(`Oi! Aqui é do Fish Burguer 🍔 Hoje e amanhã, o X-Bacon sai por R$ 25 no delivery. Bora matar a vontade?\n\n${LINHA_SAIR}`);
+  });
+
+  it('writes a "we miss you" message without any discount', () => {
+    const r = iaSimulada([{ quem: 'dono', texto: 'Quero chamar de volta quem sumiu, sem desconto' }], demo);
+    expect(r.mensagem).toMatch(/Fish Burguer/);
+    expect(r.mensagem).not.toMatch(/R\$|desconto|%/);
+  });
+});

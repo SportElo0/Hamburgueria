@@ -7,7 +7,17 @@ import { LINHA_SAIR, comLinhaSair, mensagemModelo, type Escolhido } from '@/lib/
 import { marcarEnviadoAction } from '@/app/loja/[slug]/dono/clientes/actions';
 import { setOptOutAction } from '@/app/loja/[slug]/actions';
 import { apagarPlanoAction, conversarAction, salvarPlanoAction } from '@/app/loja/[slug]/app/actions';
-import type { Fala, PlanoTorpedo } from '@/lib/torpedo-servidor';
+import type { Fala, PlanoTorpedo, RespostaTorpedo } from '@/lib/torpedo-servidor';
+
+/** The demo runs everything in the browser: simulated AI, nothing saved, WhatsApp never opened. */
+export interface DemoTorpedo {
+  conversar: (falas: Fala[]) => Promise<RespostaTorpedo>;
+  salvar: (plano: { mensagem: string; dia: string; quantos: number }) => void;
+  apagar: () => void;
+  enviado: (phone: string) => void;
+  sair: (phone: string) => void;
+  irClientes: () => void;
+}
 
 const fmtPhone = (p: string) => `(${p.slice(0, 2)}) ${p.slice(2, 7)}-${p.slice(7)}`;
 const fmtDiaLongo = (dia: string) => new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC', weekday: 'long', day: '2-digit', month: '2-digit' }).format(new Date(`${dia}T12:00:00Z`));
@@ -15,7 +25,8 @@ const QUANTOS = [25, 50, 100] as const;
 const SUGESTOES = ['Quero fazer uma promoção de um lanche que não está saindo', 'Quero chamar de volta quem sumiu, sem desconto', 'Quero divulgar um combo para o fim de semana'];
 
 /** Plan the next WhatsApp campaign with the AI, save it for a day and send it one by one from the owner's phone. */
-export function Torpedo(props: { slug: string; storeName: string; ia: boolean; hoje: string; plano: PlanoTorpedo | null; escolhidos: Escolhido[]; temLista: boolean; clientes: boolean }) {
+export function Torpedo(props: { slug: string; storeName: string; ia: boolean; hoje: string; plano: PlanoTorpedo | null; escolhidos: Escolhido[]; temLista: boolean; clientes: boolean; demo?: DemoTorpedo }) {
+  const demo = props.demo;
   const router = useRouter();
   const [pending, start] = useTransition();
   const [pensando, setPensando] = useState(false);
@@ -61,7 +72,7 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
     setTexto('');
     setPensando(true);
     start(async () => {
-      const res = await conversarAction(props.slug, novas);
+      const res = demo ? await demo.conversar(novas) : await conversarAction(props.slug, novas);
       setPensando(false);
       if (!res.ok) {
         setErro(res.error);
@@ -77,17 +88,31 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
 
   const salvar = () => {
     setErro('');
+    const pronto = () => {
+      setSalvo(true);
+      setAviso(dia === props.hoje ? 'Torpedo salvo para hoje. Já pode enviar aqui embaixo.' : `Torpedo salvo para ${fmtDiaLongo(dia)}. No dia, abra esta tela e toque em Enviar.`);
+    };
+    if (demo) {
+      demo.salvar({ mensagem, dia, quantos });
+      return pronto();
+    }
     start(async () => {
       const res = await salvarPlanoAction(props.slug, { mensagem, dia, quantos });
       if (!res.ok) return setErro(res.error ?? 'Não foi possível salvar.');
-      setSalvo(true);
-      setAviso(dia === props.hoje ? 'Torpedo salvo para hoje. Já pode enviar aqui embaixo.' : `Torpedo salvo para ${fmtDiaLongo(dia)}. No dia, abra esta tela e toque em Enviar.`);
+      pronto();
       router.refresh();
     });
   };
 
   const apagar = () => {
     if (!confirm('Apagar o torpedo planejado?')) return;
+    if (demo) {
+      demo.apagar();
+      setMensagem('');
+      setSalvo(false);
+      setAviso('');
+      return;
+    }
     start(async () => {
       const res = await apagarPlanoAction(props.slug);
       if (!res.ok) return setErro(res.error ?? 'Não foi possível apagar.');
@@ -101,6 +126,7 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
   const enviado = (c: Escolhido) => {
     setLista((l) => l.filter((x) => x.phone !== c.phone));
     setEnviadosAgora((n) => n + 1);
+    if (demo) return demo.enviado(c.phone);
     start(async () => {
       const res = await marcarEnviadoAction(props.slug, c.phone).catch(() => ({ ok: false, error: '' }));
       if (!res.ok) setErro(`Não consegui anotar o envio para ${c.name}. Confira a internet: sem a anotação, essa pessoa pode aparecer de novo antes de 30 dias.`);
@@ -109,6 +135,7 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
 
   const saiu = (c: Escolhido) => {
     setLista((l) => l.filter((x) => x.phone !== c.phone));
+    if (demo) return demo.sair(c.phone);
     start(async () => {
       const res = await setOptOutAction(props.slug, c.phone, true);
       if (!res.ok) setErro(res.error ?? 'Não foi possível salvar.');
@@ -119,11 +146,16 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
     return (
       <div className="card p-5 text-sm">
         <p className="font-semibold">Primeiro, traga seus clientes do Anota Aí.</p>
-        {props.clientes && (
-          <Link href={`/loja/${props.slug}/app`} className="btn-primary mt-3 min-h-11">
-            Ir para Clientes
-          </Link>
-        )}
+        {props.clientes &&
+          (demo ? (
+            <button type="button" onClick={demo.irClientes} className="btn-primary mt-3 min-h-11">
+              Ir para Clientes
+            </button>
+          ) : (
+            <Link href={`/loja/${props.slug}/app`} className="btn-primary mt-3 min-h-11">
+              Ir para Clientes
+            </Link>
+          ))}
       </div>
     );
 
@@ -300,7 +332,7 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
           <h2 id="quem" className="text-lg font-bold">
             Quem vai receber
           </h2>
-          {enviadosAgora > 0 && <p className="text-sm font-semibold text-ok tabular-nums">{enviadosAgora} enviados agora</p>}
+          {enviadosAgora > 0 && <p className="text-sm font-semibold text-ok tabular-nums">{enviadosAgora} {demo ? 'enviados (simulação)' : 'enviados agora'}</p>}
         </div>
         <p className="text-sm text-ink-mute">Os que mais pediram e estão parados há um tempo (o melhor é de 1 a 4 meses). Quem pediu SAIR ou já recebeu nos últimos 30 dias fica de fora.</p>
         <p className="mt-1 text-sm font-semibold text-ink-soft">Se alguém responder SAIR, PARAR ou algo parecido, toque em “Pediu para sair” na hora. Mandar de novo depois disso não pode.</p>
@@ -322,15 +354,21 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <a
-                    className="btn min-h-10 border border-ok/40 bg-ok/5 px-4 text-ok hover:bg-ok hover:text-white"
-                    href={`https://wa.me/55${c.phone}?text=${encodeURIComponent(mensagem)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => enviado(c)}
-                  >
-                    Enviar
-                  </a>
+                  {demo ? (
+                    <button type="button" className="btn min-h-10 border border-ok/40 bg-ok/5 px-4 text-ok hover:bg-ok hover:text-white" onClick={() => enviado(c)}>
+                      Enviar
+                    </button>
+                  ) : (
+                    <a
+                      className="btn min-h-10 border border-ok/40 bg-ok/5 px-4 text-ok hover:bg-ok hover:text-white"
+                      href={`https://wa.me/55${c.phone}?text=${encodeURIComponent(mensagem)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => enviado(c)}
+                    >
+                      Enviar
+                    </a>
+                  )}
                   <button type="button" className="btn-ghost min-h-10 text-sm" onClick={() => saiu(c)}>
                     Pediu para sair
                   </button>

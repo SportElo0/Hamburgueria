@@ -25,7 +25,7 @@ type Filtro = keyof typeof FILTROS;
 const PAGINA = 50;
 
 /** The store's customer list: search, quick filters, export and the "asked to stop" switch. */
-export function ClientesCrm(props: { slug: string; storeName: string; linhas: LinhaCrm[]; torpedo: boolean }) {
+export function ClientesCrm(props: { slug: string; storeName: string; linhas: LinhaCrm[]; torpedo: boolean; demo?: { sair: (phone: string, out: boolean) => void; irTorpedo: () => void } }) {
   const [linhas, setLinhas] = useState(props.linhas);
   const [busca, setBusca] = useState('');
   const [filtro, setFiltro] = useState<Filtro>('todos');
@@ -53,6 +53,7 @@ export function ClientesCrm(props: { slug: string; storeName: string; linhas: Li
     if (!out && !confirm('Esta pessoa pediu para sair. Só tire daqui se ela mesma pediu para voltar a receber.')) return;
     setErro('');
     setLinhas((all) => all.map((x) => (x.phone === l.phone ? { ...x, saiu: out } : x)));
+    if (props.demo) return props.demo.sair(l.phone, out);
     start(async () => {
       const res = await setOptOutAction(props.slug, l.phone, out);
       if (!res.ok) {
@@ -75,12 +76,20 @@ export function ClientesCrm(props: { slug: string; storeName: string; linhas: Li
       </div>
 
       {props.torpedo && contagem.sumidos > 0 && (
-        <Link href={`/loja/${props.slug}/app/torpedo`} className="card flex items-center justify-between gap-3 border-ink/20 p-4 hover:border-ink/40">
+        <div className="card flex items-center justify-between gap-3 border-ink/20 p-4">
           <span className="text-sm">
             <b>{contagem.sumidos.toLocaleString('pt-BR')} clientes sumidos</b> que já pediram com você. Vale mandar um torpedo.
           </span>
-          <span className="btn-primary min-h-10 shrink-0 px-4 text-sm">Preparar torpedo</span>
-        </Link>
+          {props.demo ? (
+            <button type="button" onClick={props.demo.irTorpedo} className="btn-primary min-h-10 shrink-0 px-4 text-sm">
+              Preparar torpedo
+            </button>
+          ) : (
+            <Link href={`/loja/${props.slug}/app/torpedo`} className="btn-primary min-h-10 shrink-0 px-4 text-sm">
+              Preparar torpedo
+            </Link>
+          )}
+        </div>
       )}
 
       <div className="card space-y-3 p-4">

@@ -13,7 +13,13 @@ const fmtDia = (iso: string) => new Intl.DateTimeFormat('pt-BR', { timeZone: 'Am
  * Bring the customers from Anota Aí: the spreadsheet is read here in the browser; only name, mobile, orders and days
  * stopped go to the server, with the store's statement that everyone accepted offers.
  */
-export function ImportarLista({ slug, resumo }: { slug: string; resumo: ResumoImportacao | null }) {
+/** In the demo the list stays in this browser: nothing goes to the server. */
+export interface DemoImportar {
+  importar: (clientes: Importado[]) => void;
+  apagar: () => void;
+}
+
+export function ImportarLista({ slug, resumo, demo }: { slug: string; resumo: ResumoImportacao | null; demo?: DemoImportar }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   const [aberto, setAberto] = useState(!resumo);
@@ -47,6 +53,7 @@ export function ImportarLista({ slug, resumo }: { slug: string; resumo: ResumoIm
   const importar = () => {
     if (!lidos || !aceite) return;
     setErro('');
+    if (demo) return demo.importar(lidos.clientes);
     start(async () => {
       const res = await importarClientesAction(slug, { fonte: lidos.arquivos.some((a) => /cliente/i.test(a)) ? 'Anota Aí' : 'Planilha', aceite: true, clientes: lidos.clientes });
       if (!res.ok) return setErro(res.error ?? 'Não foi possível importar.');
@@ -56,6 +63,7 @@ export function ImportarLista({ slug, resumo }: { slug: string; resumo: ResumoIm
 
   const apagar = () => {
     if (!confirm('Apagar a lista de clientes do app? Os nomes saem, mas guardamos a data do último torpedo e quem pediu para sair, para ninguém receber duas vezes.')) return;
+    if (demo) return demo.apagar();
     start(async () => {
       const res = await apagarImportadosAction(slug);
       if (!res.ok) return setErro(res.error ?? 'Não foi possível apagar.');
