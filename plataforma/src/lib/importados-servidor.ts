@@ -34,8 +34,9 @@ export async function saveImportacao(slug: string, imp: Importacao) {
 }
 
 export async function apagarImportacao(slug: string) {
-  await storage().remove(kImport(slug)).catch(() => {});
-  await storage().remove(kEnviados(slug)).catch(() => {});
+  // Missing files are not an error in any backend; a real failure must reach the owner (LGPD: "apagar" has to mean it).
+  await storage().remove(kImport(slug));
+  await storage().remove(kEnviados(slug));
 }
 
 export async function getEnviados(slug: string): Promise<Record<string, string>> {

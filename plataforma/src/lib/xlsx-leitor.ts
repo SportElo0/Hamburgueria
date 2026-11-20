@@ -43,9 +43,30 @@ function entries(b: Uint8Array): Entry[] {
   return out;
 }
 
+/** Unpacked size cap: a real customer export is a few MB; this stops a "zip bomb" from freezing the tab. */
+const MAX_DESCOMPACTADO = 50 * 1024 * 1024;
+
 async function inflate(data: Uint8Array): Promise<Uint8Array> {
-  const stream = new Blob([data as BlobPart]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
-  return new Uint8Array(await new Response(stream).arrayBuffer());
+  const reader = new Blob([data as BlobPart]).stream().pipeThrough(new DecompressionStream('deflate-raw')).getReader();
+  const parts: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > MAX_DESCOMPACTADO) {
+      await reader.cancel().catch(() => {});
+      throw new Error('Planilha grande demais. Exporte só os clientes (inativos ou ativos).');
+    }
+    parts.push(value);
+  }
+  const out = new Uint8Array(size);
+  let o = 0;
+  for (const part of parts) {
+    out.set(part, o);
+    o += part.byteLength;
+  }
+  return out;
 }
 
 async function read(b: Uint8Array, e: Entry): Promise<string> {

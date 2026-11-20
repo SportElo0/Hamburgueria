@@ -6,7 +6,7 @@ import { isSlug } from '@/lib/slug';
 import { getDraft } from '@/lib/stores';
 import { take, dayWindow } from '@/lib/limits';
 import { celularBR, MAX_IMPORTADOS } from '@/lib/importados';
-import { TEXTO_ACEITE, apagarImportacao, escreverMensagem, marcarEnviado, saveImportacao, type ResultadoIA } from '@/lib/importados-servidor';
+import { TEXTO_ACEITE, apagarImportacao, escreverMensagem, getImportacao, marcarEnviado, saveImportacao, type ResultadoIA } from '@/lib/importados-servidor';
 
 export interface Resultado {
   ok: boolean;
@@ -53,7 +53,12 @@ export async function importarClientesAction(slug: string, payload: unknown): Pr
 export async function apagarImportadosAction(slug: string): Promise<Resultado> {
   if (!isSlug(slug)) return { ok: false, error: 'Loja inválida.' };
   await requireStoreAccess(slug, DONO);
-  await apagarImportacao(slug);
+  try {
+    await apagarImportacao(slug);
+  } catch (err) {
+    console.error('apagar importados', err);
+    return { ok: false, error: 'Não consegui apagar a lista agora. Tente de novo em instantes.' };
+  }
   return { ok: true };
 }
 
@@ -61,6 +66,9 @@ export async function apagarImportadosAction(slug: string): Promise<Resultado> {
 export async function marcarEnviadoAction(slug: string, phone: string): Promise<Resultado> {
   if (!isSlug(slug) || !/^[1-9]{2}9\d{8}$/.test(phone)) return { ok: false, error: 'Telefone inválido.' };
   await requireStoreAccess(slug, DONO);
+  // Only customers of the imported list (keeps enviados.json the size of the list).
+  const imp = await getImportacao(slug);
+  if (!imp?.clientes.some((c) => c.phone === phone)) return { ok: false, error: 'Cliente fora da lista importada.' };
   await marcarEnviado(slug, phone);
   return { ok: true };
 }

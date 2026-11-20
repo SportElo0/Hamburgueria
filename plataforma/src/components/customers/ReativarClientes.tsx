@@ -40,6 +40,7 @@ export function ReativarClientes(props: { slug: string; storeName: string; ia: b
     setErro('');
     setLidos(null);
     if (!files?.length) return;
+    if (files.length > 4) return setErro('Escolha no máximo 4 planilhas de uma vez.');
     try {
       const todos = new Map<string, Importado>();
       let semCelular = 0;
@@ -123,7 +124,7 @@ export function ReativarClientes(props: { slug: string; storeName: string; ia: b
           <p>
             <b>{props.resumo.total}</b> clientes com celular, importados de <b>{props.resumo.fonte}</b> em {fmtDia(props.resumo.importadoEm)} por {props.resumo.aceitePor}. Aceite de ofertas confirmado pela loja.
           </p>
-          <p className="mt-1 text-ink-mute">{props.resumo.enviadosNoMes} chamados nos últimos 30 dias. Quem já foi chamado só volta a aparecer depois de 30 dias.</p>
+          <p className="mt-1 text-ink-mute">{props.resumo.enviadosNoMes} chamados nos últimos 30 dias. Quem já foi chamado só volta a aparecer depois de 30 dias. A lista fica guardada no painel até você apagar ou subir uma nova.</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button type="button" className="btn-ghost min-h-10" onClick={() => setTrocar(true)}>
               Subir lista nova
