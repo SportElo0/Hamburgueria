@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "createdAt": "2026-11-14T23:04:26.014Z",
+        "reason": "Claude: HTML de e-mail transacional (src/server/email.ts) precisa de fonte segura de cliente de e-mail; Arial é a escolha padrão e não carrega fonte web"
+      }
+    ]
+  }
+}

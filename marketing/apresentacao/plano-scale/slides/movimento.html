@@ -1,0 +1,53 @@
+<section id="movimento" data-transition="fade" style="background:#FFFFFF;color:#0B1020;font-family:'Inter', Arial, sans-serif;padding:128px">
+<div style="position:absolute;left:0;top:0;width:1920px;height:1080px;background:radial-gradient(circle at 78% 55%, rgba(8,101,254,0.12), rgba(8,101,254,0) 45%)"></div>
+<p style="position:absolute;left:128px;top:112px;width:900px;font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#0865FE">Antes de sair de casa</p>
+<h2 style="position:absolute;left:128px;top:156px;width:820px;font-size:72px;font-weight:900;letter-spacing:-2px;line-height:1.08;color:#0B1020">Casa cheia? O cliente vê <span style="color:#0865FE">antes de sair.</span></h2>
+<p style="position:absolute;left:1032px;top:112px;width:760px;font-size:24px;text-align:right;color:#5A6478">Simulação com dados de exemplo</p>
+<div data-build-in="rise order 1" style="position:absolute;left:128px;top:420px;width:820px;display:flex;flex-direction:row;gap:22px;align-items:start"><x-icon name="Activity" style="color:#0865FE;width:44px;height:44px"></x-icon><div style="display:flex;flex-direction:column;gap:4px"><h3 style="font-size:34px;font-weight:800;color:#0B1020">Movimento agora</h3><p style="font-size:28px;line-height:1.4;color:#4A5568">Tranquilo, movimentado ou cheio, e quantas mesas estão livres.</p></div></div>
+<div data-build-in="rise order 2" style="position:absolute;left:128px;top:590px;width:820px;display:flex;flex-direction:row;gap:22px;align-items:start"><x-icon name="Clock" style="color:#0865FE;width:44px;height:44px"></x-icon><div style="display:flex;flex-direction:column;gap:4px"><h3 style="font-size:34px;font-weight:800;color:#0B1020">Reserva com os horários livres</h3><p style="font-size:28px;line-height:1.4;color:#4A5568">Escolhe o dia e vê só os horários em que ainda tem mesa.</p></div></div>
+<div data-build-in="rise order 3" style="position:absolute;left:128px;top:760px;width:820px;display:flex;flex-direction:row;gap:22px;align-items:start"><x-icon name="Users" style="color:#0865FE;width:44px;height:44px"></x-icon><div style="display:flex;flex-direction:column;gap:4px"><h3 style="font-size:34px;font-weight:800;color:#0B1020">Ou entra na fila pelo celular</h3><p style="font-size:28px;line-height:1.4;color:#4A5568">E acompanha quantos estão na frente.</p></div></div>
+<x-embed data-build-in="pop order 1" style="position:absolute;left:1032px;top:160px;width:760px;height:790px"><!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:760px;height:790px;background:transparent;overflow:hidden;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#121826}
+.br{position:absolute;left:10px;top:10px;right:10px;bottom:10px;border-radius:30px;background:#fff;border:1px solid #dce2ec;box-shadow:0 40px 80px -40px rgba(18,24,38,.45);overflow:hidden}
+.bar{height:62px;background:#eef1f6;display:flex;align-items:center;gap:10px;padding:0 22px}
+.bar i{width:14px;height:14px;border-radius:50%;background:#c6cede}
+.url{margin-left:14px;flex:1;height:38px;border-radius:999px;background:#fff;border:1px solid #dce2ec;font-size:22px;color:#5a6478;display:flex;align-items:center;padding:0 18px}
+.in{padding:26px 30px}
+.t{display:flex;justify-content:space-between;align-items:center}
+.t b{font-size:32px;font-weight:900}
+.lv{font-size:26px;font-weight:800;padding:10px 22px;border-radius:999px;transition:background .4s,color .4s}
+.sub{font-size:24px;color:#5a6478;font-weight:600;margin-top:8px}
+.sal{position:relative;margin-top:20px;height:250px;border-radius:24px;background:#f4f6fa;border:1px solid #e3e8f0}
+.m{position:absolute;width:74px;height:74px;border-radius:18px;background:#fff;border:3px solid #c6cede;transition:background .4s,border-color .4s}
+.m.oc{background:#0865fe;border-color:#0865fe}
+.bt{display:flex;gap:14px;margin-top:20px}
+.b{flex:1;height:70px;border-radius:999px;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.b1{background:#0865fe;color:#fff}.b2{background:#fff;border:2px solid #0865fe;color:#0865fe}
+.hs{margin-top:20px;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .45s cubic-bezier(.23,1,.32,1)}
+.hs.on{opacity:1;transform:none}
+.hs p{font-size:24px;font-weight:700;color:#5a6478}
+.row{display:flex;gap:12px;margin-top:10px}
+.h{flex:1;height:58px;border-radius:16px;border:2px solid #dce2ec;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:background .3s,color .3s,border-color .3s}
+.h.x{color:#a9b3c7;text-decoration:line-through}
+.h.sel{background:#0865fe;border-color:#0865fe;color:#fff}
+</style></head><body><div class="br">
+<div class="bar"><i></i><i></i><i></i><div class="url">seurestaurante.exemplo</div></div>
+<div class="in">
+<div class="t"><b>Movimento agora</b><span class="lv" id="lv"></span></div>
+<p class="sub" id="sub"></p>
+<div class="sal" id="sal"></div>
+<div class="bt"><div class="b b1">Reservar mesa</div><div class="b b2" id="fila">Entrar na fila</div></div>
+<div class="hs" id="hs"><p>Sábado · 4 pessoas · horários livres</p><div class="row"><div class="h x">19:30</div><div class="h" id="h2">20:00</div><div class="h x">20:30</div><div class="h">21:30</div></div></div>
+</div></div>
+<script>
+const $=(i)=>document.getElementById(i);
+const pos=[[30,24],[130,24],[230,24],[330,24],[430,24],[530,24],[30,140],[130,140],[230,140],[330,140],[430,140],[530,140]];
+const els=pos.map(([x,y])=>{const d=document.createElement('div');d.className='m';d.style.left=(x+20)+'px';d.style.top=y+'px';$('sal').appendChild(d);return d;});
+const L={t:['Tranquilo','#dcfce7','#15803d'],m:['Movimentado','#fef3c7','#b45309'],c:['Cheio','#fee2e2','#b42318']};
+function set(n,k,fila){els.forEach((e,i)=>e.classList.toggle('oc',i<n));const l=L[k];$('lv').textContent=l[0];$('lv').style.background=l[1];$('lv').style.color=l[2];$('sub').textContent=(12-n)+' mesas livres agora';$('fila').textContent=fila?'Entrar na fila · '+fila+' na frente':'Entrar na fila';}
+const st=[[0,()=>set(4,'t',0)],[1600,()=>set(8,'m',0)],[3200,()=>set(12,'c',3)],[4600,()=>$('hs').classList.add('on')],[5800,()=>$('h2').classList.add('sel')],[8600,()=>{$('hs').classList.remove('on');$('h2').classList.remove('sel');}]];
+function run(){st.forEach(([m,f])=>setTimeout(f,m));setTimeout(run,9400);}run();
+</script></body></html></x-embed>
+<aside>Muita gente desiste de ir quando acha que vai estar lotado, ou vai e dá meia-volta na porta. Com o Scale, um link do restaurante (ou o site dele, se tiver) mostra o movimento agora, as mesas livres, e deixa reservar escolhendo entre os horários que ainda têm mesa, ou entrar na fila pelo celular. A reserva com sinal precisa da conta Mercado Pago do restaurante.</aside>
+</section>

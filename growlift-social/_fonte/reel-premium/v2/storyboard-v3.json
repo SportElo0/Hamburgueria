@@ -1,0 +1,234 @@
+{
+  "versao": "v3.2 · revisão (não é a versão comercial final)",
+  "duracao": 30.6,
+  "formato": "1080×1920 · 30 fps · H.264 + AAC 48 kHz",
+  "ritmo": "abertura explosiva, demonstrações mais suaves, assinatura calma",
+  "quadros": [
+    {
+      "n": "01",
+      "arquivo": "01-abertura.png",
+      "nome": "Abertura",
+      "inicio": 0,
+      "fim": 2.0,
+      "projeto": "Growlift",
+      "texto": "SUA MARCA / MERECE / MAIS.",
+      "mudou": "Preservada: frase, paleta e hierarquia. Ganhou três impactos de som, um por palavra."
+    },
+    {
+      "n": "02",
+      "arquivo": "02-mais-vira-tela.png",
+      "nome": "MAIS. vira tela",
+      "inicio": 2.0,
+      "fim": 3.0,
+      "projeto": "Growlift → Salinho",
+      "texto": "MAIS.",
+      "mudou": "O ponto azul cresce e vira a tela da Salinho, como na v2."
+    },
+    {
+      "n": "03",
+      "arquivo": "03-salinho-site.png",
+      "nome": "Salinho · site",
+      "inicio": 3.0,
+      "fim": 4.4,
+      "projeto": "Salinho",
+      "texto": "Salinho · moda de linho",
+      "mudou": "Sem zoom: a câmera desliza de lado sobre o site em tamanho fixo."
+    },
+    {
+      "n": "04",
+      "arquivo": "04-salinho-pecas-no-celular.png",
+      "nome": "Salinho · troca das peças",
+      "inicio": 4.4,
+      "fim": 6.1,
+      "projeto": "Salinho",
+      "texto": "",
+      "mudou": "Preservado: os dois toques reais trocam camisa → short → calça. O celular só sobe; não aproxima."
+    },
+    {
+      "n": "05",
+      "arquivo": "05-salinho-composicao.png",
+      "nome": "Salinho · Leve por natureza",
+      "inicio": 6.1,
+      "fim": 7.0,
+      "projeto": "Salinho",
+      "texto": "Leve por natureza.",
+      "mudou": "Preservada a composição; o celular sai com fade para cima em vez de zoom."
+    },
+    {
+      "n": "06",
+      "arquivo": "06-transicao-forma.png",
+      "nome": "Transição · o botão vira forma",
+      "inicio": 7.0,
+      "fim": 7.6,
+      "projeto": "Salinho → Chapa 77",
+      "texto": "",
+      "mudou": "O texto \"Reserve minha peça\" some antes; só a forma verde cresce e vira o vermelho do Chapa 77. Nenhum botão aparece por cima do restaurante."
+    },
+    {
+      "n": "07",
+      "arquivo": "07-chapa77-produto.png",
+      "nome": "Chapa 77 · cardápio",
+      "inicio": 7.6,
+      "fim": 9.6,
+      "projeto": "Chapa 77",
+      "texto": "Hamburgueria · cardápio com adicionais e sacola",
+      "mudou": "O lanche entra e o celular sobe com o cardápio real (renders 3D, preços de exemplo)."
+    },
+    {
+      "n": "08",
+      "arquivo": "08-chapa77-adicionais.png",
+      "nome": "Chapa 77 · adicionais",
+      "inicio": 9.6,
+      "fim": 12.4,
+      "projeto": "Chapa 77",
+      "texto": "",
+      "mudou": "Personalizar → Cheddar cremoso e Maionese artesanal; o total vai de R$ 58 para R$ 66. Pausa com os dois marcados."
+    },
+    {
+      "n": "09",
+      "arquivo": "09-chapa77-sacola.png",
+      "nome": "Chapa 77 · sacola",
+      "inicio": 12.4,
+      "fim": 14.4,
+      "projeto": "Chapa 77",
+      "texto": "",
+      "mudou": "Adicionar → Ver sacola → Sua sacola com o item e os adicionais. Pausa na sacola."
+    },
+    {
+      "n": "10",
+      "arquivo": "10-chapa77-pix.png",
+      "nome": "Chapa 77 · Pix no site",
+      "inicio": 14.4,
+      "fim": 17.9,
+      "projeto": "Chapa 77",
+      "texto": "Pagamento por Pix no próprio site",
+      "mudou": "Retirada no local → Pix → QR code e copia e cola (de demonstração). Pausa no QR."
+    },
+    {
+      "n": "11",
+      "arquivo": "11-chapa77-pago.png",
+      "nome": "Chapa 77 · Pix confirmado",
+      "inicio": 17.9,
+      "fim": 18.75,
+      "projeto": "Chapa 77",
+      "texto": "",
+      "mudou": "\"Pedido recebido · Pix confirmado\"."
+    },
+    {
+      "n": "12",
+      "arquivo": "12-chapa77-loja-recebe.png",
+      "nome": "Chapa 77 · a loja recebe",
+      "inicio": 18.75,
+      "fim": 20.7,
+      "projeto": "Chapa 77",
+      "texto": "O pedido chega pago na tela da loja",
+      "mudou": "O celular sai pela esquerda e entra a tela da loja; o pedido chega em Novos com \"Pix pago\"."
+    },
+    {
+      "n": "13",
+      "arquivo": "13-chapa77-loja-aceita.png",
+      "nome": "Chapa 77 · a loja aceita",
+      "inicio": 20.7,
+      "fim": 22.1,
+      "projeto": "Chapa 77",
+      "texto": "",
+      "mudou": "Aceitar pedido → o pedido vai para Em preparo."
+    },
+    {
+      "n": "14",
+      "arquivo": "14-transicao-creme.png",
+      "nome": "Transição · o creme da loja vira a Fornada",
+      "inicio": 22.1,
+      "fim": 22.65,
+      "projeto": "Chapa 77 → Fornada",
+      "texto": "",
+      "mudou": "A tela da loja apaga e o cartão creme cresce até a tela inteira (sem zoom: o retângulo cresce) e vira a página creme da Fornada."
+    },
+    {
+      "n": "15",
+      "arquivo": "15-fornada-preservada.png",
+      "nome": "Fornada",
+      "inicio": 22.65,
+      "fim": 26.55,
+      "projeto": "Fornada",
+      "texto": "Padaria · reserva do café da manhã pelo site",
+      "mudou": "Preservada exatamente como na v2 (só mudou de lugar no tempo)."
+    },
+    {
+      "n": "16",
+      "arquivo": "16-grid-marca.png",
+      "nome": "Grade → marca",
+      "inicio": 26.55,
+      "fim": 28.25,
+      "projeto": "Growlift",
+      "texto": "",
+      "mudou": "As telas viram o símbolo da Growlift; no lugar do surf, a tela do Pix do Chapa 77."
+    },
+    {
+      "n": "17",
+      "arquivo": "17-assinatura.png",
+      "nome": "Assinatura",
+      "inicio": 28.25,
+      "fim": 30.6,
+      "projeto": "Growlift",
+      "texto": "GROWLIFT / SEU PRÓXIMO SITE COMEÇA AQUI. / growlift.com.br",
+      "mudou": "Fecho em etapas, luz atravessando a marca, subida lenta. Sem botão e sem \"diagnóstico grátis\"."
+    }
+  ],
+  "comparacao": [
+    [
+      "01-hook.png",
+      "01-abertura.png",
+      "Abertura",
+      "Mantida. Agora com som."
+    ],
+    [
+      "03-salinho-entrada.png",
+      "03-salinho-site.png",
+      "Salinho · entrada",
+      "Antes: aproximação contínua. Agora: deslize lateral em tamanho fixo."
+    ],
+    [
+      "06-transicao-salinho-chapa77.png",
+      "06-transicao-forma.png",
+      "Salinho → Chapa 77",
+      "Antes: o botão com texto abria sobre o restaurante. Agora: só a forma, sem texto."
+    ],
+    [
+      "07-chapa77.png",
+      "08-chapa77-adicionais.png",
+      "Chapa 77 · pedido",
+      "Antes: rolagem pela história das cores. Agora: o pedido de verdade, mais devagar."
+    ],
+    [
+      "07-chapa77.png",
+      "10-chapa77-pix.png",
+      "Chapa 77 · pagamento",
+      "Novo: Pix no próprio site, com QR code (de demonstração)."
+    ],
+    [
+      "07-chapa77.png",
+      "12-chapa77-loja-recebe.png",
+      "Chapa 77 · loja",
+      "Novo: o pedido chega pago na tela da loja, que aceita."
+    ],
+    [
+      "09-swellclub.png",
+      "14-transicao-creme.png",
+      "Swell Club → saiu",
+      "O Swell Club saiu; o creme da tela da loja leva direto à Fornada."
+    ],
+    [
+      "11-fornada.png",
+      "15-fornada-preservada.png",
+      "Fornada",
+      "Preservada."
+    ],
+    [
+      "13-assinatura.png",
+      "17-assinatura.png",
+      "Assinatura",
+      "Antes: chamada de diagnóstico grátis. Agora: SEU PRÓXIMO SITE COMEÇA AQUI., sem botão."
+    ]
+  ]
+}

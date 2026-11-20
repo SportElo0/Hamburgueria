@@ -1,0 +1,61 @@
+// node render.mjs 11 [--still 1,5,9]   → stills to $REELS_TMP/stills-11/ (for checking)
+// node render.mjs 11                    → growlift-social/05-reels/NN-*.mp4 with the narration, plus the cover
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { launch, close, renderReel } from '../motor.mjs';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const OUT = path.resolve(HERE, '../../../05-reels');
+const NAMES = { 1: '01-quatro-negocios', 2: '02-a-confeitaria', 7: '07-quem-atende', 8: '08-sabado-a-noite', 3: '03-dois-minutos', 4: '04-ela-procurou', 5: '05-aberto-no-google', 6: '06-do-zero', 9: '09-o-lanche-e-bom', 14: '14-uma-estrela', 15: '15-o-celular-nao-para', 16: '16-cardapio-em-pdf', 11: '11-dois-amigos', 12: '12-cardapio-completo', 13: '13-porta-aberta', 17: '17-cade-o-dinheiro', 18: '18-cada-prato-um-papel', 19: '19-ela-vem-toda-sexta', 20: '20-dia-31', 21: '21-a-mesma-noite', 22: '22-o-site-no-celular', 23: '23-o-telefone-na-escada', 24: '24-o-funil-furado', 25: '25-o-site-da-pousada', 27: '27-seis-passos-da-clinica', 28: '28-gritar-no-espaco', 29: '29-a-conta-da-marmita', 30: '30-quem-acende-o-farol', 31: '31-voce-assistiu-um-hamburguer', ad1: 'anuncio-01-quantas-sem-resposta' };
+
+const id = process.argv[2];
+const stillArg = process.argv.indexOf('--still');
+const reel = await import(`./reel${id}.mjs`);
+// SPEED (e.g. 1.2): the whole reel plays faster. The timeline is sampled at t × SPEED, so every frame is still a
+// sharp render (no frame dropping), and the narration is sped up with atempo (same pitch).
+const SPEED = reel.SPEED || 1;
+const DUR = reel.DURATION / SPEED;
+const html = SPEED === 1 ? reel.html() : reel.html().replace('</body>', `<script>{const r=window.render;window.render=(t)=>r(t*${SPEED});}</script></body>`);
+
+if (stillArg > 0) {
+  const times = process.argv[stillArg + 1].split(',').map(Number);
+  const dir = path.join(process.env.REELS_TMP || os.tmpdir(), `stills-${id}`);
+  fs.mkdirSync(dir, { recursive: true });
+  const file = path.join(dir, 'reel.html');
+  fs.writeFileSync(file, html);
+  const b = await launch();
+  const page = await b.newPage({ viewport: { width: 1080, height: 1920 } });
+  page.on('pageerror', (e) => console.error('erro na página:', e.message));
+  await page.goto(pathToFileURL(file).href, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+  for (const t of times) {
+    // Run through the timeline up to t so text that changes over time (captions) is in its real state.
+    await page.evaluate((t) => window.render(t), t);
+    await page.screenshot({ path: path.join(dir, `t${String(t).padStart(5, '0')}.png`) });
+  }
+  await close();
+  console.log(dir);
+} else {
+  // Ad Reels (reelad*.mjs) export OUT: they live outside 05-reels, so they stay out of the panel's Conteúdos.
+  const outDir = reel.OUT ? path.resolve(HERE, reel.OUT) : OUT;
+  fs.mkdirSync(outDir, { recursive: true });
+  const base = path.join(outDir, NAMES[id]);
+  await renderReel({ id: `reel-${id}`, html, duration: DUR, cover: reel.COVER / SPEED, out: `${base}-mudo` });
+  await close();
+  // AUDIO: a reel without narration can bring its own soundtrack (e.g. sound design made in code).
+  const voice = path.resolve(HERE, reel.AUDIO || `../narracao-${id}-eleven.mp3`);
+  if (!fs.existsSync(voice)) {
+    // No narration yet: keep the silent version and its cover only.
+    fs.renameSync(`${base}-mudo-capa.png`, `${base}-capa.png`);
+    console.log(`${base}-mudo.mp4 (sem narração: falta ${path.basename(voice)})`);
+    process.exit(0);
+  }
+  // Narration on top, a short fade at the end; the silent version stays for posting with music.
+  const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${base}-mudo.mp4`, '-i', voice, '-filter_complex', `[1:a]${SPEED === 1 ? '' : `atempo=${SPEED},`}apad,atrim=0:${DUR},afade=t=out:st=${DUR - 0.6}:d=0.6,loudnorm=I=-14:TP=-1.5:LRA=11[a]`, '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-ar', '48000', '-movflags', '+faststart', '-shortest', `${base}.mp4`], { stdio: 'inherit' });
+  if (r.status !== 0) throw new Error('ffmpeg (áudio) falhou');
+  fs.renameSync(`${base}-mudo-capa.png`, `${base}-capa.png`);
+  console.log(`${base}.mp4`);
+}

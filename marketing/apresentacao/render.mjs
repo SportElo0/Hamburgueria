@@ -1,0 +1,11 @@
+import { chromium } from '/home/user/Hamburgueria/node_modules/playwright-core/index.mjs';
+const [,, html, pdf, shots] = process.argv;
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
+await p.goto('file://' + html, { waitUntil: 'networkidle' });
+await p.evaluate(() => document.fonts.ready);
+console.log('Inter carregada:', await p.evaluate(() => document.fonts.check('700 40px Inter')));
+const n = await p.locator('.slide').count();
+for (let i = 0; i < n; i++) await p.locator('.slide').nth(i).screenshot({ path: `${shots}/s${String(i + 1).padStart(2, '0')}.png` });
+await p.pdf({ path: pdf, width: '1920px', height: '1080px', printBackground: true, preferCSSPageSize: true });
+await b.close(); console.log(n, 'slides');

@@ -1,0 +1,99 @@
+import type { Campo, Conhecimento } from '../config';
+
+/** What the assistant knows about one conversation. Built on the server; never includes other companies or credentials. */
+export interface ContextoIA {
+  empresa: string;
+  assistente: string;
+  canal: 'site' | 'whatsapp';
+  conhecimento: Conhecimento;
+  campos: Campo[];
+  /** Fields already given in this conversation (the phone is only marked as given, never sent to the model). */
+  coletado: Record<string, string | number>;
+  /** What is still missing for the quote, in the order to ask, one at a time. */
+  faltando: { id: string; pergunta: string }[];
+  /** Free visit times the assistant may offer and book; null when the company's calendar (or booking by the assistant) is off. */
+  horarios: { id: string; texto: string }[] | null;
+  /** The customer's next visit already booked (only with the calendar on), e.g. "sexta, 14/11 às 10h". */
+  visitaAtual?: string | null;
+}
+
+export interface PedidoIA {
+  contexto: ContextoIA;
+  historico: { de: 'contato' | 'assistente'; texto: string }[];
+  modelo: string;
+  maxTokens: number;
+}
+
+/** The server runs (and validates) every action; the adapter only asks for it. */
+export type Executar = (nome: string, entrada: unknown) => Promise<string>;
+
+export interface RespostaIA {
+  texto: string;
+  tokensEntrada: number;
+  tokensSaida: number;
+  modelo: string;
+}
+
+export interface AdaptadorIA {
+  simulada: boolean;
+  responder(p: PedidoIA, executar: Executar): Promise<RespostaIA>;
+}
+
+export const MOTIVOS_ENCAMINHAMENTO = ['pedido_do_cliente', 'negociacao', 'reclamacao', 'fora_da_base', 'nao_entendi'] as const;
+
+/** The only actions the assistant can request. Closing a sale and prices are not among them; a visit only in a free time. */
+export const FERRAMENTAS = [
+  {
+    name: 'salvar_dados',
+    description:
+      'Guarda dados que o cliente informou nesta conversa para o orçamento. Envie só o que o cliente realmente disse. Campos extras vão em "extras" com o id do campo. O telefone é guardado pelo sistema, não por esta ação.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        nome: { type: 'string' },
+        cidade: { type: 'string' },
+        necessidade: { type: 'string', description: 'O que o cliente precisa, em uma frase.' },
+        extras: { type: 'object', additionalProperties: { type: 'string' } },
+      },
+    },
+  },
+  {
+    name: 'registrar_interesse_visita',
+    description: 'Registra que o cliente quer uma visita ou reunião e a preferência de dia e horário que ele disse. Não confirma a visita: a equipe confirma depois.',
+    input_schema: { type: 'object' as const, properties: { preferencia: { type: 'string' } }, required: ['preferencia'] },
+  },
+  {
+    name: 'marcar_visita',
+    description: 'Marca a visita no horário que o cliente escolheu. Use só um id da lista "horarios_livres" e só depois que o cliente escolheu. Só diga que está marcado depois que esta ação responder ok.',
+    input_schema: { type: 'object' as const, properties: { horario: { type: 'string', description: 'O id do horário escolhido, exatamente como na lista.' } }, required: ['horario'] },
+  },
+  {
+    name: 'remarcar_visita',
+    description: 'Muda a visita já marcada deste cliente para outro horário que ele escolheu. Use só um id da lista "horarios_livres". Só diga que mudou depois que esta ação responder ok.',
+    input_schema: { type: 'object' as const, properties: { horario: { type: 'string', description: 'O id do novo horário, exatamente como na lista.' } }, required: ['horario'] },
+  },
+  {
+    name: 'cancelar_visita',
+    description: 'Cancela a visita já marcada deste cliente. Use só depois que ele confirmou que quer cancelar.',
+    input_schema: { type: 'object' as const, properties: {} },
+  },
+  {
+    name: 'encaminhar_para_pessoa',
+    description:
+      'Passa a conversa para uma pessoa da equipe. Use quando o cliente pedir, em negociação de preço, reclamação, dúvida técnica fora do conteúdo aprovado ou quando você não entendeu duas vezes.',
+    input_schema: {
+      type: 'object' as const,
+      properties: { motivo: { type: 'string', enum: [...MOTIVOS_ENCAMINHAMENTO] }, resumo: { type: 'string', description: 'Resumo curto da conversa para o vendedor.' } },
+      required: ['motivo', 'resumo'],
+    },
+  },
+];
+
+/** Tools offered in this conversation: visit tools only with the calendar on, and change/cancel only when there is a visit. */
+export function ferramentasPara(c: ContextoIA) {
+  return FERRAMENTAS.filter((f) => {
+    if (f.name === 'marcar_visita') return !!c.horarios && !c.visitaAtual;
+    if (f.name === 'remarcar_visita' || f.name === 'cancelar_visita') return !!c.horarios && !!c.visitaAtual;
+    return true;
+  });
+}

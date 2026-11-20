@@ -1,0 +1,181 @@
+{
+  "note": "Cut from a photo of the printed Downtown Burger menu (tools/photos/menu.jpg), upscaled and background removed.",
+  "items": {
+    "holyfield": {
+      "src": "/photos/holyfield.webp",
+      "srcSm": "/photos/holyfield.sm.webp",
+      "size": 1200,
+      "box": {
+        "x": 7.0,
+        "y": 17.917,
+        "w": 86.0,
+        "h": 75.083
+      }
+    },
+    "downtown-classic": {
+      "src": "/photos/downtown-classic.webp",
+      "srcSm": "/photos/downtown-classic.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 7.0,
+        "y": 8.778,
+        "w": 86.0,
+        "h": 84.222
+      }
+    },
+    "the-bacon-street": {
+      "src": "/photos/the-bacon-street.webp",
+      "srcSm": "/photos/the-bacon-street.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 7.0,
+        "y": 7.444,
+        "w": 86.0,
+        "h": 85.556
+      }
+    },
+    "australian-cheddar": {
+      "src": "/photos/australian-cheddar.webp",
+      "srcSm": "/photos/australian-cheddar.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 8.556,
+        "y": 7.0,
+        "w": 82.889,
+        "h": 86.0
+      }
+    },
+    "kill-bill": {
+      "src": "/photos/kill-bill.webp",
+      "srcSm": "/photos/kill-bill.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 11.0,
+        "y": 7.0,
+        "w": 77.889,
+        "h": 86.0
+      }
+    },
+    "golden-chicken": {
+      "src": "/photos/golden-chicken.webp",
+      "srcSm": "/photos/golden-chicken.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 10.222,
+        "y": 7.0,
+        "w": 79.444,
+        "h": 86.0
+      }
+    },
+    "green-burger": {
+      "src": "/photos/green-burger.webp",
+      "srcSm": "/photos/green-burger.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 8.889,
+        "y": 7.0,
+        "w": 82.111,
+        "h": 86.0
+      }
+    },
+    "little-downtown": {
+      "src": "/photos/little-downtown.webp",
+      "srcSm": "/photos/little-downtown.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 7.111,
+        "y": 7.0,
+        "w": 85.778,
+        "h": 86.0
+      }
+    },
+    "bacon-cheddar-fries": {
+      "src": "/photos/bacon-cheddar-fries.webp",
+      "srcSm": "/photos/bacon-cheddar-fries.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 8.333,
+        "y": 7.0,
+        "w": 83.333,
+        "h": 86.0
+      }
+    },
+    "croc-canoa": {
+      "src": "/photos/croc-canoa.webp",
+      "srcSm": "/photos/croc-canoa.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 7.0,
+        "y": 29.444,
+        "w": 86.0,
+        "h": 63.556
+      }
+    },
+    "downtown-nuggets": {
+      "src": "/photos/downtown-nuggets.webp",
+      "srcSm": "/photos/downtown-nuggets.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 7.0,
+        "y": 32.444,
+        "w": 86.0,
+        "h": 60.556
+      }
+    },
+    "classic-fries": {
+      "src": "/photos/classic-fries.webp",
+      "srcSm": "/photos/classic-fries.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 11.889,
+        "y": 7.0,
+        "w": 76.222,
+        "h": 86.0
+      }
+    },
+    "refrigerante": {
+      "src": "/photos/refrigerante.webp",
+      "srcSm": "/photos/refrigerante.sm.webp",
+      "size": 700,
+      "box": {
+        "x": 31.714,
+        "y": 7.0,
+        "w": 36.571,
+        "h": 86.0
+      }
+    },
+    "long-neck": {
+      "src": "/photos/long-neck.webp",
+      "srcSm": "/photos/long-neck.sm.webp",
+      "size": 700,
+      "box": {
+        "x": 39.286,
+        "y": 7.0,
+        "w": 21.286,
+        "h": 86.0
+      }
+    },
+    "brownie": {
+      "src": "/photos/brownie.webp",
+      "srcSm": "/photos/brownie.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 7.0,
+        "y": 28.778,
+        "w": 86.0,
+        "h": 64.222
+      }
+    },
+    "milkshake": {
+      "src": "/photos/milkshake.webp",
+      "srcSm": "/photos/milkshake.sm.webp",
+      "size": 900,
+      "box": {
+        "x": 32.778,
+        "y": 7.0,
+        "w": 34.333,
+        "h": 86.0
+      }
+    }
+  }
+}
