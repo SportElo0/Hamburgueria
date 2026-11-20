@@ -41,6 +41,7 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
   const [erro, setErro] = useState('');
   const [lista, setLista] = useState(props.escolhidos);
   const [enviadosAgora, setEnviadosAgora] = useState(0);
+  const [todos, setTodos] = useState(0);
   const fimConversa = useRef<HTMLDivElement>(null);
   const caixaMensagem = useRef<HTMLTextAreaElement>(null);
 
@@ -131,6 +132,18 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
       const res = await marcarEnviadoAction(props.slug, c.phone).catch(() => ({ ok: false, error: '' }));
       if (!res.ok) setErro(`Não consegui anotar o envio para ${c.name}. Confira a internet: sem a anotação, essa pessoa pode aparecer de novo antes de 30 dias.`);
     });
+  };
+
+  /** Demo only: shows how it works with the store's official WhatsApp (one tap for everyone). */
+  const enviarTodos = () => {
+    if (!demo || !daVez.length) return;
+    if (!confirm(`Enviar o torpedo para os ${daVez.length} clientes de uma vez?`)) return;
+    const n = daVez.length;
+    const fones = new Set(daVez.map((c) => c.phone));
+    daVez.forEach((c) => demo.enviado(c.phone));
+    setLista((l) => l.filter((x) => !fones.has(x.phone)));
+    setEnviadosAgora((v) => v + n);
+    setTodos(n);
   };
 
   const saiu = (c: Escolhido) => {
@@ -339,8 +352,21 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
         {problema ? (
           <p className="card mt-3 p-4 text-sm text-ink-soft">{mensagem ? problema : 'Prepare a mensagem acima. Depois os botões de Enviar aparecem aqui.'}</p>
         ) : daVez.length === 0 ? (
-          <p className="card mt-3 p-4 text-sm text-ink-soft">{enviadosAgora ? 'Pronto, todos desta vez foram chamados.' : 'Ninguém para chamar agora. Quem já foi chamado volta depois de 30 dias.'}</p>
+          <p className="card mt-3 p-4 text-sm text-ink-soft">
+            {todos ? `Pronto: ${todos} clientes receberam o torpedo de uma vez (simulação).` : enviadosAgora ? 'Pronto, todos desta vez foram chamados.' : 'Ninguém para chamar agora. Quem já foi chamado volta depois de 30 dias.'}
+          </p>
         ) : (
+          <>
+            {demo && (
+              <div className="card mt-3 flex flex-wrap items-center justify-between gap-3 border-ok/30 bg-ok/5 p-4">
+                <p className="max-w-md text-sm text-ink-soft">
+                  <b className="text-ink">Mandar para todos de uma vez.</b> Com o WhatsApp oficial da loja ligado, sai tudo num toque (a Meta cobra um valor por mensagem, pago pela loja).
+                </p>
+                <button type="button" className="btn min-h-11 bg-ok px-5 font-semibold text-white hover:bg-ok/90" onClick={enviarTodos}>
+                  Enviar para todos ({daVez.length})
+                </button>
+              </div>
+            )}
           <ul className="card mt-3 divide-y divide-line px-4">
             {daVez.map((c, i) => (
               <li key={c.phone} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
@@ -376,6 +402,7 @@ export function Torpedo(props: { slug: string; storeName: string; ia: boolean; h
               </li>
             ))}
           </ul>
+          </>
         )}
       </section>
 
