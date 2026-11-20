@@ -2,7 +2,10 @@ import { notFound } from 'next/navigation';
 import { semSistemaCompleto } from '@/lib/produto-servidor';
 import { DONO, requireStoreAccess } from '@/lib/auth';
 import { getDraft, getPublished } from '@/lib/stores';
-import { listCustomers } from '@/lib/customers';
+import { getOptOuts, listCustomers } from '@/lib/customers';
+import { escolher } from '@/lib/importados';
+import { getEnviados, getImportacao, iaCampanhaLigada, resumoDaImportacao } from '@/lib/importados-servidor';
+import { ReativarClientes } from '@/components/customers/ReativarClientes';
 import { isReviewUrl, orderingOf, todaySP } from '@/lib/ordering';
 import { isSlug } from '@/lib/slug';
 import { CustomersBoard } from '@/components/customers/CustomersBoard';
@@ -24,11 +27,14 @@ export default async function ClientesDonoPage({ params }: { params: Promise<{ s
   const reviewUrl = orderingOf(published?.store ?? store).reviewUrl;
   const review = isReviewUrl(reviewUrl) ? reviewUrl : '';
   const tables = orderingOf(store).tables.enabled;
+  const [importacao, enviados, optOuts] = await Promise.all([getImportacao(slug), getEnviados(slug), getOptOuts(slug)]);
+  const resumo = importacao ? resumoDaImportacao(importacao, enviados) : null;
+  const escolhidos = importacao ? escolher(importacao.clientes, { importadoEm: importacao.importadoEm, optOuts, enviados }) : [];
 
   return (
     <div className="mx-auto max-w-5xl">
       <h1 className="text-3xl font-extrabold tracking-tight">Clientes e avaliações</h1>
-      <p className="mt-1 text-ink-soft">Quem pediu pelo site nos últimos 90 dias, campanhas no WhatsApp para quem aceitou e o pedido de avaliação no Google.</p>
+      <p className="mt-1 text-ink-soft">Quem pediu pelo site nos últimos 90 dias, os clientes trazidos do Anota Aí, campanhas no WhatsApp para quem aceitou e o pedido de avaliação no Google.</p>
 
       <section className="card mt-6 p-5" aria-labelledby="avaliacoes">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -64,6 +70,10 @@ export default async function ClientesDonoPage({ params }: { params: Promise<{ s
           </ul>
         </details>
       </section>
+
+      <div className="mt-4">
+        <ReativarClientes key={resumo?.importadoEm ?? "vazio"} slug={slug} storeName={store.name} ia={iaCampanhaLigada()} resumo={resumo} escolhidos={escolhidos} />
+      </div>
 
       <div className="mt-4">
         <CustomersBoard embedded slug={slug} storeName={store.name} siteUrl={store.siteUrl} coupons={coupons} customers={await listCustomers(slug)} />
