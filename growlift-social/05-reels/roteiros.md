@@ -269,7 +269,7 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 
 **Vídeos prontos:**
 - `10-pedido-na-mesa-narrado.mp4`: com narração. É o recomendado.
-- `10-pedido-na-mesa.mp4`: sem voz, só para música.
+- `10-pedido-na-mesa-mudo.mp4`: sem voz, só para música (fica só no repositório, fora do painel, para caber no limite da Vercel).
 - Capa: `10-pedido-na-mesa-capa.png`.
 
 **Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", uma fala só e corrida, 2,07 créditos em 31/10; o áudio está em `_fonte/reels/narracao-10-eleven.mp3`). O vídeo segue o ritmo da voz: cada cena acelera ou desacelera um pouco para caber na fala (tabela `WARP` em `gerar-reels.mjs`), sem pausas entre as frases:
