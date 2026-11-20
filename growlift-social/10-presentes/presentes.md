@@ -36,3 +36,19 @@ Aqui está o checklist grátis com os 7 pontos onde a clínica perde paciente no
 
 Se quiser ver a demonstração da assistente funcionando, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
 ```
+
+## 3D · Link de um cardápio 3D funcionando
+
+- **Link:** https://painel-lojas-sportelo.vercel.app/cardapio-exemplo (cardápio de exemplo com pratos em 3D e "ver na mesa"; conferido no ar em 20/11/2026).
+- **Usado no:** Reel 31, "Você acabou de assistir um hambúrguer".
+- **Já pronto:** não precisa subir nada, é só colar a mensagem no ManyChat.
+
+**Mensagem do ManyChat (palavra 3D)**
+```
+Oi! Aqui é da Growlift 👋 Valeu por comentar 3D.
+
+Aqui está um cardápio 3D funcionando pra você testar no celular: https://painel-lojas-sportelo.vercel.app/cardapio-exemplo
+Abre um lanche, gira com o dedo e toca em "ver na mesa" pra colocar ele em cima da sua mesa (é um cardápio de exemplo).
+
+Se quiser um assim pra sua loja, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
+```

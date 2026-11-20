@@ -573,3 +573,22 @@ Clínica Exemplo, conversa e dados fictícios (projeto conceito). Animação 3D 
 Quer o checklist dos 7 pontos no WhatsApp da clínica? Comenta FAROL e a gente te manda, grátis. Vale pra todo mundo que comentar.
 #clinica #clinicaodontologica #atendimento #whatsapp #growlift
 ```
+
+## 31. Você acabou de assistir um hambúrguer (gancho de atenção, cardápio 3D)
+- **Formato:** referência que o Antônio mandou (objeto prestes a ser cortado, bem devagar). Versão nossa em 3D (`_fonte/reels/novos/diorama31.js`): hambúrguer numa tábua escura e uma faca de chef descendo cada vez mais devagar, sem nunca encostar; no topo, o contador "assistindo X s" (é o tempo real do vídeo). Gancho: "Espera a faca encostar…" e o selo "quase encostando…". Aos 7 s: "Você acabou de assistir um hambúrguer por 7,0 segundos." e depois "E você continua assistindo.", com o número correndo. Aos 11 s a faca cai, o hambúrguer explode em camadas, e as camadas voltam a se juntar dentro de um celular: o cardápio 3D ("Smash da Casa", "Ver na minha mesa (AR)"). "Agora imagina se fosse o cardápio da sua loja." → "A gente faz isso pro seu negócio.": cardápio 3D, site e atendimento com IA no WhatsApp (telas de exemplo). Fim com "＋ Seguir @growlift.ai" e "Comenta 3D" (o presente vai para todo mundo que comentar, sem precisar seguir).
+- **Revisão legal (20/11), aplicada:** presente sem condição de seguir (legenda e tela), sem "★★★★★ no Google" na tela de exemplo, selo "quase encostando…", legenda diz que as telas são fictícias.
+- **Sem narração:** só texto na tela e som feito em código (`_fonte/reels/som31.py` → `som-31.mp3`): tique-taque do contador, tensão crescendo, corte seco no texto, impacto na explosão e uma batida leve no final. Nada de música de terceiros.
+- **Telas de exemplo:** "Hamburgueria Exemplo", "Loja Exemplo", lanche e conversa fictícios; o "Smash da Casa" não tem preço.
+- **Presente:** link do cardápio de exemplo (`10-presentes/presentes.md`, palavra 3D). Já está no ar.
+
+**Legenda**
+```
+Você assistiu até aqui por causa de um hambúrguer. 🍔🔪
+Agora imagina o seu cliente olhando o seu cardápio desse jeito: girando o lanche, vendo de todos os lados e colocando ele em cima da mesa, antes de pedir.
+
+A Growlift faz cardápio 3D, site e atendimento com IA no WhatsApp pra loja que quer parar o scroll do cliente.
+
+Quer testar um cardápio 3D funcionando? Comenta 3D que a gente te manda o link, grátis. Vale pra todo mundo que comentar (e se quiser acompanhar a gente, segue a @growlift.ai).
+Animação 3D feita pela Growlift; telas de exemplo, com loja, lanche, horários e conversa fictícios.
+#cardapio3d #hamburgueria #cardapiodigital #restaurante #growlift
+```

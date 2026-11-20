@@ -151,7 +151,7 @@ export function food(kind, size = 120) {
 }
 
 /** The "Comenta PALAVRA" end block (see comenta() in the runtime). theme: dark | blue. */
-export function comentaBlock(question, word, theme = 'dark', top = 520) {
+export function comentaBlock(question, word, theme = 'dark', top = 520, chamada = 'Segue e comenta') {
   const blue = theme === 'blue';
   const chip = blue ? 'background:#ffffff;color:#0865fe;box-shadow:0 30px 70px -24px rgba(0,0,0,.45)' : 'background:#0865fe;color:#ffffff;box-shadow:0 30px 70px -20px rgba(8,101,254,1)';
   const ring = blue ? '#ffffff' : '#4d8dff';
@@ -159,7 +159,7 @@ export function comentaBlock(question, word, theme = 'dark', top = 520) {
   return `<div id="cmt" class="abs" style="left:60px;right:60px;top:${top}px;text-align:center;z-index:46;visibility:hidden">
   <div style="width:150px;margin:0 auto 46px;${blue ? 'filter:brightness(0) invert(1)' : ''}">${MARK}</div>
   <p style="font-size:68px;font-weight:900;letter-spacing:-.03em;line-height:1.05;color:#ffffff">${question}</p>
-  <p id="cmtC" style="font-size:60px;font-weight:800;margin-top:40px;color:${blue ? '#dbe8ff' : '#c6cede'};line-height:1.25"><span style="display:inline-flex;align-items:center;gap:14px;padding:10px 30px;border-radius:18px;background:${blue ? '#ffffff' : '#ffffff'};color:#0b1220;font-size:46px;font-weight:900">＋ Seguir @growlift.ai</span><br>Segue e comenta</p>
+  <p id="cmtC" style="font-size:60px;font-weight:800;margin-top:40px;color:${blue ? '#dbe8ff' : '#c6cede'};line-height:1.25"><span style="display:inline-flex;align-items:center;gap:14px;padding:10px 30px;border-radius:18px;background:${blue ? '#ffffff' : '#ffffff'};color:#0b1220;font-size:46px;font-weight:900">＋ Seguir @growlift.ai</span><br>${chamada}</p>
   <div style="margin-top:18px"><span id="cmtK" style="position:relative;display:inline-block;font-size:118px;font-weight:900;letter-spacing:-.02em;border-radius:36px;padding:6px 44px 16px;${chip}">${word}<span id="cmtR" style="position:absolute;inset:-12px;border-radius:46px;border:5px solid ${ring};opacity:0"></span></span></div>
   <div id="cmtF" style="margin:60px auto 0;width:840px;display:flex;align-items:center;gap:22px;padding:22px 26px;border-radius:999px;${field};box-shadow:0 30px 60px -20px rgba(0,0,0,.6)">
     <span style="flex:none;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#ff9a3c,#e85d75)"></span>
