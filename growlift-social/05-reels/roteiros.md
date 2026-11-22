@@ -268,9 +268,9 @@ Quer ver como ficaria o seu? Peça o diagnóstico grátis, sem compromisso, pelo
 - **Quem responder:** "Oi! O Scale ainda não está à venda e não tem preço nem data. Se quiser, aviso você quando abrir. Posso avisar? (Responda SAIR a qualquer momento para parar.)" Não aceitem sinal nem reserva.
 
 **Vídeos prontos:**
-- `10-pedido-na-mesa-narrado.mp4`: com narração. É o recomendado.
+- `_10-pedido-na-mesa-narrado.mp4`: com narração. É o recomendado (fica só no repositório desde 22/11, fora do painel, para caber no limite da Vercel).
 - `10-pedido-na-mesa-mudo.mp4`: sem voz, só para música (fica só no repositório, fora do painel, para caber no limite da Vercel).
-- Capa: `10-pedido-na-mesa-capa.png`.
+- Capa: `_10-pedido-na-mesa-capa.png`.
 
 **Narração** (ElevenLabs v4 pelo Higgsfield, voz "Andre", uma fala só e corrida, 2,07 créditos em 31/10; o áudio está em `_fonte/reels/narracao-10-eleven.mp3`). O vídeo segue o ritmo da voz: cada cena acelera ou desacelera um pouco para caber na fala (tabela `WARP` em `gerar-reels.mjs`), sem pausas entre as frases:
 "Salão cheio, garçom correndo e a mesa esperando pra pedir? Agora o cliente lê o QR Code da mesa e pede pelo celular: sem baixar aplicativo, sem cadastro, sem nada. O pedido vai direto pra cozinha, o amigo entra com o código da mesa e tudo cai na mesma conta. E o garçom confirma a mesa e atende os chamados na hora. Pedido na mesa, sem aplicativo: plano Scale, em breve! Quer isso no seu restaurante? Quer entender como funciona? Comenta MESA!"
