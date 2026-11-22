@@ -24,6 +24,18 @@ const fmtDataAno = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}/${d.slice(
 
 type Form = { id?: string; nome: string; categoria: Categoria; valor: string; frequencia: Frequencia; data: string; nota: string };
 
+/**
+ * Costs the team already talked about (22/11), to add with one tap: the form opens filled in and they check the
+ * value and the day before saving. Values in dollars are estimates (rate + 3.5% IOF); the real one is on the card bill.
+ */
+const SUGESTOES: { nome: string; categoria: Categoria; valor: string; frequencia: Frequencia; dia: number; nota: string }[] = [
+  { nome: 'Imposto do CNPJ (DAS do MEI)', categoria: 'imposto', valor: '86,05', frequencia: 'mensal', dia: 20, nota: 'MEI de serviços, valor de 2026; vence dia 20' },
+  { nome: 'Vercel Pro', categoria: 'ferramenta', valor: '110,00', frequencia: 'mensal', dia: 0, nota: 'US$ 20/mês; confira o valor na fatura' },
+  { nome: 'Claude', categoria: 'assinatura', valor: '270,00', frequencia: 'mensal', dia: 0, nota: 'Team 2 pessoas, US$ 25 cada; ajuste para o plano que pagam' },
+  { nome: 'Higgsfield (Starter)', categoria: 'assinatura', valor: '105,00', frequencia: 'mensal', dia: 0, nota: 'cerca de US$ 15 a 19/mês; confira o valor na fatura' },
+  { nome: 'Domínio growlift.com.br', categoria: 'ferramenta', valor: '40,00', frequencia: 'anual', dia: 0, nota: 'já pago; coloque o dia em que renova' },
+];
+
 /** The "Caixa" tab: the month (in, out, left), next charges and every cost, added by hand. */
 export function CaixaGrowlift({ inicial, clientes, hoje }: { inicial: Custo[]; clientes: ClienteCrm[]; hoje: string }) {
   const [lista, setLista] = useState(inicial);
@@ -54,6 +66,13 @@ export function CaixaGrowlift({ inicial, clientes, hoje }: { inicial: Custo[]; c
     if (!Number.isFinite(valor)) return setErro('Valor inválido. Ex.: 86 ou 129,90');
     fazer(salvarCustoAction({ id: form.id, nome: form.nome, categoria: form.categoria, valor, frequencia: form.frequencia, data: form.data, nota: form.nota }), () => setForm(null));
   };
+
+  const usar = (x: (typeof SUGESTOES)[number]) => {
+    const dia = x.dia ? `${hoje.slice(0, 8)}${String(x.dia).padStart(2, '0')}` : hoje;
+    setErro('');
+    setForm({ nome: x.nome, categoria: x.categoria, valor: x.valor, frequencia: x.frequencia, data: dia, nota: x.nota });
+  };
+  const faltam = SUGESTOES.filter((x) => !lista.some((c) => c.nome.toLowerCase().startsWith(x.nome.split(' (')[0].toLowerCase())));
 
   const editar = (c: Custo) =>
     setForm({ id: c.id, nome: c.nome, categoria: c.categoria, valor: (c.valor / 100).toFixed(2).replace('.', ','), frequencia: c.frequencia, data: c.data, nota: c.nota });
@@ -132,6 +151,20 @@ export function CaixaGrowlift({ inicial, clientes, hoje }: { inicial: Custo[]; c
             + Adicionar custo
           </button>
         </div>
+
+        {!form && faltam.length > 0 && (
+          <div className="rounded-xl border border-dashed border-line p-3">
+            <p className="text-sm font-semibold">Adicionar rápido</p>
+            <p className="text-xs text-ink-mute">Abre já preenchido: confira o valor e o dia antes de salvar.</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {faltam.map((x) => (
+                <button key={x.nome} type="button" className="min-h-10 rounded-full border border-line bg-white px-3 text-sm hover:border-ink/40" onClick={() => usar(x)}>
+                  + {x.nome}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {form && (
           <form
