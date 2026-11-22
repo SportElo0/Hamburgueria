@@ -592,3 +592,22 @@ Quer testar um cardápio 3D funcionando? Comenta 3D que a gente te manda o link,
 Animação 3D feita pela Growlift; telas de exemplo, com loja, lanche, horários e conversa fictícios.
 #cardapio3d #hamburgueria #cardapiodigital #restaurante #growlift
 ```
+
+## 32. O balão (gancho de tensão, Growlift: site, cardápio 3D e app)
+- **Formato:** no estilo da referência que o Antônio mandou (balão laranja prestes a ser estourado por uma agulha, filmado como lente macro, com contagem de quadros), mas **refeito em 3D pela Growlift** (`_fonte/reels/novos/diorama32.js`): nenhum quadro do vídeo de referência é usado, porque é material de outra empresa. Gancho: "Espera ele estourar…", REC e contagem "QUADROS PARA O ESTOURO" de 210 a 001; a câmera vai para o macro e a pele do balão afunda com a agulha. Aos 7 s: "Você está olhando um balão há 7,0 segundos." (o número é o tempo real do vídeo); aos 11 s o balão vira malha 3D: "Um balão que nem existe."; depois "E você continua aqui, esperando ele estourar." Ponte: "Agora imagina se fosse o seu negócio." / "Site, cardápio e app pra prender a atenção.", com o celular mostrando um site (Clínica Exemplo), o cardápio 3D e o app da loja com o Torpedo (telas de exemplo). Aos 22,6 s o balão estoura. Fim "＋ Seguir @growlift.ai" e "Comenta PLANO".
+- **Sem narração:** texto na tela e som feito em código (`_fonte/reels/som32.py` → `som-32.mp3`): contagem, tensão, bipes na malha, batida leve e o estouro. Nada de música de terceiros.
+- **Telas de exemplo:** "Clínica Exemplo", "Loja Exemplo", lanche e números fictícios, com o aviso "Telas de exemplo · nomes e números fictícios" na tela.
+- **Presente:** diagnóstico grátis com plano no WhatsApp (`10-presentes/presentes.md`, palavra PLANO). Já está no ar no site.
+- **Revisão legal (22/11), aplicada:** tela da clínica sem frase de publicidade odontológica, "57.600 faces" (número certo da malha), frase da ponte sem promessa de resultado, legenda diz "link do diagnóstico". Não citar nem marcar o perfil do vídeo de referência.
+
+**Legenda**
+```
+Você ficou esperando um balão estourar. 🎈📍
+E ele nem existe: é animação 3D feita pela Growlift.
+
+Agora imagina o seu cliente parando assim no site da sua clínica, no cardápio do seu restaurante ou no app da sua loja.
+
+Quer um plano sob medida pro seu negócio aparecer melhor e chamar mais atenção? Comenta PLANO que a gente te manda o link do diagnóstico grátis. Vale pra todo mundo que comentar (e se quiser acompanhar a gente, segue a @growlift.ai).
+Telas de exemplo, com nomes e números fictícios.
+#marketingdigital #site #cardapio3d #negociolocal #growlift
+```

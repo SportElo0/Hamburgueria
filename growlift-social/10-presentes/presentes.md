@@ -52,3 +52,18 @@ Abre um lanche, gira com o dedo e toca em "ver na mesa" pra colocar ele em cima 
 
 Se quiser um assim pra sua loja, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
 ```
+
+## PLANO · Diagnóstico grátis com plano sob medida
+
+- **Link:** https://growlift.com.br/#diagnostico (formulário do site: a pessoa conta sobre o negócio e recebe um plano no WhatsApp). Já está no ar.
+- **Usado no:** Reel 32, "O balão".
+
+**Mensagem do ManyChat (palavra PLANO)**
+```
+Oi! Aqui é da Growlift 👋 Valeu por comentar PLANO.
+
+É só contar sobre o seu negócio aqui, leva uns 2 minutos: https://growlift.com.br/#diagnostico
+A gente olha como ele aparece hoje (Google, site, WhatsApp) e te manda um plano sob medida no WhatsApp, grátis e sem compromisso.
+
+Para não receber mais mensagens nossas, responda SAIR.
+```
