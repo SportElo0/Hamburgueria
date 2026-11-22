@@ -75,7 +75,7 @@ export default async function PastaPage({ params }: { params: Promise<{ pasta: s
                           className="block aspect-[9/16] w-full rounded-lg border border-line bg-accent object-cover"
                         />
                       ) : (
-                        <a href={fileUrl(f)} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-lg border border-line bg-accent">
+                        <Link href={`/painel/conteudos/ver?arquivo=${encodeURIComponent(f.path)}`} className="group relative block overflow-hidden rounded-lg border border-line bg-accent">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={fileUrl(f, 'mini')}
@@ -86,7 +86,7 @@ export default async function PastaPage({ params }: { params: Promise<{ pasta: s
                             className="h-auto w-full transition-opacity group-hover:opacity-90"
                           />
                           {f.doNotPublish && <span className="chip absolute top-2 left-2 bg-bad text-white">Não publicar</span>}
-                        </a>
+                        </Link>
                       )}
                       <div className="mt-1.5 flex items-center justify-between gap-2 text-xs">
                         <span className="truncate text-ink-mute" title={`${f.name} · ${kb(f.size)}`}>
