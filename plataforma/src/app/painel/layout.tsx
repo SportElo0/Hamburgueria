@@ -27,6 +27,9 @@ export default async function PainelLayout({ children }: { children: React.React
             <Link href="/painel/clientes" className="text-sm text-ink-mute hover:text-ink">
               Clientes
             </Link>
+            <Link href="/painel/caixa" className="text-sm text-ink-mute hover:text-ink">
+              Caixa
+            </Link>
             <DiagnosticosNav initial={novos} />
             <Link href="/painel/conteudos" className="text-sm text-ink-mute hover:text-ink">
               Conteúdos
