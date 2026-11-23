@@ -53,6 +53,28 @@ Abre um lanche, gira com o dedo e toca em "ver na mesa" pra colocar ele em cima 
 Se quiser um assim pra sua loja, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
 ```
 
+## POSTS · Skill "social" para o Claude (Skill da Semana, ep. 01)
+
+- **Link oficial do arquivo:** https://github.com/coreyhaines31/marketingskills/releases/download/v2.14.25/social-claude-web.zip (release v2.14.25, 48,7 KB, conferida em 23/11/2026). Página do autor: https://github.com/coreyhaines31/marketingskills
+- **Usado no:** carrossel 23, "Não sabe o que postar hoje?".
+- **Quem criou:** Corey Haines (licença MIT). A Growlift só mostra como usar; não hospeda nem altera o arquivo.
+- **Envio:** à mão pela equipe (ou pelo ManyChat, se a palavra POSTS for cadastrada lá), para todo mundo que comentar.
+
+**Mensagem do privado (palavra POSTS)**
+```
+Oi! Aqui é da Growlift 👋 Valeu por comentar POSTS.
+
+Aqui está a skill "social", criada pelo Corey Haines e grátis no GitHub:
+https://github.com/coreyhaines31/marketingskills/releases/download/v2.14.25/social-claude-web.zip
+
+Como instalar (precisa de um plano pago do Claude com skills liberadas):
+1) Baixe o arquivo pelo link.
+2) No Claude, vá em Customize → Skills → + Create skill → Upload a skill e envie o arquivo.
+3) Peça: "Monte os posts da semana do meu negócio" e responda as perguntas dela.
+
+Ela escreve; quem revisa e posta é você. Qualquer dúvida, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
+```
+
 ## PLANO · Diagnóstico grátis com plano sob medida
 
 - **Link:** https://growlift.com.br/#diagnostico (formulário do site: a pessoa conta sobre o negócio e recebe um plano no WhatsApp). Já está no ar.

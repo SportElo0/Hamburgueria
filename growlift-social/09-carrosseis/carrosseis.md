@@ -485,3 +485,35 @@ Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozin
 ```
 Carrossel sobre a ficha técnica da marmita: capa com uma marmita de R$ 22 e a pergunta "Sua marmita custa quanto, de verdade?"; preço posto "de olho"; quatro passos com exemplos (pesar cada item, peso vezes preço do quilo, dividir as contas do mês pelas marmitas, descontar imposto e taxas, sobrando R$ 3,02 no exemplo); resumo para salvar e o convite "Comenta MARGEM" para receber a planilha grátis.
 ```
+
+## Seg 23/11 · Skill da Semana 01: a skill que monta os seus posts
+
+Pasta `23-skill-posts/` (8 slides). Palavra: **POSTS** (presente em `10-presentes/presentes.md`: link oficial do arquivo da skill e o passo a passo). Fonte: `_fonte/carrosseis-v2.mjs 23`. Primeiro episódio da série "Skill da Semana" (plano: https://claude.ai/artifact/9WeT16HkFHwb5pwbVmHWeT).
+
+**Conferido em 23/11/2026:** o que a skill faz (SKILL.md do repositório), o arquivo `social-claude-web.zip` da release v2.14.25, as 62 mil estrelas e o caminho de instalação do README (Customize → Skills → + Create skill → Upload a skill). A skill é do Corey Haines (MIT); a Growlift não diz que fez e não tem relação com a Anthropic nem com o autor.
+
+**Antes de postar:** ter a mensagem do privado pronta (ou cadastrada no ManyChat) e responder todo mundo que comentar.
+
+**Legenda**
+
+```
+Não sabe o que postar hoje? 📅 Salva esse carrossel.
+
+Skill da Semana, ep. 01: a skill "social", criada pelo Corey Haines e grátis no GitHub (licença MIT).
+
+Ela faz o Claude perguntar sobre o seu negócio e depois montar os temas do perfil, os ganchos, o calendário da semana, roteiros de Reels e carrosséis. E ainda corta o texto com cara de IA.
+
+Pra usar, precisa de um plano pago do Claude com skills liberadas. Ela escreve; quem revisa e posta é você.
+
+Segue a @growlift.ai e comenta POSTS que a gente te manda no privado o link oficial e o passo a passo. Vale pra todo mundo que comentar, sem sorteio.
+
+A Growlift não tem relação com a Anthropic, dona do Claude, nem com o autor da skill.
+
+#claude #inteligenciaartificial #marketingdigital #empreendedorismo #pequenosnegocios
+```
+
+**Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
+
+```
+Carrossel "Skill da Semana, episódio 1": capa "Não sabe o que postar hoje?" com um celular mostrando a semana de posts de uma padaria de exemplo; o que é uma skill; a skill "social", do Corey Haines, grátis no GitHub (licença MIT, coleção marketingskills com cerca de 62 mil estrelas); as perguntas que ela faz; o que ela monta (temas, ganchos, calendário, roteiros de Reels, carrosséis); a lista do que ela evita escrever; como instalar no Claude (plano pago); e o convite "Segue e comenta POSTS".
+```

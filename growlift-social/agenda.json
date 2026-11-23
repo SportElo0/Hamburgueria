@@ -863,6 +863,27 @@
    "ia": true,
    "palavra": "3D",
    "chave": "05-reels/roteiros.md#33-quatro-estrelas-de-diferença-cardápio-no-qr-3d-e-pix-na-mesa"
+  },
+  {
+   "id": "2026-11-23-carrossel-skill-posts",
+   "titulo": "Carrossel · Skill da Semana 01: a skill que monta os seus posts (Comenta POSTS)",
+   "tipo": "carrossel",
+   "arquivos": [
+    "09-carrosseis/23-skill-posts/01.png",
+    "09-carrosseis/23-skill-posts/02.png",
+    "09-carrosseis/23-skill-posts/03.png",
+    "09-carrosseis/23-skill-posts/04.png",
+    "09-carrosseis/23-skill-posts/05.png",
+    "09-carrosseis/23-skill-posts/06.png",
+    "09-carrosseis/23-skill-posts/07.png",
+    "09-carrosseis/23-skill-posts/08.png"
+   ],
+   "capa": null,
+   "legenda": "Não sabe o que postar hoje? 📅 Salva esse carrossel.\n\nSkill da Semana, ep. 01: a skill \"social\", criada pelo Corey Haines e grátis no GitHub (licença MIT).\n\nEla faz o Claude perguntar sobre o seu negócio e depois montar os temas do perfil, os ganchos, o calendário da semana, roteiros de Reels e carrosséis. E ainda corta o texto com cara de IA.\n\nPra usar, precisa de um plano pago do Claude com skills liberadas. Ela escreve; quem revisa e posta é você.\n\nSegue a @growlift.ai e comenta POSTS que a gente te manda no privado o link oficial e o passo a passo. Vale pra todo mundo que comentar, sem sorteio.\n\nA Growlift não tem relação com a Anthropic, dona do Claude, nem com o autor da skill.\n\n#claude #inteligenciaartificial #marketingdigital #empreendedorismo #pequenosnegocios",
+   "quando": "2026-11-23T19:00:00-03:00",
+   "ia": false,
+   "palavra": "POSTS",
+   "chave": "09-carrosseis/carrosseis.md#seg-2311-skill-da-semana-01-a-skill-que-monta-os-seus-posts"
   }
  ]
 }
