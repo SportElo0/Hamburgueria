@@ -1,4 +1,4 @@
-// Reel 33 (23/11): "Quatro estrelas de diferença". Same story as the reference Antônio sent (a customer waits half an
+// Reel 33 (23/11, versão 2 em primeira pessoa): "Quatro estrelas de diferença". Same story as the reference Antônio sent (a customer waits half an
 // hour with his hand up, starts a one-star review, discovers the table QR and ends giving five stars), told with our
 // own 3D restaurant (diorama33.js), our own phone screens and only what our system really does: menu on the table
 // QR, the dish in 3D at real size, the order reaching the kitchen with the table number, Pix at the table and the
@@ -34,11 +34,11 @@ const css = `
 body{background:#0b1020}
 #gl,#bgblur{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:1}#bgblur{visibility:hidden}
 #vig{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(6,8,14,.72),rgba(6,8,14,0) 30%,rgba(6,8,14,0) 70%,rgba(6,8,14,.55))}
-#cap{top:430px!important;font-size:60px!important}
-#meta{position:absolute;left:0;right:0;top:232px;z-index:30;text-align:center;font-size:24px;font-weight:800;letter-spacing:.2em;color:#e8eefc;visibility:hidden}
-#timer{position:absolute;left:50%;top:274px;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 26px;border-radius:999px;background:#d92d20;color:#fff;font-size:30px;font-weight:900;letter-spacing:.06em;font-variant-numeric:tabular-nums;box-shadow:0 14px 34px -12px rgba(217,45,32,.9);visibility:hidden}
-#timer i{width:12px;height:12px;border-radius:50%;background:#fff}
-#stars{position:absolute;left:50%;top:346px;z-index:30;display:flex;gap:10px;padding:10px 20px;border-radius:999px;background:rgba(6,8,14,.62);border:1px solid rgba(255,255,255,.12);visibility:hidden}
+#cap{top:440px!important;font-size:66px!important;background:none!important;border:0!important;box-shadow:none!important;color:#fff!important;text-shadow:0 4px 0 rgba(0,0,0,.45),0 0 24px rgba(0,0,0,.55)}#cap .hl{background:none!important;color:#9fd8ff!important;padding:0!important}
+#meta{position:absolute;left:0;right:0;top:226px;z-index:30;text-align:center;font-size:26px;font-weight:800;letter-spacing:.2em;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6);visibility:hidden}
+#timer{position:absolute;left:50%;top:274px;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 28px;border-radius:999px;background:rgba(28,8,8,.55);border:4px solid #e5484d;color:#ff6b6b;font-size:24px;font-weight:900;letter-spacing:.08em;font-variant-numeric:tabular-nums;visibility:hidden}#timer span{font-size:40px;letter-spacing:.02em}
+#timer i{width:13px;height:13px;border-radius:50%;background:#ff4d4f}
+#stars{position:absolute;left:50%;top:352px;z-index:30;display:flex;gap:10px;padding:10px 20px;border-radius:999px;background:rgba(6,8,14,.62);border:1px solid rgba(255,255,255,.12);visibility:hidden}
 .st{width:46px;height:46px;fill:none;stroke:#f5c518;stroke-width:1.6}
 .st.on{fill:#f5c518}
 #pov{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:20;visibility:hidden}
@@ -46,8 +46,8 @@ body{background:#0b1020}
 #island{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:160px;height:44px;border-radius:30px;background:#000;z-index:9}
 .scr{position:absolute;inset:0;visibility:hidden;overflow:hidden;font-family:Inter,sans-serif}
 .sb{height:64px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 40px 6px;font-size:22px;font-weight:700}
-#hand{position:absolute;left:170px;top:1600px;width:800px;height:577px;z-index:21;transform:rotate(-3deg)}
-#tap{position:absolute;z-index:22;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:rgba(255,255,255,.35);border:4px solid rgba(255,255,255,.9);visibility:hidden}
+#hand{position:absolute;left:140px;top:1580px;width:800px;height:640px;z-index:21;transform:rotate(-3deg)}#finger{position:absolute;left:0;top:0;width:180px;height:620px;z-index:23;visibility:hidden}
+#tap{position:absolute;z-index:24;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;background:rgba(255,255,255,.35);border:4px solid rgba(255,255,255,.9);visibility:hidden}
 /* review */
 .rv{background:#fff;color:#1f2937;padding:0 34px}
 .rv .hd{display:flex;align-items:center;gap:16px;margin-top:40px}.rv .hd span{width:64px;height:64px;border-radius:50%;background:#0865fe;color:#fff;display:grid;place-items:center;font-weight:900;font-size:28px}
@@ -131,11 +131,25 @@ body{background:#0b1020}
 #dim{position:absolute;inset:0;z-index:44;background:rgba(6,8,14,.9);visibility:hidden}
 `;
 
-const hand = `<svg id="hand" viewBox="0 0 860 620">
-  <path d="M120 620 L210 330 Q240 250 330 240 L520 236 Q610 240 640 320 L760 620Z" fill="#e8a33a"/>
-  <path d="M200 380 Q190 250 300 228 L560 222 Q650 226 660 330 L640 470 Q600 560 430 560 Q260 560 220 470Z" fill="#e0ac85"/>
-  <path d="M120 300 Q70 210 130 150 Q170 110 220 150 L300 250 Q250 300 200 320Z" fill="#e0ac85"/>
-  <path d="M640 150 q40 -10 50 30 l6 90 q-6 40 -44 40 Z M650 300 q40 -6 46 34 l2 80 q-8 36 -44 34 Z" fill="#d49b74"/>
+const hand = `<svg id="hand" viewBox="0 0 800 640">
+  <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6dcc0"/><stop offset=".55" stop-color="#ecc9a2"/><stop offset="1" stop-color="#d4a97f"/></linearGradient>
+  <linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f8a55"/><stop offset=".5" stop-color="#3fa66a"/><stop offset="1" stop-color="#2f8a55"/></linearGradient></defs>
+  <rect x="235" y="470" width="350" height="200" rx="60" fill="url(#sg)"/>
+  <rect x="225" y="455" width="370" height="46" rx="23" fill="#2a7a4b"/>
+  <rect x="150" y="185" width="510" height="315" rx="140" fill="url(#hg)"/>
+  <g fill="url(#hg)" stroke="#c99a70" stroke-width="3">
+    <rect x="640" y="48" width="104" height="54" rx="27"/><rect x="646" y="112" width="104" height="54" rx="27"/><rect x="640" y="176" width="98" height="52" rx="26"/>
+    <rect x="96" y="250" width="66" height="150" rx="33" transform="rotate(-18 129 325)"/><rect x="104" y="120" width="60" height="140" rx="30" transform="rotate(-8 134 190)"/>
+  </g>
+  <path d="M250 300 q150 60 300 0" stroke="#d4a97f" stroke-width="6" fill="none" opacity=".5"/>
+</svg>`;
+const finger = `<svg id="finger" viewBox="0 0 180 620">
+  <defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d9b28a"/><stop offset=".45" stop-color="#f3d6b6"/><stop offset="1" stop-color="#d4a97f"/></linearGradient></defs>
+  <rect x="58" y="0" width="64" height="300" rx="32" fill="url(#fg)" stroke="#c99a70" stroke-width="3"/>
+  <ellipse cx="90" cy="34" rx="20" ry="16" fill="#f7e3cc"/>
+  <path d="M60 150 h60" stroke="#c99a70" stroke-width="3"/>
+  <rect x="20" y="250" width="150" height="190" rx="70" fill="url(#fg)" stroke="#c99a70" stroke-width="3"/>
+  <rect x="40" y="420" width="120" height="220" rx="40" fill="#3fa66a"/>
 </svg>`;
 
 const body = `
@@ -179,6 +193,7 @@ const body = `
         <div class="zm in" id="z3">Eu quero!<small>00:05</small></div></div></div>
   </div>
   ${hand}
+  ${finger}
   <div id="tap"></div>
 </div>
 <div id="dim"></div>
@@ -190,8 +205,8 @@ const CAPS = [
   [2.2, 3.15, 'Uma estrela.', 'Uma estrela'],
   [3.75, 4.75, 'Pera, pera!', 'Pera, pera!'],
   [4.75, 5.95, 'Eu só quero pedir.', 'pedir'],
-  [6.15, 7.85, 'E a culpa nem é do garçom:', 'garçom'],
-  [7.95, 10.3, 'são dez mesas e duas mãos.', 'duas mãos'],
+  [6.1, 7.95, 'E a culpa nem é da garçonete:', 'garçonete'],
+  [8.0, 10.35, 'são dez mesas e duas mãos.', 'duas mãos'],
   [10.45, 11.5, 'Seu QR?', 'QR'],
   [11.55, 12.85, 'Um PDF.', 'PDF'],
   [12.9, 14.4, 'Olha o que esse aqui faz.', 'esse aqui'],
@@ -221,8 +236,9 @@ const CAPS = [
 const script = `
 window.MOTION=2;
 const L=(a,b,x)=>a+(b-a)*x;
-const POVS=[[2.15,3.75],[14.5,18.4],[23.6,25.1],[30.2,39.1],[45.6,48.0]];
-const SCR=[['sRev1',2.15,3.75],['sScan',14.5,15.75],['sMenu',15.75,18.4],['sItem',23.6,25.1],['sConta',30.2,35.6],['sAval',35.6,36.85],['sRev5',36.85,39.1],['sZap',45.6,48.0]];
+const POVS=[[2.15,3.75,10],[14.5,18.4,10],[23.6,25.1,10],[30.2,39.1,10],[39.1,41.3,3],[45.6,48.0,10]];
+const CACHE=[...POVS,[48.0,57,8]];
+const SCR=[['sRev1',2.15,3.75],['sScan',14.5,15.75],['sMenu',15.75,18.4],['sItem',23.6,25.1],['sConta',30.2,35.6],['sAval',35.6,36.85],['sRev5',36.85,41.3],['sZap',45.6,48.0]];
 const STARS=[[2.45,1],[21.0,2],[25.8,3],[29.2,4],[37.3,5]];
 const TAPS=[[2.35,0.6,[338,895]],[24.25,0.5,[545,1500]],[32.45,0.5,[540,1255]],[36.45,0.5,[540,1430]],[37.15,0.45,[700,893]],[38.6,0.5,[540,1388]]];
 function side(id,p,dir){const el=$(id);const w=el.offsetWidth,h=el.offsetHeight;let x=dir>0?p.x+70:p.x-70-w;x=Math.max(40,Math.min(1040-w,x));const y=Math.max(690,p.y-h/2);el.style.left=x+'px';el.style.top=y+'px';}
@@ -230,11 +246,11 @@ const type=(id,txt,t,a,b)=>{const n=Math.floor(clamp((t-a)/(b-a))*txt.length);co
 function place(id,p,dy,below){const el=$(id);el.style.left=(p.x-el.offsetWidth/2)+'px';el.style.top=(below?p.y+dy:p.y-el.offsetHeight-(dy||0))+'px';}
 window.draw=(t)=>{
   // phone shots: the restaurant behind is blurred; it is drawn once per shot (same image in every process)
-  const wi=POVS.findIndex(([a,b])=>t>=a&&t<b); const pov=wi>=0;
-  if(pov){ if(window._bk!==wi){ window.dio.draw(POVS[wi][0]); const g=$('bgblur').getContext('2d'); g.filter='blur(10px) brightness(.78)'; g.drawImage($('gl'),-30,-30,1140,1980); window._bk=wi; }
+  const pov=POVS.some(([a,b])=>t>=a&&t<b); const wi=CACHE.findIndex(([a,b])=>t>=a&&t<b);
+  if(wi>=0){ if(window._bk!==wi){ window.dio.draw(CACHE[wi][0]); const g=$('bgblur').getContext('2d'); g.clearRect(0,0,1080,1920); g.filter='blur('+CACHE[wi][2]+'px) brightness(.85)'; g.drawImage($('gl'),-30,-30,1140,1980); window._bk=wi; }
     $('gl').style.visibility='hidden'; $('bgblur').style.visibility='visible'; }
   else { window.dio.draw(t); $('gl').style.visibility='visible'; $('bgblur').style.visibility='hidden'; }
-  show('pov',t,pov?POVS.find(([a,b])=>t>=a&&t<b)[0]:0,pov?POVS.find(([a,b])=>t>=a&&t<b)[1]:0,{dy:120,fi:.35,fo:.2});
+  const pw=POVS.find(([a,b])=>t>=a&&t<b); show('pov',t,pw?(pw[0]===39.1?30.2:pw[0]):0,pw?(pw[1]===39.1?41.3:pw[1]):0,{dy:120,fi:.35,fo:.2});
   for(const [id,a,b] of SCR) show(id,t,a,b,{dy:0,fi:.18,fo:.12,x:id==='sMenu'||id==='sRev5'||id==='sItem'?50:0});
   // top: when and how long
   show('meta',t,0,14.5,{dy:-10});
@@ -263,6 +279,8 @@ window.draw=(t)=>{
   // chat
   show('z1',t,45.95,undefined,{dy:30}); show('z2',t,46.6,47.25,{dy:20}); show('z3',t,47.25,undefined,{dy:20,sc:.06});
   // taps
+  const ft=TAPS.find(([a,d])=>t>=a-.35&&t<a+d+.15); const fe=$('finger');
+  if(ft&&pov){const k=t<ft[0]?eoS((t-(ft[0]-.35))/.35):1-eoS((t-(ft[0]+ft[1]))/.15);fe.style.visibility='visible';fe.style.transform='translate('+(ft[2][0]-90+(1-k)*120)+'px,'+(ft[2][1]-6+(1-k)*500)+'px) rotate(-14deg)';}else fe.style.visibility='hidden';
   const tp=TAPS.find(([a,d])=>t>=a&&t<a+d); const te=$('tap');
   if(tp&&pov){const k=(t-tp[0])/tp[1];te.style.visibility='visible';te.style.left=tp[2][0]+'px';te.style.top=tp[2][1]+'px';te.style.opacity=String(1-k);te.style.transform='scale('+(.6+.6*k)+')';}else te.style.visibility='hidden';
   // waiter lines (over his head)
@@ -272,7 +290,7 @@ window.draw=(t)=>{
   // AR: measuring line across the burger and its label
   const arOn=t>=19.6&&t<23.6;
   show('ar',t,19.6,23.6,{dy:0}); show('arlab',t,19.75,23.6,{dy:14});
-  if(arOn){const a=window.dio.project(-0.064,0.826,0.2,true),b=window.dio.project(0.064,0.826,0.2,true);
+  if(arOn){const a=window.dio.project(-0.064,0.82,-0.28,true),b=window.dio.project(0.064,0.82,-0.28,true);
     const set=(id,x1,y1,x2,y2)=>{const e=$(id);e.setAttribute('x1',x1);e.setAttribute('y1',y1);e.setAttribute('x2',x2);e.setAttribute('y2',y2);};
     const k=eoS((t-19.6)/.6); const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
     set('arL',L(mx,a.x,k),L(my,a.y,k),L(mx,b.x,k),L(my,b.y,k)); set('arA',a.x,a.y-18,a.x,a.y+18); set('arB',b.x,b.y-18,b.x,b.y+18);
