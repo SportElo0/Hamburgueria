@@ -24,6 +24,10 @@ export function deCampoData(v: string): Date | null {
 export const ORIGENS: Record<string, string> = { site: 'Site', formulario_incorporado: 'Formulário no site do cliente', api: 'Integração', whatsapp: 'WhatsApp', chat_site: 'Chat do site', ligacao: 'Ligação não atendida', anuncio_google: 'Formulário de anúncio do Google', agenda: 'Página de agendamento', desconhecida: 'Não informada' };
 export const NOME_EVENTO: Record<string, string> = {
   pedido_recebido: 'Pedido recebido',
+  modelo_enviado: 'Mensagem enviada com modelo aprovado',
+  recebimento_registrado: 'Recebimento registrado',
+  recebimento_removido: 'Recebimento removido',
+  relato_retomada: 'Como a venda aconteceu',
   ligacao_nao_atendida: 'Ligação não atendida',
   visita_marcada: 'Visita marcada',
   limpeza_automatica: 'Limpeza automática de dados',

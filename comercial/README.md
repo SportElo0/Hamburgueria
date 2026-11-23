@@ -156,6 +156,25 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+## Enviar orçamento por modelo aprovado (equipe)
+
+Quem pediu pelo site e autorizou o WhatsApp, mas nunca escreveu no WhatsApp, só pode receber mensagem da empresa por um **modelo aprovado pela Meta**. A equipe faz isso pelo painel:
+
+- **Cadastro (administrador):** Configurações › WhatsApp › “Modelos para a equipe enviar”: nome do modelo na Meta, título para a equipe, o texto aprovado com `{{1}}`, `{{2}}`… e o nome de cada campo. O sistema confere a numeração e a quantidade de campos. Salvar o resto do WhatsApp não apaga os modelos.
+- **Envio:** na oportunidade (“Enviar pelo WhatsApp”) ou na conversa, quando passou das 24 horas ou o cliente ainda não escreveu. A pessoa escolhe o modelo, preenche os campos (nome do cliente e da empresa já vêm sugeridos), vê a mensagem exatamente como o cliente vai ler e envia. Cada campo vai como parâmetro do modelo (sem quebra de linha, até 300 caracteres).
+- **“É o orçamento”** (marcado por padrão antes de “Proposta enviada”): move a oportunidade para “Proposta enviada” (com o valor, se informado) e **não** assume a conversa, para a retomada automática da empresa poder sair se o cliente não responder. Desmarcado, quem envia assume a conversa e as automáticas param, como numa mensagem digitada.
+- **Regras (no envio e de novo na fila):** fora das 24 horas só com autorização de WhatsApp do formulário (a do “aperte 1” e a da agenda não valem); SAIR bloqueia; só celular; o mesmo texto para o mesmo cliente em 10 minutos é recusado (dois toques, duas pessoas); até 60 envios de modelo por hora por empresa. Estado da mensagem: na fila → enviada → entregue → lida, ou falhou / incerta com tarefa para a equipe.
+- Código: `enviarModeloEquipe` em `src/server/conversas.ts`, cadastro em `src/server/integracoes.ts`, tela em `src/componentes/enviar-modelo.tsx`; testes em `test/orcamento-whatsapp.test.ts` (inclui a retomada parando com resposta, SAIR, pessoa assumindo, proposta aceita, resposta segundos antes do envio, fila caindo no meio e filas em paralelo).
+
+**O que só um celular real comprova** (os testes usam o simulador): que a Meta aceita o modelo com os parâmetros do jeito que o adaptador manda; que a mensagem chega e os avisos de entregue/lida voltam pelo webhook; o texto de erro real da Meta quando falha; e que os modelos automáticos (confirmação, retorno, avaliação), que hoje mandam o texto inteiro como a única variável, são aprovados nesse formato — se não forem, cadastrar esses modelos com campos, como os da equipe.
+
+## Recebimentos e “Vendas pagas”
+
+- Na oportunidade, **Recebimentos**: valor, data em que o dinheiro entrou e descrição (Sinal, Saldo, Parcela). Mostra o recebido e o que falta para o valor da proposta (ex.: proposta de R$ 3.200 com sinal de R$ 800 → R$ 800 recebidos, R$ 2.400 em aberto). Não aceita data no futuro nem oportunidade perdida; só quem registrou ou o administrador remove; tudo fica no histórico. Registrar recebimento não muda a etapa.
+- **“Como esta venda aconteceu?”**: o vendedor diz se o cliente voltou depois da retomada ou fechou sem ela.
+- **Vendas pagas** (menu do administrador): o que entrou no mês, venda por venda, e a seção **“Vendas pagas após retomada”**: vendas em que uma mensagem automática de retomada (retorno da proposta, ou fluxo que começa em “Proposta enviada”/“Negociação” ou em oportunidade parada) foi aceita pelo WhatsApp antes do 1º pagamento ou no mesmo dia. O sistema comprova a ordem; a causa é o relato do vendedor.
+- Código: `src/server/recebimentos.ts`, `src/app/painel/vendas/page.tsx`; testes em `test/recebimentos.test.ts`. A plataforma não cobra nem recebe dinheiro: é o registro do que a equipe informa.
+
 ## Proposta online
 
 Na página da oportunidade, **Proposta online**: título, itens (descrição | quantidade | valor), condições (pagamento, prazo, garantia, o que não está incluso, despesas adicionais), validade em dias a contar do envio e se o cliente é pessoa comprando para si (mostra o direito de desistir em 7 dias, CDC art. 49) ou empresa. **Gerar link** cria um endereço secreto (só o hash fica guardado), move a oportunidade para “Proposta enviada” e grava o valor. Só funciona com razão social, CNPJ, endereço e um contato preenchidos em Configurações › Site (Decreto 7.962/2013).

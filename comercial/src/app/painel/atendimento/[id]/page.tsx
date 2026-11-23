@@ -7,6 +7,9 @@ import { ESTADO_MENSAGEM, EtiquetaEstado } from '@/componentes/pedacos';
 import { formatarTelefone } from '@/server/config';
 import { mensagensDe, naJanelaWhatsApp, obterConversa } from '@/server/conversas';
 import { canalDa } from '@/server/integracoes';
+import { EnviarModelo } from '@/componentes/enviar-modelo';
+import { empresaPorId } from '@/server/empresas';
+import { um } from '@/server/db';
 import { exigirCtx, ouNaoEncontrado } from '@/server/sessao';
 
 export const metadata = { title: 'Conversa' };
@@ -15,7 +18,12 @@ export default async function ConversaPagina({ params }: { params: Promise<{ id:
   const ctx = await exigirCtx();
   const { id } = await params;
   const v = await ouNaoEncontrado(obterConversa(ctx, id));
-  const [ms, { canal }] = await Promise.all([mensagensDe(ctx.empresaId, id), canalDa(ctx.empresaId)]);
+  const [ms, { canal, config }, empresa, op] = await Promise.all([
+    mensagensDe(ctx.empresaId, id),
+    canalDa(ctx.empresaId),
+    empresaPorId(ctx.empresaId),
+    v.oportunidade_id ? um<{ etapa: string }>('select etapa from oportunidades where empresa_id = $1 and id = $2', [ctx.empresaId, v.oportunidade_id]) : null,
+  ]);
   const zap = v.canal === 'whatsapp';
   const foraDaJanela = zap && !naJanelaWhatsApp(v.ultima_entrada_em);
   const bloqueado = zap && !!v.nao_contatar_em && !(v.ultima_entrada_em && v.ultima_entrada_em > v.nao_contatar_em);
@@ -57,7 +65,14 @@ export default async function ConversaPagina({ params }: { params: Promise<{ id:
             {bloqueado ? (
               <p className="aviso bg-erro-clara text-erro">Este contato pediu para não receber mensagens. Só dá para responder se ele escrever de novo.</p>
             ) : foraDaJanela ? (
-              <p className="aviso bg-alerta-clara text-alerta">Passaram mais de 24 horas desde a última mensagem do cliente. O WhatsApp só aceita texto livre dentro desse prazo: ligue, ou aguarde o cliente escrever.</p>
+              <>
+                <p className="aviso bg-alerta-clara text-alerta">{v.ultima_entrada_em ? 'Passaram mais de 24 horas desde a última mensagem do cliente.' : 'O cliente ainda não escreveu neste WhatsApp.'} O WhatsApp só aceita texto livre até 24 horas depois da mensagem do cliente: envie um modelo aprovado ou ligue.</p>
+                {config.modelos_equipe.length > 0 ? (
+                  <EnviarModelo modelos={config.modelos_equipe} conversaId={id} contato={v.contato_nome ?? ''} empresa={empresa?.nome ?? ''} podeSeguirRetomada={!!op && ['novo', 'atendimento', 'qualificado'].includes(op.etapa)} avisoRetomada={v.estado !== 'ia_ativa' ? 'A conversa está com uma pessoa da equipe: a retomada automática não sai enquanto for assim.' : null} />
+                ) : (
+                  <p className="mt-3 text-[15px] text-suave">Nenhum modelo aprovado cadastrado. {ctx.papel === 'admin' ? <Link className="font-semibold text-marca-escura underline" href="/painel/configuracoes#modelos-equipe">Cadastrar em Configurações › WhatsApp</Link> : 'O administrador cadastra em Configurações › WhatsApp.'}</p>
+                )}
+              </>
             ) : (
               <Formulario acao={enviarMensagemAcao} limpar>
                 <input type="hidden" name="id" value={id} />

@@ -11,7 +11,7 @@ import { gerarLinkAvaliacao } from '@/server/avaliacoes';
 import { TEXTO_ACEITE_AGENDAMENTO, type Etapa } from '@/server/config';
 import { salvarConhecimento } from '@/server/conhecimento';
 import { dentroDoLimite, VISITANTE_DEMO } from '@/server/contexto';
-import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, simularEntradaWhatsApp } from '@/server/conversas';
+import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, enviarModeloEquipe, simularEntradaWhatsApp } from '@/server/conversas';
 import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, cadastrarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig, empresaPorSlug } from '@/server/empresas';
 import { demonstracaoAberta, garantirVisitante, reporSenhaVisitante } from '@/server/demonstracao';
 import { emailLigado } from '@/server/email';
@@ -20,7 +20,7 @@ import { tx } from '@/server/db';
 import { ErroDeFormulario, receberPedido } from '@/server/pedidos';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { gerarChaveGoogle } from '@/server/google-ads';
-import { salvarWhatsApp } from '@/server/integracoes';
+import { removerModeloEquipe, salvarModeloEquipe, salvarWhatsApp } from '@/server/integracoes';
 import { gerarChaveTelefonia, simularLigacaoPerdida } from '@/server/ligacoes';
 import { salvarInvestimento } from '@/server/anuncios';
 import { cancelarProposta, criarProposta, enviarProposta, responderProposta } from '@/server/propostas';
@@ -30,6 +30,7 @@ import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
 import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, type InscricaoEntrada } from '@/server/push';
 import { processarFila } from '@/server/trabalhos';
+import { definirRelato, registrarRecebimento, removerRecebimento } from '@/server/recebimentos';
 
 const t = (fd: FormData, k: string) => String(fd.get(k) ?? '').trim();
 const TEMPO_MINIMO_SENHA_MS = 800;
@@ -231,6 +232,61 @@ export const enviarMensagemAcao = async (_: Retorno, fd: FormData) =>
     // Sends right away when the worker is not running (it would pick the job up anyway).
     await processarFila(5).catch(() => {});
     return { ok: 'Mensagem registrada.' };
+  });
+
+export const enviarModeloAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const valores = Array.from({ length: 10 }, (_x, i) => t(fd, `campo_${i}`));
+    const r = await enviarModeloEquipe(await exigirCtx(), {
+      oportunidadeId: t(fd, 'oportunidade') || undefined,
+      conversaId: t(fd, 'conversa') || undefined,
+      modelo: t(fd, 'modelo'),
+      valores,
+      seguirRetomada: fd.get('retomada') === 'on',
+      valorCentavos: centavos(t(fd, 'valor')),
+    });
+    // Sends right away when the worker is not running (it would pick the job up anyway).
+    await processarFila(5).catch(() => {});
+    revalidatePath(`/painel/atendimento/${r.conversaId}`);
+    if (r.oportunidadeId) revalidatePath(`/painel/oportunidades/${r.oportunidadeId}`);
+    return { ok: r.moverParaProposta ? 'Mensagem na fila do WhatsApp e oportunidade em “Proposta enviada”. Acompanhe a entrega na conversa.' : 'Mensagem na fila do WhatsApp. Acompanhe a entrega na conversa.' };
+  });
+
+export const recebimentoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const id = t(fd, 'oportunidade');
+    await registrarRecebimento(await exigirCtx(), id, { valorCentavos: centavos(t(fd, 'valor')) ?? 0, recebidoEm: t(fd, 'data'), descricao: t(fd, 'descricao') });
+    revalidatePath(`/painel/oportunidades/${id}`);
+    return { ok: 'Recebimento registrado.' };
+  });
+
+export const removerRecebimentoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await removerRecebimento(await exigirCtx(), t(fd, 'id'));
+    revalidatePath(`/painel/oportunidades/${t(fd, 'oportunidade')}`);
+    return { ok: 'Recebimento removido.' };
+  });
+
+export const relatoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await definirRelato(await exigirCtx(), t(fd, 'oportunidade'), t(fd, 'relato'));
+    revalidatePath(`/painel/oportunidades/${t(fd, 'oportunidade')}`);
+    return { ok: 'Salvo.' };
+  });
+
+export const salvarModeloEquipeAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const campos = t(fd, 'campos').split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+    const m = await salvarModeloEquipe(await exigirCtx(), { nome: t(fd, 'nome'), titulo: t(fd, 'titulo'), texto: String(fd.get('texto') ?? ''), campos });
+    revalidatePath('/painel/configuracoes');
+    return { ok: `Modelo “${m.titulo}” salvo. A equipe já pode enviar pela oportunidade ou pela conversa.` };
+  });
+
+export const removerModeloEquipeAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await removerModeloEquipe(await exigirCtx(), t(fd, 'nome'));
+    revalidatePath('/painel/configuracoes');
+    return { ok: 'Modelo removido.' };
   });
 
 export const simularWhatsAppAcao = async (_: Retorno, fd: FormData) => {

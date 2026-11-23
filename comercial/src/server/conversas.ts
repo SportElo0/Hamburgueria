@@ -3,7 +3,7 @@ import { PERGUNTA_LEMBRETE, aceitarLembrete, cancelarPeloCliente, horariosLivres
 import { lerWebhook } from './canais/whatsapp-cloud';
 import { normalizarTelefone, type EstadoConversa, type Etapa } from './config';
 import { conhecimentoAtual } from './conhecimento';
-import { ator, criarTarefa, dentroDoLimite, registrar, type Ctx } from './contexto';
+import { ator, criarTarefa, dentroDoLimite, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, type Empresa } from './empresas';
 import { ErroDeUso, NaoEncontrado } from './erros';
@@ -12,7 +12,7 @@ import { agendar, cancelarPendentes, executar, pegar, type Resultado, type Traba
 import { adaptadorIA, modeloPadrao } from './ia';
 import { MOTIVOS_ENCAMINHAMENTO, type ContextoIA } from './ia/tipos';
 import { canalDa, empresaDoNumero } from './integracoes';
-import { marcarAtendimentoHumano } from './oportunidades';
+import { definirValor, marcarAtendimentoHumano, mudarEtapa } from './oportunidades';
 import { abrirAtendimento, validarExtras } from './pedidos';
 import { hashToken, novoToken } from './segredos';
 
@@ -45,6 +45,10 @@ export interface Mensagem {
   simulada: boolean;
   ia_simulada: boolean;
   modelo_mensagem: string | null;
+  /** The filled fields of an approved template, in order; null = the whole text is the template's only variable. */
+  variaveis: string[] | null;
+  /** What the message was for (confirmacao, retorno, fluxo, modelo_equipe...); null for replies and older messages. */
+  finalidade: string | null;
   erro: string | null;
   criado_em: Date;
 }
@@ -158,6 +162,10 @@ export async function despachar(t: Trabalho): Promise<Resultado> {
       return cancelar('O contato pediu para não receber mensagens.');
     }
     const naJanela = !!v.ultima_entrada_em && Date.now() - v.ultima_entrada_em.getTime() < JANELA_WHATSAPP_MS;
+    // A template the team queued outside the 24 hours: the consent may have been revoked meanwhile.
+    if (m.finalidade === 'modelo_equipe' && !naJanela && !(await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null and origem not in ('ligacao', 'agenda')`, [t.empresa_id, v.contato_id], db))) {
+      return cancelar('A autorização de WhatsApp deste contato foi retirada.');
+    }
     const modelo = m.modelo_mensagem && m.modelo_mensagem !== 'texto' ? m.modelo_mensagem : null;
     if (!naJanela && !modelo) {
       await criarTarefa(db, t.empresa_id, { conversaId: v.id, tipo: 'fora_da_janela', titulo: 'Mensagem não enviada: passou das 24 horas da última mensagem do cliente', detalhe: 'O WhatsApp só aceita texto livre até 24 horas depois da última mensagem do cliente. Use um modelo aprovado ou ligue.', chave: `janela:${id}` });
@@ -186,7 +194,7 @@ export async function despachar(t: Trabalho): Promise<Resultado> {
     return { tipo: 'falhou', erro: motivo ?? 'Canal indisponível.' };
   }
   const r = pronto.usarModelo
-    ? await canal.enviarModelo(pronto.telefone, { nome: pronto.usarModelo, idioma: config.idioma_modelos, variaveis: [pronto.m.corpo] })
+    ? await canal.enviarModelo(pronto.telefone, { nome: pronto.usarModelo, idioma: config.idioma_modelos, variaveis: pronto.m.variaveis ?? [pronto.m.corpo] })
     : await canal.enviarTexto(pronto.telefone, pronto.m.corpo);
   if (r.tipo === 'aceito') {
     // Only now, with the provider's id, the message counts as sent.
@@ -219,13 +227,20 @@ export async function assumir(ctx: Ctx, conversaId: string): Promise<void> {
   await tx(async (db) => {
     const v = await travar(db, ctx.empresaId, conversaId);
     if (!v) throw new NaoEncontrado('Conversa não encontrada.');
-    if (v.estado === 'humano_atendendo' && v.assumida_por === ctx.userId) return;
-    await q(`update conversas set estado = 'humano_atendendo', assumida_por = $2, assumida_em = now(), atualizado_em = now() where id = $1`, [v.id, ctx.userId], db);
-    await pararAutomaticos(db, v, 'Uma pessoa assumiu a conversa.');
-    await q(`update tarefas set concluida_em = now(), concluida_por = $3 where empresa_id = $1 and conversa_id = $2 and tipo = 'assumir_conversa' and concluida_em is null`, [ctx.empresaId, v.id, ctx.userId], db);
-    await marcarAtendimentoHumano(db, ctx.empresaId, v.oportunidade_id, ctx.userId);
-    await registrar(db, ctx.empresaId, { conversaId: v.id, oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: ator(ctx), tipo: 'conversa_assumida', dados: { de: v.estado } });
+    await assumirTravada(db, ctx, v);
   });
+}
+
+/** The same take-over, on a conversation already locked inside the caller's transaction. */
+async function assumirTravada(db: Db, ctx: Ctx, v: Conversa): Promise<void> {
+  if (v.estado === 'humano_atendendo' && v.assumida_por === ctx.userId) return;
+  await q(`update conversas set estado = 'humano_atendendo', assumida_por = $2, assumida_em = now(), atualizado_em = now() where id = $1`, [v.id, ctx.userId], db);
+  await pararAutomaticos(db, v, 'Uma pessoa assumiu a conversa.');
+  await q(`update tarefas set concluida_em = now(), concluida_por = $3 where empresa_id = $1 and conversa_id = $2 and tipo = 'assumir_conversa' and concluida_em is null`, [ctx.empresaId, v.id, ctx.userId], db);
+  await marcarAtendimentoHumano(db, ctx.empresaId, v.oportunidade_id, ctx.userId);
+  await registrar(db, ctx.empresaId, { conversaId: v.id, oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: ator(ctx), tipo: 'conversa_assumida', dados: { de: v.estado } });
+  v.estado = 'humano_atendendo';
+  v.assumida_por = ctx.userId;
 }
 
 /** Giving the conversation back to the assistant is always an explicit act; a seller's silence never does it. */
@@ -267,6 +282,105 @@ export async function enviarComoHumano(ctx: Ctx, conversaId: string, texto: stri
     await inserirSaida(db, v, { autor: 'humano', autorId: ctx.userId, corpo, automatica: false });
     await registrar(db, ctx.empresaId, { conversaId: v.id, oportunidadeId: v.oportunidade_id, contatoId: v.contato_id, ator: ator(ctx), tipo: 'mensagem_humana' });
   });
+}
+
+/* ---------- A person sends an approved template (a quote, the values of a booking) ---------- */
+
+const celular = (tel: string) => /^55[1-9]\d9\d{8}$/.test(tel);
+/** Meta refuses template fields with line breaks, tabs or more than 4 spaces in a row. */
+const campoDoModelo = (v: string) => v.replace(/[\r\n\t]+/g, ' ').replace(/ {2,}/g, ' ').trim();
+
+export interface EnvioModelo {
+  /** The opportunity (from its page) or the WhatsApp conversation (from the inbox): one of the two. */
+  oportunidadeId?: string;
+  conversaId?: string;
+  modelo: string;
+  valores: string[];
+  /**
+   * The quote was sent and the follow-up may run: the opportunity goes to "Proposta enviada" (with the value, if given)
+   * and the person does not take the conversation, so the company's follow-up can still go out if nobody answers.
+   */
+  seguirRetomada?: boolean;
+  valorCentavos?: number | null;
+}
+
+/** Fills the approved text with the fields, exactly as the customer will read it. */
+export function montarModelo(texto: string, valores: string[]): string {
+  return texto.replace(/\{\{\s*(\d+)\s*\}\}/g, (_, n: string) => valores[Number(n) - 1] ?? '');
+}
+
+/**
+ * A person of the team sends an approved template by WhatsApp. It works also when the customer never wrote on WhatsApp
+ * (a request from the site with consent): that is what templates are for. The same rules as every other send apply,
+ * checked here and again when the queue sends it: consent (outside the 24 hours), SAIR, mobile number, status and failure.
+ */
+export async function enviarModeloEquipe(ctx: Ctx, e: EnvioModelo): Promise<{ conversaId: string; mensagemId: string; oportunidadeId: string | null; moverParaProposta: boolean }> {
+  const { config } = await canalDa(ctx.empresaId);
+  const m = config.modelos_equipe.find((x) => x.nome === e.modelo);
+  if (!m) throw new ErroDeUso('Escolha um dos modelos aprovados cadastrados em Configurações › WhatsApp.');
+  const valores = m.campos.map((_, i) => campoDoModelo(String(e.valores[i] ?? '')));
+  const vazio = valores.findIndex((v) => !v);
+  if (vazio >= 0) throw new ErroDeUso(`Preencha o campo “${m.campos[vazio]}”.`);
+  const longo = valores.findIndex((v) => v.length > 300);
+  if (longo >= 0) throw new ErroDeUso(`O campo “${m.campos[longo]}” passou de 300 caracteres.`);
+  if (e.valorCentavos != null && (!Number.isSafeInteger(e.valorCentavos) || e.valorCentavos < 0)) throw new ErroDeUso('Valor inválido.');
+  exigirNaoVisitante(ctx);
+  const uuid = /^[0-9a-f-]{36}$/i;
+  if (e.conversaId ? !uuid.test(e.conversaId) : !uuid.test(e.oportunidadeId ?? '')) throw new NaoEncontrado(e.conversaId ? 'Conversa não encontrada.' : 'Oportunidade não encontrada.');
+  if (!(await dentroDoLimite(`modelo:${ctx.empresaId}`, 60, 3600)) || !(await dentroDoLimite(`modelo-pessoa:${ctx.userId}`, 30, 3600))) throw new ErroDeUso('Muitos envios de modelo nesta hora. Tente mais tarde.', 429);
+  const corpo = montarModelo(m.texto, valores);
+
+  const r = await tx(async (db) => {
+    let v: Conversa | null = null;
+    let o: { id: string; etapa: Etapa; contato_id: string } | null = null;
+    if (e.conversaId) {
+      v = await travar(db, ctx.empresaId, e.conversaId);
+      if (!v) throw new NaoEncontrado('Conversa não encontrada.');
+      if (v.canal !== 'whatsapp' || !v.contato_id) throw new ErroDeUso('Modelos aprovados só saem pelo WhatsApp.');
+      if (v.oportunidade_id) o = await um('select id, etapa, contato_id from oportunidades where empresa_id = $1 and id = $2 for update', [ctx.empresaId, v.oportunidade_id], db);
+    } else {
+      o = await um('select id, etapa, contato_id from oportunidades where empresa_id = $1 and id = $2 for update', [ctx.empresaId, e.oportunidadeId ?? ''], db);
+      if (!o) throw new NaoEncontrado('Oportunidade não encontrada.');
+      v = await um<Conversa>(`select * from conversas where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' for update`, [ctx.empresaId, o.contato_id], db);
+    }
+    const contatoId = v?.contato_id ?? o!.contato_id;
+    const c = await um<{ telefone: string; nome: string; nao_contatar_em: Date | null }>('select telefone, nome, nao_contatar_em from contatos where empresa_id = $1 and id = $2', [ctx.empresaId, contatoId], db);
+    if (!c) throw new NaoEncontrado('Contato não encontrado.');
+    if (c.nao_contatar_em && !(v?.ultima_entrada_em && v.ultima_entrada_em > c.nao_contatar_em)) throw new ErroDeUso('Este contato pediu para não receber mensagens. Só dá para responder se ele escrever de novo.');
+    if (!celular(c.telefone)) throw new ErroDeUso('O telefone deste contato não é de celular: o WhatsApp não entrega. Ligue para ele.');
+    // Inside the 24 hours the customer wrote first; outside them, the company starts the talk and needs the consent.
+    if (!naJanelaWhatsApp(v?.ultima_entrada_em ?? null)) {
+      const ok = await um(`select 1 from consentimentos where empresa_id = $1 and contato_id = $2 and canal = 'whatsapp' and revogado_em is null and origem not in ('ligacao', 'agenda')`, [ctx.empresaId, contatoId], db);
+      if (!ok) throw new ErroDeUso('Este contato não autorizou mensagens da empresa pelo WhatsApp. Ligue para ele, ou espere ele escrever.');
+    }
+    if (o && ['ganho', 'perdido'].includes(o.etapa) && e.seguirRetomada) throw new ErroDeUso('A oportunidade está encerrada: envie sem programar a retomada.');
+    if (!v) {
+      v = (await um<Conversa>(`insert into conversas (empresa_id, contato_id, oportunidade_id, canal, dados) values ($1, $2, $3, 'whatsapp', $4) returning *`, [ctx.empresaId, contatoId, o?.id ?? null, JSON.stringify(c.nome ? { nome: c.nome } : {})], db))!;
+    }
+    // A second tap, or two people sending the same quote: the same text a moment ago is not sent again.
+    if (await um(`select 1 from mensagens where empresa_id = $1 and conversa_id = $2 and modelo_mensagem = $3 and corpo = $4 and estado <> 'cancelada' and criado_em > now() - interval '10 minutes'`, [ctx.empresaId, v.id, m.nome, corpo], db)) {
+      throw new ErroDeUso('Esta mesma mensagem já foi enviada para este cliente há poucos minutos. Veja a entrega na conversa.');
+    }
+    // Without the follow-up, writing to the customer is taking the conversation, as with a typed message.
+    if (!e.seguirRetomada) await assumirTravada(db, ctx, v);
+    const msg = await um<{ id: string }>(
+      `insert into mensagens (empresa_id, conversa_id, direcao, autor, autor_id, corpo, estado, automatica, modelo_mensagem, variaveis, finalidade, oportunidade_id)
+       values ($1, $2, 'saida', 'humano', $3, $4, 'na_fila', false, $5, $6, 'modelo_equipe', $7) returning id`,
+      [ctx.empresaId, v.id, ctx.userId, corpo, m.nome, JSON.stringify(valores), o?.id ?? null],
+      db,
+    );
+    await q('update conversas set atualizado_em = now(), oportunidade_id = coalesce(oportunidade_id, $2) where id = $1', [v.id, o?.id ?? null], db);
+    await agendar(db, ctx.empresaId, { tipo: 'enviar_mensagem', chave: `envio:${msg!.id}`, conversaId: v.id, oportunidadeId: o?.id ?? null, dados: { mensagem: msg!.id, finalidade: 'modelo_equipe' } });
+    if (o) await q('update oportunidades set ultima_interacao_em = now() where id = $1', [o.id], db);
+    await marcarAtendimentoHumano(db, ctx.empresaId, o?.id ?? null, ctx.userId);
+    await registrar(db, ctx.empresaId, { conversaId: v.id, oportunidadeId: o?.id ?? null, contatoId, ator: ator(ctx), tipo: 'modelo_enviado', dados: { modelo: m.nome, titulo: m.titulo, retomada: !!e.seguirRetomada } });
+    const moverParaProposta = !!e.seguirRetomada && !!o && ['novo', 'atendimento', 'qualificado'].includes(o.etapa);
+    return { conversaId: v.id, mensagemId: msg!.id, oportunidadeId: o?.id ?? null, moverParaProposta };
+  });
+  // "Proposta enviada" starts the company's follow-ups (rules and flows), exactly as when a person moves the card.
+  if (r.moverParaProposta && r.oportunidadeId) await mudarEtapa(ctx, r.oportunidadeId, { etapa: 'proposta', valorCentavos: e.valorCentavos ?? null });
+  else if (e.seguirRetomada && r.oportunidadeId && e.valorCentavos != null) await definirValor(ctx, r.oportunidadeId, e.valorCentavos);
+  return r;
 }
 
 /** The assistant (or a failure, or a limit) passes the conversation to the team and stops answering. */

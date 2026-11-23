@@ -12,6 +12,11 @@ import { CartaoVisita } from '@/componentes/visita';
 import { visitas } from '@/server/agenda';
 import { SecaoPropostas } from '@/componentes/propostas';
 import { propostasDa } from '@/server/propostas';
+import { EnviarModelo } from '@/componentes/enviar-modelo';
+import { integracaoWhatsApp } from '@/server/integracoes';
+import { naJanelaWhatsApp } from '@/server/conversas';
+import { RELATOS, hojeEm, recebimentosDa } from '@/server/recebimentos';
+import { recebimentoAcao, relatoAcao, removerRecebimentoAcao } from '@/app/acoes';
 
 export const metadata = { title: 'Oportunidade' };
 
@@ -26,6 +31,9 @@ function detalheEvento(tipo: string, d: Record<string, unknown>, nomes: Map<stri
   if (tipo === 'visita_alterada') return `${d.estado === 'remarcada' ? `Remarcada para ${d.quando}` : String(d.estado ?? '')}`;
   if (tipo === 'acesso_admin_growlift') return `Motivo: ${d.motivo}`;
   if (tipo === 'pedido_recebido') return `Origem: ${ORIGENS[String(d.origem)] ?? d.origem}`;
+  if (tipo === 'modelo_enviado') return `${d.titulo ?? d.modelo}${d.retomada ? ' · com retomada automática' : ''}`;
+  if (tipo === 'recebimento_registrado' || tipo === 'recebimento_removido') return `${reais((d.valor_centavos as number) ?? null)} · ${String(d.recebido_em ?? '').split('-').reverse().join('/')}${d.descricao ? ` · ${d.descricao}` : ''}`;
+  if (tipo === 'relato_retomada') return RELATOS[String(d.relato) as keyof typeof RELATOS] ?? '';
   return '';
 }
 
@@ -36,6 +44,15 @@ export default async function Detalhe({ params }: { params: Promise<{ id: string
   const [contato, eventos, pessoas, abertas, conversas, empresa] = await Promise.all([contatoDe(ctx, o.contato_id), historico(ctx, id), equipe(ctx), tarefas(ctx, { oportunidadeId: id }), conversasDoContato(ctx, o.contato_id), empresaPorId(ctx.empresaId)]);
   const vs = await visitas(ctx, new Date(0), new Date('2100-01-01'), id);
   const props = await propostasDa(ctx, id);
+  const zap = await integracaoWhatsApp(ctx.empresaId);
+  const conversaZap = conversas.find((v) => v.canal === 'whatsapp');
+  const autorizou = !!contato?.consentimentos.some((c) => c.canal === 'whatsapp' && !c.revogado_em && c.origem !== 'ligacao' && c.origem !== 'agenda');
+  const naJanela = naJanelaWhatsApp(conversaZap?.ultima_entrada_em ?? null);
+  const recebidos = await recebimentosDa(ctx, id);
+  const totalRecebido = recebidos.reduce((t, r) => t + r.valor_centavos, 0);
+  const valorProposta = o.valor_proposta_centavos != null ? Number(o.valor_proposta_centavos) : null;
+  const emAberto = valorProposta != null ? Math.max(0, valorProposta - totalRecebido) : null;
+  const dataBr = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}/${d.slice(0, 4)}`;
   const fuso = empresa!.config.regras.fuso;
   const temVisitaAtiva = vs.some((v) => (v.estado === 'marcada' || v.estado === 'confirmada') && !v.passou);
   const nomes = new Map(pessoas.map((p) => [p.user_id, p.nome]));
@@ -89,6 +106,27 @@ export default async function Detalhe({ params }: { params: Promise<{ id: string
                   </li>
                 ))}
               </ul>
+            )}
+          </section>
+
+          <section className="cartao p-4" aria-labelledby="t-modelo">
+            <h2 id="t-modelo" className="font-bold">Enviar pelo WhatsApp</h2>
+            <p className="mt-1 text-sm text-suave">Com um modelo aprovado pela Meta, a mensagem chega mesmo que o cliente nunca tenha escrito no WhatsApp (ex.: pediu orçamento pelo site e autorizou).</p>
+            {contato?.nao_contatar_em ? (
+              <p className="aviso mt-3 bg-erro-clara text-erro">Este contato pediu para não receber mensagens. Só dá para responder se ele escrever de novo.</p>
+            ) : !autorizou && !naJanela ? (
+              <p className="aviso mt-3 bg-alerta-clara text-alerta">Sem autorização de WhatsApp e sem mensagem dele nas últimas 24 horas: ligue para o cliente.</p>
+            ) : zap.config.modelos_equipe.length === 0 ? (
+              <p className="mt-3 text-[15px] text-suave">Nenhum modelo aprovado cadastrado. {ctx.papel === 'admin' ? <Link className="font-semibold text-marca-escura underline" href="/painel/configuracoes#modelos-equipe">Cadastrar em Configurações › WhatsApp</Link> : 'O administrador cadastra em Configurações › WhatsApp.'}</p>
+            ) : (
+              <EnviarModelo
+                modelos={zap.config.modelos_equipe}
+                oportunidadeId={id}
+                contato={o.contato_nome ?? ''}
+                empresa={empresa!.nome}
+                podeSeguirRetomada={['novo', 'atendimento', 'qualificado'].includes(o.etapa)}
+                avisoRetomada={conversaZap && conversaZap.estado !== 'ia_ativa' ? 'A conversa no WhatsApp está com uma pessoa da equipe: a retomada automática não sai enquanto for assim.' : null}
+              />
             )}
           </section>
 
@@ -195,6 +233,50 @@ export default async function Detalhe({ params }: { params: Promise<{ id: string
               <input className="campo" id="valor" name="valor" inputMode="decimal" defaultValue={o.valor_proposta_centavos != null ? (Number(o.valor_proposta_centavos) / 100).toFixed(2).replace('.', ',') : ''} placeholder="18.500,00" />
               <Enviar secundario>Salvar valor</Enviar>
             </Formulario>
+          </section>
+
+          <section className="cartao p-4" aria-labelledby="t-receb">
+            <h2 id="t-receb" className="font-bold">Recebimentos</h2>
+            <dl className="mt-2 grid grid-cols-2 gap-2 text-[15px]">
+              <div><dt className="text-sm text-suave">Recebido</dt><dd className="font-semibold text-tinta">{reais(totalRecebido)}</dd></div>
+              <div><dt className="text-sm text-suave">Em aberto</dt><dd className="font-semibold text-tinta">{emAberto == null ? '—' : reais(emAberto)}</dd></div>
+            </dl>
+            {valorProposta == null && <p className="mt-1 text-[13px] text-suave">Informe o valor da proposta para ver quanto falta receber.</p>}
+            {recebidos.length > 0 && (
+              <ul className="mt-3 divide-y divide-linha border-t border-linha">
+                {recebidos.map((r) => (
+                  <li key={r.id} className="flex items-start justify-between gap-2 py-2 text-[15px]">
+                    <span><span className="font-semibold text-tinta">{reais(r.valor_centavos)}</span> · {dataBr(r.recebido_em)}{r.descricao ? ` · ${r.descricao}` : ''}<span className="block text-[13px] text-suave">Registrado por {r.criado_nome ?? 'alguém da equipe'}</span></span>
+                    {(ctx.papel === 'admin' || r.criado_por === ctx.userId) && (
+                      <Formulario acao={removerRecebimentoAcao}><input type="hidden" name="id" value={r.id} /><input type="hidden" name="oportunidade" value={id} /><Enviar secundario className="min-h-9 px-2 py-1 text-sm">Remover</Enviar></Formulario>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {o.etapa !== 'perdido' && (
+              <div className="mt-3 border-t border-linha pt-3">
+                <h3 className="text-[15px] font-semibold text-tinta">Registrar um recebimento</h3>
+                <Formulario acao={recebimentoAcao} limpar className="mt-2 space-y-3">
+                  <input type="hidden" name="oportunidade" value={id} />
+                  <div><label className="rotulo" htmlFor="rc-valor">Valor recebido (R$)</label><input className="campo" id="rc-valor" name="valor" inputMode="decimal" required placeholder={emAberto ? (emAberto / 100).toFixed(2).replace('.', ',') : '800,00'} /></div>
+                  <div><label className="rotulo" htmlFor="rc-data">Data em que o dinheiro entrou</label><input className="campo" id="rc-data" name="data" type="date" required defaultValue={hojeEm(fuso)} max={hojeEm(fuso)} /></div>
+                  <div><label className="rotulo" htmlFor="rc-desc">Descrição (opcional)</label><input className="campo" id="rc-desc" name="descricao" maxLength={80} list="rc-sugestoes" placeholder="Sinal" /><datalist id="rc-sugestoes"><option value="Sinal" /><option value="Saldo" /><option value="Pagamento integral" /><option value="Parcela" /></datalist></div>
+                  <Enviar secundario>Registrar</Enviar>
+                </Formulario>
+              </div>
+            )}
+            {(recebidos.length > 0 || o.etapa === 'ganho') && (
+              <Formulario acao={relatoAcao} className="mt-3 space-y-2 border-t border-linha pt-3">
+                <input type="hidden" name="oportunidade" value={id} />
+                <label className="rotulo" htmlFor="rc-relato">Como esta venda aconteceu?</label>
+                <select className="campo" id="rc-relato" name="relato" defaultValue={o.retomada_relato ?? ''}>
+                  {Object.entries(RELATOS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                </select>
+                <Enviar secundario>Salvar</Enviar>
+                <p className="text-[13px] text-suave">O sistema mostra se houve retomada antes do pagamento; só você sabe se foi ela que trouxe o cliente de volta.</p>
+              </Formulario>
+            )}
           </section>
 
           {o.etapa === 'ganho' && (

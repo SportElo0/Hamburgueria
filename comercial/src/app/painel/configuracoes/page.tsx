@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { convidarAcao, gerarChaveGoogleAcao, gerarChaveTelefoniaAcao, membroAcao, responsavelPadraoAcao, salvarConfigAcao, salvarWhatsAppAcao, simularLigacaoAcao } from '@/app/acoes';
+import { convidarAcao, gerarChaveGoogleAcao, gerarChaveTelefoniaAcao, membroAcao, removerModeloEquipeAcao, responsavelPadraoAcao, salvarConfigAcao, salvarModeloEquipeAcao, salvarWhatsAppAcao, simularLigacaoAcao } from '@/app/acoes';
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { feedbacks } from '@/server/avaliacoes';
@@ -162,6 +162,39 @@ export default async function Configuracoes() {
           <p className="text-sm text-suave sm:col-span-2">Fora das 24 horas depois da última mensagem do cliente, o WhatsApp só aceita modelos aprovados pela Meta. Sem modelo, o envio automático vira tarefa para uma pessoa. Endereço para os avisos da Meta (webhook): <code className="break-all">{base}/api/webhooks/whatsapp</code></p>
           <div className="sm:col-span-2"><Enviar>Salvar WhatsApp</Enviar></div>
         </Formulario>
+
+        <div id="modelos-equipe" className="mt-6 border-t border-linha pt-5">
+          <h3 className="font-bold">Modelos para a equipe enviar</h3>
+          <p className="mt-1 text-sm text-suave">Para mandar um orçamento ou os valores de uma reserva a quem pediu pelo site e autorizou o WhatsApp, mesmo que a pessoa nunca tenha escrito. Crie o modelo na Meta (categoria “Utilidade”), espere a aprovação e cadastre aqui com o mesmo nome e o mesmo texto. Cada {'{{1}}'}, {'{{2}}'}… vira um campo que a equipe preenche antes de enviar.</p>
+          {zap.config.modelos_equipe.length > 0 && (
+            <ul className="mt-3 divide-y divide-linha">
+              {zap.config.modelos_equipe.map((m) => (
+                <li key={m.nome} className="flex flex-wrap items-start justify-between gap-3 py-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-tinta">{m.titulo} <code className="text-sm font-normal text-suave">{m.nome}</code></p>
+                    <p className="mt-1 whitespace-pre-wrap text-sm">{m.texto}</p>
+                    <p className="mt-1 text-sm text-suave">Campos: {m.campos.map((c, i) => `{{${i + 1}}} ${c}`).join(' · ') || 'nenhum'}</p>
+                  </div>
+                  {ctx.papel === 'admin' && (
+                    <Formulario acao={removerModeloEquipeAcao}><input type="hidden" name="nome" value={m.nome} /><Enviar secundario className="min-h-9 px-2 py-1 text-sm">Remover</Enviar></Formulario>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          {ctx.papel === 'admin' && (
+            <details className="mt-3" open={zap.config.modelos_equipe.length === 0}>
+              <summary className="cursor-pointer font-semibold text-marca-escura">Cadastrar um modelo aprovado</summary>
+              <Formulario acao={salvarModeloEquipeAcao} limpar className="mt-3 grid gap-4 sm:grid-cols-2">
+                <div><label className="rotulo" htmlFor="me-nome">Nome do modelo na Meta</label><input className="campo" id="me-nome" name="nome" required placeholder="orcamento_reserva" autoComplete="off" /></div>
+                <div><label className="rotulo" htmlFor="me-titulo">Título para a equipe</label><input className="campo" id="me-titulo" name="titulo" required maxLength={60} placeholder="Valores da reserva" /></div>
+                <div className="sm:col-span-2"><label className="rotulo" htmlFor="me-texto">Texto aprovado (idêntico ao da Meta, letra por letra: é o que a equipe vê antes de enviar)</label><textarea className="campo" id="me-texto" name="texto" rows={4} required maxLength={1024} placeholder={'Olá, {{1}}! Aqui é da {{2}}. Para {{3}}, o valor fica em {{4}}. Para reservar, é só responder esta mensagem. Para não receber mensagens, responda SAIR.'} /></div>
+                <div className="sm:col-span-2"><label className="rotulo" htmlFor="me-campos">Nome de cada campo, um por linha, na ordem</label><textarea className="campo" id="me-campos" name="campos" rows={4} placeholder={'Nome do cliente\nNome da empresa\nDatas e pessoas\nValor'} /></div>
+                <div className="sm:col-span-2"><Enviar secundario>Salvar modelo</Enviar></div>
+              </Formulario>
+            </details>
+          )}
+        </div>
       </Secao>
 
       <Secao id="ligacoes" titulo="Ligações não atendidas" nota="A empresa usa um número de um serviço de telefonia na internet, que toca nos celulares da equipe. Quando ninguém atende, o serviço avisa a plataforma: ela responde pelo WhatsApp quem autorizou, abre a oportunidade e cria a tarefa de retornar a ligação.">

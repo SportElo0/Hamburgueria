@@ -23,6 +23,26 @@ async function main() {
 
   const { cadastrarEmpresa } = await import('../src/server/empresas');
 
+  /**
+   * The approved templates the team sends from the panel (quote, values of a booking). In the demonstration they are
+   * fictitious and only the simulator "sends" them. Added once; a company that already has its own is left alone.
+   */
+  async function modelosDemo() {
+    const MODELOS: Record<string, unknown[]> = {
+      'pousada-demo': [{ nome: 'valores_reserva', titulo: 'Valores da reserva', texto: 'Olá, {{1}}! Aqui é da {{2}}. Para {{3}}, o valor fica em {{4}}. Para reservar, é só responder esta mensagem. Para não receber mensagens, responda SAIR.', campos: ['Nome do hóspede', 'Nome da pousada', 'Datas, pessoas e acomodação', 'Valor'] }],
+      'lumivale-demo': [{ nome: 'orcamento_pronto', titulo: 'Orçamento pronto', texto: 'Olá, {{1}}! Aqui é da {{2}}. O orçamento do seu sistema de energia solar ficou em {{3}}: {{4}}. Quer que a gente explique os detalhes? É só responder esta mensagem. Para não receber mensagens, responda SAIR.', campos: ['Nome do cliente', 'Nome da empresa', 'Valor', 'Resumo do sistema'] }],
+      'soldovale-demo': [{ nome: 'orcamento_pronto', titulo: 'Orçamento pronto', texto: 'Olá, {{1}}! Aqui é da {{2}}. O orçamento ficou em {{3}}: {{4}}. É só responder esta mensagem para tirar dúvidas. Para não receber mensagens, responda SAIR.', campos: ['Nome do cliente', 'Nome da empresa', 'Valor', 'Resumo'] }],
+    };
+    for (const [slug, modelos] of Object.entries(MODELOS)) {
+      await q(
+        `update integracoes set config = jsonb_set(config, '{modelos_equipe}', $2::jsonb)
+         where tipo = 'whatsapp' and empresa_id = (select id from empresas where slug = $1 and demonstracao)
+           and coalesce(jsonb_array_length(config -> 'modelos_equipe'), 0) = 0`,
+        [slug, JSON.stringify(modelos)],
+      );
+    }
+  }
+
   /** The pousada demonstration, built by the ready-made model exactly as a real sign-up (everything fictitious). */
   async function pousadaDemo(growliftId: string) {
     const existe = await um<{ id: string }>(`select id from empresas where slug = 'pousada-demo'`);
@@ -77,6 +97,7 @@ async function main() {
   if (await um(`select 1 from empresas where slug = 'lumivale-demo'`)) {
     const g = await um<{ user_id: string }>(`select a.user_id from admins_plataforma a join "user" u on u.id = a.user_id where u.email = 'equipe@growlift.demo'`);
     const criou = g ? await pousadaDemo(g.user_id) : false;
+    await modelosDemo();
     console.log(criou ? 'Pousada de demonstração criada (pousada-demo). Login: admin@marecalma.demo' : 'Os dados de demonstração já existem. Para recomeçar do zero: npm run reiniciar-banco');
     return fecharPool();
   }
@@ -177,6 +198,7 @@ async function main() {
 
   await novo(sol.empresa, 6, { nome: 'Cliente da Sol do Vale (fictício)', telefone: '12900000201', cidade: 'Taubaté', necessidade: 'Projeto para minha casa.' });
   await pousadaDemo(growlift);
+  await modelosDemo();
 
   await fecharPool();
   console.log(`

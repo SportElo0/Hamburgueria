@@ -37,6 +37,8 @@ interface Iniciada {
   modelo?: string;
   /** For follow-ups: cancel when the customer wrote after this moment. */
   agendadoEm?: Date;
+  /** A flow message that is a follow-up (its flow starts at "Proposta enviada" or on a stalled opportunity). */
+  retomada?: boolean;
 }
 
 /**
@@ -88,8 +90,8 @@ export async function enviarIniciada(t: Trabalho, i: Iniciada): Promise<Resultad
       return { tipo: 'cancelado', motivo: 'Fora da janela de 24 horas e sem modelo aprovado: virou tarefa.' };
     }
     const m = await um<{ id: string }>(
-      `insert into mensagens (empresa_id, conversa_id, direcao, autor, corpo, estado, automatica, modelo_mensagem) values ($1, $2, 'saida', 'sistema', $3, 'na_fila', true, $4) returning id`,
-      [empresa.id, v.id, i.corpo, modelo || 'texto'],
+      `insert into mensagens (empresa_id, conversa_id, direcao, autor, corpo, estado, automatica, modelo_mensagem, finalidade, oportunidade_id) values ($1, $2, 'saida', 'sistema', $3, 'na_fila', true, $4, $5, $6) returning id`,
+      [empresa.id, v.id, i.corpo, modelo || 'texto', i.retomada ? 'retomada' : i.finalidade, o.id],
       db,
     );
     await q('update conversas set atualizado_em = now(), oportunidade_id = coalesce(oportunidade_id, $2) where id = $1', [v.id, o.id], db);

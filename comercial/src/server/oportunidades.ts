@@ -21,6 +21,7 @@ export interface Oportunidade {
   proxima_acao: string;
   proxima_acao_em: Date | null;
   valor_proposta_centavos: string | null;
+  retomada_relato: string;
   motivo_perda: string;
   interesse_visita: string;
   entrada_em: Date;

@@ -6,7 +6,7 @@ import { atribuirPorFluxo, moverEtapaPorFluxo } from './oportunidades';
 import { nomeSeguro } from './trabalhos-texto';
 
 /** Sends a message the company starts (checked again for consent, hours, who holds the conversation, channel rules). */
-export type EnviarIniciada = (t: Trabalho, i: { oportunidadeId: string; corpo: string; finalidade: 'fluxo'; modelo: string }) => Promise<Resultado>;
+export type EnviarIniciada = (t: Trabalho, i: { oportunidadeId: string; corpo: string; finalidade: 'fluxo'; modelo: string; retomada?: boolean }) => Promise<Resultado>;
 
 interface Execucao {
   id: string;
@@ -56,7 +56,7 @@ export async function executarPassoFluxo(t: Trabalho, enviar: EnviarIniciada): P
   const execId = String(t.dados.execucao ?? '');
   const i = Number(t.dados.passo ?? 0);
   const e = await um<Execucao>(
-    `select e.*, f.ativo from fluxo_execucoes e join fluxos f on f.empresa_id = e.empresa_id and f.id = e.fluxo_id where e.empresa_id = $1 and e.id = $2`,
+    `select e.*, f.ativo, f.gatilho as gatilho_fluxo from fluxo_execucoes e join fluxos f on f.empresa_id = e.empresa_id and f.id = e.fluxo_id where e.empresa_id = $1 and e.id = $2`,
     [t.empresa_id, execId],
   );
   if (!e) return { tipo: 'cancelado', motivo: 'O fluxo foi excluído.' };
@@ -116,7 +116,10 @@ export async function executarPassoFluxo(t: Trabalho, enviar: EnviarIniciada): P
     }
     if (p.tipo === 'enviar_whatsapp') {
       const corpo = p.texto.replace(/\{\{\s*nome\s*\}\}/g, nomeSeguro(o.nome) || 'tudo bem').replace(/\{\{\s*empresa\s*\}\}/g, o.empresa);
-      const r = await enviar(t, { oportunidadeId: e.oportunidade_id, corpo: `${corpo} Para não receber mensagens, responda SAIR.`, finalidade: 'fluxo', modelo: p.modelo });
+      // A flow that starts when the values were sent, or on a stalled opportunity, is a follow-up (it counts in the sales report).
+      const g = (e as unknown as { gatilho_fluxo?: { tipo?: string; etapa?: string } }).gatilho_fluxo;
+      const retomada = (g?.tipo === 'etapa_alterada' && (g.etapa === 'proposta' || g.etapa === 'negociacao')) || g?.tipo === 'sem_interacao';
+      const r = await enviar(t, { oportunidadeId: e.oportunidade_id, corpo: `${corpo} Para não receber mensagens, responda SAIR.`, finalidade: 'fluxo', modelo: p.modelo, retomada });
       // Outside the company's hours the same step waits for the next opening.
       if (r.tipo === 'adiar') return r;
       const quando = r.tipo === 'concluido' ? 'Mensagem enviada para a fila do WhatsApp' : r.tipo === 'cancelado' ? `Não enviada: ${r.motivo}` : `Não enviada: ${'erro' in r ? r.erro : ''}`;

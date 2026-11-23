@@ -22,7 +22,7 @@ Abra `/demonstracao` no ambiente de demonstração. É uma página guiada com a 
 1. **Site com IA.** Aperte “Ver a conversa”: às 23h o hóspede pergunta, a Ana responde só com o que a pousada informou, não dá preço e passa o pedido para a recepção. Se o dono quiser testar de verdade, abra o site de exemplo (`/s/pousada-demo`).
 2. **Google.** Marque os itens um por um (ou “Deixar tudo pronto”) e mostre o perfil e a busca se completando. Diga a frase do rodapé: ninguém garante 1º lugar.
 3. **Ligações.** Escolha o horário, aperte “Simular a ligação” e deixe o dono escolher “Apertar 1” ou “Não apertar”. Sem o 1, nenhuma mensagem sai: fica só a tarefa de retornar.
-4. **Retomada.** “Ver o pedido andar”: o cartão anda no quadro, a retomada sai em 1 dia e para quando a Juliana responde. Troque para “Não responde mais” para mostrar a tarefa de 3 dias.
+4. **Retomada.** “Ver o pedido andar”: a recepção envia os valores pelo painel com um modelo aprovado (chega mesmo que a Juliana só tenha pedido pelo site), o cartão anda no quadro, a retomada sai em 1 dia e para quando a Juliana responde; no fim, o sinal de R$ 800 aparece como recebido e o resto em aberto. Troque para “Não responde mais” para mostrar a tarefa de 3 dias. No painel de verdade (`admin@marecalma.demo`), abra o pedido da Renata e use “Enviar pelo WhatsApp”; depois registre um recebimento e mostre “Vendas pagas”.
 5. **Avaliações.** “Marcar estadia como concluída”, abra o convite e escolha uma nota baixa: o botão de avaliar no Google continua lá. Todo hóspede recebe o mesmo convite.
 6. **Resumo.** Mostra o que aconteceu nesta simulação. Feche com “o que a gente não promete”.
 

@@ -450,17 +450,17 @@ function CenaLigacao({ marcar }: { marcar: Marcar }) {
 
 const COLUNAS = ['Novo pedido', 'Em atendimento', 'Proposta enviada', 'Ganho'];
 const RETOMADA = `Oi, Juliana! Aqui é da ${EMPRESA}. Conseguiu ver os valores para as suas datas? Se quiser reservar, é só responder por aqui que a gente confirma a disponibilidade. Para não receber mensagens, responda SAIR.`;
-interface Evento { quando: string; texto: string; etapa: number; msg?: { de: 'p' | 'h'; t: string }; auto?: boolean; tarefa?: string; ms: number }
+interface Evento { quando: string; texto: string; etapa: number; msg?: { de: 'p' | 'h'; t: string }; auto?: boolean; modelo?: boolean; estado?: string; tarefa?: string; ms: number }
 const BASE: Evento[] = [
   { quando: 'Sex · 23:14', texto: 'O pedido chega pelo formulário do site, com a autorização para falar pelo WhatsApp marcada. A recepção recebe o aviso no celular.', etapa: 0, ms: 500 },
   { quando: 'Sáb · 08:05', texto: 'Paula, da recepção, abre o pedido.', etapa: 1, ms: 1300 },
-  { quando: 'Sáb · 08:20', texto: 'A recepção manda os valores pelo WhatsApp.', etapa: 2, msg: { de: 'p', t: 'Bom dia, Juliana! Para 29/12 a 02/01 na suíte casal com varanda, o valor é R$ 3.200 pelas 4 noites, com café da manhã (valor fictício). Quer que eu reserve?' }, ms: 1500 },
-  { quando: 'Dom · 08:20', texto: '1 dia sem resposta: a retomada sai sozinha.', etapa: 2, auto: true, msg: { de: 'p', t: RETOMADA }, ms: 2000 },
+  { quando: 'Sáb · 08:20', texto: 'Paula envia os valores pelo painel, com o modelo aprovado “Valores da reserva”. Chega no WhatsApp da Juliana mesmo sem ela ter escrito antes.', etapa: 2, modelo: true, estado: 'No painel: enviada · entregue', msg: { de: 'p', t: `Olá, Juliana! Aqui é da ${EMPRESA}. Para 29/12 a 02/01, 2 adultos, suíte casal com varanda e café da manhã, o valor fica em R$ 3.200 pelas 4 noites (valor fictício). Para reservar, é só responder esta mensagem. Para não receber mensagens, responda SAIR.` }, ms: 1500 },
+  { quando: 'Dom · 08:20', texto: '1 dia sem resposta: a retomada sai sozinha.', etapa: 2, auto: true, modelo: true, estado: 'No painel: enviada · entregue', msg: { de: 'p', t: RETOMADA }, ms: 2000 },
 ];
 const RESPONDE: Evento[] = [
   ...BASE,
   { quando: 'Dom · 10:02', texto: 'Juliana responde. A automação para na hora.', etapa: 2, msg: { de: 'h', t: 'Oi! Vi sim, pode reservar.' }, ms: 1800 },
-  { quando: 'Dom · 10:15', texto: 'A recepção confirma a reserva: R$ 3.200 (valor fictício).', etapa: 3, ms: 1500 },
+  { quando: 'Dom · 10:15', texto: 'A recepção confirma a reserva e registra o sinal de R$ 800 que caiu no Pix (valores fictícios).', etapa: 3, ms: 1500 },
 ];
 const SOME: Evento[] = [...BASE, { quando: 'Qua · 08:20', texto: '3 dias sem resposta: a recepção recebe uma tarefa.', etapa: 2, tarefa: 'Retomar o pedido de reserva: valores enviados há 3 dias sem resposta', ms: 2000 }];
 const ATRASOS_RESPONDE = RESPONDE.map((e) => e.ms);
@@ -486,10 +486,11 @@ function CenaRetomada({ marcar }: { marcar: Marcar }) {
       dor="a recepção manda os valores, o hóspede não responde e, no corre do dia, ninguém lembra de voltar a falar com ele."
       faz={[
         'Todo pedido vira um cartão no painel: novo, em atendimento, proposta enviada, ganho.',
+        'A recepção envia os valores pelo painel, com um modelo aprovado pela Meta: chega mesmo que o hóspede só tenha pedido pelo site, e o painel mostra se foi entregue ou se falhou.',
         'Se o hóspede autorizou mensagens e não responder em 1 dia, sai uma mensagem de retomada. Em 3 dias sem resposta, a recepção recebe uma tarefa (sem autorização, fica só a tarefa).',
         'Se ele responder ou a reserva mudar de etapa, a automação para e ele não recebe mais nada dela.',
       ]}
-      precisa={['O WhatsApp oficial da pousada (o mesmo do serviço 3).', 'Alguém da recepção para mandar os valores e confirmar a reserva.']}
+      precisa={['O WhatsApp oficial da pousada (o mesmo do serviço 3).', 'Os modelos de mensagem aprovados pela Meta (valores e retomada). A gente escreve e cadastra.', 'Alguém da recepção para mandar os valores, confirmar a reserva e registrar o que foi pago.']}
       nota="A retomada só vai para quem autorizou receber mensagens e sempre tem a opção SAIR. Uma mensagem só, sem insistência."
     >
       <Segmentado rotulo="Depois dos valores, a Juliana…" valor={modo} mudar={setModo} desligado={resp.tocando || some.tocando} opcoes={[{ v: 'responde', t: 'Responde à retomada' }, { v: 'some', t: 'Não responde mais' }]} />
@@ -515,11 +516,13 @@ function CenaRetomada({ marcar }: { marcar: Marcar }) {
             <p className="flex flex-wrap items-center gap-2 text-[12px] font-bold tabular-nums text-suave">
               {e.quando}
               {e.auto && <span className="etiqueta etiqueta-azul">Automação</span>}
+              {e.modelo && <span className="etiqueta">Modelo aprovado</span>}
             </p>
             <p className="mt-0.5 text-[14.5px] font-semibold leading-snug text-tinta">{e.texto}</p>
             {e.msg && <div className="mt-1.5"><Balao lado={e.msg.de === 'h' ? 'dir' : 'esq'} rotulo={e.msg.de === 'h' ? 'Juliana' : EMPRESA}>{e.msg.t}</Balao></div>}
+            {e.estado && <p className="mt-1 text-[12px] font-semibold text-ok">{e.estado}</p>}
             {e.tarefa && <div className="mt-1.5"><NoPainel titulo={`Tarefa: ${e.tarefa}`} tom="alerta" /></div>}
-            {e.etapa === 3 && <div className="mt-1.5"><NoPainel titulo="Reserva fechada: R$ 3.200 (valor fictício)" tom="ok">O valor entra nos números do mês da pousada.</NoPainel></div>}
+            {e.etapa === 3 && <div className="mt-1.5"><NoPainel titulo="Reserva fechada: R$ 800 recebidos, R$ 2.400 em aberto (valores fictícios)" tom="ok">Entra em “Vendas pagas”, marcada como paga após retomada: a mensagem de retomada saiu antes do pagamento.</NoPainel></div>}
           </li>
         ))}
       </ol>
@@ -620,7 +623,7 @@ function Resumo({ feito, ir, recomecar }: { feito: Feito; ir: (i: number) => voi
     {
       feito: !!feito.retomada,
       passo: 3,
-      t: feito.retomada === 'ganho' ? 'Um pedido parado foi retomado sozinho e fechou: R$ 3.200 (valor fictício).' : feito.retomada === 'tarefa' ? 'Um pedido sem resposta virou tarefa para a recepção, sem insistir com o hóspede.' : 'Retomada: ainda não vista.',
+      t: feito.retomada === 'ganho' ? 'Um pedido parado foi retomado sozinho e fechou com sinal de R$ 800 de R$ 3.200 (valores fictícios).' : feito.retomada === 'tarefa' ? 'Um pedido sem resposta virou tarefa para a recepção, sem insistir com o hóspede.' : 'Retomada: ainda não vista.',
     },
     { feito: feito.avaliacao, passo: 4, t: feito.avaliacao ? 'Um convite de avaliação saiu no check-out, com o botão do Google para todos.' : 'Avaliações: ainda não vistas.' },
   ];
