@@ -106,6 +106,12 @@ fetch('https://painel-lojas-sportelo.vercel.app/api/public/lojas/<slug>/ofertas'
 ```
 Texto da caixinha: "Quero receber ofertas da <loja> no WhatsApp (no máximo uma mensagem por mês; para sair, responda SAIR)." Nunca pré-marcada.
 
+## GEO do site da Growlift (aparecer nas respostas de IA), 23/11/2026
+
+- **Etapa 1 (no ar):** JSON-LD no `<head>` do `growlift/index.html` (Organization com os dados do rodapé e `areaServed` Brasil, WebSite e FAQPage). As perguntas do FAQPage são cópia exata da seção "Dúvidas": se mudar uma, mude a outra (o Google exige que bata com o texto da tela). Nova pergunta "Vocês atendem fora de São Paulo?" (atendem o Brasil inteiro, confirmado pelo Antônio). Open Graph com `img/og.jpg`, logo em `img/logo.png`, sitemap atualizado.
+- **Inglês pendente:** `growlift/en/` ainda tem preços e oferta antigos. Está com `noindex` e fora do sitemap, mas continua no ar e com o botão EN no menu; a revisão legal recomenda tirar do ar ou atualizar (decisão do Antônio).
+- **Próximas etapas:** 2) páginas de verdade para /clinicas, /restaurantes, /imobiliarias e /outros (hoje é a mesma página trocando texto por JavaScript), com perguntas próprias, mostrando os textos antes; 3) Google Search Console e Bing Webmaster com o login deles (o ChatGPT e o Copilot usam o Bing). Não existe arquivo ou marcação mágica para IA (o Google diz isso); nada de avaliação falsa ou texto só para robô.
+
 ## Pedidos de diagnóstico (site da Growlift)
 
 `growlift/` posta em `/api/public/diagnosticos`; a lista fica em `/painel/diagnosticos`. Limite: 300 por dia e 5 por endereço por dia.
