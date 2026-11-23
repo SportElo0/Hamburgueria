@@ -49,3 +49,6 @@ __pycache__/
 # Playwright MCP screenshots and traces
 .playwright-mcp/
 .superpowers/
+
+# falas em pedaços do Reel 33 (narracao33.py gera de novo)
+growlift-social/_fonte/reels/voz33/*.wav
