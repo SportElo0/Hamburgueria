@@ -488,7 +488,7 @@ Carrossel sobre a ficha técnica da marmita: capa com uma marmita de R$ 22 e a p
 
 ## Seg 23/11 · Skill da Semana 01: a skill que monta os seus posts
 
-Pasta `23-skill-posts/` (8 slides). Palavra: **POSTS** (presente em `10-presentes/presentes.md`: link oficial do arquivo da skill e o passo a passo). Fonte: `_fonte/carrosseis-v2.mjs 23`. Primeiro episódio da série "Skill da Semana" (plano: https://claude.ai/artifact/9WeT16HkFHwb5pwbVmHWeT).
+Pasta `23-skill-posts/` (8 slides). Palavra: **POSTS** (presente em `10-presentes/presentes.md`: link oficial do arquivo da skill e o passo a passo). Fonte: `_fonte/carrosseis-v2.mjs 23`. Formato "post de texto" (foto, nome e texto grande, um assunto por slide), refeito em 23/11 a pedido do Antônio. Primeiro episódio da série "Skill da Semana" (plano: https://claude.ai/artifact/9WeT16HkFHwb5pwbVmHWeT).
 
 **Conferido em 23/11/2026:** o que a skill faz (SKILL.md do repositório), o arquivo `social-claude-web.zip` da release v2.14.25, as 62 mil estrelas e o caminho de instalação do README (Customize → Skills → + Create skill → Upload a skill). A skill é do Corey Haines (MIT); a Growlift não diz que fez e não é afiliada à Anthropic nem ao autor. Revisão legal feita: "gratuita" sempre junto do aviso de que a conta do Claude precisa ter skills liberadas (depende do plano), e seguir é pedido, não condição.
 
@@ -497,11 +497,11 @@ Pasta `23-skill-posts/` (8 slides). Palavra: **POSTS** (presente em `10-presente
 **Legenda**
 
 ```
-Não sabe o que postar hoje? 📅 Salva esse carrossel.
+Pare de pedir "faz um post pra mim" pra IA. 👇 Salva esse carrossel.
 
 Skill da Semana, ep. 01: a skill "social", criada pelo Corey Haines, é gratuita no GitHub (licença MIT).
 
-Ela faz o Claude perguntar sobre o seu negócio e depois montar os temas do perfil, os ganchos, o calendário da semana, roteiros de Reels e carrosséis. E ainda corta o texto com cara de IA.
+Ela faz o Claude te entrevistar sobre o seu negócio e depois montar os temas do perfil, os ganchos, o calendário da semana, roteiros de Reels e carrosséis. E ainda corta o texto com cara de IA.
 
 Pra usar, sua conta do Claude precisa permitir skills e execução de código (hoje isso depende do plano; confira no app). Ela escreve; quem revisa e posta é você.
 
@@ -515,5 +515,5 @@ A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude, nem 
 **Texto alternativo da capa** (em Configurações avançadas, ao postar pelo app)
 
 ```
-Carrossel "Skill da Semana, episódio 1": capa "Não sabe o que postar hoje?" com um celular mostrando a semana de posts de uma padaria de exemplo; o que é uma skill; a skill "social", do Corey Haines, grátis no GitHub (licença MIT, coleção marketingskills com cerca de 62 mil estrelas em 23/11/2026); as perguntas que ela faz; o que ela monta (temas, ganchos, calendário, roteiros de Reels, carrosséis); a lista do que ela evita escrever; como instalar no Claude (a conta precisa ter skills liberadas); e o convite "Segue e comenta POSTS".
+Carrossel "Skill da Semana, episódio 1", no formato de post de texto da Growlift: "Pare de pedir faz um post pra mim pra IA"; por que pedido genérico dá resposta genérica e o que é uma skill; a skill "social", do Corey Haines, gratuita no GitHub (licença MIT, coleção marketingskills com cerca de 62 mil estrelas em 23/11/2026); as perguntas que ela faz; o que ela monta (temas, ganchos, calendário, roteiros de Reels, carrosséis); a lista do que ela evita escrever; como instalar no Claude (a conta precisa ter skills liberadas); e o convite "Comenta POSTS".
 ```

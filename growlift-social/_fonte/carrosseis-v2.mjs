@@ -73,6 +73,41 @@ function slide(inner, { n, total, tema }) {
   );
 }
 
+// Formato "post de texto": foto, nome e texto grande no fundo branco, um assunto por slide.
+const AVATAR = pathToFileURL(path.join(ROOT, '02-instagram-perfil', 'foto-perfil.png')).href;
+const POST_CSS = `
+body{background:#ffffff;color:#0f1419}
+.tw{position:absolute;left:84px;right:84px;top:50%;transform:translateY(-50%)}
+.tw-head{display:flex;align-items:center;gap:26px}
+.tw-head img{width:120px;height:120px;border-radius:50%}
+.tw-nome{font-size:42px;font-weight:800;letter-spacing:-.01em;color:#0f1419}
+.tw-user{font-size:34px;color:#536471;font-weight:500;margin-top:2px}
+.tw-txt{margin-top:38px;font-size:48px;line-height:1.3;font-weight:500;letter-spacing:-.012em;color:#0f1419}
+.tw-txt b{font-weight:800}
+.azul{color:${BLUE};font-weight:800}
+.tw-card{margin-top:38px;border:2px solid #cfd9de;border-radius:32px;overflow:hidden;background:#fff}
+.tw-li{display:flex;gap:24px;align-items:flex-start;font-size:38px;line-height:1.28;font-weight:600;padding:24px 32px;color:#0f1419}
+.tw-li+.tw-li{border-top:2px solid #eff3f4}
+.tw-li b{font-weight:800}
+.tw-ic{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:30px;font-weight:900;margin-top:-2px}
+.tw-nota{margin-top:30px;font-size:31px;line-height:1.4;color:#536471;font-weight:500}
+.tw-coment{margin-top:34px;display:flex;align-items:center;gap:22px;height:104px;padding:0 34px 0 18px;border:2px solid #cfd9de;border-radius:999px;font-size:40px;color:#0f1419}
+.tw-coment-av{flex:none;width:68px;height:68px;border-radius:50%;background:#e1e8ed}
+`;
+
+function slidePost(inner, { n, total }) {
+  const rodape =
+    n === 1
+      ? `<div style="position:absolute;right:84px;bottom:64px;font-size:32px;font-weight:700;color:#536471">Arrasta →</div>`
+      : `<div style="position:absolute;right:84px;bottom:64px;font-size:28px;font-weight:600;color:#8b98a5">${n}/${total}</div>`;
+  return page(
+    1080,
+    1350,
+    `<div class="tw"><div class="tw-head"><img src="${AVATAR}" alt=""><div><div class="tw-nome">Growlift</div><div class="tw-user">@growlift.ai</div></div></div>${inner}</div>${rodape}`,
+    POST_CSS,
+  );
+}
+
 // ---------------------------------------------------------------------------------------------
 // Peças de cena
 
@@ -998,99 +1033,81 @@ Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozin
     alt: 'Carrossel sobre a ficha técnica da marmita: capa com uma marmita de R$ 22 e a pergunta "Sua marmita custa quanto, de verdade?"; preço posto "de olho"; quatro passos com exemplos (pesar cada item, peso vezes preço do quilo, dividir as contas do mês pelas marmitas, descontar imposto e taxas, sobrando R$ 3,02 no exemplo); resumo para salvar e o convite "Comenta MARGEM" para receber a planilha grátis.',
   },
   // Carrossel 23 (Skill da Semana, ep. 01): a skill "social" do marketingskills (Corey Haines, MIT), conferida no
-  // SKILL.md e na release v2.14.25 em 23/11/2026. Crédito ao autor, aviso do plano pago do Claude, nada dito como nosso.
+  // SKILL.md e na release v2.14.25 em 23/11/2026. Formato "post de texto" (o mais copiado em carrossel educativo em
+  // 2026): foto, nome e texto grande, um assunto por slide. Crédito ao autor; "gratuita" sempre com o aviso do plano.
   {
     slug: '23-skill-posts',
+    estilo: 'post',
     titulo: 'Skill da Semana 01: a skill que monta os seus posts',
-    temas: ['escuro', 'claro', 'claro', 'azul', 'claro', 'escuro', 'claro', 'azul'],
+    temas: ['post', 'post', 'post', 'post', 'post', 'post', 'post', 'post'],
     slides: [
       () =>
-        `<span class="chip">Skill da Semana · Ep. 01</span>
-         <h1 class="h" style="font-size:108px;margin-top:30px">Não sabe o que <em>postar</em> hoje?</h1>
-         <p class="p" style="margin-top:26px;max-width:880px">Essa skill gratuita (de código aberto) faz o Claude montar a semana de posts do seu negócio.</p>
-         <div style="position:absolute;left:-84px;right:-84px;bottom:0;height:600px">
-           ${celular(
-             `<div style="padding:64px 26px 0"><div style="font-size:30px;font-weight:900">Posts da semana</div><div style="font-size:20px;font-weight:700;color:#8a93a3;margin-top:4px">Padaria Exemplo · exemplo</div>
-              ${[['Seg', 'Reel', 'O pão saindo do forno às 6h'], ['Qua', 'Carrossel', '3 jeitos de guardar o pão fresco'], ['Sex', 'Post', 'Quem faz o pão da casa']]
-                .map(([d, f, t]) => `<div style="margin-top:18px;padding:16px 18px;border-radius:20px;border:1.5px solid #e6eaf2;display:flex;gap:14px;align-items:center"><span style="flex:none;width:62px;height:62px;border-radius:16px;background:#e2eaff;color:${BLUE};display:grid;place-items:center;font-size:22px;font-weight:900">${d}</span><span><b style="display:block;font-size:19px;color:${BLUE};letter-spacing:.04em;text-transform:uppercase">${f}</b><span style="font-size:23px;font-weight:700">${t}</span></span></div>`)
-                .join('')}</div>`,
-             { x: 320, y: 20, w: 440, h: 620, rot: -3 },
-           )}
-           ${balao('Semana pronta ✅', { x: 700, y: 120, rot: 5, size: 32 })}
-         </div>`,
+        `<div class="tw-txt" style="font-size:86px;line-height:1.06;font-weight:800;letter-spacing:-.035em">Pare de pedir <span class="azul">“faz um post pra mim”</span> pra IA.</div>
+         <div class="tw-txt" style="font-size:54px">Tem uma skill que faz o Claude montar a <b>semana inteira de posts</b> do seu negócio.</div>
+         <div class="tw-txt" style="font-size:54px">Te mostro como ↓</div>`,
       () =>
-        porque({
-          frase: 'O que é uma <em>skill?</em>',
-          apoio: 'É um pacote de instruções que você instala no Claude. A partir daí, ele faz aquela tarefa sempre do mesmo jeito, como alguém que já sabe o caminho.',
-          cena: `<div style="position:absolute;left:110px;top:60px;display:flex;align-items:center;gap:26px">
-              <div class="card" style="padding:28px 30px;width:410px"><div style="font-size:22px;font-weight:800;color:#8a93a3;letter-spacing:.06em">ARQUIVO</div><div style="margin-top:10px;font-size:29px;font-weight:900;white-space:nowrap">social-claude-web.zip</div></div>
-              <span style="font-size:70px;font-weight:900;color:${BLUE}">→</span>
-              <div class="card" style="padding:28px 30px;width:380px"><div style="font-size:22px;font-weight:800;color:#8a93a3;letter-spacing:.06em">VOCÊ PEDE</div><div style="margin-top:10px;font-size:30px;font-weight:800">“Monte os posts da semana da minha padaria”</div></div></div>`,
-        }),
+        `<div class="tw-txt"><b>Pedido genérico, resposta genérica.</b></div>
+         <div class="tw-txt">A IA não sabe quem é o seu cliente, o tom da sua marca nem quanto tempo você tem pra postar. Aí ela chuta.</div>
+         <div class="tw-txt">É pra isso que existe <span class="azul">skill</span>: um pacote de instruções que você instala no Claude. Daí ele faz a tarefa sempre do mesmo jeito, como alguém que já sabe o caminho.</div>`,
       () =>
-        `<span class="chip">A skill de hoje</span>
-         <h2 class="h" style="font-size:96px;margin-top:30px"><em>social</em>, do Corey Haines.</h2>
-         <p class="p" style="margin-top:28px;max-width:900px">Gratuita no GitHub, com licença aberta (MIT). Faz parte do <b>marketingskills</b>, uma coleção de 56 skills de marketing.</p>
-         <div class="card" style="margin-top:54px;padding:30px 34px;display:flex;justify-content:space-between;align-items:center">
-           <div><div style="font-size:24px;font-weight:800;color:#8a93a3">github.com/coreyhaines31/</div><div style="font-size:42px;font-weight:900;margin-top:4px">marketingskills</div></div>
-           <div style="text-align:right"><div style="font-size:44px;font-weight:900;color:#b07a00">★ 62 mil</div><div style="font-size:20px;font-weight:700;color:#8a93a3">estrelas em 23/11/2026</div></div></div>
-         <p class="p" style="margin-top:28px;font-size:30px">Quem criou foi ele. A Growlift só mostra como usar e não é afiliada a ele nem à Anthropic, dona do Claude.</p>`,
+        `<div class="tw-txt">A skill de hoje se chama <span class="azul">social</span>.</div>
+         <div class="tw-txt">Quem criou foi o Corey Haines. É gratuita no GitHub, com licença aberta (MIT), e faz parte de uma coleção de 56 skills de marketing.</div>
+         <div class="tw-card">
+           <div style="padding:34px 36px;background:#f7f9f9;border-bottom:2px solid #eff3f4">
+             <div style="font-size:30px;color:#536471;font-weight:600">github.com/coreyhaines31</div>
+             <div style="font-size:52px;font-weight:800;margin-top:6px;letter-spacing:-.02em">marketingskills</div></div>
+           <div style="padding:24px 36px;display:flex;justify-content:space-between;align-items:center;font-size:30px;color:#536471;font-weight:600">
+             <span><b style="color:#b07a00;font-size:36px">★ 62 mil</b> estrelas</span><span>em 23/11/2026</span></div></div>
+         <div class="tw-nota">Pra usar, sua conta do Claude precisa ter skills liberadas (depende do plano). A Growlift não é afiliada ao autor nem à Anthropic.</div>`,
       () =>
-        `<h2 class="h" style="font-size:96px;margin-top:10px">Primeiro, ela <em>pergunta.</em></h2>
-         <p class="p" style="margin-top:26px;max-width:900px">Antes de escrever, ela quer entender o seu negócio:</p>
-         <div style="margin-top:40px;display:grid;gap:16px">${[
-           'Qual é o objetivo: vender, ser lembrado, atrair gente nova?',
+        `<div class="tw-txt"><b>Primeiro, ela te entrevista.</b> Antes de escrever qualquer post, quer saber:</div>
+         <div class="tw-card">${[
+           'Qual é o objetivo: vender, ser lembrado ou atrair gente nova?',
            'Quem é o seu público?',
            'Em quais redes você posta?',
            'Qual é o tom da sua marca?',
            'Quanto tempo você tem por semana?',
          ]
-           .map((q) => `<div style="align-self:start;justify-self:start;max-width:860px;padding:20px 28px;border-radius:30px;border-bottom-left-radius:10px;background:#fff;color:${INK};font-size:32px;font-weight:700;line-height:1.25">${q}</div>`)
+           .map((q) => `<div class="tw-li"><span class="tw-ic" style="background:#e8f0ff;color:${BLUE}">?</span><span>${q}</span></div>`)
            .join('')}</div>`,
-      ({ tema }) =>
-        `<h2 class="h" style="font-size:96px;margin-top:10px">Depois, ela <em>monta.</em></h2>
-         <div style="margin-top:56px">${lista(
-           [
-             ['Os temas do seu perfil', '(3 a 5, pra não postar no improviso).'],
-             ['Ganchos', 'para o começo de cada post.'],
-             ['O calendário da semana,', 'com o que postar em cada dia.'],
-             ['Roteiros de Reels', 'de 15 a 30 segundos.'],
-             ['Carrosséis e legendas', 'no formato de cada rede.'],
-           ],
-           tema,
-         )}</div>`,
       () =>
-        `<h2 class="h" style="font-size:92px;margin-top:10px">E corta o texto <em>com cara de IA.</em></h2>
-         <p class="p" style="margin-top:26px;max-width:900px">Ela vem com uma lista do que não escrever:</p>
-         <div class="card" style="margin-top:44px;padding:16px 34px">${['Frase feita', 'Pergunta que ela mesma responde', 'Emoji no começo de cada linha', 'Uma frase por linha, só pra parecer profundo']
-           .map((x, i) => `<div style="display:flex;align-items:center;gap:22px;padding:22px 0;${i ? 'border-top:1.5px solid #eef1f5;' : ''}font-size:34px;font-weight:800"><span class="x">✕</span>${x}</div>`)
+        `<div class="tw-txt"><b>Depois, ela monta pra você:</b></div>
+         <div class="tw-card">${[
+           'Os temas do seu perfil (3 a 5)',
+           'Ganchos pro começo de cada post',
+           'O calendário da semana',
+           'Roteiros de Reels de 15 a 30 segundos',
+           'Carrosséis e legendas no formato de cada rede',
+         ]
+           .map((q) => `<div class="tw-li"><span class="tw-ic" style="background:${GREEN};color:#fff">✓</span><span>${q}</span></div>`)
            .join('')}</div>`,
-      ({ tema }) =>
-        `<h2 class="h" style="font-size:96px;margin-top:10px">Como <em>usar.</em></h2>
-         <div style="margin-top:52px">${lista(
-           [
-             ['Baixe o arquivo', 'social-claude-web.zip (a gente te manda o link).'],
-             ['No Claude (como diz o README do projeto):', 'Customize → Skills → + Create skill → Upload a skill.'],
-             ['Peça em português:', '“Monte os posts da semana do meu negócio”.'],
-           ],
-           tema,
-         )}</div>
-         <div style="margin-top:46px;padding:24px 28px;border-radius:22px;background:#e2eaff;color:${INK};font-size:30px;font-weight:700;line-height:1.35">Sua conta do Claude precisa permitir skills e execução de código (hoje isso depende do plano; confira no app). Ela escreve; quem revisa e posta é você.</div>`,
       () =>
-        `<h2 class="h" style="font-size:96px;margin-top:10px">Quer o link e o <em>passo a passo?</em></h2>
-         <p class="p" style="margin-top:30px;max-width:900px">Segue a @growlift.ai e</p>
-         <div style="margin-top:26px;display:flex;align-items:center;gap:22px">
-           <span style="font-size:44px;font-weight:900;color:#fff">Comenta</span>
-           <span style="display:inline-flex;align-items:center;height:110px;padding:0 46px;border-radius:999px;background:#fff;color:${BLUE};font-size:60px;font-weight:900;box-shadow:0 30px 60px -24px rgba(0,0,0,.45)">POSTS</span></div>
-         <p class="p" style="margin-top:26px;font-size:34px">que a gente te manda no privado.</p>
-         <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap">${['Link e passo a passo grátis', 'Pra todo mundo que comentar', 'Sem sorteio'].map((x) => `<span class="chip">${x}</span>`).join('')}</div>
-         <p style="position:absolute;left:0;right:0;bottom:0;font-size:27px;line-height:1.4;color:#ffffff;font-weight:600">Skill criada por Corey Haines (licença MIT). A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude, nem pelo autor da skill.</p>`,
+        `<div class="tw-txt">E o detalhe que a gente mais gostou: ela vem com uma lista do que <b>não</b> escrever, pra tirar a cara de IA do texto.</div>
+         <div class="tw-card">${['Frase feita', 'Pergunta que ela mesma responde', 'Emoji no começo de cada linha', 'Uma frase por linha, só pra parecer profundo']
+           .map((q) => `<div class="tw-li"><span class="tw-ic" style="background:${RED};color:#fff">✕</span><span>${q}</span></div>`)
+           .join('')}</div>`,
+      () =>
+        `<div class="tw-txt"><b>Como usar, em 3 passos:</b></div>
+         <div class="tw-card">${[
+           ['Baixe o arquivo', 'social-claude-web.zip (a gente te manda o link).'],
+           ['No Claude:', 'Customize → Skills → + Create skill → Upload a skill.'],
+           ['Peça em português:', '“Monte os posts da semana do meu negócio”.'],
+         ]
+           .map(([a, b], i) => `<div class="tw-li"><span class="tw-ic" style="background:${BLUE};color:#fff">${i + 1}</span><span><b>${a}</b> ${b}</span></div>`)
+           .join('')}</div>
+         <div class="tw-nota">Sua conta do Claude precisa permitir skills e execução de código (hoje depende do plano). Ela escreve; quem revisa e posta é você.</div>`,
+      () =>
+        `<div class="tw-txt" style="font-size:76px;line-height:1.1;font-weight:800;letter-spacing:-.035em">Quer o link?</div>
+         <div class="tw-txt">Comenta <span class="azul">POSTS</span> aqui embaixo que a gente te manda no privado, com o passo a passo.</div>
+         <div class="tw-coment"><span class="tw-coment-av"></span><span style="flex:1;font-weight:700">POSTS</span><span style="color:${BLUE};font-weight:800">Publicar</span></div>
+         <div class="tw-txt" style="font-size:42px;color:#536471">Vale pra todo mundo que comentar, sem sorteio. E segue a @growlift.ai pra ver a skill da próxima semana.</div>
+         <div class="tw-nota">Skill criada por Corey Haines (licença MIT). A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude, nem pelo autor da skill.</div>`,
     ],
-    legenda: `Não sabe o que postar hoje? 📅 Salva esse carrossel.
+    legenda: `Pare de pedir "faz um post pra mim" pra IA. 👇 Salva esse carrossel.
 
 Skill da Semana, ep. 01: a skill "social", criada pelo Corey Haines, é gratuita no GitHub (licença MIT).
 
-Ela faz o Claude perguntar sobre o seu negócio e depois montar os temas do perfil, os ganchos, o calendário da semana, roteiros de Reels e carrosséis. E ainda corta o texto com cara de IA.
+Ela faz o Claude te entrevistar sobre o seu negócio e depois montar os temas do perfil, os ganchos, o calendário da semana, roteiros de Reels e carrosséis. E ainda corta o texto com cara de IA.
 
 Pra usar, sua conta do Claude precisa permitir skills e execução de código (hoje isso depende do plano; confira no app). Ela escreve; quem revisa e posta é você.
 
@@ -1099,7 +1116,7 @@ Comenta POSTS que a gente te manda no privado o link oficial e o passo a passo. 
 A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude, nem pelo autor da skill.
 
 #claude #inteligenciaartificial #marketingdigital #empreendedorismo #pequenosnegocios`,
-    alt: 'Carrossel "Skill da Semana, episódio 1": capa "Não sabe o que postar hoje?" com um celular mostrando a semana de posts de uma padaria de exemplo; o que é uma skill; a skill "social", do Corey Haines, grátis no GitHub (licença MIT, coleção marketingskills com cerca de 62 mil estrelas em 23/11/2026); as perguntas que ela faz; o que ela monta (temas, ganchos, calendário, roteiros de Reels, carrosséis); a lista do que ela evita escrever; como instalar no Claude (a conta precisa ter skills liberadas); e o convite "Segue e comenta POSTS".',
+    alt: 'Carrossel "Skill da Semana, episódio 1", no formato de post de texto da Growlift: "Pare de pedir faz um post pra mim pra IA"; por que pedido genérico dá resposta genérica e o que é uma skill; a skill "social", do Corey Haines, gratuita no GitHub (licença MIT, coleção marketingskills com cerca de 62 mil estrelas em 23/11/2026); as perguntas que ela faz; o que ela monta (temas, ganchos, calendário, roteiros de Reels, carrosséis); a lista do que ela evita escrever; como instalar no Claude (a conta precisa ter skills liberadas); e o convite "Comenta POSTS".',
   },
 ];
 
@@ -1118,7 +1135,7 @@ for (const c of CARROSSEIS) {
   const total = c.slides.length;
   for (let i = 0; i < total; i++) {
     const tema = c.temas[i];
-    const html = slide(c.slides[i]({ tema }), { n: i + 1, total, tema });
+    const html = c.estilo === 'post' ? slidePost(c.slides[i](), { n: i + 1, total }) : slide(c.slides[i]({ tema }), { n: i + 1, total, tema });
     const file = `${OUT}/${c.slug}/${String(i + 1).padStart(2, '0')}.png`;
     const htmlPath = path.join(HERE, 'html', file.replace(/\.png$/, '.html'));
     await fs.mkdir(path.dirname(htmlPath), { recursive: true });
@@ -1127,7 +1144,7 @@ for (const c of CARROSSEIS) {
     await pg.goto(pathToFileURL(htmlPath).href, { waitUntil: 'networkidle' });
     await pg.evaluate(() => document.fonts.ready);
     // Quality check: nothing may spill out of the slide.
-    const over = await pg.evaluate(() => [...document.querySelectorAll('h1,h2,p')].filter((el) => el.getBoundingClientRect().right > 1080 || el.getBoundingClientRect().bottom > 1350).length);
+    const over = await pg.evaluate(() => [...document.querySelectorAll('h1,h2,p,.tw')].filter((el) => el.getBoundingClientRect().right > 1080 || el.getBoundingClientRect().bottom > 1350).length);
     if (over) console.warn(`${file}: ${over} texto(s) saindo da arte`);
     const out = path.join(ROOT, file);
     await fs.mkdir(path.dirname(out), { recursive: true });
