@@ -25,7 +25,17 @@ async function main() {
 
   /** The pousada demonstration, built by the ready-made model exactly as a real sign-up (everything fictitious). */
   async function pousadaDemo(growliftId: string) {
-    if (await um(`select 1 from empresas where slug = 'pousada-demo'`)) return false;
+    const existe = await um<{ id: string }>(`select id from empresas where slug = 'pousada-demo'`);
+    if (existe) {
+      // Created before the models stopped sending two messages at once: bring it to the current model.
+      await q(`update empresas set config = jsonb_set(config, '{regras,retorno_auto_cliente}', 'false') where id = $1`, [existe.id]);
+      await q(
+        `update fluxos set passos = (select coalesce(jsonb_agg(p order by i), '[]') from jsonb_array_elements(passos) with ordinality x(p, i) where p ->> 'tipo' <> 'enviar_whatsapp')
+         where empresa_id = $1 and gatilho ->> 'tipo' = 'pedido_recebido'`,
+        [existe.id],
+      );
+      return false;
+    }
     const r = await cadastrarEmpresa(growliftId, {
       nome: 'Pousada Maré Calma (fictícia)',
       slug: 'pousada-demo',

@@ -29,6 +29,19 @@ describe('modelos por tipo de negócio', () => {
     }
   });
 
+  it('nenhum modelo manda duas mensagens ao cliente no mesmo momento', () => {
+    for (const m of Object.values(MODELOS)) {
+      const r = montarPeloModelo(m, 'Empresa', DadosCadastro.parse({}));
+      // The order confirmation is built in: the welcome flow does not send another message.
+      const boasVindas = r.fluxos.find((f) => f.gatilho.tipo === 'pedido_recebido');
+      expect(boasVindas?.passos.some((p) => p.tipo === 'enviar_whatsapp') ?? false).toBe(false);
+      // A flow already follows up the proposal by WhatsApp: the built-in follow-up message stays off.
+      const retomada = r.fluxos.some((f) => f.gatilho.tipo === 'etapa_alterada' && f.gatilho.etapa === 'proposta' && f.passos.some((p) => p.tipo === 'enviar_whatsapp'));
+      expect(retomada).toBe(true);
+      expect(r.config.regras.retorno_auto_cliente).toBe(false);
+    }
+  });
+
   it('cadastra uma pousada pelo modelo, com os dados do dono e o convite', async () => {
     const slug = `pousada-${unico()}`;
     const r = await cadastrarEmpresa(await adminPlataforma(), {
@@ -54,7 +67,7 @@ describe('modelos por tipo de negócio', () => {
     const e = (await empresaPorId(r.empresa.id))!;
     expect(e.segmento).toBe('pousada');
     expect(e.config.campos.map((c) => c.id)).toEqual(['entrada', 'saida', 'pessoas']);
-    expect(e.config.regras).toMatchObject({ retorno_auto_cliente: true, retorno_auto_horas: 24, retorno_auto_horas_2: 72, avaliacao_auto: true, hora_inicio: 8, hora_fim: 22 });
+    expect(e.config.regras).toMatchObject({ retorno_auto_cliente: false, retorno_auto_horas: 24, retorno_auto_horas_2: 72, avaliacao_auto: true, hora_inicio: 8, hora_fim: 22 });
     expect(e.config.agenda.ativa).toBe(false);
     expect(e.config.ia.nome).toBe('Lia');
     expect(e.config.avaliacao.link).toContain('placeid=teste');

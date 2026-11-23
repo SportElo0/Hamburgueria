@@ -186,7 +186,7 @@ export const executores: Record<string, Executor> = {
     if (!empresa?.config.avaliacao.link) return { tipo: 'cancelado', motivo: 'Sem link de avaliação configurado.' };
     const token = await criarConviteAvaliacao(empresa.id, t.oportunidade_id!);
     const nome = nomeSeguro(await nomeDe(undefined, t.empresa_id, t.oportunidade_id!));
-    return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'avaliacao', corpo: `Olá${nome ? `, ${nome}` : ''}! Obrigado por contratar a ${empresa.nome}. Se puder, conte como foi sua experiência: ${process.env.APP_URL ?? ''}/avaliar/${token} Para não receber mensagens, responda SAIR.` });
+    return enviarIniciada(t, { oportunidadeId: t.oportunidade_id!, finalidade: 'avaliacao', corpo: `Olá${nome ? `, ${nome}` : ''}! Obrigado por escolher a ${empresa.nome}. Se puder, conte como foi sua experiência: ${process.env.APP_URL ?? ''}/avaliar/${token} Para não receber mensagens, responda SAIR.` });
   },
 };
 

@@ -56,13 +56,15 @@ export interface ModeloNegocio {
 
 const PRECO_REGRA = 'Preço, desconto e prazo só podem ser informados se estiverem escritos em “preços autorizados”. Fora isso, a equipe responde.';
 
+// The follow-up after the proposal is the model's flow (its own wording, then a task for the team), so the built-in
+// automatic follow-up message stays off: the customer never gets two messages at the same moment.
 export const MODELOS: Record<string, ModeloNegocio> = {
   pousada: {
     id: 'pousada',
     nome: 'Pousada',
-    resumo: 'Pedidos de reserva direta: a assistente anota datas e número de pessoas, a equipe confirma valores e disponibilidade, quem não respondeu é retomado em 1 e 3 dias e, depois da estadia, o hóspede recebe o convite de avaliação.',
+    resumo: 'Pedidos de reserva direta: a assistente anota datas e número de pessoas, a equipe confirma valores e disponibilidade, quem não respondeu recebe uma retomada em 1 dia e, sem resposta em 3 dias, vira tarefa para a equipe; e, depois da estadia, o hóspede recebe o convite de avaliação.',
     campos: SEGMENTOS['pousada'].campos,
-    regras: { sla_minutos: 15, retorno_proposta_dias: 1, retorno_auto_cliente: true, retorno_auto_horas: 24, retorno_auto_horas_2: 72, avaliacao_auto: true, manutencao_auto: false, hora_inicio: 8, hora_fim: 22 },
+    regras: { sla_minutos: 15, retorno_proposta_dias: 1, retorno_auto_cliente: false, retorno_auto_horas: 24, retorno_auto_horas_2: 72, avaliacao_auto: true, manutencao_auto: false, hora_inicio: 8, hora_fim: 22 },
     agenda: { ativa: false },
     chamada: 'Reserve direto com a gente',
     textosSite: { botao: 'Pedir reserva', titulo_servicos: 'Acomodações', titulo_areas: 'Onde estamos', titulo_form: 'Peça sua reserva', texto_form: 'Conte as datas e quantas pessoas. Uma pessoa da equipe confere a disponibilidade e manda os valores. O pedido ainda não é a reserva confirmada.' },
@@ -92,7 +94,7 @@ export const MODELOS: Record<string, ModeloNegocio> = {
     nome: 'Restaurante (reservas, eventos e encomendas)',
     resumo: 'Reservas de mesa e de grupo, aniversários, eventos e encomendas: a assistente anota o pedido, a equipe confirma e passa o valor, quem não respondeu é retomado no dia seguinte e, depois, o cliente recebe o convite de avaliação. (A reativação de clientes de delivery fica no app das lojas.)',
     campos: SEGMENTOS['restaurante'].campos,
-    regras: { sla_minutos: 15, retorno_proposta_dias: 1, retorno_auto_cliente: true, retorno_auto_horas: 24, retorno_auto_horas_2: 0, avaliacao_auto: true, manutencao_auto: false, hora_inicio: 11, hora_fim: 23 },
+    regras: { sla_minutos: 15, retorno_proposta_dias: 1, retorno_auto_cliente: false, retorno_auto_horas: 24, retorno_auto_horas_2: 0, avaliacao_auto: true, manutencao_auto: false, hora_inicio: 11, hora_fim: 23 },
     agenda: { ativa: false },
     chamada: 'Reserve sua mesa ou encomende com a gente',
     textosSite: { botao: 'Fazer pedido', titulo_servicos: 'O que oferecemos', titulo_areas: 'Onde estamos', titulo_form: 'Reserva, evento ou encomenda', texto_form: 'Conte o que você precisa, para quando e para quantas pessoas. Uma pessoa da equipe confirma e responde. O pedido ainda não é a reserva confirmada.' },
@@ -122,7 +124,7 @@ export const MODELOS: Record<string, ModeloNegocio> = {
     nome: 'Serviços (ar-condicionado, elétrica, reformas…)',
     resumo: 'Orçamento e visita técnica: a assistente entende o serviço e a urgência e marca a visita na agenda, quem não respondeu à proposta é retomado, orçamento parado vira tarefa, e depois do serviço vêm o convite de avaliação e o lembrete de manutenção (só para quem autorizou).',
     campos: SEGMENTOS['servicos-gerais'].campos,
-    regras: { sla_minutos: 30, retorno_proposta_dias: 2, retorno_auto_cliente: true, retorno_auto_horas: 48, retorno_auto_horas_2: 120, avaliacao_auto: true, manutencao_auto: true, manutencao_meses: 12 },
+    regras: { sla_minutos: 30, retorno_proposta_dias: 2, retorno_auto_cliente: false, retorno_auto_horas: 48, retorno_auto_horas_2: 120, avaliacao_auto: true, manutencao_auto: true, manutencao_meses: 12 },
     agenda: { ativa: true, ia_marca: true, lembrete: true },
     chamada: 'Peça seu orçamento',
     textosSite: { botao: 'Pedir orçamento', titulo_servicos: 'Serviços', titulo_areas: 'Áreas atendidas', titulo_form: 'Peça seu orçamento', texto_form: 'Conte o serviço e a urgência. Uma pessoa da equipe analisa e fala com você. O formulário não calcula valores.' },
@@ -136,7 +138,7 @@ export const MODELOS: Record<string, ModeloNegocio> = {
     nome: 'Energia solar',
     resumo: 'Orçamento com tipo de imóvel e conta de luz, visita técnica na agenda, retomada da proposta, orçamento parado, pós-venda, avaliação e lembrete de manutenção (só para quem autorizou).',
     campos: SEGMENTOS['energia-solar'].campos,
-    regras: { sla_minutos: 30, retorno_proposta_dias: 2, retorno_auto_cliente: true, retorno_auto_horas: 48, retorno_auto_horas_2: 120, avaliacao_auto: true, manutencao_auto: true, manutencao_meses: 12 },
+    regras: { sla_minutos: 30, retorno_proposta_dias: 2, retorno_auto_cliente: false, retorno_auto_horas: 48, retorno_auto_horas_2: 120, avaliacao_auto: true, manutencao_auto: true, manutencao_meses: 12 },
     agenda: { ativa: true, ia_marca: true, lembrete: true },
     chamada: 'Energia solar para a sua casa ou empresa',
     textosSite: { botao: 'Pedir orçamento', titulo_servicos: 'Serviços', titulo_areas: 'Áreas atendidas', titulo_form: 'Peça seu orçamento', texto_form: 'Conte o que você precisa. Uma pessoa da equipe analisa e fala com você. O formulário não calcula valores nem promete economia.' },
@@ -207,7 +209,9 @@ export function montarPeloModelo(modelo: ModeloNegocio, nome: string, dados: Dad
     ...modelo.fluxosPadrao.map((id) => {
       const m = MODELOS_DE_FLUXO.find((f) => f.id === id);
       if (!m) throw new Error(`Fluxo pronto desconhecido no modelo ${modelo.id}: ${id}`);
-      return { ...m.fluxo, ativo: true };
+      // The welcome message is already the built-in order confirmation: the flow keeps only the team's part.
+      const passos = id === 'boas-vindas' ? m.fluxo.passos.filter((p) => p.tipo !== 'enviar_whatsapp') : m.fluxo.passos;
+      return { ...m.fluxo, passos, ativo: true };
     }),
     ...modelo.fluxosProprios,
   ].map((f) => EntradaFluxo.parse(f));

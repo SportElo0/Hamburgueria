@@ -310,12 +310,15 @@ const DadosIA = z.object({
   extras: z.record(z.string(), z.string().max(200)).optional(),
 });
 
+/** Guests and diners have no property: they are asked where they come from. */
+const PERGUNTA_CIDADE: Record<string, string> = { pousada: 'De qual cidade você vem?', restaurante: 'De qual cidade você é?' };
+
 function faltando(empresa: Empresa, v: Conversa): { id: string; pergunta: string }[] {
   const d = v.dados;
   const lista = [
     { id: 'nome', pergunta: 'Para começar, qual é o seu nome?' },
     ...(v.canal === 'site' ? [{ id: 'telefone', pergunta: 'Qual é o seu telefone com DDD, para a equipe falar com você?' }] : []),
-    { id: 'cidade', pergunta: 'Em qual cidade fica o imóvel?' },
+    { id: 'cidade', pergunta: PERGUNTA_CIDADE[empresa.segmento] ?? 'Em qual cidade fica o imóvel?' },
     ...empresa.config.campos.filter((c) => c.obrigatorio).map((c) => ({ id: c.id, pergunta: c.pergunta })),
     { id: 'necessidade', pergunta: 'Me conte em poucas palavras o que você precisa.' },
   ];
