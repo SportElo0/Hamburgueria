@@ -884,6 +884,20 @@
    "ia": false,
    "palavra": "POSTS",
    "chave": "09-carrosseis/carrosseis.md#seg-2311-skill-da-semana-01-a-skill-que-monta-os-seus-posts"
+  },
+  {
+   "id": "2026-11-24-reel-34",
+   "titulo": "Reel 34 · Do caderno pra planilha, Skill da Semana 02 (Comenta PLANILHA)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/34-do-caderno-pra-planilha-mudo.mp4"
+   ],
+   "capa": "05-reels/34-do-caderno-pra-planilha-capa.png",
+   "legenda": "Seu caixa ainda é anotado no caderno? 📒\n\nTira uma foto e pede pro Claude em português: \"transforma isso numa planilha de caixa, com o total do mês e um gráfico\". A skill de planilhas (xlsx), criada pela Anthropic, devolve um arquivo de Excel de verdade, com as contas somadas e o gráfico de pra onde foi o dinheiro.\n\nSkill da Semana, ep. 02. Ela já vem no plano pago do Claude (a conta precisa ter a criação de arquivos ligada; confira no app). Confira sempre os números que ela leu.\n\nComenta PLANILHA que a gente te manda no privado a planilha de controle de caixa pronta pra usar, mais o passo a passo e o pedido pra copiar. Vale pra todo mundo que comentar, sem sorteio. Se curtir, segue a @growlift.ai (ajuda, mas não é obrigatório).\n\nManda pro sócio que ainda usa caderno 😅\n\nExemplo com uma lanchonete fictícia e valores ilustrativos; as telas do vídeo são ilustrações nossas. A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude.\n\n#claude #inteligenciaartificial #planilha #empreendedorismo #pequenosnegocios",
+   "quando": "2026-11-24T12:00:00-03:00",
+   "ia": false,
+   "palavra": "PLANILHA",
+   "chave": "05-reels/roteiros.md#34-do-caderno-pra-planilha-skill-da-semana-ep-02"
   }
  ]
 }

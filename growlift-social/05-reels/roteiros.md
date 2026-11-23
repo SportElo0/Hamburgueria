@@ -630,3 +630,37 @@ Tem restaurante? Comenta 3D que a gente te manda um cardápio 3D funcionando pra
 História de exemplo: a Brasa Burger é uma marca conceito da Growlift, e restaurante, pessoas e telas são ilustrativos; a nota é sempre decisão de cada cliente (o sistema não garante avaliação melhor). O prato em 3D no tamanho real está em fase de testes. Animação 3D e narração com voz gerada por computador.
 #restaurante #cardapiodigital #cardapio3d #hamburgueria #growlift
 ```
+
+## 34. Do caderno pra planilha (Skill da Semana, ep. 02)
+- **Formato:** transformação antes e depois em 25,5 s, sem narração (texto na tela o tempo todo; a música em alta entra no app na hora de postar, por isso o arquivo é o `-mudo`). Duração 26 s. Revisão legal de 23/11 aplicada (sem "grátis" junto do plano pago, seguir só como pedido, aviso de não afiliação legível, telas marcadas como ilustração, "XLSX"). Gancho no primeiro quadro: o caderno e a pergunta "Seu caixa ainda é anotado no caderno?". Depois: "Tira uma foto." (moldura da câmera e flash), "E pede em português:" (a foto e o pedido), "E ela devolve isso:" (a planilha se monta linha por linha, os totais contam e o gráfico cresce), "Isso é a skill de planilhas do Claude" (criada pela Anthropic, já vem no plano pago do Claude; não é afiliada; conferir os números) e o fim "Comenta PLANILHA" com "Manda pro sócio que ainda usa caderno" e "Se curtir, segue a @growlift.ai" (seguir é pedido, não condição).
+- **De verdade, não encenado:** a página do caderno (`_fonte/reels/novos/caderno34.mjs`, lanchonete fictícia) foi fotografada, a foto foi lida e a planilha foi feita com a skill xlsx (`_fonte/planilha-caixa.py` → `10-presentes/planilha-controle-de-caixa.xlsx`, 212 fórmulas, recalculada sem erro). Os números da tela são os dela: entradas R$ 7.075, saídas R$ 3.093, sobrou R$ 3.982. A tela da planilha é desenhada por nós (não imita a tela do Claude nem do Excel).
+- **Por que pode viralizar:** dá para entender sem som em 1 segundo; quase todo pequeno negócio conhece alguém que anota no caderno (identificação e envio: "manda pro sócio"); o presente é útil (salvamentos) e a palavra é fácil (comentários); 25 s seguram até o fim.
+- **Plano de postagem:**
+  1. Antes: subir a planilha num link público e deixar a mensagem do privado pronta (`10-presentes/presentes.md`, PLANILHA); conferir no app do Claude o nome da opção de criação de arquivos.
+  2. Ao postar: escolher uma música em alta do próprio Instagram, volume baixo; capa = primeiro quadro (`34-do-caderno-pra-planilha-capa.png`); fixar um comentário próprio: "Comenta PLANILHA que a gente te manda a planilha 👇".
+  3. Na primeira hora: responder todo mundo que comentar (comentário e privado); story com enquete "Seu caixa é no caderno ou na planilha?" levando para o Reel.
+  4. Também no TikTok, sem marca d'água.
+  5. Depois de 48 h: olhar envios, salvamentos, comentários PLANILHA e seguidores novos, e comparar com os outros Reels.
+- **Palavra:** PLANILHA (presente em `10-presentes/presentes.md`).
+
+**Legenda**
+```
+Seu caixa ainda é anotado no caderno? 📒
+
+Tira uma foto e pede pro Claude em português: "transforma isso numa planilha de caixa, com o total do mês e um gráfico". A skill de planilhas (xlsx), criada pela Anthropic, devolve um arquivo de Excel de verdade, com as contas somadas e o gráfico de pra onde foi o dinheiro.
+
+Skill da Semana, ep. 02. Ela já vem no plano pago do Claude (a conta precisa ter a criação de arquivos ligada; confira no app). Confira sempre os números que ela leu.
+
+Comenta PLANILHA que a gente te manda no privado a planilha de controle de caixa pronta pra usar, mais o passo a passo e o pedido pra copiar. Vale pra todo mundo que comentar, sem sorteio. Se curtir, segue a @growlift.ai (ajuda, mas não é obrigatório).
+
+Manda pro sócio que ainda usa caderno 😅
+
+Exemplo com uma lanchonete fictícia e valores ilustrativos; as telas do vídeo são ilustrações nossas. A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude.
+
+#claude #inteligenciaartificial #planilha #empreendedorismo #pequenosnegocios
+```
+
+**Texto alternativo**
+```
+Reel "Skill da Semana, episódio 2": uma página de caderno com o caixa de novembro de uma lanchonete fictícia, escrito à mão; a pergunta "Seu caixa ainda é anotado no caderno?"; a foto do caderno é enviada com o pedido "Transforma isso numa planilha de caixa, com o total do mês e um gráfico"; a planilha aparece linha por linha, com entradas de R$ 7.075, saídas de R$ 3.093 e R$ 3.982 de sobra no exemplo, e o gráfico "Para onde foi o dinheiro"; a skill de planilhas, criada pela Anthropic, que vem no plano pago do Claude; e o convite "Segue e comenta PLANILHA".
+```

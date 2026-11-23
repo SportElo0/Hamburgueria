@@ -75,6 +75,28 @@ Como instalar (sua conta do Claude precisa permitir skills e execução de códi
 Ela escreve; quem revisa e posta é você. Qualquer dúvida, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
 ```
 
+## PLANILHA · Planilha "Controle de caixa" (Skill da Semana, ep. 02)
+
+- **Arquivo:** `planilha-controle-de-caixa.xlsx` (Excel; abre também no Google Planilhas e no celular). Gerada por `_fonte/planilha-caixa.py` com a skill xlsx: abas "Como usar", "Caixa" (200 linhas, células amarelas para preencher, saldo automático, lista de categorias) e "Resumo" (totais e o gráfico "Para onde foi o dinheiro").
+- **Usada no:** Reel 34, "Do caderno pra planilha". Os lançamentos de exemplo são o caderno do vídeo (lanchonete fictícia) e a planilha avisa isso no topo.
+- **Para entregar:** subir o arquivo num link público (Google Drive com "qualquer pessoa com o link pode ver") e colar o link na mensagem abaixo. Envio à mão pela equipe (ou pelo ManyChat, se a palavra PLANILHA for cadastrada lá), para todo mundo que comentar.
+
+**Mensagem do privado (palavra PLANILHA)**
+```
+Oi! Aqui é da Growlift 👋 Valeu por comentar PLANILHA.
+
+Aqui está a planilha de controle de caixa, pronta pra usar: [LINK DA PLANILHA]
+É só apagar os lançamentos de exemplo e colocar os seus nas células amarelas: o saldo e o resumo com o gráfico se calculam sozinhos. Abre no Excel, no Google Planilhas e no celular.
+
+Quer fazer igual no vídeo, com o seu caderno? A skill de planilhas é da Anthropic e já vem no plano pago do Claude:
+1) No Claude, confira nas configurações se a criação de arquivos está ligada.
+2) Tire uma foto bem iluminada da página do caderno e mande no chat (antes, cubra nomes, telefones e CPF de clientes que estiverem anotados).
+3) Peça: "Transforma isso numa planilha de caixa, com o total do mês e um gráfico."
+Confira os números que ela leu antes de usar.
+
+A Growlift não é afiliada à Anthropic. Qualquer dúvida, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
+```
+
 ## PLANO · Diagnóstico grátis com plano sob medida
 
 - **Link:** https://growlift.com.br/#diagnostico (formulário do site: a pessoa conta sobre o negócio e recebe um plano no WhatsApp). Já está no ar.
