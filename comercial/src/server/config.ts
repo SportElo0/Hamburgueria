@@ -45,7 +45,29 @@ export const SEGMENTOS: Record<string, { nome: string; campos: Campo[] }> = {
       { id: 'gasto_mensal', rotulo: 'Gasto aproximado por mês com energia (R$)', tipo: 'numero', opcoes: [], obrigatorio: false, pergunta: 'Mais ou menos quanto vem a conta de luz por mês?' },
     ],
   },
-  'servicos-gerais': { nome: 'Serviços em geral', campos: [] },
+  'servicos-gerais': {
+    nome: 'Serviços (ar-condicionado, elétrica, reformas…)',
+    campos: [
+      { id: 'servico', rotulo: 'Qual serviço', tipo: 'texto', opcoes: [], obrigatorio: true, pergunta: 'Qual serviço você precisa?' },
+      { id: 'urgencia', rotulo: 'Para quando', tipo: 'opcoes', opcoes: ['Hoje', 'Esta semana', 'Sem pressa'], obrigatorio: false, pergunta: 'É para hoje, para esta semana ou sem pressa?' },
+    ],
+  },
+  pousada: {
+    nome: 'Pousada',
+    campos: [
+      { id: 'entrada', rotulo: 'Data de entrada', tipo: 'texto', opcoes: [], obrigatorio: true, pergunta: 'Para qual dia seria a entrada?' },
+      { id: 'saida', rotulo: 'Data de saída', tipo: 'texto', opcoes: [], obrigatorio: true, pergunta: 'E a saída, em qual dia?' },
+      { id: 'pessoas', rotulo: 'Quantas pessoas (adultos e crianças)', tipo: 'texto', opcoes: [], obrigatorio: true, pergunta: 'Quantas pessoas, contando adultos e crianças (e a idade das crianças)?' },
+    ],
+  },
+  restaurante: {
+    nome: 'Restaurante (reservas, eventos e encomendas)',
+    campos: [
+      { id: 'tipo_pedido', rotulo: 'O que você precisa', tipo: 'opcoes', opcoes: ['Reserva de mesa', 'Aniversário ou evento', 'Encomenda', 'Outro'], obrigatorio: true, pergunta: 'É reserva de mesa, aniversário ou evento, encomenda ou outra coisa?' },
+      { id: 'data', rotulo: 'Para quando', tipo: 'texto', opcoes: [], obrigatorio: true, pergunta: 'Para qual dia e horário?' },
+      { id: 'pessoas', rotulo: 'Quantas pessoas', tipo: 'numero', opcoes: [], obrigatorio: false, pergunta: 'Para quantas pessoas?' },
+    ],
+  },
 };
 
 const Texto = (max: number) => z.string().trim().max(max).default('');
@@ -55,6 +77,12 @@ export const ConfigEmpresa = z.object({
   site: z
     .object({
       chamada: Texto(120),
+      /** Words of the site that change with the kind of business (empty = the generic wording). */
+      botao: Texto(30),
+      titulo_servicos: Texto(40),
+      titulo_areas: Texto(40),
+      titulo_form: Texto(60),
+      texto_form: Texto(240),
       imagem: Texto(200),
       descricao: Texto(600),
       servicos: z.array(Item).max(8).default([]),

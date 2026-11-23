@@ -12,7 +12,7 @@ import { TEXTO_ACEITE_AGENDAMENTO, type Etapa } from '@/server/config';
 import { salvarConhecimento } from '@/server/conhecimento';
 import { dentroDoLimite, VISITANTE_DEMO } from '@/server/contexto';
 import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, simularEntradaWhatsApp } from '@/server/conversas';
-import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, criarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig, empresaPorSlug } from '@/server/empresas';
+import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, cadastrarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig, empresaPorSlug } from '@/server/empresas';
 import { demonstracaoAberta, garantirVisitante, reporSenhaVisitante } from '@/server/demonstracao';
 import { emailLigado } from '@/server/email';
 import { ErroDeUso } from '@/server/erros';
@@ -334,8 +334,33 @@ export const responsavelPadraoAcao = async (_: Retorno, fd: FormData) =>
 export const criarEmpresaAcao = async (_: Retorno, fd: FormData) =>
   tentar(async () => {
     const s = await exigirPlataforma();
-    const e = await criarEmpresa(s.userId, { nome: t(fd, 'nome'), slug: t(fd, 'slug'), segmento: t(fd, 'segmento'), demonstracao: fd.get('demonstracao') === 'on' });
-    return { ok: `Empresa "${e.nome}" criada. Entre nela (com motivo) para convidar o administrador.` };
+    const hora = (k: string) => (t(fd, k) === '' ? undefined : Number(t(fd, k)));
+    const r = await cadastrarEmpresa(s.userId, {
+      nome: t(fd, 'nome'),
+      slug: t(fd, 'slug'),
+      segmento: t(fd, 'segmento'),
+      demonstracao: fd.get('demonstracao') === 'on',
+      email_dono: t(fd, 'email_dono'),
+      dados: {
+        whatsapp: t(fd, 'whatsapp'),
+        email: t(fd, 'email'),
+        cidade: t(fd, 'cidade'),
+        endereco: t(fd, 'endereco'),
+        descricao: t(fd, 'descricao'),
+        servicos: t(fd, 'servicos'),
+        precos: t(fd, 'precos'),
+        perguntas: t(fd, 'perguntas'),
+        horarios: t(fd, 'horarios'),
+        hora_inicio: hora('hora_inicio'),
+        hora_fim: hora('hora_fim'),
+        link_avaliacao: t(fd, 'link_avaliacao'),
+        assistente: t(fd, 'assistente'),
+      },
+    });
+    const base = `Empresa "${r.empresa.nome}" criada pelo modelo, com ${r.fluxos} automações ligadas. Site: /s/${r.empresa.slug}. Falta ligar o WhatsApp dela (Configurações › Integrações).`;
+    if (!r.convite) return { ok: `${base} Entre nela (com motivo) para convidar o administrador.` };
+    const aviso = r.convite.email === 'enviado' ? 'O convite do dono foi enviado por e-mail (vale 7 dias).' : 'O convite do dono vale 7 dias: copie o link e mande para ele.';
+    return { ok: `${base} ${aviso}`, copiar: r.convite.link };
   });
 
 export const entrarEmpresaAcao = async (_: Retorno, fd: FormData) => {

@@ -71,7 +71,7 @@ describe('proposta online', () => {
     const lb = await enviarProposta(A.admin, b.id);
     // simulate the validity passing (the content lock is lifted only for this test update)
     await q('alter table propostas disable trigger propostas_conteudo_fixo');
-    await q(`update propostas set validade = current_date - 1 where id = $1`, [b.id]);
+    await q(`update propostas set validade = (now() at time zone 'America/Sao_Paulo')::date - 1 where id = $1`, [b.id]);
     await q('alter table propostas enable trigger propostas_conteudo_fixo');
     await expect(responderProposta(tokenDe(lb), { aceitar: true, nome: 'Fulano de Tal', ipHash: 'x' })).rejects.toThrow(/validade/);
 

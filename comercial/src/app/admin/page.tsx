@@ -5,6 +5,7 @@ import { Marca } from '@/componentes/acesso';
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { SEGMENTOS, ambiente } from '@/server/config';
+import { MODELOS } from '@/server/modelos';
 import { q } from '@/server/db';
 import { emailLigado } from '@/server/email';
 import { painelPlataforma } from '@/server/empresas';
@@ -64,14 +65,40 @@ export default async function Admin() {
         )}
 
         <section className="cartao p-4" aria-labelledby="t-nova">
-          <h2 id="t-nova" className="font-bold">Cadastrar empresa</h2>
-          <p className="mt-1 text-sm text-suave">A empresa nasce com o formulário do segmento e conteúdo em branco. Nada é copiado de outras empresas.</p>
-          <Formulario acao={criarEmpresaAcao} limpar className="mt-3 grid gap-3 sm:grid-cols-3">
-            <div><label className="rotulo" htmlFor="nome">Nome</label><input className="campo" id="nome" name="nome" required minLength={2} /></div>
-            <div><label className="rotulo" htmlFor="slug">Endereço (letras minúsculas e hífen)</label><input className="campo" id="slug" name="slug" required pattern="[a-z0-9-]{3,40}" /></div>
-            <div><label className="rotulo" htmlFor="segmento">Segmento</label><select className="campo" id="segmento" name="segmento">{Object.entries(SEGMENTOS).map(([k, v]) => <option key={k} value={k}>{v.nome}</option>)}</select></div>
-            <label className="flex min-h-11 items-center gap-2 text-[15px] sm:col-span-2"><input type="checkbox" name="demonstracao" className="h-5 w-5" /> Empresa de demonstração (dados fictícios)</label>
-            <div><Enviar>Cadastrar</Enviar></div>
+          <h2 id="t-nova" className="font-bold">Cadastrar empresa pelo modelo</h2>
+          <p className="mt-1 text-sm text-suave">Escolha o modelo do tipo de negócio e preencha o que o dono passou. A empresa já nasce com o formulário, as regras, o site, o conteúdo da assistente e as automações ligadas. O que ficar em branco continua em branco: a assistente passa essas perguntas para a equipe, nada é inventado.</p>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {Object.values(MODELOS).map((m) => <li key={m.id} className="rounded-lg border border-linha p-3 text-sm"><strong className="text-tinta">{m.nome}</strong><span className="mt-1 block text-suave">{m.resumo}</span></li>)}
+          </ul>
+          <Formulario acao={criarEmpresaAcao} limpar className="mt-4 space-y-4">
+            <fieldset className="grid gap-3 sm:grid-cols-3">
+              <legend className="mb-2 text-sm font-semibold text-tinta">1. A empresa</legend>
+              <div><label className="rotulo" htmlFor="segmento">Modelo</label><select className="campo" id="segmento" name="segmento" defaultValue="pousada">{Object.values(MODELOS).map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}</select></div>
+              <div><label className="rotulo" htmlFor="nome">Nome</label><input className="campo" id="nome" name="nome" required minLength={2} maxLength={80} /></div>
+              <div><label className="rotulo" htmlFor="slug">Endereço do site (/s/…)</label><input className="campo" id="slug" name="slug" required pattern="[a-z0-9-]{3,40}" placeholder="pousada-exemplo" /></div>
+              <div><label className="rotulo" htmlFor="whatsapp">WhatsApp da empresa</label><input className="campo" id="whatsapp" name="whatsapp" inputMode="tel" maxLength={20} placeholder="(12) 99999-0000" /></div>
+              <div><label className="rotulo" htmlFor="email">E-mail da empresa</label><input className="campo" id="email" name="email" type="email" maxLength={120} /></div>
+              <div><label className="rotulo" htmlFor="cidade">Cidade / região que atende</label><input className="campo" id="cidade" name="cidade" maxLength={120} placeholder="Juquehy, São Sebastião" /></div>
+              <div className="sm:col-span-2"><label className="rotulo" htmlFor="endereco">Endereço (opcional)</label><input className="campo" id="endereco" name="endereco" maxLength={200} /></div>
+              <div><label className="rotulo" htmlFor="email_dono">E-mail do dono (recebe o convite)</label><input className="campo" id="email_dono" name="email_dono" type="email" maxLength={120} /></div>
+            </fieldset>
+            <fieldset className="grid gap-3 sm:grid-cols-2">
+              <legend className="mb-2 text-sm font-semibold text-tinta">2. O que a assistente pode dizer (só o que o dono confirmou)</legend>
+              <div className="sm:col-span-2"><label className="rotulo" htmlFor="descricao">Descrição curta</label><textarea className="campo min-h-20" id="descricao" name="descricao" maxLength={600} placeholder="Ex.: Pousada a 100 m da praia, com café da manhã e piscina." /></div>
+              <div><label className="rotulo" htmlFor="servicos">Serviços ou acomodações (um por linha: Nome — detalhe)</label><textarea className="campo min-h-28" id="servicos" name="servicos" maxLength={2000} placeholder={'Suíte casal — vista para o jardim\nChalé família — até 4 pessoas'} /></div>
+              <div><label className="rotulo" htmlFor="precos">Preços que a assistente pode informar (opcional, um por linha)</label><textarea className="campo min-h-28" id="precos" name="precos" maxLength={2000} placeholder="Deixe em branco para a equipe sempre passar os valores." /></div>
+              <div className="sm:col-span-2"><label className="rotulo" htmlFor="perguntas">Perguntas frequentes (uma por linha: pergunta | resposta)</label><textarea className="campo min-h-24" id="perguntas" name="perguntas" maxLength={4000} placeholder={'Que horas é o check-in? | A partir das 14h.\nAceita pet? | Sim, pets pequenos, com aviso antes.'} /></div>
+              <div className="sm:col-span-2"><label className="rotulo" htmlFor="horarios">Horários (texto para a assistente)</label><input className="campo" id="horarios" name="horarios" maxLength={300} placeholder="Recepção todos os dias, das 8h às 22h." /></div>
+            </fieldset>
+            <fieldset className="grid gap-3 sm:grid-cols-4">
+              <legend className="mb-2 text-sm font-semibold text-tinta">3. Atendimento e avaliações</legend>
+              <div><label className="rotulo" htmlFor="hora_inicio">Atende a partir de</label><select className="campo" id="hora_inicio" name="hora_inicio" defaultValue=""><option value="">Padrão do modelo</option>{Array.from({ length: 24 }, (_, h) => <option key={h} value={h}>{h}h</option>)}</select></div>
+              <div><label className="rotulo" htmlFor="hora_fim">Até</label><select className="campo" id="hora_fim" name="hora_fim" defaultValue=""><option value="">Padrão do modelo</option>{Array.from({ length: 24 }, (_, h) => <option key={h + 1} value={h + 1}>{h + 1}h</option>)}</select></div>
+              <div><label className="rotulo" htmlFor="assistente">Nome da assistente</label><input className="campo" id="assistente" name="assistente" maxLength={40} placeholder="Ana" /></div>
+              <div><label className="rotulo" htmlFor="link_avaliacao">Link de avaliação do Google</label><input className="campo" id="link_avaliacao" name="link_avaliacao" type="url" maxLength={300} placeholder="https://search.google.com/local/writereview?placeid=…" /></div>
+            </fieldset>
+            <label className="flex min-h-11 items-center gap-2 text-[15px]"><input type="checkbox" name="demonstracao" className="h-5 w-5" /> Empresa de demonstração (dados fictícios)</label>
+            <div><Enviar>Cadastrar pelo modelo</Enviar></div>
           </Formulario>
         </section>
 

@@ -25,7 +25,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
       <header className="border-b border-linha">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <span className="text-lg font-bold text-tinta">{empresa.nome}</span>
-          <a href="#orcamento" className="botao min-h-10 px-4 py-1.5">Pedir orçamento</a>
+          <a href="#orcamento" className="botao min-h-10 px-4 py-1.5">{s.botao || 'Pedir orçamento'}</a>
         </div>
       </header>
 
@@ -36,7 +36,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
               <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">{s.chamada || empresa.nome}</h1>
               {s.descricao && <p className="mt-4 text-lg">{s.descricao}</p>}
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href="#orcamento" className="botao">Pedir orçamento</a>
+                <a href="#orcamento" className="botao">{s.botao || 'Pedir orçamento'}</a>
                 {podeAgendar && <Link href={`/agendar/${empresa.slug}`} className="botao-2">Agendar visita</Link>}
                 {zap && <a className="botao-2" href={`https://wa.me/${zap}`} target="_blank" rel="noopener noreferrer">Falar pelo WhatsApp</a>}
               </div>
@@ -50,7 +50,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
 
         {s.servicos.length > 0 && (
           <section className="mx-auto max-w-5xl px-4 py-12" aria-labelledby="t-servicos">
-            <h2 id="t-servicos" className="text-2xl font-bold">Serviços</h2>
+            <h2 id="t-servicos" className="text-2xl font-bold">{s.titulo_servicos || 'Serviços'}</h2>
             <ul className="mt-5 grid gap-4 sm:grid-cols-2">
               {s.servicos.map((x) => <li key={x.titulo} className="rounded-xl border border-linha p-5"><h3 className="text-lg font-bold">{x.titulo}</h3>{x.texto && <p className="mt-1">{x.texto}</p>}</li>)}
             </ul>
@@ -60,7 +60,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
         {s.areas.length > 0 && (
           <section className="bg-fundo" aria-labelledby="t-areas">
             <div className="mx-auto max-w-5xl px-4 py-12">
-              <h2 id="t-areas" className="text-2xl font-bold">Áreas atendidas</h2>
+              <h2 id="t-areas" className="text-2xl font-bold">{s.titulo_areas || 'Áreas atendidas'}</h2>
               <ul className="mt-4 flex flex-wrap gap-2">{s.areas.map((a) => <li key={a} className="rounded-full border border-linha bg-white px-4 py-1.5 font-medium text-tinta">{a}</li>)}</ul>
             </div>
           </section>
@@ -95,8 +95,8 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
         <section id="orcamento" className="mx-auto max-w-5xl scroll-mt-4 px-4 py-12" aria-labelledby="t-orc">
           <div className="grid gap-8 md:grid-cols-2">
             <div>
-              <h2 id="t-orc" className="text-3xl font-bold">Peça seu orçamento</h2>
-              <p className="mt-3 text-lg">Conte o que você precisa. Uma pessoa da equipe analisa e fala com você. O formulário não calcula valores nem promete economia.</p>
+              <h2 id="t-orc" className="text-3xl font-bold">{s.titulo_form || 'Peça seu orçamento'}</h2>
+              <p className="mt-3 text-lg">{s.texto_form || 'Conte o que você precisa. Uma pessoa da equipe analisa e fala com você. O formulário não calcula valores nem promete economia.'}</p>
               <dl className="mt-6 space-y-2 text-[15px]">
                 {zap && <div><dt className="font-semibold text-tinta">WhatsApp</dt><dd><a className="underline" href={`https://wa.me/${zap}`} target="_blank" rel="noopener noreferrer">{formatarTelefone(zap)}</a></dd></div>}
                 {s.email && <div><dt className="font-semibold text-tinta">E-mail</dt><dd><a className="underline" href={`mailto:${s.email}`}>{s.email}</a></dd></div>}

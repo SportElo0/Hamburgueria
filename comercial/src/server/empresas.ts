@@ -6,6 +6,7 @@ import { pool, q, tx, um, type Db } from './db';
 import { ErroDeUso, NaoAutorizado, NaoEncontrado } from './erros';
 import { enviarEmail, type ResultadoEmail } from './email';
 import { hashToken, novoToken } from './segredos';
+import { DadosCadastro, MODELOS, montarPeloModelo } from './modelos';
 
 export interface Empresa {
   id: string;
@@ -57,6 +58,52 @@ export async function criarEmpresa(adminUserId: string, entrada: z.input<typeof 
     await registrar(db, l!.id, { ator: { tipo: 'admin_growlift', id: adminUserId }, tipo: 'empresa_criada', dados: { segmento: e.segmento } });
     return montar(l)!;
   });
+}
+
+const Cadastro = NovaEmpresa.extend({
+  segmento: z.string().refine((s) => s in MODELOS, 'Escolha um modelo.'),
+  dados: DadosCadastro.prefault({}),
+  /** The owner's e-mail: gets the invitation to be the company's admin (optional). */
+  email_dono: z.union([z.literal(''), z.email('E-mail do dono inválido.').trim().toLowerCase()]).default(''),
+});
+
+/**
+ * The 5-minute sign-up: a new company from a ready-made model (form questions, rules, site texts, the content the
+ * assistant may use and the flows already on) filled with the owner's own data, plus the owner's invitation.
+ */
+export async function cadastrarEmpresa(adminUserId: string, entrada: z.input<typeof Cadastro>): Promise<{ empresa: Empresa; convite: { link: string; email: ResultadoEmail } | null; fluxos: number }> {
+  await exigirPlataforma(adminUserId);
+  const e = Cadastro.parse(entrada);
+  if (await um('select 1 from empresas where slug = $1', [e.slug])) throw new ErroDeUso('Já existe uma empresa com este endereço.');
+  if (e.email_dono && (await um('select 1 from "user" where email = $1', [e.email_dono]))) throw new ErroDeUso('O e-mail do dono já tem login na plataforma. Use outro e-mail.');
+  const modelo = MODELOS[e.segmento];
+  const { config, conhecimento, fluxos } = montarPeloModelo(modelo, e.nome, e.dados);
+  const token = e.email_dono ? novoToken() : null;
+  const empresa = await tx(async (db) => {
+    const l = await um<Linha>(
+      `insert into empresas (nome, slug, segmento, chave_publica, demonstracao, config) values ($1, $2, $3, $4, $5, $6) returning *`,
+      [e.nome, e.slug, e.segmento, `pk_${novoToken(18)}`, e.demonstracao, JSON.stringify(config)],
+      db,
+    );
+    const id = l!.id;
+    await q(`insert into conhecimento (empresa_id, versao, dados, criado_por) values ($1, 1, $2, $3)`, [id, JSON.stringify(conhecimento), adminUserId], db);
+    for (const f of fluxos) await q('insert into fluxos (empresa_id, nome, ativo, gatilho, passos) values ($1, $2, $3, $4, $5)', [id, f.nome, f.ativo, JSON.stringify(f.gatilho), JSON.stringify(f.passos)], db);
+    if (token) await q(`insert into convites (empresa_id, email, papel, token_hash, expira_em, criado_por) values ($1, $2, 'admin', $3, now() + interval '7 days', $4)`, [id, e.email_dono, hashToken(token), adminUserId], db);
+    await registrar(db, id, { ator: { tipo: 'admin_growlift', id: adminUserId }, tipo: 'empresa_criada', dados: { segmento: e.segmento, modelo: modelo.id, fluxos: fluxos.length, convite_dono: !!token } });
+    return montar(l)!;
+  });
+  let convite: { link: string; email: ResultadoEmail } | null = null;
+  if (token) {
+    const link = `${process.env.APP_URL ?? ''}/convite/${token}`;
+    const email = await enviarEmail({
+      para: e.email_dono,
+      assunto: `Convite para administrar a ${empresa.nome} · Growlift Comercial`,
+      link,
+      texto: `A Growlift preparou o sistema da ${empresa.nome} no Growlift Comercial.\n\nPara criar seu acesso de administrador, abra: ${link}\n\nO convite vale por 7 dias. Se você não esperava este convite, ignore este e-mail.`,
+    });
+    convite = { link, email };
+  }
+  return { empresa, convite, fluxos: fluxos.length };
 }
 
 /** What the Growlift admin sees without entering a company: names and the health of integrations, no customer data. */

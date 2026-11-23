@@ -18,6 +18,23 @@ O objetivo é melhorar o atendimento e o acompanhamento da procura que a empresa
 
 Perfis: **administrador Growlift** (cadastra empresas; só vê dados de uma empresa entrando com motivo, por 1 hora, com registro no histórico dela), **administrador da empresa** e **vendedor**.
 
+## Modelos por tipo de negócio e cadastro em 5 minutos (23/11/2026)
+
+Como os "snapshots" do GoHighLevel: em **Administração › Cadastrar empresa pelo modelo**, a equipe Growlift escolhe o modelo e preenche o que o dono passou. A empresa nasce com:
+
+- o **formulário** do tipo de negócio (pousada: entrada, saída e pessoas; restaurante: tipo de pedido, data e pessoas; serviços: serviço e urgência; energia solar: imóvel e conta);
+- as **regras** de acompanhamento (retomada automática de quem não respondeu, avaliação depois do serviço, lembrete de manutenção só nos modelos de serviço), o horário e a agenda (ligada só onde há visita);
+- o **site** com os textos do ramo ("Pedir reserva", "Acomodações"…), os serviços e as perguntas frequentes;
+- o **conteúdo da assistente** (descrição, serviços, horários, perguntas, preços autorizados, regras comerciais e o que passar para a equipe). O que ficar em branco continua em branco: a assistente passa a pergunta para a equipe; preço só se estiver em "preços autorizados";
+- as **automações já ligadas** (boas-vindas, ligação não atendida e as do ramo, como "Valores enviados e sem resposta" na pousada);
+- o **convite do dono** como administrador (link mostrado uma vez e enviado por e-mail quando o Resend estiver ligado).
+
+Código: `src/server/modelos.ts` (os modelos e `montarPeloModelo`), `cadastrarEmpresa` em `src/server/empresas.ts`, testes em `test/modelos.test.ts`. Um modelo novo é uma entrada em `MODELOS` (e o segmento em `SEGMENTOS`, `src/server/config.ts`).
+
+Demonstração: **Pousada Maré Calma (fictícia)**, `/s/pousada-demo`, login `admin@marecalma.demo`, criada pelo modelo exatamente como um cadastro real.
+
+Ainda não existe: aplicar uma melhoria do modelo em empresas que já usam (hoje cada empresa muda as próprias automações e textos em Configurações).
+
 ## Escolhas técnicas (em poucas linhas)
 
 - **Next.js 16 + TypeScript**, um só aplicativo (monólito): é a mesma base dos outros projetos deste repositório.

@@ -21,8 +21,53 @@ async function main() {
   const { salvarWhatsApp } = await import('../src/server/integracoes');
   const { salvarFluxo, MODELOS_DE_FLUXO } = await import('../src/server/fluxos');
 
+  const { cadastrarEmpresa } = await import('../src/server/empresas');
+
+  /** The pousada demonstration, built by the ready-made model exactly as a real sign-up (everything fictitious). */
+  async function pousadaDemo(growliftId: string) {
+    if (await um(`select 1 from empresas where slug = 'pousada-demo'`)) return false;
+    const r = await cadastrarEmpresa(growliftId, {
+      nome: 'Pousada Maré Calma (fictícia)',
+      slug: 'pousada-demo',
+      segmento: 'pousada',
+      demonstracao: true,
+      dados: {
+        whatsapp: '12900000300',
+        email: 'reservas@marecalma.demo',
+        cidade: 'Litoral Norte de SP (endereço fictício)',
+        descricao: 'Pousada fictícia de demonstração, a poucos passos da praia, com café da manhã e piscina.',
+        servicos: 'Suíte casal — cama de casal e varanda para o jardim\nSuíte família — até 4 pessoas\nChalé — cozinha compacta e rede na varanda',
+        perguntas: 'Que horas é o check-in e o check-out? | Check-in a partir das 14h e check-out até as 11h.\nO café da manhã está incluído? | Sim, servido das 8h às 10h30.\nAceita pet? | Pets pequenos, com aviso antes da reserva.',
+        horarios: 'Recepção todos os dias, das 8h às 22h.',
+        hora_inicio: 8,
+        hora_fim: 22,
+        link_avaliacao: 'https://example.com/avaliacao-ficticia',
+        assistente: 'Ana',
+      },
+    });
+    const admin = await criarUsuario('admin@marecalma.demo', 'Paula (fictícia)', SENHA);
+    await q(`insert into membros (user_id, empresa_id, papel) values ($1, $2, 'admin')`, [admin, r.empresa.id]);
+    const a = { userId: admin, nome: 'Paula', empresaId: r.empresa.id, papel: 'admin' as const };
+    await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao', modelo_ligacao: 'demo_ligacao', modelo_lembrete_visita: 'demo_lembrete_visita' });
+    const e = (await empresaPorId(r.empresa.id))!;
+    const pedir = (i: number, dados: Record<string, unknown>) =>
+      receberPedido(e, { preferencia_contato: 'WhatsApp', aceite_whatsapp: true, chave_idempotencia: randomUUID(), ...dados }, { origem: 'site', ipHash: `demo-pousada-${i}` });
+    const op = (x: Awaited<ReturnType<typeof pedir>>) => ('oportunidadeId' in x ? x.oportunidadeId : '');
+    const r1 = op(await pedir(1, { nome: 'Juliana Costa (fictícia)', telefone: '11900000301', cidade: 'São Paulo', necessidade: 'Quero reservar o Réveillon, se tiver suíte com varanda.', extras: { entrada: '29/12', saida: '02/01', pessoas: '2 adultos' } }));
+    const r2 = op(await pedir(2, { nome: 'Marcos Lima (fictício)', telefone: '11900000302', cidade: 'Campinas', necessidade: 'Família com duas crianças, 4 noites em janeiro.', extras: { entrada: '10/01', saida: '14/01', pessoas: '2 adultos e 2 crianças (6 e 9 anos)' } }));
+    const r3 = op(await pedir(3, { nome: 'Renata Alves (fictícia)', telefone: '11900000303', cidade: 'Santos', necessidade: 'Fim de semana de Carnaval para o casal.', extras: { entrada: '13/02', saida: '17/02', pessoas: '2 adultos' } }));
+    await mudarEtapa(a, r1, { etapa: 'atendimento' });
+    await mudarEtapa(a, r1, { etapa: 'proposta', valorCentavos: 320_000 });
+    await anotar(a, r1, 'Valores enviados para a suíte com varanda (exemplo fictício).');
+    await mudarEtapa(a, r2, { etapa: 'ganho', valorCentavos: 260_000 });
+    await anotar(a, r3, 'Aguardando a hóspede confirmar as datas.');
+    return true;
+  }
+
   if (await um(`select 1 from empresas where slug = 'lumivale-demo'`)) {
-    console.log('Os dados de demonstração já existem. Para recomeçar do zero: npm run reiniciar-banco');
+    const g = await um<{ user_id: string }>(`select a.user_id from admins_plataforma a join "user" u on u.id = a.user_id where u.email = 'equipe@growlift.demo'`);
+    const criou = g ? await pousadaDemo(g.user_id) : false;
+    console.log(criou ? 'Pousada de demonstração criada (pousada-demo). Login: admin@marecalma.demo' : 'Os dados de demonstração já existem. Para recomeçar do zero: npm run reiniciar-banco');
     return fecharPool();
   }
   const growlift = await criarUsuario('equipe@growlift.demo', 'Equipe Growlift', SENHA);
@@ -121,6 +166,7 @@ async function main() {
   await escreverNoChatSite(lumi.empresa, chat.token, 'Quero falar com um atendente', 'demo-chat');
 
   await novo(sol.empresa, 6, { nome: 'Cliente da Sol do Vale (fictício)', telefone: '12900000201', cidade: 'Taubaté', necessidade: 'Projeto para minha casa.' });
+  await pousadaDemo(growlift);
 
   await fecharPool();
   console.log(`
@@ -131,8 +177,10 @@ Dados de demonstração criados (tudo fictício). Senha de todos os logins: ${SE
   Lumivale, vendedor ..... vendas@lumivale.demo
   Sol do Vale, admin ..... admin@soldovale.demo
   Sol do Vale, vendedor .. vendas@soldovale.demo
+  Pousada (modelo), admin  admin@marecalma.demo
 
   Site de demonstração: ${process.env.APP_URL ?? 'http://localhost:3100'}/s/lumivale-demo
+  Site da pousada .....: ${process.env.APP_URL ?? 'http://localhost:3100'}/s/pousada-demo
 `);
 }
 
