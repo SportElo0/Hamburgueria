@@ -15,6 +15,8 @@ interface Props {
   chave: string;
   empresa: string;
   campos: CampoExtra[];
+  /** Text of the send button (the company's model: "Pedir reserva", "Fazer pedido"…). */
+  botao?: string;
   textoConsentimento: string;
   linkPrivacidade: string;
   origem: 'site' | 'formulario_incorporado';
@@ -25,7 +27,7 @@ const Erro = ({ id, erros }: { id: string; erros: Record<string, string> }) => (
 const novaChave = () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `k${Date.now()}${Math.random().toString(36).slice(2, 12)}`);
 
 /** Quote request form. It only says "received" after the server confirms the request was saved. */
-export function FormularioPedido({ chave, empresa, campos, textoConsentimento, linkPrivacidade, origem }: Props) {
+export function FormularioPedido({ chave, empresa, campos, textoConsentimento, linkPrivacidade, origem, botao = 'Pedir orçamento' }: Props) {
   const [erros, setErros] = useState<Record<string, string>>({});
   const [geral, setGeral] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -141,7 +143,7 @@ export function FormularioPedido({ chave, empresa, campos, textoConsentimento, l
       <label className="flex items-start gap-3 text-[14.5px]"><input type="checkbox" name="aceite_whatsapp" className="mt-0.5 h-5 w-5 shrink-0" /><span>{textoConsentimento}</span></label>
       {/* Hidden from people; robots fill it and are discarded. */}
       <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden"><label>Site<input name="site_url" tabIndex={-1} autoComplete="off" /></label></div>
-      <button className="botao w-full" disabled={enviando}>{enviando ? 'Enviando…' : 'Pedir orçamento'}</button>
+      <button className="botao w-full" disabled={enviando}>{enviando ? 'Enviando…' : botao}</button>
       <p className="text-[13px] text-suave">Usamos seus dados para responder e acompanhar este pedido de orçamento, inclusive com mensagens de retorno, e guardamos de qual anúncio ou página você veio. Se tiver menos de 18 anos, peça a um responsável. <a className="underline" href={linkPrivacidade} target="_blank" rel="noopener noreferrer">Privacidade</a>.</p>
     </form>
   );

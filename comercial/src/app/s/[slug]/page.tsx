@@ -105,7 +105,7 @@ export default async function Site({ params }: { params: Promise<{ slug: string 
               </dl>
             </div>
             <div className="rounded-2xl border border-linha p-5 shadow-sm">
-              <FormularioPedido chave={empresa.chave_publica} empresa={empresa.nome} campos={empresa.config.campos} textoConsentimento={TEXTO_CONSENTIMENTO_WHATSAPP(empresa.nome)} linkPrivacidade={`/s/${empresa.slug}/privacidade`} origem="site" />
+              <FormularioPedido chave={empresa.chave_publica} empresa={empresa.nome} campos={empresa.config.campos} textoConsentimento={TEXTO_CONSENTIMENTO_WHATSAPP(empresa.nome)} linkPrivacidade={`/s/${empresa.slug}/privacidade`} origem="site" botao={s.botao || undefined} />
             </div>
           </div>
         </section>
