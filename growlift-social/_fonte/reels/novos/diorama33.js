@@ -1,10 +1,10 @@
-// Reel 33 · "Quatro estrelas de diferença", version 2 (23/11): first person, like the reference Antônio sent. The
-// camera is the customer's eyes at table 7; we only see his arm, his hand and his phone. Toy-like characters (matte,
-// big round heads, dot eyes, pink cheeks): the red-haired waitress with round glasses, mint sweater and white apron,
-// the waiter in a black vest, the chef behind the kitchen window, pastel diners. Warm diner: cream walls, brown
-// ceiling band, black-and-white checkered floor, red chairs, yellow cone lamps, TV boards on the back wall.
-// window.dio.draw(t) draws time t (pure function of t); window.dio.project(x,y,z) gives screen pixels for overlays;
-// window.ready resolves once the burger GLB is parsed. Phone screens are HTML in reel33.mjs.
+// Reel 33 · "Quatro estrelas de diferença", version 3 (23/11): one continuous first-person shot, like the reference
+// Antônio sent. The camera is the customer's eyes at table 7: his hand goes up, the waiter rushes past, the phone
+// comes up in his hand (a 3D phone whose screens are drawn on a canvas, and whose camera shows the real table for the
+// QR scan and the dish in 3D), the waitress panics, the menu card is picked up and swapped for the QR card, the order
+// flies to the kitchen screen, the waiter brings the burger, he takes a bite, pays and reviews; then the camera leaves
+// his eyes for the side view. Toy-like characters; warm diner with checkered floor. window.dio.draw(t) draws time t
+// (pure function of t); window.ready resolves once the burger and the menu photos are loaded.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -20,6 +20,7 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.12;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.localClippingEnabled = true;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#3a2414');
@@ -315,14 +316,14 @@ add(T7, rbox(0.95, 0.04, 0.95, 0.012), cloth, 0, 0.77, 0);
 add(T7, new THREE.BoxGeometry(0.95, 0.22, 0.02), cloth, 0, 0.67, 0.47);
 for (const s of [-1, 1]) add(T7, new THREE.BoxGeometry(0.02, 0.22, 0.95), cloth, s * 0.47, 0.67, 0);
 add(T7, new THREE.CylinderGeometry(0.04, 0.04, 0.6, 10), toy('#2c1a0e'), 0, 0.3, 0);
-add(T7, new THREE.BoxGeometry(0.42, 0.006, 0.3), toy('#b3261e', { roughness: 0.75 }), 0, 0.793, -0.2);
+add(T7, new THREE.BoxGeometry(0.42, 0.006, 0.3), toy('#b3261e', { roughness: 0.75 }), 0, 0.793, -0.04);
 lamp(0, 0.1, true);
 breadBasket(T7, -0.3, 0.12);
 add(T7, new THREE.CylinderGeometry(0.04, 0.045, 0.24, 18), toy('#3b8fd6', { roughness: 0.25, transparent: true, opacity: 0.85 }), 0.33, 0.91, 0.18);
 add(T7, new THREE.CylinderGeometry(0.02, 0.025, 0.04, 12), toy('#2b6aa8'), 0.33, 1.05, 0.18);
 add(T7, new THREE.CylinderGeometry(0.022, 0.025, 0.07, 12), toy('#e9eef3', { roughness: 0.3 }), 0.22, 0.825, 0.25);
-for (const s of [-1, 1]) add(T7, rbox(0.015, 0.004, 0.18, 0.002), toy('#c9ced8', { metalness: 0.7, roughness: 0.3 }), s * 0.24, 0.797, -0.2);
-const plate = add(T7, new THREE.CylinderGeometry(0.14, 0.12, 0.02, 28), toy('#fbfbf8', { roughness: 0.25 }), 0, 0.805, -0.2);
+for (const s of [-1, 1]) add(T7, rbox(0.015, 0.004, 0.18, 0.002), toy('#c9ced8', { metalness: 0.7, roughness: 0.3 }), s * 0.24, 0.797, -0.04);
+const plate = add(T7, new THREE.CylinderGeometry(0.14, 0.12, 0.02, 28), toy('#fbfbf8', { roughness: 0.25 }), 0, 0.805, -0.04);
 const qrTex = canvasTex(320, 440, (g, w) => {
   g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, 440);
   g.fillStyle = '#0865fe'; g.fillRect(0, 0, w, 88);
@@ -352,11 +353,21 @@ function tableCard(tex) {
   add(c, new THREE.PlaneGeometry(0.124, 0.172), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.6 }), 0, 0.12, 0.004, false);
   return { c };
 }
-const qrCard = tableCard(qrTex);
-qrCard.c.position.set(0.36, 0.79, 0.34);
-qrCard.c.rotation.y = Math.PI + 0.35;
-qrCard.c.scale.setScalar(0.85);
-T7.add(qrCard.c);
+// the card on the table: the PDF menu card at first; the hand swaps it for our QR card
+const cardMat = new THREE.MeshStandardMaterial({ map: pdfTex, roughness: 0.6 });
+function tableCard2(m) {
+  const c = new THREE.Group();
+  add(c, rbox(0.15, 0.03, 0.06, 0.008), woodDark, 0, 0.015, 0);
+  add(c, new THREE.BoxGeometry(0.13, 0.18, 0.006), toy('#ffffff'), 0, 0.12, 0);
+  add(c, new THREE.PlaneGeometry(0.124, 0.172), m, 0, 0.12, 0.004, false);
+  return c;
+}
+const TCARD = new THREE.Vector3(0.14, 0.79, 0.3);
+const tcard = tableCard2(cardMat);
+tcard.position.copy(TCARD);
+tcard.rotation.y = Math.PI;
+tcard.scale.setScalar(0.85);
+T7.add(tcard);
 
 // ---------------------------------------------------------------- staff and the customer (seen only from outside)
 const waitress = toyPerson({ kind: 'waitress', shirt: '#5cc8a8', skin: SKIN.a, hair: 'bun', hairColor: '#d4582a', glasses: '#c8323c' });
@@ -382,17 +393,25 @@ const servePlate = new THREE.Group();
 add(servePlate, new THREE.CylinderGeometry(0.14, 0.12, 0.02, 28), toy('#fbfbf8', { roughness: 0.25 }), 0, 0, 0);
 waiter.armR.add(servePlate); servePlate.position.set(0.03, -0.38, 0.16);
 
+
 // ---------------------------------------------------------------- the burger (GLB of the demo menu)
 let burgerProto = null;
-const arBurger = new THREE.Group(), servedBurger = new THREE.Group(), heldBurger = new THREE.Group();
-T7.add(arBurger); arBurger.position.set(0, 0.816, -0.2);
+const arBurger = new THREE.Group(), tableBurger = new THREE.Group(), servedBurger = new THREE.Group(), heldBurger = new THREE.Group();
+T7.add(arBurger); arBurger.position.set(0, 0.816, -0.04);
+T7.add(tableBurger); tableBurger.position.set(0, 0.816, -0.04); tableBurger.rotation.y = 0.6;
 servePlate.add(servedBurger); servedBurger.position.set(0, 0.012, 0);
-window.ready = new Promise((resolve) => {
+// the bite: two clipping planes (in the burger's own space) that remove a notch on its +x side
+const BITE = [new THREE.Plane(new THREE.Vector3(-1, 0, 1).normalize(), 0.026 / Math.SQRT2 * 1.4), new THREE.Plane(new THREE.Vector3(-1, 0, -1).normalize(), 0.026 / Math.SQRT2 * 1.4)];
+const biteWorld = [new THREE.Plane(), new THREE.Plane()];
+const heldMats = [];
+const FOTOS = {};
+window.ready = (async () => {
+  await Promise.all(Object.entries(window.FOTOS || {}).map(([k, src]) => new Promise((res) => { const im = new Image(); im.onload = () => { FOTOS[k] = im; res(); }; im.onerror = res; im.src = src; })));
   const b64 = window.BURGER_B64;
-  if (!b64) return resolve();
+  if (!b64) return;
   const bin = atob(b64), buf = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
-  new GLTFLoader().parse(buf.buffer, '', (gltf) => {
+  await new Promise((resolve) => new GLTFLoader().parse(buf.buffer, '', (gltf) => {
     burgerProto = gltf.scene;
     burgerProto.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
     const box = new THREE.Box3().setFromObject(burgerProto);
@@ -400,62 +419,110 @@ window.ready = new Promise((resolve) => {
     const a = burgerProto.clone(true);
     a.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.material.transparent = true; } });
     arBurger.add(a);
+    tableBurger.add(burgerProto.clone(true));
     servedBurger.add(burgerProto.clone(true));
-    heldBurger.add(burgerProto.clone(true));
+    const h = burgerProto.clone(true);
+    h.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.material.side = THREE.DoubleSide; heldMats.push(o.material); } });
+    heldBurger.add(h);
     resolve();
-  }, () => resolve());
-});
+  }, () => resolve()));
+})();
 const ringMat = new THREE.MeshBasicMaterial({ color: '#4d8dff', transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
-const arRing = add(T7, new THREE.RingGeometry(0.085, 0.1, 64), ringMat, 0, 0.818, -0.2, false);
+const arRing = add(T7, new THREE.RingGeometry(0.085, 0.1, 64), ringMat, 0, 0.818, -0.04, false);
 arRing.rotation.x = -Math.PI / 2;
-const discMat = new THREE.MeshBasicMaterial({ color: '#4d8dff', transparent: true, opacity: 0, depthWrite: false });
-const arDisc = add(T7, new THREE.CircleGeometry(0.085, 48), discMat, 0, 0.817, -0.2, false);
-arDisc.rotation.x = -Math.PI / 2;
 
-// ---------------------------------------------------------------- the customer's arm and hand (first person)
+// ---------------------------------------------------------------- first person: hands, sleeves, phone
 const POVSKIN = toy('#ecc9a2', { roughness: 0.55 });
+const SLEEVE = toy('#3fa66a', { roughness: 0.75 });
+const CUFF = toy('#2f8a55');
 const pov = new THREE.Group();
 camera.add(pov);
-const sleeve = add(pov, new THREE.CapsuleGeometry(0.075, 0.5, 8, 16), toy('#3fa66a', { roughness: 0.75 }), 0, 0, 0, false);
-const cuff = add(pov, new THREE.CylinderGeometry(0.068, 0.07, 0.05, 20), toy('#2f8a55'), 0, 0, 0, false);
-const hand = new THREE.Group();
-pov.add(hand);
-add(hand, rbox(0.1, 0.11, 0.038, 0.018), POVSKIN, 0, 0, 0, false);
-const fingers = [];
-for (let i = 0; i < 4; i++) {
-  const f = new THREE.Group();
-  f.position.set(-0.036 + i * 0.024, 0.055, 0);
-  add(f, new THREE.CapsuleGeometry(0.0115, 0.035, 4, 10), POVSKIN, 0, 0.025, 0, false);
-  const j = new THREE.Group(); j.position.set(0, 0.05, 0); f.add(j);
-  add(j, new THREE.CapsuleGeometry(0.011, 0.028, 4, 10), POVSKIN, 0, 0.02, 0, false);
-  hand.add(f);
-  fingers.push({ f, j });
+function makeHand(side) {
+  const h = new THREE.Group();
+  add(h, rbox(0.1, 0.11, 0.038, 0.018), POVSKIN, 0, 0, 0, false);
+  const fingers = [];
+  for (let i = 0; i < 4; i++) {
+    const f = new THREE.Group();
+    f.position.set(side * (-0.036 + i * 0.024), 0.055, 0);
+    add(f, new THREE.CapsuleGeometry(0.0115, 0.035, 4, 10), POVSKIN, 0, 0.025, 0, false);
+    const j = new THREE.Group(); j.position.set(0, 0.05, 0); f.add(j);
+    add(j, new THREE.CapsuleGeometry(0.011, 0.028, 4, 10), POVSKIN, 0, 0.02, 0, false);
+    h.add(f);
+    fingers.push({ f, j });
+  }
+  const thumb = new THREE.Group();
+  thumb.position.set(side * -0.055, -0.01, 0.01);
+  add(thumb, new THREE.CapsuleGeometry(0.013, 0.04, 4, 10), POVSKIN, 0, 0.03, 0, false);
+  thumb.rotation.z = side * 0.7;
+  h.add(thumb);
+  const sleeve = add(new THREE.Group(), new THREE.CapsuleGeometry(0.075, 0.5, 8, 16), SLEEVE, 0, 0, 0, false);
+  const cuff = add(new THREE.Group(), new THREE.CylinderGeometry(0.068, 0.07, 0.05, 20), CUFF, 0, 0, 0, false);
+  return { h, fingers, thumb, sleeve, cuff };
 }
-const thumb = new THREE.Group();
-thumb.position.set(-0.055, -0.01, 0.01);
-add(thumb, new THREE.CapsuleGeometry(0.013, 0.04, 4, 10), POVSKIN, 0, 0.03, 0, false);
-thumb.rotation.z = 0.7;
-hand.add(thumb);
-const heldCard = new THREE.Group();
-const heldPdf = tableCard(pdfTex), heldQr = tableCard(qrTex);
-heldCard.add(heldPdf.c, heldQr.c);
-heldCard.scale.setScalar(1.15);
+const R = makeHand(1), L = makeHand(-1);
+for (const k of [R, L]) pov.add(k.h, k.sleeve, k.cuff);
+const wristV = new THREE.Vector3(), elbowV = new THREE.Vector3();
+/** Hand k at (camera space) position/rotation, finger curl per finger, sleeve from `from` (below the frame). */
+function pose(k, pos, rot, curls, from, thumbCurl = 0) {
+  k.h.visible = k.sleeve.visible = k.cuff.visible = true;
+  k.h.position.set(...pos);
+  k.h.rotation.set(...rot);
+  k.fingers.forEach((o, i) => { const c = Array.isArray(curls) ? curls[i] : curls; o.f.rotation.x = c; o.j.rotation.x = c * 1.2; });
+  k.thumb.rotation.x = thumbCurl;
+  wristV.set(0, -0.07, 0).applyEuler(k.h.rotation).add(k.h.position);
+  elbowV.set(...from);
+  limb(k.sleeve, elbowV, wristV, 0.65);
+  k.cuff.position.copy(wristV);
+  k.cuff.quaternion.copy(k.sleeve.quaternion);
+}
+const hide = (k) => { k.h.visible = k.sleeve.visible = k.cuff.visible = false; };
+
+// the phone: body, the camera feed (render target) and the drawn screen on top, held in a gripping right hand
+const PW = 0.066, PH = 0.143, SW = 540, SH = 1170;
+const phone = new THREE.Group();
+pov.add(phone);
+add(phone, rbox(PW + 0.007, PH + 0.009, 0.009, 0.008), toy('#0d0f14', { roughness: 0.3, metalness: 0.3 }), 0, 0, 0, false);
+const rt = new THREE.WebGLRenderTarget(SW / 2, SH / 2, { samples: 2 });
+rt.texture.colorSpace = THREE.SRGBColorSpace;
+const feed = add(phone, new THREE.PlaneGeometry(PW, PH), new THREE.MeshBasicMaterial({ map: rt.texture, toneMapped: false }), 0, 0, 0.0048, false);
+const uiCanvas = document.createElement('canvas'); uiCanvas.width = SW; uiCanvas.height = SH;
+const ui = uiCanvas.getContext('2d');
+const uiTex = new THREE.CanvasTexture(uiCanvas); uiTex.colorSpace = THREE.SRGBColorSpace; uiTex.anisotropy = 8;
+add(phone, new THREE.PlaneGeometry(PW, PH), new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, toneMapped: false }), 0, 0, 0.005, false);
+// gripping hand (part of the phone): palm behind, fingers around the right edge, thumb on the left edge
+const grip = new THREE.Group();
+phone.add(grip);
+add(grip, rbox(0.085, 0.1, 0.03, 0.016), POVSKIN, 0.005, -0.055, -0.022, false);
+for (let i = 0; i < 4; i++) {
+  const f = add(grip, new THREE.CapsuleGeometry(0.0115, 0.03, 4, 10), POVSKIN, PW / 2 + 0.006, -0.065 + i * 0.024, -0.004, false);
+  f.rotation.z = Math.PI / 2 + 0.25;
+}
+const gthumb = add(grip, new THREE.CapsuleGeometry(0.0125, 0.04, 4, 10), POVSKIN, -PW / 2 - 0.004, -0.045, 0.004, false);
+gthumb.rotation.z = -0.35;
+const gsleeve = add(phone, new THREE.CapsuleGeometry(0.075, 0.5, 8, 16), SLEEVE, 0, 0, 0, false);
+const gcuff = add(phone, new THREE.CylinderGeometry(0.068, 0.07, 0.05, 20), CUFF, 0, 0, 0, false);
+limb(gsleeve, new THREE.Vector3(0.1, -0.5, -0.12), new THREE.Vector3(0.012, -0.11, -0.03), 0.65);
+gcuff.position.set(0.012, -0.11, -0.03); gcuff.quaternion.copy(gsleeve.quaternion);
+const phoneCam = new THREE.PerspectiveCamera(62, SW / SH, 0.02, 40);
+scene.add(phoneCam);
+const screenPoint = (px, py) => new THREE.Vector3((px / SW - 0.5) * PW, (0.5 - py / SH) * PH, 0.012);
+
+// the card the hand picks up, and the order that flies to the kitchen
+const heldCard = tableCard2(cardMat);
+heldCard.scale.setScalar(1.1);
 pov.add(heldCard);
 pov.add(heldBurger);
-const wristV = new THREE.Vector3(), elbowV = new THREE.Vector3();
-/** Places the hand (camera space) and stretches the sleeve from below the frame to the wrist. */
-function arm(hx, hy, hz, rx, ry, rz, curl, from) {
-  pov.visible = true;
-  hand.position.set(hx, hy, hz);
-  hand.rotation.set(rx, ry, rz);
-  fingers.forEach((o, i) => { o.f.rotation.x = curl; o.j.rotation.x = curl * 1.2; o.f.rotation.z = (i - 1.5) * 0.06 * (1 - curl); });
-  thumb.rotation.x = curl * 0.6;
-  wristV.set(0, -0.07, 0).applyEuler(hand.rotation).add(hand.position);
-  elbowV.set(...from);
-  limb(sleeve, elbowV, wristV, 0.65);
-  cuff.position.copy(wristV);
-  cuff.quaternion.copy(sleeve.quaternion);
-}
+const orderTex = canvasTex(400, 220, (g) => {
+  g.fillStyle = '#0d2a1c'; g.beginPath(); g.roundRect(6, 6, 388, 208, 26); g.fill();
+  g.strokeStyle = '#34d27b'; g.lineWidth = 8; g.stroke();
+  g.fillStyle = '#ffffff'; g.font = '900 64px Inter, sans-serif'; g.fillText('Mesa 7', 34, 92);
+  g.fillStyle = '#bfe9d1'; g.font = '700 40px Inter, sans-serif'; g.fillText('1× Clássico', 34, 160);
+});
+const order = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 0.11), new THREE.MeshBasicMaterial({ map: orderTex, transparent: true, toneMapped: false, depthTest: false }));
+order.renderOrder = 20;
+scene.add(order);
+const glowTex = canvasTex(128, 128, (g) => { const gr = g.createRadialGradient(64, 64, 4, 64, 64, 64); gr.addColorStop(0, 'rgba(120,200,255,1)'); gr.addColorStop(1, 'rgba(120,200,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); });
+const glows = Array.from({ length: 10 }, () => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthTest: false, blending: THREE.AdditiveBlending })); s.renderOrder = 19; scene.add(s); return s; });
 
 // ---------------------------------------------------------------- lights
 scene.add(new THREE.HemisphereLight('#fff1dc', '#3a2414', 0.9));
@@ -468,34 +535,196 @@ Object.assign(key.shadow.camera, { left: -6, right: 6, top: 7, bottom: -4, near:
 key.shadow.bias = -0.0005;
 scene.add(key, key.target);
 
-// ---------------------------------------------------------------- shots
-// [start, pos, look, fov]; two keys at almost the same time = a cut. The customer's eye: EYE.
-const S = (t, p, q, f) => ({ t, p, q, f });
-const EYE = [0, 1.16, -0.52];
-const PHONE = (t) => S(t, EYE, [0.05, 0.98, 2.2], 52);
-const SHOTS = [
-  S(0, EYE, [0.25, 1.1, 2.5], 54), S(2.14, EYE, [0.35, 1.1, 2.5], 54),
-  PHONE(2.15), PHONE(3.74),
-  S(3.75, EYE, [0.1, 1.05, 2.3], 50), S(6.09, EYE, [0.05, 1.05, 2.3], 48),
-  S(6.1, EYE, [0.2, 1.05, 2.4], 50), S(10.39, EYE, [0.12, 1.05, 2.4], 47),
-  S(10.4, EYE, [0.05, 1.0, 2.3], 50), S(14.49, EYE, [0.05, 1.0, 2.3], 48),
-  S(14.5, EYE, [0.12, 0.8, 0.35], 52), S(18.39, EYE, [0.12, 0.8, 0.35], 52),
-  S(18.4, [0, 1.12, -0.6], [0, 0.82, -0.12], 44), S(23.59, [0, 1.07, -0.58], [0, 0.83, -0.14], 40),
-  PHONE(23.6), PHONE(25.09),
-  S(25.1, [KX - 0.15, 1.7, ROOM.z1 - 3.7], [KX, 1.88, ROOM.z1], 46), S(26.89, [KX - 0.1, 1.7, ROOM.z1 - 3.3], [KX, 1.9, ROOM.z1], 44),
-  S(26.9, EYE, [0.15, 1.1, 2.2], 52), S(28.39, EYE, [0.1, 1.05, 2.0], 50),
-  S(28.4, EYE, [0, 0.78, 0.1], 50), S(30.19, EYE, [0, 0.8, 0.1], 48),
-  PHONE(30.2), PHONE(41.29),
-  S(41.3, [-2.1, 1.28, -0.1], [0.3, 0.98, -0.1], 54), S(45.59, [-2.6, 1.45, -0.05], [0.3, 0.98, -0.1], 54),
-  PHONE(45.6), PHONE(47.99),
-  S(48.0, [-2.6, 1.45, -0.05], [0.3, 0.98, -0.1], 54), S(60, [-2.8, 1.5, 0], [0.3, 0.98, -0.1], 54),
+// ---------------------------------------------------------------- the phone screens (drawn on a canvas)
+const rr = (x, y, w, h, r, fill) => { ui.beginPath(); ui.roundRect(x, y, w, h, r); ui.fillStyle = fill; ui.fill(); };
+const txt = (s, x, y, size, color, weight = 700, align = 'left') => { ui.font = `${weight} ${size}px Inter, sans-serif`; ui.fillStyle = color; ui.textAlign = align; ui.textBaseline = 'alphabetic'; ui.fillText(s, x, y); };
+function wrap(s, x, y, w, size, color, lh, weight = 500) {
+  ui.font = `${weight} ${size}px Inter, sans-serif`; ui.fillStyle = color; ui.textAlign = 'left';
+  let line = '', yy = y;
+  for (const word of s.split(' ')) { const tst = line ? line + ' ' + word : word; if (ui.measureText(tst).width > w && line) { ui.fillText(line, x, yy); line = word; yy += lh; } else line = tst; }
+  if (line) ui.fillText(line, x, yy);
+}
+const star = (cx, cy, r, on, color = '#fbbc04') => {
+  ui.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + (i * Math.PI) / 5, rad = i % 2 ? r * 0.45 : r; ui.lineTo(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad); }
+  ui.closePath();
+  if (on) { ui.fillStyle = color; ui.fill(); } else { ui.strokeStyle = '#9aa0a6'; ui.lineWidth = 3; ui.stroke(); }
+};
+const statusBar = (dark, hora) => { txt(hora, 40, 46, 22, dark ? '#fff' : '#111', 700); rr(SW / 2 - 70, 18, 140, 38, 19, '#000'); txt('●●● ', SW - 40, 46, 16, dark ? '#fff' : '#111', 700, 'right'); };
+const cover = (img, x, y, w, h, r) => {
+  if (!img) { rr(x, y, w, h, r, '#3a2414'); return; }
+  ui.save(); ui.beginPath(); ui.roundRect(x, y, w, h, r); ui.clip();
+  const s = Math.max(w / img.width, h / img.height); ui.drawImage(img, x + (w - img.width * s) / 2, y + (h - img.height * s) / 2, img.width * s, img.height * s);
+  ui.restore();
+};
+const GOLD = '#f2b632', DARK = '#120c08', CARD = '#211610';
+function scrReview(t, five) {
+  ui.fillStyle = '#ffffff'; ui.fillRect(0, 0, SW, SH);
+  statusBar(false, five ? '23:59' : '23:12');
+  txt('←', 36, 120, 34, '#3c4043', 700); txt('Sua avaliação', 90, 120, 30, '#202124', 800);
+  rr(36, 160, SW - 72, 110, 22, '#f1f3f4');
+  cover(FOTOS.duplo, 54, 178, 74, 74, 16);
+  txt('Brasa Burger', 148, 210, 28, '#202124', 800); txt('Hamburgueria · Avaliação no Google', 148, 246, 18, '#5f6368', 600);
+  txt('Sua nota', 40, 330, 22, '#5f6368', 700);
+  const n = five ? [43.12, 43.32, 43.52, 43.72, 43.92].filter((x) => t >= x).length : t >= 4.25 ? 1 : 0;
+  for (let i = 0; i < 5; i++) star(84 + i * 92, 400, 36, i < n);
+  rr(36, 470, SW - 72, 250, 20, '#ffffff'); ui.strokeStyle = '#dadce0'; ui.lineWidth = 3; ui.beginPath(); ui.roundRect(36, 470, SW - 72, 250, 20); ui.stroke();
+  const msg = five ? 'O lanche, nota 10. E não esperei ninguém.' : 'Meia hora esperando. Ninguém me atendeu.';
+  const k = clamp(five ? (t - 44.0) / 0.9 : (t - 4.5) / 1.1);
+  wrap(msg.slice(0, Math.floor(k * msg.length)) + (k < 1 && Math.floor(t * 3) % 2 ? '|' : ''), 60, 520, SW - 120, 28, '#202124', 38, 600);
+  const pub = five && t >= 45.15;
+  rr(36, 760, SW - 72, 84, 42, pub ? '#1e8e3e' : '#1a73e8');
+  txt(pub ? 'Publicada ✓' : 'Publicar', SW / 2, 815, 30, '#ffffff', 800, 'center');
+  txt(pub ? 'Visível no Google Maps' : 'Sua avaliação é pública', SW / 2, 890, 20, '#80868b', 600, 'center');
+}
+function scrScan(t) {
+  ui.clearRect(0, 0, SW, SH);
+  ui.fillStyle = 'rgba(0,0,0,.35)'; ui.fillRect(0, 0, SW, 130); ui.fillRect(0, SH - 210, SW, 210);
+  statusBar(true, '23:15');
+  txt('Aponte para o QR da mesa', SW / 2, 110, 24, '#ffffff', 700, 'center');
+  ui.strokeStyle = '#ffffff'; ui.lineWidth = 9; ui.lineCap = 'round';
+  const x0 = 110, y0 = 360, w = 320, h = 320, c = 64;
+  for (const [x, y, dx, dy] of [[x0, y0, 1, 1], [x0 + w, y0, -1, 1], [x0, y0 + h, 1, -1], [x0 + w, y0 + h, -1, -1]]) { ui.beginPath(); ui.moveTo(x + dx * c, y); ui.lineTo(x, y); ui.lineTo(x, y + dy * c); ui.stroke(); }
+  const ly = y0 + 20 + ((t * 1.4) % 1) * (h - 40);
+  ui.fillStyle = 'rgba(106,164,255,.9)'; ui.fillRect(x0 + 16, ly, w - 32, 5);
+  if (t >= 17.25) { const k = eo((t - 17.25) / 0.25); rr(SW / 2 - 190, SH - 170 + (1 - k) * 30, 380, 84, 42, '#ffffff'); txt('Mesa 7 · Abrir cardápio', SW / 2, SH - 116 + (1 - k) * 30, 26, '#0865fe', 800, 'center'); }
+}
+const MENU = [
+  ['duplo', 'Brasa Duplo', 'Dois blends de 160 g, cheddar, bacon e pão brioche.', 'R$ 39,90', false],
+  ['classico', 'Clássico', 'Blend de 160 g, queijo, alface, tomate e molho da casa.', 'R$ 34,90', true],
+  ['fritas', 'Fritas da casa', 'Batata rústica com páprica e maionese verde.', 'R$ 16,90', false],
+  ['refri', 'Refrigerante lata', '350 ml, bem gelado.', 'R$ 7,00', false],
+  ['sobremesa', 'Petit gâteau', 'Com sorvete de creme.', 'R$ 22,90', false],
 ];
-function cameraAt(t) {
+function scrMenu(t) {
+  ui.fillStyle = DARK; ui.fillRect(0, 0, SW, SH);
+  const scroll = eio((t - 18.5) / 1.0) * 120;
+  ui.save(); ui.translate(0, -scroll);
+  cover(FOTOS.duplo, 0, 0, SW, 300, 0);
+  const gr = ui.createLinearGradient(0, 120, 0, 300); gr.addColorStop(0, 'rgba(18,12,8,0)'); gr.addColorStop(1, DARK); ui.fillStyle = gr; ui.fillRect(0, 120, SW, 182);
+  txt('BRASA', 36, 250, 50, GOLD, 900); txt('BURGER', 196, 250, 50, '#ffffff', 900);
+  txt('Mesa 7 · peça e pague pelo celular', 36, 286, 20, '#cbb9a6', 600);
+  ['Burgers', 'Porções', 'Bebidas', 'Sobremesas'].forEach((c, i) => { const x = 36 + [0, 128, 246, 360][i]; rr(x, 316, [112, 106, 102, 150][i], 46, 23, i ? CARD : GOLD); txt(c, x + [56, 53, 51, 75][i], 346, 19, i ? '#e8dccf' : DARK, 800, 'center'); });
+  MENU.forEach(([img, nome, desc, preco, d3], i) => {
+    const y = 390 + i * 168;
+    rr(24, y, SW - 48, 152, 24, CARD);
+    cover(FOTOS[img], 36, y + 12, 128, 128, 18);
+    txt(nome, 184, y + 46, 26, '#ffffff', 800);
+    wrap(desc, 184, y + 78, SW - 230, 17, '#bfae9b', 22, 500);
+    txt(preco, 184, y + 136, 24, GOLD, 900);
+    if (d3) { rr(SW - 106, y + 108, 70, 32, 16, '#0865fe'); txt('3D', SW - 71, y + 131, 18, '#ffffff', 900, 'center'); }
+  });
+  ui.restore();
+  statusBar(true, '23:15');
+}
+function scrDetail(t) {
+  ui.fillStyle = DARK; ui.fillRect(0, 0, SW, SH);
+  cover(FOTOS.classico, 0, 0, SW, 520, 0);
+  statusBar(true, '23:16');
+  rr(24, 70, 64, 64, 32, 'rgba(0,0,0,.45)'); txt('←', 56, 113, 30, '#fff', 800, 'center');
+  rr(SW - 140, 464, 112, 40, 20, '#0865fe'); txt('3D · real', SW - 84, 491, 18, '#fff', 900, 'center');
+  txt('Clássico', 36, 590, 44, '#ffffff', 900);
+  wrap('Blend de 160 g, queijo, alface, tomate e molho da casa no pão brioche.', 36, 636, SW - 72, 22, '#cbb9a6', 32, 500);
+  txt('R$ 34,90', 36, 744, 36, GOLD, 900);
+  ui.strokeStyle = GOLD; ui.lineWidth = 4; ui.beginPath(); ui.roundRect(36, 800, SW - 72, 88, 44); ui.stroke();
+  txt('Ver na minha mesa · 3D', SW / 2, 856, 28, GOLD, 800, 'center');
+  rr(36, 910, SW - 72, 92, 46, GOLD); txt('Pedir · Mesa 7', SW / 2, 968, 30, DARK, 900, 'center');
+}
+function scrAR(t) {
+  ui.clearRect(0, 0, SW, SH);
+  ui.fillStyle = 'rgba(0,0,0,.3)'; ui.fillRect(0, 0, SW, 120);
+  statusBar(true, '23:16');
+  if (t >= 24.0) { const k = eo((t - 24.0) / 0.3); rr(SW / 2 - 150, 150 - (1 - k) * 20, 300, 56, 28, 'rgba(8,101,254,.92)'); txt('12 cm · tamanho real', SW / 2, 187 - (1 - k) * 20, 22, '#fff', 800, 'center'); }
+  rr(24, SH - 250, SW - 48, 220, 30, 'rgba(18,12,8,.92)');
+  txt('Clássico', 52, SH - 196, 30, '#fff', 900); txt('R$ 34,90', SW - 52, SH - 196, 28, GOLD, 900, 'right');
+  const sent = t >= 27.4;
+  rr(52, SH - 160, SW - 104, 96, 48, sent ? '#1e8e3e' : GOLD);
+  txt(sent ? 'Pedido enviado ✓ · Mesa 7' : 'Pedir · Mesa 7', SW / 2, SH - 100, 28, sent ? '#fff' : DARK, 900, 'center');
+}
+function scrBill(t) {
+  ui.fillStyle = DARK; ui.fillRect(0, 0, SW, SH);
+  statusBar(true, '23:58');
+  if (t >= 39.95) {
+    const k = back((t - 39.95) / 0.35);
+    ui.beginPath(); ui.arc(SW / 2, 470, 90 * k, 0, 7); ui.fillStyle = '#1e8e3e'; ui.fill();
+    ui.strokeStyle = '#fff'; ui.lineWidth = 16; ui.lineCap = 'round'; ui.beginPath(); ui.moveTo(SW / 2 - 40 * k, 470); ui.lineTo(SW / 2 - 10 * k, 500); ui.lineTo(SW / 2 + 45 * k, 440); ui.stroke();
+    txt('Pago pelo Pix', SW / 2, 640, 40, '#fff', 900, 'center'); txt('Mesa 7 · R$ 41,90', SW / 2, 690, 24, '#cbb9a6', 600, 'center');
+    return;
+  }
+  txt('Sua conta', 36, 130, 40, '#fff', 900); txt('Mesa 7 · Brasa Burger', 36, 172, 22, '#cbb9a6', 600);
+  rr(24, 210, SW - 48, 300, 26, CARD);
+  [['1× Clássico', 'R$ 34,90'], ['1× Refrigerante', 'R$ 7,00']].forEach(([a, b], i) => { txt(a, 52, 270 + i * 70, 26, '#e8dccf', 600); txt(b, SW - 52, 270 + i * 70, 26, '#e8dccf', 600, 'right'); });
+  ui.fillStyle = '#3a2a1f'; ui.fillRect(52, 400, SW - 104, 2);
+  txt('Total', 52, 460, 32, '#fff', 900); txt('R$ 41,90', SW - 52, 460, 32, GOLD, 900, 'right');
+  txt('Pagamento', 36, 570, 22, '#cbb9a6', 700);
+  rr(36, 590, 150, 56, 28, GOLD); txt('Pix', 111, 627, 22, DARK, 900, 'center');
+  rr(200, 590, 150, 56, 28, CARD); txt('Cartão', 275, 627, 22, '#e8dccf', 700, 'center');
+  const busy = t >= 39.3;
+  rr(36, 860, SW - 72, 96, 48, GOLD);
+  if (busy) { ui.strokeStyle = DARK; ui.lineWidth = 7; ui.beginPath(); ui.arc(SW / 2, 908, 22, t * 9, t * 9 + 4.5); ui.stroke(); }
+  else txt('Pagar com Pix', SW / 2, 920, 30, DARK, 900, 'center');
+}
+function scrThanks(t) {
+  ui.fillStyle = DARK; ui.fillRect(0, 0, SW, SH);
+  statusBar(true, '23:59');
+  ui.beginPath(); ui.arc(96, 240, 52, 0, 7); ui.fillStyle = '#1e8e3e'; ui.fill();
+  ui.strokeStyle = '#fff'; ui.lineWidth = 10; ui.lineCap = 'round'; ui.beginPath(); ui.moveTo(74, 240); ui.lineTo(90, 258); ui.lineTo(120, 224); ui.stroke();
+  txt('Conta fechada.', 36, 380, 44, '#fff', 900); txt('Obrigado pela visita!', 36, 434, 44, '#fff', 900);
+  rr(24, 500, SW - 48, 330, 28, CARD);
+  wrap('Sua avaliação no Google ajuda outras pessoas a conhecer a casa.', 56, 566, SW - 112, 26, '#e8dccf', 38, 600);
+  rr(56, 700, SW - 112, 92, 46, GOLD); txt('Avaliar no Google', SW / 2, 758, 30, DARK, 900, 'center');
+}
+function scrChat(t) {
+  ui.fillStyle = '#0b141a'; ui.fillRect(0, 0, SW, SH);
+  rr(0, 0, SW, 170, 0, '#1f2c33');
+  statusBar(true, '00:04');
+  ui.beginPath(); ui.arc(84, 124, 32, 0, 7); ui.fillStyle = '#f2b134'; ui.fill(); txt('R', 84, 135, 30, '#3a2a00', 900, 'center');
+  txt('Rafa', 132, 118, 28, '#e9edef', 800); txt('Hamburgueria', 132, 148, 19, '#8696a0', 600);
+  if (t >= 53.4) { const k = eo((t - 53.4) / 0.3); ui.globalAlpha = k; rr(SW - 380, 220, 350, 520, 22, '#005c4b'); cover(FOTOS.duplo, SW - 368, 232, 326, 420, 16); ui.beginPath(); ui.arc(SW - 205, 442, 46, 0, 7); ui.fillStyle = 'rgba(0,0,0,.55)'; ui.fill(); ui.beginPath(); ui.moveTo(SW - 222, 418); ui.lineTo(SW - 222, 466); ui.lineTo(SW - 182, 442); ui.closePath(); ui.fillStyle = '#fff'; ui.fill(); wrap('Olha isso pro teu restaurante', SW - 360, 692, 300, 23, '#e9edef', 30, 500); ui.globalAlpha = 1; }
+  if (t >= 54.0 && t < 54.6) { rr(30, 770, 120, 64, 22, '#202c33'); for (let i = 0; i < 3; i++) { ui.beginPath(); ui.arc(64 + i * 26, 802, 7, 0, 7); ui.fillStyle = i === Math.floor(t * 6) % 3 ? '#e9edef' : '#8696a0'; ui.fill(); } }
+  if (t >= 54.6) { const k = back((t - 54.6) / 0.3); rr(30, 770, 220 * k, 72, 22, '#202c33'); if (k > 0.8) txt('Eu quero!', 56, 818, 28, '#e9edef', 700); }
+}
+let lastScreen = '';
+function drawScreen(t) {
+  let s = '';
+  if (t < 6) { scrReview(t, false); s = 'r1'; }
+  else if (t < 17.75) { scrScan(t); s = 'scan'; }
+  else if (t < 20.05) { scrMenu(t); s = 'menu'; }
+  else if (t < 23.45) { scrDetail(t); s = 'det'; }
+  else if (t < 28.5) { scrAR(t); s = 'ar'; }
+  else if (t < 41.9) { scrBill(t); s = 'bill'; }
+  else if (t < 42.85) { scrThanks(t); s = 'thx'; }
+  else if (t < 50) { scrReview(t, true); s = 'r5'; }
+  else { scrChat(t); s = 'chat'; }
+  uiTex.needsUpdate = true;
+  lastScreen = s;
+}
+// taps: [time, screen x, y]
+const TAPS = [[4.25, 84, 400], [19.95, 270, 514], [23.35, 270, 846], [27.3, 270, SH - 112], [39.2, 270, 908], [42.75, 270, 746], [43.12, 84, 400], [43.32, 176, 400], [43.52, 268, 400], [43.72, 360, 400], [43.92, 452, 400], [45.05, 270, 802]];
+
+// ---------------------------------------------------------------- timeline: where the eye looks, the phone, the hands
+const EYE = new THREE.Vector3(0, 1.16, -0.52);
+// [t, look x,y,z, fov]
+const LOOK = [
+  [0, 0.15, 1.12, 2.5, 54], [3.3, 0.1, 1.0, 2.2, 54], [3.7, 0.04, 0.95, 2.2, 54], [5.6, 0.04, 0.95, 2.2, 54],
+  [6.0, 0.06, 1.1, 2.3, 50], [12.4, 0.06, 1.02, 2.2, 50], [12.9, 0.06, 0.92, 1.6, 52], [16.2, 0.08, 0.88, 1.4, 52],
+  [16.6, 0.04, 0.84, 0.9, 54], [27.9, 0.04, 0.84, 0.9, 54],
+  [28.7, 1.5, 2.45, 8.3, 30], [29.3, 1.5, 2.5, 8.3, 20], [31.2, 1.5, 2.5, 8.3, 20],
+  [31.9, 0.3, 1.1, 2.0, 50], [33.9, 0.22, 1.02, 1.6, 50], [34.6, 0.02, 0.86, 0.35, 52], [37.5, 0.02, 0.86, 0.35, 52],
+  [37.9, 0.04, 0.95, 2.2, 54], [45.6, 0.04, 0.95, 2.2, 54], [46.1, 0.15, 1.08, 1.7, 52], [48.1, 0.15, 1.08, 1.7, 52],
+];
+function lookAt(t) {
   let i = 0;
-  while (i < SHOTS.length - 1 && SHOTS[i + 1].t <= t) i++;
-  const A = SHOTS[i], B = SHOTS[Math.min(i + 1, SHOTS.length - 1)];
-  const k = B.t - A.t < 0.05 ? 1 : eio((t - A.t) / (B.t - A.t));
-  return { p: A.p.map((v, j) => lerp(v, B.p[j], k)), q: A.q.map((v, j) => lerp(v, B.q[j], k)), f: lerp(A.f, B.f, k) };
+  while (i < LOOK.length - 1 && LOOK[i + 1][0] <= t) i++;
+  const A = LOOK[i], B = LOOK[Math.min(i + 1, LOOK.length - 1)];
+  const k = B[0] - A[0] < 0.01 ? 1 : eio((t - A[0]) / (B[0] - A[0]));
+  return { q: [lerp(A[1], B[1], k), lerp(A[2], B[2], k), lerp(A[3], B[3], k)], f: lerp(A[4], B[4], k) };
+}
+// phone windows [in, out]: it rises from below the frame and goes back down
+const PHONE = [[3.55, 5.75], [16.45, 28.05], [37.7, 48.1], [52.96, 60]];
+function phoneUp(t) {
+  for (const [a, b] of PHONE) if (t >= a - 0.01 && t < b + 0.4) return Math.min(eo((t - a) / 0.38), 1 - eio((t - b) / 0.38));
+  return 0;
 }
 const polyAt = (pts, k) => {
   const seg = []; let total = 0;
@@ -514,131 +743,200 @@ function walk(p, pts, k, t, speed = 12) {
   p.g.rotation.y = Math.atan2(dir[0], dir[1]);
   p.legs.forEach((l, i) => { l.rotation.x = moving ? Math.sin(t * speed + i * Math.PI) * 0.45 : 0; });
 }
-const faceCam = (p) => { p.g.rotation.y = Math.atan2(camera.position.x - p.g.position.x, camera.position.z - p.g.position.z); };
+const faceCam = (p) => { p.g.rotation.y = Math.atan2(EYE.x - p.g.position.x, EYE.z - p.g.position.z); };
+const tmpV = new THREE.Vector3(), tmpV2 = new THREE.Vector3(), tmpQ = new THREE.Quaternion();
+const toPov = (v) => camera.worldToLocal(v.clone());
+const TIP = new THREE.Vector3(0.036, 0.16, 0);
 
 function update(t) {
-  const c = cameraAt(t);
-  camera.position.set(...c.p);
-  camera.fov = c.f;
+  // ---- camera: the customer's eyes (a tiny head motion), the pull-back at the end
+  const L0 = lookAt(t);
+  camera.position.copy(EYE).add(tmpV.set(Math.sin(t * 0.9) * 0.004, Math.sin(t * 1.3) * 0.003, 0));
+  camera.fov = L0.f;
+  camera.lookAt(...L0.q);
+  if (t >= 48.16 && t < 52.96) {
+    const k = eio((t - 48.16) / 3.2);
+    camera.position.set(lerp(EYE.x, -2.5, k), lerp(EYE.y, 1.42, k), lerp(EYE.z, -0.05, k));
+    camera.fov = lerp(52, 58, k);
+    camera.lookAt(lerp(0.15, 0.2, k), lerp(1.08, 0.98, k), lerp(1.7, -0.25, k));
+  }
   camera.updateProjectionMatrix();
-  camera.lookAt(...c.q);
+  camera.updateMatrixWorld();
+  const pov1 = !(t >= 48.16 && t < 52.96);
+  pov.visible = pov1;
+  customer.g.visible = !pov1;
 
-  // defaults
-  pov.visible = false; heldCard.visible = false; heldBurger.visible = false;
+  // ---- defaults (the table card shows our QR once the hand has swapped it)
+  const cm = t >= 15.3 ? qrTex : pdfTex;
+  if (cardMat.map !== cm) { cardMat.map = cm; cardMat.needsUpdate = true; }
+  hide(R); hide(L); heldCard.visible = false; heldBurger.visible = false; tcard.visible = true;
   waitress.g.visible = false; waiter.g.visible = false;
-  customer.g.visible = t >= 41.3;
   trayW.visible = true; servePlate.visible = false; trayA.visible = false; trayB.visible = false;
   for (const p of [waitress, waiter]) { p.armL.rotation.set(0, 0, 0); p.armR.rotation.set(0, 0, 0); p.head.rotation.set(0, 0, 0); p.legs.forEach((l) => l.rotation.set(0, 0, 0)); face(p, 'smile'); }
+  order.visible = false; glows.forEach((g) => (g.visible = false));
 
-  if (t < 2.15) {
-    // half an hour with the hand up; the waiter rushes past ("já vou!")
-    arm(0.15, 0.1 + Math.sin(t * 6) * 0.01, -0.6, -0.15, -0.25, 0.12, 0.05, [0.42, -0.72, -0.3]);
-    walk(waiter, [[-1.6, 2.6], [-0.3, 1.5], [1.4, 1.0], [2.6, 0.9]], t / 2.15, t);
-    waiter.armR.rotation.set(-1.5, 0, 0); waiter.armL.rotation.set(Math.sin(t * 12) * 0.4, 0, 0);
-    waiter.head.rotation.y = -0.8;
-    waitress.g.visible = true; waitress.g.position.set(1.0, 0, 6.6); waitress.g.rotation.y = Math.PI * 0.85;
-    waitress.armR.rotation.set(-1.4, 0, 0); trayA.visible = true;
-  } else if (t >= 3.75 && t < 6.1) {
-    // "pera, pera!": the waitress in front, both arms up, flustered; the hand waves at her
-    const w = Math.sin(t * 10);
-    arm(0.17 + w * 0.025, 0.0, -0.6, -0.1, -0.25, 0.15 + w * 0.25, 0.05, [0.45, -0.74, -0.3]);
-    waitress.g.visible = true; waitress.g.position.set(0.12, 0, 1.55); faceCam(waitress);
-    const up = eo((t - 3.9) / 0.35);
-    waitress.armR.rotation.set(0, 0, lerp(0, 2.75, up) + Math.sin(t * 7) * 0.08);
-    waitress.armL.rotation.set(0, 0, -lerp(0, 2.75, up) - Math.sin(t * 7 + 1) * 0.08);
-    face(waitress, 'o');
-    waitress.head.rotation.z = Math.sin(t * 3) * 0.06;
-    walk(waiter, [[2.6, 3.4], [-2.4, 3.2]], (t - 3.75) / 2.35, t); waiter.armR.rotation.set(-1.5, 0, 0);
-  } else if (t >= 6.1 && t < 10.4) {
-    // "não é culpa da garçonete: são dez mesas e duas mãos"
+  // ---- phone in the hand
+  const up = phoneUp(t);
+  phone.visible = up > 0.001;
+  const lowered = t >= 46.0 && t < 48.2 ? eio((t - 46.0) / 0.5) * 0.09 : 0;
+  phone.position.set(0.006 + Math.sin(t * 1.1) * 0.002, lerp(-0.3, -0.036, up) - lowered, -0.3);
+  phone.rotation.set(-0.12 + (1 - up) * 0.5, 0.05, -0.03 + Math.sin(t * 0.8) * 0.01);
+  phone.updateMatrix();
+  if (phone.visible) drawScreen(t);
+  const feedOn = phone.visible && ((t >= 16.45 && t < 17.75) || (t >= 23.45 && t < 28.5));
+  feed.visible = feedOn;
+
+  // ---- story
+  if (t < 3.6) {
+    // half an hour with the hand up; the waiter rushes past ("já tô indo aí!")
+    pose(R, [0.15, 0.09 + Math.sin(t * 6) * 0.01, -0.58], [-0.15, -0.25, 0.12], 0.05, [0.42, -0.72, -0.3]);
+    if (t > 3.2) R.h.position.y -= eio((t - 3.2) / 0.4) * 0.4;
+    walk(waiter, [[-0.6, 2.5], [0.05, 1.55], [0.75, 1.5], [1.35, 2.7]], t / 3.4, t);
+    waiter.armR.rotation.set(-1.5, 0, 0); waiter.armL.rotation.set(t > 2.2 ? -1.0 : Math.sin(t * 12) * 0.4, 0, t > 2.2 ? 0.6 : 0);
+    waiter.head.rotation.y = t > 2.0 ? 0.9 : -0.6;
+    waitress.g.visible = true; waitress.g.position.set(1.1, 0, 6.4); waitress.g.rotation.y = Math.PI * 0.85; waitress.armR.rotation.set(-1.4, 0, 0); trayA.visible = true;
+  } else if (t < 12.6) {
+    // the waitress sees the one star and panics; then she listens; the waiter crosses behind her
     waitress.g.visible = true;
-    const moving = t < 7.7;
-    waitress.g.position.set(moving ? lerp(0.95, -0.12, eio((t - 6.1) / 1.6)) : -0.12, 0, 1.7);
-    if (moving) { waitress.g.rotation.y = -Math.PI / 2; waitress.legs.forEach((l, i) => { l.rotation.x = Math.sin(t * 12 + i * Math.PI) * 0.45; }); }
-    else faceCam(waitress);
-    trayA.visible = t < 9.25; trayB.visible = t < 9.25;
-    waitress.armR.rotation.set(-1.5, 0, 0); waitress.armL.rotation.set(-1.5, 0, 0);
-    if (t >= 9.25) { const s = eo((t - 9.25) / 0.3); waitress.armR.rotation.set(-1.25 * s, 0, 0.55 * s); waitress.armL.rotation.set(-1.25 * s, 0, -0.55 * s); }
-    face(waitress, t < 9.25 ? 'worried' : 'o');
-    walk(waiter, [[2.4, 4.2], [-0.6, 3.0], [-2.6, 3.4]], (t - 6.1) / 4.3, t); waiter.armR.rotation.set(-1.5, 0, 0);
-  } else if (t >= 10.4 && t < 14.5) {
-    // the hand shows the PDF menu card, then flips it for our QR card
-    heldCard.visible = true;
-    arm(0.06, -0.25, -0.58, -0.25, 0.1, 0.05, 0.85, [0.45, -0.78, -0.25]);
-    heldCard.position.set(0.05, -0.22, -0.6);
-    heldCard.rotation.set(0.05, 0.15, 0);
-    const flip = t < 12.75 ? 1 : t < 13.05 ? Math.abs(Math.cos(((t - 12.75) / 0.3) * Math.PI)) : 1;
-    heldCard.scale.set(1.15 * Math.max(0.02, flip), 1.15, 1.15);
-    heldPdf.c.visible = t < 12.9; heldQr.c.visible = t >= 12.9;
-    waitress.g.visible = true; waitress.g.position.set(-0.45, 0, 2.6); faceCam(waitress); face(waitress, 'worried');
-    waitress.armR.rotation.set(-1.4, 0, 0); trayA.visible = true;
-  } else if (t >= 26.9 && t < 28.4) {
-    // the waiter brings the plate towards the camera ("com licença!") and puts it down
-    const k = (t - 26.9) / 1.15;
-    walk(waiter, [[0.6, 3.6], [0.35, 1.7], [0.3, 1.02]], eo(k), t);
-    if (k >= 1) faceCam(waiter);
-    trayW.visible = false;
-    servePlate.visible = t < 28.1;
-    waiter.armR.rotation.set(t < 27.75 ? -1.45 : lerp(-1.45, -0.95, clamp((t - 27.75) / 0.3)), 0, 0);
-  } else if (t >= 28.4 && t < 30.2) {
-    // "hmm, que delícia": the hand lifts the burger a little towards the camera
-    const k = eo((t - 28.45) / 0.8);
-    heldBurger.visible = !!burgerProto;
-    heldBurger.position.set(0.0, lerp(-0.3, -0.13, k), lerp(-0.6, -0.48, k));
-    heldBurger.rotation.set(0.5, 0.4, 0);
-    arm(0.03, lerp(-0.35, -0.18, k), lerp(-0.58, -0.46, k), -1.2, 0, 0, 0.7, [0.4, -0.8, -0.2]);
-  } else if (t >= 39.1 && t < 41.3) {
-    // phone up, the waitress smiling behind it
-    waitress.g.visible = true; waitress.g.position.set(0.35, 0, 1.45); faceCam(waitress); face(waitress, 'big');
-    waitress.armL.rotation.set(-0.5, 0, -0.2);
-  } else if (t >= 41.3) {
-    // the same table from the side: the customer eating, the waitress beside it smiling
-    waitress.g.visible = true; waitress.g.position.set(0.78, 0, 0.42); waitress.g.rotation.y = -Math.PI / 2 - 0.9; face(waitress, 'big');
-    waitress.armR.rotation.set(-0.3, 0, 0.1);
+    const inK = eo((t - 5.35) / 0.55);
+    waitress.g.position.set(lerp(1.4, 0.1, inK), inK < 1 ? Math.abs(Math.sin(t * 14)) * 0.03 : 0, lerp(2.4, 1.5, inK));
+    faceCam(waitress);
+    if (t < 5.35) waitress.g.visible = false;
+    if (t >= 5.85 && t < 7.2) {
+      const k = eo((t - 5.85) / 0.25);
+      waitress.armR.rotation.set(0, 0, 2.7 * k + Math.sin(t * 9) * 0.1); waitress.armL.rotation.set(0, 0, -2.7 * k - Math.sin(t * 9 + 1) * 0.1);
+      face(waitress, 'o');
+    } else if (t >= 7.2) {
+      waitress.armR.rotation.set(-0.9, 0, -0.35); waitress.armL.rotation.set(-0.9, 0, 0.35);
+      face(waitress, 'worried');
+      if (t >= 11.4) { const k = eo((t - 11.4) / 0.3); waitress.armR.rotation.set(-1.3 * k, 0, 0.5 * k); waitress.armL.rotation.set(-1.3 * k, 0, -0.5 * k); waitress.head.rotation.x = 0.15; }
+    }
+    if (t >= 9.6 && t < 11.6) { walk(waiter, [[-2.0, 2.6], [2.2, 2.4]], (t - 9.6) / 2.0, t); waiter.armR.rotation.set(-1.5, 0, 0); waiter.armL.rotation.set(-1.5, 0, 0); }
+  } else if (t < 16.45) {
+    // the hand picks up the PDF menu card, shows it, swaps it for our QR card and puts it back on the table
+    waitress.g.visible = true; waitress.g.position.set(-0.35, 0, 2.2); faceCam(waitress); face(waitress, 'worried');
+    const onTable = toPov(tmpV.copy(TCARD).applyMatrix4(T7.matrixWorld));
+    const held = new THREE.Vector3(0.04, -0.12, -0.42);
+    const k = t < 13.3 ? eio((t - 12.75) / 0.55) : t < 15.95 ? 1 : 1 - eio((t - 15.95) / 0.45);
+    if (t >= 12.75) {
+      tcard.visible = false; heldCard.visible = true;
+      heldCard.position.lerpVectors(onTable, held, k);
+      heldCard.rotation.set(lerp(-0.45, 0.05, k), 0.12 * k, 0);
+      const flip = t >= 15.1 && t < 15.5 ? Math.abs(Math.cos(((t - 15.1) / 0.4) * Math.PI)) : 1;
+      heldCard.scale.set(1.1 * Math.max(0.03, flip), 1.1, 1.1);
+      pose(R, [heldCard.position.x + 0.03, heldCard.position.y - 0.02, heldCard.position.z + 0.02], [-0.3, 0.1, 0.1], 0.9, [0.4, -0.72, -0.22], 0.6);
+    }
+    if (t >= 16.4) { tcard.visible = true; heldCard.visible = false; }
+  } else if (t >= 31.4 && t < 34.6) {
+    // a little later: the waiter brings the plate ("com licença! hambúrguer clássico")
+    walk(waiter, [[1.3, 6.8], [0.6, 3.0], [0.38, 0.95]], eo((t - 31.4) / 2.1), t);
+    if (t > 33.5) faceCam(waiter);
+    trayW.visible = false; servePlate.visible = t < 34.25;
+    waiter.armR.rotation.set(t < 33.9 ? -1.45 : lerp(-1.45, -0.95, clamp((t - 33.9) / 0.3)), 0, 0);
+    waitress.g.visible = true; waitress.g.position.set(-1.2, 0, 2.9); faceCam(waitress); face(waitress, 'big');
+  } else if (t >= 45.6 && t < 48.16) {
+    // she sees the five stars and is delighted
+    waitress.g.visible = true; waitress.g.position.set(0.18, 0, 1.25); faceCam(waitress); face(waitress, 'big');
+    const k = eo((t - 45.7) / 0.3);
+    waitress.armR.rotation.set(-1.9 * k, 0, -0.75 * k); waitress.armL.rotation.set(-1.9 * k, 0, 0.75 * k);
+    waitress.head.rotation.z = Math.sin(t * 4) * 0.08;
+  } else if (t >= 48.16 && t < 52.96) {
+    // the same table from the side: he eats, she walks by smiling
+    waitress.g.visible = true;
+    walk(waitress, [[1.5, 0.9], [0.75, 0.45]], (t - 48.16) / 2.0, t, 10);
+    if (t > 50.2) { waitress.g.rotation.y = -Math.PI / 2 - 0.8; } face(waitress, 'big');
+  }
+  if (t >= 16.45 && t < 31.4) { waitress.g.visible = true; waitress.g.position.set(-0.55, 0, 1.9); faceCam(waitress); face(waitress, t >= 24 ? 'big' : 'smile'); waitress.armR.rotation.set(-1.4, 0, 0); trayA.visible = true; }
+
+  // ---- taps with the other hand (index finger out)
+  const tp = TAPS.find(([a]) => t >= a - 0.32 && t < a + 0.28);
+  if (phone.visible && up > 0.9 && tp) {
+    const target = screenPoint(tp[1], tp[2]).applyMatrix4(phone.matrix);
+    const k = t < tp[0] ? eo((t - (tp[0] - 0.32)) / 0.32) : 1 - eio((t - tp[0]) / 0.28);
+    const rest = new THREE.Vector3(-0.32, -0.42, -0.28);
+    const rot = new THREE.Euler(-0.35, 0.15, 0.4);
+    const tipNow = TIP.clone().applyEuler(rot);
+    const press = t >= tp[0] && t < tp[0] + 0.08 ? 0.004 : 0.012;
+    const hp = target.clone().add(new THREE.Vector3(0, 0, press)).sub(tipNow);
+    hp.lerpVectors(rest, hp, k);
+    pose(L, [hp.x, hp.y, hp.z], [rot.x, rot.y, rot.z], [0, 1.25, 1.25, 1.25], [-0.45, -0.75, -0.2], 0.8);
   }
 
-  // the table's plate: empty while waiting, with the 3D burger preview, then the real one served
-  plate.visible = t < 26.9 || t >= 28.1;
-  const ar = t >= 18.8 && t < 23.6;
-  const served = t >= 28.1;
-  arBurger.visible = !!burgerProto && (ar || (served && !(t >= 28.4 && t < 30.2)));
-  const kAr = served ? 1 : eo((t - 19.0) / 1.3);
-  arBurger.scale.setScalar(served ? 1 : 0.7 + 0.3 * back((t - 19.0) / 1.0));
-  arBurger.rotation.y = served ? 0.5 : (t - 19) * 0.5;
-  arBurger.position.y = 0.816 + (served ? 0 : (1 - kAr) * 0.05);
-  arBurger.traverse((o) => { if (o.isMesh && o.material.transparent) o.material.opacity = served ? 1 : kAr; });
-  const rk = ((t - 19.0) % 1.4) / 1.4;
-  ringMat.opacity = ar ? (1 - rk) * 0.9 : 0;
-  arRing.scale.setScalar(1 + rk * 1.4);
-  discMat.opacity = ar ? 0.22 * clamp((t - 18.9) / 0.5) * (t > 23.0 ? clamp((23.6 - t) / 0.6) : 1) : 0;
+  // ---- AR preview on the plate (only through the phone), the real burger later, the bite
+  plate.visible = true;
+  tableBurger.visible = !!burgerProto && t >= 34.25 && !(t >= 35.15 && t < 48.16);
+  arBurger.visible = false;
+  const kAr = eo((t - 23.8) / 1.0);
+  arBurger.scale.setScalar(0.75 + 0.25 * back((t - 23.8) / 0.8));
+  arBurger.rotation.y = (t - 23.8) * 0.5;
+  arBurger.traverse((o) => { if (o.isMesh && o.material.transparent) o.material.opacity = kAr; });
+  ringMat.opacity = 0;
+  if (t >= 35.15 && t < 37.7 && burgerProto) {
+    // he lifts the burger towards his mouth and takes a bite
+    const from = toPov(tmpV.set(0, 0.816, -0.04).applyMatrix4(T7.matrixWorld));
+    const k = eo((t - 35.15) / 0.7), down = t > 37.2 ? eio((t - 37.2) / 0.5) : 0;
+    heldBurger.visible = true;
+    heldBurger.position.lerpVectors(from, new THREE.Vector3(0.0, -0.075, -0.27), k * (1 - down));
+    heldBurger.rotation.set(0.35 * k, -Math.PI / 2 + 0.25, 0.1 * k);
+    heldBurger.updateMatrixWorld();
+    const bitten = t >= 36.25;
+    heldMats.forEach((m) => { m.clippingPlanes = bitten ? biteWorld : null; m.clipIntersection = true; m.needsUpdate = m.userData.b !== bitten; m.userData.b = bitten; });
+    if (bitten) BITE.forEach((p, i) => biteWorld[i].copy(p).applyMatrix4(heldBurger.children[0] ? heldBurger.children[0].matrixWorld : heldBurger.matrixWorld));
+    pose(L, [heldBurger.position.x - 0.01, heldBurger.position.y - 0.085, heldBurger.position.z + 0.03], [-1.35, 0.15, 0.15], 0.7, [-0.4, -0.8, -0.2], 0.5);
+  }
 
-  // diners: some keep a hand up while the customer waits
+  // ---- the order flies from the phone to the kitchen screen
+  if (t >= 27.95 && t < 29.15) {
+    const k = eio((t - 27.95) / 1.15);
+    const a = new THREE.Vector3(); phone.getWorldPosition(a);
+    const b = new THREE.Vector3(KX + 0.35, 2.52, ROOM.z1 - 0.18);
+    const p = a.clone().lerp(b, k); p.y += Math.sin(k * Math.PI) * 0.9;
+    order.visible = true; order.position.copy(p); order.quaternion.copy(camera.quaternion);
+    order.scale.setScalar(lerp(0.6, 3.2, k) * (k > 0.92 ? 1 - (k - 0.92) / 0.08 : 1));
+    glows.forEach((g, i) => { const kk = clamp(k - i * 0.03); const q = a.clone().lerp(b, kk); q.y += Math.sin(kk * Math.PI) * 0.9; g.visible = kk > 0; g.position.copy(q); g.scale.setScalar((0.25 + kk * 1.2) * (1 - i / 12)); g.material.opacity = 0.7 * (1 - i / 10); });
+  }
+
+  // ---- diners: hands up while the customer waits
   others.forEach((tb, i) => tb.people.forEach((p, k) => {
     if (!p) return;
-    const up = t < 10.4 && (i + k) % 2 === 0;
-    p.armR.rotation.set(up ? 0 : -0.9, 0, up ? 2.6 + Math.sin(t * 5 + i) * 0.12 : 0);
+    const upd = t < 12.6 && (i + k) % 2 === 0;
+    p.armR.rotation.set(upd ? 0 : -0.9, 0, upd ? 2.6 + Math.sin(t * 5 + i) * 0.12 : 0);
     p.head.rotation.y = Math.sin(t * 0.7 + i * 2) * 0.2;
   }));
 
-  // kitchen
-  const stage = t >= 25.6 ? 1 : 0;
-  const keyS = stage * 100 + (stage ? Math.floor((t - 25.6) * 2) : 0);
-  if (keyS !== tvState) { tvState = keyS; drawK(stage, Math.max(0, t - 25.6)); }
-  const cheer = t >= 25.75 && t < 26.9;
-  chef.armR.rotation.set(cheer ? 0 : -1.0 + Math.sin(t * 3) * 0.2, 0, cheer ? 2.6 : 0);
-  chef.armL.rotation.set(cheer ? 0 : -1.0 - Math.sin(t * 3) * 0.2, 0, cheer ? -2.6 : 0);
+  // ---- kitchen screen and the chef
+  const stage = t >= 29.05 ? 1 : 0;
+  const keyS = stage * 100 + (stage ? Math.floor((t - 29.05) * 2) : 0);
+  if (keyS !== tvState) { tvState = keyS; drawK(stage, Math.max(0, t - 29.05)); }
+  const cheer = t >= 29.2 && t < 31.3;
+  chef.armR.rotation.set(cheer ? 0 : -1.0 + Math.sin(t * 3) * 0.2, 0, cheer ? 2.6 + Math.sin(t * 8) * 0.1 : 0);
+  chef.armL.rotation.set(cheer ? -1.6 : -1.0 - Math.sin(t * 3) * 0.2, 0, 0);
   face(chef, cheer ? 'big' : 'smile');
-  lampLights.forEach((L, i) => { L.intensity = 5 + Math.sin(t * 2 + i) * 0.15; });
+  lampLights.forEach((Lt, i) => { Lt.intensity = 5 + Math.sin(t * 2 + i) * 0.15; });
+
+  // ---- the phone's camera (scan and the dish in 3D on the plate)
+  if (feedOn) {
+    const ar = t >= 23.45;
+    phone.getWorldPosition(tmpV);
+    phoneCam.position.copy(tmpV);
+    const tgt = ar ? tmpV2.set(0, 0.85, -0.04).applyMatrix4(T7.matrixWorld) : tmpV2.copy(TCARD).add(new THREE.Vector3(0, 0.1, 0)).applyMatrix4(T7.matrixWorld);
+    phoneCam.lookAt(tgt);
+    phoneCam.fov = ar ? 58 : 36;
+    phoneCam.updateProjectionMatrix();
+    pov.visible = false;
+    arBurger.visible = ar && !!burgerProto;
+    ringMat.opacity = ar ? (1 - (((t - 23.8) % 1.4) / 1.4)) * 0.9 : 0;
+    arRing.scale.setScalar(1 + (((t - 23.8) % 1.4) / 1.4) * 1.4);
+    renderer.setRenderTarget(rt);
+    renderer.render(scene, phoneCam);
+    renderer.setRenderTarget(null);
+    arBurger.visible = false; ringMat.opacity = 0;
+    pov.visible = pov1;
+  }
 }
 
 const v3 = new THREE.Vector3();
 window.dio = {
   draw(t) { update(t); renderer.render(scene, camera); },
-  project(x, y, z, local) {
-    v3.set(x, y, z);
-    if (local) T7.localToWorld(v3);
-    v3.project(camera);
-    return { x: (v3.x * 0.5 + 0.5) * W, y: (-v3.y * 0.5 + 0.5) * H };
-  },
-  waiterHead() { const p = new THREE.Vector3(); waiter.head.getWorldPosition(p); return this.project(p.x, p.y, p.z); },
+  project(x, y, z) { v3.set(x, y, z); v3.project(camera); return { x: (v3.x * 0.5 + 0.5) * W, y: (-v3.y * 0.5 + 0.5) * H }; },
 };

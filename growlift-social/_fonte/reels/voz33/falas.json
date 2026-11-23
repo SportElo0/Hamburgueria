@@ -1,0 +1,146 @@
+[
+ {
+  "ini": 0.0,
+  "fim": 1.92,
+  "quem": "N",
+  "texto": "Meia hora com a mão levantada!"
+ },
+ {
+  "ini": 2.3,
+  "fim": 3.69,
+  "quem": "W",
+  "texto": "Já tô indo aí!"
+ },
+ {
+  "ini": 4.1,
+  "fim": 5.45,
+  "quem": "N",
+  "texto": "Uma estrela."
+ },
+ {
+  "ini": 5.85,
+  "fim": 7.03,
+  "quem": "G",
+  "texto": "Pera, pera, pera!"
+ },
+ {
+  "ini": 7.4,
+  "fim": 9.0,
+  "quem": "N",
+  "texto": "Faz meia hora que eu quero pedir."
+ },
+ {
+  "ini": 9.1,
+  "fim": 12.47,
+  "quem": "N",
+  "texto": "E a culpa nem é do garçom: são dez mesas e duas mãos."
+ },
+ {
+  "ini": 12.6,
+  "fim": 14.88,
+  "quem": "N",
+  "texto": "Seu QR me mostra um PDF."
+ },
+ {
+  "ini": 15.0,
+  "fim": 16.43,
+  "quem": "N",
+  "texto": "Olha o que esse aqui faz."
+ },
+ {
+  "ini": 16.55,
+  "fim": 18.44,
+  "quem": "N",
+  "texto": "Eu escaneio e já tenho o cardápio."
+ },
+ {
+  "ini": 18.45,
+  "fim": 19.61,
+  "quem": "N",
+  "texto": "Sem baixar nada."
+ },
+ {
+  "ini": 19.62,
+  "fim": 22.92,
+  "quem": "N",
+  "texto": "Se não sei o que pedir, vejo a foto de cada prato."
+ },
+ {
+  "ini": 22.95,
+  "fim": 25.86,
+  "quem": "N",
+  "texto": "E antes de pedir, vejo ele em cima da minha mesa."
+ },
+ {
+  "ini": 26.76,
+  "fim": 27.94,
+  "quem": "N",
+  "texto": "Peço agora."
+ },
+ {
+  "ini": 29.16,
+  "fim": 31.54,
+  "quem": "N",
+  "texto": "Chegou sozinho, com o número da minha mesa."
+ },
+ {
+  "ini": 32.44,
+  "fim": 33.53,
+  "quem": "W",
+  "texto": "Com licença!"
+ },
+ {
+  "ini": 33.68,
+  "fim": 34.93,
+  "quem": "W",
+  "texto": "Hambúrguer clássico."
+ },
+ {
+  "ini": 35.4,
+  "fim": 36.93,
+  "quem": "N",
+  "texto": "Hmm... que delícia!"
+ },
+ {
+  "ini": 37.78,
+  "fim": 40.3,
+  "quem": "N",
+  "texto": "E a conta? Não espero: pago aqui."
+ },
+ {
+  "ini": 40.3,
+  "fim": 41.97,
+  "quem": "N",
+  "texto": "Sem esperar ninguém."
+ },
+ {
+  "ini": 42.18,
+  "fim": 45.41,
+  "quem": "N",
+  "texto": "Comi muito bem: cinco estrelas. No Google."
+ },
+ {
+  "ini": 45.8,
+  "fim": 47.73,
+  "quem": "N",
+  "texto": "E agora há pouco eu ia dar uma."
+ },
+ {
+  "ini": 48.16,
+  "fim": 52.83,
+  "quem": "N",
+  "texto": "A mesma mesa. O mesmo lanche. Quatro estrelas de diferença."
+ },
+ {
+  "ini": 52.96,
+  "fim": 55.07,
+  "quem": "N",
+  "texto": "Manda pra aquele amigo que tem restaurante."
+ },
+ {
+  "ini": 55.04,
+  "fim": 59.22,
+  "quem": "N",
+  "texto": "E se o restaurante é seu: comenta três dê, que a gente te manda a demonstração."
+ }
+]
