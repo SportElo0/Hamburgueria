@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Growlift · IA, automação e 3D para negócios locais</title>
-<meta name="description" content="Atendimento com IA no WhatsApp, cardápio com o prato em 3D, painel de decisões e sites para negócios locais. Faça o diagnóstico grátis e receba um plano sob medida no WhatsApp.">
+<title>Growlift · Pedidos acompanhados até a venda, para negócios locais</title>
+<meta name="description" content="A Growlift monta no seu negócio um sistema que responde quem pergunta, transforma ligação perdida em conversa, lembra quem sumiu e mostra quais pedidos viraram venda. Diagnóstico grátis.">
 <link rel="canonical" href="https://growlift.com.br/">
 <link rel="alternate" hreflang="pt-BR" href="https://growlift.com.br/">
 <link rel="alternate" hreflang="en" href="https://growlift.com.br/en/">
@@ -26,8 +26,8 @@
   <div class="wrap">
     <a class="logo" href="#conteudo" aria-label="Growlift, início"><svg aria-hidden="true"><use href="#marca"/></svg><span class="logo-word">GROWLIFT</span></a>
     <nav class="nav" aria-label="Principal">
-      <a href="#ramos" class="so-ramos">O que fazemos</a>
-      <a href="#restaurantes" class="so-rest">Restaurantes</a>
+      <a href="#dor" class="so-ramos">O problema</a>
+      <a href="#ramos" class="so-rest">O sistema</a>
       <a class="ramo-chip" href="#escolha" hidden><span class="ramo-nome"></span><small>trocar</small></a>
       <a href="#subida" class="so-subida">Como funciona</a>
       <a href="#quem-somos">Quem somos</a>
@@ -51,10 +51,12 @@
     <div class="fade" aria-hidden="true"></div>
     <div class="wrap" style="width:100%">
       <div class="copy copy-pick">
-        <p class="eyebrow rise">IA, automação e 3D para negócios locais</p>
-        <h1 id="titulo" class="rise d2">Qual é o seu <span class="blue">negócio?</span></h1>
-        <p class="lead rise d3">Escolha e veja o que a gente faz pelo seu.</p>
-        <div class="pick rise d4" role="group" aria-label="Escolha o seu ramo">
+        <p class="eyebrow rise">Para negócios locais que vendem por orçamento ou reserva</p>
+        <h1 id="titulo" class="rise d2">Os pedidos que você já recebe, <span class="blue">acompanhados até a venda.</span></h1>
+        <p class="lead rise d3">A gente monta um sistema que responde quem pergunta, lembra quem sumiu e mostra quais pedidos viraram dinheiro no caixa.</p>
+        <div class="hero-ctas rise d3"><a class="btn btn-primary" href="/whatsapp.html" target="_blank" rel="noopener">Falar no WhatsApp</a><a class="btn btn-ghost" href="https://growlift-comercial.vercel.app/demonstracao" target="_blank" rel="noopener">Ver a demonstração <span aria-hidden="true">↗</span></a></div>
+        <p class="pick-label rise d4" id="pick-label">Ou veja o que a gente faz pelo seu ramo:</p>
+        <div class="pick rise d4" role="group" aria-labelledby="pick-label">
           <a class="pick-card" href="/clinicas" data-ramo="clinica">
             <img src="img/ramo-clinica.webp" alt="" width="640" height="800" fetchpriority="high">
             <span class="pick-txt"><b>Clínica</b><small>Atendimento no WhatsApp e agenda</small></span>
@@ -62,7 +64,7 @@
           </a>
           <a class="pick-card" href="/restaurantes" data-ramo="restaurante">
             <img src="img/ramo-restaurante.webp" alt="" width="640" height="800" fetchpriority="high">
-            <span class="pick-txt"><b>Restaurante</b><small>Cardápio 3D, pedidos e Pix</small></span>
+            <span class="pick-txt"><b>Restaurante</b><small>Reservas, pedidos e Pix</small></span>
             <span class="pick-ok" aria-hidden="true"></span>
           </a>
           <a class="pick-card" href="/imobiliarias" data-ramo="imobiliaria">
@@ -72,27 +74,43 @@
           </a>
           <a class="pick-card" href="/outros" data-ramo="outro">
             <img src="img/ramo-outro.webp" alt="" width="640" height="800" fetchpriority="high">
-            <span class="pick-txt"><b>Outro negócio</b><small>Site e atendimento sob medida</small></span>
+            <span class="pick-txt"><b>Pousada, serviços e outros</b><small>Orçamento, retomada e avaliações</small></span>
             <span class="pick-ok" aria-hidden="true"></span>
           </a>
         </div>
-        <p class="note rise d4">Fotos ilustrativas, criadas por IA. Ou <a href="#diagnostico">peça o seu plano grátis</a> direto: 3 perguntas, 1 minuto.</p>
+        <p class="note rise d4">Fotos ilustrativas, criadas por IA. Ou <a href="#diagnostico">peça o seu diagnóstico grátis</a>: 3 perguntas, 1 minuto.</p>
       </div>
     </div>
   </section>
 
 
+  <!-- A dor: o cliente interessado que vai embora -->
+  <section class="section" id="dor" aria-labelledby="dor-titulo">
+    <div class="wrap">
+      <p class="eyebrow reveal">O problema</p>
+      <h2 id="dor-titulo" class="h2 reveal d2" style="margin-top:16px">Cliente interessado <span class="blue">que vai embora.</span></h2>
+      <p class="lead reveal d2">Muitas vezes o pedido chegou e ninguém acompanhou.</p>
+      <div class="exs dor-exs">
+        <article class="ex reveal"><p class="ex-sit">Sexta, 23h · pedido pelo site</p><p class="ex-b in">Tem quarto para o Réveillon? Somos 2 adultos.</p><p class="ex-miss">Ninguém responde até sábado. Ela reserva em outro lugar.</p></article>
+        <article class="ex reveal d2"><p class="ex-sit">Terça, 15h · ligação</p><p class="ex-b in">Chamada perdida</p><p class="ex-miss">A recepção estava ocupada. A pessoa liga para o próximo da lista.</p></article>
+        <article class="ex reveal d2"><p class="ex-sit">Sábado · orçamento enviado</p><p class="ex-b out">O valor fica em R$ 3.200 pelas 4 noites. Quer que eu reserve?</p><p class="ex-miss">Sem resposta. Na correria, ninguém lembra de voltar a falar com ele.</p></article>
+        <article class="ex reveal d2"><p class="ex-sit">Domingo · fim da estadia</p><p class="ex-b in">Amei, voltamos com certeza!</p><p class="ex-miss">Foi embora sem avaliar no Google. Quem procura não fica sabendo.</p></article>
+      </div>
+      <p class="fx-note">Situações de exemplo, com valores fictícios.</p>
+    </div>
+  </section>
+
   <!-- Outro negócio: tudo o que a gente faz, rápido, e o diagnóstico logo depois -->
   <section class="section ramo-sec" id="funcoes" data-so="outro" aria-labelledby="funcoes-titulo" hidden>
     <div class="wrap">
-      <p class="eyebrow">Para qualquer negócio</p>
+      <p class="eyebrow">Pousadas, serviços e outros negócios</p>
       <h2 id="funcoes-titulo" class="h2" style="margin-top:16px">O que a gente pode montar <span class="blue">pra você.</span></h2>
-      <p class="lead">Padaria, confeitaria, oficina, escola, loja: o plano junta só o que resolve o seu caso.</p>
+      <p class="lead">Pousada, oficina, instalador, energia solar, loja: o plano junta só o que resolve o seu caso.</p>
       <div class="fx">
         <article class="fx-card"><img src="img/tela-whatsapp.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.2-4.6A9 9 0 1 1 21 12z"/></svg></span><h3>Atendente de IA no WhatsApp</h3><p>Responde de dia e de noite, com os seus preços e horários, faz orçamento e marca na agenda.</p></div></article>
-        <article class="fx-card"><img src="img/tela-3d.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20.5 7.5v9L12 21.2 3.5 16.5v-9L12 2.8Z"/><path d="M3.8 7.6 12 12.2l8.2-4.6M12 12.2v8.8"/></svg></span><h3>Produto em 3D</h3><p>O cliente gira o bolo, o pão ou o prato no celular e vê na mesa, do tamanho real.</p></div></article>
-        <article class="fx-card"><img src="img/site-confeitaria.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></svg></span><h3>Site com pedido e Pix</h3><p>O seu catálogo com foto e preço, e o pedido chega direto pra você, sem comissão.</p></div></article>
-        <article class="fx-card"><img src="img/tela-painel.webp" alt="" width="1280" height="800" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><h3>Painel que mostra o lucro</h3><p>Quanto sobra de cada produto e o que testar, com um agente de IA que conhece os seus números.</p></div></article>
+        <article class="fx-card"><img src="img/servicos/ligacao.webp" alt="" width="960" height="600" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span><h3>Ligação perdida vira conversa</h3><p>Quem liga e não é atendido recebe uma mensagem no WhatsApp só se aceitar (aperta 1 na ligação). A equipe sempre ganha a tarefa de retornar.</p></div></article>
+        <article class="fx-card"><img src="img/servicos/retomada.webp" alt="" width="960" height="600" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span><h3>Retomada de quem sumiu</h3><p>Mandou o orçamento e o cliente não respondeu? Sai uma retomada para quem autorizou ao pedir, e ela para na hora em que ele responde.</p></div></article>
+        <article class="fx-card"><img src="img/servicos/avaliacoes.webp" alt="" width="960" height="600" loading="lazy"><div><span class="fx-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg></span><h3>Avaliações no Google</h3><p>Depois do serviço, o convite para avaliar no Google vai para todos os clientes, sem escolher quem teve uma experiência boa.</p></div></article>
       </div>
       <div class="ramo-cta"><a class="btn btn-primary" href="#diagnostico">Quero saber o que serve pro meu negócio <span aria-hidden="true">→</span></a><p>3 perguntas, 1 minuto. O plano chega no seu WhatsApp em até 2 dias úteis, sem compromisso.</p></div>
       <p class="fx-note">Telas ilustrativas, com dados fictícios.</p>
@@ -106,43 +124,44 @@
       <div class="glow" aria-hidden="true"></div>
       <div class="wrap">
         <h2 id="ramos-titulo">
-          Tecnologia que
+          A gente monta um sistema que
           <span class="spin" aria-hidden="true"><span class="track">
-            <span>atende no WhatsApp.</span><span>mostra o prato em 3D.</span><span>diz o que dá lucro.</span><span>vende no seu site.</span>
+            <span>responde na hora.</span><span>não perde ligação.</span><span>lembra quem sumiu.</span><span>mostra o que vendeu.</span>
           </span></span>
-          <span class="sr-only">atende o seu WhatsApp, mostra o prato em 3D, diz o que dá lucro e vende no seu site.</span>
+          <span class="sr-only">responde na hora, não perde ligação, lembra quem sumiu e mostra o que vendeu.</span>
         </h2>
-        <p class="lead">Uma atendente de IA no WhatsApp, o cardápio com o prato em 3D, um agente que conhece os seus números e o site com pedido sem comissão. O seu plano junta só o que resolve o seu caso.</p>
+        <p class="lead">O sistema mensal: site com uma assistente de IA que só fala o que você aprovou, ligação perdida que vira conversa para quem aceitou, retomada de quem pediu orçamento e autorizou, e o relatório do que foi pago. <a class="lead-link" href="https://growlift-comercial.vercel.app/demonstracao" target="_blank" rel="noopener">Ver a demonstração dos 5 serviços ↗</a></p>
 
         <div class="browser" id="montagem">
           <div class="frame">
             <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">seunegocio.com.br</span></div>
             <div class="screen">
               <div class="slides">
-                <img src="img/tela-whatsapp.webp" data-url="WhatsApp do seu negócio" alt="Exemplo fictício: a atendente de IA responde às 23h41 o preço da limpeza de um ar-condicionado e agenda a visita" width="1280" height="800" loading="lazy">
-                <img src="img/tela-3d.webp" data-url="seunegocio.com.br/cardapio" alt="Hambúrguer em 3D no cardápio, com 12 cm de largura no tamanho real; exemplo criado por IA" width="1280" height="800" loading="lazy">
-                <img src="img/tela-painel.webp" data-url="Painel de decisões" alt="Painel com vendas e sobra de cada prato e o agente de IA sugerindo o que testar; dados fictícios" width="1280" height="800" loading="lazy">
-                <img src="img/site-hamburgueria.webp" data-url="seunegocio.com.br" alt="Modelo fictício de site de hamburgueria com pedido e Pix" width="1280" height="800" loading="lazy">
+                <img src="img/servicos/site-ia.webp" data-url="seunegocio.com.br" alt="Exemplo fictício: no site da pousada, à noite, a assistente responde o hóspede e entrega o pedido de reserva para a recepção" width="960" height="600" loading="lazy">
+                <img src="img/servicos/ligacao.webp" data-url="WhatsApp do seu negócio" alt="Exemplo fictício: depois de uma ligação não atendida, a pessoa recebe uma mensagem no WhatsApp e a equipe ganha a tarefa de retornar" width="960" height="600" loading="lazy">
+                <img src="img/servicos/retomada.webp" data-url="Painel · pedidos" alt="Exemplo fictício: o pedido anda no quadro, a retomada sai e para quando a hóspede responde" width="960" height="600" loading="lazy">
+                <img src="img/servicos/vendas.webp" data-url="Painel · vendas pagas" alt="Exemplo fictício: relatório do mês com o que foi recebido, venda por venda, e quais foram pagas depois de uma retomada" width="1280" height="800" loading="lazy">
               </div>
             </div>
           </div>
         <ul class="chips">
           <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.2-4.6A9 9 0 1 1 21 12z"/></svg>Responde de dia e de noite</li>
-          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20.5 7.5v9L12 21.2 3.5 16.5v-9L12 2.8Z"/><path d="M3.8 7.6 12 12.2l8.2-4.6M12 12.2v8.8"/></svg>O prato em 3D na mesa</li>
-          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>O que dá lucro, prato a prato</li>
-          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></svg>Pedido e Pix sem comissão</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Retorno de ligação perdida</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Retomada que sabe parar</li>
+          <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#4d8dff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Vendas pagas, uma a uma</li>
         </ul>
         </div>
         <div class="ramos-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+        <p class="fx-note sim-note">Telas de demonstração, com dados fictícios: a Pousada Maré Calma não existe. A IA, o WhatsApp oficial e a ligação são ligados no número de cada cliente; até o primeiro, rodam em simulação.</p>
       </div>
     </div>
   </section>
 
   <!-- Cena 1: o hambúrguer no prato. A rolagem vira o prato de frente; depois o controle é da pessoa -->
-  <section class="section spot" id="restaurantes" aria-labelledby="rest-titulo">
+  <section class="section spot" id="restaurantes" aria-labelledby="rest-titulo" hidden>
     <div class="wrap spot-grid">
       <div>
-        <p class="eyebrow reveal">Para restaurantes</p>
+        <p class="eyebrow reveal">Para restaurantes · em teste</p>
         <h2 id="rest-titulo" class="h2 reveal d2" style="margin-top:16px">Encoste o dedo.<br>Gire o prato.</h2>
         <p class="lead reveal d2">É assim que o seu cliente vê o cardápio no celular, e ainda coloca o prato na mesa pela câmera, do tamanho real.</p>
         <div class="qr-mesa reveal d3">
@@ -163,7 +182,7 @@
   </section>
 
   <!-- Cena 2: a pesquisa da sobremesa. A tela para e os números sobem com a rolagem -->
-  <section class="scene-sobremesa" id="pesquisa-3d" aria-labelledby="sob-titulo">
+  <section class="scene-sobremesa" id="pesquisa-3d" aria-labelledby="sob-titulo" hidden>
     <div class="wrap scene-inner">
       <h2 id="sob-titulo" class="scene-title">Quem vê em 3D pede mais sobremesa.</h2>
       <div class="race" role="img" aria-label="Clientes que pediram sobremesa: 18% com a foto comum e 41% com o cardápio em 3D">
@@ -202,7 +221,7 @@
         <article class="zpanel">
           <p class="ztime">7h30</p>
           <h3 class="zwhat">Você acorda com o cliente atendido e a visita marcada.</h3>
-          <div class="seven"><b>7x</b><span>mais chance de levar a conversa adiante respondendo em até 1 hora.</span></div>
+          <div class="seven"><b>7x</b><span>mais chance de levar a conversa adiante respondendo em até 1 hora, num estudo americano.</span></div>
           <p class="scene-src zap-src">Oldroyd, McElheran e Elkington, <i>Harvard Business Review</i>, 2011. <a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads" target="_blank" rel="noopener">Ler o artigo</a>. Resultado de uma pesquisa, não garantia.</p>
         </article>
       </div>
@@ -263,38 +282,6 @@
     </div>
   </section>
 
-  <!-- Sites: continua, com menos peso -->
-  <section class="section" id="modelos" aria-labelledby="modelos-titulo" style="padding-top:0">
-    <div class="wrap">
-      <div class="models-head">
-        <div>
-          <p class="eyebrow reveal">Também fazemos sites</p>
-          <h2 id="modelos-titulo" class="h2 reveal d2" style="margin-top:16px">Um visual para cada ramo.</h2>
-          <p class="lead reveal d2">Projetos conceito, com nomes fictícios, para mostrar o que dá para fazer. O seu é feito do zero, com as suas cores e fotos.</p>
-        </div>
-        <a class="btn btn-ghost reveal" href="#diagnostico">Quero o meu</a>
-      </div>
-      <div class="models">
-        <article class="model reveal">
-          <div class="pic"><img src="img/site-hamburgueria.webp" alt="Modelo fictício de site para hamburgueria: fundo escuro e dourado com o burger em destaque" width="1280" height="800" loading="lazy"></div>
-          <div class="cap"><div><h3>Hamburgueria e delivery</h3><p>Projeto conceito · cardápio, pedido e Pix no site</p></div></div>
-        </article>
-        <article class="model reveal d2">
-          <div class="pic"><img src="img/site-restaurante.webp" alt="Modelo fictício de site para restaurante: varanda com mesas e plantas" width="1280" height="800" loading="lazy"></div>
-          <div class="cap"><div><h3>Restaurante</h3><p>Projeto conceito · cardápio completo, fotos e reserva</p></div></div>
-        </article>
-        <article class="model reveal d2">
-          <div class="pic"><img src="img/site-confeitaria.webp" alt="Modelo fictício de site para confeitaria: bolo com morangos em destaque" width="1280" height="800" loading="lazy"></div>
-          <div class="cap"><div><h3>Confeitaria</h3><p>Projeto conceito · galeria de bolos e encomenda pelo WhatsApp</p></div></div>
-        </article>
-        <article class="model reveal d2">
-          <div class="pic"><img src="img/site-advocacia.webp" alt="Modelo fictício de site para escritório de advocacia: azul-marinho e dourado" width="1280" height="800" loading="lazy"></div>
-          <div class="cap"><div><h3>Escritório e saúde</h3><p>Projeto conceito · áreas de atuação, conteúdos e contato</p></div></div>
-        </article>
-      </div>
-    </div>
-  </section>
-
   <!-- Subida: a cena 3D do design original, agora contando o plano sob medida -->
   <section class="lift" id="subida" aria-labelledby="lift-titulo">
     <div class="lift-pin">
@@ -304,11 +291,25 @@
         <p class="eyebrow">Plano sob medida</p>
         <h2 id="lift-titulo" class="h2">Um degrau por vez.</h2>
         <ol class="lift-steps">
-          <li class="on"><span class="lift-tag">1º</span><b>A gente acha a maior dor.</b><span class="lift-text">3 perguntas no site. O plano chega no seu WhatsApp em até 2 dias úteis, com preço por escrito.</span></li>
-          <li><span class="lift-tag">2º</span><b>Começa pelo que rende mais.</b><span class="lift-text">Uma peça de cada vez, com o resultado medido antes de seguir.</span></li>
-          <li><span class="lift-tag">3º</span><b>O resto, se fizer sentido.</b><span class="lift-text">Nada de pacote pronto e nenhuma comissão sobre as suas vendas.</span></li>
+          <li class="on"><span class="lift-tag">1º</span><b>A gente acha a maior dor.</b><span class="lift-text">3 perguntas no site ou uma conversa no WhatsApp. O plano chega em até 2 dias úteis, com preço por escrito.</span></li>
+          <li><span class="lift-tag">2º</span><b>Começa pelo que mais trava.</b><span class="lift-text">Uma peça de cada vez, e você vê o que foi feito antes de seguir.</span></li>
+          <li><span class="lift-tag">3º</span><b>Depois, o sistema, se fizer sentido.</b><span class="lift-text">Cada pedido acompanhado e o relatório do que foi pago. Sem comissão sobre as suas vendas.</span></li>
         </ol>
       </div>
+    </div>
+  </section>
+
+  <!-- O que a gente não promete -->
+  <section class="section" id="promessas" aria-labelledby="prom-titulo">
+    <div class="wrap">
+      <p class="eyebrow reveal">Combinado é combinado</p>
+      <h2 id="prom-titulo" class="h2 reveal d2" style="margin-top:16px">O que a gente <span class="blue">não promete.</span></h2>
+      <ul class="prom reveal d2">
+        <li><b>Primeiro lugar no Google.</b><span>Ninguém pode garantir. A gente deixa o perfil completo e correto, e não controla a posição.</span></li>
+        <li><b>Número de vendas ou de clientes.</b><span>Depende do seu negócio. O que a gente mostra é o que aconteceu, pedido por pedido.</span></li>
+        <li><b>Mensagem para quem não pediu.</b><span>O sistema só escreve para quem autorizou, e sempre tem a opção SAIR.</span></li>
+        <li><b>Avaliação comprada.</b><span>Todo cliente recebe o mesmo convite, sem desconto nem brinde, porque as regras do Google proíbem pagar ou premiar por avaliação.</span></li>
+      </ul>
     </div>
   </section>
 
@@ -337,13 +338,14 @@
               <label class="opt" data-r="base restaurante"><input type="checkbox" name="dor" value="O cliente compra uma vez e não volta"><span>O cliente compra uma vez e não volta</span></label>
               <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="Paciente falta ou esquece a consulta"><span>Paciente falta ou esquece a consulta</span></label>
               <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Tem imóvel vendido ou alugado ainda anunciado"><span>Tem imóvel vendido ou alugado ainda anunciado</span></label>
-              <label class="opt" data-r="base restaurante"><input type="checkbox" name="dor" value="Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)"><span>Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)</span></label>
+              <label class="opt" data-r="restaurante" hidden><input type="checkbox" name="dor" value="Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)"><span>Cada cliente gasta pouco (quase ninguém pede adicional ou sobremesa)</span></label>
+              <label class="opt" data-r="base"><input type="checkbox" name="dor" value="Mando orçamento e o cliente some, e ninguém lembra de retomar"><span>Mando orçamento e o cliente some, e ninguém lembra de retomar</span></label>
               <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="Perco tempo remarcando e confirmando consulta"><span>Perco tempo remarcando e confirmando consulta</span></label>
               <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Atualizar o site e os portais dá muito trabalho"><span>Atualizar o site e os portais dá muito trabalho</span></label>
               <label class="opt" data-r="base restaurante"><input type="checkbox" name="dor" value="Pago muita comissão para aplicativo de entrega"><span>Pago muita comissão para aplicativo de entrega</span></label>
               <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="A agenda fica com horários vagos"><span>A agenda fica com horários vagos</span></label>
               <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Marcar visita com o corretor vira bagunça"><span>Marcar visita com o corretor vira bagunça</span></label>
-              <label class="opt" data-r="base"><input type="checkbox" name="dor" value="Não sei quais produtos dão lucro"><span>Não sei quais produtos dão lucro</span></label>
+              <label class="opt" data-r="base"><input type="checkbox" name="dor" value="Perco ligação quando estou atendendo"><span>Perco ligação quando estou atendendo</span></label>
               <label class="opt" data-r="restaurante" hidden><input type="checkbox" name="dor" value="Não sei quais pratos dão lucro"><span>Não sei quais pratos dão lucro</span></label>
               <label class="opt" data-r="clinica" hidden><input type="checkbox" name="dor" value="O paciente não volta para o retorno"><span>O paciente não volta para o retorno</span></label>
               <label class="opt" data-r="imobiliaria" hidden><input type="checkbox" name="dor" value="Muito curioso e pouco cliente pronto pra fechar"><span>Muito curioso e pouco cliente pronto pra fechar</span></label>
@@ -450,7 +452,7 @@
         <p class="eyebrow reveal">Quem somos</p>
         <h2 id="time-titulo" class="h2 reveal d2" style="margin-top:16px">Gente de verdade do outro lado do WhatsApp.</h2>
         <p class="lead reveal d2">A Growlift é o Lucas e o Antônio. Somos jovens, de São Paulo, e crescemos usando a internet do jeito que o seu cliente usa: pelo celular.</p>
-        <p class="lead reveal d3">Nós dois montamos as automações, os cardápios em 3D, os painéis e os sites, e atendemos você. Quem conversa com você é quem faz.</p>
+        <p class="lead reveal d3">Nós dois montamos os sistemas, as automações e os sites, e atendemos você. Quem conversa com você é quem faz.</p>
       </div>
       <div class="team-people">
         <figure class="person reveal">
@@ -459,7 +461,7 @@
         </figure>
         <figure class="person reveal d2">
           <div class="photo"><img src="img/time/antonio.webp" alt="Antônio, da Growlift" width="640" height="800" loading="lazy"></div>
-          <figcaption><b>Antônio</b><span>Especialista em programação: IA, automações e 3D</span></figcaption>
+          <figcaption><b>Antônio</b><span>Programação: IA, automações e 3D</span></figcaption>
         </figure>
       </div>
     </div>
@@ -472,11 +474,13 @@
       <div class="faq">
         <details class="reveal"><summary>O diagnóstico é pago?</summary><p>Não. O diagnóstico e o plano são grátis e sem compromisso. Você só paga se quiser começar.</p></details>
         <details class="reveal"><summary>Quanto custa?</summary><p>Depende do que o seu negócio precisa. Por isso não tem tabela fixa: o preço vem no plano, por escrito, depois do diagnóstico, e só começa se você aprovar.</p></details>
-        <details class="reveal"><summary>Funciona para o meu ramo?</summary><p>Se você atende clientes na sua cidade e conversa com eles pelo WhatsApp, quase sempre tem algo para melhorar: restaurantes, deliveries, serviços como ar-condicionado e limpeza, clínicas, escritórios e lojas. O cardápio em 3D é para quem vende comida.</p></details>
+        <details class="reveal"><summary>Vocês mexem no meu perfil do Google?</summary><p>Se fizer parte do plano, sim: a gente arruma categoria, horário, fotos e link. O perfil continua no seu nome; a gente recebe acesso de gerente, e você pode tirar esse acesso quando quiser. Todo cliente recebe o mesmo convite para avaliar, sem desconto nem brinde em troca.</p></details>
+        <details class="reveal"><summary>Vocês garantem mais clientes ou o 1º lugar no Google?</summary><p>Não. Ninguém pode garantir posição no Google nem número de vendas. O que a gente garante é o combinado por escrito, e o sistema mostra o que aconteceu com cada pedido.</p></details>
+        <details class="reveal"><summary>Funciona para o meu ramo?</summary><p>Se você atende clientes na sua cidade, recebe pedidos de orçamento ou de reserva e conversa pelo WhatsApp, quase sempre tem algo para melhorar: pousadas, restaurantes, serviços como ar-condicionado e limpeza, energia solar, clínicas e lojas. O cardápio em 3D, ainda em teste, é para quem vende comida.</p></details>
         <details class="reveal"><summary>Como a atendente de IA conversa?</summary><p>Ela fala do jeito do seu negócio, pode ter um nome e usa só as informações que você passou. Se o cliente perguntar sério se é uma pessoa, ela responde que é a assistente do negócio e oferece chamar alguém da equipe. Quando não sabe a resposta, ela chama você.</p></details>
         <details class="reveal"><summary>Quem paga o WhatsApp oficial?</summary><p>A conta do WhatsApp oficial é do seu negócio, com o seu número. A Meta cobra algumas mensagens direto de você, conforme a tabela dela na época. A gente mostra a estimativa no plano.</p></details>
         <details class="reveal"><summary>Tem fidelidade? Posso desistir?</summary><p>As condições vêm escritas na proposta e no contrato, antes de começar. E você sempre tem 7 dias para desistir sem multa, a contar da assinatura do contrato.</p></details>
-        <details class="reveal"><summary>Vocês cobram comissão sobre as vendas?</summary><p>Não. A Growlift cobra o valor combinado no plano, sem comissão sobre os seus pedidos ou serviços.</p></details>
+        <details class="reveal"><summary>Vocês cobram comissão sobre as vendas?</summary><p>Não. A Growlift cobra o valor combinado no plano, sem comissão sobre os seus pedidos ou serviços. A Meta cobra à parte, direto do seu negócio, as mensagens do WhatsApp oficial.</p></details>
         <details class="reveal"><summary>E se eu já tiver site ou sistema?</summary><p>Melhor ainda: a gente trabalha junto com o que você já usa. Conte no diagnóstico qual é, e o plano parte dele.</p></details>
       </div>
     </div>
@@ -488,7 +492,7 @@
   <div class="wrap">
     <div>
       <a class="logo" href="#conteudo"><svg aria-hidden="true"><use href="#marca"/></svg>GROWLIFT</a>
-      <p>IA, automação e 3D para negócios locais. Plano sob medida, sem comissão sobre as suas vendas.</p>
+      <p>Pedidos acompanhados até a venda, para negócios locais. Plano sob medida, sem comissão sobre as suas vendas.</p>
     </div>
     <div>
       <h3>Contato</h3>
@@ -501,9 +505,9 @@
     <div>
       <h3>Navegue</h3>
       <ul>
-        <li><a href="#ramos">O que fazemos</a></li>
-        <li><a href="#restaurantes">Restaurantes</a></li>
-        <li><a href="#modelos">Sites</a></li>
+        <li><a href="#dor">O problema</a></li>
+        <li><a href="#ramos">O sistema</a></li>
+        <li><a href="#promessas">O que não prometemos</a></li>
         <li><a href="#diagnostico">Diagnóstico grátis</a></li>
       </ul>
     </div>

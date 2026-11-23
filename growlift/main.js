@@ -241,7 +241,8 @@
     const cfg = RAMOS[ramo];
     document.body.dataset.ramo = cfg ? ramo : '';
     const allHide = ['ramos', 'restaurantes', 'pesquisa-3d', 'whatsapp', 'modelos', 'subida'];
-    allHide.forEach((id) => { const el = document.getElementById(id); if (el) el.hidden = !!cfg && cfg.hide.includes(id); });
+    const semRamo = ['restaurantes', 'pesquisa-3d'];
+    allHide.forEach((id) => { const el = document.getElementById(id); if (el) el.hidden = cfg ? cfg.hide.includes(id) : semRamo.includes(id); });
     // Sections made for one trade only (data-so="clinica"…) show up just for it.
     document.querySelectorAll('[data-so]').forEach((el) => (el.hidden = !cfg || !el.dataset.so.split(' ').includes(ramo)));
     cards.forEach((c) => (c.dataset.ramo === ramo ? c.setAttribute('aria-current', 'true') : c.removeAttribute('aria-current')));
