@@ -5,6 +5,7 @@ import { storage, ConflictError } from './storage';
 import { monthKey, nextIsExtra } from './changes';
 import { hourWindow, take } from './limits';
 import { orderingOf } from './ordering';
+import { PASTA_FOTOS } from './servicos';
 import {
   changeEntrySchema,
   changeLimit,
@@ -67,6 +68,8 @@ export async function getPublished(slug: string) {
 }
 
 export async function createStore(input: { slug: string; name: string; segment: Store['segment'] }, by: string) {
+  // The services tab keeps its pictures in midia/growlift-servicos/: no store may share that folder.
+  if (input.slug === PASTA_FOTOS) throw new Error('Este endereço é reservado. Escolha outro.');
   const store = storeSchema.parse(emptyStore(input.slug, input.name, input.segment));
   const record: StoreRecord = { store, updatedAt: new Date().toISOString(), updatedBy: by, publishedAt: null };
   await storage().writeJSON(draftKey(store.slug), record, null);
