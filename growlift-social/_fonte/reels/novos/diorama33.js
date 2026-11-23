@@ -302,7 +302,7 @@ function table(x, z, guests, light) {
 }
 const PASTEL = ['#e8a0b4', '#9db7e8', '#a8d8b9', '#f4c97a', '#c6a8e8', '#f2a37a'];
 const HEADS = [SKIN.a, '#f6e2cf', SKIN.b, '#efe6dc'];
-const OTHERS = [[-2.0, 2.3], [2.1, 2.0], [-3.3, 4.6], [0.3, 4.3], [3.3, 4.7], [-1.6, 6.4], [3.4, 6.9]];
+const OTHERS = [[-2.0, 2.3], [2.1, 2.0], [-3.3, 4.6], [-0.7, 4.4], [3.3, 4.7], [-1.6, 6.4], [3.4, 6.9]];
 const others = OTHERS.map(([x, z], i) => table(x, z, [
   { shirt: PASTEL[i % 6], skin: HEADS[i % 4], hair: i % 3 === 0 ? 'short' : null, hairColor: '#5a3a22' },
   i % 2 ? { shirt: PASTEL[(i + 3) % 6], skin: HEADS[(i + 1) % 4], hair: i % 4 === 1 ? 'bun' : null, hairColor: '#3d2a1e' } : null,
@@ -375,8 +375,8 @@ scene.add(waitress.g);
 const waiter = toyPerson({ kind: 'waiter', skin: SKIN.a, hair: 'bowl', hairColor: '#3a2416', pants: '#151515' });
 scene.add(waiter.g);
 const chef = toyPerson({ kind: 'chef', shirt: '#ffffff', skin: SKIN.b, hair: 'chef', pants: '#ffffff' });
-chef.g.position.set(KX + 0.2, 0, ROOM.z1 - 0.3);
-chef.g.rotation.y = Math.PI;
+chef.g.position.set(KX + 0.2, 0.12, ROOM.z1 - 0.3);
+chef.g.rotation.y = Math.atan2(-(KX + 0.2), -(ROOM.z1 - 0.3 + 0.52));
 scene.add(chef.g);
 const customer = toyPerson({ shirt: '#3fa66a', skin: '#ecc9a2', hair: 'short', hairColor: '#3a2416', seated: true });
 customer.g.position.set(0, 0, -0.62);
@@ -709,7 +709,7 @@ const LOOK = [
   [0, 0.15, 1.12, 2.5, 54], [3.3, 0.1, 1.0, 2.2, 54], [3.7, 0.04, 0.95, 2.2, 54], [5.6, 0.04, 0.95, 2.2, 54],
   [6.0, 0.06, 1.1, 2.3, 50], [12.4, 0.06, 1.02, 2.2, 50], [12.9, 0.06, 0.92, 1.6, 52], [16.2, 0.08, 0.88, 1.4, 52],
   [16.6, 0.04, 0.84, 0.9, 54], [27.9, 0.04, 0.84, 0.9, 54],
-  [28.7, 1.5, 2.45, 8.3, 30], [29.3, 1.5, 2.5, 8.3, 20], [31.2, 1.5, 2.5, 8.3, 20],
+  [28.7, 1.5, 2.4, 8.3, 30], [29.3, 1.55, 2.3, 8.3, 21], [31.2, 1.55, 2.3, 8.3, 21],
   [31.9, 0.3, 1.1, 2.0, 50], [33.9, 0.22, 1.02, 1.6, 50], [34.6, 0.02, 0.86, 0.35, 52], [37.5, 0.02, 0.86, 0.35, 52],
   [37.9, 0.04, 0.95, 2.2, 54], [45.6, 0.04, 0.95, 2.2, 54], [46.1, 0.15, 1.08, 1.7, 52], [48.1, 0.15, 1.08, 1.7, 52],
 ];
@@ -893,7 +893,7 @@ function update(t) {
     const p = a.clone().lerp(b, k); p.y += Math.sin(k * Math.PI) * 0.9;
     order.visible = true; order.position.copy(p); order.quaternion.copy(camera.quaternion);
     order.scale.setScalar(lerp(0.6, 3.2, k) * (k > 0.92 ? 1 - (k - 0.92) / 0.08 : 1));
-    glows.forEach((g, i) => { const kk = clamp(k - i * 0.03); const q = a.clone().lerp(b, kk); q.y += Math.sin(kk * Math.PI) * 0.9; g.visible = kk > 0; g.position.copy(q); g.scale.setScalar((0.25 + kk * 1.2) * (1 - i / 12)); g.material.opacity = 0.7 * (1 - i / 10); });
+    glows.forEach((g, i) => { const kk = clamp(k - i * 0.03); const q = a.clone().lerp(b, kk); q.y += Math.sin(kk * Math.PI) * 0.9; g.visible = kk > 0.04; g.position.copy(q); g.scale.setScalar(q.distanceTo(camera.position) * 0.07 * (1 - i / 12)); g.material.opacity = 0.32 * (1 - i / 10); });
   }
 
   // ---- diners: hands up while the customer waits
