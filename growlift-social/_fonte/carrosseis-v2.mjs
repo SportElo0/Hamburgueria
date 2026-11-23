@@ -1007,7 +1007,7 @@ Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozin
       () =>
         `<span class="chip">Skill da Semana · Ep. 01</span>
          <h1 class="h" style="font-size:108px;margin-top:30px">Não sabe o que <em>postar</em> hoje?</h1>
-         <p class="p" style="margin-top:26px;max-width:880px">Essa skill grátis faz o Claude montar a semana de posts do seu negócio.</p>
+         <p class="p" style="margin-top:26px;max-width:880px">Essa skill gratuita (de código aberto) faz o Claude montar a semana de posts do seu negócio.</p>
          <div style="position:absolute;left:-84px;right:-84px;bottom:0;height:600px">
            ${celular(
              `<div style="padding:64px 26px 0"><div style="font-size:30px;font-weight:900">Posts da semana</div><div style="font-size:20px;font-weight:700;color:#8a93a3;margin-top:4px">Padaria Exemplo · exemplo</div>
@@ -1030,11 +1030,11 @@ Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozin
       () =>
         `<span class="chip">A skill de hoje</span>
          <h2 class="h" style="font-size:96px;margin-top:30px"><em>social</em>, do Corey Haines.</h2>
-         <p class="p" style="margin-top:28px;max-width:900px">Grátis no GitHub, com licença aberta (MIT). Faz parte do <b>marketingskills</b>, uma coleção de 56 skills de marketing.</p>
+         <p class="p" style="margin-top:28px;max-width:900px">Gratuita no GitHub, com licença aberta (MIT). Faz parte do <b>marketingskills</b>, uma coleção de 56 skills de marketing.</p>
          <div class="card" style="margin-top:54px;padding:30px 34px;display:flex;justify-content:space-between;align-items:center">
            <div><div style="font-size:24px;font-weight:800;color:#8a93a3">github.com/coreyhaines31/</div><div style="font-size:42px;font-weight:900;margin-top:4px">marketingskills</div></div>
            <div style="text-align:right"><div style="font-size:44px;font-weight:900;color:#b07a00">★ 62 mil</div><div style="font-size:20px;font-weight:700;color:#8a93a3">estrelas em 23/11/2026</div></div></div>
-         <p class="p" style="margin-top:28px;font-size:30px">Quem criou foi ele. A Growlift só mostra como usar.</p>`,
+         <p class="p" style="margin-top:28px;font-size:30px">Quem criou foi ele. A Growlift só mostra como usar e não é afiliada a ele nem à Anthropic, dona do Claude.</p>`,
       () =>
         `<h2 class="h" style="font-size:96px;margin-top:10px">Primeiro, ela <em>pergunta.</em></h2>
          <p class="p" style="margin-top:26px;max-width:900px">Antes de escrever, ela quer entender o seu negócio:</p>
@@ -1070,12 +1070,12 @@ Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozin
          <div style="margin-top:52px">${lista(
            [
              ['Baixe o arquivo', 'social-claude-web.zip (a gente te manda o link).'],
-             ['No Claude:', 'Customize → Skills → + Create skill → Upload a skill.'],
+             ['No Claude (como diz o README do projeto):', 'Customize → Skills → + Create skill → Upload a skill.'],
              ['Peça em português:', '“Monte os posts da semana do meu negócio”.'],
            ],
            tema,
          )}</div>
-         <div style="margin-top:46px;padding:24px 28px;border-radius:22px;background:#e2eaff;color:${INK};font-size:30px;font-weight:700;line-height:1.35">Precisa de um plano pago do Claude com skills liberadas. Ela escreve; quem revisa e posta é você.</div>`,
+         <div style="margin-top:46px;padding:24px 28px;border-radius:22px;background:#e2eaff;color:${INK};font-size:30px;font-weight:700;line-height:1.35">Sua conta do Claude precisa permitir skills e execução de código (hoje isso depende do plano; confira no app). Ela escreve; quem revisa e posta é você.</div>`,
       () =>
         `<h2 class="h" style="font-size:96px;margin-top:10px">Quer o link e o <em>passo a passo?</em></h2>
          <p class="p" style="margin-top:30px;max-width:900px">Segue a @growlift.ai e</p>
@@ -1083,23 +1083,23 @@ Comenta MARGEM e a Growlift te manda grátis a planilha que faz essa conta sozin
            <span style="font-size:44px;font-weight:900;color:#fff">Comenta</span>
            <span style="display:inline-flex;align-items:center;height:110px;padding:0 46px;border-radius:999px;background:#fff;color:${BLUE};font-size:60px;font-weight:900;box-shadow:0 30px 60px -24px rgba(0,0,0,.45)">POSTS</span></div>
          <p class="p" style="margin-top:26px;font-size:34px">que a gente te manda no privado.</p>
-         <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap">${['Grátis', 'Pra todo mundo que comentar', 'Sem sorteio'].map((x) => `<span class="chip">${x}</span>`).join('')}</div>
-         <p style="position:absolute;left:0;right:0;bottom:0;font-size:24px;line-height:1.4;color:#d6e3ff;font-weight:600">Skill criada por Corey Haines (licença MIT). A Growlift não tem relação com a Anthropic, dona do Claude, nem com o autor da skill.</p>`,
+         <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap">${['Link e passo a passo grátis', 'Pra todo mundo que comentar', 'Sem sorteio'].map((x) => `<span class="chip">${x}</span>`).join('')}</div>
+         <p style="position:absolute;left:0;right:0;bottom:0;font-size:27px;line-height:1.4;color:#ffffff;font-weight:600">Skill criada por Corey Haines (licença MIT). A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude, nem pelo autor da skill.</p>`,
     ],
     legenda: `Não sabe o que postar hoje? 📅 Salva esse carrossel.
 
-Skill da Semana, ep. 01: a skill "social", criada pelo Corey Haines e grátis no GitHub (licença MIT).
+Skill da Semana, ep. 01: a skill "social", criada pelo Corey Haines, é gratuita no GitHub (licença MIT).
 
 Ela faz o Claude perguntar sobre o seu negócio e depois montar os temas do perfil, os ganchos, o calendário da semana, roteiros de Reels e carrosséis. E ainda corta o texto com cara de IA.
 
-Pra usar, precisa de um plano pago do Claude com skills liberadas. Ela escreve; quem revisa e posta é você.
+Pra usar, sua conta do Claude precisa permitir skills e execução de código (hoje isso depende do plano; confira no app). Ela escreve; quem revisa e posta é você.
 
-Segue a @growlift.ai e comenta POSTS que a gente te manda no privado o link oficial e o passo a passo. Vale pra todo mundo que comentar, sem sorteio.
+Comenta POSTS que a gente te manda no privado o link oficial e o passo a passo. Vale pra todo mundo que comentar, sem sorteio. Se curtir, segue a @growlift.ai (ajuda, mas não é obrigatório).
 
-A Growlift não tem relação com a Anthropic, dona do Claude, nem com o autor da skill.
+A Growlift não é afiliada nem patrocinada pela Anthropic, dona do Claude, nem pelo autor da skill.
 
 #claude #inteligenciaartificial #marketingdigital #empreendedorismo #pequenosnegocios`,
-    alt: 'Carrossel "Skill da Semana, episódio 1": capa "Não sabe o que postar hoje?" com um celular mostrando a semana de posts de uma padaria de exemplo; o que é uma skill; a skill "social", do Corey Haines, grátis no GitHub (licença MIT, coleção marketingskills com cerca de 62 mil estrelas); as perguntas que ela faz; o que ela monta (temas, ganchos, calendário, roteiros de Reels, carrosséis); a lista do que ela evita escrever; como instalar no Claude (plano pago); e o convite "Segue e comenta POSTS".',
+    alt: 'Carrossel "Skill da Semana, episódio 1": capa "Não sabe o que postar hoje?" com um celular mostrando a semana de posts de uma padaria de exemplo; o que é uma skill; a skill "social", do Corey Haines, grátis no GitHub (licença MIT, coleção marketingskills com cerca de 62 mil estrelas em 23/11/2026); as perguntas que ela faz; o que ela monta (temas, ganchos, calendário, roteiros de Reels, carrosséis); a lista do que ela evita escrever; como instalar no Claude (a conta precisa ter skills liberadas); e o convite "Segue e comenta POSTS".',
   },
 ];
 

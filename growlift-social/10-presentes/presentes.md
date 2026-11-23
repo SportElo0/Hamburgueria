@@ -64,10 +64,10 @@ Se quiser um assim pra sua loja, é só responder aqui. Para não receber mais m
 ```
 Oi! Aqui é da Growlift 👋 Valeu por comentar POSTS.
 
-Aqui está a skill "social", criada pelo Corey Haines e grátis no GitHub:
+Aqui está a skill "social", criada pelo Corey Haines, gratuita no GitHub (a Growlift não é afiliada a ele nem à Anthropic):
 https://github.com/coreyhaines31/marketingskills/releases/download/v2.14.25/social-claude-web.zip
 
-Como instalar (precisa de um plano pago do Claude com skills liberadas):
+Como instalar (sua conta do Claude precisa permitir skills e execução de código; hoje isso depende do plano):
 1) Baixe o arquivo pelo link.
 2) No Claude, vá em Customize → Skills → + Create skill → Upload a skill e envie o arquivo.
 3) Peça: "Monte os posts da semana do meu negócio" e responda as perguntas dela.
