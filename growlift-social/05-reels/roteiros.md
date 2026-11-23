@@ -611,3 +611,23 @@ Quer um plano sob medida pro seu negócio aparecer melhor e chamar mais atençã
 Telas de exemplo, com nomes e números fictícios.
 #marketingdigital #site #cardapio3d #negociolocal #growlift
 ```
+
+## 33. Quatro estrelas de diferença (cardápio no QR, 3D e Pix na mesa)
+- **Formato:** a mesma história da referência que o Antônio mandou (anúncio de outra empresa de cardápio): o cliente espera meia hora com a mão levantada, começa a dar uma estrela no Google, lê o QR da mesa e termina dando cinco estrelas. **Refeito do zero pela Growlift:** restaurante 3D próprio (`_fonte/reels/novos/diorama33.js`, o mesmo visual do Reel 10), telas de celular próprias e só o que o nosso sistema faz de verdade. Nenhum quadro, imagem ou marca do vídeo de referência é usado; as frases são nossas.
+- **O que mudou da referência:** a cena em que o cliente pergunta a uma IA o que pedir saiu (o nosso cardápio não tem isso). O protagonista é homem porque a voz é a "Andre", a mesma voz brasileira já aprovada.
+- **Cenas:** mesa 7 com cronômetro "ESPERANDO 29:57" e o garçom passando ("Já vou, já vou!"); uma estrela no Google; "são dez mesas e duas mãos" (salão visto de cima, todas as mesas chamando); o cartão do cardápio em PDF trocado pelo QR da mesa; cardápio no celular (tela real do cardápio de exemplo); o hambúrguer em 3D aparecendo em cima da mesa, "12 cm · tamanho real" (o arquivo 3D é o do cardápio de exemplo); "Enviar para a cozinha" e a tela da cozinha com "Mesa 7 · NOVO"; o garçom servindo; conta e Pix na mesa; "Avaliar no Google" (o mesmo convite para todos) e cinco estrelas; "A mesma mesa. O mesmo lanche. Quatro estrelas de diferença."; o vídeo mandado para o amigo da hamburgueria; fim "＋ Seguir @growlift.ai" e "Comenta 3D".
+- **Narração:** ElevenLabs pelo Higgsfield, voz "Andre", 2,25 créditos (23/11), em `_fonte/reels/narracao-33-eleven.mp3`. Legendas e cenas seguem o tempo de cada palavra (faster-whisper).
+- **Palavra:** 3D (a automação do ManyChat já existe e manda o link do cardápio de exemplo, `10-presentes/presentes.md`).
+- **Revisão legal (23/11), aplicada na legenda:** a frase "quatro estrelas de diferença" fica, com o aviso de que é história de exemplo e de que a nota é decisão de cada cliente; o prato 3D aparece como "em fase de testes" (o hambúrguer é o modelo de exemplo, com 12 cm de largura no arquivo); "deixou a avaliação dele" em vez de prometer cinco estrelas. Risco de direito autoral baixo (estrutura de história não é protegida; tudo foi refeito): não citar nem marcar a empresa da referência e guardar estes arquivos como prova de criação própria.
+
+**Legenda**
+```
+Meia hora com a mão levantada… e quase uma estrela no Google. ⭐
+Até ele ler o QR da mesa: viu o cardápio, viu o lanche em 3D em cima da mesa, pediu, pagou no Pix e deixou a avaliação dele.
+
+A mesma mesa. O mesmo lanche. Quatro estrelas de diferença.
+
+Tem restaurante? Comenta 3D que a gente te manda um cardápio 3D funcionando pra você testar no celular. Vale pra todo mundo que comentar (e segue a @growlift.ai pra ver mais).
+História de exemplo: restaurante, pessoas e telas são ilustrativos, e a nota é sempre decisão de cada cliente (o sistema não garante avaliação melhor). O prato em 3D no tamanho real está em fase de testes; o hambúrguer do vídeo é um modelo de exemplo. Animação 3D e narração com voz gerada por inteligência artificial.
+#restaurante #cardapiodigital #cardapio3d #hamburgueria #growlift
+```

@@ -849,6 +849,20 @@
    "ia": true,
    "palavra": "PLANO",
    "chave": "05-reels/roteiros.md#32-o-balão-gancho-de-tensão-growlift-site-cardápio-3d-e-app"
+  },
+  {
+   "id": "2026-11-24-reel-33",
+   "titulo": "Reel 33 · Quatro estrelas de diferença (Comenta 3D)",
+   "tipo": "reel",
+   "arquivos": [
+    "05-reels/33-quatro-estrelas.mp4"
+   ],
+   "capa": "05-reels/33-quatro-estrelas-capa.png",
+   "legenda": "Meia hora com a mão levantada… e quase uma estrela no Google. ⭐\nAté ele ler o QR da mesa: viu o cardápio, viu o lanche em 3D em cima da mesa, pediu, pagou no Pix e deixou a avaliação dele.\n\nA mesma mesa. O mesmo lanche. Quatro estrelas de diferença.\n\nTem restaurante? Comenta 3D que a gente te manda um cardápio 3D funcionando pra você testar no celular. Vale pra todo mundo que comentar (e segue a @growlift.ai pra ver mais).\nHistória de exemplo: restaurante, pessoas e telas são ilustrativos, e a nota é sempre decisão de cada cliente (o sistema não garante avaliação melhor). O prato em 3D no tamanho real está em fase de testes; o hambúrguer do vídeo é um modelo de exemplo. Animação 3D e narração com voz gerada por inteligência artificial.\n#restaurante #cardapiodigital #cardapio3d #hamburgueria #growlift",
+   "quando": "2026-11-24T18:00:00-03:00",
+   "ia": true,
+   "palavra": "3D",
+   "chave": "05-reels/roteiros.md#33-quatro-estrelas-de-diferença-cardápio-no-qr-3d-e-pix-na-mesa"
   }
  ]
 }
