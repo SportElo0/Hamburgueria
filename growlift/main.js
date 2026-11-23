@@ -292,6 +292,9 @@
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   cards.forEach((card) =>
     card.addEventListener('click', (e) => {
+      // On a trade page (clinicas.html…, made by tools/growlift-ramos.py) the card is a plain link to the other
+      // trade's page, so the cover text always matches the trade. On the home page it adapts in place.
+      if (fromPath) { store(card.dataset.ramo); return; }
       e.preventDefault();
       const ramo = card.dataset.ramo;
       const cfg = RAMOS[ramo];

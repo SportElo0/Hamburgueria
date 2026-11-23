@@ -30,19 +30,41 @@
   "rewrites": [
     {
       "source": "/clinicas",
-      "destination": "/index.html"
+      "destination": "/clinicas.html"
     },
     {
       "source": "/restaurantes",
-      "destination": "/index.html"
+      "destination": "/restaurantes.html"
     },
     {
       "source": "/imobiliarias",
-      "destination": "/index.html"
+      "destination": "/imobiliarias.html"
     },
     {
       "source": "/outros",
-      "destination": "/index.html"
+      "destination": "/outros.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/clinicas.html",
+      "destination": "/clinicas",
+      "permanent": true
+    },
+    {
+      "source": "/restaurantes.html",
+      "destination": "/restaurantes",
+      "permanent": true
+    },
+    {
+      "source": "/imobiliarias.html",
+      "destination": "/imobiliarias",
+      "permanent": true
+    },
+    {
+      "source": "/outros.html",
+      "destination": "/outros",
+      "permanent": true
     }
   ]
 }
