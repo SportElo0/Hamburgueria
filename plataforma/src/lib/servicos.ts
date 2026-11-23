@@ -36,6 +36,23 @@ const PAINEL = 'https://painel-lojas-sportelo.vercel.app';
 
 const s = (id: string, nome: string, situacao: Situacao, resumo: string, demo = ''): Servico => ({ id, nome, situacao, resumo, imagem: `/servicos/${id}.webp`, demo, criadoEm: '2026-11-23' });
 
+/**
+ * Cards the team asked to add after the list was first saved (the saved list wins, so they are merged in once).
+ * Once delivered, a card is the team's like any other: deleting it does not bring it back.
+ */
+function SERVICOS_ADICIONADOS_LISTA(): Servico[] {
+  return [
+    s('mesa-conectada', 'Página da mesa (QR e NFC)', 'ideia', 'Uma página que abre pelo QR ou por NFC na mesa: cardápio, cartão fidelidade com selos, Wi-Fi, Instagram e avaliação no Google num lugar só. Quem quiser deixa o contato para receber promoções, com aceite e opção de sair.'),
+  ];
+}
+export const SERVICOS_ADICIONADOS: Servico[] = SERVICOS_ADICIONADOS_LISTA();
+
+/** The saved list plus the added cards not delivered yet (and not already there). Pure: the caller stores `entregues`. */
+export function comAdicionados(lista: Servico[], entregues: string[]): Servico[] {
+  const novos = SERVICOS_ADICIONADOS.filter((a) => !entregues.includes(a.id) && !lista.some((x) => x.id === a.id));
+  return [...lista, ...novos.map((n) => structuredClone(n))];
+}
+
 export const SERVICOS_INICIAIS: Servico[] = [
   s('site-ia', 'Site com chat de IA', 'pronto', 'Site da empresa com uma assistente que responde a qualquer hora, só com as informações do cliente, e entrega o pedido de orçamento ou reserva pronto para a equipe.', `${COMERCIAL}/s/pousada-demo`),
   s('google', 'Perfil no Google + SEO', 'pronto', 'A gente arruma o perfil no Google (categoria, horário, fotos reais, link) e o título das páginas do site, para a empresa aparecer certo nas buscas. Sem garantia de posição.', `${COMERCIAL}/demonstracao`),
@@ -49,6 +66,7 @@ export const SERVICOS_INICIAIS: Servico[] = [
   s('crm-torpedo', 'App de clientes: CRM e Torpedo', 'pronto', 'A loja vê seus clientes, quem sumiu e quanto cada um gastou, e prepara com a IA a mensagem para trazer de volta quem parou de comprar.', `${PAINEL}/demo/fish-burguer`),
   s('paineis', 'Painéis de organização', 'pronto', 'Painel do dono com vendas, preços e custos de cada prato, mesas e relatório do mês, para decidir com números.'),
   s('link-bio', 'Link na bio com perguntas', 'ideia', 'No link da bio, o cliente responde 2 ou 3 perguntas e recebe a indicação do produto certo da empresa, com botão para pedir no WhatsApp.'),
+  ...SERVICOS_ADICIONADOS_LISTA(),
 ];
 
 const FOTO_ENVIADA = new RegExp(`^midia/${PASTA_FOTOS}/[a-z0-9]{6,40}\\.(jpg|png|webp|avif)$`);

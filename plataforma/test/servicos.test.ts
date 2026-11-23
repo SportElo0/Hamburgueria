@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { SERVICOS_INICIAIS, SITUACOES, demoValida, imagemValida, srcImagem, tipoDaImagem } from '@/lib/servicos';
+import { SERVICOS_ADICIONADOS, SERVICOS_INICIAIS, SITUACOES, comAdicionados, demoValida, imagemValida, srcImagem, tipoDaImagem } from '@/lib/servicos';
 
 describe('serviços da Growlift', () => {
   it('starts with valid cards, each with its picture on disk', () => {
@@ -15,6 +15,17 @@ describe('serviços da Growlift', () => {
       expect(existsSync(join(process.cwd(), 'public', s.imagem))).toBe(true);
       expect(demoValida(s.demo)).toBe(true);
     }
+  });
+
+  it('merges a card added later once, and never brings back one the team deleted', () => {
+    expect(SERVICOS_INICIAIS.some((s) => s.id === 'mesa-conectada')).toBe(true);
+    const salva = SERVICOS_INICIAIS.filter((s) => s.id !== 'mesa-conectada').slice(0, 3);
+    // saved before the card existed: it shows up
+    expect(comAdicionados(salva, []).map((s) => s.id)).toEqual([...salva.map((s) => s.id), 'mesa-conectada']);
+    // already in the saved list: not duplicated
+    expect(comAdicionados([...salva, SERVICOS_ADICIONADOS[0]], []).filter((s) => s.id === 'mesa-conectada')).toHaveLength(1);
+    // delivered and then deleted by the team: stays deleted
+    expect(comAdicionados(salva, ['mesa-conectada']).some((s) => s.id === 'mesa-conectada')).toBe(false);
   });
 
   it('accepts only its own pictures and https demo links', () => {
