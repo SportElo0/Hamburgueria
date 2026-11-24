@@ -11,7 +11,7 @@ export default async function ChatIncorporado({ params }: { params: Promise<{ ch
   const base = process.env.APP_URL ?? '';
   return (
     <main className="h-dvh bg-white">
-      <ChatSite chave={empresa.chave_publica} empresa={empresa.nome} atendente={empresa.config.ia.falar_como_marca ? empresa.nome : empresa.config.ia.nome} linkPrivacidade={`${base}/s/${empresa.slug}/privacidade`} flutuante={false} aberto incorporado />
+      <ChatSite chave={empresa.chave_publica} empresa={empresa.nome} atendente={empresa.config.ia.falar_como_marca ? empresa.nome : empresa.config.ia.nome} linkPrivacidade={empresa.config.site.link_privacidade || `${base}/s/${empresa.slug}/privacidade`} flutuante={false} aberto incorporado />
     </main>
   );
 }

@@ -29,8 +29,9 @@ export async function migrar(zerar = false) {
   }
   const { agendarFilaNoBanco } = await import('../src/server/agendador-banco');
   console.log(await agendarFilaNoBanco((sql, params) => q(sql, params as unknown[])));
-  const { prepararPrimeiroAcesso } = await import('../src/server/primeiro-acesso');
+  const { atualizarGrowlift, prepararPrimeiroAcesso } = await import('../src/server/primeiro-acesso');
   console.log(await prepararPrimeiroAcesso());
+  console.log(await atualizarGrowlift());
   return pool();
 }
 

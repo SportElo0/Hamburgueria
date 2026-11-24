@@ -4,8 +4,8 @@ import { apagarContato } from './oportunidades';
 
 /**
  * Data retention. Once a day: contacts that never became customers and had no interaction for the company's
- * retention period are deleted (with their conversations, consents, calls, visits and history), plus technical
- * leftovers. Customers (an opportunity won) are kept: their records may be needed for the service and the law.
+ * retention period are deleted (with their conversations, consents, calls, visits and history), the site chats
+ * where nobody left a contact after the same period, plus technical leftovers. Customers (an opportunity won) are kept: their records may be needed for the service and the law.
  */
 
 /** Contacts of a company that the retention rule would delete now. */
@@ -48,9 +48,22 @@ export async function limparDadosAntigos(forcar = false): Promise<number> {
     const n = await tx(async (db: Db) => {
       const ids = await q<{ id: string }>(sqlVencidos(500), [e.id, e.meses], db);
       for (const c of ids) await apagarContato(db, e.id, c.id);
-      // Only the count goes to the history: nothing about the people deleted.
-      if (ids.length) await registrar(db, e.id, { ator: { tipo: 'sistema' }, tipo: 'limpeza_automatica', dados: { contatos: ids.length, meses: e.meses } });
-      return ids.length;
+      // Site chats where nobody left a contact: deleted after the same period without activity.
+      const soltas = (
+        await q<{ id: string }>(
+          `select id from conversas where empresa_id = $1 and contato_id is null and oportunidade_id is null and atualizado_em < now() - make_interval(months => $2) limit 500`,
+          [e.id, e.meses],
+          db,
+        )
+      ).map((x) => x.id);
+      if (soltas.length) {
+        await q(`update trabalhos set estado = 'cancelado', resultado = 'Conversa excluída.', concluido_em = now() where empresa_id = $1 and estado = 'pendente' and conversa_id = any($2::uuid[])`, [e.id, soltas], db);
+        await q('delete from eventos where empresa_id = $1 and conversa_id = any($2::uuid[])', [e.id, soltas], db);
+        await q('delete from conversas where empresa_id = $1 and id = any($2::uuid[])', [e.id, soltas], db);
+      }
+      // Only the counts go to the history: nothing about the people deleted.
+      if (ids.length || soltas.length) await registrar(db, e.id, { ator: { tipo: 'sistema' }, tipo: 'limpeza_automatica', dados: { contatos: ids.length, conversas: soltas.length, meses: e.meses } });
+      return ids.length + soltas.length;
     });
     total += n;
   }

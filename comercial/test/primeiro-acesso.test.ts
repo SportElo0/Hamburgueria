@@ -2,7 +2,11 @@ import { afterAll, describe, expect, it } from 'vitest';
 import { contextoDe } from '@/server/contexto';
 import { fecharPool, um } from '@/server/db';
 import { empresaPorId } from '@/server/empresas';
-import { CONHECIMENTO_GROWLIFT, prepararPrimeiroAcesso } from '@/server/primeiro-acesso';
+import { CAMPOS_GROWLIFT, CHAVE_SITE_GROWLIFT, CONHECIMENTO_GROWLIFT, RASCUNHO_1_GROWLIFT, atualizarGrowlift, prepararPrimeiroAcesso } from '@/server/primeiro-acesso';
+import { empresaPorChave } from '@/server/empresas';
+import { q } from '@/server/db';
+import { receberPedido } from '@/server/pedidos';
+import { SEGMENTOS } from '@/server/config';
 import { Conhecimento } from '@/server/config';
 import { novaEmpresa, unico } from './apoio';
 
@@ -31,5 +35,48 @@ describe('primeiro acesso a um banco de produção novo', () => {
     const k = (await um<{ dados: unknown }>('select dados from conhecimento where empresa_id = $1 and versao = 1', [e.id]))!.dados;
     expect(Conhecimento.parse(k).faq).toHaveLength(CONHECIMENTO_GROWLIFT.faq.length);
     expect(await prepararPrimeiroAcesso({ ...env, PRIMEIRO_ADMIN_SENHA: 'uma-senha-nova-de-teste' }, { somenteSeVazio: false })).toMatch(/já existe um login/);
+  });
+
+  it('deixa a empresa Growlift pronta para o site uma vez e depois não desfaz o que a equipe mudou', async () => {
+    // The production database of 24/11/2026: company created with the first draft and the segment's default fields.
+    const e = await novaEmpresa('Growlift Teste');
+    const aposentar = `update empresas set slug = 'x-' || id, chave_publica = 'pk_' || replace(id::text, '-', '')`;
+    await q(`${aposentar} where slug = 'growlift'`);
+    await q(`update empresas set slug = 'growlift', config = config || $2::jsonb where id = $1`, [e.empresa.id, JSON.stringify({ campos: SEGMENTOS['servicos-gerais'].campos })]);
+    await q('delete from conhecimento where empresa_id = $1', [e.empresa.id]);
+    await q('insert into conhecimento (empresa_id, versao, dados) values ($1, 1, $2)', [e.empresa.id, JSON.stringify(RASCUNHO_1_GROWLIFT)]);
+
+    expect(await atualizarGrowlift()).toMatch(/chave do site.*perguntas.*conhecimento versão 2/);
+    const g = (await empresaPorChave(CHAVE_SITE_GROWLIFT))!;
+    expect(g.id).toBe(e.empresa.id);
+    expect(g.config.campos.map((c) => c.id)).toEqual(CAMPOS_GROWLIFT.map((c) => c.id));
+    expect(g.config.site.link_privacidade).toBe('https://growlift.com.br/privacidade.html');
+    expect(g.config.site.cnpj).toBe('69.611.450/0001-17');
+    expect(g.config.dados.guarda_meses).toBe(12);
+    const k = (await um<{ dados: unknown }>('select dados from conhecimento where empresa_id = $1 and versao = 2', [e.empresa.id]))!.dados;
+    expect(Conhecimento.parse(k).faq.length).toBe(CONHECIMENTO_GROWLIFT.faq.length);
+    expect(Conhecimento.safeParse(CONHECIMENTO_GROWLIFT).success).toBe(true);
+    expect(JSON.stringify(CONHECIMENTO_GROWLIFT)).not.toMatch(/R\$/); // no price until it is on the site
+
+    // What growlift.com.br sends when someone asks for the diagnostic: a request with an alert for the team, no WhatsApp.
+    const pedido = {
+      nome: 'Barbearia do Teste', telefone: '11912345678', cidade: 'Campinas, SP', preferencia_contato: 'WhatsApp', aceite_whatsapp: false,
+      necessidade: 'Pediu o diagnóstico grátis pelo site.', chave_idempotencia: `site-${unico()}`, site_url: '',
+      extras: { ramo: 'Serviços (ar-condicionado, limpeza, reforma…)', dor: 'Perco ligação quando estou atendendo', volume: 'De 10 a 50', quem_responde: 'Eu mesmo', presenca: '@barbeariateste' },
+    };
+    const r = await receberPedido(g, pedido, { origem: 'api', ipHash: `ip-${unico()}` });
+    expect('descartado' in r).toBe(false);
+    const n = await um<{ titulo: string; tipo: string }>(`select titulo, tipo from notificacoes where empresa_id = $1 order by criado_em desc limit 1`, [e.empresa.id]);
+    expect(n).toMatchObject({ titulo: 'Novo pedido: Barbearia do Teste (Campinas, SP) pediu orçamento', tipo: 'tarefa:atender_pedido' });
+    expect(await um('select 1 from consentimentos where empresa_id = $1', [e.empresa.id])).toBeNull();
+    expect(await um(`select 1 from trabalhos where empresa_id = $1 and tipo = 'confirmacao_pedido'`, [e.empresa.id])).toBeNull();
+
+    // The team edits the knowledge and the data retention; the next builds keep it.
+    await q('insert into conhecimento (empresa_id, versao, dados) values ($1, 3, $2)', [e.empresa.id, JSON.stringify({ ...CONHECIMENTO_GROWLIFT, horarios: 'Seg a sex, 9h às 18h' })]);
+    await q(`update empresas set config = jsonb_set(config, '{dados,guarda_meses}', '24') where id = $1`, [e.empresa.id]);
+    expect(await atualizarGrowlift()).toBe('growlift: nada a atualizar');
+    expect((await empresaPorId(e.empresa.id))!.config.dados.guarda_meses).toBe(24);
+    expect((await um<{ n: number }>('select count(*)::int as n from conhecimento where empresa_id = $1', [e.empresa.id]))!.n).toBe(3);
+    await q(`${aposentar} where id = $1`, [e.empresa.id]);
   });
 });

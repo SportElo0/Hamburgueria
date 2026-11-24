@@ -285,6 +285,7 @@ export default async function Configuracoes() {
           <div><label className="rotulo" htmlFor="cnpj">CNPJ</label><input className="campo" id="cnpj" name="cnpj" inputMode="numeric" defaultValue={c.site.cnpj} /></div>
           <div className="sm:col-span-2"><label className="rotulo" htmlFor="responsavel_dados">Quem responde por pedidos sobre dados pessoais (nome e contato)</label><input className="campo" id="responsavel_dados" name="responsavel_dados" defaultValue={c.site.responsavel_dados} /></div>
           <div className="sm:col-span-2"><label className="rotulo" htmlFor="privacidade">Política de privacidade (texto da empresa)</label><textarea className="campo" id="privacidade" name="privacidade" rows={6} defaultValue={c.site.privacidade} /><p className="mt-1 text-sm text-suave">A plataforma mostra o texto que a empresa escrever. Ela não garante adequação à lei: peça a revisão de um advogado.</p></div>
+          <div className="sm:col-span-2"><label className="rotulo" htmlFor="link_privacidade">Ou o endereço da política no site da empresa (opcional)</label><input className="campo" id="link_privacidade" name="link_privacidade" type="url" placeholder="https://" defaultValue={c.site.link_privacidade} /><p className="mt-1 text-sm text-suave">Se preencher, o chat e o formulário instalados no site da empresa levam para esta página. Ela precisa falar do chat e do formulário.</p></div>
           <div className="sm:col-span-2"><Enviar>Salvar site</Enviar></div>
         </Formulario>
       </Secao>

@@ -95,6 +95,8 @@ export const ConfigEmpresa = z.object({
       razao_social: Texto(120),
       cnpj: Texto(20),
       privacidade: Texto(6000),
+      /** The company's own privacy policy (https), linked by the chat and the forms instead of the page made here. */
+      link_privacidade: z.string().trim().max(300).regex(/^(https:\/\/[^\s"'<>]+)?$/, 'Use um endereço que comece com https://').default(''),
     })
     .prefault({}),
   regras: z

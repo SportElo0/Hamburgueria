@@ -45,7 +45,7 @@ describe('limpeza automática', () => {
     expect(await existe(outra.contatoId)).toBe(1); // company with retention off
     // only the count goes to the history
     const ev = await q<{ dados: { contatos: number } }>(`select dados from eventos where empresa_id = $1 and tipo = 'limpeza_automatica'`, [A.empresa.id]);
-    expect(ev.at(-1)!.dados).toEqual({ contatos: 1, meses: 12 });
+    expect(ev.at(-1)!.dados).toEqual({ contatos: 1, conversas: 0, meses: 12 });
   });
 
   it('roda no máximo uma vez a cada 20 horas', async () => {
@@ -56,5 +56,19 @@ describe('limpeza automática', () => {
     expect(await existe(p.contatoId)).toBe(1);
     await limparDadosAntigos(true);
     expect(await existe(p.contatoId)).toBe(0);
+  });
+
+  it('apaga, no mesmo prazo, as conversas do chat do site em que ninguém deixou contato', async () => {
+    const nova = async (meses: number) =>
+      (await q<{ id: string }>(`insert into conversas (empresa_id, canal, atualizado_em) values ($1, 'site', now() - make_interval(months => $2)) returning id`, [A.empresa.id, meses]))[0].id;
+    const velha = await nova(13);
+    const recente = await nova(2);
+    await q(`insert into mensagens (empresa_id, conversa_id, direcao, autor, corpo, estado) values ($1, $2, 'entrada', 'contato', 'Quanto custa?', 'recebida')`, [A.empresa.id, velha]);
+    const deB = (await q<{ id: string }>(`insert into conversas (empresa_id, canal, atualizado_em) values ($1, 'site', now() - interval '60 months') returning id`, [B.empresa.id]))[0].id;
+    await limparDadosAntigos(true);
+    expect(await contar('conversas where id = $1', [velha])).toBe(0);
+    expect(await contar('mensagens where conversa_id = $1', [velha])).toBe(0);
+    expect(await contar('conversas where id = $1', [recente])).toBe(1);
+    expect(await contar('conversas where id = $1', [deB])).toBe(1); // company with retention off
   });
 });

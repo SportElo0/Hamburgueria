@@ -2,6 +2,7 @@
  * Growlift Comercial: chat button for any site.
  * <script src="https://<plataforma>/chat.js" data-chave="pk_..." async></script>
  * Optional: data-texto="Fale com a gente" data-cor="#175cd3".
+ * The button has id="growlift-chat-botao", so the site can move it (e.g. above its own fixed bar) with CSS and !important.
  * The chat opens in an iframe from the platform: nothing of the site is read, and the site's styles do not affect it.
  */
 (function () {
@@ -27,6 +28,7 @@
     if (!quadro) {
       quadro = document.createElement('iframe');
       quadro.src = base + '/incorporar/' + encodeURIComponent(chave) + '/chat';
+      quadro.id = 'growlift-chat-quadro';
       quadro.title = 'Chat de atendimento';
       quadro.setAttribute('allow', 'clipboard-write');
       document.body.appendChild(quadro);
@@ -42,6 +44,7 @@
   }
 
   var botao = document.createElement('button');
+  botao.id = 'growlift-chat-botao';
   botao.type = 'button';
   botao.textContent = texto;
   botao.setAttribute('aria-label', texto);

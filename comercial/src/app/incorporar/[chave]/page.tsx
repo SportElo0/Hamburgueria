@@ -13,7 +13,7 @@ export default async function Incorporar({ params }: { params: Promise<{ chave: 
   return (
     <main className="bg-white p-4">
       {empresa.demonstracao && <p className="mb-3 rounded-md bg-alerta-clara px-3 py-1.5 text-[13px] text-alerta">Formulário de demonstração · empresa fictícia</p>}
-      <FormularioPedido chave={empresa.chave_publica} empresa={empresa.nome} campos={empresa.config.campos} textoConsentimento={TEXTO_CONSENTIMENTO_WHATSAPP(empresa.nome)} linkPrivacidade={`${base}/s/${empresa.slug}/privacidade`} origem="formulario_incorporado" />
+      <FormularioPedido chave={empresa.chave_publica} empresa={empresa.nome} campos={empresa.config.campos} textoConsentimento={TEXTO_CONSENTIMENTO_WHATSAPP(empresa.nome)} linkPrivacidade={empresa.config.site.link_privacidade || `${base}/s/${empresa.slug}/privacidade`} origem="formulario_incorporado" />
     </main>
   );
 }

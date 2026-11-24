@@ -166,6 +166,16 @@ Um segmento novo é uma entrada em `SEGMENTOS` (`src/server/config.ts`) com as p
 
 Respostas: `201` (salvo; `repetido: true` se o mesmo envio já tinha chegado), `422` com `campos` dizendo o que corrigir, `429` quando há envios demais. A chave pública só identifica a empresa; não dá acesso a dados. Só marque `aceite_whatsapp` se a pessoa viu e aceitou o texto de autorização. Proteções: validação no servidor, limite por endereço e por empresa, campo-isca contra robôs e a chave de idempotência.
 
+**Política de privacidade da própria empresa**: em Configurações › Site, o campo "endereço da política no site da empresa" (só `https://`) faz o chat e o formulário instalados no site dela levarem para essa página, em vez da página gerada aqui. A página precisa falar do chat e do formulário.
+
+### growlift.com.br (a Growlift como primeira cliente, 24/11/2026)
+
+- **Chat:** `growlift/index.html` e as páginas de ramo carregam `https://growlift-sistema.vercel.app/chat.js` com a chave fixa `pk_growlift_site`. O botão "Tirar dúvidas" é um vidro escuro (CSS em `growlift/styles.css`, `#growlift-chat-botao`) e sobe acima da barra azul do celular quando ela aparece (`body.cta-on`).
+- **Formulário de diagnóstico:** continua indo para o painel antigo (lista de Diagnósticos e aviso no Telegram) e também vai para `POST /api/publico/pedidos` do sistema: nome do negócio, WhatsApp, cidade (campo novo, obrigatório), respostas como campos (`ramo`, `dor`, `volume`, `quem_responde`, `presenca`) e as UTMs. Vira "Novo pedido" com aviso no painel e no app do celular. Vai com `aceite_whatsapp: false`: o texto do site autoriza só o envio do diagnóstico e do plano, então ninguém recebe mensagem automática; o Lucas ou o Antônio respondem.
+- **Empresa Growlift no banco:** `atualizarGrowlift()` (`src/server/primeiro-acesso.ts`) roda no fim de cada `npm run migrar`. Sempre garante a chave `pk_growlift_site`; uma vez só, enquanto a empresa está como foi criada, aplica as perguntas do diagnóstico, os dados da empresa, a guarda de 12 meses (a da política do site) e o conhecimento completo (`CONHECIMENTO_GROWLIFT`: tudo o que o site e os termos dizem, sem preço). Depois disso, o que a equipe mudar no painel fica.
+- **CSP do site** (`growlift/vercel.json`): `script-src`, `frame-src` e `connect-src` liberam `https://growlift-sistema.vercel.app`.
+- **Sem a chave da Anthropic** (`IA_ANTHROPIC_API_KEY` na Vercel, projeto growlift-sistema), o chat responde que vai chamar a equipe e a conversa aparece no Atendimento. Com a chave, a assistente responde com o conhecimento.
+
 ## Enviar orçamento por modelo aprovado (equipe)
 
 Quem pediu pelo site e autorizou o WhatsApp, mas nunca escreveu no WhatsApp, só pode receber mensagem da empresa por um **modelo aprovado pela Meta**. A equipe faz isso pelo painel:
@@ -200,7 +210,7 @@ Menu **Anúncios** (administrador): pedidos do mês separados pelo anúncio que 
 
 ## Limpeza automática de dados
 
-Configurações › Dados: prazo em meses (padrão 24; 0 = nunca). Uma vez por dia, junto com as outras rotinas, o sistema apaga contatos que nunca fecharam negócio e não tiveram pedido, conversa, ligação nem visita nesse período, com tudo o que é deles (oportunidades, conversas, autorizações, ligações, visitas, histórico). Clientes (venda ganha) e quem tem visita marcada não são apagados. O histórico da empresa registra só quantos foram apagados. A página de privacidade mostra o prazo. Também limpa sobras técnicas (contadores, avisos da Meta com mais de 30 dias, trabalhos e avisos lidos com mais de 180 dias).
+Configurações › Dados: prazo em meses (padrão 24; 0 = nunca). Uma vez por dia, junto com as outras rotinas, o sistema apaga contatos que nunca fecharam negócio e não tiveram pedido, conversa, ligação nem visita nesse período, com tudo o que é deles (oportunidades, conversas, autorizações, ligações, visitas, histórico). Clientes (venda ganha) e quem tem visita marcada não são apagados. Conversas do chat do site em que ninguém deixou contato também são apagadas depois do mesmo prazo sem movimento. O histórico da empresa registra só quantos foram apagados. A página de privacidade mostra o prazo. Também limpa sobras técnicas (contadores, avisos da Meta com mais de 30 dias, trabalhos e avisos lidos com mais de 180 dias).
 
 ## Agenda de visitas
 
