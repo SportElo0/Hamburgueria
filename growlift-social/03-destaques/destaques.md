@@ -38,16 +38,16 @@ Os quatro modelos são fictícios e estão identificados como tal. Os sites feit
 
 ## 2 · Serviços (7 stories, novos em 24/11/2026)
 
-O que a Growlift faz, uma frase por story (fundo escuro e azul neon, igual à parte nova do site). A abertura e o fechamento têm a marca em 3D; do 02 ao 06, cada story mostra uma tela de verdade do sistema (painel e demonstração com empresas fictícias: Lumivale e Pousada Maré Calma), marcada "demonstração, dados fictícios". As telas ficam em `_fonte/assets/stories/servicos/`.
+O que a Growlift faz, uma frase por story (fundo escuro e azul neon, igual à parte nova do site). A abertura e o fechamento têm a marca em 3D; do 02 ao 06, no mesmo formato dos stories antigos (selo, título, imagem e 3 checks), cada um numa cor e com uma tela de verdade do sistema (painel e demonstração com empresas fictícias: Lumivale e Pousada Maré Calma), marcada "demonstração, dados fictícios". As telas ficam em `_fonte/assets/stories/servicos/`.
 
 | Arquivo | O que mostra |
 | --- | --- |
 | 01 | Abertura: "O que a Growlift faz, em poucas palavras." |
-| 02 | O cliente chama: pelo WhatsApp, por ligação ou pelo site |
-| 03 | A IA responde na hora: de dia e de noite, com os seus preços e horários |
-| 04 | Ligação perdida não fica sem resposta: mensagem no WhatsApp só se o cliente aceitar, e a tarefa de ligar de volta |
-| 05 | Quem sumiu é lembrado: retomada do orçamento, só para quem autorizou |
-| 06 | Você acompanha até o pagamento |
+| 02 | Todas as conversas (azul): tela de Atendimento do painel |
+| 03 | Resposta na hora (verde-água): chat do site respondendo às 23h12 |
+| 04 | Ninguém atendeu? (roxo): o "aperte 1" que quem ligou ouve |
+| 05 | Quem sumiu volta (laranja): quadro de pedidos e retomada |
+| 06 | Tudo no seu celular (verde): avisos do painel |
 | 07 | "Tudo isso num sistema só, montado para o seu negócio.", com o lugar do link para o diagnóstico grátis |
 
 Só entra o que o sistema já faz. Sem preço, sem cliente, sem número de resultado. **Antes de postar, apaguem do destaque os 6 stories antigos** (planos Start, Grow e Lift), que falam de uma oferta que não é mais a principal.

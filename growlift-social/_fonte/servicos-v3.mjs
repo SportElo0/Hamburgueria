@@ -6,7 +6,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright-core';
-import { linkSlot } from './pecas.mjs';
+import { linkSlot, storyServiceV2 } from './pecas.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(HERE, '../03-destaques/2-servicos');
@@ -77,19 +77,34 @@ const MARCA = '<svg viewBox="50 40 530 415"><path fill="#2f7dff" d="M280 48H410L
 const page = (n, body) => `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>${CSS}</style></head><body>
 <div class="mark" style="background-image:url(${frame(QUADROS[n])})"></div><div class="fade"></div>${body}</body></html>`;
 const pageTela = (body) => `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>${CSS}</style></head><body><div style="position:absolute;left:-200px;top:200px;width:1480px;height:900px;background:radial-gradient(closest-side,rgba(47,125,255,.28),transparent)"></div>${body}</body></html>`;
+// Do 02 ao 06: como os stories antigos (selo, título, imagem e 3 checks), cada um numa cor.
+const SERVICOS = [
+  { chip: 'Atendimento', titulo: 'Todas as conversas', lead: 'WhatsApp, site e ligações num lugar só.', cor: '#0865fe',
+    tela: 'atendimento.png', tipo: 'tela', itens: ['Ninguém fica sem resposta', 'Você vê quem a IA atende e quem espera', 'A equipe toda no mesmo painel'] },
+  { chip: 'Atendente de IA', titulo: 'Resposta na hora', lead: 'De dia e de noite, com os seus preços.', cor: '#00b3a4',
+    tela: 'site-ia.png', tipo: 'cel', itens: ['Faz orçamento e marca na agenda', 'Entende áudio', 'Chama a equipe quando precisa'] },
+  { chip: 'Ligação perdida', titulo: 'Ninguém atendeu?', lead: 'A ligação vira conversa no WhatsApp.', cor: '#7c4dff',
+    tela: 'ligacao.png', tipo: 'cel', itens: ['Só para quem apertou 1', 'Você ganha a tarefa de retornar', 'Aviso no celular na hora'] },
+  { chip: 'Retomada', titulo: 'Quem sumiu volta', lead: 'Mandou o orçamento e ele sumiu?', cor: '#ff7a3d',
+    tela: 'retomada.png', tipo: 'tela', itens: ['Mensagem só para quem autorizou', 'Para quando ele responde', 'Cada pedido num quadro, até o ganho'] },
+  { chip: 'Avisos e vendas', titulo: 'Tudo no seu celular', lead: 'Cada pedido acompanhado até o pagamento.', cor: '#16c172',
+    tela: 'avisos.png', tipo: 'tela', itens: ['Aviso de pedido novo e de ligação', 'Resumo do dia', 'Relatório do que foi pago'] },
+];
+const fundo = (cor) => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="180"><defs><radialGradient id="g" cx="30%" cy="35%" r="70%"><stop offset="0" stop-color="${cor}"/><stop offset="1" stop-color="#06080d"/></radialGradient></defs><rect width="100" height="180" fill="url(#g)"/></svg>`);
+const etiqueta = '<span style="position:absolute;left:24px;top:24px;z-index:3;font-size:24px;font-weight:600;color:#e8eefa;background:rgba(6,8,13,.75);border:1.5px solid rgba(255,255,255,.2);padding:8px 18px;border-radius:999px">Demonstração · dados fictícios</span>';
+const tela = (sv) => sv.tipo === 'cel'
+  ? `<div style="position:absolute;inset:0;display:flex;justify-content:center"><div style="position:relative;width:440px;max-height:680px;align-self:flex-start;border-radius:52px;overflow:hidden;border:3px solid rgba(255,255,255,.25);box-shadow:0 50px 100px -30px rgba(0,0,0,.9),0 0 80px -20px ${sv.cor}"><img src="${shot(sv.tela)}" style="display:block;width:100%"></div></div>${etiqueta}`
+  : `<div style="position:absolute;inset:0;border-radius:34px;overflow:hidden;background:#fff;border:1.5px solid rgba(255,255,255,.2);box-shadow:0 60px 120px -40px rgba(0,0,0,.95),0 0 90px -30px ${sv.cor};display:flex;align-items:flex-start;padding-top:72px"><img src="${shot(sv.tela)}" style="display:block;width:100%"></div>${etiqueta}`;
 const track = (k) => `<div class="track">${ITENS.map((_, i) => `<i class="${i < k ? 'on' : ''}"></i>`).join('')}</div>`;
 
 const stories = [
   page(0, `<div class="copy"><h1>O que a<br>Growlift faz,<br><em>em poucas palavras.</em></h1>
     <p class="sub">5 coisas que o sistema faz pelo seu negócio. Toque para ver.</p></div>
     <div class="brand">${MARCA}GROWLIFT</div>`),
-  ...ITENS.map(([ic, t, s], i) => {
-    const tela = TELAS[i];
-    return pageTela(`<div class="top"><div class="label">O que a Growlift faz · ${i + 1} de 5</div>${track(i + 1)}</div>
-    <div class="shotwrap"><div class="shotbox ${tela.tipo}" style="width:${tela.w}px"><img src="${shot(tela.f)}"></div>
-    <p class="demo"><b>${tela.nota}</b> · demonstração, dados fictícios</p></div>
-    <div class="copy low"><h1>${t}</h1><p class="sub">${s}</p></div>`);
-  }),
+  ...SERVICOS.map((sv, i) => storyServiceV2({
+    index: `${i + 1}/5`, plan: sv.chip, title: sv.titulo, lead: sv.lead, items: sv.itens, bg: fundo(sv.cor),
+    visual: tela(sv),
+  }).replace('<head>', `<head><base href="${pathToFileURL(path.join(HERE, 'assets') + '/').href}">`)),
   page(6, `<div class="top"><div class="label">O que a Growlift faz</div>${track(5)}</div>
     <div class="copy" style="bottom:640px"><h1 style="font-size:104px">Tudo isso num sistema só,<br><em>montado para o seu negócio.</em></h1></div>
     ${linkSlot('Toque no link e peça o diagnóstico grátis', 1330)}`),
