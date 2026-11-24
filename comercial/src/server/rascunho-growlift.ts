@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { z } from 'zod';
-import { registrar } from './contexto';
+import { dentroDoLimite, registrar } from './contexto';
 import { pool, q, um } from './db';
 import type { Resultado, Trabalho } from './fila';
 import { modeloPadrao } from './ia';
@@ -69,7 +69,7 @@ function chamador(): Chamar | null {
   return async (sistema, usuario) => {
     const r = await client.messages.parse({
       model: modeloPadrao(),
-      max_tokens: 4000,
+      max_tokens: 1500,
       output_config: { effort: 'low', format: zodOutputFormat(RascunhoSaida) },
       system: sistema,
       messages: [{ role: 'user', content: usuario }],
@@ -80,6 +80,12 @@ function chamador(): Chamar | null {
 }
 
 const limpar = (s: string, max: number) => s.replace(/[<>]/g, '').replace(/\s+\n/g, '\n').trim().slice(0, max);
+/** What the visitant typed may carry a phone or an e-mail: never sent to the model. */
+const semContato = (s: string) => s.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[removido]').replace(/\+?\d[\d\s().-]{6,}\d/g, '[removido]');
+/** The visitor's text could steer the draft: no links in what the team may copy and send. */
+const semLink = (s: string) => s.replace(/\b(?:https?:\/\/|www\.)\S+/gi, '[link removido]').replace(/\b[\w-]+(?:\.[\w-]+)*\.(?:com|net|org|br|io|app|me|site|xyz|info|link|ly)(?:\/\S*)?/gi, '[link removido]');
+/** At most this many drafts per day: a robot sending requests cannot run up the AI bill. */
+const RASCUNHOS_POR_DIA = 60;
 
 /** Job "rascunho_pedido": scheduled by receberPedido for the Growlift company only. */
 export async function gerarRascunhoPedido(t: Trabalho): Promise<Resultado> {
@@ -91,23 +97,24 @@ export async function gerarRascunhoPedido(t: Trabalho): Promise<Resultado> {
     [t.empresa_id, t.oportunidade_id],
   );
   if (!o || o.slug !== SLUG_GROWLIFT) return { tipo: 'cancelado', motivo: 'Pedido não é da Growlift.' };
+  if (!(await dentroDoLimite(`rascunho:${t.empresa_id}`, RASCUNHOS_POR_DIA, 86400))) return { tipo: 'cancelado', motivo: 'Limite diário de rascunhos da IA atingido.' };
   const d = o.dados ?? {};
   const entrada: EntradaRascunho = {
     ramo: limpar(String(d.ramo ?? ''), 80),
     cidade: limpar(o.cidade, 80),
-    dores: limpar(String(d.dor ?? ''), 300),
-    pedido: limpar(o.necessidade, 1000),
+    dores: semContato(limpar(String(d.dor ?? ''), 300)),
+    pedido: semContato(limpar(o.necessidade, 1000)),
   };
   const usuario = `<pedido>\nRamo: ${entrada.ramo || 'não informado'}\nCidade: ${entrada.cidade}\nO que mais atrapalha: ${entrada.dores || 'não informado'}\nO que escreveu ou escolheu: ${entrada.pedido}\n</pedido>`;
   const r = await chamar(SISTEMA, usuario);
   if (!r) return { tipo: 'cancelado', motivo: 'A IA não devolveu o rascunho.' };
   const solucoes = [...new Set(r.solucoes)].filter((s) => s in CATALOGO_GROWLIFT).slice(0, 5);
   const nomeEmpresa = limpar(o.nome, 80) || 'a sua empresa';
-  const mensagem = limpar(r.mensagem, 900).replaceAll('[empresa]', nomeEmpresa);
+  const mensagem = semLink(limpar(r.mensagem, 900)).replaceAll('[empresa]', nomeEmpresa);
   const texto = [
-    `Resumo da IA: ${limpar(r.resumo, 500)}`,
+    `Resumo da IA: ${semLink(limpar(r.resumo, 500))}`,
     solucoes.length ? `Sugestões: ${solucoes.map((s) => CATALOGO_GROWLIFT[s].split(':')[0]).join('; ')}` : '',
-    `Rascunho da primeira mensagem (confira, troque [seu nome] e mande do seu WhatsApp):\n${mensagem}`,
+    `Rascunho da primeira mensagem (confira, troque [seu nome] e mande do seu WhatsApp; o texto do visitante pode ter influenciado o rascunho):\n${mensagem}`,
   ].filter(Boolean).join('\n\n');
   await q(`update tarefas set detalhe = trim(both from detalhe || E'\\n\\n' || $3) where empresa_id = $1 and chave = $2`, [t.empresa_id, `atender:${t.oportunidade_id}`, texto]);
   await registrar(pool(), t.empresa_id, { oportunidadeId: t.oportunidade_id, ator: { tipo: 'ia' }, tipo: 'rascunho_ia', dados: { solucoes } });

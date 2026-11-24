@@ -38,7 +38,7 @@ export default async function Tarefas({ searchParams }: { searchParams: Promise<
                   <input type="hidden" name="id" value={t.id} />
                   <div className="min-w-0 flex-1">
                     {link ? <Link href={link} className="font-semibold text-tinta underline">{t.titulo}</Link> : <span className="font-semibold text-tinta">{t.titulo}</span>}
-                    {t.detalhe && <p className="text-sm">{t.detalhe}</p>}
+                    {t.detalhe && <p className="whitespace-pre-wrap text-sm">{t.detalhe}</p>}
                     <p className="mt-0.5 flex flex-wrap gap-x-3 text-[13px] text-suave">
                       <span className={vencida ? 'font-bold text-erro' : ''}>{t.concluida_em ? `Concluída em ${dataHora(t.concluida_em)}` : `Prazo: ${dataHora(t.prazo)}${vencida ? ' (vencida)' : ''}`}</span>
                       <span>{t.responsavel_nome ?? 'Sem responsável'}</span>

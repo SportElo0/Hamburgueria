@@ -83,7 +83,7 @@ describe('primeiro acesso a um banco de produção novo', () => {
     let enviado = '';
     usarRascunhoDeTeste(async (_s, u) => {
       enviado = u;
-      return { resumo: 'Climatização em Campinas que perde ligação no serviço.', solucoes: ['ligacao', 'aviso', 'inventado' as 'ia'], mensagem: 'Oi! Aqui é o [seu nome], da Growlift. Recebi o diagnóstico da [empresa].' };
+      return { resumo: 'Climatização em Campinas que perde ligação no serviço.', solucoes: ['ligacao', 'aviso', 'inventado' as 'ia'], mensagem: 'Oi! Aqui é o [seu nome], da Growlift. Recebi o diagnóstico da [empresa]. Veja em https://golpe.example/x ou golpe.com.br.' };
     });
     expect((await rodar()).tipo).toBe('concluido');
     usarRascunhoDeTeste(null);
@@ -95,6 +95,8 @@ describe('primeiro acesso a um banco de produção novo', () => {
     expect(det).toContain('Sugestões: Ligação perdida vira conversa; Aviso no celular');
     expect(det).toContain('Recebi o diagnóstico da Barbearia do Teste.');
     expect(det).not.toContain('inventado');
+    expect(det).not.toMatch(/golpe/);
+    expect(det).toContain('[link removido]');
 
     // The team edits the knowledge and shortens the retention; the next builds keep it.
     await q('insert into conhecimento (empresa_id, versao, dados) values ($1, 3, $2)', [e.empresa.id, JSON.stringify({ ...CONHECIMENTO_GROWLIFT, horarios: 'Seg a sex, 9h às 18h' })]);
