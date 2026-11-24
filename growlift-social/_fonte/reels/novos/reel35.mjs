@@ -4,7 +4,7 @@
 // Tudo de exemplo é fictício e marcado. Sem narração: texto na tela; a música entra no app na hora de postar.
 import { page, comentaBlock } from './base.mjs';
 
-export const DURATION = 43.0;
+export const DURATION = 55.0;
 export const COVER = 4.5;
 
 const css = `
@@ -184,10 +184,15 @@ ${comentaBlock('Quer o passo a passo para instalar e testar?', 'IA', 'dark', 430
 `;
 
 const Q = 'Qual a melhor oficina mecânica em Campinas?';
+// A narração (voz Andre, 52,4 s) manda no ritmo: cada cena é esticada para o trecho da fala que a explica.
+// Pontos [tempo do vídeo, tempo das cenas]: o desenho das cenas segue o tempo antigo, esticado por partes.
 const script = `
 window.MOTION=2;
 const Q=${JSON.stringify(Q)};
-window.draw=(t)=>{
+const MAPA=[[0,0],[5.5,6.2],[11.3,9.6],[17.8,16.4],[24.6,21.6],[30.5,26.0],[36.0,30.4],[42.1,35.2],[49.0,39.5],[55.0,43.0]];
+const remap=(t)=>{for(let i=1;i<MAPA.length;i++){if(t<=MAPA[i][0]){const [a,b]=MAPA[i-1],[c,d]=MAPA[i];return b+(d-b)*(t-a)/(c-a);}}return MAPA[MAPA.length-1][1];};
+window.draw=(t0)=>{
+  const t=remap(t0);
   show('ep',t,-1,39.5,{dy:0});
   // 0. gancho: a pergunta na tela e sendo digitada já no primeiro quadro
   show('hook',t,-1,6.2,{dy:0});

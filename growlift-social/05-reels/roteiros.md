@@ -666,7 +666,7 @@ Reel "Skill da Semana, episódio 2": uma página de caderno com o caixa de novem
 ```
 
 ## 35. Você aparece no ChatGPT? (Skill da Semana, ep. 03)
-- **Formato:** aula curta em 43 s, sem narração (texto na tela o tempo todo; a música em alta entra no app na hora de postar, por isso o arquivo é o `-mudo`). Capa: o quadro de 4,5 s (a pergunta, a resposta com três oficinas fictícias e "E a sua, aparece?").
+- **Formato:** aula curta em 55 s, **com narração** (voz "Andre", ElevenLabs no Higgsfield, 2,25 créditos em 24/11; `_fonte/reels/narracao-35-eleven.mp3`, 52,4 s; as cenas foram esticadas para o trecho da fala que as explica). Texto na tela o tempo todo. Também há a versão `-mudo` (sem voz) para postar com música em alta. Capa: o quadro de 4,5 s (a pergunta, a resposta com três oficinas fictícias e "E a sua, aparece?").
 - **Gancho no primeiro quadro:** "Pergunta pro ChatGPT quem é o melhor do seu ramo na sua cidade. Você aparece?", com a pergunta sendo digitada numa tela de chat genérica (não imita a tela de nenhuma IA) e a resposta citando três oficinas fictícias (Oficina Jacarandá Azul, Auto Mecânica Vento Sul, Garagem Sete Ipês).
 - **O valor (o que quase ninguém sabe):**
   1. Não existe "o robô da IA": são três (treino `GPTBot`, busca `OAI-SearchBot`, na hora `ChatGPT-User`). Bloquear o errado no robots.txt pode tirar o site das respostas. E bloquear o `Google-Extended` não tira do resumo de IA do Google (ele vale para o treino do Gemini). Fontes: [OpenAI, Overview of OpenAI Crawlers](https://developers.openai.com/api/docs/bots) e [Google, web publisher controls](https://blog.google/technology/ai/an-update-on-web-publisher-controls/).
