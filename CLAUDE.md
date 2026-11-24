@@ -11,8 +11,8 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 | --- | --- | --- |
 | `growlift/` | Site da Growlift (HTML estático) | Vercel `prj_6Bem4OwJHw2dAY96xpcLyZCbUbZt` (domínio growlift.com.br) |
 | `plataforma/` | Painel das lojas (Next.js) + aba Conteúdos | Vercel `prj_RtyR3H3YbwXdXkv9s08IhAQszQvK` |
-| `elpatron/` | Site do El Patron | Vercel `prj_XMxV4MsDwttCRq96OWsYhcM0AtQc` |
-| `src/` (raiz) | Site do Downtown Burger | Vercel `prj_nyFCGwrqD9IQayLYrweIi5Rg6JEz` |
+| `elpatron/` | Site do El Patron | Vercel `prj_XMxV4MsDwttCRq96OWsYhcM0AtQc` (pausado desde 24/11/2026, não é cliente; para voltar, despausar o projeto) |
+| `src/` (raiz) | Site do Downtown Burger | Vercel `prj_nyFCGwrqD9IQayLYrweIi5Rg6JEz` (pausado desde 24/11/2026, não é cliente; para voltar, despausar o projeto) |
 | `pousada/` | Pousada Villa Verano | Vercel (`pousada-villa-verano` ou `villa-verano`: confirme no projeto antes) |
 | `bacchi/` | Site e catálogo da Bacchi (Next.js), versão de teste | Vercel `prj_UVUjMXxWuY4y3p8k0hGGgWhsuPJm` (bacchi-teste.vercel.app, fora do Google; ver `bacchi/README.md`) |
 | `lumivale/` | Lumivale Energia Solar, site conceito (empresa fictícia) do portfólio, HTML + GSAP | Vercel `prj_fNpaVGA4Mg240asPTrD0gbHjCgzK` (lumivale-conceito.vercel.app, fora do Google; ver `lumivale/README.md`) |

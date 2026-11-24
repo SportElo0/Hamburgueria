@@ -10,8 +10,8 @@ Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` est
 
 | Pasta | O que é | No ar |
 | --- | --- | --- |
-| `src/` (raiz) | Site do Downtown Burger (Next.js, exportação estática) | https://downtown-burger-gilt.vercel.app/ |
-| `elpatron/` | Site do El Patron Burger (Osasco), preto e dourado, história em 3D, pedidos próprios | https://el-patron-burger.vercel.app/ |
+| `src/` (raiz) | Site do Downtown Burger (Next.js, exportação estática) | https://downtown-burger-gilt.vercel.app/ (pausado em 24/11/2026: não é cliente) |
+| `elpatron/` | Site do El Patron Burger (Osasco), preto e dourado, história em 3D, pedidos próprios | https://el-patron-burger.vercel.app/ (pausado em 24/11/2026: não é cliente) |
 | `plataforma/` | Painel das lojas: cardápio, pedidos online, tela da loja, relatório, clientes e campanhas | https://painel-lojas-sportelo.vercel.app/ |
 | `pousada/` | Site da Pousada Villa Verano (aguarda nova referência do cliente para o redesenho) | ver no Vercel |
 | `growlift/` | Site da Growlift (HTML estático), no ar desde 26/10/2026 | https://growlift.com.br (DNS no Registro.br: endereço do site = `216.198.79.1`) |
