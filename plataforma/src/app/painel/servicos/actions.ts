@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { randomUUID } from 'node:crypto';
 import { requireUser } from '@/lib/auth';
 import { limparTexto, pareceCpf } from '@/lib/crm';
-import { MAX_RESUMO, MAX_SERVICOS, PASTA_FOTOS, SITUACOES, demoValida, imagemValida, tipoDaImagem, type Servico } from '@/lib/servicos';
+import { MAX_PROBLEMA, MAX_RESUMO, MAX_SERVICOS, PASTA_FOTOS, SITUACOES, demoValida, imagemValida, tipoDaImagem, type Servico } from '@/lib/servicos';
 import { mudarServicos } from '@/lib/servicos-servidor';
 import { gravacaoPermitida, SomenteLeituraError } from '@/lib/ambiente';
 import { storage } from '@/lib/storage';
@@ -16,6 +16,7 @@ const Dados = z.object({
   id: z.string().max(60).optional(),
   nome: z.string().max(200),
   resumo: z.string().max(1000),
+  problema: z.string().max(1000).optional(),
   situacao: z.enum(SITUACOES),
   imagem: z.string().max(200),
   demo: z.string().max(400),
@@ -40,12 +41,13 @@ export async function salvarServicoAction(dados: unknown): Promise<ResultadoServ
   if (!p.success) return { ok: false, error: 'Confira os campos.' };
   const nome = limparTexto(p.data.nome, 80);
   const resumo = limparTexto(p.data.resumo, MAX_RESUMO);
+  const problema = limparTexto(p.data.problema, MAX_PROBLEMA);
   const demo = p.data.demo.trim();
   if (!nome) return { ok: false, error: 'Escreva o nome do serviço.' };
-  if (pareceCpf(nome) || pareceCpf(resumo)) return { ok: false, error: 'Não salve CPF aqui.' };
+  if (pareceCpf(nome) || pareceCpf(resumo) || pareceCpf(problema)) return { ok: false, error: 'Não salve CPF aqui.' };
   if (!imagemValida(p.data.imagem)) return { ok: false, error: 'Foto inválida. Envie a foto de novo.' };
   if (!demoValida(demo)) return { ok: false, error: 'O link da demonstração precisa começar com https://' };
-  const campos = { nome, resumo, situacao: p.data.situacao, imagem: p.data.imagem, demo };
+  const campos = { nome, resumo, problema, situacao: p.data.situacao, imagem: p.data.imagem, demo };
   return rodar((l, agora) => {
     if (p.data.id) {
       const s = l.find((x) => x.id === p.data.id);
