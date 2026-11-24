@@ -125,6 +125,7 @@ Oi! Aqui é da Growlift 👋 Valeu por comentar IA.
 
 Aqui está a skill "ai-seo", criada pelo Corey Haines, gratuita no GitHub (a Growlift não é afiliada a ele nem à Anthropic):
 https://github.com/coreyhaines31/marketingskills/releases/download/v2.14.28/ai-seo-claude-web.zip
+Confira o arquivo na página do autor antes de instalar; a Growlift não hospeda nem altera o arquivo.
 
 Como instalar (sua conta do Claude precisa permitir skills e execução de código; hoje isso depende do plano):
 1) Baixe o arquivo pelo link.

@@ -4,7 +4,7 @@
 // Tudo de exemplo é fictício e marcado. Sem narração: texto na tela; a música entra no app na hora de postar.
 import { page, comentaBlock } from './base.mjs';
 
-export const DURATION = 41.0;
+export const DURATION = 43.0;
 export const COVER = 4.5;
 
 const css = `
@@ -25,7 +25,7 @@ body{background:#06080d;color:#f3f5f9}
 #ans .it{display:flex;gap:18px;align-items:baseline;margin-top:14px}
 #ans .it span{flex:none;width:52px;height:52px;border-radius:50%;background:#1f2a3d;display:grid;place-items:center;font-size:28px;font-weight:900;color:#8db8ff}
 #stamp{position:absolute;right:30px;bottom:-34px;transform:rotate(-6deg);padding:16px 30px;border-radius:18px;background:#ff6b5b;color:#fff;font-size:40px;font-weight:900;letter-spacing:-.01em;box-shadow:0 30px 60px -20px rgba(255,107,91,.7);visibility:hidden}
-#fic{position:absolute;left:70px;right:70px;top:1700px;z-index:25;font-size:26px;color:#8790a6;font-weight:600}
+#fic{position:absolute;left:70px;right:70px;top:1700px;z-index:25;font-size:34px;color:#c6cede;font-weight:700}
 #s1{top:560px;font-size:110px}
 #s1 small{display:block;margin-top:50px;font-size:58px;font-weight:700;letter-spacing:-.02em;line-height:1.25;color:#c6cede}
 .lesson{position:absolute;left:56px;right:56px;top:330px;z-index:30;visibility:hidden}
@@ -59,7 +59,7 @@ body{background:#06080d;color:#f3f5f9}
 #skill h2 code{font:900 68px/1 ui-monospace,Menlo,monospace;color:#4d8dff}
 #rep{margin-top:40px;border-radius:30px;background:#f3f5f9;color:#121826;overflow:hidden;box-shadow:0 60px 120px -50px rgba(8,101,254,.6)}
 #rep .top{display:flex;justify-content:space-between;align-items:center;padding:28px 30px;background:#121826;color:#f3f5f9;font-size:34px;font-weight:800}
-#rep .top span{font-size:22px;color:#8790a6;font-weight:700}
+#rep .top span{font-size:28px;color:#ffd166;font-weight:900}
 .tb{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,.75fr));font-size:34px}
 .tb>div{min-width:0;padding:22px 16px;border-bottom:1.5px solid #dce2ec;display:flex;align-items:center}
 .tb .h{font-size:22px;font-weight:900;letter-spacing:.02em;line-height:1.15;text-align:center;color:#6a7385;text-transform:uppercase}
@@ -93,15 +93,15 @@ const body = `
   <p id="q"><span id="qt"></span><span id="caret"></span></p>
   <div id="ans">
     Aqui estão boas opções em Campinas:
-    <div class="it"><span>1</span><p><b>Auto Center Ipê</b>: avaliações altas e preço no site</p></div>
-    <div class="it"><span>2</span><p><b>Oficina Boa Vista</b>: citada em guias da cidade</p></div>
-    <div class="it"><span>3</span><p><b>Mecânica do Parque</b>: responde rápido</p></div>
+    <div class="it"><span>1</span><p><b>Oficina Jacarandá Azul</b>: avaliações altas e preço no site</p></div>
+    <div class="it"><span>2</span><p><b>Auto Mecânica Vento Sul</b>: citada em guias da cidade</p></div>
+    <div class="it"><span>3</span><p><b>Garagem Sete Ipês</b>: responde rápido</p></div>
   </div>
   <div id="stamp">E a sua, aparece?</div>
 </div>
 <p id="fic">Exemplo ilustrativo, com nomes fictícios.</p>
 
-<p class="say" id="s1">A IA não escolhe pelo anúncio.<small>Ela escolhe quem consegue <b style="color:#fff">ler</b> e <b style="color:#fff">confirmar</b>. Quatro coisas que quase ninguém sabe:</small></p>
+<p class="say" id="s1">Não é sobre anúncio.<small>Em geral, a IA cita quem ela consegue <b style="color:#fff">ler</b> e <b style="color:#fff">confirmar</b>. Quatro coisas que pouca gente sabe:</small></p>
 
 <div class="lesson" id="L1">
   <span class="num">1</span>
@@ -112,7 +112,7 @@ const body = `
     <div class="bot" id="b3"><div><p>Na hora</p><code>ChatGPT-User</code></div><span>abre seu site quando alguém pede</span></div>
   </div>
   <p class="warn" id="w1"><b>Bloquear o robô errado no robots.txt</b> pode tirar seu site das respostas.</p>
-  <p class="note" id="n1">E bloquear o Google-Extended não tira você do resumo de IA do Google: ele vale para o treino do Gemini.</p>
+  <p class="note" id="n1">E bloquear o Google-Extended não tira você da Busca nem do resumo de IA do Google: ele controla o uso para o Gemini.</p>
 </div>
 
 <div class="lesson" id="L2">
@@ -149,11 +149,11 @@ const body = `
 </div>
 
 <div id="skill">
-  <h2>A skill <code>ai-seo</code> faz isso tudo pra você:</h2>
+  <h2>A skill <code>ai-seo</code> te guia nisso tudo:</h2>
   <div id="rep">
     <div class="top">Auditoria de visibilidade em IA<span>EXEMPLO</span></div>
     <div class="tb">
-      <div class="h">Pergunta</div><div class="h hc">ChatGPT</div><div class="h hc">Perplexity</div><div class="h hc">Google IA</div>
+      <div class="h">Pergunta</div><div class="h hc">ChatGPT</div><div class="h hc">Perplexity</div><div class="h hc">IA do Google</div>
       <div id="t1">Melhor oficina em Campinas</div><div class="c n">✗</div><div class="c n">✗</div><div class="c y">✓</div>
       <div id="t2">Troca de embreagem preço</div><div class="c n">✗</div><div class="c y">✓</div><div class="c n">✗</div>
       <div id="t3">Oficina aberta sábado</div><div class="c y">✓</div><div class="c n">✗</div><div class="c n">✗</div>
@@ -165,21 +165,21 @@ const body = `
       <p id="p3"><b>3.</b> Entrar nos guias que a IA já cita</p>
     </div>
   </div>
-  <p id="ex">Exemplo ilustrativo. Ela também mostra por que o concorrente é citado e você não.</p>
+  <p id="ex">Exemplo ilustrativo. Ela ajuda a entender por que o concorrente aparece e você não.</p>
 </div>
 
 <div id="cred">
   <h2>Skill <em>ai-seo</em>, do Corey Haines.</h2>
   <div class="card">
     <div class="li"><b>✓</b>Gratuita no GitHub (licença MIT)</div>
-    <div class="li"><b>✓</b>Funciona no Claude, no plano pago</div>
+    <div class="li"><b>✓</b>Funciona no Claude (depende do plano)</div>
     <div class="li"><b>✓</b>Você pede em português</div>
   </div>
   <p class="nt">Ninguém controla a resposta da IA: a skill mostra o que melhorar, não garante posição. A Growlift não é afiliada ao autor nem à Anthropic.</p>
 </div>
 
 <div id="dim"></div>
-${comentaBlock('Quer o passo a passo para instalar e testar?', 'IA', 'dark', 430)}
+${comentaBlock('Quer o passo a passo para instalar e testar?', 'IA', 'dark', 430, 'Comenta')}
 <p id="save">📌 Salva pra testar no seu negócio<br><span style="font-size:34px;color:#c6cede;font-weight:700">Seguir é opcional: vale pra todo mundo que comentar</span></p>
 `;
 
@@ -188,7 +188,7 @@ const script = `
 window.MOTION=2;
 const Q=${JSON.stringify(Q)};
 window.draw=(t)=>{
-  show('ep',t,-1,38.0,{dy:0});
+  show('ep',t,-1,39.5,{dy:0});
   // 0. gancho: a pergunta na tela e sendo digitada já no primeiro quadro
   show('hook',t,-1,6.2,{dy:0});
   show('chat',t,-1,6.2,{dy:0});
@@ -222,11 +222,11 @@ window.draw=(t)=>{
   ['t1','t2','t3'].forEach((id,i)=>{const k=show(id,t,30.9+i*.3,undefined,{dy:0}); const row=$(id); let c=row.nextElementSibling; for(let j=0;j<3;j++){c.style.opacity=String(k); c=c.nextElementSibling;}});
   ['p1','p2','p3'].forEach((id,i)=>show(id,t,32.2+i*.4,undefined,{dy:14}));
   // 7. créditos
-  show('cred',t,35.2,38.0,{dy:30});
+  show('cred',t,35.2,39.5,{dy:30});
   // 8. fim: comenta IA + salva
-  show('dim',t,38.0,undefined,{dy:0,fi:.4});
-  comenta(t,38.0,38.6,'IA');
-  show('save',t,39.6,undefined,{dy:20});
+  show('dim',t,39.5,undefined,{dy:0,fi:.4});
+  comenta(t,39.5,40.1,'IA');
+  show('save',t,40.1,undefined,{dy:20});
 };
 `;
 

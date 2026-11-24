@@ -666,16 +666,17 @@ Reel "Skill da Semana, episódio 2": uma página de caderno com o caixa de novem
 ```
 
 ## 35. Você aparece no ChatGPT? (Skill da Semana, ep. 03)
-- **Formato:** aula curta em 41 s, sem narração (texto na tela o tempo todo; a música em alta entra no app na hora de postar, por isso o arquivo é o `-mudo`). Capa: o quadro de 4,5 s (a pergunta, a resposta com três oficinas fictícias e "E a sua, aparece?").
-- **Gancho no primeiro quadro:** "Pergunta pro ChatGPT quem é o melhor do seu ramo na sua cidade. Você aparece?", com a pergunta sendo digitada numa tela de chat genérica (não imita a tela de nenhuma IA) e a resposta citando três oficinas fictícias.
+- **Formato:** aula curta em 43 s, sem narração (texto na tela o tempo todo; a música em alta entra no app na hora de postar, por isso o arquivo é o `-mudo`). Capa: o quadro de 4,5 s (a pergunta, a resposta com três oficinas fictícias e "E a sua, aparece?").
+- **Gancho no primeiro quadro:** "Pergunta pro ChatGPT quem é o melhor do seu ramo na sua cidade. Você aparece?", com a pergunta sendo digitada numa tela de chat genérica (não imita a tela de nenhuma IA) e a resposta citando três oficinas fictícias (Oficina Jacarandá Azul, Auto Mecânica Vento Sul, Garagem Sete Ipês).
 - **O valor (o que quase ninguém sabe):**
   1. Não existe "o robô da IA": são três (treino `GPTBot`, busca `OAI-SearchBot`, na hora `ChatGPT-User`). Bloquear o errado no robots.txt pode tirar o site das respostas. E bloquear o `Google-Extended` não tira do resumo de IA do Google (ele vale para o treino do Gemini). Fontes: [OpenAI, Overview of OpenAI Crawlers](https://developers.openai.com/api/docs/bots) e [Google, web publisher controls](https://blog.google/technology/ai/an-update-on-web-publisher-controls/).
   2. A IA copia trechos, não páginas: resposta na primeira frase, blocos que se entendem sozinhos, tabela de comparação, número com fonte e data.
   3. Ela cita quem os outros citam: avaliações, guias da cidade, diretórios, fóruns.
   4. Uma pergunta não prova nada: testar de 10 a 20 perguntas que trazem cliente, várias vezes, e acompanhar de quantas vezes aparece.
 - **A skill:** `ai-seo`, da coleção marketingskills do Corey Haines (gratuita no GitHub, licença MIT, cerca de 62 mil estrelas em 24/11/2026). A tela da auditoria e o plano são exemplo ilustrativo (oficinas fictícias), no formato do que a skill entrega: tabela pergunta × ChatGPT/Perplexity/Google IA, por que o concorrente é citado e plano em ordem de prioridade.
-- **Avisos na tela:** precisa do plano pago do Claude; ninguém controla a resposta da IA, a skill não garante posição; a Growlift não é afiliada ao autor nem à Anthropic.
-- **Fim:** "Quer o passo a passo para instalar e testar? ＋ Seguir @growlift.ai · Segue e comenta IA" e "Salva pra testar no seu negócio · Seguir é opcional: vale pra todo mundo que comentar".
+- **Revisão legal de 24/11 aplicada** (fim sem "segue e" junto do presente, "te guia", "pouca gente sabe", créditos mais tempo na tela, marcas citadas só para identificar, nomes fictícios improváveis).
+- **Avisos na tela:** funciona no Claude (depende do plano); ninguém controla a resposta da IA, a skill não garante posição; a Growlift não é afiliada ao autor nem à Anthropic.
+- **Fim:** "Quer o passo a passo para instalar e testar? ＋ Seguir @growlift.ai · Comenta IA" e "Salva pra testar no seu negócio · Seguir é opcional: vale pra todo mundo que comentar".
 - **Plano de postagem:**
   1. Antes: deixar a mensagem do privado pronta (`10-presentes/presentes.md`, IA) e, se for usar o ManyChat, cadastrar a palavra IA e testar.
   2. Ao postar: música em alta do próprio Instagram, volume baixo; fixar o comentário "Comenta IA que a gente te manda o passo a passo 👇".
@@ -687,25 +688,25 @@ Reel "Skill da Semana, episódio 2": uma página de caderno com o caixa de novem
 ```
 Pergunta pro ChatGPT quem é o melhor do seu ramo na sua cidade. Você aparece? 🤖
 
-4 coisas que quase ninguém sabe sobre aparecer nas respostas de IA:
+4 coisas que pouca gente sabe sobre aparecer nas respostas de IA:
 
-1. Não existe "o robô da IA". Só a OpenAI tem três: GPTBot (treino), OAI-SearchBot (busca) e ChatGPT-User (abre seu site quando alguém pede). Bloquear o errado no robots.txt pode tirar você das respostas. E bloquear o Google-Extended não tira você do resumo de IA do Google.
+1. Não existe "o robô da IA". Só a OpenAI tem três: GPTBot (treino), OAI-SearchBot (busca) e ChatGPT-User (abre seu site quando alguém pede). Bloquear o errado no robots.txt pode tirar você das respostas. E bloquear o Google-Extended não tira você da Busca nem do resumo de IA do Google: ele controla o uso para o Gemini.
 2. A IA copia trechos, não páginas: resposta na primeira frase, blocos que se entendem sozinhos, tabela de comparação, número com fonte e data.
 3. Ela cita quem os outros citam: avaliações, guias da cidade, diretórios.
 4. Uma pergunta não prova nada: teste de 10 a 20 perguntas que trazem cliente, várias vezes.
 
-A skill "ai-seo", do Corey Haines (gratuita no GitHub, licença MIT), faz essa auditoria no Claude e monta o plano em ordem de prioridade. Skill da Semana, ep. 03. Precisa do plano pago do Claude. Ninguém controla a resposta da IA: ela mostra o que melhorar, não garante posição.
+A skill "ai-seo", do Corey Haines (gratuita no GitHub, licença MIT), te guia nessa auditoria no Claude e no plano em ordem de prioridade. Skill da Semana, ep. 03. Funciona no Claude (depende do plano). Ninguém controla a resposta da IA: ela mostra o que melhorar, não garante posição.
 
-Comenta IA que a gente te manda no privado o passo a passo para instalar e testar. Vale pra todo mundo que comentar, sem sorteio. Se curtir, segue a @growlift.ai (ajuda, mas não é obrigatório).
+Comenta IA que a gente te manda no privado o passo a passo para instalar e testar. Vale pra todo mundo que comentar, sem sorteio. Se curtir, segue a @growlift.ai (é opcional, o presente vale para todo mundo que comentar).
 
 Salva pra testar no seu negócio 📌
 
-Exemplo com oficinas fictícias; as telas do vídeo são ilustrações nossas. A Growlift não é afiliada nem patrocinada pelo autor da skill nem pela Anthropic, dona do Claude.
+Exemplo com oficinas fictícias; as telas do vídeo são ilustrações nossas. A Growlift não é afiliada nem patrocinada pelo autor da skill nem pela Anthropic, dona do Claude. ChatGPT, OpenAI, Perplexity, Google, Gemini, Claude e Anthropic são marcas de seus respectivos donos; citadas só para identificar as ferramentas.
 
 #claude #chatgpt #inteligenciaartificial #seo #pequenosnegocios
 ```
 
 **Texto alternativo**
 ```
-Reel "Skill da Semana, episódio 3": a pergunta "Pergunta pro ChatGPT quem é o melhor do seu ramo na sua cidade. Você aparece?" e uma tela de chat em que a IA cita três oficinas fictícias de Campinas; quatro lições: os três robôs de IA (GPTBot, OAI-SearchBot e ChatGPT-User) e o cuidado com o robots.txt, a IA copia trechos e não páginas, ela cita quem os outros citam, e testar de 10 a 20 perguntas várias vezes; a tela de exemplo da auditoria da skill ai-seo, com o plano em ordem de prioridade; os créditos ao Corey Haines; e o convite "Segue e comenta IA".
+Reel "Skill da Semana, episódio 3": a pergunta "Pergunta pro ChatGPT quem é o melhor do seu ramo na sua cidade. Você aparece?" e uma tela de chat em que a IA cita três oficinas fictícias de Campinas; quatro lições: os três robôs de IA (GPTBot, OAI-SearchBot e ChatGPT-User) e o cuidado com o robots.txt, a IA copia trechos e não páginas, ela cita quem os outros citam, e testar de 10 a 20 perguntas várias vezes; a tela de exemplo da auditoria da skill ai-seo, com o plano em ordem de prioridade; os créditos ao Corey Haines; e o convite "Comenta IA" (seguir é opcional).
 ```
