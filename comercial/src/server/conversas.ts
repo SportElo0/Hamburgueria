@@ -16,6 +16,7 @@ import { definirValor, marcarAtendimentoHumano, mudarEtapa } from './oportunidad
 import { abrirAtendimento, validarExtras } from './pedidos';
 import { hashToken, novoToken } from './segredos';
 import { MAX_AUDIO_BYTES, transcritor } from './transcricao';
+import { confirmarPelaMensagem } from './avisos-whatsapp';
 
 export interface Conversa {
   id: string;
@@ -748,6 +749,8 @@ export async function receberWhatsApp(empresaId: string, e: EntradaWhatsApp): Pr
   const empresa = await empresaPorId(empresaId);
   const telefone = e.de.replace(/\D/g, '');
   if (!empresa || !/^\d{8,15}$/.test(telefone)) return { duplicada: true };
+  // A team member confirming their number for alerts ("AVISOS <code>"): not a customer conversation.
+  if (await confirmarPelaMensagem(empresaId, telefone, e.texto)) return { duplicada: false };
   return tx(async (db) => {
     await db.query('select pg_advisory_xact_lock(hashtext($1))', [`${empresaId}:t:${telefone}`]);
     if (await um('select 1 from mensagens where empresa_id = $1 and id_provedor = $2', [empresaId, e.idProvedor], db)) return { duplicada: true };

@@ -1,10 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { simulador } from '@/server/canais/simulador';
-import { desligarAvisoWhatsApp, enviarAvisosWhatsApp, ligarAvisoWhatsApp, meuAvisoWhatsApp } from '@/server/avisos-whatsapp';
+import { confirmarPelaMensagem, desligarAvisoWhatsApp, enviarAvisosWhatsApp, ligarAvisoWhatsApp, meuAvisoWhatsApp } from '@/server/avisos-whatsapp';
+import { receberWhatsApp } from '@/server/conversas';
+import { alterarMembro } from '@/server/empresas';
 import { fecharPool, q } from '@/server/db';
 import { salvarWhatsApp } from '@/server/integracoes';
 import { receberPedido } from '@/server/pedidos';
-import { meta, novaEmpresa, pedido, telefone, type Cenario } from './apoio';
+import { contar, meta, novaEmpresa, pedido, telefone, unico, type Cenario } from './apoio';
 
 let A: Cenario;
 let B: Cenario;
@@ -25,9 +27,24 @@ describe('avisos importantes no WhatsApp de quem pediu', () => {
     await expect(ligarAvisoWhatsApp(A.admin, telAdmin, false)).rejects.toThrow(/aceita/);
     await expect(ligarAvisoWhatsApp(A.admin, '1133334444', true)).rejects.toThrow(/celular/);
     await expect(ligarAvisoWhatsApp({ ...A.admin, acessoAdmin: 'suporte' }, telAdmin, true)).rejects.toThrow(/próprio login/);
-    await ligarAvisoWhatsApp(A.admin, `(${telAdmin.slice(0, 2)}) ${telAdmin.slice(2)}`, true);
+    const codigo = await ligarAvisoWhatsApp(A.admin, `(${telAdmin.slice(0, 2)}) ${telAdmin.slice(2)}`, true);
     const meu = await meuAvisoWhatsApp(A.admin);
     expect(meu?.telefone).toBe(`55${telAdmin}`);
+    expect(meu?.confirmado_em).toBeNull();
+    // not confirmed yet: nothing goes out
+    await enviarAvisosWhatsApp();
+    await q(`insert into notificacoes (empresa_id, user_id, titulo, link, tipo) values ($1, null, 'Novo pedido: antes', '/painel', 'tarefa:atender_pedido')`, [A.empresa.id]);
+    await enviarAvisosWhatsApp();
+    expect(enviadosPara(telAdmin)).toHaveLength(0);
+    // wrong code, or the code from another number, or in another company: no
+    expect(await confirmarPelaMensagem(A.empresa.id, `55${telAdmin}`, 'AVISOS 000000')).toBe(codigo === '000000');
+    expect(await confirmarPelaMensagem(A.empresa.id, `55${telefone()}`, `AVISOS ${codigo}`)).toBe(false);
+    expect(await confirmarPelaMensagem(B.empresa.id, `55${telAdmin}`, `AVISOS ${codigo}`)).toBe(false);
+    // the person sends "AVISOS <code>" from that number to the company's WhatsApp: confirmed, and no customer conversation is created
+    const r = await receberWhatsApp(A.empresa.id, { de: `55${telAdmin}`, nome: 'Admin', texto: `avisos ${codigo}`, idProvedor: `wamid.${unico()}`, quando: new Date() });
+    expect(r).toEqual({ duplicada: false });
+    expect((await meuAvisoWhatsApp(A.admin))?.confirmado_em).toBeTruthy();
+    expect(await contar('contatos where empresa_id = $1 and telefone = $2', [A.empresa.id, `55${telAdmin}`])).toBe(0);
     const texto = (await q<{ texto_aceite: string }>('select texto_aceite from avisos_whatsapp where user_id = $1', [A.admin.userId]))[0].texto_aceite;
     expect(texto).toContain('pelo número da Solar Avisos');
     expect(texto).not.toMatch(/automátic|robô/i);
@@ -49,7 +66,8 @@ describe('avisos importantes no WhatsApp de quem pediu', () => {
   });
 
   it('avisos para a empresa vão só para administradores; aviso comum não vai; avaliação baixa vai', async () => {
-    await ligarAvisoWhatsApp(A.vendedor, telVendedor, true);
+    const cod = await ligarAvisoWhatsApp(A.vendedor, telVendedor, true);
+    expect(await confirmarPelaMensagem(A.empresa.id, `55${telVendedor}`, `AVISOS ${cod}`)).toBe(true);
     await enviarAvisosWhatsApp();
     const antesV = enviadosPara(telVendedor).length;
     const antesA = enviadosPara(telAdmin).length;
@@ -70,7 +88,7 @@ describe('avisos importantes no WhatsApp de quem pediu', () => {
 
   it('sem o modelo aprovado nada sai; aviso velho (mais de 1 hora) não sai; desligar para tudo', async () => {
     const telB = telefone();
-    await ligarAvisoWhatsApp(B.admin, telB, true);
+    await confirmarPelaMensagem(B.empresa.id, `55${telB}`, `AVISOS ${await ligarAvisoWhatsApp(B.admin, telB, true)}`);
     await q(`insert into notificacoes (empresa_id, user_id, titulo, link, tipo) values ($1, null, 'Novo pedido: X', '/painel', 'tarefa:atender_pedido')`, [B.empresa.id]);
     await enviarAvisosWhatsApp();
     expect(enviadosPara(telB)).toHaveLength(0);
@@ -85,5 +103,13 @@ describe('avisos importantes no WhatsApp de quem pediu', () => {
     await q(`insert into notificacoes (empresa_id, user_id, titulo, link, tipo) values ($1, null, 'Novo pedido: Y', '/painel', 'tarefa:atender_pedido')`, [A.empresa.id]);
     await enviarAvisosWhatsApp();
     expect(enviadosPara(telAdmin)).toHaveLength(antes);
+  });
+
+  it('quem sai da empresa tem o número apagado', async () => {
+    const C = await novaEmpresa('Solar Saída');
+    await ligarAvisoWhatsApp(C.vendedor, telefone(), true);
+    expect(await meuAvisoWhatsApp(C.vendedor)).toBeTruthy();
+    await alterarMembro(C.admin, C.vendedor.userId, { ativo: false });
+    expect(await meuAvisoWhatsApp(C.vendedor)).toBeNull();
   });
 });

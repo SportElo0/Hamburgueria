@@ -575,8 +575,8 @@ export async function testarAvisoAcao(): Promise<Retorno> {
 
 export const ligarAvisoWhatsAppAcao = async (_: Retorno, fd: FormData) =>
   tentar(async () => {
-    await ligarAvisoWhatsApp(await exigirCtx(), t(fd, 'telefone'), fd.get('aceite') === 'on');
-    return { ok: 'Avisos no WhatsApp ligados.' };
+    const codigo = await ligarAvisoWhatsApp(await exigirCtx(), t(fd, 'telefone'), fd.get('aceite') === 'on');
+    return { ok: `Falta confirmar: mande do seu WhatsApp, para o número da empresa, a mensagem AVISOS ${codigo}.` };
   });
 
 export const desligarAvisoWhatsAppAcao = async () =>

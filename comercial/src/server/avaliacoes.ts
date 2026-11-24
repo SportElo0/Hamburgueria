@@ -1,5 +1,5 @@
 import { formatarTelefone } from './config';
-import { ator, criarTarefa, registrar, type Ctx } from './contexto';
+import { ator, criarTarefa, dentroDoLimite, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um } from './db';
 import { empresaPorId } from './empresas';
 import { ErroDeUso, NaoEncontrado } from './erros';
@@ -43,6 +43,7 @@ export const NOTA_BAIXA = 3;
 export async function registrarFeedbackPrivado(token: string, nota: number, comentario: string) {
   if (!Number.isInteger(nota) || nota < 1 || nota > 5) throw new ErroDeUso('Escolha uma nota de 1 a 5.');
   const texto = comentario.trim().slice(0, 1000);
+  if (!(await dentroDoLimite(`avaliacao:${hashToken(token)}`, 10, 3600))) throw new ErroDeUso('Muitas tentativas. Tente de novo mais tarde.');
   await tx(async (db) => {
     const r = await um<{ id: string; empresa_id: string; oportunidade_id: string; anterior: number | null }>(
       `with antes as (select id, nota_privada from avaliacoes where token_hash = $1 for update)

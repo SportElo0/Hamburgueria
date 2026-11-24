@@ -1,3 +1,4 @@
+import { randomInt } from 'node:crypto';
 import { celular } from './ligacoes';
 import { normalizarTelefone } from './config';
 import { dentroDoLimite, exigirNaoVisitante, type Ctx } from './contexto';
@@ -16,14 +17,35 @@ import { horaLocal, preferenciasDe, recebeAgora } from './avisos';
  * customer name or message.
  */
 export const TIPOS_WHATSAPP = ['tarefa:atender_pedido', 'tarefa:assumir_conversa', 'tarefa:retornar_ligacao', 'tarefa:avaliacao_baixa'];
-/** Cost guard per person per day (each message is paid to Meta). */
+/** Cost guards per day (each message is paid to Meta): per person and per company. */
 export const MAX_POR_DIA = 30;
+export const MAX_POR_EMPRESA_DIA = 100;
+/** What the person sends from their own WhatsApp to the company's number to prove the number is theirs. */
+export const MENSAGEM_CONFIRMACAO = (codigo: string) => `AVISOS ${codigo}`;
+const CONFIRMACAO = /^\s*avisos\s+(\d{6})\s*$/i;
 
 export const TEXTO_ACEITE_AVISOS = (empresa: string) =>
   `Quero receber no meu WhatsApp, enviados pelo número da ${empresa}, os avisos importantes do painel: pedido novo, cliente esperando uma pessoa, ligação perdida e avaliação com nota baixa. Para parar, desligo no painel.`;
 
 export async function meuAvisoWhatsApp(ctx: Ctx) {
-  return um<{ telefone: string; aceito_em: Date; ultimo_envio_em: Date | null }>('select telefone, aceito_em, ultimo_envio_em from avisos_whatsapp where empresa_id = $1 and user_id = $2', [ctx.empresaId, ctx.userId]);
+  return um<{ telefone: string; aceito_em: Date; ultimo_envio_em: Date | null; codigo: string | null; confirmado_em: Date | null }>(
+    'select telefone, aceito_em, ultimo_envio_em, codigo, confirmado_em from avisos_whatsapp where empresa_id = $1 and user_id = $2',
+    [ctx.empresaId, ctx.userId],
+  );
+}
+
+/**
+ * Incoming WhatsApp message "AVISOS <code>" from the number waiting for confirmation: proves the number belongs to the
+ * person who turned the alerts on (they sent it themselves). Returns true when it was such a message (not a customer's).
+ */
+export async function confirmarPelaMensagem(empresaId: string, telefone: string, texto: string | null): Promise<boolean> {
+  const m = texto?.match(CONFIRMACAO);
+  if (!m) return false;
+  const r = await um(
+    `update avisos_whatsapp set confirmado_em = now(), codigo = null where empresa_id = $1 and telefone = $2 and codigo = $3 and confirmado_em is null returning user_id`,
+    [empresaId, telefone, m[1]],
+  );
+  return !!r;
 }
 
 /** Turned on by the person, for their own number (never by someone else, and never by Growlift's support access). */
@@ -34,11 +56,14 @@ export async function ligarAvisoWhatsApp(ctx: Ctx, telefone: string, aceite: boo
   const tel = normalizarTelefone(telefone);
   if (!tel || !celular(tel)) throw new ErroDeUso('Informe um celular com DDD, por exemplo (11) 91234-5678.');
   const empresa = (await empresaPorId(ctx.empresaId))!;
+  // Nothing is sent until the person confirms from that number (they send "AVISOS <code>" to the company's WhatsApp).
+  const codigo = String(randomInt(100000, 1000000));
   await q(
-    `insert into avisos_whatsapp (empresa_id, user_id, telefone, texto_aceite) values ($1, $2, $3, $4)
-     on conflict (empresa_id, user_id) do update set telefone = excluded.telefone, texto_aceite = excluded.texto_aceite, aceito_em = now()`,
-    [ctx.empresaId, ctx.userId, tel, TEXTO_ACEITE_AVISOS(empresa.nome)],
+    `insert into avisos_whatsapp (empresa_id, user_id, telefone, texto_aceite, codigo, confirmado_em) values ($1, $2, $3, $4, $5, null)
+     on conflict (empresa_id, user_id) do update set telefone = excluded.telefone, texto_aceite = excluded.texto_aceite, aceito_em = now(), codigo = excluded.codigo, confirmado_em = null`,
+    [ctx.empresaId, ctx.userId, tel, TEXTO_ACEITE_AVISOS(empresa.nome), codigo],
   );
+  return codigo;
 }
 
 export async function desligarAvisoWhatsApp(ctx: Ctx) {
@@ -64,7 +89,7 @@ export async function enviarAvisosWhatsApp(max = 50): Promise<number> {
     const quem = await q<{ user_id: string; telefone: string }>(
       `select a.user_id, a.telefone from avisos_whatsapp a
        join membros m on m.user_id = a.user_id and m.empresa_id = a.empresa_id and m.ativo
-       where a.empresa_id = $1 and (a.user_id = $2 or ($2::text is null and m.papel = 'admin'))`,
+       where a.empresa_id = $1 and a.confirmado_em is not null and (a.user_id = $2 or ($2::text is null and m.papel = 'admin'))`,
       [n.empresa_id, n.user_id],
     );
     if (!quem.length) continue;
@@ -77,6 +102,7 @@ export async function enviarAvisosWhatsApp(max = 50): Promise<number> {
       // Subjects turned off and quiet hours of this person (same choices as the phone alerts).
       if (!recebeAgora(await preferenciasDe(n.empresa_id, p.user_id), n.tipo, hora)) continue;
       if (!(await dentroDoLimite(`aviso-whatsapp:${n.empresa_id}:${p.user_id}`, MAX_POR_DIA, 86_400))) continue;
+      if (!(await dentroDoLimite(`aviso-whatsapp:${n.empresa_id}`, MAX_POR_EMPRESA_DIA, 86_400))) continue;
       try {
         const r = await canal.enviarModelo(p.telefone, { nome: config.modelo_aviso_equipe, idioma: config.idioma_modelos, variaveis: [empresa?.nome ?? '', assuntoSeguro(n.titulo), link] });
         if (r.tipo === 'aceito') {

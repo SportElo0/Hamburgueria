@@ -2,8 +2,8 @@ import { desligarAvisoWhatsAppAcao, ligarAvisoWhatsAppAcao } from '@/app/acoes';
 import { AppCelular } from '@/componentes/app-celular';
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
-import { TEXTO_ACEITE_AVISOS, meuAvisoWhatsApp } from '@/server/avisos-whatsapp';
-import { formatarTelefone } from '@/server/config';
+import { MENSAGEM_CONFIRMACAO, TEXTO_ACEITE_AVISOS, meuAvisoWhatsApp } from '@/server/avisos-whatsapp';
+import { formatarTelefone, normalizarTelefone } from '@/server/config';
 import { empresaPorId } from '@/server/empresas';
 import { integracaoWhatsApp } from '@/server/integracoes';
 import { aparelhosDe, chavesVapid } from '@/server/push';
@@ -16,6 +16,7 @@ export default async function Celular() {
   const [aparelhos, zap, empresa, meu] = await Promise.all([aparelhosDe(ctx), integracaoWhatsApp(ctx.empresaId), empresaPorId(ctx.empresaId), meuAvisoWhatsApp(ctx)]);
   const chave = chavesVapid()?.publica ?? null;
   const zapPronto = zap.config.modo === 'oficial' && !!zap.config.modelo_aviso_equipe;
+  const zapEmpresa = normalizarTelefone(empresa?.config.site.whatsapp ?? '');
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <h1 className="text-2xl font-bold">App no celular</h1>
@@ -43,7 +44,16 @@ export default async function Celular() {
         {!zapPronto && <p className="aviso mt-3 bg-alerta-clara text-alerta">Ainda não funciona nesta empresa: falta o WhatsApp oficial ligado e o modelo de mensagem aprovado pela Meta (a equipe Growlift cuida disso). Você já pode deixar ligado.</p>}
         {meu ? (
           <div className="mt-3 space-y-2">
-            <p className="text-[15px]">Ligado para <strong>{formatarTelefone(meu.telefone)}</strong> desde {dataHora(meu.aceito_em)}{meu.ultimo_envio_em ? ` · último aviso ${dataHora(meu.ultimo_envio_em)}` : ''}.</p>
+            {meu.confirmado_em ? (
+              <p className="text-[15px]">Ligado para <strong>{formatarTelefone(meu.telefone)}</strong>, confirmado em {dataHora(meu.confirmado_em)}{meu.ultimo_envio_em ? ` · último aviso ${dataHora(meu.ultimo_envio_em)}` : ''}.</p>
+            ) : (
+              <div className="aviso bg-alerta-clara text-alerta">
+                <p>Falta confirmar que o número <strong>{formatarTelefone(meu.telefone)}</strong> é seu. Mande, desse WhatsApp para o número da empresa{zapEmpresa ? ` (${formatarTelefone(zapEmpresa)})` : ''}, a mensagem:</p>
+                <p className="mt-1 text-lg font-bold tracking-wide">{MENSAGEM_CONFIRMACAO(meu.codigo ?? '')}</p>
+                {zapEmpresa && <a className="mt-2 inline-block font-semibold underline" href={`https://wa.me/${zapEmpresa}?text=${encodeURIComponent(MENSAGEM_CONFIRMACAO(meu.codigo ?? ''))}`}>Abrir o WhatsApp com a mensagem pronta</a>}
+                <p className="mt-1 text-sm">Até confirmar, nenhum aviso sai.</p>
+              </div>
+            )}
             <Formulario acao={desligarAvisoWhatsAppAcao}><Enviar secundario>Desligar avisos no WhatsApp</Enviar></Formulario>
           </div>
         ) : ctx.acessoAdmin ? (
