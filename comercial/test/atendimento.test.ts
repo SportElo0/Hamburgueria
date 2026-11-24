@@ -458,6 +458,12 @@ describe('13. avaliação', () => {
     expect(await conviteAberto(token)).toMatchObject({ empresa: 'Solar Avaliação', linkPublico: 'https://exemplo.com/avaliar-solar', jaRespondeu: false });
     await registrarFeedbackPrivado(token, 1, 'Demorou muito');
     expect(await conviteAberto(token)).toMatchObject({ linkPublico: 'https://exemplo.com/avaliar-solar', jaRespondeu: true });
+    // low rating: a task to talk to the customer, with the rating and the comment, alerting the team; only once
+    const baixas = () => q<{ titulo: string; detalhe: string }>(`select titulo, detalhe from tarefas where oportunidade_id = $1 and tipo = 'avaliacao_baixa'`, [p.oportunidadeId]);
+    expect(await baixas()).toEqual([{ titulo: 'Avaliação com nota 1 de 5: Marina Teste', detalhe: 'Comentário: "Demorou muito" Fale com o cliente para entender o que aconteceu e ajudar.' }]);
+    expect(await contar(`notificacoes where empresa_id = $1 and titulo = 'Avaliação com nota 1 de 5: Marina Teste'`, [C.empresa.id])).toBe(1);
+    await registrarFeedbackPrivado(token, 2, 'Ainda chateado');
+    expect(await baixas()).toHaveLength(1);
     await registrarFeedbackPrivado(token, 5, '');
     expect((await conviteAberto(token))!.linkPublico).toBe('https://exemplo.com/avaliar-solar');
     expect(await conviteAberto('token-que-nao-existe-0123456789')).toBeNull();
