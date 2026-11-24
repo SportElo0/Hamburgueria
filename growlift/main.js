@@ -371,7 +371,8 @@
     let pastHero = false;
     let atForm = false;
     const inScene = new Set();
-    const show = () => sticky.classList.toggle('on', pastHero && !atForm && inScene.size === 0);
+    // The chat button (chat.js) climbs above the bar while it shows (styles.css, .cta-on).
+    const show = () => document.body.classList.toggle('cta-on', sticky.classList.toggle('on', pastHero && !atForm && inScene.size === 0));
     new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting; show(); }).observe(heroEl);
     new IntersectionObserver(([e]) => { atForm = e.isIntersecting; show(); }, { rootMargin: '0px 0px -30% 0px' }).observe(diag);
     // The pinned scenes use the whole screen: the button steps aside while one is on screen.
@@ -588,6 +589,19 @@
       .join('\n')
       .slice(0, 1000);
 
+  // One key per visit: a second click or a retry after a network error never opens a second request in the system.
+  const idem = `site-${window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)}`;
+  const campaign = () => {
+    const p = new URLSearchParams(location.search);
+    return Object.fromEntries(['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'].filter((k) => p.get(k)).map((k) => [k, p.get(k).slice(0, 120)]));
+  };
+  const post = (url, body) =>
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(20000) }).then(async (res) => {
+      const b = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(b.error || b.erro || 'Não foi possível enviar agora. Tente de novo em instantes.');
+      return b;
+    });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const f = form.elements;
@@ -596,37 +610,59 @@
     if (!valid(1)) return go(1);
     if (f.business.value.trim().length < 2) return fail('Informe o nome do negócio.', f.business);
     if (digits.length < 10) return fail('Informe um WhatsApp com DDD.', f.whatsapp);
+    if (f.city.value.trim().length < 2) return fail('Informe a cidade do negócio.', f.city);
     if (!f.consent.checked) return fail('Marque a autorização para podermos mandar o plano no WhatsApp.', f.consent);
 
     clear();
     button.disabled = true;
     button.textContent = 'Enviando…';
-    try {
-      const res = await fetch(form.dataset.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          business: f.business.value,
-          segment: segment(),
-          city: '',
-          whatsapp: digits,
-          presence: f.presence.value,
-          wishes: answers(f),
-          consent: f.consent.checked,
-          website: f.website.value,
-        }),
-        signal: AbortSignal.timeout(20000),
-      });
-      const body = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(body.error || 'Não foi possível enviar agora. Tente de novo em instantes.');
+    const wishes = f.wishes.value.trim();
+    // Two copies: the diagnostics list of the panel and the Growlift sales system, which alerts the team on the
+    // phone. The site's consent covers only the diagnostic and the plan, so the system is told not to message
+    // automatically (aceite_whatsapp: false): Lucas or Antônio answer by hand.
+    const sent = await Promise.allSettled([
+      post(form.dataset.endpoint, {
+        business: f.business.value,
+        segment: segment(),
+        city: f.city.value.trim(),
+        whatsapp: digits,
+        presence: f.presence.value,
+        wishes: answers(f),
+        consent: f.consent.checked,
+        website: f.website.value,
+      }),
+      form.dataset.sistema
+        ? post(form.dataset.sistema, {
+            chave: form.dataset.chave,
+            nome: f.business.value.trim(),
+            telefone: digits,
+            cidade: f.city.value.trim(),
+            necessidade: `Pediu o diagnóstico grátis pelo site.${wishes ? `\nMais: ${wishes}` : ''}`,
+            preferencia_contato: 'WhatsApp',
+            aceite_whatsapp: false,
+            chave_idempotencia: idem,
+            extras: {
+              ramo: segment(),
+              dor: picked('dor').join('; ').slice(0, 200),
+              volume: picked('volume').join(''),
+              quem_responde: picked('quem').join(''),
+              presenca: f.presence.value.trim().slice(0, 200),
+            },
+            campanha: campaign(),
+            site_url: f.website.value,
+          })
+        : Promise.reject(new Error('')),
+    ]);
+    if (sent.some((r) => r.status === 'fulfilled')) {
       form.hidden = true;
       ok.hidden = false;
       ok.focus();
-    } catch (err) {
-      const offline = err instanceof TypeError || (err && err.name === 'TimeoutError');
-      fail(offline ? 'Sem conexão. Confira a internet e tente de novo.' : err.message);
-      button.disabled = false;
-      button.textContent = 'Receber meu plano grátis';
+      return;
     }
+    const err = sent[0].reason;
+    const offline = err instanceof TypeError || (err && err.name === 'TimeoutError');
+    fail(offline ? 'Sem conexão. Confira a internet e tente de novo.' : err.message);
+    button.disabled = false;
+    button.textContent = 'Receber meu plano grátis';
   });
 })();

@@ -333,7 +333,7 @@
         <h2 id="diag-titulo" class="reveal d2">Qual é a maior dor do seu negócio hoje?</h2>
         <p class="lead reveal d2">3 perguntas rápidas, quase tudo com um toque. Em até 2 dias úteis chega no seu WhatsApp o que a gente faria no seu lugar, por onde começar e quanto custa.</p>
 
-        <form class="form wizard reveal" id="form-diagnostico" novalidate data-endpoint="https://painel-lojas-sportelo.vercel.app/api/public/diagnosticos">
+        <form class="form wizard reveal" id="form-diagnostico" novalidate data-sistema="https://growlift-sistema.vercel.app/api/publico/pedidos" data-chave="pk_growlift_site" data-endpoint="https://painel-lojas-sportelo.vercel.app/api/public/diagnosticos">
           <div class="progress" aria-hidden="true"><i></i></div>
           <p class="step-count" id="step-count" aria-live="polite">Passo 1 de 3</p>
 
@@ -409,7 +409,11 @@
                 <label for="f-zap">WhatsApp</label>
                 <input id="f-zap" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(11) 90000-0000">
               </div>
-              <div class="field full">
+              <div class="field">
+                <label for="f-cidade">Cidade</label>
+                <input id="f-cidade" name="city" autocomplete="address-level2" maxlength="80" required placeholder="Ex.: Campinas, SP">
+              </div>
+              <div class="field">
                 <label for="f-presenca">Instagram ou site <span>(se tiver)</span></label>
                 <input id="f-presenca" name="presence" maxlength="200" placeholder="@seunegocio ou seunegocio.com.br">
               </div>
@@ -535,5 +539,6 @@
 <script src="vendor/gsap-3.15.0.min.js" defer></script>
 <script src="vendor/ScrollTrigger-3.15.0.min.js" defer></script>
 <script src="main.js" defer></script>
+<script src="https://growlift-sistema.vercel.app/chat.js" data-chave="pk_growlift_site" data-texto="Tirar dúvidas" data-cor="#0865fe" async></script>
 </body>
 </html>
