@@ -1,0 +1,59 @@
+{
+ "falas": [
+  {
+   "cena": "hook",
+   "ini": 0.25,
+   "fim": 5.35,
+   "texto": "Pergunta pro chat gê pê tê quem é o melhor do seu ramo, na sua cidade. Você aparece?"
+  },
+  {
+   "cena": "s1",
+   "ini": 5.7,
+   "fim": 11.18,
+   "texto": "Em geral, a i á cita quem ela consegue ler e confirmar. Quatro coisas que pouca gente sabe."
+  },
+  {
+   "cena": "L1",
+   "ini": 11.58,
+   "fim": 17.3,
+   "texto": "Um. São três robôs, não um. Bloquear o errado pode tirar o seu site das respostas."
+  },
+  {
+   "cena": "L2",
+   "ini": 17.7,
+   "fim": 23.89,
+   "texto": "Dois. Ela copia trechos, não páginas. Resposta na primeira frase, e tabela de comparação."
+  },
+  {
+   "cena": "L3",
+   "ini": 24.29,
+   "fim": 30.02,
+   "texto": "Três. Ela cita quem os outros citam. Avaliações, guias da cidade, diretórios."
+  },
+  {
+   "cena": "L4",
+   "ini": 30.42,
+   "fim": 36.02,
+   "texto": "Quatro. Uma pergunta não prova nada. Teste de dez a vinte perguntas, várias vezes."
+  },
+  {
+   "cena": "skill",
+   "ini": 36.42,
+   "fim": 42.69,
+   "texto": "A skill êi ai, ésse ê ó, do Córi Hêinz, te guia nessa auditoria. É grátis, no GitHub."
+  },
+  {
+   "cena": "cred",
+   "ini": 43.09,
+   "fim": 47.71,
+   "texto": "Ninguém controla a resposta da i á: ela mostra o que melhorar, não garante posição."
+  },
+  {
+   "cena": "fim",
+   "ini": 48.11,
+   "fim": 50.83,
+   "texto": "Comenta i á, que a gente te manda o passo a passo."
+  }
+ ],
+ "fim_da_fala": 50.83
+}

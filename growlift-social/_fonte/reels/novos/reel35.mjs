@@ -184,12 +184,12 @@ ${comentaBlock('Quer o passo a passo para instalar e testar?', 'IA', 'dark', 430
 `;
 
 const Q = 'Qual a melhor oficina mecânica em Campinas?';
-// A narração (voz Andre, 52,4 s) manda no ritmo: cada cena é esticada para o trecho da fala que a explica.
+// A narração (voz Piper pt_BR "cadu", brasileira, 50,8 s; narracao35.py) manda no ritmo: cada cena é esticada para o trecho da fala que a explica.
 // Pontos [tempo do vídeo, tempo das cenas]: o desenho das cenas segue o tempo antigo, esticado por partes.
 const script = `
 window.MOTION=2;
 const Q=${JSON.stringify(Q)};
-const MAPA=[[0,0],[5.5,6.2],[11.3,9.6],[17.8,16.4],[24.6,21.6],[30.5,26.0],[36.0,30.4],[42.1,35.2],[49.0,39.5],[55.0,43.0]];
+const MAPA=[[0,0],[5.5,6.2],[11.4,9.6],[17.5,16.4],[24.1,21.6],[30.2,26.0],[36.2,30.4],[42.9,35.2],[47.9,39.5],[55.0,43.0]];
 const remap=(t)=>{for(let i=1;i<MAPA.length;i++){if(t<=MAPA[i][0]){const [a,b]=MAPA[i-1],[c,d]=MAPA[i];return b+(d-b)*(t-a)/(c-a);}}return MAPA[MAPA.length-1][1];};
 window.draw=(t0)=>{
   const t=remap(t0);
