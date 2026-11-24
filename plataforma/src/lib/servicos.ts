@@ -43,6 +43,7 @@ const s = (id: string, nome: string, situacao: Situacao, resumo: string, demo = 
 function SERVICOS_ADICIONADOS_LISTA(): Servico[] {
   return [
     s('mesa-conectada', 'Página da mesa (QR e NFC)', 'ideia', 'Uma página que abre pelo QR ou por NFC na mesa: cardápio, cartão fidelidade com selos, Wi-Fi, Instagram e avaliação no Google num lugar só. Quem quiser deixa o contato para receber promoções, com aceite e opção de sair.'),
+    s('catalogo-lojista', 'Catálogo com carrinho no WhatsApp', 'ideia', 'Catálogo da loja no celular, com fotos, preços e estoque. O cliente monta o carrinho e manda o pedido pronto no WhatsApp da loja, com itens e total. O lojista cadastra pela foto do produto: a IA sugere nome, descrição e categoria, e ele confere o preço. Sem estoque, aparece esgotado.'),
   ];
 }
 export const SERVICOS_ADICIONADOS: Servico[] = SERVICOS_ADICIONADOS_LISTA();

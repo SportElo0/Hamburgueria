@@ -19,9 +19,11 @@ describe('serviços da Growlift', () => {
 
   it('merges a card added later once, and never brings back one the team deleted', () => {
     expect(SERVICOS_INICIAIS.some((s) => s.id === 'mesa-conectada')).toBe(true);
-    const salva = SERVICOS_INICIAIS.filter((s) => s.id !== 'mesa-conectada').slice(0, 3);
-    // saved before the card existed: it shows up
-    expect(comAdicionados(salva, []).map((s) => s.id)).toEqual([...salva.map((s) => s.id), 'mesa-conectada']);
+    const adicionados = SERVICOS_ADICIONADOS.map((s) => s.id);
+    expect(adicionados).toEqual(['mesa-conectada', 'catalogo-lojista']);
+    const salva = SERVICOS_INICIAIS.filter((s) => !adicionados.includes(s.id)).slice(0, 3);
+    // saved before the cards existed: they show up, in order
+    expect(comAdicionados(salva, []).map((s) => s.id)).toEqual([...salva.map((s) => s.id), ...adicionados]);
     // already in the saved list: not duplicated
     expect(comAdicionados([...salva, SERVICOS_ADICIONADOS[0]], []).filter((s) => s.id === 'mesa-conectada')).toHaveLength(1);
     // delivered and then deleted by the team: stays deleted
