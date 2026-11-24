@@ -3,7 +3,7 @@ import { convidarAcao, gerarChaveGoogleAcao, gerarChaveTelefoniaAcao, membroAcao
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { feedbacks } from '@/server/avaliacoes';
-import { FRASE_MENU_LIGACAO, ambiente, formatarTelefone } from '@/server/config';
+import { FRASE_DESVIO_LIGACAO, FRASE_MENU_LIGACAO, ambiente, formatarTelefone } from '@/server/config';
 import { emailLigado } from '@/server/email';
 import { empresaPorId, equipe } from '@/server/empresas';
 import { adaptadorIA, modeloPadrao } from '@/server/ia';
@@ -135,6 +135,7 @@ export default async function Configuracoes() {
           <input type="hidden" name="secao" value="ia" />
           <div className="sm:col-span-2"><Marcar id="ativa" rotulo="Assistente ligada" ajuda="Desligada, toda mensagem nova vira tarefa para uma pessoa." marcado={c.ia.ativa} /></div>
           <div><label className="rotulo" htmlFor="nome">Nome da assistente</label><input className="campo" id="nome" name="nome" defaultValue={c.ia.nome} maxLength={40} /></div>
+          <div className="sm:col-span-2"><Marcar id="falar_como_marca" rotulo="Falar como a empresa, sem nome de pessoa" ajuda={`Ela se apresenta como “Aqui é da ${empresa!.nome}” e fala “a gente”. Use quando um nome de pessoa não cabe (por exemplo, o canal da própria Growlift).`} marcado={c.ia.falar_como_marca} /></div>
           <div><label className="rotulo" htmlFor="modelo">Modelo (em branco = padrão: {modeloPadrao()})</label><input className="campo" id="modelo" name="modelo" defaultValue={c.ia.modelo} placeholder={modeloPadrao()} /></div>
           <Num id="limite_respostas_mes" rotulo="Limite de respostas por mês" valor={c.ia.limite_respostas_mes} min={0} max={100000} />
           <Num id="max_mensagens_contexto" rotulo="Mensagens da conversa que o modelo lê" valor={c.ia.max_mensagens_contexto} min={4} max={60} />
@@ -204,6 +205,7 @@ export default async function Configuracoes() {
           </p>
           <p><strong>Pedir autorização na ligação:</strong> configure no menu do número, palavra por palavra, a frase “{FRASE_MENU_LIGACAO(empresa!.nome)}”, e mande aceite_whatsapp só quando a pessoa apertar 1 nesse menu. Cada aceite fica guardado com essa frase, o horário e o número da chamada, e vale só para a resposta daquela ligação. Sem o aceite, a mensagem só vai para quem autorizou no formulário (texto que inclui retornar ligações); para os outros, fica só a tarefa de retornar a ligação.</p>
           <p className="text-suave">Endereço para os avisos do serviço: <code className="break-all">{base}/api/webhooks/telefonia</code>, com a chave em “Authorization: Bearer” (ou como senha do acesso básico). Campos: de, id, status (nao_atendida, no-answer, busy…) e aceite_whatsapp.</p>
+          <p className="text-suave"><strong>Desvio da operadora (a empresa continua com o número dela):</strong> a operadora desvia as ligações não atendidas para um número da Twilio, com “A call comes in” em <code className="break-all">{base}/api/webhooks/telefonia/desvio</code> e “Call status changes” no mesmo endereço com <code>?etapa=fim</code>, a chave como senha do acesso básico. A plataforma fala “{FRASE_DESVIO_LIGACAO(empresa!.nome)}” e só responde pelo WhatsApp quem apertar 1.</p>
           {ctx.acessoAdmin ? (
             <Formulario acao={gerarChaveTelefoniaAcao}><Enviar secundario>{telefonia ? 'Trocar a chave do serviço' : 'Criar a chave do serviço'}</Enviar></Formulario>
           ) : (

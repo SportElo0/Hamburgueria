@@ -6,7 +6,7 @@ import { conhecimentoAtual } from './conhecimento';
 import { ator, criarTarefa, dentroDoLimite, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, type Empresa } from './empresas';
-import { ErroDeUso, NaoEncontrado } from './erros';
+import { ErroDeUso, ErroTemporario, NaoEncontrado } from './erros';
 import { dispararFluxos } from './fluxos';
 import { agendar, cancelarPendentes, executar, pegar, type Resultado, type Trabalho } from './fila';
 import { adaptadorIA, modeloPadrao } from './ia';
@@ -15,6 +15,7 @@ import { canalDa, empresaDoNumero } from './integracoes';
 import { definirValor, marcarAtendimentoHumano, mudarEtapa } from './oportunidades';
 import { abrirAtendimento, validarExtras } from './pedidos';
 import { hashToken, novoToken } from './segredos';
+import { MAX_AUDIO_BYTES, transcritor } from './transcricao';
 
 export interface Conversa {
   id: string;
@@ -682,7 +683,7 @@ export async function responderComIA(t: Trabalho): Promise<Resultado> {
   const agenda = empresa.config.agenda;
   const horarios = agenda.ativa && agenda.ia_marca ? (await horariosLivres(empresa, 6)).map((h) => ({ id: h.id, texto: h.texto })) : null;
   const visitaAtual = horarios && v.contato_id ? ((await proximaVisitaDoContato(empresa, v.contato_id))?.texto ?? null) : null;
-  const contexto: ContextoIA = { empresa: empresa.nome, assistente: cfg.nome, canal: v.canal, conhecimento: k.dados, campos: empresa.config.campos, coletado, faltando: faltando(empresa, v), horarios, visitaAtual };
+  const contexto: ContextoIA = { empresa: empresa.nome, assistente: cfg.nome, comoMarca: cfg.falar_como_marca, canal: v.canal, conhecimento: k.dados, campos: empresa.config.campos, coletado, faltando: faltando(empresa, v), horarios, visitaAtual };
   let resposta;
   try {
     resposta = await adaptador.responder({ contexto, historico, modelo: cfg.modelo || modeloPadrao(), maxTokens: cfg.max_tokens_resposta }, (nome, entrada) => executarAcao(empresa, v.id, nome, entrada, marcas));
@@ -718,8 +719,28 @@ export interface EntradaWhatsApp {
   de: string;
   nome: string;
   texto: string | null;
+  /** A voice note: its WhatsApp file id and type (downloaded and transcribed by a job). */
+  audio?: { id: string; tipo: string } | null;
   idProvedor: string;
   quando: Date;
+}
+
+/** What a voice note shows while it is being transcribed, and when it could not be. */
+export const AUDIO_TRANSCREVENDO = '[Áudio recebido. Transcrevendo…]';
+export const AUDIO_SEM_TRANSCRICAO = '[O cliente enviou um áudio que não deu para transcrever.]';
+/** Prefix of a transcribed voice note: the team and the assistant know it was said, not typed. */
+export const PREFIXO_AUDIO = '[Áudio] ';
+/** Caps on paid transcription (one contact flooding audios, or a whole company). */
+export const AUDIOS_POR_CONTATO_HORA = 15;
+export const AUDIOS_POR_EMPRESA_DIA = 300;
+
+/** The contact asked to stop (typed or said): no more messages, consents revoked, pending automatic sends cancelled. */
+async function pedidoDeSair(db: Db, v: Conversa, contatoId: string, mensagemId: string) {
+  await q('update contatos set nao_contatar_em = now() where id = $1', [contatoId], db);
+  await q('update consentimentos set revogado_em = now() where empresa_id = $1 and contato_id = $2 and revogado_em is null', [v.empresa_id, contatoId], db);
+  await pararAutomaticos(db, v, 'O contato pediu para não receber mensagens.');
+  await registrar(db, v.empresa_id, { conversaId: v.id, oportunidadeId: v.oportunidade_id, contatoId, ator: { tipo: 'visitante' }, tipo: 'pedido_de_interrupcao' });
+  await criarTarefa(db, v.empresa_id, { conversaId: v.id, oportunidadeId: v.oportunidade_id, tipo: 'descadastro', titulo: 'Um contato pediu para não receber mais mensagens', chave: `sair:${mensagemId}` });
 }
 
 /** Stores a message that arrived on the company's WhatsApp number and decides who answers it. */
@@ -743,7 +764,13 @@ export async function receberWhatsApp(empresaId: string, e: EntradaWhatsApp): Pr
       if (contato!.cidade) inicial.cidade = contato!.cidade;
       v = (await um<Conversa>(`insert into conversas (empresa_id, contato_id, canal, dados) values ($1, $2, 'whatsapp', $3) returning *`, [empresaId, contato!.id, JSON.stringify(inicial)], db))!;
     }
-    const corpo = e.texto?.trim() ? e.texto.trim().slice(0, 4000) : '[O cliente enviou um arquivo ou áudio. A assistente só lê texto.]';
+    // A voice note with a transcription service: stored now, transcribed by a job right after (for the assistant and the team).
+    // Paid per minute, so capped per contact and per company; above that the audio goes to a person, as before.
+    const transcrever =
+      !e.texto?.trim() && !!e.audio && !!transcritor() &&
+      (await dentroDoLimite(`audio:contato:${empresaId}:${telefone}`, AUDIOS_POR_CONTATO_HORA, 3600)) &&
+      (await dentroDoLimite(`audio:empresa:${empresaId}`, AUDIOS_POR_EMPRESA_DIA, 86_400));
+    const corpo = e.texto?.trim() ? e.texto.trim().slice(0, 4000) : transcrever ? AUDIO_TRANSCREVENDO : '[O cliente enviou um arquivo ou áudio. A assistente só lê texto.]';
     const m = await um<{ id: string }>(
       `insert into mensagens (empresa_id, conversa_id, direcao, autor, corpo, estado, id_provedor) values ($1, $2, 'entrada', 'contato', $3, 'recebida', $4) returning id`,
       [empresaId, v.id, corpo, e.idProvedor],
@@ -759,28 +786,75 @@ export async function receberWhatsApp(empresaId: string, e: EntradaWhatsApp): Pr
     await q(`update mensagens set estado = 'cancelada', erro = 'O cliente respondeu antes do envio.', atualizado_em = now() where conversa_id = $1 and estado = 'na_fila' and autor = 'sistema' and modelo_mensagem is not null`, [v.id], db);
 
     if (e.texto && SAIR.test(e.texto)) {
-      await q('update contatos set nao_contatar_em = now() where id = $1', [contato!.id], db);
-      await q('update consentimentos set revogado_em = now() where empresa_id = $1 and contato_id = $2 and revogado_em is null', [empresaId, contato!.id], db);
-      await pararAutomaticos(db, v, 'O contato pediu para não receber mensagens.');
-      await registrar(db, empresaId, { conversaId: v.id, oportunidadeId: v.oportunidade_id, contatoId: contato!.id, ator: { tipo: 'visitante' }, tipo: 'pedido_de_interrupcao' });
-      await criarTarefa(db, empresaId, { conversaId: v.id, oportunidadeId: v.oportunidade_id, tipo: 'descadastro', titulo: 'Um contato pediu para não receber mais mensagens', chave: `sair:${m!.id}` });
+      await pedidoDeSair(db, v, contato!.id, m!.id);
       return { duplicada: false, mensagemId: m!.id, trabalhoId: null, conversaId: v.id };
     }
     if (e.texto?.trim() && v.oportunidade_id) {
       const op = await um<{ etapa: Etapa }>('select etapa from oportunidades where empresa_id = $1 and id = $2', [empresaId, v.oportunidade_id], db);
       if (op) await dispararFluxos(db, empresaId, { tipo: 'mensagem_recebida', texto: e.texto }, { id: v.oportunidade_id, contatoId: contato!.id, etapa: op.etapa });
     }
+    const trabalhoAudio = transcrever ? await agendar(db, empresaId, { tipo: 'transcrever_audio', chave: `audio:${m!.id}`, conversaId: v.id, dados: { mensagem: m!.id, midia: e.audio!.id, tipo: e.audio!.tipo }, maxTentativas: 2 }) : null;
     if (v.estado !== 'ia_ativa') {
       const resp = v.assumida_por ?? (await um<{ responsavel_id: string | null }>('select responsavel_id from oportunidades where id = $1', [v.oportunidade_id], db))?.responsavel_id ?? null;
       await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresaId, resp, 'Nova mensagem do cliente', corpo.slice(0, 120), `/painel/atendimento/${v.id}`], db);
       return { duplicada: false, mensagemId: m!.id, trabalhoId: null, conversaId: v.id };
     }
+    if (transcrever) return { duplicada: false, mensagemId: m!.id, trabalhoId: trabalhoAudio, conversaId: v.id };
     if (!e.texto?.trim()) {
       await encaminhar(db, v, 'midia', 'O cliente enviou mídia.', 'sistema');
       return { duplicada: false, mensagemId: m!.id, trabalhoId: null, conversaId: v.id };
     }
     const trabalhoId = contato!.nao_contatar_em ? null : await agendar(db, empresaId, { tipo: 'responder_ia', chave: `ia:${m!.id}`, conversaId: v.id, dados: { mensagem: m!.id }, maxTentativas: 2 });
     return { duplicada: false, mensagemId: m!.id, trabalhoId, conversaId: v.id };
+  });
+}
+
+/**
+ * Job: a voice note becomes text. Downloaded from WhatsApp, transcribed, and stored in the message itself (the team sees
+ * it in the inbox). Then, if the conversation is still the assistant's, she answers it like a typed message. When it
+ * cannot be transcribed (too big, provider down), the conversation goes to a person, as with any other file.
+ */
+export async function transcreverAudio(t: Trabalho): Promise<Resultado> {
+  const msgId = String(t.dados.mensagem ?? '');
+  const m = await um<{ id: string; conversa_id: string; corpo: string }>(`select id, conversa_id, corpo from mensagens where empresa_id = $1 and id = $2 and direcao = 'entrada'`, [t.empresa_id, msgId]);
+  if (!m || m.corpo !== AUDIO_TRANSCREVENDO) return { tipo: 'cancelado', motivo: 'O áudio já foi tratado.' };
+  let texto = '';
+  let erro = '';
+  try {
+    const servico = transcritor();
+    const { canal } = await canalDa(t.empresa_id);
+    if (!servico || !canal) throw new Error('Sem serviço de transcrição ou sem WhatsApp configurado.');
+    const midia = await canal.baixarMidia(String(t.dados.midia ?? ''));
+    if (midia.dados.byteLength > MAX_AUDIO_BYTES) throw new Error('Áudio longo demais para transcrever.');
+    texto = await servico.transcrever(midia.dados, midia.tipo);
+    if (!texto) throw new Error('A transcrição veio vazia.');
+  } catch (err) {
+    erro = (err instanceof Error ? err.message : String(err)).slice(0, 300);
+    // A provider hiccup (network, 429, 5xx) gets one more try; anything else, or a second failure, goes to a person.
+    if (err instanceof ErroTemporario && t.tentativas < t.max_tentativas) return { tipo: 'repetir', erro };
+  }
+  return tx(async (db) => {
+    const v = await um<Conversa>('select * from conversas where empresa_id = $1 and id = $2 for update', [t.empresa_id, m.conversa_id], db);
+    if (!v) return { tipo: 'cancelado', motivo: 'Conversa não existe mais.' } as Resultado;
+    const ok = !erro && !!texto;
+    await q('update mensagens set corpo = $2, atualizado_em = now() where id = $1 and corpo = $3', [m.id, ok ? `${PREFIXO_AUDIO}${texto}` : AUDIO_SEM_TRANSCRICAO, AUDIO_TRANSCREVENDO], db);
+    await registrar(db, t.empresa_id, { conversaId: v.id, oportunidadeId: v.oportunidade_id, ator: { tipo: 'sistema' }, tipo: ok ? 'audio_transcrito' : 'audio_nao_transcrito', dados: ok ? { simulado: transcritor()?.simulado ?? false } : { erro } });
+    if (!ok) {
+      await encaminhar(db, v, 'midia', 'O cliente enviou um áudio que não deu para transcrever.', 'sistema');
+      return { tipo: 'concluido', nota: `Áudio não transcrito: ${erro}` } as Resultado;
+    }
+    // "Pare de me mandar mensagem" said in a voice note counts like a typed SAIR.
+    if (SAIR.test(texto) && v.contato_id) {
+      await pedidoDeSair(db, v, v.contato_id, m.id);
+      return { tipo: 'concluido', nota: 'Pedido para parar, por áudio.' } as Resultado;
+    }
+    if (v.oportunidade_id) {
+      const op = await um<{ etapa: Etapa; contato_id: string }>('select etapa, contato_id from oportunidades where empresa_id = $1 and id = $2', [t.empresa_id, v.oportunidade_id], db);
+      if (op) await dispararFluxos(db, t.empresa_id, { tipo: 'mensagem_recebida', texto }, { id: v.oportunidade_id, contatoId: op.contato_id, etapa: op.etapa });
+    }
+    const bloqueado = v.contato_id ? !!(await um('select 1 from contatos where id = $1 and nao_contatar_em is not null', [v.contato_id], db)) : false;
+    if (v.estado === 'ia_ativa' && !bloqueado) await agendar(db, t.empresa_id, { tipo: 'responder_ia', chave: `ia:${m.id}`, conversaId: v.id, dados: { mensagem: m.id }, maxTentativas: 2 });
+    return { tipo: 'concluido', nota: transcritor()?.simulado ? 'Transcrição simulada.' : undefined } as Resultado;
   });
 }
 
@@ -821,7 +895,7 @@ export async function processarWebhookWhatsApp(payload: unknown): Promise<{ trab
     // No separate "seen" table: a message is deduplicated by its provider id inside the same transaction that stores it,
     // so a failure midway leaves nothing behind and the provider's retry is processed normally.
     for (const m of entrada.mensagens) {
-      const r = await receberWhatsApp(empresaId, { de: m.de, nome: m.nome, texto: m.texto, idProvedor: m.id, quando: m.quando });
+      const r = await receberWhatsApp(empresaId, { de: m.de, nome: m.nome, texto: m.texto, audio: m.audio, idProvedor: m.id, quando: m.quando });
       if (r.duplicada) ignorados++;
       else if (r.trabalhoId) trabalhos.push(r.trabalhoId);
     }

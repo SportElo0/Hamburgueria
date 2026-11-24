@@ -126,6 +126,10 @@ describe('ligação não atendida', () => {
     const r = A.empresa.config.regras;
     expect(textoRetornoLigacao({ ...A.empresa, nome: 'Loja $& Cia', config: { ...A.empresa.config, regras: { ...r, hora_inicio: 9, ligacao_texto_fora: 'Abrimos às {{abertura}} na {{empresa}}.' } } }, true)).toBe('Abrimos às 9h na Loja $& Cia. Para não receber mensagens, responda SAIR.');
     expect(t).toMatch(/responda SAIR\.$/);
+    // speaking as the company: no person's name
+    const marca = { ...A.empresa, config: { ...A.empresa.config, ia: { ...A.empresa.config.ia, falar_como_marca: true } } };
+    expect(textoRetornoLigacao(marca, false)).toMatch(/^Oi! Aqui é da Solar Ligações\. Vi que você ligou/);
+    expect(textoRetornoLigacao(marca, false)).not.toContain('Ana');
   });
 
   it('dispara os fluxos de "ligação não atendida" da empresa', async () => {
@@ -176,6 +180,72 @@ describe('ligação não atendida', () => {
     expect((await chamar(JSON.stringify({ de: 'abc', id: unico(), status: 'missed' }))).status).toBe(422);
     expect((await chamar('nao é json')).status).toBe(400);
     // nothing of company A shows up in company B
+    expect(await contar('ligacoes where empresa_id = $1', [B.empresa.id])).toBe(0);
+  });
+
+  it('desvio da operadora: frase do "aperte 1", consentimento só com 1 depois dela, e quem desligou vira tarefa', async () => {
+    const { POST } = await import('@/app/api/webhooks/telefonia/desvio/route');
+    const chave = await gerarChaveTelefonia({ ...A.admin, acessoAdmin: 'acesso-teste' });
+    const basic = `Basic ${Buffer.from(`growlift:${chave}`).toString('base64')}`;
+    const form = (c: Record<string, string>) => new URLSearchParams(c).toString();
+    const chamar = (url: string, campos: Record<string, string>, auth = basic) =>
+      POST(new Request(url, { method: 'POST', headers: { authorization: auth, 'content-type': 'application/x-www-form-urlencoded' }, body: form(campos) }));
+    const acaoDe = (x: string) => x.match(/action="([^"]+)"/)![1].replace(/&amp;/g, '&');
+    const base = 'https://growlift.test/api/webhooks/telefonia/desvio';
+
+    expect((await chamar(base, { From: `+55${telefone()}`, CallSid: `CA${unico()}` }, `Basic ${Buffer.from('growlift:tel_errada').toString('base64')}`)).status).toBe(401);
+
+    // pressed 1: the WhatsApp goes out, and the consent records the forwarding sentence (version 2)
+    const tel = telefone();
+    const sid = `CA${unico()}`;
+    const inicio = await chamar(base, { From: `+55${tel}`, CallSid: sid, CallStatus: 'ringing' });
+    expect(inicio.headers.get('content-type')).toMatch(/text\/xml/);
+    const x = await inicio.text();
+    expect(x).toContain('<Gather input="dtmf" numDigits="1"');
+    expect(x).toContain('language="pt-BR"');
+    expect(x).toContain('Oi, aqui é da Solar Ligações. Não conseguimos atender agora. Quer receber uma mensagem nossa no WhatsApp, neste número, sobre a sua ligação? Aperte 1.');
+    expect(x).not.toContain(chave);
+    const acao = acaoDe(x);
+    expect(acao).toMatch(/etapa=resposta/);
+    const resp = await chamar(acao, { From: `+55${tel}`, CallSid: sid, Digits: '1' }, '');
+    expect(await resp.text()).toContain('Combinado! Já te mandamos a mensagem no WhatsApp.');
+    await processarFila();
+    expect(await doSistema(A.empresa.id, tel)).toHaveLength(1);
+    const k = await um<{ texto: string; versao: number }>(`select k.texto, k.versao from consentimentos k join contatos c on c.id = k.contato_id where c.telefone = $1 and k.origem = 'ligacao'`, [`55${tel}`]);
+    expect(k).toMatchObject({ versao: 2, texto: expect.stringContaining('Não conseguimos atender agora') });
+    // the end-of-call notice of the same call adds nothing
+    await chamar(`${base}?etapa=fim`, { From: `+55${tel}`, CallSid: sid, CallStatus: 'completed' });
+    expect(await contar('ligacoes where empresa_id = $1 and id_externo = $2', [A.empresa.id, sid])).toBe(1);
+
+    // the signed answer step is tied to that call and that company
+    const outra = `CA${unico()}`;
+    expect((await chamar(acao.replace(sid, outra), { From: `+55${telefone()}`, CallSid: outra, Digits: '1' }, '')).status).toBe(401);
+    expect((await chamar(acao.replace(/t=[^&]+/, 't=forjada'), { From: `+55${tel}`, CallSid: sid, Digits: '1' }, '')).status).toBe(401);
+    // a leaked URL cannot record consent for another phone, nor be stretched in time
+    expect((await chamar(acao, { From: `+55${telefone()}`, CallSid: sid, Digits: '1' }, '')).status).toBe(401);
+    expect((await chamar(acao.replace(/x=\d+/, `x=${Date.now() + 99 * 60_000}`), { From: `+55${tel}`, CallSid: sid, Digits: '1' }, '')).status).toBe(401);
+
+    // no key pressed (Redirect without Digits) or another key: task only, and the voice does not promise WhatsApp
+    const tel2 = telefone();
+    const sid2 = `CA${unico()}`;
+    const acao2 = acaoDe(await (await chamar(base, { From: `+55${tel2}`, CallSid: sid2 })).text());
+    expect(await (await chamar(acao2, { From: `+55${tel2}`, CallSid: sid2, Digits: '2' }, '')).text()).toContain('Avisamos a equipe da sua ligação');
+    await processarFila();
+    expect(await doSistema(A.empresa.id, tel2)).toHaveLength(0);
+    expect((await tarefas(A.empresa.id, tel2))[0].detalhe).toMatch(/Sem autorização para WhatsApp/);
+
+    // hung up during the sentence: the status notice still creates the call-back task
+    const tel3 = telefone();
+    const sid3 = `CA${unico()}`;
+    await chamar(base, { From: `+55${tel3}`, CallSid: sid3 });
+    await chamar(`${base}?etapa=fim`, { From: `+55${tel3}`, CallSid: sid3, CallStatus: 'completed' });
+    expect(await tarefas(A.empresa.id, tel3)).toHaveLength(1);
+
+    // landline: no sentence about WhatsApp, straight to the task; hidden number: just a polite goodbye
+    const fixo = await (await chamar(base, { From: '+551133334444', CallSid: `CA${unico()}` })).text();
+    expect(fixo).not.toContain('Gather');
+    expect(fixo).toContain('Avisamos a equipe da sua ligação');
+    expect(await (await chamar(base, { From: 'anonymous', CallSid: `CA${unico()}` })).text()).toContain('ligue de novo mais tarde');
     expect(await contar('ligacoes where empresa_id = $1', [B.empresa.id])).toBe(0);
   });
 });

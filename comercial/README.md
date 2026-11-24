@@ -214,6 +214,19 @@ Com profissionais cadastrados (Agenda › “Profissionais e horário de trabalh
 - **A assistente** oferece os mesmos horários (um horário está livre se pelo menos um profissional está livre) e marca com quem estiver livre; ao remarcar, fica com o mesmo profissional quando ele está livre.
 - Demonstração: as empresas fictícias já vêm com Carla, Rafael e Bruno (seg a sex, 8h às 12h e 13h às 17h; o Bruno folga na quinta). O visitante da demonstração aberta mexe nos horários, mas não no cadastro.
 
+## Áudio no WhatsApp → texto
+
+O áudio que o cliente manda vira texto na própria conversa (`[Áudio] …`), para a assistente responder e para a equipe ler na caixa de conversas (`src/server/transcricao.ts`, trabalho `transcrever_audio` em `src/server/conversas.ts`).
+
+- **Variáveis (só na Vercel):** `TRANSCRICAO_API_KEY` (chave do serviço); opcionais `TRANSCRICAO_URL` (padrão: Groq, `https://api.groq.com/openai/v1/audio/transcriptions`) e `TRANSCRICAO_MODELO` (padrão `whisper-large-v3-turbo`). O formato é o comum de "audio/transcriptions": para usar a OpenAI, trocar endereço e modelo.
+- O arquivo é baixado da Meta com o token da empresa, que só vai para os servidores de arquivos da Meta; até 2 MB (vários minutos de áudio de voz). Idioma português.
+- Falha passageira (rede, 429, 5xx) tenta mais uma vez; outra falha, áudio grande demais ou transcrição vazia: a conversa vai para uma pessoa, como antes.
+- Teto de custo: 15 áudios por contato por hora e 300 por empresa por dia; acima disso, o áudio vai para a equipe sem transcrição.
+- "Pare de me mandar mensagem" dito num áudio vale como SAIR (mesma regra do texto).
+- Antes de ligar com cliente real: conferir nos termos do provedor que o áudio não é guardado nem usado para treinar modelo, e pôr o provedor no contrato de operador (LGPD, transferência internacional).
+- Sem chave: fora de produção usa o simulador; em produção o áudio vai para a equipe, como antes.
+- A assistente sabe que `[Áudio]` pode ter erro de transcrição e pede para confirmar o que não fizer sentido. A página de privacidade de cada empresa avisa do serviço de transcrição.
+
 ## Ligação não atendida → WhatsApp
 
 Quando alguém liga para a empresa e ninguém atende, a plataforma responde pelo WhatsApp, abre a oportunidade e cria a tarefa de retornar a ligação (Configurações › Ligações não atendidas; texto e liga/desliga em Regras).
@@ -225,6 +238,12 @@ Quando alguém liga para a empresa e ninguém atende, a plataforma responde pelo
 - Fora da janela de 24 horas precisa do modelo aprovado “resposta a ligação não atendida” (Configurações › WhatsApp).
 - Gatilho “Quando uma ligação não é atendida” no construtor de fluxos, com o modelo pronto “Ligação não atendida” (distribui e avisa a equipe se ninguém assumir em 30 minutos).
 - Na demonstração, “Simular ligação” em Configurações mostra tudo sem serviço de telefonia.
+- **Desvio da operadora (recomendado; a empresa continua com o número dela):** na linha da empresa, a operadora desvia para um número da Twilio as ligações não atendidas, ocupadas ou fora de área. Assim só a ligação perdida chega na plataforma e só ela gasta minuto (número US$ 4,25/mês + US$ 0,010/min recebido, pelos preços abaixo). Rota `POST /api/webhooks/telefonia/desvio` (`src/app/api/webhooks/telefonia/desvio/route.ts`):
+  - No número da Twilio, "A call comes in" → `https://growlift:<CHAVE>@<endereço>/api/webhooks/telefonia/desvio` e "Call status changes" → o mesmo endereço com `?etapa=fim`.
+  - A plataforma fala uma frase fixa em voz brasileira (Polly.Camila, `language="pt-BR"`): "Oi, aqui é da {empresa}. Não conseguimos atender agora. Quer receber uma mensagem nossa no WhatsApp, neste número, sobre a sua ligação? Aperte 1." (frase versão 2, guardada palavra por palavra em cada aceite; mudar uma palavra exige nova versão). Não é IA de voz. **Antes do primeiro cliente, ouvir a voz numa ligação de teste**; se soar portuguesa, trocar ou gravar com a voz de um dos sócios.
+  - Apertou 1: responde pelo WhatsApp e a assistente continua a conversa. Outra tecla, nenhuma ou desligou no meio (aviso `fim`): só a tarefa de retornar. Telefone fixo ou ligação de resposta desligada: não fala do WhatsApp, só a tarefa. Número oculto: só despedida.
+  - O passo da resposta não leva a chave da empresa: a URL é assinada para aquela ligação, aquele telefone e aquela empresa, e vale 10 minutos. Sem segredo do servidor, não oferece o WhatsApp (só a tarefa).
+  - A voz não promete retorno ("Avisamos a equipe da sua ligação"): a tarefa de retornar existe, mas a promessa falada obrigaria a empresa.
 - **Provedores pesquisados (14/11/2026, preços das páginas oficiais, sem imposto; conferir antes de contratar):**
   - **Twilio** (recomendado para o primeiro teste): número local no Brasil US$ 4,25/mês, receber ligação US$ 0,010/min, repassar para celular US$ 0,0663/min e para fixo US$ 0,031/min. O menu “aperte 1” (Gather) e o aviso de ligação não atendida (`DialCallStatus`, `CallSid`, `From`) já batem com a entrada da plataforma, sem adaptador. Número brasileiro pede cadastro com documentos e endereço, o que pode levar alguns dias. Fonte: twilio.com/en-us/voice/pricing/br.
   - **Plivo:** número no Brasil US$ 5 a 6,17/mês, receber a partir de US$ 0,006/min; API parecida com a da Twilio. Fonte: plivo.com/voice/pricing/br.
@@ -299,6 +318,7 @@ Nenhuma mensalidade é necessária para rodar o núcleo no computador. Em produ�
 | Hospedagem da aplicação + processo do worker | fixo | Não cotado. O worker precisa de um processo que fique ligado (ou uma chamada agendada frequente). |
 | PostgreSQL gerenciado | fixo | Não cotado. |
 | IA (Anthropic) | variável, por uso | Preços de tabela por milhão de tokens (entrada / saída), referência de 03/11/2026 do material da Anthropic usado no desenvolvimento: Opus 5.5 US$ 4 / US$ 20; Sonnet 5.5 US$ 2 / US$ 10; Haiku 5.5 US$ 0,10 / US$ 0,50. Conferir a página de preços antes de fechar valores. |
+| Transcrição de áudio | variável, por minuto | Groq whisper-large-v3-turbo US$ 0,04 por hora de áudio, mínimo de 10 s por pedido (groq.com/pricing, 24/11/2026). Alternativa: OpenAI gpt-4o-mini-transcribe, cerca de US$ 0,003/min (estimativa por tokens). 300 áudios de 30 s ≈ US$ 0,10. Conferir antes de contratar. |
 | WhatsApp (Meta) | variável, por mensagem | Pago pela empresa cliente à Meta. Preços não verificados (documentação inacessível daqui). |
 | E-mail transacional (convites, senha) | fixo ou por uso | Ainda não integrado. |
 | Domínio | fixo | Não cotado. |
@@ -328,7 +348,7 @@ Em 12/11/2026 rodaram as revisões de segurança e legal do repositório (autom�
 
 ## Fora desta versão (sem telas que finjam funcionar)
 
-Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanhas de anúncios, central telefônica, gestão financeira, contratos, pagamentos e cobrança automática de assinaturas. Também: envio de mídia, formulários de anúncio da Meta (Facebook/Instagram) e duração diferente por serviço na agenda.
+Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanhas de anúncios, central telefônica, gestão financeira, contratos, pagamentos e cobrança automática de assinaturas. Também: envio de mídia, leitura de foto e documento (só áudio vira texto), formulários de anúncio da Meta (Facebook/Instagram) e duração diferente por serviço na agenda.
 
 ## Próximos passos para o primeiro cliente em produção
 

@@ -131,8 +131,11 @@ export const ConfigEmpresa = z.object({
     .object({
       ativa: z.boolean().default(true),
       nome: z.string().trim().max(40).default('Ana'),
+      /** Speaks as the company ("a gente"), with no person's name: for channels where a name would mislead, like Growlift's own. */
+      falar_como_marca: z.boolean().default(false),
       modelo: Texto(60),
-      limite_respostas_mes: z.number().int().min(0).max(100000).default(500),
+      /** Monthly allowance of the entry plan: about 300 conversations (24/11/2026). */
+      limite_respostas_mes: z.number().int().min(0).max(100000).default(2000),
       max_mensagens_contexto: z.number().int().min(4).max(60).default(20),
       max_tokens_resposta: z.number().int().min(100).max(2000).default(500),
     })
@@ -197,13 +200,17 @@ export const TEXTO_CONSENTIMENTO_WHATSAPP = (empresa: string) =>
   `Autorizo a ${empresa} a falar comigo pelo WhatsApp sobre este pedido de orçamento, a proposta, para retornar minhas ligações, me lembrar das visitas marcadas e, depois do serviço, para me convidar a avaliar o atendimento e me lembrar da manutenção. Posso pedir para parar a qualquer momento respondendo SAIR.`;
 
 /**
- * What the phone menu says before the call rings (configured, word for word, in the telephony service) and what is
- * recorded when the caller presses 1. A new wording gets a new version, so each record says exactly what was heard.
+ * What the phone menu says and what is recorded when the caller presses 1. A new wording gets a new version, so each
+ * record says exactly what was heard. Version 1: menu before the call rings (configured, word for word, in the telephony
+ * service). Version 2: call the carrier forwarded because nobody answered; the platform itself speaks it (desvio route).
  */
 export const VERSAO_FRASE_LIGACAO = 1;
+export const VERSAO_FRASE_DESVIO = 2;
 export const FRASE_MENU_LIGACAO = (empresa: string) => `Se ninguém puder atender, quer receber uma mensagem da ${empresa} no WhatsApp, neste número? Aperte 1.`;
-export const TEXTO_ACEITE_LIGACAO = (empresa: string, idChamada: string, quando: Date) =>
-  `Na ligação de ${quando.toISOString()} (chamada ${idChamada}), quem ligou ouviu "${FRASE_MENU_LIGACAO(empresa)}" (frase versão ${VERSAO_FRASE_LIGACAO}) e apertou 1: autorizou uma mensagem da ${empresa} pelo WhatsApp sobre esta ligação.`;
+export const FRASE_DESVIO_LIGACAO = (empresa: string) => `Oi, aqui é da ${empresa}. Não conseguimos atender agora. Quer receber uma mensagem nossa no WhatsApp, neste número, sobre a sua ligação? Aperte 1.`;
+export type VersaoFraseLigacao = typeof VERSAO_FRASE_LIGACAO | typeof VERSAO_FRASE_DESVIO;
+export const TEXTO_ACEITE_LIGACAO = (empresa: string, idChamada: string, quando: Date, versao: VersaoFraseLigacao = VERSAO_FRASE_LIGACAO) =>
+  `Na ligação de ${quando.toISOString()} (chamada ${idChamada}), quem ligou ouviu "${(versao === VERSAO_FRASE_DESVIO ? FRASE_DESVIO_LIGACAO : FRASE_MENU_LIGACAO)(empresa)}" (frase versão ${versao}) e apertou 1: autorizou uma mensagem da ${empresa} pelo WhatsApp sobre esta ligação.`;
 
 export type Ambiente = 'desenvolvimento' | 'demonstracao' | 'producao';
 export function ambiente(): Ambiente {

@@ -4,6 +4,8 @@ import type { Campo, Conhecimento } from '../config';
 export interface ContextoIA {
   empresa: string;
   assistente: string;
+  /** Speaks as the company, with no person's name. */
+  comoMarca?: boolean;
   canal: 'site' | 'whatsapp';
   conhecimento: Conhecimento;
   campos: Campo[];

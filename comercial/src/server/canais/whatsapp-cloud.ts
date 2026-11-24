@@ -1,4 +1,5 @@
 import { createHmac } from 'node:crypto';
+import { buscarComPrazo } from '../erros';
 import { iguais } from '../segredos';
 import type { CanalWhatsApp, ModeloMensagem, ResultadoEnvio } from './tipos';
 
@@ -44,7 +45,32 @@ export function canalCloud(c: CredenciaisCloud, buscar: typeof fetch = fetch): C
         type: 'template',
         template: { name: m.nome, language: { code: m.idioma }, components: m.variaveis.length ? [{ type: 'body', parameters: m.variaveis.map((text) => ({ type: 'text', text })) }] : [] },
       }),
+    async baixarMidia(id) {
+      if (!versao) throw new Error('WHATSAPP_GRAPH_VERSION não configurada.');
+      const info = await buscarComPrazo(buscar, `https://graph.facebook.com/${versao}/${encodeURIComponent(id)}`, { headers: { Authorization: `Bearer ${c.accessToken}` } }, 15_000);
+      const j = (await info.json().catch(() => null)) as { url?: string; mime_type?: string; file_size?: number } | null;
+      if (!info.ok || !j?.url) throw new Error(`O WhatsApp não informou o arquivo (${info.status}).`);
+      if (Number(j.file_size ?? 0) > LIMITE_MIDIA) throw new Error('Arquivo grande demais.');
+      // The token goes only to Meta's own file servers.
+      if (!seguro(j.url)) throw new Error('Endereço do arquivo fora dos servidores da Meta.');
+      const arq = await buscarComPrazo(buscar, j.url, { headers: { Authorization: `Bearer ${c.accessToken}` }, redirect: 'error' }, 20_000);
+      if (!arq.ok) throw new Error(`Não foi possível baixar o arquivo (${arq.status}).`);
+      const dados = new Uint8Array(await arq.arrayBuffer());
+      if (dados.byteLength > LIMITE_MIDIA) throw new Error('Arquivo grande demais.');
+      return { dados, tipo: j.mime_type || arq.headers.get('content-type') || 'audio/ogg' };
+    },
   };
+}
+
+/** Files the customer sends are downloaded only up to this size (voice notes are far smaller). */
+const LIMITE_MIDIA = 5 * 1024 * 1024;
+function seguro(u: string): boolean {
+  try {
+    const x = new URL(u);
+    return x.protocol === 'https:' && !x.username && !x.password && /(^|\.)(fbsbx\.com|facebook\.com|whatsapp\.net)$/.test(x.hostname);
+  } catch {
+    return false;
+  }
 }
 
 /** Meta signs each webhook body with the app secret (header X-Hub-Signature-256). */
@@ -56,7 +82,7 @@ export function assinaturaValida(corpoBruto: string, cabecalho: string | null, a
 
 export interface EntradaWebhook {
   phoneNumberId: string;
-  mensagens: { id: string; de: string; nome: string; texto: string | null; tipo: string; quando: Date }[];
+  mensagens: { id: string; de: string; nome: string; texto: string | null; tipo: string; audio: { id: string; tipo: string } | null; quando: Date }[];
   estados: { id: string; estado: 'sent' | 'delivered' | 'read' | 'failed'; erro: string | null; quando: Date }[];
 }
 
@@ -82,6 +108,7 @@ export function lerWebhook(payload: unknown): EntradaWebhook[] {
             nome: nomes.get(m.from as string) ?? '',
             tipo: String(m.type ?? ''),
             texto: m.type === 'text' ? String((m.text as { body?: string })?.body ?? '') : m.type === 'button' ? String((m.button as { text?: string })?.text ?? '') : null,
+            audio: m.type === 'audio' && typeof (m.audio as { id?: unknown })?.id === 'string' ? { id: (m.audio as { id: string }).id, tipo: String((m.audio as { mime_type?: string }).mime_type ?? 'audio/ogg') } : null,
             quando: quando(m.timestamp),
           })),
         estados: (v.statuses ?? [])

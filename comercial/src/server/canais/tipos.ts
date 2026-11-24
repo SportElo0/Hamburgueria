@@ -18,4 +18,6 @@ export interface CanalWhatsApp {
   simulado: boolean;
   enviarTexto(para: string, corpo: string): Promise<ResultadoEnvio>;
   enviarModelo(para: string, modelo: ModeloMensagem): Promise<ResultadoEnvio>;
+  /** Downloads a file the customer sent (voice note), by its WhatsApp id. Throws when it cannot. */
+  baixarMidia(id: string): Promise<{ dados: Uint8Array; tipo: string }>;
 }

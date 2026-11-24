@@ -12,6 +12,8 @@ import { integracaoWhatsApp, salvarWhatsApp } from '@/server/integracoes';
 import { marcarServicoConcluido, mudarEtapa, obter, tarefas } from '@/server/oportunidades';
 import { receberPedido, type PedidoSalvo } from '@/server/pedidos';
 import { processarFila } from '@/server/trabalhos';
+import { transcritor, usarTranscritorDeTeste } from '@/server/transcricao';
+import { ErroTemporario } from '@/server/erros';
 import { contar, meta, novaEmpresa, pedido, telefone, unico, type Cenario } from './apoio';
 
 const CONHECIMENTO = {
@@ -513,5 +515,171 @@ describe('14. tentativa de burlar as instruções', () => {
     expect(o.etapa).toBe('novo');
     expect(o.contato_nome).toBe('Marina Teste');
     expect(await contar(`oportunidades where empresa_id = $1 and etapa = 'ganho'`, [A.empresa.id])).toBe(0);
+  });
+});
+
+describe('assistente falando como a empresa (canal da própria Growlift)', () => {
+  it('sem nome de pessoa no prompt nem na apresentação; a regra do "é robô?" continua', async () => {
+    const base = { empresa: 'Growlift', assistente: 'Ana', canal: 'whatsapp' as const, conhecimento: { descricao: 'Sites e atendimento.', servicos: '', horarios: '', regioes: '', faq: [], precos_autorizados: '', regras_comerciais: '', criterios_encaminhamento: '' }, campos: [], coletado: {}, faltando: [], horarios: null };
+    const { fixo } = promptDoSistema({ ...base, comoMarca: true } as never);
+    expect(fixo).toContain('Aqui é da Growlift');
+    expect(fixo).toContain('Não use nome de pessoa');
+    expect(fixo).not.toContain('Ana');
+    expect(fixo).toContain('não minta');
+    expect(fixo).toContain('"[Áudio]"');
+    expect(promptDoSistema(base as never).fixo).toContain('apresente-se pelo nome: "Ana, da Growlift"');
+    const C = await novaEmpresa('Growlift Teste', CONHECIMENTO);
+    await salvarConfig(C.admin, 'ia', { ...C.empresa.config.ia, falar_como_marca: true });
+    C.empresa = (await empresaPorId(C.empresa.id))!;
+    const chat = await escreverNoChatSite(C.empresa, null, 'Quanto tempo leva a instalação?', unico());
+    expect(chat.mensagens.at(-1)!.texto).toContain('Oi! Aqui é da Growlift Teste.');
+    expect(chat.mensagens.at(-1)!.texto).not.toContain('Ana');
+    expect(C.empresa.config.ia.limite_respostas_mes).toBe(2000);
+  });
+});
+
+describe('áudio no WhatsApp: vira texto para a assistente e para a equipe', () => {
+  const NUMERO = `8${Date.now()}`.slice(0, 15);
+  const audio = (de: string, id: string, midia: string) => ({ object: 'whatsapp_business_account', entry: [{ id: 'waba', changes: [{ field: 'messages', value: { messaging_product: 'whatsapp', metadata: { phone_number_id: NUMERO }, contacts: [{ wa_id: de, profile: { name: 'Cliente Áudio' } }], messages: [{ from: de, id, timestamp: String(Math.floor(Date.now() / 1000)), type: 'audio', audio: { id: midia, mime_type: 'audio/ogg; codecs=opus', voice: true } }] } }] }] });
+  let C: Cenario;
+  let chamadas: { url: string; auth: string }[];
+  /** Meta's network, simulated: media info, the file, and the outgoing reply. `endereco` is where Meta says the file is. */
+  const rede = (endereco = 'https://lookaside.fbsbx.com/whatsapp_business/attachments/?mid=1') => {
+    chamadas = [];
+    vi.stubGlobal('fetch', async (url: string, init: RequestInit = {}) => {
+      const u = String(url);
+      chamadas.push({ url: u, auth: String((init.headers as Record<string, string> | undefined)?.Authorization ?? '') });
+      if (u.endsWith('/messages')) return Response.json({ messages: [{ id: `wamid.out.${unico()}` }] });
+      if (u.startsWith('https://graph.facebook.com/')) return Response.json({ url: endereco, mime_type: 'audio/ogg; codecs=opus', file_size: 6000 });
+      return new Response(new Uint8Array(6000), { headers: { 'content-type': 'audio/ogg' } });
+    });
+  };
+  const conversaDe = async (de: string) => (await um<{ id: string; estado: string }>(`select v.id, v.estado from conversas v join contatos c on c.id = v.contato_id where c.telefone = $1 and v.empresa_id = $2`, [de, C.empresa.id]))!;
+
+  beforeAll(async () => {
+    C = await novaEmpresa('Solar Áudio', CONHECIMENTO);
+    await salvarConfig(C.admin, 'regras', { ...C.empresa.config.regras, hora_inicio: 0, hora_fim: 24 });
+    process.env.WHATSAPP_GRAPH_VERSION = 'v0.0-teste';
+    await salvarWhatsApp({ ...C.admin, acessoAdmin: 'suporte' }, { modo: 'oficial', phone_number_id: NUMERO }, 'token-secreto-da-empresa-C-5678');
+    C.empresa = (await empresaPorId(C.empresa.id))!;
+  });
+  afterEach(() => usarTranscritorDeTeste(undefined as unknown as null));
+
+  it('o áudio é baixado da Meta com o token da empresa, transcrito e respondido como texto', async () => {
+    const recebidos: string[] = [];
+    usarTranscritorDeTeste({ simulado: false, transcrever: async (dados, tipo) => (recebidos.push(`${dados.byteLength}:${tipo}`), 'Quanto tempo leva a instalação?') });
+    rede();
+    const de = `55${telefone()}`;
+    const midia = `media.${unico()}`;
+    const r = await processarWebhookWhatsApp(audio(de, `wamid.in.${unico()}`, midia));
+    expect(r.trabalhos).toHaveLength(1);
+    const v = await conversaDe(de);
+    expect((await mensagensDe(C.empresa.id, v.id))[0].corpo).toBe('[Áudio recebido. Transcrevendo…]');
+    await processarFila();
+    const ms = await mensagensDe(C.empresa.id, v.id);
+    expect(ms[0].corpo).toBe('[Áudio] Quanto tempo leva a instalação?');
+    expect(ms.map((m) => m.autor)).toEqual(['contato', 'ia']);
+    expect(ms[1].corpo).toContain('2 a 3 dias');
+    expect(recebidos).toEqual(['6000:audio/ogg; codecs=opus']);
+    expect(chamadas[0]).toEqual({ url: `https://graph.facebook.com/v0.0-teste/${midia}`, auth: 'Bearer token-secreto-da-empresa-C-5678' });
+    expect(chamadas[1].url).toMatch(/^https:\/\/lookaside\.fbsbx\.com\//);
+    expect(await estado(v.id)).toBe('ia_ativa');
+  });
+
+  it('o token nunca vai para endereço fora da Meta; sem transcrição a conversa vai para uma pessoa', async () => {
+    usarTranscritorDeTeste({ simulado: false, transcrever: async () => 'nunca chega aqui' });
+    rede('https://servidor-estranho.example/arquivo.ogg');
+    const de = `55${telefone()}`;
+    await processarWebhookWhatsApp(audio(de, `wamid.in.${unico()}`, `media.${unico()}`));
+    await processarFila();
+    const v = await conversaDe(de);
+    expect(chamadas.some((c) => c.url.includes('servidor-estranho'))).toBe(false);
+    expect((await mensagensDe(C.empresa.id, v.id))[0].corpo).toBe('[O cliente enviou um áudio que não deu para transcrever.]');
+    expect(v.estado).toBe('aguardando_humano');
+
+    // transcription that comes back empty: same, a person takes over
+    usarTranscritorDeTeste({ simulado: false, transcrever: async () => '' });
+    rede();
+    const de2 = `55${telefone()}`;
+    await processarWebhookWhatsApp(audio(de2, `wamid.in.${unico()}`, `media.${unico()}`));
+    await processarFila();
+    expect((await conversaDe(de2)).estado).toBe('aguardando_humano');
+  });
+
+  it('falha passageira do serviço (rede, 429, 5xx): tenta mais uma vez antes de chamar uma pessoa', async () => {
+    let vezes = 0;
+    usarTranscritorDeTeste({ simulado: false, transcrever: async () => { vezes++; if (vezes === 1) throw new ErroTemporario('Serviço indisponível (503).'); return 'Vocês atendem Valinhos?'; } });
+    rede();
+    const de = `55${telefone()}`;
+    await processarWebhookWhatsApp(audio(de, `wamid.in.${unico()}`, `media.${unico()}`));
+    await processarFila();
+    const v = await conversaDe(de);
+    expect((await mensagensDe(C.empresa.id, v.id))[0].corpo).toBe('[Áudio recebido. Transcrevendo…]');
+    await q(`update trabalhos set executar_em = now() - interval '1 second' where conversa_id = $1 and tipo = 'transcrever_audio' and estado = 'pendente'`, [v.id]);
+    await processarFila();
+    expect((await mensagensDe(C.empresa.id, v.id))[0].corpo).toBe('[Áudio] Vocês atendem Valinhos?');
+    expect(vezes).toBe(2);
+    expect(await estado(v.id)).toBe('ia_ativa');
+  });
+
+  it('"pare de me mandar mensagem" num áudio vale como SAIR: ninguém responde e nada automático sai', async () => {
+    usarTranscritorDeTeste({ simulado: false, transcrever: async () => 'Por favor, pare de me mandar mensagem.' });
+    rede();
+    const de = `55${telefone()}`;
+    await processarWebhookWhatsApp(audio(de, `wamid.in.${unico()}`, `media.${unico()}`));
+    await processarFila();
+    const v = await conversaDe(de);
+    const ms = await mensagensDe(C.empresa.id, v.id);
+    expect(ms.map((m) => m.autor)).toEqual(['contato']);
+    expect(await um(`select 1 from contatos where telefone = $1 and empresa_id = $2 and nao_contatar_em is not null`, [de, C.empresa.id])).toBeTruthy();
+    expect(await contar(`tarefas where empresa_id = $1 and tipo = 'descadastro' and conversa_id = $2`, [C.empresa.id, v.id])).toBe(1);
+  });
+
+  it('teto de custo: acima de 15 áudios por hora do mesmo contato, o áudio vai para a equipe sem transcrever', async () => {
+    let vezes = 0;
+    usarTranscritorDeTeste({ simulado: false, transcrever: async () => (vezes++, 'oi') });
+    rede();
+    const de = `55${telefone()}`;
+    for (let i = 0; i < 16; i++) await processarWebhookWhatsApp(audio(de, `wamid.in.${unico()}`, `media.${unico()}`));
+    const v = await conversaDe(de);
+    const ms = await mensagensDe(C.empresa.id, v.id);
+    expect(ms.filter((m) => m.corpo === '[Áudio recebido. Transcrevendo…]')).toHaveLength(15);
+    expect(ms.at(-1)!.corpo).toMatch(/A assistente só lê texto/);
+    expect(await estado(v.id)).toBe('aguardando_humano');
+    expect(vezes).toBe(0);
+  });
+
+  it('sem serviço de transcrição (produção sem chave), continua como antes: vai para a equipe', async () => {
+    usarTranscritorDeTeste(null);
+    rede();
+    const de = `55${telefone()}`;
+    const r = await processarWebhookWhatsApp(audio(de, `wamid.in.${unico()}`, `media.${unico()}`));
+    expect(r.trabalhos).toHaveLength(0);
+    const v = await conversaDe(de);
+    expect(v.estado).toBe('aguardando_humano');
+    expect((await mensagensDe(C.empresa.id, v.id))[0].corpo).toMatch(/A assistente só lê texto/);
+  });
+
+  it('o serviço real recebe o arquivo, o modelo e o idioma português, com a chave só no cabeçalho', async () => {
+    const pedidos: { url: string; auth: string; campos: Record<string, string> }[] = [];
+    vi.stubGlobal('fetch', async (url: string, init: RequestInit) => {
+      const fd = init.body as FormData;
+      pedidos.push({ url: String(url), auth: String((init.headers as Record<string, string>).Authorization), campos: Object.fromEntries([...fd.entries()].map(([k, v]) => [k, typeof v === 'string' ? v : `arquivo:${(v as File).name}:${(v as File).type}`])) });
+      return Response.json({ text: '  Oi,   tudo bem?  ' });
+    });
+    usarTranscritorDeTeste(undefined as unknown as null);
+    process.env.TRANSCRICAO_API_KEY = 'chave-de-teste-transcricao';
+    try {
+      expect(await transcritor()!.transcrever(new Uint8Array(100), 'audio/ogg; codecs=opus')).toBe('Oi, tudo bem?');
+      await expect(transcritor()!.transcrever(new Uint8Array(3 * 1024 * 1024), 'audio/ogg')).rejects.toThrow(/grande/);
+    } finally {
+      delete process.env.TRANSCRICAO_API_KEY;
+    }
+    expect(pedidos).toHaveLength(1);
+    expect(pedidos[0]).toEqual({
+      url: 'https://api.groq.com/openai/v1/audio/transcriptions',
+      auth: 'Bearer chave-de-teste-transcricao',
+      campos: { file: 'arquivo:audio.ogg:audio/ogg', model: 'whisper-large-v3-turbo', language: 'pt', response_format: 'json' },
+    });
   });
 });

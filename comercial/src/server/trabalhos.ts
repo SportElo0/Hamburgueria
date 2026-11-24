@@ -1,6 +1,6 @@
 import { criarTarefa, registrar } from './contexto';
 import { enviarAvisosCelular } from './push';
-import { despachar, responderComIA, JANELA_WHATSAPP_MS, type Conversa } from './conversas';
+import { despachar, responderComIA, transcreverAudio, JANELA_WHATSAPP_MS, type Conversa } from './conversas';
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, type Empresa } from './empresas';
 import { nomeSeguro } from './trabalhos-texto';
@@ -108,6 +108,7 @@ export { nomeSeguro };
 
 export const executores: Record<string, Executor> = {
   responder_ia: responderComIA,
+  transcrever_audio: transcreverAudio,
   fluxo_passo: (t) => executarPassoFluxo(t, (tr, i) => enviarIniciada(tr, i)),
   enviar_mensagem: despachar,
 

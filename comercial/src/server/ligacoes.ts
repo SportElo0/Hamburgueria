@@ -1,4 +1,4 @@
-import { TEXTO_ACEITE_LIGACAO, VERSAO_FRASE_LIGACAO, ambiente, formatarTelefone, normalizarTelefone, type Etapa } from './config';
+import { TEXTO_ACEITE_LIGACAO, VERSAO_FRASE_LIGACAO, ambiente, formatarTelefone, normalizarTelefone, type Etapa, type VersaoFraseLigacao } from './config';
 import { ator, criarTarefa, dentroDoLimite, exigirAdmin, exigirNaoVisitante, registrar, type Ctx } from './contexto';
 import { q, tx, um } from './db';
 import { empresaPorId, membroAtivo, type Empresa } from './empresas';
@@ -23,6 +23,8 @@ export interface LigacaoPerdida {
   quando?: Date;
   /** The caller pressed 1 in the call menu to receive the answer by WhatsApp. */
   aceiteWhatsapp: boolean;
+  /** Which menu wording the caller heard (1: before ringing, set up in the service; 2: after the carrier forwarded the unanswered call). */
+  versaoFrase?: VersaoFraseLigacao;
   simulada?: boolean;
 }
 
@@ -34,7 +36,8 @@ const MAX_RESPOSTAS_HORA = 40;
 /** Calls from the same number within this window count as one (someone calling three times in a row): one task, no new message.
  * Messages: at most one per number per 24 hours. */
 const JANELA_REPETIDA_MS = 2 * 3_600_000;
-const celular = (tel: string) => /^55[1-9]\d9\d{8}$/.test(tel);
+/** Brazilian mobile number (only mobiles get WhatsApp answers). */
+export const celular = (tel: string) => /^55[1-9]\d9\d{8}$/.test(tel);
 
 export async function registrarLigacaoPerdida(empresa: Empresa, l: LigacaoPerdida): Promise<{ resultado: ResultadoLigacao; oportunidadeId?: string }> {
   const tel = normalizarTelefone(l.telefone);
@@ -72,7 +75,7 @@ async function gravarLigacao(empresa: Empresa, l: LigacaoPerdida, tel: string, i
     // Not recorded when the answer is switched off, for a landline or for someone who asked to stop.
     const aceitouAgora = l.aceiteWhatsapp && celular(tel) && !pediuSair && empresa.config.regras.ligacao_auto;
     if (aceitouAgora) {
-      await q(`insert into consentimentos (empresa_id, contato_id, canal, texto, origem, versao) values ($1, $2, 'whatsapp', $3, 'ligacao', $4)`, [empresa.id, contato.id, TEXTO_ACEITE_LIGACAO(empresa.nome, idExterno, quando), VERSAO_FRASE_LIGACAO], db);
+      await q(`insert into consentimentos (empresa_id, contato_id, canal, texto, origem, versao) values ($1, $2, 'whatsapp', $3, 'ligacao', $4)`, [empresa.id, contato.id, TEXTO_ACEITE_LIGACAO(empresa.nome, idExterno, quando, l.versaoFrase ?? VERSAO_FRASE_LIGACAO), l.versaoFrase ?? VERSAO_FRASE_LIGACAO], db);
     }
 
     // An open opportunity of this contact gets the call; otherwise the call opens a new one.
@@ -141,7 +144,9 @@ async function gravarLigacao(empresa: Empresa, l: LigacaoPerdida, tel: string, i
 export function textoRetornoLigacao(empresa: Empresa, foraDoHorario: boolean): string {
   const r = empresa.config.regras;
   const base = foraDoHorario ? r.ligacao_texto_fora : r.ligacao_texto;
-  const corpo = base
+  // Speaking as the company: "Aqui é {{atendente}}, da {{empresa}}" becomes "Aqui é da {{empresa}}".
+  const semNome = empresa.config.ia.falar_como_marca ? base.replace(/\{\{\s*atendente\s*\}\}\s*,\s*d([ao])\s+(?=\{\{\s*empresa\s*\}\})/g, 'd$1 ') : base;
+  const corpo = semNome
     .replace(/\{\{\s*empresa\s*\}\}/g, () => empresa.nome)
     .replace(/\{\{\s*atendente\s*\}\}/g, () => empresa.config.ia.nome || 'a equipe')
     .replace(/\{\{\s*abertura\s*\}\}/g, () => `${r.hora_inicio}h`);
