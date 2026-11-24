@@ -388,3 +388,11 @@ Aplicativo nativo, construtor visual de sites, disparos de prospecção, campanh
 5. Rodar as revisões de segurança e legal do repositório (`revisor-seguranca`, `revisor-legal`) e corrigir o que apontarem.
 6. Testar backup e restauração.
 7. Com o cliente: texto de privacidade revisado por advogado, conteúdo aprovado, modelos de mensagem aprovados na Meta, equipe convidada.
+
+## Resumo diário dos e-mails da Growlift
+
+Só para a empresa `growlift`. Todo dia às 6h de Brasília (a Vercel grátis dispara dentro dessa hora), `/api/cron/resumo-email` lê, só para leitura, os e-mails novos do Gmail da equipe por IMAP, com uma **senha de app da conta da Growlift** (variáveis `EMAIL_RESUMO_USUARIO` e `EMAIL_RESUMO_SENHA_APP`, Production, Sensitive; nunca uma senha pessoal). A IA (modelo padrão, saída estruturada) separa o que é importante, a categoria, a urgência e um motivo de uma frase; o que ela não classificar aparece como importante. A equipe recebe um aviso sem nomes (painel e celular) e a página `/painel/emails`. Precisa de `CRON_SECRET` na Vercel (Production) para o agendador, e do `IA_ANTHROPIC_API_KEY`. O e-mail do resumo (`EMAIL_RESUMO_DESTINO`) só sai quando o Resend estiver ligado (e a política do site citar o Resend).
+
+- **Vai para a IA:** remetente, assunto e os primeiros 300 caracteres do corpo, sem links, e-mails, CPF, CNPJ nem telefones. **Fica guardado:** remetente, assunto, categoria, urgência e motivo, por 90 dias (limpeza diária). O corpo nunca é gravado.
+- **"Apagar meus dados":** em `/painel/emails`, "Apagar uma pessoa dos resumos" tira o remetente dos resumos; depois apagar o e-mail original no Gmail (e a cópia do resumo, se o Resend estiver ligado).
+- **Registro do legítimo interesse (LGPD, art. 10), 24/11/2026:** *finalidade*, não perder pedidos, pagamentos e prazos de quem escreve para a Growlift; *necessidade*, só remetente, assunto e um trecho curto sem dados soltos, só leitura; *expectativa*, quem escreve para um negócio espera que a equipe leia; *salvaguardas*, só administradores da Growlift veem, 90 dias, sem decisão automática sobre a pessoa, política do site citando o tratamento. Antes de ligar: conferir que a conta da Anthropic aceita o contrato de tratamento de dados (DPA) e não usa os dados para treino.

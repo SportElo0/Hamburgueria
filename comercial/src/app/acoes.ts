@@ -237,6 +237,18 @@ export const gerarResumoEmailAcao = async () =>
     return { ok: r.total ? `Pronto: ${r.total} e-mail(s) lidos, ${r.importantes} importante(s).` : 'Pronto: nenhum e-mail novo desde o último resumo.' };
   });
 
+export const apagarRemetenteResumoAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const ctx = await exigirCtx();
+    exigirAdmin(ctx);
+    const { apagarRemetenteDosResumos, SLUG_EMAIL } = await import('@/server/resumo-email');
+    const e = await um<{ slug: string }>('select slug from empresas where id = $1', [ctx.empresaId]);
+    if (e?.slug !== SLUG_EMAIL) throw new ErroDeUso('Esta função é só da Growlift.', 403);
+    const n = await apagarRemetenteDosResumos(ctx.empresaId, t(fd, 'remetente'));
+    revalidatePath('/painel/emails');
+    return { ok: n ? `Pronto: ${n} item(ns) apagado(s) dos resumos. Lembre de apagar também o e-mail original no Gmail.` : 'Nenhum item desse remetente nos resumos guardados.' };
+  });
+
 /* ---------- Conversations ---------- */
 
 export const assumirAcao = async (_: Retorno, fd: FormData) =>

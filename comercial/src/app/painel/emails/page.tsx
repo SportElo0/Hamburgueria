@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { gerarResumoEmailAcao } from '@/app/acoes';
+import { apagarRemetenteResumoAcao, gerarResumoEmailAcao } from '@/app/acoes';
 import { dataHora } from '@/componentes/formato';
 import { Enviar, Formulario } from '@/componentes/formulario';
 import { q, um } from '@/server/db';
@@ -36,7 +36,7 @@ export default async function Emails() {
           </Formulario>
         )}
       </div>
-      <p className="text-suave">Todo dia, de manhã, o sistema lê (só leitura) os e-mails novos da caixa da Growlift, a IA separa o que é importante e avisa vocês. Ele não responde, não apaga e não marca como lido. O texto dos e-mails não fica guardado: só o remetente, o assunto e o motivo, por 90 dias.</p>
+      <p className="text-suave">Todo dia, de manhã, o sistema lê (só leitura) os e-mails novos da caixa da Growlift, a IA separa o que é importante e avisa vocês. Ele não responde, não apaga e não marca como lido. O texto dos e-mails não fica guardado: só o remetente, o assunto e o motivo, por 90 dias. As primeiras linhas de cada e-mail (sem links, telefones, CPF e e-mails soltos) vão para a IA da Anthropic só para classificar.</p>
 
       {!ligado && (
         <section className="card space-y-2 border-l-4 border-aviso">
@@ -49,6 +49,17 @@ export default async function Emails() {
         </section>
       )}
 
+      <section className="card space-y-2">
+        <h2 className="text-lg font-bold">Apagar uma pessoa dos resumos</h2>
+        <p className="text-sm text-suave">Para atender um pedido de “apagar meus dados”: escreva o endereço de e-mail de quem pediu. Os itens dessa pessoa saem dos resumos guardados. Depois, apague também o e-mail original no Gmail.</p>
+        <Formulario acao={apagarRemetenteResumoAcao} className="flex flex-wrap items-end gap-2">
+          <div><label className="rotulo" htmlFor="remetente">E-mail de quem pediu</label><input className="campo" id="remetente" name="remetente" type="email" required /></div>
+          <Enviar>Apagar dos resumos</Enviar>
+        </Formulario>
+      </section>
+      {ligado && !process.env.CRON_SECRET && (
+        <p role="alert" className="rounded-md bg-erro-clara px-3 py-2 text-erro">Falta a variável <code>CRON_SECRET</code> na Vercel (Production, Sensitive, qualquer texto aleatório com 32 letras ou mais). Sem ela o resumo automático das 6h não roda; o botão acima continua funcionando.</p>
+      )}
       {linhas.length === 0 && ligado && <p className="card text-suave">Ainda não rodou. Toque em “Gerar o resumo agora” para testar.</p>}
       {linhas.map((r) => (
         <section key={r.id} className="card space-y-3">

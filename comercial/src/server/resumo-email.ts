@@ -59,7 +59,8 @@ export const emailConfigurado = () => !!(process.env.EMAIL_RESUMO_USUARIO && pro
 
 const URL = /\b(?:https?:\/\/|www\.)\S+/gi;
 /** The first lines of a message, without links, signatures' noise or quoted replies, for the AI (never stored). */
-export function limparTrecho(texto: string, max = 500): string {
+const DADOS = [/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g, /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g, /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/g, /\+?\(?\d[\d\s().-]{7,}\d/g];
+export function limparTrecho(texto: string, max = 300): string {
   return texto
     .split(/\r?\n/)
     .filter((l) => !/^\s*>/.test(l))
@@ -68,7 +69,9 @@ export function limparTrecho(texto: string, max = 500): string {
     .replace(/[<>]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, max);
+    .slice(0, max)
+    // E-mails, CPF, CNPJ, phones and card numbers typed in the body never go to the AI (the chat does the same).
+    .replace(DADOS[0], '[dado]').replace(DADOS[1], '[dado]').replace(DADOS[2], '[dado]').replace(DADOS[3], '[dado]');
 }
 const limparLinha = (s: string, max: number) => s.replace(/[\u0000-\u001f\u007f-\u009f<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
 
@@ -151,9 +154,26 @@ async function classificarComIA(msgs: Mensagem[]): Promise<Classe[]> {
       messages: [{ role: 'user', content: texto }],
     });
     if (r.stop_reason === 'refusal' || !r.parsed_output) continue;
-    for (const x of r.parsed_output.itens) saida.push({ ...x, motivo: limparLinha(x.motivo, 140) });
+    // The reason is written by the model after reading someone else's text: no links or phone numbers in it.
+    for (const x of r.parsed_output.itens) saida.push({ ...x, motivo: limparLinha(x.motivo, 140).replace(URL, '[link]').replace(/\+?\d[\d\s().-]{6,}\d/g, '[número]') });
   }
   return saida;
+}
+
+/** "Apagar meus dados": takes one sender out of every kept summary (by e-mail address or part of the name). Returns how many items went. */
+export async function apagarRemetenteDosResumos(empresaId: string, busca: string): Promise<number> {
+  const termo = busca.trim().toLowerCase();
+  if (termo.length < 4) throw new ErroDeUso('Escreva o endereço de e-mail completo (ou pelo menos 4 letras do nome).');
+  const linhas = await q<{ id: string; importantes: ItemImportante[] }>('select id, importantes from resumos_email where empresa_id = $1', [empresaId]);
+  let n = 0;
+  for (const l of linhas) {
+    const resto = l.importantes.filter((x) => !x.de.toLowerCase().includes(termo));
+    if (resto.length !== l.importantes.length) {
+      n += l.importantes.length - resto.length;
+      await q('update resumos_email set importantes = $2 where id = $1', [l.id, JSON.stringify(resto)]);
+    }
+  }
+  return n;
 }
 
 export interface ResultadoResumo {

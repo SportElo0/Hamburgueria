@@ -1,7 +1,7 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import { fecharPool, q, um } from '@/server/db';
 import { limparDadosAntigos } from '@/server/limpeza';
-import { gerarResumoEmail, limparTrecho, usarEmailDeTeste, type Classe, type Mensagem } from '@/server/resumo-email';
+import { apagarRemetenteDosResumos, gerarResumoEmail, limparTrecho, usarEmailDeTeste, type Classe, type Mensagem } from '@/server/resumo-email';
 import { novaEmpresa } from './apoio';
 
 afterAll(async () => {
@@ -25,6 +25,7 @@ const classes = (msgs: Mensagem[]): Classe[] => ([
 describe('resumo diário dos e-mails da Growlift', () => {
   it('limpa o trecho: sem link, sem resposta citada e sem sinais < >', () => {
     expect(limparTrecho('Oi <b>tudo</b>?\n> citado antigo\nVeja https://golpe.example/x agora')).toBe('Oi b tudo /b ? Veja [link] agora');
+    expect(limparTrecho('Meu CPF 123.456.789-09, fone (11) 91234-5678 e e-mail fulano@x.exemplo.')).toBe('Meu CPF [dado], fone [dado] e e-mail [dado].');
   });
 
   it('classifica, junta o que não foi classificado, avisa a equipe sem nomes e roda uma vez por dia', async () => {
@@ -66,6 +67,9 @@ describe('resumo diário dos e-mails da Growlift', () => {
     const depois = new Date(agora.getTime() + 3600_000);
     await gerarResumoEmail({ forcar: true, agora: depois });
     expect(desdeVisto!.getTime()).toBe(agora.getTime());
+    // pedido de "apagar meus dados": o remetente sai dos resumos guardados
+    expect(await apagarRemetenteDosResumos(e.empresa.id, 'marina@clinica.exemplo')).toBe(2);
+    expect(await apagarRemetenteDosResumos(e.empresa.id, 'marina@clinica.exemplo')).toBe(0);
     // retenção de 90 dias
     await q(`update resumos_email set criado_em = now() - interval '91 days' where id = $1`, [r.resumoId]);
     await limparDadosAntigos(true);
