@@ -60,9 +60,10 @@ const SITE_GROWLIFT = {
 
 /**
  * Keeps the Growlift company ready for growlift.com.br, at every build. The public key must always match the site.
- * The rest is applied once, while the company is still as it was created (diagnostic fields still the segment's
- * defaults, or the knowledge still the untouched first draft), so nothing the partners change in the panel is undone:
- * the diagnostic fields, the empty company data, the 12 months of the site's privacy policy and the full knowledge.
+ * So must the data retention: at most the 12 months its privacy policy promises. The rest is applied once, while the
+ * company is still as it was created (diagnostic fields still the segment's defaults, or the knowledge still the
+ * untouched first draft), so nothing the partners change in the panel is undone: the diagnostic fields, the empty
+ * company data and the full knowledge.
  * Does nothing when the company does not exist (demo databases, a database not set up yet).
  */
 export async function atualizarGrowlift(): Promise<string> {
@@ -84,9 +85,13 @@ export async function atualizarGrowlift(): Promise<string> {
     if (camposPadrao || ultima?.rascunho) {
       if (camposPadrao) c.campos = CAMPOS_GROWLIFT;
       for (const [k, v] of Object.entries(SITE_GROWLIFT) as [keyof typeof SITE_GROWLIFT, string][]) if (!c.site[k]) c.site[k] = v;
-      if (c.dados.guarda_meses === 24) c.dados.guarda_meses = 12;
       await q('update empresas set config = $2 where id = $1', [e.id, JSON.stringify(c)], db);
       feito.push('perguntas do diagnóstico e dados da empresa');
+    }
+    // The site's privacy policy promises 12 months: never keep longer (0 = never delete would break it too).
+    if (c.dados.guarda_meses === 0 || c.dados.guarda_meses > 12) {
+      await q(`update empresas set config = jsonb_set(config, '{dados,guarda_meses}', '12') where id = $1`, [e.id], db);
+      feito.push('guarda de 12 meses (política do site)');
     }
     if (ultima?.rascunho) {
       await q('insert into conhecimento (empresa_id, versao, dados) values ($1, $2, $3)', [e.id, ultima.versao + 1, JSON.stringify(CONHECIMENTO_GROWLIFT)], db);
@@ -166,7 +171,7 @@ export const CONHECIMENTO_GROWLIFT = {
   ],
   precos_autorizados: '',
   regras_comerciais:
-    'Não dizer preço de plano: o preço vem no plano, por escrito, depois do diagnóstico. Não prometer posição no Google, número de vendas ou de clientes, nem prazo além dos escritos aqui (plano em até 2 dias úteis). Não citar clientes. Não fechar contrato, não cobrar e não mandar link de pagamento pelo chat. Para quem quiser o diagnóstico, pedir o nome do negócio, o ramo, a cidade e o WhatsApp, ou indicar o formulário do site.',
+    'Não dizer preço de plano: o preço vem no plano, por escrito, depois do diagnóstico. Não prometer posição no Google, número de vendas ou de clientes, nem prazo além dos escritos aqui (plano em até 2 dias úteis). Não citar clientes. Não fechar contrato, não cobrar e não mandar link de pagamento pelo chat. Para quem quiser o diagnóstico, pedir o nome do negócio, o ramo, a cidade e o WhatsApp, ou indicar o formulário do site. Ao pedir o WhatsApp, avisar que a equipe vai chamar nesse número para enviar o diagnóstico e o plano.',
   criterios_encaminhamento:
     'Chamar alguém da equipe quando a pessoa: quiser o diagnóstico e já tiver deixado o WhatsApp; pedir proposta, preço ou desconto; quiser contratar, cancelar ou falar do contrato; já for cliente e tiver um problema; ou perguntar algo que não está nestas informações.',
 };

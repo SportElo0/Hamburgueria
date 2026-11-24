@@ -71,11 +71,17 @@ describe('primeiro acesso a um banco de produção novo', () => {
     expect(await um('select 1 from consentimentos where empresa_id = $1', [e.empresa.id])).toBeNull();
     expect(await um(`select 1 from trabalhos where empresa_id = $1 and tipo = 'confirmacao_pedido'`, [e.empresa.id])).toBeNull();
 
-    // The team edits the knowledge and the data retention; the next builds keep it.
+    // The team edits the knowledge and shortens the retention; the next builds keep it.
     await q('insert into conhecimento (empresa_id, versao, dados) values ($1, 3, $2)', [e.empresa.id, JSON.stringify({ ...CONHECIMENTO_GROWLIFT, horarios: 'Seg a sex, 9h às 18h' })]);
-    await q(`update empresas set config = jsonb_set(config, '{dados,guarda_meses}', '24') where id = $1`, [e.empresa.id]);
+    await q(`update empresas set config = jsonb_set(config, '{dados,guarda_meses}', '6') where id = $1`, [e.empresa.id]);
     expect(await atualizarGrowlift()).toBe('growlift: nada a atualizar');
-    expect((await empresaPorId(e.empresa.id))!.config.dados.guarda_meses).toBe(24);
+    expect((await empresaPorId(e.empresa.id))!.config.dados.guarda_meses).toBe(6);
+    // Longer than the site's policy promises (or never deleting) goes back to 12 months.
+    for (const meses of [24, 0]) {
+      await q(`update empresas set config = jsonb_set(config, '{dados,guarda_meses}', $2::jsonb) where id = $1`, [e.empresa.id, String(meses)]);
+      expect(await atualizarGrowlift()).toMatch(/guarda de 12 meses/);
+      expect((await empresaPorId(e.empresa.id))!.config.dados.guarda_meses).toBe(12);
+    }
     expect((await um<{ n: number }>('select count(*)::int as n from conhecimento where empresa_id = $1', [e.empresa.id]))!.n).toBe(3);
     await q(`${aposentar} where id = $1`, [e.empresa.id]);
   });

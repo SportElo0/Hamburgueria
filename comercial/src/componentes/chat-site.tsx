@@ -107,7 +107,7 @@ export function ChatSite({ chave, empresa, tokenInicial, aberto: abertoInicial =
           <button className="botao shrink-0" disabled={enviando || !texto.trim()}>{enviando ? '…' : 'Enviar'}</button>
         </div>
         <p className="mt-1.5 px-1 text-[12px] leading-snug text-suave">
-          Ao escrever, você concorda que a conversa seja guardada pela {empresa} para atender seu pedido.
+          A conversa fica guardada pela {empresa} para atender seu pedido.
           {linkPrivacidade && <> Saiba como usamos seus dados em <a className="underline" href={linkPrivacidade} target="_blank" rel="noopener noreferrer">Privacidade</a>.</>}
         </p>
       </form>
