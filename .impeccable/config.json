@@ -1,0 +1,134 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "growlift-social/_fonte/presentes/checklist-farol.html",
+      "marketing/propostas/fish-burguer-reativacao.html"
+    ],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "inter tight",
+        "createdAt": "2026-11-09T02:36:00.588Z",
+        "reason": "user brief for the Lumivale concept site specifies Inter Tight with Helvetica Neue fallback"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter tight",
+        "createdAt": "2026-11-09T02:49:15.872Z",
+        "reason": "user brief for Lumivale specifies Inter Tight"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T02:49:25.078Z",
+        "reason": "the radial glow is the sun itself (preloader, hero, final glow) in the Lumivale solar concept brief"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T02:49:25.087Z",
+        "reason": "soft brand-blue shadow on the CTA dot and drag cursor, part of the sky-and-sun look the Lumivale brief asks for"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "full-bleed section color bands and the accordion's top divider line; text is inset by .wrap padding (checked in screenshots at 390-1440 px)"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "lumivale/index.html"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "measured without the stylesheet; real sizes are h2 clamp up to ~80px, h3 20-26px, body 16-18px"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "lumivale/styles.css"
+        ],
+        "createdAt": "2026-11-09T10:32:00.000Z",
+        "reason": "the font is Inter Tight, which the Lumivale brief specifies"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "fraunces",
+        "createdAt": "2026-11-16T11:23:45.090Z",
+        "reason": "Claude: areia-clara/ is a fictitious client concept site with its own type system, separate from the Growlift DESIGN.md"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.252Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.263Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.272Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "buried-raster",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.282Z",
+        "reason": "Claude: areia-clara follows the user's Pinterest editorial reference and the user asked for lots of animation; day-section photos crossfade by design"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "areia-clara/index.html"
+        ],
+        "createdAt": "2026-11-16T11:44:24.292Z",
+        "reason": "Claude: flagged light text sits on the hero video, panorama photo or dark sections, not on the sand page background the static scan assumes"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "cinzel",
+        "createdAt": "2026-11-24T01:37:04.566Z"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "montserrat",
+        "createdAt": "2026-11-24T01:37:04.576Z"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-24T13:32:39.294Z"
+      }
+    ]
+  }
+}

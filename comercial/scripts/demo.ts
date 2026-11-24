@@ -1,0 +1,222 @@
+import { randomUUID } from 'node:crypto';
+import { carregarEnv } from './env';
+
+carregarEnv();
+
+const SENHA = 'demonstracao-2026';
+
+/**
+ * Demonstration data: two fictitious companies (to show isolation), their teams and a few requests.
+ * Every name, phone and number here is invented. Never run against a production database.
+ */
+async function main() {
+  if (!['desenvolvimento', 'demonstracao'].includes(process.env.AMBIENTE ?? '')) throw new Error('Recusado: dados de demonstração só entram com AMBIENTE=desenvolvimento ou demonstracao definido.');
+  const { q, um, fecharPool } = await import('../src/server/db');
+  const { criarUsuario } = await import('../src/server/auth');
+  const { criarEmpresa, empresaPorId, salvarConfig, definirResponsavelPadrao } = await import('../src/server/empresas');
+  const { salvarConhecimento } = await import('../src/server/conhecimento');
+  const { receberPedido } = await import('../src/server/pedidos');
+  const { mudarEtapa, anotar, definirProximaAcao } = await import('../src/server/oportunidades');
+  const { escreverNoChatSite } = await import('../src/server/conversas');
+  const { salvarWhatsApp } = await import('../src/server/integracoes');
+  const { salvarFluxo, MODELOS_DE_FLUXO } = await import('../src/server/fluxos');
+
+  const { cadastrarEmpresa } = await import('../src/server/empresas');
+
+  /**
+   * The approved templates the team sends from the panel (quote, values of a booking). In the demonstration they are
+   * fictitious and only the simulator "sends" them. Added once; a company that already has its own is left alone.
+   */
+  async function modelosDemo() {
+    const MODELOS: Record<string, unknown[]> = {
+      'pousada-demo': [{ nome: 'valores_reserva', titulo: 'Valores da reserva', texto: 'Olá, {{1}}! Aqui é da {{2}}. Para {{3}}, o valor fica em {{4}}. Para reservar, é só responder esta mensagem. Para não receber mensagens, responda SAIR.', campos: ['Nome do hóspede', 'Nome da pousada', 'Datas, pessoas e acomodação', 'Valor'] }],
+      'lumivale-demo': [{ nome: 'orcamento_pronto', titulo: 'Orçamento pronto', texto: 'Olá, {{1}}! Aqui é da {{2}}. O orçamento do seu sistema de energia solar ficou em {{3}}: {{4}}. Quer que a gente explique os detalhes? É só responder esta mensagem. Para não receber mensagens, responda SAIR.', campos: ['Nome do cliente', 'Nome da empresa', 'Valor', 'Resumo do sistema'] }],
+      'soldovale-demo': [{ nome: 'orcamento_pronto', titulo: 'Orçamento pronto', texto: 'Olá, {{1}}! Aqui é da {{2}}. O orçamento ficou em {{3}}: {{4}}. É só responder esta mensagem para tirar dúvidas. Para não receber mensagens, responda SAIR.', campos: ['Nome do cliente', 'Nome da empresa', 'Valor', 'Resumo'] }],
+    };
+    for (const [slug, modelos] of Object.entries(MODELOS)) {
+      await q(
+        `update integracoes set config = jsonb_set(config, '{modelos_equipe}', $2::jsonb)
+         where tipo = 'whatsapp' and empresa_id = (select id from empresas where slug = $1 and demonstracao)
+           and coalesce(jsonb_array_length(config -> 'modelos_equipe'), 0) = 0`,
+        [slug, JSON.stringify(modelos)],
+      );
+    }
+  }
+
+  /** The pousada demonstration, built by the ready-made model exactly as a real sign-up (everything fictitious). */
+  async function pousadaDemo(growliftId: string) {
+    const existe = await um<{ id: string }>(`select id from empresas where slug = 'pousada-demo'`);
+    if (existe) {
+      // Created before the models stopped sending two messages at once: bring it to the current model.
+      await q(`update empresas set config = jsonb_set(config, '{regras,retorno_auto_cliente}', 'false') where id = $1`, [existe.id]);
+      await q(
+        `update fluxos set passos = (select coalesce(jsonb_agg(p order by i), '[]') from jsonb_array_elements(passos) with ordinality x(p, i) where p ->> 'tipo' <> 'enviar_whatsapp')
+         where empresa_id = $1 and gatilho ->> 'tipo' = 'pedido_recebido'`,
+        [existe.id],
+      );
+      return false;
+    }
+    const r = await cadastrarEmpresa(growliftId, {
+      nome: 'Pousada Maré Calma (fictícia)',
+      slug: 'pousada-demo',
+      segmento: 'pousada',
+      demonstracao: true,
+      dados: {
+        whatsapp: '12900000300',
+        email: 'reservas@marecalma.demo',
+        cidade: 'Litoral Norte de SP (endereço fictício)',
+        descricao: 'Pousada fictícia de demonstração, a poucos passos da praia, com café da manhã e piscina.',
+        servicos: 'Suíte casal — cama de casal e varanda para o jardim\nSuíte família — até 4 pessoas\nChalé — cozinha compacta e rede na varanda',
+        perguntas: 'Que horas é o check-in e o check-out? | Check-in a partir das 14h e check-out até as 11h.\nO café da manhã está incluído? | Sim, servido das 8h às 10h30.\nAceita pet? | Pets pequenos, com aviso antes da reserva.',
+        horarios: 'Recepção todos os dias, das 8h às 22h.',
+        hora_inicio: 8,
+        hora_fim: 22,
+        link_avaliacao: 'https://example.com/avaliacao-ficticia',
+        assistente: 'Ana',
+      },
+    });
+    const admin = await criarUsuario('admin@marecalma.demo', 'Paula (fictícia)', SENHA);
+    await q(`insert into membros (user_id, empresa_id, papel) values ($1, $2, 'admin')`, [admin, r.empresa.id]);
+    const a = { userId: admin, nome: 'Paula', empresaId: r.empresa.id, papel: 'admin' as const };
+    await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao', modelo_ligacao: 'demo_ligacao', modelo_lembrete_visita: 'demo_lembrete_visita' });
+    const e = (await empresaPorId(r.empresa.id))!;
+    const pedir = (i: number, dados: Record<string, unknown>) =>
+      receberPedido(e, { preferencia_contato: 'WhatsApp', aceite_whatsapp: true, chave_idempotencia: randomUUID(), ...dados }, { origem: 'site', ipHash: `demo-pousada-${i}` });
+    const op = (x: Awaited<ReturnType<typeof pedir>>) => ('oportunidadeId' in x ? x.oportunidadeId : '');
+    const r1 = op(await pedir(1, { nome: 'Juliana Costa (fictícia)', telefone: '11900000301', cidade: 'São Paulo', necessidade: 'Quero reservar o Réveillon, se tiver suíte com varanda.', extras: { entrada: '29/12', saida: '02/01', pessoas: '2 adultos' } }));
+    const r2 = op(await pedir(2, { nome: 'Marcos Lima (fictício)', telefone: '11900000302', cidade: 'Campinas', necessidade: 'Família com duas crianças, 4 noites em janeiro.', extras: { entrada: '10/01', saida: '14/01', pessoas: '2 adultos e 2 crianças (6 e 9 anos)' } }));
+    const r3 = op(await pedir(3, { nome: 'Renata Alves (fictícia)', telefone: '11900000303', cidade: 'Santos', necessidade: 'Fim de semana de Carnaval para o casal.', extras: { entrada: '13/02', saida: '17/02', pessoas: '2 adultos' } }));
+    await mudarEtapa(a, r1, { etapa: 'atendimento' });
+    await mudarEtapa(a, r1, { etapa: 'proposta', valorCentavos: 320_000 });
+    await anotar(a, r1, 'Valores enviados para a suíte com varanda (exemplo fictício).');
+    await mudarEtapa(a, r2, { etapa: 'ganho', valorCentavos: 260_000 });
+    await anotar(a, r3, 'Aguardando a hóspede confirmar as datas.');
+    return true;
+  }
+
+  if (await um(`select 1 from empresas where slug = 'lumivale-demo'`)) {
+    const g = await um<{ user_id: string }>(`select a.user_id from admins_plataforma a join "user" u on u.id = a.user_id where u.email = 'equipe@growlift.demo'`);
+    const criou = g ? await pousadaDemo(g.user_id) : false;
+    await modelosDemo();
+    console.log(criou ? 'Pousada de demonstração criada (pousada-demo). Login: admin@marecalma.demo' : 'Os dados de demonstração já existem. Para recomeçar do zero: npm run reiniciar-banco');
+    return fecharPool();
+  }
+  const growlift = await criarUsuario('equipe@growlift.demo', 'Equipe Growlift', SENHA);
+  await q('insert into admins_plataforma (user_id) values ($1)', [growlift]);
+
+  async function montar(nome: string, slug: string, prefixo: string, site: Record<string, unknown>, conhecimento: Record<string, unknown>) {
+    const e = await criarEmpresa(growlift, { nome, slug, segmento: 'energia-solar', demonstracao: true });
+    const admin = await criarUsuario(`admin@${prefixo}.demo`, `Carla Admin (${prefixo})`, SENHA);
+    const vendedor = await criarUsuario(`vendas@${prefixo}.demo`, `Rafael Vendas (${prefixo})`, SENHA);
+    await q(`insert into membros (user_id, empresa_id, papel) values ($1, $3, 'admin'), ($2, $3, 'vendedor')`, [admin, vendedor, e.id]);
+    const a = { userId: admin, nome: 'Carla Admin', empresaId: e.id, papel: 'admin' as const };
+    const v = { userId: vendedor, nome: 'Rafael Vendas', empresaId: e.id, papel: 'vendedor' as const };
+    await salvarConfig(a, 'site', { ...e.config.site, ...site });
+    await salvarConfig(a, 'avaliacao', { link: 'https://example.com/avaliacao-ficticia' });
+    await salvarConfig(a, 'agenda', { ativa: true });
+    // Every automation on, so the demonstration shows them running (WhatsApp simulated).
+    await salvarConfig(a, 'regras', { ...e.config.regras, retorno_auto_cliente: true, retorno_auto_horas: 24, retorno_auto_horas_2: 72, avaliacao_auto: true });
+    await salvarConhecimento(a, conhecimento);
+    await definirResponsavelPadrao(a, vendedor);
+    await salvarWhatsApp(a, { modo: 'simulador', modelo_confirmacao: 'demo_confirmacao', modelo_retorno: 'demo_retorno', modelo_avaliacao: 'demo_avaliacao', modelo_ligacao: 'demo_ligacao', modelo_lembrete_visita: 'demo_lembrete_visita' });
+    // Two of the ready-made flows start switched on in the demonstration (the third stays off, to show the switch).
+    for (const m of MODELOS_DE_FLUXO) await salvarFluxo(a, null, { ...m.fluxo, ativo: m.id !== 'boas-vindas' });
+    return { empresa: (await empresaPorId(e.id))!, a, v };
+  }
+
+  const lumi = await montar(
+    'Lumivale Energia Solar',
+    'lumivale-demo',
+    'lumivale',
+    {
+      chamada: 'Energia solar para a sua casa ou empresa',
+      imagem: '/demo/telhado.webp',
+      descricao: 'Empresa fictícia de demonstração. Projeto, instalação e manutenção de painéis solares, com atendimento do pedido até a entrega.',
+      servicos: [
+        { titulo: 'Residencial', texto: 'Casas e sobrados, em telhado de cerâmica, fibrocimento ou laje.' },
+        { titulo: 'Comercial e condomínios', texto: 'Lojas, galpões e áreas comuns, com instalação planejada para não parar o funcionamento.' },
+        { titulo: 'Manutenção e limpeza', texto: 'Limpeza das placas e verificação do inversor e das conexões.' },
+        { titulo: 'Bombeamento solar rural', texto: 'Bomba d\'água ligada aos painéis para irrigação e bebedouro.' },
+      ],
+      areas: ['Campinas', 'Valinhos', 'Vinhedo', 'Indaiatuba'],
+      projetos: [
+        { titulo: 'Casa em Valinhos', texto: 'Exemplo ilustrativo: telhado de cerâmica.' },
+        { titulo: 'Padaria em Campinas', texto: 'Exemplo ilustrativo: cobertura metálica.' },
+        { titulo: 'Sítio em Indaiatuba', texto: 'Exemplo ilustrativo: bombeamento.' },
+      ],
+      whatsapp: '11900000000',
+      email: 'contato@lumivale.demo',
+      endereco: 'Campinas, SP (endereço fictício)',
+      responsavel_dados: 'Carla (fictícia) · contato@lumivale.demo',
+      razao_social: 'Lumivale Energia Solar Ltda (fictícia)',
+      cnpj: '00.000.000/0001-00',
+      privacidade: 'Texto de exemplo de uma empresa fictícia. Uma empresa real escreve aqui a sua política, revisada por um advogado.',
+    },
+    {
+      descricao: 'A Lumivale (empresa fictícia) projeta e instala sistemas de energia solar em casas, comércios e propriedades rurais.',
+      servicos: 'Projeto e instalação residencial e comercial; manutenção e limpeza de placas; bombeamento solar rural.',
+      horarios: 'Segunda a sexta, das 8h às 18h. Sábado, das 8h às 12h.',
+      regioes: 'Atendemos Campinas, Valinhos, Vinhedo e Indaiatuba.',
+      faq: [
+        { pergunta: 'Quanto tempo leva a instalação?', resposta: 'Em uma casa, a instalação costuma levar de 2 a 3 dias. Antes disso há o projeto e a aprovação na distribuidora, que têm prazo próprio.' },
+        { pergunta: 'Vocês fazem a visita técnica?', resposta: 'Sim, a visita técnica é feita por alguém da equipe, que combina o dia e o horário com você.' },
+        { pergunta: 'Funciona em dia nublado?', resposta: 'O sistema continua gerando em dias nublados, só que menos do que em dias de sol.' },
+      ],
+      precos_autorizados: '',
+      regras_comerciais: 'O orçamento é feito por um vendedor depois de entender o imóvel e a conta de luz. Não informar valores, descontos nem prazos de retorno do investimento pelo chat.',
+      criterios_encaminhamento: 'Dúvidas sobre financiamento, garantia e dimensionamento vão para um vendedor.',
+    },
+  );
+  const sol = await montar(
+    'Sol do Vale Engenharia',
+    'soldovale-demo',
+    'soldovale',
+    { chamada: 'Projetos de energia solar no Vale do Paraíba', descricao: 'Segunda empresa fictícia, usada para demonstrar que os dados de cada cliente ficam separados.', servicos: [{ titulo: 'Projetos residenciais', texto: '' }], areas: ['São José dos Campos', 'Taubaté'], whatsapp: '12900000000', email: 'contato@soldovale.demo' },
+    { descricao: 'Sol do Vale (empresa fictícia).', regioes: 'São José dos Campos e Taubaté.', horarios: 'Segunda a sexta, das 9h às 17h.' },
+  );
+
+  const novo = (empresa: typeof lumi.empresa, i: number, dados: Record<string, unknown>) =>
+    receberPedido(empresa, { preferencia_contato: 'WhatsApp', aceite_whatsapp: true, chave_idempotencia: randomUUID(), extras: { tipo_imovel: 'Casa' }, ...dados }, { origem: 'site', ipHash: `demo-${i}` });
+  const id = (r: Awaited<ReturnType<typeof novo>>) => ('oportunidadeId' in r ? r.oportunidadeId : '');
+
+  const p1 = id(await novo(lumi.empresa, 1, { nome: 'Marina Duarte (fictícia)', telefone: '11900000101', cidade: 'Valinhos', necessidade: 'Quero reduzir a conta de luz da minha casa.', extras: { tipo_imovel: 'Casa', gasto_mensal: '480' }, campanha: { utm_source: 'google', utm_campaign: 'solar-residencial' } }));
+  const p2 = id(await novo(lumi.empresa, 2, { nome: 'Otávio Reis (fictício)', telefone: '11900000102', cidade: 'Campinas', necessidade: 'Orçamento para a cobertura da minha padaria.', extras: { tipo_imovel: 'Comércio', gasto_mensal: '2300' } }));
+  const p3 = id(await novo(lumi.empresa, 3, { nome: 'Helena Prado (fictícia)', telefone: '11900000103', cidade: 'Vinhedo', necessidade: 'Limpeza das placas que já tenho.', aceite_whatsapp: false, preferencia_contato: 'Ligação' }));
+  const p4 = id(await novo(lumi.empresa, 4, { nome: 'Sérgio Lima (fictício)', telefone: '11900000104', cidade: 'Indaiatuba', necessidade: 'Bomba solar para o sítio.', extras: { tipo_imovel: 'Rural' } }));
+  await novo(lumi.empresa, 5, { nome: 'Bianca Nunes (fictícia)', telefone: '11900000105', cidade: 'Campinas', necessidade: 'Energia solar para apartamento, é possível?', extras: { tipo_imovel: 'Apartamento ou condomínio' } });
+
+  await mudarEtapa(lumi.v, p1, { etapa: 'atendimento' });
+  await anotar(lumi.v, p1, 'Liguei e confirmei os dados. Pediu visita no sábado de manhã.');
+  await definirProximaAcao(lumi.v, p1, 'Confirmar a visita técnica', new Date(Date.now() + 86_400_000));
+  await mudarEtapa(lumi.v, p2, { etapa: 'qualificado' });
+  await mudarEtapa(lumi.v, p2, { etapa: 'proposta', valorCentavos: 6_800_000 });
+  await mudarEtapa(lumi.v, p3, { etapa: 'ganho', valorCentavos: 45_000 });
+  await mudarEtapa(lumi.v, p4, { etapa: 'perdido', motivoPerda: 'Decidiu adiar o projeto.' });
+
+  const chat = await escreverNoChatSite(lumi.empresa, null, 'Funciona em dia nublado?', 'demo-chat');
+  await escreverNoChatSite(lumi.empresa, chat.token, 'Quero falar com um atendente', 'demo-chat');
+
+  await novo(sol.empresa, 6, { nome: 'Cliente da Sol do Vale (fictício)', telefone: '12900000201', cidade: 'Taubaté', necessidade: 'Projeto para minha casa.' });
+  await pousadaDemo(growlift);
+  await modelosDemo();
+
+  await fecharPool();
+  console.log(`
+Dados de demonstração criados (tudo fictício). Senha de todos os logins: ${SENHA}
+
+  Equipe Growlift ........ equipe@growlift.demo
+  Lumivale, admin ........ admin@lumivale.demo
+  Lumivale, vendedor ..... vendas@lumivale.demo
+  Sol do Vale, admin ..... admin@soldovale.demo
+  Sol do Vale, vendedor .. vendas@soldovale.demo
+  Pousada (modelo), admin  admin@marecalma.demo
+
+  Site de demonstração: ${process.env.APP_URL ?? 'http://localhost:3100'}/s/lumivale-demo
+  Site da pousada .....: ${process.env.APP_URL ?? 'http://localhost:3100'}/s/pousada-demo
+`);
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

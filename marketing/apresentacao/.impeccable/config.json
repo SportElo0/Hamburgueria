@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          "marketing/apresentacao/deck.html"
+        ],
+        "createdAt": "2026-10-19T17:29:00.821Z",
+        "reason": "Outscale deck is a separate brand from Downtown's DESIGN.md; Inter matches the user's logo lettering"
+      }
+    ]
+  }
+}

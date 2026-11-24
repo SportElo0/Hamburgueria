@@ -1,0 +1,16 @@
+import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const OUT = process.argv[2];
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const d = await b.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1.5 });
+await d.goto('http://localhost:3100/login');
+await d.locator('input[name=email]').fill('caixa@teste.local');
+await d.locator('input[name=senha]').fill('teste-1234-loja');
+await d.locator('button[type=submit]').click();
+await d.waitForURL(/\/loja\//);
+await d.goto('http://localhost:3100/loja/el-patron-burger/clientes');
+await d.waitForTimeout(1000);
+await d.getByLabel('Cupom da campanha').selectOption('VOLTEI');
+await d.waitForTimeout(300);
+console.log(await d.locator('section', { hasText: 'Campanha no WhatsApp' }).locator('p').first().innerText());
+await d.screenshot({ path: `${OUT}/clientes-d.jpg`, type: 'jpeg', quality: 88 });
+await b.close();

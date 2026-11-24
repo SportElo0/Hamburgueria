@@ -1,0 +1,57 @@
+<section id="cozinha" data-transition="fade" style="background:#F3F5F9;color:#0B1020;font-family:'Inter', Arial, sans-serif;padding:128px">
+<p style="position:absolute;left:128px;top:112px;width:900px;font-size:24px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#0865FE">Na cozinha e no bar</p>
+<h2 style="position:absolute;left:128px;top:156px;width:760px;font-size:72px;font-weight:900;letter-spacing:-2px;line-height:1.08;color:#0B1020">Chega tudo escrito, na hora.</h2>
+<div data-build-in="rise order 1" style="position:absolute;left:128px;top:420px;width:760px;display:flex;flex-direction:row;gap:22px;align-items:center"><x-icon name="Lightning" style="color:#0865FE;width:44px;height:44px"></x-icon><p style="font-size:30px;color:#0B1020"><b>Alerta sonoro</b> a cada pedido novo</p></div>
+<div data-build-in="rise order 2" style="position:absolute;left:128px;top:510px;width:760px;display:flex;flex-direction:row;gap:22px;align-items:center"><x-icon name="Settings" style="color:#0865FE;width:44px;height:44px"></x-icon><p style="font-size:30px;color:#0B1020"><b>Bar e cozinha separados:</b> cada tela vê o que é dela</p></div>
+<div data-build-in="rise order 3" style="position:absolute;left:128px;top:600px;width:760px;display:flex;flex-direction:row;gap:22px;align-items:center"><x-icon name="PaperPlane" style="color:#0865FE;width:44px;height:44px"></x-icon><p style="font-size:30px;color:#0B1020"><b>Imprime sozinho</b> na impressora de 80 mm configurada</p></div>
+<div data-build-in="rise order 4" style="position:absolute;left:128px;top:690px;width:760px;display:flex;flex-direction:row;gap:22px;align-items:center"><x-icon name="Check" style="color:#0865FE;width:44px;height:44px"></x-icon><p style="font-size:30px;color:#0B1020"><b>Esgotou?</b> Um toque e sai do cardápio</p></div>
+<div data-build-in="rise order 5" style="position:absolute;left:128px;top:780px;width:760px;display:flex;flex-direction:row;gap:22px;align-items:center"><x-icon name="Users" style="color:#0865FE;width:44px;height:44px"></x-icon><p style="font-size:30px;color:#0B1020"><b>O garçom lança</b> pedido pelo celular dele</p></div>
+<p style="position:absolute;left:944px;top:136px;width:848px;font-size:24px;text-align:right;color:#4A5568">Simulação com dados de exemplo</p>
+<x-embed data-build-in="pop order 1" style="position:absolute;left:944px;top:190px;width:848px;height:720px"><!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:848px;height:720px;background:transparent;overflow:hidden;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.tab{position:absolute;left:8px;top:8px;width:832px;height:600px;border-radius:44px;background:#0b1020;padding:22px;box-shadow:0 50px 90px -40px rgba(11,16,32,.7)}
+.scr{position:relative;width:100%;height:100%;border-radius:28px;background:#eef1f6;overflow:hidden;color:#121826}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:20px 26px;background:#fff;border-bottom:1px solid #dce2ec}
+.hd b{font-size:28px;font-weight:900}
+.auto{font-size:24px;font-weight:800;color:#15803d;background:#dcfce7;padding:8px 16px;border-radius:999px}
+.cols{position:absolute;left:0;right:0;top:84px;bottom:0;display:flex;gap:18px;padding:18px}
+.col{flex:1;position:relative}
+.ch{font-size:24px;font-weight:900;letter-spacing:3px;color:#5a6478;margin:2px 4px 12px}
+.tk{position:absolute;left:0;right:0;background:#fff;border-radius:22px;padding:18px 20px;border:2px solid #e3e8f0;transform:translateY(-560px);opacity:0;transition:transform .6s cubic-bezier(.23,1,.32,1),opacity .4s,border-color .3s}
+.tk.on{transform:translateY(0);opacity:1}
+.tk.new{border-color:#0865fe;box-shadow:0 0 0 6px rgba(8,101,254,.15)}
+.th{display:flex;justify-content:space-between;align-items:center}
+.th b{font-size:28px;font-weight:900}
+.nw{font-size:22px;font-weight:900;color:#fff;background:#0865fe;padding:4px 12px;border-radius:999px}
+.ln{font-size:24px;font-weight:700;margin-top:8px}
+.ob{font-size:24px;color:#b45309;font-weight:700;margin-top:4px}
+.ac{margin-top:14px;height:56px;border-radius:999px;background:#0865fe;color:#fff;font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:background .3s}
+.ac.prep{background:#f59e0b}
+.pr{position:absolute;left:560px;top:600px;width:240px;height:110px}
+.pb{position:absolute;left:0;top:30px;width:240px;height:80px;border-radius:18px;background:#1f2937}
+.pp{position:absolute;left:40px;top:40px;width:160px;height:140px;background:#fff;border-radius:6px;box-shadow:0 10px 20px -10px rgba(0,0,0,.4);transform:translateY(0);transition:transform 1.2s ease-out;padding:12px 14px;font-size:22px;font-weight:800;line-height:1.3;color:#121826}
+.pp.out{transform:translateY(-120px)}
+.bell{position:absolute;right:26px;top:20px}
+</style></head><body>
+<div class="pr"><div class="pp" id="pp">MESA 7<br>COZINHA</div><div class="pb"></div></div>
+<div class="tab"><div class="scr">
+<div class="hd"><b>Pedidos · Sexta 21:14</b><span class="auto">Imprimir sozinho ✓</span></div>
+<div class="cols">
+<div class="col"><p class="ch">COZINHA</p>
+<div class="tk" id="t1" style="top:44px"><div class="th"><b>Mesa 7</b><span class="nw">NOVO</span></div><p class="ln">2× Burger da casa</p><p class="ln">1× Fritas da casa</p><p class="ob">sem cebola</p><div class="ac" id="a1">Aceitar</div></div>
+<div class="tk" id="t3" style="top:330px"><div class="th"><b>Mesa 3</b><span class="nw">NOVO</span></div><p class="ln">1× Salada da casa</p><div class="ac">Aceitar</div></div>
+</div>
+<div class="col"><p class="ch">BAR</p>
+<div class="tk" id="t2" style="top:44px"><div class="th"><b>Mesa 7</b><span class="nw">NOVO</span></div><p class="ln">2× Suco natural</p><p class="ln">1× Água com gás</p><div class="ac">Aceitar</div></div>
+</div>
+</div></div></div>
+<script>
+const $=(i)=>document.getElementById(i);
+const on=(i)=>{$(i).classList.add('on','new');};
+const st=[[500,()=>on('t1')],[1500,()=>on('t2')],[2400,()=>$('pp').classList.add('out')],[4000,()=>{$('a1').classList.add('prep');$('a1').textContent='Em preparo';$('t1').classList.remove('new');$('t1').querySelector('.nw').style.visibility='hidden';}],[5400,()=>on('t3')],
+[8400,()=>{['t1','t2','t3'].forEach(i=>{$(i).classList.remove('on','new');$(i).querySelector('.nw').style.visibility='visible';});$('a1').classList.remove('prep');$('a1').textContent='Aceitar';$('pp').classList.remove('out');}]];
+function run(){st.forEach(([m,f])=>setTimeout(f,m));setTimeout(run,9400);}run();
+</script></body></html></x-embed>
+<aside>Mostre que a cozinha não depende mais da letra do garçom. O pedido chega escrito, com observação, e o bar vê só as bebidas. A impressão pode ser automática. E quando acaba um ingrediente, um toque tira o item do cardápio na hora, e ninguém pede o que não tem.</aside>
+</section>

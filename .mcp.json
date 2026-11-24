@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        ".claude/mcp/playwright.mjs"
+      ],
+      "env": {}
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "google-maps-platform-code-assist": {
+      "type": "http",
+      "url": "https://mapscodeassist.googleapis.com/mcp"
+    }
+  }
+}

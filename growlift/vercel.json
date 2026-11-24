@@ -1,0 +1,70 @@
+{
+  "cleanUrls": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://growlift-sistema.vercel.app/chat.js; frame-src https://growlift-sistema.vercel.app; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' blob: data: https://painel-lojas-sportelo.vercel.app https://growlift-sistema.vercel.app; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; worker-src 'self' blob:"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/clinicas",
+      "destination": "/clinicas.html"
+    },
+    {
+      "source": "/restaurantes",
+      "destination": "/restaurantes.html"
+    },
+    {
+      "source": "/imobiliarias",
+      "destination": "/imobiliarias.html"
+    },
+    {
+      "source": "/outros",
+      "destination": "/outros.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/clinicas.html",
+      "destination": "/clinicas",
+      "permanent": true
+    },
+    {
+      "source": "/restaurantes.html",
+      "destination": "/restaurantes",
+      "permanent": true
+    },
+    {
+      "source": "/imobiliarias.html",
+      "destination": "/imobiliarias",
+      "permanent": true
+    },
+    {
+      "source": "/outros.html",
+      "destination": "/outros",
+      "permanent": true
+    }
+  ]
+}

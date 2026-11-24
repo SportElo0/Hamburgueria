@@ -1,0 +1,130 @@
+import 'server-only';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import { ConflictError, storage } from './storage';
+
+/**
+ * The Growlift social kit (../growlift-social), copied into conteudos-gerados/ by
+ * scripts/conteudos.mjs at build time. Only the approval status lives in the store.
+ */
+
+export interface ContentFile {
+  path: string;
+  name: string;
+  type: string;
+  size: number;
+  width: number;
+  height: number;
+  format: string;
+  thumb: string;
+  doNotPublish: boolean;
+  /** A video's cover image (the Reel cover to upload with it), or ''. */
+  cover?: string;
+}
+export interface ContentGroup {
+  id: string;
+  title: string;
+  files: ContentFile[];
+}
+export interface ContentDoc {
+  file: string;
+  title: string;
+  intro: string;
+  sections: { id: string; title: string; html: string }[];
+}
+export interface ContentFolder {
+  slug: string;
+  title: string;
+  blurb: string;
+  sectionStatus: boolean;
+  groups: ContentGroup[];
+  docs: ContentDoc[];
+}
+export interface Manifest {
+  generatedAt: string;
+  folders: ContentFolder[];
+}
+
+export const CONTENT_STATUSES = ['rascunho', 'aprovado', 'postado'] as const;
+export type ContentStatus = (typeof CONTENT_STATUSES)[number];
+export interface StatusEntry {
+  status: ContentStatus;
+  by: string;
+  at: string;
+}
+
+export class ContentError extends Error {}
+
+export const root = () => path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.CONTEUDOS_GERADOS_DIR || 'conteudos-gerados');
+/** A file the build script wrote next to the manifest (agenda.json), or null. */
+export async function readGenerated<T>(name: 'agenda.json'): Promise<T | null> {
+  try {
+    return JSON.parse(await fs.readFile(path.join(root(), name), 'utf8')) as T;
+  } catch {
+    return null;
+  }
+}
+
+let cached: Manifest | null = null;
+export async function getManifest(): Promise<Manifest> {
+  if (cached && process.env.NODE_ENV === 'production') return cached;
+  try {
+    cached = JSON.parse(await fs.readFile(path.join(root(), 'manifest.json'), 'utf8')) as Manifest;
+  } catch {
+    cached = { generatedAt: '', folders: [] };
+  }
+  return cached;
+}
+
+/** Everything a status can be set on: image groups, and doc sections in folders that track them (Reels). */
+export function statusKeys(m: Manifest): Set<string> {
+  const keys = new Set<string>();
+  for (const f of m.folders) {
+    for (const g of f.groups) keys.add(g.id);
+    if (f.sectionStatus) for (const d of f.docs) for (const s of d.sections) keys.add(sectionKey(d, s.id));
+  }
+  return keys;
+}
+export const sectionKey = (doc: Pick<ContentDoc, 'file'>, id: string) => `${doc.file}#${id}`;
+
+export async function findGroup(id: string) {
+  const m = await getManifest();
+  for (const f of m.folders) for (const g of f.groups) if (g.id === id) return g;
+  return null;
+}
+
+/** A single `Range: bytes=…` request (what video players send), clamped to the file; null = whole file, 'invalida' = 416. */
+export function byteRange(header: string | null, total: number): { start: number; end: number } | null | 'invalida' {
+  const m = /^bytes=(\d*)-(\d*)$/.exec(header?.trim() ?? '');
+  if (!m || (!m[1] && !m[2])) return null;
+  const start = m[1] ? Number(m[1]) : Math.max(0, total - Number(m[2]));
+  const end = m[1] && m[2] ? Math.min(Number(m[2]), total - 1) : total - 1;
+  return start >= total || start > end ? 'invalida' : { start, end };
+}
+
+/** 03-destaques/1-projetos/01.png → growlift-destaques-projetos-01.png */
+export const downloadName = (rel: string) =>
+  'growlift-' + rel.split('/').map((p) => p.replace(/^\d+-/, '')).join('-').replace(/[^a-zA-Z0-9.-]+/g, '-');
+
+const STATUS_KEY = 'conteudos/status.json';
+
+export async function getStatuses(): Promise<Record<string, StatusEntry>> {
+  return (await storage().readJSON<Record<string, StatusEntry>>(STATUS_KEY))?.data ?? {};
+}
+
+export async function setContentStatus(key: string, status: ContentStatus, by: string, now = new Date()) {
+  if (!CONTENT_STATUSES.includes(status) || !statusKeys(await getManifest()).has(key)) throw new ContentError('Conteúdo inválido.');
+  for (let attempt = 0; ; attempt++) {
+    const doc = await storage().readJSON<Record<string, StatusEntry>>(STATUS_KEY);
+    const next = { ...(doc?.data ?? {}) };
+    if (status === 'rascunho') delete next[key];
+    else next[key] = { status, by, at: now.toISOString() };
+    try {
+      await storage().writeJSON(STATUS_KEY, next, doc ? doc.etag : null);
+      return;
+    } catch (err) {
+      // Someone else marked another piece at the same moment: re-read and apply on top.
+      if (!(err instanceof ConflictError) || attempt >= 3) throw err;
+    }
+  }
+}
