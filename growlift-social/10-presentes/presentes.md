@@ -111,3 +111,27 @@ A gente olha como ele aparece hoje (Google, site, WhatsApp) e te manda um plano 
 
 Para não receber mais mensagens nossas, responda SAIR.
 ```
+
+## IA · Skill "ai-seo" para o Claude (Skill da Semana, ep. 03)
+
+- **Link oficial do arquivo:** https://github.com/coreyhaines31/marketingskills/releases/download/v2.14.28/ai-seo-claude-web.zip (release v2.14.28, 76,5 KB, conferida em 24/11/2026). Página do autor: https://github.com/coreyhaines31/marketingskills
+- **Usado no:** Reel 35, "Você aparece no ChatGPT?".
+- **Quem criou:** Corey Haines (licença MIT). A Growlift só mostra como usar; não hospeda nem altera o arquivo.
+- **Envio:** à mão pela equipe (ou pelo ManyChat, se a palavra IA for cadastrada lá), para todo mundo que comentar.
+
+**Mensagem do privado (palavra IA)**
+```
+Oi! Aqui é da Growlift 👋 Valeu por comentar IA.
+
+Aqui está a skill "ai-seo", criada pelo Corey Haines, gratuita no GitHub (a Growlift não é afiliada a ele nem à Anthropic):
+https://github.com/coreyhaines31/marketingskills/releases/download/v2.14.28/ai-seo-claude-web.zip
+
+Como instalar (sua conta do Claude precisa permitir skills e execução de código; hoje isso depende do plano):
+1) Baixe o arquivo pelo link.
+2) No Claude, vá em Customize → Skills → + Create skill → Upload a skill e envie o arquivo.
+3) Peça: "Faça uma auditoria de visibilidade em IA do meu negócio" e passe o seu site, a cidade e 10 perguntas que um cliente faria (ex.: "melhor oficina em Campinas").
+
+Dica antes de mexer em qualquer coisa: abra seusite.com.br/robots.txt e veja se tem "Disallow" para OAI-SearchBot, PerplexityBot ou Googlebot. Se tiver, é a primeira coisa para conversar com quem cuida do site.
+
+Ela não garante posição (ninguém controla a resposta da IA): mostra o que melhorar. Qualquer dúvida, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
+```
