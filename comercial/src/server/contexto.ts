@@ -91,12 +91,13 @@ export async function criarTarefa(db: Db, empresaId: string, t: NovaTarefa): Pro
     db,
   );
   if (!r) return null;
-  await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [
+  await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, $6)', [
     empresaId,
     t.responsavelId ?? null,
     t.titulo,
     t.detalhe ?? '',
     t.link ?? (t.oportunidadeId ? `/painel/oportunidades/${t.oportunidadeId}` : t.conversaId ? `/painel/atendimento/${t.conversaId}` : '/painel/tarefas'),
+    `tarefa:${t.tipo}`,
   ], db);
   return r.id;
 }

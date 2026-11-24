@@ -54,6 +54,8 @@ const ConfigWhatsApp = z.object({
   modelo_manutencao: z.string().trim().max(80).default(''),
   modelo_ligacao: z.string().trim().max(80).default(''),
   modelo_lembrete_visita: z.string().trim().max(80).default(''),
+  /** Alert to the team's own WhatsApp: {{1}} company, {{2}} subject, {{3}} panel link. */
+  modelo_aviso_equipe: z.string().trim().max(80).default(''),
   idioma_modelos: z.string().trim().max(10).default('pt_BR'),
   /** Templates a person sends from the panel (saved on their own screen, kept when the rest is saved). */
   modelos_equipe: z.array(ModeloEquipe).max(15).default([]),

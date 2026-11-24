@@ -29,6 +29,7 @@ import { adicionarHorario, ativarProfissional, CORES, desfazerAjuste, profission
 import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao, definirValor, excluirContato, marcarNotificacoesLidas, marcarServicoConcluido, mudarEtapa } from '@/server/oportunidades';
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
 import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, type InscricaoEntrada } from '@/server/push';
+import { desligarAvisoWhatsApp, ligarAvisoWhatsApp } from '@/server/avisos-whatsapp';
 import { processarFila } from '@/server/trabalhos';
 import { definirRelato, registrarRecebimento, removerRecebimento } from '@/server/recebimentos';
 
@@ -361,7 +362,7 @@ export const salvarConfigAcao = async (_: Retorno, fd: FormData) =>
 
 export const salvarWhatsAppAcao = async (_: Retorno, fd: FormData) =>
   tentar(async () => {
-    await salvarWhatsApp(await exigirCtx(), { modo: t(fd, 'modo'), phone_number_id: t(fd, 'phone_number_id'), waba_id: t(fd, 'waba_id'), modelo_confirmacao: t(fd, 'modelo_confirmacao'), modelo_retorno: t(fd, 'modelo_retorno'), modelo_avaliacao: t(fd, 'modelo_avaliacao'), modelo_manutencao: t(fd, 'modelo_manutencao'), modelo_ligacao: t(fd, 'modelo_ligacao'), modelo_lembrete_visita: t(fd, 'modelo_lembrete_visita'), idioma_modelos: t(fd, 'idioma_modelos') || 'pt_BR' }, String(fd.get('token') ?? ''));
+    await salvarWhatsApp(await exigirCtx(), { modo: t(fd, 'modo'), phone_number_id: t(fd, 'phone_number_id'), waba_id: t(fd, 'waba_id'), modelo_confirmacao: t(fd, 'modelo_confirmacao'), modelo_retorno: t(fd, 'modelo_retorno'), modelo_avaliacao: t(fd, 'modelo_avaliacao'), modelo_manutencao: t(fd, 'modelo_manutencao'), modelo_ligacao: t(fd, 'modelo_ligacao'), modelo_lembrete_visita: t(fd, 'modelo_lembrete_visita'), modelo_aviso_equipe: t(fd, 'modelo_aviso_equipe'), idioma_modelos: t(fd, 'idioma_modelos') || 'pt_BR' }, String(fd.get('token') ?? ''));
     return { ok: 'Configuração do WhatsApp salva.' };
   });
 
@@ -556,6 +557,18 @@ export async function testarAvisoAcao(): Promise<Retorno> {
     return n ? { ok: 'Aviso de teste enviado. Ele chega em alguns segundos.' } : { erro: 'O aviso não saiu. Desligue e ligue os avisos de novo neste celular.' };
   });
 }
+
+export const ligarAvisoWhatsAppAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    await ligarAvisoWhatsApp(await exigirCtx(), t(fd, 'telefone'), fd.get('aceite') === 'on');
+    return { ok: 'Avisos no WhatsApp ligados.' };
+  });
+
+export const desligarAvisoWhatsAppAcao = async () =>
+  tentar(async () => {
+    await desligarAvisoWhatsApp(await exigirCtx());
+    return { ok: 'Avisos no WhatsApp desligados.' };
+  });
 
 /* ---------- Missed calls ---------- */
 

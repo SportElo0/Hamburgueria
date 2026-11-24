@@ -1,5 +1,11 @@
+import { desligarAvisoWhatsAppAcao, ligarAvisoWhatsAppAcao } from '@/app/acoes';
 import { AppCelular } from '@/componentes/app-celular';
 import { dataHora } from '@/componentes/formato';
+import { Enviar, Formulario } from '@/componentes/formulario';
+import { TEXTO_ACEITE_AVISOS, meuAvisoWhatsApp } from '@/server/avisos-whatsapp';
+import { formatarTelefone } from '@/server/config';
+import { empresaPorId } from '@/server/empresas';
+import { integracaoWhatsApp } from '@/server/integracoes';
 import { aparelhosDe, chavesVapid } from '@/server/push';
 import { exigirCtx } from '@/server/sessao';
 
@@ -7,8 +13,9 @@ export const metadata = { title: 'App no celular' };
 
 export default async function Celular() {
   const ctx = await exigirCtx();
-  const aparelhos = await aparelhosDe(ctx);
+  const [aparelhos, zap, empresa, meu] = await Promise.all([aparelhosDe(ctx), integracaoWhatsApp(ctx.empresaId), empresaPorId(ctx.empresaId), meuAvisoWhatsApp(ctx)]);
   const chave = chavesVapid()?.publica ?? null;
+  const zapPronto = zap.config.modo === 'oficial' && !!zap.config.modelo_aviso_equipe;
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <h1 className="text-2xl font-bold">App no celular</h1>
@@ -29,6 +36,26 @@ export default async function Celular() {
           </ul>
         )}
         <p className="mt-3 text-sm text-suave">O aviso mostra só o assunto (por exemplo, “Novo pedido” ou “Nova mensagem do cliente”) e o nome da empresa. O nome e as mensagens do cliente ficam no painel, não aparecem na tela bloqueada.</p>
+      </section>
+      <section className="cartao p-5">
+        <h2 className="text-lg font-bold">Avisos no seu WhatsApp</h2>
+        <p className="mt-1 text-[15px]">Para quem não quer instalar o app: os avisos importantes (pedido novo, cliente esperando uma pessoa, ligação perdida e avaliação com nota baixa) chegam no seu WhatsApp, pelo número da empresa. Só o assunto e o link do painel, sem dados do cliente.</p>
+        {!zapPronto && <p className="aviso mt-3 bg-alerta-clara text-alerta">Ainda não funciona nesta empresa: falta o WhatsApp oficial ligado e o modelo de mensagem aprovado pela Meta (a equipe Growlift cuida disso). Você já pode deixar ligado.</p>}
+        {meu ? (
+          <div className="mt-3 space-y-2">
+            <p className="text-[15px]">Ligado para <strong>{formatarTelefone(meu.telefone)}</strong> desde {dataHora(meu.aceito_em)}{meu.ultimo_envio_em ? ` · último aviso ${dataHora(meu.ultimo_envio_em)}` : ''}.</p>
+            <Formulario acao={desligarAvisoWhatsAppAcao}><Enviar secundario>Desligar avisos no WhatsApp</Enviar></Formulario>
+          </div>
+        ) : ctx.acessoAdmin ? (
+          <p className="mt-3 text-sm text-suave">Cada pessoa liga no próprio WhatsApp, com o próprio login.</p>
+        ) : (
+          <Formulario acao={ligarAvisoWhatsAppAcao} className="mt-3 space-y-3">
+            <div><label className="rotulo" htmlFor="telefone">Seu celular com DDD</label><input className="campo" id="telefone" name="telefone" inputMode="tel" placeholder="(11) 91234-5678" required /></div>
+            <label className="flex items-start gap-2 text-[15px]"><input type="checkbox" name="aceite" required className="mt-1" /> <span>{TEXTO_ACEITE_AVISOS(empresa!.nome)}</span></label>
+            <Enviar>Ligar avisos no WhatsApp</Enviar>
+          </Formulario>
+        )}
+        <p className="mt-3 text-sm text-suave">A Meta cobra cada aviso da empresa, como as outras mensagens que a empresa inicia. No máximo 30 avisos por pessoa por dia.</p>
       </section>
     </div>
   );

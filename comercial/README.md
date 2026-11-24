@@ -224,6 +224,13 @@ Com profissionais cadastrados (Agenda › “Profissionais e horário de trabalh
 - **A assistente** oferece os mesmos horários (um horário está livre se pelo menos um profissional está livre) e marca com quem estiver livre; ao remarcar, fica com o mesmo profissional quando ele está livre.
 - Demonstração: as empresas fictícias já vêm com Carla, Rafael e Bruno (seg a sex, 8h às 12h e 13h às 17h; o Bruno folga na quinta). O visitante da demonstração aberta mexe nos horários, mas não no cadastro.
 
+## Avisos para a equipe
+
+- **No painel:** lista em Visão geral, com o número de não lidos no menu.
+- **No celular** (app instalado pelo painel, página "App no celular"): o mesmo aviso, só com o assunto, sem dados do cliente na tela bloqueada.
+- **No WhatsApp de quem pediu** (`src/server/avisos-whatsapp.ts`): só os importantes (pedido novo, conversa que precisa de uma pessoa, ligação perdida, avaliação com nota baixa). Cada pessoa liga no próprio login, com o próprio celular, aceitando o texto (guardado com a data). Sai pelo número oficial da empresa, com o modelo aprovado "aviso para a equipe" (Configurações › WhatsApp; variáveis {{1}} empresa, {{2}} assunto, {{3}} link do painel). Sem o WhatsApp oficial ou sem o modelo, nada sai. Só o assunto e o link, nunca nome ou mensagem do cliente; aviso para a empresa toda vai só para administradores; no máximo 30 por pessoa por dia; aviso com mais de 1 hora não sai. A Meta cobra cada mensagem da empresa.
+- **Avaliação com nota baixa** (1 a 3 de 5 na página de avaliação): vira, uma vez, a tarefa de falar com o cliente, com a nota e o comentário, e avisa a equipe. O botão do Google continua para todo mundo.
+
 ## Áudio no WhatsApp → texto
 
 O áudio que o cliente manda vira texto na própria conversa (`[Áudio] …`), para a assistente responder e para a equipe ler na caixa de conversas (`src/server/transcricao.ts`, trabalho `transcrever_audio` em `src/server/conversas.ts`).

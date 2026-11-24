@@ -1,5 +1,6 @@
 import { criarTarefa, registrar } from './contexto';
 import { enviarAvisosCelular } from './push';
+import { enviarAvisosWhatsApp } from './avisos-whatsapp';
 import { despachar, responderComIA, transcreverAudio, JANELA_WHATSAPP_MS, type Conversa } from './conversas';
 import { pool, q, tx, um, type Db } from './db';
 import { empresaPorId, type Empresa } from './empresas';
@@ -208,6 +209,7 @@ export async function processarFila(max?: number): Promise<number> {
   const n = await processarPendentes(executores, max);
   // Phone alerts of the notifications these jobs (and the request that triggered them) created.
   await enviarAvisosCelular().catch((err) => console.error('[avisos celular]', err));
+  await enviarAvisosWhatsApp().catch((err) => console.error('[avisos whatsapp]', err));
   return n;
 }
 
