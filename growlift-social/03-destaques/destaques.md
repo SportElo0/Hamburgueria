@@ -19,7 +19,7 @@ Uma por destaque, em `capas/`: `1-projetos.png`, `2-servicos.png`, `6-contato.pn
 | Destaque | Story | Endereço do link | Texto do adesivo |
 | --- | --- | --- | --- |
 | Projetos | 06 (o nosso próprio site, computador e celular) | `https://growlift.com.br` | Ver o site ao vivo |
-| Serviços | 07 (tudo isso num sistema só) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis |
+| Serviços | 12 (qual desses resolve o seu problema?) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis |
 | Contato | 01 (chama no WhatsApp) | `https://wa.me/5511942279336` | Chamar no WhatsApp |
 | Contato | 02 (diagnóstico grátis) | `https://growlift.com.br/#diagnostico` | Pedir diagnóstico grátis |
 
@@ -36,22 +36,26 @@ Uma por destaque, em `capas/`: `1-projetos.png`, `2-servicos.png`, `6-contato.pn
 
 Os quatro modelos são fictícios e estão identificados como tal. Os sites feitos para negócios reais (El Patron, Downtown e outros) **ficam de fora**: foram demonstrações, não clientes, e não temos autorização para mostrar a marca deles.
 
-## 2 · Serviços (7 stories, novos em 24/11/2026)
+## 2 · Serviços (12 stories, novos em 24/11/2026)
 
-O que a Growlift faz, uma frase por story (fundo escuro e azul neon, igual à parte nova do site). A abertura e o fechamento têm a marca em 3D; do 02 ao 06, no mesmo formato dos stories antigos (selo, título, imagem e 3 checks), cada um numa cor e com uma tela de verdade do sistema (painel e demonstração com empresas fictícias: Lumivale e Pousada Maré Calma), marcada "demonstração, dados fictícios". As telas ficam em `_fonte/assets/stories/servicos/`.
+10 serviços diferentes, um por story, no formato do story antigo "Achado no Google": selo, título curto, o problema em uma frase, a imagem da demonstração (dados fictícios) e 3 checks. Cada story numa cor. Só entram serviços que existem (prontos ou que só falta ligar no número do cliente); as ideias da aba Serviços ficam de fora até ficarem prontas.
 
-| Arquivo | O que mostra |
+| Arquivo | Serviço |
 | --- | --- |
-| 01 | Abertura: "O que a Growlift faz, em poucas palavras." |
-| 02 | Todas as conversas (azul): tela de Atendimento do painel |
-| 03 | Resposta na hora (verde-água): chat do site respondendo às 23h12 |
-| 04 | Ninguém atendeu? (roxo): o "aperte 1" que quem ligou ouve |
-| 05 | Quem sumiu volta (laranja): quadro de pedidos e retomada |
-| 06 | Tudo no seu celular (verde): avisos do painel |
-| 07 | "Tudo isso num sistema só, montado para o seu negócio.", com o lugar do link para o diagnóstico grátis |
+| 01 | Abertura: "10 coisas que a gente monta pro seu negócio." (marca em 3D) |
+| 02 | Site que responde (site com chat de IA) |
+| 03 | Resposta na hora (atendente de IA no WhatsApp) |
+| 04 | Ninguém atendeu? (ligação perdida vira WhatsApp) |
+| 05 | Quem sumiu volta (retomada) |
+| 06 | Certo no Google (perfil no Google + SEO) |
+| 07 | Convite para avaliar (avaliações no Google) |
+| 08 | Cardápio no QR |
+| 09 | Delivery próprio |
+| 10 | Quem parou de comprar (app de clientes) |
+| 11 | Quanto sobra no prato (painéis de números) |
+| 12 | "Qual desses resolve o seu problema?", com o lugar do link para o diagnóstico grátis |
 
-Só entra o que o sistema já faz. Sem preço, sem cliente, sem número de resultado. **Antes de postar, apaguem do destaque os 6 stories antigos** (planos Start, Grow e Lift), que falam de uma oferta que não é mais a principal.
-Para gerar de novo: `node growlift-social/_fonte/servicos-v3.mjs`.
+**Antes de postar, apaguem do destaque os stories antigos.** Para gerar de novo: `node growlift-social/_fonte/servicos-v3.mjs` (imagens em `plataforma/public/servicos/`).
 
 ## 3 · Clientes (estrutura pronta, **não publicar ainda**)
 
