@@ -166,7 +166,8 @@
     button.textContent = 'Enviando…';
     const dores = picked('dor').map((d) => NOME_DOR[d]);
     const quer = picked('quer').map((k) => SOLUCOES[k][0]);
-    const texto = [`Página para empresas de conserto`, `Maior dor: ${dores.join('; ')}`, `Ramo: ${ramo()}`, `Quer: ${quer.join('; ')}`].join('\n');
+    const conte = f.wishes.value.trim().slice(0, 500);
+    const texto = [`Página para empresas de conserto`, `Maior dor: ${dores.join('; ')}`, `Ramo: ${ramo()}`, `Quer: ${quer.join('; ')}`, conte ? `Contou: ${conte}` : ''].filter(Boolean).join('\n');
     const sent = await Promise.allSettled([
       post(form.dataset.endpoint, {
         business: f.business.value,
@@ -183,7 +184,7 @@
         nome: f.business.value.trim(),
         telefone: digits,
         cidade: f.city.value.trim(),
-        necessidade: `Pediu o diagnóstico pela página para empresas de conserto.\nQuer: ${quer.join('; ')}`.slice(0, 1000),
+        necessidade: `Pediu o diagnóstico pela página para empresas de conserto.\nQuer: ${quer.join('; ')}${conte ? `\nContou: ${conte}` : ''}`.slice(0, 1000),
         preferencia_contato: 'WhatsApp',
         aceite_whatsapp: false,
         chave_idempotencia: idem,

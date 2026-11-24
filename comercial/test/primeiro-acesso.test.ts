@@ -6,6 +6,9 @@ import { CAMPOS_GROWLIFT, CHAVE_SITE_GROWLIFT, CONHECIMENTO_GROWLIFT, RASCUNHO_1
 import { empresaPorChave } from '@/server/empresas';
 import { q } from '@/server/db';
 import { receberPedido } from '@/server/pedidos';
+import { pegar, executar } from '@/server/fila';
+import { executores } from '@/server/trabalhos';
+import { usarRascunhoDeTeste } from '@/server/rascunho-growlift';
 import { SEGMENTOS } from '@/server/config';
 import { Conhecimento } from '@/server/config';
 import { novaEmpresa, unico } from './apoio';
@@ -70,6 +73,28 @@ describe('primeiro acesso a um banco de produção novo', () => {
     expect(n).toMatchObject({ titulo: 'Novo pedido: Barbearia do Teste (Campinas, SP) pediu orçamento', tipo: 'tarefa:atender_pedido' });
     expect(await um('select 1 from consentimentos where empresa_id = $1', [e.empresa.id])).toBeNull();
     expect(await um(`select 1 from trabalhos where empresa_id = $1 and tipo = 'confirmacao_pedido'`, [e.empresa.id])).toBeNull();
+
+    // The AI draft: only the answers go to the model (no phone, no business name); the draft lands in the task.
+    const rodar = async () => {
+      const id = (await um<{ id: string }>(`select id from trabalhos where empresa_id = $1 and tipo = 'rascunho_pedido' order by criado_em desc limit 1`, [e.empresa.id]))!.id;
+      await q(`update trabalhos set executar_em = now() where id = $1`, [id]);
+      return executar((await pegar(id))!, executores);
+    };
+    let enviado = '';
+    usarRascunhoDeTeste(async (_s, u) => {
+      enviado = u;
+      return { resumo: 'Climatização em Campinas que perde ligação no serviço.', solucoes: ['ligacao', 'aviso', 'inventado' as 'ia'], mensagem: 'Oi! Aqui é o [seu nome], da Growlift. Recebi o diagnóstico da [empresa].' };
+    });
+    expect((await rodar()).tipo).toBe('concluido');
+    usarRascunhoDeTeste(null);
+    expect(enviado).toContain('Perco ligação');
+    expect(enviado).not.toContain('11912345678');
+    expect(enviado).not.toContain('Barbearia do Teste');
+    const det = (await um<{ detalhe: string }>(`select detalhe from tarefas where empresa_id = $1 and chave = $2`, [e.empresa.id, `atender:${(r as { oportunidadeId: string }).oportunidadeId}`]))!.detalhe;
+    expect(det).toContain('Resumo da IA: Climatização');
+    expect(det).toContain('Sugestões: Ligação perdida vira conversa; Aviso no celular');
+    expect(det).toContain('Recebi o diagnóstico da Barbearia do Teste.');
+    expect(det).not.toContain('inventado');
 
     // The team edits the knowledge and shortens the retention; the next builds keep it.
     await q('insert into conhecimento (empresa_id, versao, dados) values ($1, 3, $2)', [e.empresa.id, JSON.stringify({ ...CONHECIMENTO_GROWLIFT, horarios: 'Seg a sex, 9h às 18h' })]);

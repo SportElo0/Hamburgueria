@@ -6,6 +6,7 @@ import { membroAtivo, type Empresa } from './empresas';
 import { ErroDeUso } from './erros';
 import { agendar } from './fila';
 import { dispararFluxos } from './fluxos';
+import { SLUG_GROWLIFT } from './rascunho-growlift';
 
 /** Validation error with one message per field, so the form can show where to fix. */
 export class ErroDeFormulario extends ErroDeUso {
@@ -147,6 +148,8 @@ export async function receberPedido(empresa: Empresa, entrada: unknown, meta: Me
     await abrirAtendimento(db, empresa, oportunidadeId, responsavel, `${e.nome} (${e.cidade}) pediu orçamento`);
     // Automatic confirmation by WhatsApp, only with the visitor's consent (checked again when it is sent).
     if (e.aceite_whatsapp) await agendar(db, empresa.id, { tipo: 'confirmacao_pedido', chave: `confirmacao:${oportunidadeId}`, oportunidadeId, em: new Date(Date.now() + 5_000) });
+    // Growlift's own requests: the AI leaves a summary and a draft of the first message in the task (sent by hand).
+    if (empresa.slug === SLUG_GROWLIFT) await agendar(db, empresa.id, { tipo: 'rascunho_pedido', chave: `rascunho:${oportunidadeId}`, oportunidadeId, em: new Date(Date.now() + 3_000), maxTentativas: 2 });
     await dispararFluxos(db, empresa.id, { tipo: 'pedido_recebido' }, { id: oportunidadeId, contatoId, etapa: 'novo' });
     return { oportunidadeId, contatoId, repetido: false };
   });

@@ -11,6 +11,7 @@ import { canalDa } from './integracoes';
 import { hashToken, novoToken } from './segredos';
 import { textoRetornoLigacao } from './ligacoes';
 import { textoLembrete } from './agenda';
+import { gerarRascunhoPedido } from './rascunho-growlift';
 
 /** Local hour (0-23) in the company's time zone. */
 function horaLocal(fuso: string, d = new Date()): number {
@@ -110,6 +111,7 @@ export { nomeSeguro };
 export const executores: Record<string, Executor> = {
   responder_ia: responderComIA,
   transcrever_audio: transcreverAudio,
+  rascunho_pedido: gerarRascunhoPedido,
   fluxo_passo: (t) => executarPassoFluxo(t, (tr, i) => enviarIniciada(tr, i)),
   enviar_mensagem: despachar,
 
@@ -232,6 +234,7 @@ export const NOME_TRABALHO: Record<string, string> = {
   lembrete_manutencao: 'Lembrete de manutenção',
   retorno_ligacao: 'Resposta pelo WhatsApp a uma ligação não atendida',
   lembrete_visita: 'Lembrete da visita marcada',
+  rascunho_pedido: 'Resumo e rascunho de mensagem da IA (Growlift)',
 };
 
 export interface Execucao {
