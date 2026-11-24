@@ -72,6 +72,7 @@ export async function limparDadosAntigos(forcar = false): Promise<number> {
   await q(`delete from limites where janela < now() - interval '1 day'`, [], p);
   await q(`delete from eventos_webhook where recebido_em < now() - interval '30 days'`, [], p);
   await q(`delete from emails_simulados where criado_em < now() - interval '1 day'`, [], p);
+  await q(`delete from resumos_email where criado_em < now() - interval '90 days'`, [], p);
   await q(`delete from trabalhos where estado in ('concluido', 'cancelado', 'falhou') and coalesce(concluido_em, criado_em) < now() - interval '180 days'`, [], p);
   await q(`delete from notificacoes where lida_em is not null and lida_em < now() - interval '180 days'`, [], p);
   return total;

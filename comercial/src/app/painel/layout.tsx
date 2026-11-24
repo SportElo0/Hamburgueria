@@ -60,7 +60,7 @@ export default async function PainelLayout({ children }: { children: React.React
               { href: '/painel/tarefas', nome: 'Tarefas', aviso: n?.tarefas },
               { href: '/painel/agenda', nome: 'Agenda' },
               { href: '/painel/celular', nome: 'App no celular' },
-              ...(ctx.papel === 'admin' ? [{ href: '/painel/vendas', nome: 'Vendas pagas' }, { href: '/painel/anuncios', nome: 'Anúncios' }, { href: '/painel/automacoes', nome: 'Automações' }, { href: '/painel/conhecimento', nome: 'Conhecimento' }, { href: '/painel/configuracoes', nome: 'Configurações' }] : []),
+              ...(ctx.papel === 'admin' ? [{ href: '/painel/vendas', nome: 'Vendas pagas' }, { href: '/painel/anuncios', nome: 'Anúncios' }, { href: '/painel/automacoes', nome: 'Automações' }, { href: '/painel/conhecimento', nome: 'Conhecimento' }, ...(empresa.slug === 'growlift' ? [{ href: '/painel/emails', nome: 'E-mails' }] : []), { href: '/painel/configuracoes', nome: 'Configurações' }] : []),
             ]}
           />
         </div>

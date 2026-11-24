@@ -10,13 +10,13 @@ import { auth } from '@/server/auth';
 import { gerarLinkAvaliacao } from '@/server/avaliacoes';
 import { TEXTO_ACEITE_AGENDAMENTO, type Etapa } from '@/server/config';
 import { salvarConhecimento } from '@/server/conhecimento';
-import { dentroDoLimite, VISITANTE_DEMO } from '@/server/contexto';
+import { dentroDoLimite, exigirAdmin, VISITANTE_DEMO } from '@/server/contexto';
 import { assumir, devolverParaIA, encerrarConversa, enviarComoHumano, enviarModeloEquipe, simularEntradaWhatsApp } from '@/server/conversas';
 import { abrirAcessoAdmin, aceitarConvite, alterarMembro, convidar, cadastrarEmpresa, definirAtiva, definirResponsavelPadrao, empresaPorId, encerrarAcessoAdmin, salvarConfig, empresaPorSlug } from '@/server/empresas';
 import { demonstracaoAberta, garantirVisitante, reporSenhaVisitante } from '@/server/demonstracao';
 import { emailLigado } from '@/server/email';
 import { ErroDeUso } from '@/server/erros';
-import { tx } from '@/server/db';
+import { tx, um } from '@/server/db';
 import { ErroDeFormulario, receberPedido } from '@/server/pedidos';
 import { CONDICOES, MODELOS_DE_FLUXO, excluirFluxo, salvarFluxo, type EntradaFluxo } from '@/server/fluxos';
 import { gerarChaveGoogle } from '@/server/google-ads';
@@ -220,6 +220,21 @@ export const salvarPreferenciasAvisosAcao = async (_: Retorno, fd: FormData) =>
     const hora = (k: string) => (t(fd, k) === '' ? null : Number(t(fd, k)));
     await salvarPreferencias(await exigirCtx(), { recebe: fd.getAll('recebe').map(String), silencio_inicio: hora('silencio_inicio'), silencio_fim: hora('silencio_fim') });
     return { ok: 'Pronto: é isso que vai chegar no seu celular e no WhatsApp.' };
+  });
+
+/* ---------- Summary of the team's inbox (Growlift only) ---------- */
+
+export const gerarResumoEmailAcao = async () =>
+  tentar(async () => {
+    const ctx = await exigirCtx();
+    exigirAdmin(ctx);
+    const { gerarResumoEmail, SLUG_EMAIL } = await import('@/server/resumo-email');
+    const e = await um<{ slug: string }>('select slug from empresas where id = $1', [ctx.empresaId]);
+    if (e?.slug !== SLUG_EMAIL) throw new ErroDeUso('Esta função é só da Growlift.', 403);
+    const r = await gerarResumoEmail({ forcar: true });
+    if (r.motivo) throw new ErroDeUso(r.motivo);
+    revalidatePath('/painel/emails');
+    return { ok: r.total ? `Pronto: ${r.total} e-mail(s) lidos, ${r.importantes} importante(s).` : 'Pronto: nenhum e-mail novo desde o último resumo.' };
   });
 
 /* ---------- Conversations ---------- */
