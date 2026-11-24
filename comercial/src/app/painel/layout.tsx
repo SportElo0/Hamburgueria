@@ -53,7 +53,8 @@ export default async function PainelLayout({ children }: { children: React.React
           </div>
           <Navegacao
             itens={[
-              { href: '/painel', nome: 'Visão geral', aviso: n?.avisos },
+              { href: '/painel', nome: 'Visão geral' },
+              { href: '/painel/avisos', nome: 'Avisos', aviso: n?.avisos },
               { href: '/painel/oportunidades', nome: 'Oportunidades' },
               { href: '/painel/atendimento', nome: 'Atendimento', aviso: n?.conversas },
               { href: '/painel/tarefas', nome: 'Tarefas', aviso: n?.tarefas },

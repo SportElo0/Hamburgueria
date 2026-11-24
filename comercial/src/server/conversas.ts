@@ -796,7 +796,7 @@ export async function receberWhatsApp(empresaId: string, e: EntradaWhatsApp): Pr
     const trabalhoAudio = transcrever ? await agendar(db, empresaId, { tipo: 'transcrever_audio', chave: `audio:${m!.id}`, conversaId: v.id, dados: { mensagem: m!.id, midia: e.audio!.id, tipo: e.audio!.tipo }, maxTentativas: 2 }) : null;
     if (v.estado !== 'ia_ativa') {
       const resp = v.assumida_por ?? (await um<{ responsavel_id: string | null }>('select responsavel_id from oportunidades where id = $1', [v.oportunidade_id], db))?.responsavel_id ?? null;
-      await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresaId, resp, 'Nova mensagem do cliente', corpo.slice(0, 120), `/painel/atendimento/${v.id}`], db);
+      await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'conversa')`, [empresaId, resp, 'Nova mensagem do cliente', corpo.slice(0, 120), `/painel/atendimento/${v.id}`], db);
       return { duplicada: false, mensagemId: m!.id, trabalhoId: null, conversaId: v.id };
     }
     if (transcrever) return { duplicada: false, mensagemId: m!.id, trabalhoId: trabalhoAudio, conversaId: v.id };
@@ -963,7 +963,7 @@ export async function escreverNoChatSite(empresa: Empresa, token: string | null,
       if (op && v.contato_id) await dispararFluxos(db, empresa.id, { tipo: 'mensagem_recebida', texto: corpo }, { id: v.oportunidade_id, contatoId: v.contato_id, etapa: op.etapa });
     }
     if (v.estado !== 'ia_ativa') {
-      await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresa.id, v.assumida_por, 'Nova mensagem no chat do site', corpo.slice(0, 120), `/painel/atendimento/${v.id}`], db);
+      await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'conversa')`, [empresa.id, v.assumida_por, 'Nova mensagem no chat do site', corpo.slice(0, 120), `/painel/atendimento/${v.id}`], db);
       return null;
     }
     return agendar(db, empresa.id, { tipo: 'responder_ia', chave: `ia:${m!.id}`, conversaId: v.id, dados: { mensagem: m!.id }, maxTentativas: 2 });

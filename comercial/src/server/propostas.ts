@@ -158,7 +158,7 @@ export async function abrirPropostaPublica(token: string, contarVisita: boolean)
       [p.id],
     );
     if (primeira?.responsavel_id != null) {
-      await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [p.empresa_id, primeira.responsavel_id || null, `O cliente abriu a proposta nº ${p.numero}`, '', `/painel/oportunidades/${p.oportunidade_id}`]);
+      await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'proposta')`, [p.empresa_id, primeira.responsavel_id || null, `O cliente abriu a proposta nº ${p.numero}`, '', `/painel/oportunidades/${p.oportunidade_id}`]);
       await registrar(pool(), p.empresa_id, { oportunidadeId: p.oportunidade_id, ator: { tipo: 'visitante' }, tipo: 'proposta_vista', dados: { numero: p.numero } }).catch(() => {});
     }
   }

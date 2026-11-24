@@ -236,7 +236,7 @@ export async function atribuirPorFluxo(db: Db, empresaId: string, id: string, a:
   await q('update oportunidades set responsavel_id = $3 where empresa_id = $1 and id = $2', [empresaId, id, escolhido], db);
   await q('update tarefas set responsavel_id = $3 where empresa_id = $1 and oportunidade_id = $2 and concluida_em is null', [empresaId, id, escolhido], db);
   await registrar(db, empresaId, { oportunidadeId: id, contatoId: o.contato_id, ator: { tipo: 'sistema' }, tipo: 'responsavel_alterado', dados: { de: o.responsavel_id, para: escolhido, fluxo } });
-  await q('insert into notificacoes (empresa_id, user_id, titulo, link) values ($1, $2, $3, $4)', [empresaId, escolhido, 'Uma oportunidade foi atribuída a você', `/painel/oportunidades/${id}`], db);
+  await q(`insert into notificacoes (empresa_id, user_id, titulo, link, tipo) values ($1, $2, $3, $4, 'atribuicao')`, [empresaId, escolhido, 'Uma oportunidade foi atribuída a você', `/painel/oportunidades/${id}`], db);
   const nome = await um<{ name: string }>('select name from "user" where id = $1', [escolhido], db);
   return `Atribuída a ${nome?.name ?? 'um vendedor'}`;
 }
@@ -251,7 +251,7 @@ export async function atribuir(ctx: Ctx, id: string, userId: string | null): Pro
     await q('update tarefas set responsavel_id = $3 where empresa_id = $1 and oportunidade_id = $2 and concluida_em is null', [ctx.empresaId, id, userId], db);
     await registrar(db, ctx.empresaId, { oportunidadeId: id, contatoId: o.contato_id, ator: ator(ctx), tipo: 'responsavel_alterado', dados: { de: o.responsavel_id, para: userId } });
     if (userId && userId !== ctx.userId) {
-      await q('insert into notificacoes (empresa_id, user_id, titulo, link) values ($1, $2, $3, $4)', [ctx.empresaId, userId, 'Uma oportunidade foi atribuída a você', `/painel/oportunidades/${id}`], db);
+      await q(`insert into notificacoes (empresa_id, user_id, titulo, link, tipo) values ($1, $2, $3, $4, 'atribuicao')`, [ctx.empresaId, userId, 'Uma oportunidade foi atribuída a você', `/painel/oportunidades/${id}`], db);
     }
   });
 }

@@ -214,7 +214,7 @@ export async function marcarVisita(db: Db, empresa: Empresa, v: NovaVisita): Pro
     const prazo = new Date(Math.min(Date.now() + empresa.config.regras.sla_minutos * 60_000, v.inicio.getTime() - 2 * 3_600_000));
     await criarTarefa(db, empresa.id, { oportunidadeId: o.id, tipo: 'confirmar_visita', titulo: `Confirmar a visita de ${texto}: ${o.nome || formatarTelefone(o.telefone)}`, detalhe: v.origem === 'cliente' ? 'O cliente marcou pela página de agendamento. Confirme o endereço com ele e marque a visita como confirmada na agenda.' : 'Marcada pela assistente. Confirme o endereço com o cliente e marque a visita como confirmada na agenda.', prazo: prazo > new Date() ? prazo : new Date(), responsavelId: responsavel, chave: `visita-ia:${r.id}` });
   } else if (responsavel && responsavel !== v.criadoPor) {
-    await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresa.id, responsavel, `Visita marcada para você: ${texto}`, o.nome, '/painel/agenda'], db);
+    await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'agenda')`, [empresa.id, responsavel, `Visita marcada para você: ${texto}`, o.nome, '/painel/agenda'], db);
   }
   await dispararFluxos(db, empresa.id, { tipo: 'visita_marcada' }, { id: o.id, contatoId: o.contato_id, etapa: o.etapa });
   return { id: r.id, texto, lembrete };
@@ -323,7 +323,7 @@ export async function proximaVisitaDoContato(empresa: Empresa, contatoId: string
 }
 
 async function avisarEquipe(db: Db, empresaId: string, para: string | null, titulo: string, oportunidadeId: string) {
-  await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [empresaId, para, titulo, '', `/painel/oportunidades/${oportunidadeId}`], db);
+  await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'agenda')`, [empresaId, para, titulo, '', `/painel/oportunidades/${oportunidadeId}`], db);
 }
 
 export async function remarcarPeloCliente(db: Db, empresa: Empresa, contatoId: string, inicio: Date): Promise<string> {

@@ -3,6 +3,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 import { criarTarefa } from '@/server/contexto';
 import { fecharPool, pool, q } from '@/server/db';
 import { assuntoSeguro, avisoDeTeste, chavesVapid, endpointValido, enviarAvisosCelular, salvarInscricao, usarRemetenteDeTeste, type Aviso } from '@/server/push';
+import { grupoDoTipo, horaLocal, listarAvisos, marcarAvisosLidos, minhasPreferencias, recebeAgora, salvarPreferencias } from '@/server/avisos';
 import { contar, novaEmpresa, unico, type Cenario } from './apoio';
 
 let A: Cenario;
@@ -135,5 +136,86 @@ describe('avisos no celular', () => {
       if (antes === undefined) delete process.env.SUPABASE_JWT_SECRET;
       else process.env.SUPABASE_JWT_SECRET = antes;
     }
+  });
+});
+
+describe('página de avisos e o que cada pessoa recebe', () => {
+  const aviso = (empresaId: string, userId: string | null, titulo: string, tipo: string) =>
+    q(`insert into notificacoes (empresa_id, user_id, titulo, link, tipo) values ($1, $2, $3, '/painel', $4)`, [empresaId, userId, titulo, tipo]);
+
+  it('cada tipo de aviso cai no assunto certo', () => {
+    expect(grupoDoTipo('tarefa:atender_pedido')).toBe('pedidos');
+    expect(grupoDoTipo('sla')).toBe('pedidos');
+    expect(grupoDoTipo('conversa')).toBe('conversas');
+    expect(grupoDoTipo('tarefa:assumir_conversa')).toBe('conversas');
+    expect(grupoDoTipo('tarefa:retornar_ligacao')).toBe('ligacoes');
+    expect(grupoDoTipo('tarefa:avaliacao_baixa')).toBe('avaliacoes');
+    expect(grupoDoTipo('agenda')).toBe('agenda');
+    expect(grupoDoTipo('proposta')).toBe('propostas');
+    expect(grupoDoTipo('resumo')).toBe('resumo');
+    expect(grupoDoTipo('tarefa:manual')).toBe('tarefas');
+    expect(grupoDoTipo('tarefa_vencida')).toBe('tarefas');
+    expect(grupoDoTipo('geral')).toBe('outros');
+  });
+
+  it('assunto desligado e horário de silêncio (inclusive passando da meia-noite); o aviso de teste sempre chega', () => {
+    const p = { grupos_desligados: ['resumo' as const], silencio_inicio: null, silencio_fim: null };
+    expect(recebeAgora(p, 'resumo', 10)).toBe(false);
+    expect(recebeAgora(p, 'tarefa:atender_pedido', 10)).toBe(true);
+    const noite = { grupos_desligados: [], silencio_inicio: 22, silencio_fim: 7 };
+    expect(recebeAgora(noite, 'conversa', 23)).toBe(false);
+    expect(recebeAgora(noite, 'conversa', 3)).toBe(false);
+    expect(recebeAgora(noite, 'conversa', 7)).toBe(true);
+    expect(recebeAgora(noite, 'conversa', 12)).toBe(true);
+    const almoco = { grupos_desligados: [], silencio_inicio: 12, silencio_fim: 14 };
+    expect(recebeAgora(almoco, 'conversa', 13)).toBe(false);
+    expect(recebeAgora(almoco, 'conversa', 14)).toBe(true);
+    expect(recebeAgora({ grupos_desligados: ['outros'], silencio_inicio: 0, silencio_fim: 23 }, 'teste', 5)).toBe(true);
+  });
+
+  it('preferências: valida as horas e guarda só o que a pessoa desligou', async () => {
+    await expect(salvarPreferencias(A.vendedor, { recebe: [], silencio_inicio: 22, silencio_fim: null })).rejects.toThrow(/começo e o fim/);
+    await expect(salvarPreferencias(A.vendedor, { recebe: [], silencio_inicio: 8, silencio_fim: 8 })).rejects.toThrow(/começo e o fim/);
+    await expect(salvarPreferencias(A.vendedor, { recebe: [], silencio_inicio: 25, silencio_fim: 3 })).rejects.toThrow(/0 a 23/);
+    await salvarPreferencias(A.vendedor, { recebe: ['pedidos', 'conversas', 'ligacoes', 'avaliacoes', 'agenda', 'propostas', 'tarefas', 'outros', 'inventado'], silencio_inicio: 22, silencio_fim: 7 });
+    expect(await minhasPreferencias(A.vendedor)).toEqual({ grupos_desligados: ['resumo'], silencio_inicio: 22, silencio_fim: 7 });
+    expect(await minhasPreferencias(A.admin)).toEqual({ grupos_desligados: [], silencio_inicio: null, silencio_fim: null });
+  });
+
+  it('lista: vendedor vê só os dele, administrador vê também os da empresa; filtro e marcar lidos por assunto', async () => {
+    const C = await novaEmpresa('Solar Lista');
+    await aviso(C.empresa.id, null, 'Novo pedido: X', 'tarefa:atender_pedido');
+    await aviso(C.empresa.id, null, 'Retornar a ligação: Y', 'tarefa:retornar_ligacao');
+    await aviso(C.empresa.id, C.vendedor.userId, 'Uma oportunidade foi atribuída a você', 'atribuicao');
+    const doVendedor = await listarAvisos(C.vendedor);
+    expect(doVendedor.avisos.map((a) => a.titulo)).toEqual(['Uma oportunidade foi atribuída a você']);
+    const doAdmin = await listarAvisos(C.admin);
+    expect(doAdmin.avisos).toHaveLength(2);
+    expect(doAdmin.naoLidos).toMatchObject({ pedidos: 1, ligacoes: 1, tarefas: 0 });
+    expect((await listarAvisos(C.admin, { grupo: 'ligacoes' })).avisos.map((a) => a.titulo)).toEqual(['Retornar a ligação: Y']);
+    await marcarAvisosLidos(C.admin, 'ligacoes');
+    expect((await listarAvisos(C.admin, { soNaoLidos: true })).avisos.map((a) => a.titulo)).toEqual(['Novo pedido: X']);
+    await marcarAvisosLidos(C.admin);
+    expect((await listarAvisos(C.admin, { soNaoLidos: true })).avisos).toHaveLength(0);
+    // the salesperson's own alert is untouched by the admin's "mark all"
+    expect((await listarAvisos(C.vendedor, { soNaoLidos: true })).avisos).toHaveLength(1);
+  });
+
+  it('o celular respeita o assunto desligado e o horário de silêncio de cada pessoa', async () => {
+    const C = await novaEmpresa('Solar Silêncio');
+    const s = sub();
+    await salvarInscricao(C.admin, s, 'Celular');
+    await salvarPreferencias(C.admin, { recebe: ['pedidos', 'conversas', 'ligacoes', 'avaliacoes', 'agenda', 'propostas', 'tarefas', 'outros'], silencio_inicio: null, silencio_fim: null });
+    await aviso(C.empresa.id, null, 'Resumo do dia da empresa', 'resumo');
+    await aviso(C.empresa.id, null, 'Novo pedido: Z', 'tarefa:atender_pedido');
+    await enviarAvisosCelular();
+    expect(para(s.endpoint).map((a) => a.titulo)).toEqual(['Novo pedido']);
+    // quiet hour right now: nothing reaches the phone, but it stays in the panel list
+    const agora = horaLocal(C.empresa.config.regras.fuso);
+    await salvarPreferencias(C.admin, { recebe: ['pedidos'], silencio_inicio: agora, silencio_fim: (agora + 1) % 24 });
+    await aviso(C.empresa.id, null, 'Novo pedido: W', 'tarefa:atender_pedido');
+    await enviarAvisosCelular();
+    expect(para(s.endpoint)).toHaveLength(1);
+    expect((await listarAvisos(C.admin)).avisos.map((a) => a.titulo)).toContain('Novo pedido: W');
   });
 });

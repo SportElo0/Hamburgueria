@@ -30,6 +30,7 @@ import { anotar, atribuir, concluirTarefa, criarTarefaManual, definirProximaAcao
 import { exigirCtx, exigirPlataforma, ipHash } from '@/server/sessao';
 import { avisoDeTeste, enviarAvisosCelular, removerInscricao, salvarInscricao, type InscricaoEntrada } from '@/server/push';
 import { desligarAvisoWhatsApp, ligarAvisoWhatsApp } from '@/server/avisos-whatsapp';
+import { GRUPOS, marcarAvisosLidos, salvarPreferencias, type Grupo } from '@/server/avisos';
 import { processarFila } from '@/server/trabalhos';
 import { definirRelato, registrarRecebimento, removerRecebimento } from '@/server/recebimentos';
 
@@ -206,6 +207,20 @@ export async function lerNotificacoesAcao() {
   await marcarNotificacoesLidas(await exigirCtx());
   revalidatePath('/', 'layout');
 }
+
+/** Alerts page: mark all as read, or only one subject group. */
+export async function lerAvisosAcao(fd: FormData) {
+  const g = t(fd, 'grupo');
+  await marcarAvisosLidos(await exigirCtx(), g && g in GRUPOS ? (g as Grupo) : null);
+  revalidatePath('/', 'layout');
+}
+
+export const salvarPreferenciasAvisosAcao = async (_: Retorno, fd: FormData) =>
+  tentar(async () => {
+    const hora = (k: string) => (t(fd, k) === '' ? null : Number(t(fd, k)));
+    await salvarPreferencias(await exigirCtx(), { recebe: fd.getAll('recebe').map(String), silencio_inicio: hora('silencio_inicio'), silencio_fim: hora('silencio_fim') });
+    return { ok: 'Pronto: é isso que vai chegar no seu celular e no WhatsApp.' };
+  });
 
 /* ---------- Conversations ---------- */
 

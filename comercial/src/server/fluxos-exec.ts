@@ -135,7 +135,7 @@ export async function executarPassoFluxo(t: Trabalho, enviar: EnviarIniciada): P
     }
     if (p.tipo === 'avisar_equipe') {
       await tx(async (db) => {
-        await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [e.empresa_id, o.responsavel_id, p.titulo, o.nome, `/painel/oportunidades/${e.oportunidade_id}`], db);
+        await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'fluxo')`, [e.empresa_id, o.responsavel_id, p.titulo, o.nome, `/painel/oportunidades/${e.oportunidade_id}`], db);
         await seguir(db, i, 'Equipe avisada');
       });
       return { tipo: 'concluido' };

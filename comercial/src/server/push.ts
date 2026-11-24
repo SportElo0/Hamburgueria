@@ -3,6 +3,8 @@ import webpush from 'web-push';
 import { dentroDoLimite, exigirNaoVisitante, type Ctx } from './contexto';
 import { q, um } from './db';
 import { ErroDeUso } from './erros';
+import { horaLocal, preferenciasDe, recebeAgora, type Preferencias } from './avisos';
+import { empresaPorId } from './empresas';
 
 /**
  * Phone alerts for the installed panel (Web Push). Every internal notification (new request, conversation waiting
@@ -92,7 +94,7 @@ export async function avisoDeTeste(ctx: Ctx): Promise<number> {
   if (!(await um('select 1 from inscricoes_push where empresa_id = $1 and user_id = $2', [ctx.empresaId, ctx.userId]))) {
     throw new ErroDeUso('Nenhum celular com avisos ligados. Ligue os avisos neste aparelho primeiro.');
   }
-  await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [ctx.empresaId, ctx.userId, 'Aviso de teste', 'Os avisos deste celular estão funcionando.', '/painel/celular']);
+  await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'teste')`, [ctx.empresaId, ctx.userId, 'Aviso de teste', 'Os avisos deste celular estão funcionando.', '/painel/celular']);
   return enviarAvisosCelular();
 }
 
@@ -130,17 +132,19 @@ export function usarRemetenteDeTeste(r: Remetente | null) {
 export async function enviarAvisosCelular(max = 50): Promise<number> {
   if (remetente === remetentePadrao && !chavesVapid()) return 0;
   await q(`update notificacoes set push_em = now() where push_em is null and criado_em < now() - interval '1 hour'`);
-  const lote = await q<{ empresa_id: string; user_id: string | null; titulo: string; link: string }>(
+  const lote = await q<{ empresa_id: string; user_id: string | null; titulo: string; link: string; tipo: string }>(
     `update notificacoes set push_em = now() where id in (
        select id from notificacoes where push_em is null order by criado_em limit $1 for update skip locked
-     ) returning empresa_id, user_id, titulo, link`,
+     ) returning empresa_id, user_id, titulo, link, tipo`,
     [max],
   );
   let enviados = 0;
+  const prefs = new Map<string, Preferencias>();
   for (const n of lote) {
+    const hora = horaLocal((await empresaPorId(n.empresa_id))?.config.regras.fuso ?? 'America/Sao_Paulo');
     // No recipient = the company's admins. Only active members of that same company receive it.
-    const subs = await q<{ id: string; endpoint: string; p256dh: string; auth: string; empresa: string }>(
-      `select s.id, s.endpoint, s.p256dh, s.auth, e.nome as empresa
+    const subs = await q<{ id: string; user_id: string; endpoint: string; p256dh: string; auth: string; empresa: string }>(
+      `select s.id, s.user_id, s.endpoint, s.p256dh, s.auth, e.nome as empresa
        from inscricoes_push s
        join membros m on m.user_id = s.user_id and m.empresa_id = s.empresa_id and m.ativo
        join empresas e on e.id = s.empresa_id
@@ -148,6 +152,10 @@ export async function enviarAvisosCelular(max = 50): Promise<number> {
       [n.empresa_id, n.user_id],
     );
     for (const s of subs) {
+      // What this person chose to receive (subjects and quiet hours); the panel list keeps everything.
+      const chave = `${n.empresa_id}:${s.user_id}`;
+      if (!prefs.has(chave)) prefs.set(chave, await preferenciasDe(n.empresa_id, s.user_id));
+      if (!recebeAgora(prefs.get(chave)!, n.tipo, hora)) continue;
       try {
         await remetente(s, { titulo: assuntoSeguro(n.titulo), corpo: `${s.empresa} · toque para abrir`, link: n.link.startsWith('/painel') ? n.link : '/painel' });
         await q('update inscricoes_push set ultimo_envio_em = now(), falhas = 0 where id = $1', [s.id]);

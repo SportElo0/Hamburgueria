@@ -46,7 +46,7 @@ export async function escalarTarefas(): Promise<number> {
       for (const t of lista) {
         const link = t.conversa_id ? `/painel/atendimento/${t.conversa_id}` : t.oportunidade_id ? `/painel/oportunidades/${t.oportunidade_id}` : '/painel/tarefas?estado=vencidas&de=todas';
         // No recipient = the company admins (see notificacoes in oportunidades.ts).
-        await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, null, $2, $3, $4)', [
+        await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, null, $2, $3, $4, 'tarefa_vencida')`, [
           e.id,
           `Tarefa vencida há mais de ${horas} h: ${t.titulo}`.slice(0, 200),
           `${t.responsavel ? `Responsável: ${t.responsavel}` : 'Sem responsável'}.`,
@@ -92,7 +92,7 @@ export async function enviarResumos(agora = new Date()): Promise<number> {
           `${x.vencidas} vencida(s)`,
           ...(m.papel === 'admin' ? [`${x.fila} oportunidade(s) sem responsável`] : []),
         ];
-        await q('insert into notificacoes (empresa_id, user_id, titulo, corpo, link) values ($1, $2, $3, $4, $5)', [
+        await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) values ($1, $2, $3, $4, $5, 'resumo')`, [
           e.id,
           m.user_id,
           m.papel === 'admin' ? 'Resumo do dia da empresa' : 'Seu resumo do dia',

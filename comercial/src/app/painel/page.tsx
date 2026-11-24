@@ -91,7 +91,10 @@ export default async function VisaoGeral({ searchParams }: { searchParams: Promi
       <section className="cartao p-4" aria-labelledby="t-avisos">
         <div className="flex items-center justify-between gap-3">
           <h2 id="t-avisos" className="font-bold">Avisos {naoLidas.length ? <span className="etiqueta etiqueta-alerta ml-1">{naoLidas.length} novo(s)</span> : null}</h2>
-          {naoLidas.length > 0 && <form action={lerNotificacoesAcao}><button className="botao-2 min-h-9 px-3 py-1 text-sm">Marcar como lidos</button></form>}
+          <div className="flex items-center gap-2">
+            {naoLidas.length > 0 && <form action={lerNotificacoesAcao}><button className="botao-2 min-h-9 px-3 py-1 text-sm">Marcar como lidos</button></form>}
+            <Link href="/painel/avisos" className="text-sm font-semibold text-marca hover:underline">Ver todos</Link>
+          </div>
         </div>
         {avisos.length === 0 ? (
           <p className="mt-3 text-[15px] text-suave">Nenhum aviso por enquanto.</p>

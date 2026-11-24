@@ -6,6 +6,7 @@ import { empresaPorId } from './empresas';
 import { ErroDeUso } from './erros';
 import { canalDa } from './integracoes';
 import { assuntoSeguro } from './push';
+import { horaLocal, preferenciasDe, recebeAgora } from './avisos';
 
 /**
  * The important alerts also on the WhatsApp of whoever asked (many owners never install the panel app): a new
@@ -51,10 +52,10 @@ export async function desligarAvisoWhatsApp(ctx: Ctx) {
  */
 export async function enviarAvisosWhatsApp(max = 50): Promise<number> {
   await q(`update notificacoes set whatsapp_em = now() where whatsapp_em is null and (criado_em < now() - interval '1 hour' or not (tipo = any($1)))`, [TIPOS_WHATSAPP]);
-  const lote = await q<{ empresa_id: string; user_id: string | null; titulo: string; link: string }>(
+  const lote = await q<{ empresa_id: string; user_id: string | null; titulo: string; link: string; tipo: string }>(
     `update notificacoes set whatsapp_em = now() where id in (
        select id from notificacoes where whatsapp_em is null order by criado_em limit $1 for update skip locked
-     ) returning empresa_id, user_id, titulo, link`,
+     ) returning empresa_id, user_id, titulo, link, tipo`,
     [max],
   );
   let enviados = 0;
@@ -70,8 +71,11 @@ export async function enviarAvisosWhatsApp(max = 50): Promise<number> {
     const { canal, config } = await canalDa(n.empresa_id);
     if (!canal || !config.modelo_aviso_equipe) continue;
     const empresa = await empresaPorId(n.empresa_id);
+    const hora = horaLocal(empresa?.config.regras.fuso ?? 'America/Sao_Paulo');
     const link = `${(process.env.APP_URL ?? '').replace(/\/$/, '')}${n.link.startsWith('/painel') ? n.link : '/painel'}`;
     for (const p of quem) {
+      // Subjects turned off and quiet hours of this person (same choices as the phone alerts).
+      if (!recebeAgora(await preferenciasDe(n.empresa_id, p.user_id), n.tipo, hora)) continue;
       if (!(await dentroDoLimite(`aviso-whatsapp:${n.empresa_id}:${p.user_id}`, MAX_POR_DIA, 86_400))) continue;
       try {
         const r = await canal.enviarModelo(p.telefone, { nome: config.modelo_aviso_equipe, idioma: config.idioma_modelos, variaveis: [empresa?.nome ?? '', assuntoSeguro(n.titulo), link] });

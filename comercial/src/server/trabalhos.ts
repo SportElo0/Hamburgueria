@@ -123,7 +123,7 @@ export const executores: Record<string, Executor> = {
     const link = `/painel/oportunidades/${t.oportunidade_id}`;
     const titulo = `Pedido sem atendimento: ${o.nome || 'contato'}`;
     // To the assignee (if any) and always to the company admins.
-    await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link) select $1, x, $2, $3, $4 from (select distinct unnest(array[$5::text, null]) as x) s`, [t.empresa_id, titulo, 'Passou do prazo configurado para o primeiro atendimento.', link, o.responsavel_id]);
+    await q(`insert into notificacoes (empresa_id, user_id, titulo, corpo, link, tipo) select $1, x, $2, $3, $4, 'sla' from (select distinct unnest(array[$5::text, null]) as x) s`, [t.empresa_id, titulo, 'Passou do prazo configurado para o primeiro atendimento.', link, o.responsavel_id]);
     await registrar(pool(), t.empresa_id, { oportunidadeId: t.oportunidade_id, ator: { tipo: 'sistema' }, tipo: 'alerta_sem_atendimento' });
     return { tipo: 'concluido' };
   },
