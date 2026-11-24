@@ -81,12 +81,7 @@ const visLista = `<div style="position:absolute;inset:0;border-radius:34px;overf
   </div>
 </div>${demo('Exemplo de campanha · nomes fictícios').replace('left:24px;top:24px', 'right:24px;bottom:24px')}`;
 
-S('2-servicos', 1, P.storyOpenV2({ plate: 'hd/marca-vidro-vertical.png', title: `O que a gente<br>${B('faz.')}`, lead: 'Site, Google e vendas pelo site. Você escolhe até onde ir.' }));
-S('2-servicos', 2, P.storyServiceV2({ index: '1/4', plan: 'Em todos os planos', title: 'Site feito do zero', lead: 'Com as fotos, as cores e os serviços do seu negócio.', visual: visSite, bg: 'hd/confeitaria.png', items: ['Domínio e hospedagem por nossa conta', 'Botão de WhatsApp, mapa e horários', 'Pensado primeiro para o celular'] }));
-S('2-servicos', 3, P.storyServiceV2({ index: '2/4', plan: 'A partir do Grow', title: 'Achado no Google', lead: 'Para quem procura o seu ramo na sua cidade.', visual: visGoogle, bg: 'hd/restaurante.png', items: ['SEO local no site', 'Perfil da Empresa no Google configurado', 'Acompanhamento do perfil'] }));
-S('2-servicos', 4, P.storyServiceV2({ index: '3/4', plan: 'No plano Lift', title: 'Pedido e Pix no site', lead: 'Para restaurantes que querem vender direto.', visual: visPedido, bg: 'hd/burger.png', items: ['Cardápio com pedido e pagamento', 'Tela da loja com alerta e impressão', 'Sem comissão por pedido'] }));
-S('2-servicos', 5, P.storyServiceV2({ index: '4/4', plan: 'A partir do Grow', title: 'Clientes que voltam', lead: 'Uma lista de quem autorizou receber as suas ofertas.', visual: visLista, bg: 'hd/burger.png', items: ['No Grow: cadastro direto pelo site', 'No Lift: campanha mensal no WhatsApp', 'Só para quem aceitou, com opção de sair'] }));
-S('2-servicos', 6, P.storyPlansV2({ plate: 'hd/marca-vidro-vertical.png', title: `Qual é o seu ${B('momento?')}`, lead: 'Mensalidade fixa e nenhuma comissão por pedido.', plans: [['Start', 'Seu site no ar', 'Site feito do zero, com domínio e hospedagem.'], ['Grow', 'Achado no Google', 'Tudo do Start, mais SEO local e o seu perfil no Google.'], ['Lift', 'Vende pelo site', 'Tudo do Grow, mais pedido e Pix no seu site.']], link: { sticker: 'Ver os planos', hint: 'Toque no link e compare os planos' } }));
+// Serviços: desde 24/11/2026 os stories saem de servicos-v3.mjs (o que a Growlift faz, escuro e neon).
 
 // --- 03 Stories: Contato ------------------------------------------------------------------
 // Contato, second generation: two stories, each with its link button drawn where the sticker goes.
