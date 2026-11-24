@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnóstico grátis para empresas de conserto · Growlift</title>
+<meta name="description" content="Para quem atende chamado na hora: ar-condicionado, elétrica, encanamento, chaveiro e outros. Marque o que atrapalha e veja o que a gente montaria na sua empresa.">
+<!-- Página das conversas e dos anúncios: fora do Google, para não disputar com a página principal. -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#06080d">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .lp { max-width: 760px; margin: 0 auto; padding: 120px var(--pad) 72px; }
+  .lp h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; margin-top: 16px; }
+  .lp h1 .blue { color: var(--blue-bright); }
+  .lp .lead { margin-top: 18px; }
+  .lp .form { grid-template-columns: 1fr; margin-top: 32px; }
+  .lp .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 700px) { .lp .grid2 { grid-template-columns: 1fr; } }
+  .stepbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--dim); }
+  .stepbar .progress { flex: 1; max-width: 220px; }
+  .sol { display: grid; gap: 10px; }
+  .sol .opt { align-items: flex-start; padding-top: 14px; padding-bottom: 14px; }
+  .sol .opt b { display: block; color: var(--text); font-size: 16px; }
+  .sol .opt small { display: block; margin-top: 4px; color: var(--muted); font-size: 14.5px; line-height: 1.45; }
+  .sol .opt input { top: 24px !important; }
+  .note { margin: 4px 0 0; font-size: 14px; color: var(--dim); line-height: 1.5; }
+  .stop { margin-top: 32px; padding: 28px; border-radius: var(--radius); border: 1px solid var(--line-strong); background: var(--surface); }
+  .stop h2 { font-size: 24px; font-weight: 800; }
+  .stop p { margin: 10px 0 0; color: var(--text-soft); }
+  .who-line { display: flex; align-items: center; gap: 14px; margin-top: 40px; color: var(--muted); font-size: 15px; }
+  .lp-foot { max-width: 760px; margin: 0 auto; padding: 0 var(--pad) 120px; color: var(--dim); font-size: 14px; }
+  .lp-foot a { color: var(--blue-soft); }
+</style>
+<script src="/_vercel/insights/script.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="marca" viewBox="50 40 530 415"><path fill="#0865FE" d="M280 48H410L190 450H55Z"/><path fill="#0865FE" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></symbol>
+</svg>
+<header class="top scrolled">
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Growlift, ir ao site"><svg aria-hidden="true"><use href="#marca"/></svg>GROWLIFT</a>
+    <nav class="nav" aria-label="Principal"><a class="btn btn-ghost" href="index.html">Conhecer a Growlift</a></nav>
+  </div>
+</header>
+
+<main class="lp" id="conteudo">
+  <p class="eyebrow">Para empresas de conserto e serviço na hora</p>
+  <h1>O cliente liga enquanto você está no serviço. <span class="blue">Quem atende?</span></h1>
+  <p class="lead">Marque o que mais atrapalha hoje e veja, na hora, o que a gente montaria na sua empresa. Depois, em até 2 dias úteis, chega no seu WhatsApp o plano com o preço, por escrito. Grátis e sem compromisso.</p>
+
+  <form class="form" id="lp-form" novalidate data-sistema="https://growlift-sistema.vercel.app/api/publico/pedidos" data-chave="pk_growlift_site" data-endpoint="https://painel-lojas-sportelo.vercel.app/api/public/diagnosticos">
+    <div class="stepbar"><span id="lp-count" aria-live="polite">Passo 1 de 4</span><div class="progress" aria-hidden="true"><i id="lp-bar"></i></div></div>
+
+    <fieldset class="wstep group" data-step="0">
+      <legend>Você é dono ou responsável pela empresa?</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="dono" value="sim"><span>Sim, sou eu que decido</span></label>
+        <label class="opt"><input type="radio" name="dono" value="nao"><span>Não, trabalho na empresa</span></label>
+      </div>
+      <div class="wnav"><button class="btn btn-primary" type="button" data-next>Continuar →</button></div>
+    </fieldset>
+
+    <fieldset class="wstep group" data-step="1" hidden>
+      <legend>Qual é o serviço da empresa?</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="ramo" value="Ar-condicionado e refrigeração"><span>Ar-condicionado e refrigeração</span></label>
+        <label class="opt"><input type="radio" name="ramo" value="Elétrica"><span>Elétrica</span></label>
+        <label class="opt"><input type="radio" name="ramo" value="Encanamento e desentupimento"><span>Encanamento e desentupimento</span></label>
+        <label class="opt"><input type="radio" name="ramo" value="Chaveiro"><span>Chaveiro</span></label>
+        <label class="opt"><input type="radio" name="ramo" value="Vidraçaria"><span>Vidraçaria</span></label>
+        <label class="opt"><input type="radio" name="ramo" value="Assistência técnica"><span>Assistência técnica</span></label>
+        <label class="opt"><input type="radio" name="ramo" value="Dedetização"><span>Dedetização</span></label>
+        <label class="opt"><input type="radio" name="ramo" value="Outro"><span>Outro</span></label>
+      </div>
+      <div class="field" id="lp-outro" hidden>
+        <label for="f-outro">Qual?</label>
+        <input id="f-outro" maxlength="60" placeholder="Ex.: conserto de portão">
+      </div>
+      <fieldset class="group" style="margin-top:14px">
+        <legend>O que mais atrapalha hoje? <span>(marque até 3)</span></legend>
+        <div class="opts opts-col">
+          <label class="opt"><input type="checkbox" name="dor" value="ligacao"><span>Perco ligação quando estou no serviço</span></label>
+          <label class="opt"><input type="checkbox" name="dor" value="demora"><span>Demoro para responder o WhatsApp e o cliente chama outro</span></label>
+          <label class="opt"><input type="checkbox" name="dor" value="noite"><span>Ninguém atende à noite nem no fim de semana</span></label>
+          <label class="opt"><input type="checkbox" name="dor" value="orcamento"><span>Mando orçamento e o cliente some</span></label>
+          <label class="opt"><input type="checkbox" name="dor" value="agenda"><span>Cliente esquece a visita ou a agenda vira bagunça</span></label>
+          <label class="opt"><input type="checkbox" name="dor" value="volta"><span>O cliente faz o serviço uma vez e não volta</span></label>
+          <label class="opt"><input type="checkbox" name="dor" value="google"><span>Pouca gente me acha no Google</span></label>
+          <label class="opt"><input type="checkbox" name="dor" value="controle"><span>Não sei quanto entrou de cada serviço</span></label>
+        </div>
+      </fieldset>
+      <div class="wnav"><button class="btn btn-ghost" type="button" data-back>Voltar</button><button class="btn btn-primary" type="button" data-next>Ver o que a gente montaria →</button></div>
+    </fieldset>
+
+    <fieldset class="wstep group" data-step="2" hidden>
+      <legend>Para o que você marcou, a gente montaria isto. Marque o que você quer.</legend>
+      <div class="sol" id="lp-sol"></div>
+      <p class="note">É uma sugestão a partir das suas respostas. O plano diz o que entra no seu caso, o prazo e o preço, e nada começa sem você aprovar. Ninguém pode garantir número de clientes ou de vendas.</p>
+      <div class="wnav"><button class="btn btn-ghost" type="button" data-back>Voltar</button><button class="btn btn-primary" type="button" data-next>Continuar →</button></div>
+    </fieldset>
+
+    <fieldset class="wstep group" data-step="3" hidden>
+      <legend>Para onde mandamos o seu plano?</legend>
+      <div class="grid2">
+        <div class="field"><label for="f-negocio">Nome da empresa</label><input id="f-negocio" name="business" autocomplete="organization" maxlength="80" required placeholder="Ex.: Refrigeração do Léo"></div>
+        <div class="field"><label for="f-zap">WhatsApp</label><input id="f-zap" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(11) 90000-0000"></div>
+        <div class="field"><label for="f-cidade">Cidade</label><input id="f-cidade" name="city" autocomplete="address-level2" maxlength="80" required placeholder="Ex.: Campinas, SP"></div>
+        <div class="field"><label for="f-presenca">Instagram ou site <span>(se tiver)</span></label><input id="f-presenca" name="presence" maxlength="200" placeholder="@suaempresa"></div>
+      </div>
+      <div class="hp" aria-hidden="true"><label for="f-site">Não preencha</label><input id="f-site" name="website" tabindex="-1" autocomplete="off"></div>
+      <label class="consent"><input type="checkbox" name="consent" required> <span>Autorizo a Growlift a me chamar no WhatsApp para enviar o diagnóstico e o plano. Veja a <a href="privacidade.html">política de privacidade</a>.</span></label>
+      <div class="wnav"><button class="btn btn-ghost" type="button" data-back>Voltar</button><button class="btn btn-primary" type="submit">Receber meu plano grátis</button></div>
+    </fieldset>
+    <p class="form-msg" id="lp-msg" role="alert" hidden></p>
+  </form>
+
+  <div class="stop" id="lp-nao" tabindex="-1" hidden>
+    <h2>Obrigado!</h2>
+    <p>Esta página é para quem decide na empresa. Se achar que pode ajudar, mande este link para o dono ou o responsável.</p>
+  </div>
+  <div class="done" id="lp-ok" tabindex="-1" hidden>
+    <h3>Recebemos!</h3>
+    <p>Em até 2 dias úteis você recebe no WhatsApp o diagnóstico e o plano, com o que você escolheu, por onde começar e quanto custa. Quem vai ler e responder é o Lucas ou o Antônio.</p>
+  </div>
+
+  <p class="who-line"><span class="faces" aria-hidden="true"><img src="img/time/lucas.webp" alt="" width="48" height="48" loading="lazy"><img src="img/time/antonio.webp" alt="" width="48" height="48" loading="lazy"></span><span>Quem lê é gente: o Lucas e o Antônio, da Growlift, de São Paulo.</span></p>
+</main>
+
+<footer class="lp-foot">
+  <p>Growlift · 69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP · <a href="mailto:contato@growlift.com.br">contato@growlift.com.br</a></p>
+  <p><a href="privacidade.html">Política de privacidade</a> · <a href="termos.html">Termos de uso</a></p>
+</footer>
+<script src="diagnostico.js" defer></script>
+<script src="https://growlift-sistema.vercel.app/chat.js" data-chave="pk_growlift_site" data-texto="Tirar dúvidas" data-cor="#0865fe" async></script>
+</body>
+</html>
