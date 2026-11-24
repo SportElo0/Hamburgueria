@@ -38,7 +38,7 @@ Os quatro modelos são fictícios e estão identificados como tal. Os sites feit
 
 ## 2 · Serviços (7 stories, novos em 24/11/2026)
 
-O que a Growlift faz, uma frase por story, com a marca em 3D do site se montando de um story para o outro (fundo escuro e azul neon, igual à parte nova do site).
+O que a Growlift faz, uma frase por story (fundo escuro e azul neon, igual à parte nova do site). A abertura e o fechamento têm a marca em 3D; do 02 ao 06, cada story mostra uma tela de verdade do sistema (painel e demonstração com empresas fictícias: Lumivale e Pousada Maré Calma), marcada "demonstração, dados fictícios". As telas ficam em `_fonte/assets/stories/servicos/`.
 
 | Arquivo | O que mostra |
 | --- | --- |

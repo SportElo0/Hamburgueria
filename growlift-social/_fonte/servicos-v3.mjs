@@ -13,6 +13,7 @@ const OUT = path.resolve(HERE, '../03-destaques/2-servicos');
 const SITE = path.resolve(HERE, '../../growlift');
 const FONT = pathToFileURL(path.join(SITE, 'fonts/inter-latin-wght-normal.woff2')).href;
 const FONT_EXT = pathToFileURL(path.join(SITE, 'fonts/inter-latin-ext-wght-normal.woff2')).href;
+const shot = (f) => pathToFileURL(path.join(HERE, 'assets/stories/servicos', f)).href;
 const frame = (n) => pathToFileURL(path.join(SITE, `img/lift/m/${String(n).padStart(2, '0')}.webp`)).href;
 
 const ICONS = {
@@ -32,6 +33,14 @@ const ITENS = [
   ['money', 'Você acompanha<br><em>até o pagamento.</em>', 'Cada pedido aparece no seu celular, até virar dinheiro no caixa.'],
 ];
 const QUADROS = [6, 22, 38, 54, 70, 86, 95];
+// Uma tela de verdade do sistema em cada story (painel e demonstração, empresas e dados fictícios).
+const TELAS = [
+  { f: 'atendimento.png', w: 820, tipo: 'tela', nota: 'Painel · conversas de todos os canais' },
+  { f: 'site-ia.png', w: 540, tipo: 'cel', nota: 'Chat do site, 23h12' },
+  { f: 'ligacao.png', w: 500, tipo: 'cel', nota: 'Quem ligou ouve isto no celular' },
+  { f: 'retomada.png', w: 640, tipo: 'tela', nota: 'Quadro de pedidos e retomada' },
+  { f: 'avisos.png', w: 820, tipo: 'tela', nota: 'Avisos do painel, também no celular' },
+];
 
 const CSS = `
 @font-face{font-family:Inter;font-weight:100 900;src:url(${FONT}) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2191,U+2193,U+2212}
@@ -52,20 +61,35 @@ h1{margin-top:44px;font-size:112px;line-height:1.0;letter-spacing:-.04em;font-we
 em{font-style:normal;color:#7fb2ff;text-shadow:0 0 40px rgba(47,125,255,.75)}
 p.sub{margin-top:34px;font-size:44px;line-height:1.4;color:#b6c1d9}
 .next{margin-top:40px;font-size:34px;color:#6b7896;font-weight:600}
+.shotwrap{position:absolute;left:0;right:0;top:370px;height:800px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.shotbox{position:relative;border-radius:36px;overflow:hidden;border:3px solid rgba(127,178,255,.55);box-shadow:0 0 70px rgba(47,125,255,.45),0 40px 90px -30px #000;background:#fff;max-height:700px}
+.shotbox.cel{border-radius:56px;border-width:4px;max-height:700px}
+.shotbox img{display:block;width:100%}
+.demo{margin-top:22px;font-size:28px;color:#9aa6c0;font-weight:600;text-align:center}
+.demo b{color:#7fb2ff}
+.copy.low{bottom:300px}
+.copy.low h1{font-size:96px;margin-top:0}
+.copy.low p.sub{font-size:40px;margin-top:24px}
 .brand{position:absolute;left:96px;bottom:250px;display:flex;align-items:center;gap:16px;font-weight:800;letter-spacing:.14em;font-size:34px;color:#f3f6ff;opacity:.9}
 .brand svg{width:46px;height:38px}
 `;
 const MARCA = '<svg viewBox="50 40 530 415"><path fill="#2f7dff" d="M280 48H410L190 450H55Z"/><path fill="#2f7dff" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></svg>';
 const page = (n, body) => `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>${CSS}</style></head><body>
 <div class="mark" style="background-image:url(${frame(QUADROS[n])})"></div><div class="fade"></div>${body}</body></html>`;
+const pageTela = (body) => `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><style>${CSS}</style></head><body><div style="position:absolute;left:-200px;top:200px;width:1480px;height:900px;background:radial-gradient(closest-side,rgba(47,125,255,.28),transparent)"></div>${body}</body></html>`;
 const track = (k) => `<div class="track">${ITENS.map((_, i) => `<i class="${i < k ? 'on' : ''}"></i>`).join('')}</div>`;
 
 const stories = [
   page(0, `<div class="copy"><h1>O que a<br>Growlift faz,<br><em>em poucas palavras.</em></h1>
     <p class="sub">5 coisas que o sistema faz pelo seu negócio. Toque para ver.</p></div>
     <div class="brand">${MARCA}GROWLIFT</div>`),
-  ...ITENS.map(([ic, t, s], i) => page(i + 1, `<div class="top"><div class="label">O que a Growlift faz · ${i + 1} de 5</div>${track(i + 1)}</div>
-    <div class="copy"><div class="ico"><svg viewBox="0 0 24 24">${ICONS[ic]}</svg></div><h1>${t}</h1><p class="sub">${s}</p></div>`)),
+  ...ITENS.map(([ic, t, s], i) => {
+    const tela = TELAS[i];
+    return pageTela(`<div class="top"><div class="label">O que a Growlift faz · ${i + 1} de 5</div>${track(i + 1)}</div>
+    <div class="shotwrap"><div class="shotbox ${tela.tipo}" style="width:${tela.w}px"><img src="${shot(tela.f)}"></div>
+    <p class="demo"><b>${tela.nota}</b> · demonstração, dados fictícios</p></div>
+    <div class="copy low"><h1>${t}</h1><p class="sub">${s}</p></div>`);
+  }),
   page(6, `<div class="top"><div class="label">O que a Growlift faz</div>${track(5)}</div>
     <div class="copy" style="bottom:640px"><h1 style="font-size:104px">Tudo isso num sistema só,<br><em>montado para o seu negócio.</em></h1></div>
     ${linkSlot('Toque no link e peça o diagnóstico grátis', 1330)}`),
