@@ -1,5 +1,6 @@
 import { createECDH, hkdfSync } from 'node:crypto';
 import webpush from 'web-push';
+import { segredoBase } from './chaves';
 import { dentroDoLimite, exigirNaoVisitante, type Ctx } from './contexto';
 import { q, um } from './db';
 import { ErroDeUso } from './erros';
@@ -14,11 +15,11 @@ import { empresaPorId } from './empresas';
 
 const b64url = (b: Buffer) => b.toString('base64url');
 
-/** VAPID keys: VAPID_PUBLIC_KEY + VAPID_PRIVATE_KEY when set, else derived from SUPABASE_JWT_SECRET (same scheme as chaves.ts). */
+/** VAPID keys: VAPID_PUBLIC_KEY + VAPID_PRIVATE_KEY when set, else derived from the integration's secret (same scheme as chaves.ts). */
 export function chavesVapid(): { publica: string; privada: string } | null {
   if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) return { publica: process.env.VAPID_PUBLIC_KEY, privada: process.env.VAPID_PRIVATE_KEY };
-  const base = process.env.SUPABASE_JWT_SECRET;
-  if (!base || base.length < 32) return null;
+  const base = segredoBase();
+  if (!base) return null;
   const privada = Buffer.from(hkdfSync('sha256', base, 'growlift-comercial', 'vapid', 32));
   const ecdh = createECDH('prime256v1');
   ecdh.setPrivateKey(privada);
