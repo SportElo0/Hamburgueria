@@ -6,7 +6,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://growlift-sistema.vercel.app; frame-src https://growlift-sistema.vercel.app; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' blob: data: https://painel-lojas-sportelo.vercel.app https://growlift-sistema.vercel.app; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; worker-src 'self' blob:"
+          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://growlift-sistema.vercel.app/chat.js; frame-src https://growlift-sistema.vercel.app; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' blob: data: https://painel-lojas-sportelo.vercel.app https://growlift-sistema.vercel.app; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; worker-src 'self' blob:"
         },
         {
           "key": "X-Content-Type-Options",
