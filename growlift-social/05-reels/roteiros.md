@@ -64,7 +64,7 @@ Start, Grow e Lift: veja o que cada um inclui no link da bio.
 ```
 
 ## 3. Do celular ao diagnóstico
-> **Substituído em 01/11** pela versão em história "Dois minutos" (`03-dois-minutos.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-03-do-celular-ao-diagnostico.mp4` e aparece no painel com a etiqueta "Não publicar".
+> **Removido em 24/11 (nunca postado).** Era substituído em 01/11 pela versão em história "Dois minutos" (`03-dois-minutos.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-03-do-celular-ao-diagnostico.mp4` e aparece no painel com a etiqueta "Não publicar".
 
 - **Gancho:** "Pedir o diagnóstico do seu site leva menos de 2 minutos."
 - **Demonstração:** no celular, tocar em "Diagnóstico grátis", preencher e mostrar a tela de confirmação.
@@ -114,7 +114,7 @@ Se você se viu em algum deles, peça o diagnóstico grátis pelo link na bio.
 ```
 
 ## 5. Perfil da Empresa no Google: o básico (educativo)
-> **Substituído em 01/11** pela versão em história "Aberto no Google, fechado na porta" (`05-aberto-no-google.mp4`, com voz, Comenta GOOGLE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-05-perfil-no-google.mp4` e aparece no painel com a etiqueta "Não publicar".
+> **Removido em 24/11 (nunca postado).** Era substituído em 01/11 pela versão em história "Aberto no Google, fechado na porta" (`05-aberto-no-google.mp4`, com voz, Comenta GOOGLE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-05-perfil-no-google.mp4` e aparece no painel com a etiqueta "Não publicar".
 
 - **Gancho:** "O seu negócio aparece no Google Maps?"
 - **Pontos:** nome igual ao da fachada, horário certo, fotos reais, categoria correta, responder às avaliações.
@@ -142,7 +142,7 @@ No plano Grow, a gente configura e acompanha o seu perfil no Google (a verifica�
 ```
 
 ## 6. Bastidores: como nasce um modelo
-> **Substituído em 01/11** pela versão em história "Do zero, linha por linha" (`06-do-zero.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-06-bastidores.mp4` e aparece no painel com a etiqueta "Não publicar".
+> **Removido em 24/11 (nunca postado).** Era substituído em 01/11 pela versão em história "Do zero, linha por linha" (`06-do-zero.mp4`, com voz, Comenta SITE). Roteiro e legenda em `novo-estilo-historias.md` e na Agenda. O vídeo antigo virou `_antigo-06-bastidores.mp4` e aparece no painel com a etiqueta "Não publicar".
 
 - **Gancho:** "Veja um site nascer, linha por linha." (revisado em 01/11; antes: "De uma folha em branco a um site.")
 - **Demonstração:** o código de verdade do modelo Doce Ateliê aparecendo acelerado, linha por linha. Depois, o mesmo modelo em três etapas: só o conteúdo, com o visual e com as fotos.

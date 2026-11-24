@@ -33,7 +33,7 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - **Gancho:** dono de restaurante entre um pedido e outro, cozinha apertada, olhando o celular. "Dois minutos. É o que ele tinha."
 - **História:** ele preenche o diagnóstico grátis no celular (a tela real, com dados de exemplo), toca em enviar e volta pra chapa. Depois, a prévia do site chega no WhatsApp dele (em até 2 dias úteis).
 - **Fecho:** "Diagnóstico grátis, direto do celular. Comenta SITE."
-- **Palavra:** SITE. **Pronto em 01/11:** `03-dois-minutos.mp4` (voz 1,05 crédito).
+- **Palavra:** SITE. **Removido em 24/11 (nunca postado; o vídeo saiu do painel).** Era `03-dois-minutos.mp4` (voz 1,05 crédito).
 
 ### 4 · "Ele procurou e não achou" (era: Três sinais)
 - **Gancho:** um cliente com fome, na rua, digitando "hamburgueria perto de mim". Fecha a câmera na tela: a lojinha do nosso personagem não aparece. "Ele procurou. Não achou."
@@ -45,14 +45,14 @@ Decisão do Lucas e do Antônio: os Reels "chatos" viram **histórias curtas de 
 - **Gancho:** cliente chega faminto na porta de uma pizzaria fechada, olha o celular: "Aberto até 23h". "Aberto no Google. Fechado na porta."
 - **História:** o dono confere os 5 itens do perfil (nome igual ao da fachada, horário certo inclusive nos feriados, fotos reais, categoria, resposta às avaliações) e o Google passa a mostrar o certo. Sem promessa de posição.
 - **Fecho:** "Perfil em dia é o básico pra ser encontrado. Comenta GOOGLE."
-- **Palavra:** GOOGLE. **Pronto em 01/11:** `05-aberto-no-google.mp4` (voz 1,20 crédito).
+- **Palavra:** GOOGLE. **Removido em 24/11 (nunca postado; o vídeo saiu do painel).** Era `05-aberto-no-google.mp4` (voz 1,20 crédito).
 
 ### 6 · "Do zero, linha por linha" (era: Bastidores)
 - **Gancho:** a dona da confeitaria explicando o que quer para um dos nossos, um caderno cheio de ideias. "Ela só tinha um caderno."
 - **História:** o caderno vira código, o código vira site, as fotos entram e o site aparece no celular dela (Doce Ateliê, projeto conceito). Mostra que é feito do zero, sem modelo pronto.
 - **Fecho:** "Seu site, feito do zero. Comenta SITE."
 - **Palavra:** SITE.
-- **Pronto em 01/11:** `06-do-zero.mp4 (voz 1,05 crédito)`.
+- **Removido em 24/11 (nunca postado; o vídeo saiu do painel).** Era `06-do-zero.mp4 (voz 1,05 crédito)`.
 
 ### 7 · "Quem atende é quem faz" (era: Quem somos)
 - **Gancho:** um dono de restaurante manda mensagem a uma empresa e imagina um call center. Corta: quem responde são dois bonequinhos desenhados (os dois da Growlift, **sem foto**: decisão de 01/11). "Quem responde é quem faz."
