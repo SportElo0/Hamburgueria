@@ -4,7 +4,7 @@
 // Tudo de exemplo é fictício e marcado. Sem narração: texto na tela; a música entra no app na hora de postar.
 import { page, comentaBlock } from './base.mjs';
 
-export const DURATION = 55.0;
+export const DURATION = 53.0;
 export const COVER = 4.5;
 
 const css = `
@@ -189,7 +189,7 @@ const Q = 'Qual a melhor oficina mecânica em Campinas?';
 const script = `
 window.MOTION=2;
 const Q=${JSON.stringify(Q)};
-const MAPA=[[0,0],[5.5,6.2],[11.4,9.6],[17.5,16.4],[24.1,21.6],[30.2,26.0],[36.2,30.4],[42.9,35.2],[47.9,39.5],[55.0,43.0]];
+const MAPA=[[0,0],[5.5,6.2],[10.8,9.6],[17.0,16.4],[23.3,21.6],[29.0,26.0],[34.9,30.4],[41.2,35.2],[45.9,39.5],[53.0,43.0]];
 const remap=(t)=>{for(let i=1;i<MAPA.length;i++){if(t<=MAPA[i][0]){const [a,b]=MAPA[i-1],[c,d]=MAPA[i];return b+(d-b)*(t-a)/(c-a);}}return MAPA[MAPA.length-1][1];};
 window.draw=(t0)=>{
   const t=remap(t0);

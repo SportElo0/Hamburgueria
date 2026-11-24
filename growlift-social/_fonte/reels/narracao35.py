@@ -1,10 +1,11 @@
-# Narração do Reel 35: voz brasileira grátis e local (Piper pt_BR "cadu", a mesma do Reel 33; rhasspy/piper-voices).
+# Narração do Reel 35: voz brasileira grátis e local (Piper pt_BR "faber", escolhida pelo Antônio em 24/11; rhasspy/piper-voices).
+# Cada fala ganha um tratamento para soar menos robótica: tom 4% mais grave, mais corpo nos graves, presença e compressão.
 #   python3 narracao35.py <pasta-dos-modelos> [voz]
 # Gera cada fala, mede a duração, junta com pausas e escreve narracao-35-eleven.mp3 (nome que o render usa) e
 # voz35/tempos.json: o segundo em que começa cada cena, para o vídeo acompanhar a fala.
 import sys, wave, json, subprocess, os
 from piper import PiperVoice, SynthesisConfig
-MOD = sys.argv[1]; VOZ = sys.argv[2] if len(sys.argv) > 2 else 'cadu'
+MOD = sys.argv[1]; VOZ = sys.argv[2] if len(sys.argv) > 2 else 'faber'
 # Escrito como se fala no Brasil: "ChatGPT" = chat gê pê tê; "IA" = i á; "SEO" = ésse ê ó.
 CENAS = [
   ('hook', 'Pergunta pro chat gê pê tê quem é o melhor do seu ramo, na sua cidade. Você aparece?'),
@@ -22,7 +23,11 @@ v = PiperVoice.load(f'{MOD}/pt_BR-{VOZ}-medium.onnx')
 t = 0.25; info = []; ins = []; filt = []
 for i, (cena, txt) in enumerate(CENAS):
     f = f'{OUT}/f{i:02d}.wav'
-    with wave.open(f, 'wb') as w: v.synthesize_wav(txt, w, syn_config=SynthesisConfig(length_scale=0.80))
+    with wave.open(f, 'wb') as w: v.synthesize_wav(txt, w, syn_config=SynthesisConfig(length_scale=0.88))
+    g = f.replace('.wav', 'g.wav')
+    sr = v.config.sample_rate
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', f, '-af', f'asetrate={int(sr*0.96)},aresample={sr},atempo={1/0.96:.5f},highpass=f=80,equalizer=f=150:t=q:w=1:g=3.5,equalizer=f=3200:t=q:w=1.1:g=2,acompressor=threshold=-22dB:ratio=3.5:attack=5:release=120,aecho=0.85:0.6:25:0.12', g], check=True)
+    os.replace(g, f)
     with wave.open(f) as w: dur = w.getnframes() / w.getframerate()
     info.append({'cena': cena, 'ini': round(t, 2), 'fim': round(t + dur, 2), 'texto': txt})
     ins += ['-i', f]; ms = int(t * 1000)
