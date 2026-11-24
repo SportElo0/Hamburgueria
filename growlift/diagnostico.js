@@ -5,13 +5,13 @@
   if (!form) return;
 
   const SOLUCOES = {
-    ligacao: ['Ligação perdida vira conversa', 'Quem liga e não é atendido recebe uma mensagem no WhatsApp, se aceitar (aperta 1 na ligação). Você ganha a tarefa de retornar.'],
+    ligacao: ['Ligação perdida vira conversa', 'Quem liga e ninguém atende ouve um aviso e, se apertar 1, recebe uma mensagem no WhatsApp. Você ganha a tarefa de retornar. Precisa de um número de telefonia pela internet, e o plano mostra o custo.'],
     ia: ['Atendente de IA no WhatsApp', 'Responde de dia e de noite com os seus preços e horários, entende áudio, faz orçamento e chama você quando precisa.'],
-    aviso: ['Aviso no seu celular', 'Cada pedido novo toca no seu celular na hora, com o que o cliente precisa.'],
+    aviso: ['Aviso no seu celular', 'Cada pedido novo avisa no seu celular, com o que o cliente precisa, se você ligar os avisos.'],
     agenda: ['Agenda de visitas com lembrete', 'Mostra os horários livres, marca a visita e lembra o cliente na véspera, se ele aceitou receber.'],
     retomada: ['Retomada de orçamento', 'Mandou o orçamento e o cliente sumiu? Sai uma retomada para quem autorizou, e ela para quando ele responde.'],
     proposta: ['Orçamento online com aceite', 'O cliente abre o orçamento pelo link e aceita na hora. Você vê quando ele abriu.'],
-    avaliacao: ['Avaliações no Google', 'Depois do serviço, o convite para avaliar vai para todos os clientes, sem escolher quem gostou.'],
+    avaliacao: ['Avaliações no Google', 'Depois do serviço, o convite para avaliar vai para os clientes que aceitaram receber, sem escolher quem gostou.'],
     manutencao: ['Lembrete de manutenção', 'Meses depois do serviço, lembra o cliente que aceitou de fazer a manutenção.'],
     site: ['Site com chat', 'Um site da sua empresa em que o cliente tira dúvida no chat e pede orçamento.'],
     vendas: ['Relatório do que foi pago', 'Cada pedido acompanhado até o pagamento, e o relatório do que entrou.'],

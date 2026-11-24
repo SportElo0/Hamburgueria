@@ -4,7 +4,7 @@ Para chamar, à mão, donos de empresas de ar-condicionado, elétrica, encanamen
 
 ## Regras (não negociáveis)
 
-- **Uma pessoa por vez, à mão.** Nada de lista, disparo ou robô. Quem manda assina com o próprio nome.
+- **Uma pessoa por vez, à mão.** Nada de lista, disparo ou robô. Quem manda assina com o próprio nome. Abordar quem não pediu pode fazer o WhatsApp bloquear o número: use um número que vocês aceitem perder, nunca o dos clientes que aceitaram receber.
 - **Uma mensagem só.** A política de privacidade diz que a gente procura o negócio uma vez. Se não responder, não insista.
 - **SAIR ou NÃO:** anote na lista de bloqueio do painel (aba Oportunidades) e não procure de novo.
 - **Lead Finder:** o painel nunca guarda nome, endereço, telefone ou site vindos do Google, só o place ID. O telefone aparece na tela de quem vai mandar e pronto. Pesquisa paga só com o custo mostrado e o ok de vocês.
@@ -23,9 +23,9 @@ Oi, tudo bem? Sou o [seu nome], da Growlift, de São Paulo. Vi a [nome da empres
 
 Uma pergunta rápida: quando vocês estão no meio de um serviço e o telefone toca, quem atende?
 
-A gente monta um sistema para empresas de conserto que responde o cliente na hora e não deixa ligação sem retorno. Se quiser ver o que serve para vocês, são 3 perguntas, grátis e sem compromisso: growlift.com.br/diagnostico.html?utm_source=whatsapp&utm_medium=abordagem
+A gente monta um sistema para empresas de conserto que ajuda a responder o cliente pelo WhatsApp e registra cada ligação perdida, para vocês retornarem. Se quiser ver o que serve para vocês, são 3 perguntas, grátis e sem compromisso: growlift.com.br/diagnostico.html?utm_source=whatsapp&utm_medium=abordagem
 
-Se não quiser receber mensagem nossa, é só responder SAIR.
+Se não quiser receber mensagem nossa, é só responder SAIR ou NÃO. Meu e-mail é contato@growlift.com.br.
 ```
 
 ## Respostas prontas
