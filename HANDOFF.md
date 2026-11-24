@@ -106,6 +106,12 @@ fetch('https://painel-lojas-sportelo.vercel.app/api/public/lojas/<slug>/ofertas'
 ```
 Texto da caixinha: "Quero receber ofertas da <loja> no WhatsApp (no máximo uma mensagem por mês; para sair, responda SAIR)." Nunca pré-marcada.
 
+## Giancarlo Guglielmi (demonstração), 24/11/2026
+
+- Site em `giancarlo/` (HTML + GSAP, ScrollTrigger, SplitText e Lenis), a partir do manual de marca que o Dr. Odair mandou para apresentar ao amigo. Faixa "Demonstração preparada pela Growlift, sem aprovação do Dr. Giancarlo", `noindex` em três camadas, revisão legal aplicada (títulos sem autoelogio pelas regras da OAB).
+- Vercel `prj_Fri9qxRwWIJeSNkm2ohRRrPr4Ogf` criado com a proteção de login da Vercel ligada: para mostrar, usar o botão **Share** do deploy (link de compartilhamento), e só para o Dr. Odair e o Dr. Giancarlo.
+- Falta: áreas de atuação, OAB e registro da sociedade, cidade, WhatsApp, e-mail, foto nítida, ok por escrito para a foto do manual, logo original do designer.
+
 ## GEO do site da Growlift (aparecer nas respostas de IA), 23/11/2026
 
 - **Etapa 1 (no ar):** JSON-LD no `<head>` do `growlift/index.html` (Organization com os dados do rodapé e `areaServed` Brasil, WebSite e FAQPage). As perguntas do FAQPage são cópia exata da seção "Dúvidas": se mudar uma, mude a outra (o Google exige que bata com o texto da tela). Nova pergunta "Vocês atendem fora de São Paulo?" (atendem o Brasil inteiro, confirmado pelo Antônio). Open Graph com `img/og.jpg`, logo em `img/logo.png`, sitemap atualizado.

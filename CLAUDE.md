@@ -16,6 +16,7 @@ Detalhes de cada projeto, onde está no ar e o que ficou pendente: `HANDOFF.md`.
 | `pousada/` | Pousada Villa Verano | Vercel (`pousada-villa-verano` ou `villa-verano`: confirme no projeto antes) |
 | `bacchi/` | Site e catálogo da Bacchi (Next.js), versão de teste | Vercel `prj_UVUjMXxWuY4y3p8k0hGGgWhsuPJm` (bacchi-teste.vercel.app, fora do Google; ver `bacchi/README.md`) |
 | `lumivale/` | Lumivale Energia Solar, site conceito (empresa fictícia) do portfólio, HTML + GSAP | Vercel `prj_fNpaVGA4Mg240asPTrD0gbHjCgzK` (lumivale-conceito.vercel.app, fora do Google; ver `lumivale/README.md`) |
+| `giancarlo/` | Giancarlo Guglielmi Sociedade Individual de Advocacia, demonstração para apresentar (amigo do Dr. Odair), HTML + GSAP | Vercel `prj_Fri9qxRwWIJeSNkm2ohRRrPr4Ogf` (giancarlo-guglielmi-demo, protegido por login da Vercel; mandar link de compartilhamento; ver `giancarlo/README.md`) |
 | `comercial/` | Growlift Comercial: pedidos de orçamento, atendimento com IA e acompanhamento de negociações para empresas de serviços (Next.js + PostgreSQL) | não publicado; roda local (ver `comercial/README.md`) |
 | `growlift-social/` | Instagram e WhatsApp da Growlift (imagens, Reels, textos) | aparece no painel, aba Conteúdos |
 

@@ -113,6 +113,16 @@
         ],
         "createdAt": "2026-11-16T11:44:24.292Z",
         "reason": "Claude: flagged light text sits on the hero video, panorama photo or dark sections, not on the sand page background the static scan assumes"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "cinzel",
+        "createdAt": "2026-11-24T01:37:04.566Z"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "montserrat",
+        "createdAt": "2026-11-24T01:37:04.576Z"
       }
     ]
   }
