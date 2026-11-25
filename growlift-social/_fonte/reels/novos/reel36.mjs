@@ -6,12 +6,13 @@ import { page, comentaBlock } from './base.mjs';
 
 export const DURATION = 30;
 export const COVER = 4.9;
-export const AUDIO = '../som-36.mp3';
+export const AUDIO = '../narracao-36-eleven.mp3';
 
 const css = `
 body{background:#000}
 .brandmark{display:none}
-#cap{display:none}
+#cap{top:300px!important;background:none!important;border:0!important;color:#fff!important;font-size:54px!important;font-weight:800!important;max-width:900px!important;text-shadow:0 4px 30px rgba(0,0,0,.95),0 0 18px rgba(0,0,0,.9)}
+#cap .hl{background:none!important;color:#7fb2ff!important;padding:0!important;text-shadow:0 0 30px rgba(47,125,255,.9)}
 #cv{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:1}
 #grain{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:60;pointer-events:none;mix-blend-mode:screen;opacity:.06}
 #bars:before,#bars:after{content:"";position:absolute;left:0;right:0;height:170px;background:#000;z-index:58}
@@ -193,4 +194,4 @@ window.draw=(t)=>{
 };
 `;
 
-export const html = () => page({ css, body, script, captions: [] });
+export const html = () => page({ css, body, script, captions: [[0.25,1.95,"Existe uma skill...","skill"],[2.0,5.0,"que foi instalada mais de 4,5 milhões de vezes.","4,5 milhões"],[5.05,6.45,"Ela não escreve código."],[6.5,7.4,"Não faz site."],[7.45,8.9,"Não cria imagem."],[11.4,13.2,"São milhares de skills...","milhares"],[13.25,14.8,"E você não sabe qual é a sua.","a sua"],[17.4,18.9,"Ela procura por você...","você"],[22.75,24.2,"...e acha a certa.","a certa"]] });
