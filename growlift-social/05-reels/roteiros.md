@@ -710,3 +710,29 @@ Exemplo com oficinas fictícias; as telas do vídeo são ilustrações nossas. A
 ```
 Reel "Skill da Semana, episódio 3": a pergunta "Pergunta pro ChatGPT quem é o melhor do seu ramo na sua cidade. Você aparece?" e uma tela de chat em que a IA cita três oficinas fictícias de Campinas; quatro lições: os três robôs de IA (GPTBot, OAI-SearchBot e ChatGPT-User) e o cuidado com o robots.txt, a IA copia trechos e não páginas, ela cita quem os outros citam, e testar de 10 a 20 perguntas várias vezes; a tela de exemplo da auditoria da skill ai-seo, com o plano em ordem de prioridade; os créditos ao Corey Haines; e o convite "Comenta IA" (seguir é opcional).
 ```
+
+## 36. A skill que acha as outras (Skill da Semana, ep. 04)
+- **Formato:** 30 s, clima de trailer (escuro, neon azul, granulado, faixas de cinema, glitch), cortes secos e pouco texto. Som de cinema feito em código (`_fonte/reels/som36.py` → `som-36.mp3`): coração, subida, BRAAM no número, impactos com glitch nos X, silêncio, vento e sussurros no labirinto, radar, corte seco e explosão de luz. Pedido do Antônio (25/11): "misterioso, cinemático, bastante imagem, menos letra".
+- **Dado:** find-skills (Vercel) é a nº 1 do skills.sh, **4,5 mi de instalações** (lido em 25/11/2026). Funciona no Claude Code. Não mostra como instalar: vai no privado para quem comentar.
+- **Narração (a gravar com Google Chirp 3 HD, voz brasileira grave, depois da amostra aprovada):**
+```
+(0 s) Existe uma skill…
+(2 s) …que foi instalada mais de quatro milhões e meio de vezes.
+(5 s) Ela não escreve código. (6,2 s) Não faz site. (7,4 s) Não cria imagem.
+(8,8 s) Ela acha.
+(9,7–11 s: silêncio)
+(11 s) São milhares de skills. E você não sabe qual é a sua.
+(17 s) Ela procura por você…
+(22,6 s) …e acha a certa.
+(25 s) Quer saber qual é? Comenta SKILL.
+```
+- **Fim:** "Quer saber qual é? ＋ Seguir @growlift.ai · Comenta SKILL" e a nota: skill da Vercel, Claude Code, dado do skills.sh, sem relação com Anthropic/Vercel, seguir é opcional.
+- **Antes de postar:** ManyChat com a palavra SKILL entregando o texto de `10-presentes/presentes.md` (seção SKILL).
+- **Legenda:**
+```
+Existe uma skill com 4,5 milhões de instalações. E ela não faz nada… além de achar as outras. 👀
+
+Comenta SKILL que a gente te manda qual é no privado.
+
+Dado do skills.sh em 25/11/2026. Skill da Vercel, funciona no Claude Code. A Growlift não tem relação com a Anthropic nem com a Vercel.
+```

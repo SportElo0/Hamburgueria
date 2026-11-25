@@ -136,3 +136,23 @@ Dica antes de mexer em qualquer coisa: abra seusite.com.br/robots.txt e veja se 
 
 Ela não garante posição (ninguém controla a resposta da IA): mostra o que melhorar. Qualquer dúvida, é só responder aqui. Para não receber mais mensagens nossas, responda SAIR.
 ```
+
+## SKILL · A skill que acha as outras: find-skills (Skill da Semana, ep. 04)
+
+Para quem comentar **SKILL** no Reel 36. Mensagem do ManyChat (fala como a marca, sem "mensagem automática"):
+
+```
+Oi! Aqui é a Growlift 👋 A skill do vídeo é a find-skills, da Vercel: a mais instalada do skills.sh (4,5 milhões de instalações em 25/11/2026).
+
+Ela funciona no Claude Code (o Claude do terminal). Pra instalar, abre o terminal e roda:
+npx skills add https://github.com/vercel-labs/skills --skill find-skills
+
+Depois é só pedir pro Claude, com as suas palavras, o que você precisa (ex.: "acha uma skill pra organizar minhas vendas"). Ela procura, mostra o que cada skill faz e instala a que você escolher.
+
+Precisa do Node.js instalado. Confere sempre o que uma skill faz antes de instalar.
+A Growlift não tem relação com a Vercel nem com a Anthropic.
+
+Se não quiser mais receber mensagens, responde SAIR.
+```
+
+Fonte do número: https://skills.sh/vercel-labs/skills/find-skills (lido em 25/11/2026).
