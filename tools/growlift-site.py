@@ -35,7 +35,7 @@ S = {
     'ligacao': ('#7c4dff', 'Ligações', 'Ninguém atendeu?', 'A ligação perdida vira conversa no WhatsApp.', 'ligacao', ['Mensagem só para quem apertou 1', 'A equipe ganha a tarefa de retornar', 'Aviso no celular na hora']),
     'retomada': ('#ff7a3d', 'Retomada', 'Quem sumiu volta', 'Mandou o orçamento e o cliente sumiu?', 'retomada', ['Retomada só para quem autorizou', 'Para quando ele responde', 'Depois, tarefa para a equipe']),
     'google': ('#1a73e8', 'Google', 'Certo no Google', 'Horário, telefone ou fotos errados no Google?', 'google', ['Perfil com horário e fotos reais', 'Botões de ligar, rota e site', 'Páginas do site com títulos certos']),
-    'avaliacoes': ('#f5b400', 'Avaliações', 'Convite para avaliar', 'Poucas avaliações, ou só antigas?', 'avaliacoes', ['Convite depois do atendimento', 'Todo cliente recebe o mesmo convite', 'Recado privado, se ele preferir']),
+    'avaliacoes': ('#f5b400', 'Avaliações', 'Convite para avaliar', 'Poucas avaliações, ou só antigas?', 'avaliacoes', ['Convite depois do atendimento', 'Todo cliente recebe o mesmo convite', 'O convite sempre leva ao Google']),
     'cardapio': ('#e8453c', 'Na mesa', 'Cardápio no QR', 'Demora para pedir e para pagar a conta?', 'cardapio', ['Cardápio com fotos na mesa', 'Pedido e conta pelo Pix', 'Reservas e fila de espera']),
     'delivery': ('#ff4f8b', 'Delivery', 'Delivery próprio', 'Cansou da comissão dos aplicativos?', 'delivery', ['Pedido pelo site da sua loja, com Pix', 'Taxa por bairro e cupom', 'O contato de quem pede fica com você']),
     'clientes': ('#00b8d9', 'Clientes', 'Quem parou de comprar', 'Cliente sumiu e ninguém percebeu?', 'crm-torpedo', ['Quanto cada cliente já gastou', 'Quem sumiu há 1 a 4 meses', 'Mensagem pronta, só para quem aceitou']),
@@ -58,16 +58,16 @@ RAMOS = {
               ('#0865fe', 'Site com IA', 'Site que tira dúvidas', 'Convênio, preço e endereço a qualquer hora.', 'site-ia', ['Responde só com as informações da clínica', 'Pedido de horário pronto para a recepção', 'Chama alguém da equipe quando precisa']),
               S['avaliacoes'], S['google']],
         qa_t='O que a atendente resolve <em>no dia a dia.</em>',
-        qa=[('Sábado, 21h · preço', 'Quanto custa uma limpeza?', 'A limpeza com avaliação fica R$ 180. Tenho horário terça às 10h ou quarta às 17h. Quer que eu reserve?'),
+        qa=[('Sábado, 21h · horário', 'Tem horário para limpeza essa semana?', 'Tenho terça às 10h ou quarta às 17h. Quer que eu reserve?'),
             ('Domingo · convênio', 'Vocês aceitam o meu convênio?', 'Me manda o nome do convênio e do plano que eu confiro na lista da clínica pra você.'),
             ('Segunda, 7h · remarcar', 'Não vou conseguir ir hoje às 9h', 'Sem problema! Posso passar para amanhã às 9h ou quinta às 14h. Qual fica melhor?')],
-        limite='<b>Não faz:</b> triagem nem orientação de saúde. Quando o assunto é urgente, avisa a equipe e indica o 192 (SAMU).'),
+        limite='<b>Não faz:</b> triagem, avaliação de sintomas nem orientação de saúde. Se a pessoa escrever que é uma emergência, ela só mostra o telefone 192 (SAMU) e avisa a equipe.'),
     'restaurante': dict(arquivo='restaurantes.html', nome='Restaurante', cor='#e8453c', corl='#ff8a80', para='Para restaurantes, hamburguerias e deliveries',
         h1='O cliente chama no WhatsApp, <em>o pedido chega na cozinha.</em>',
         lead='A gente monta uma atendente de IA que responde no WhatsApp do restaurante com o seu cardápio e a sua área de entrega e manda o link para o cliente pedir. O pedido chega na tela da cozinha, com pagamento por Pix, e as vendas ficam no relatório.',
         hero='pedidos', svcs=[S['delivery'], S['cardapio'], S['clientes'], S['numeros']],
         qa_t='O que a atendente responde <em>no WhatsApp.</em>',
-        qa=[('Sexta, 22h · cardápio', 'Tem hambúrguer sem glúten?', 'Tenho o Clássico no pão sem glúten. Te mando o link do cardápio para pedir?'),
+        qa=[('Sexta, 22h · cardápio', 'Tem opção vegetariana?', 'Tenho o Veggie, com hambúrguer de grão-de-bico. Te mando o link do cardápio para pedir?'),
             ('Sábado · entrega', 'Entrega no Jardim Paulista?', 'Entrega sim, a taxa para o seu bairro é R$ 6. Quer o link para pedir?'),
             ('Domingo · pagamento', 'Dá pra pagar no Pix?', 'Dá sim! No fim do pedido aparece o código Pix para copiar.')],
         limite=''),
@@ -83,7 +83,7 @@ RAMOS = {
         qa=[('Domingo, 22h · disponibilidade', 'Esse apê da Rua do Bosque ainda tá disponível?', 'Está sim! 1 dormitório, aluguel de R$ 1.700. Quer visitar sábado às 10h ou às 15h?'),
             ('Pergunta comum', 'Aceita pet?', 'Esse aceita pet de pequeno porte. Quer ver outros que também aceitam?'),
             ('Busca', 'Tem algo até R$ 2.000 perto do metrô?', 'Tenho 3 opções no site com esse valor. Te mando os links com fotos?')],
-        limite='<b>Autorização:</b> a imobiliária colhe a autorização de cada proprietário para a consulta mensal (no contrato de administração, por exemplo).'),
+        limite='<b>Autorização:</b> a imobiliária colhe, de cada proprietário, uma autorização específica para a consulta mensal pelo WhatsApp. Quem não quiser mais responde SAIR.'),
     'outro': dict(arquivo='outros.html', nome='', cor='#ff7a3d', corl='#ffab80', para='Para pousadas, serviços e outros negócios',
         h1='O orçamento enviado <em>não fica esquecido.</em>',
         lead='A gente monta só o que resolve o seu caso: atendente de IA no WhatsApp, ligação perdida que vira conversa, retomada de quem pediu orçamento e convite para avaliar no Google.',
@@ -132,7 +132,7 @@ PAINEIS = {
     'aviso': ([('Mensagem do mês enviada', 'Só para os proprietários que autorizaram', 'enviada', False), ('Rua do Bosque, 45', 'Respondeu: continua, R$ 1.700', 'ok', False), ('Rua das Acácias, 120', 'Respondeu: alugou · corretor avisado', 'a confirmar', True)], 'Exemplo · dados fictícios'),
     'pedidos': ([('Pedido 128 · 2 Smash + batata', 'Pix pago · entrega no Centro', 'na cozinha', False), ('Pedido 129 · Clássico + milkshake', 'Veio do link mandado no WhatsApp', 'aceito', False), ('Pedido 130 · Duplo Bacon', 'Aguardando o Pix', 'aguardando', True)], 'Exemplo · tela da loja com pedidos fictícios'),
     'visitas': ([('Domingo, 22h · Rua do Bosque, 45', 'Perguntou se ainda está disponível', 'respondido', False), ('Sábado, 10h · visita marcada', 'Com o corretor Rafael', 'marcada', False), ('Segunda · até R$ 2.000 perto do metrô', 'Recebeu 3 opções do site', 'respondido', False)], 'Exemplo · conversas fictícias'),
-    'consultas': ([('Sábado, 21h · preço da limpeza', 'Respondido na hora, horário oferecido', 'marcada', False), ('Domingo · convênio', 'Pediu o plano para conferir', 'respondido', False), ('Segunda, 7h · não vai conseguir ir', 'Passou para amanhã, 9h', 'remarcada', False)], 'Exemplo · conversas fictícias'),
+    'consultas': ([('Sábado, 21h · horário para limpeza', 'Respondido na hora, horário oferecido', 'marcada', False), ('Domingo · convênio', 'Pediu o plano para conferir', 'respondido', False), ('Segunda, 7h · não vai conseguir ir', 'Passou para amanhã, 9h', 'remarcada', False)], 'Exemplo · conversas fictícias'),
 }
 
 
@@ -156,12 +156,12 @@ def header() -> str:
 <header class="top"><div class="wrap">
   <a class="logo" href="/" aria-label="Growlift, página inicial"><svg aria-hidden="true"><use href="#marca"/></svg>GROWLIFT</a>
   <nav class="nav" aria-label="Principal"><a href="/#o-que-faz">O que a gente faz</a><a href="/#ramos">Por ramo</a><a href="/#quem-somos">Quem somos</a><a href="#duvidas">Dúvidas</a></nav>
-  <div class="hdr"><a class="lang" href="/en/" hreflang="en" lang="en">EN</a><a class="btn btn-p" href="#diagnostico">Diagnóstico grátis</a></div>
+  <div class="hdr"><a class="btn btn-p" href="#diagnostico">Diagnóstico grátis</a></div>
 </div></header>'''
 
 
 def ctas() -> str:
-    return (f'<div class="cta"><a class="btn btn-p" href="#diagnostico">Diagnóstico grátis, em 1 minuto</a>'
+    return (f'<div class="cta"><a class="btn btn-p" href="#diagnostico">Diagnóstico grátis, 3 perguntas</a>'
             f'<a class="btn btn-g" href="/whatsapp.html" target="_blank" rel="noopener">{WHATS}Falar no WhatsApp</a></div>'
             '<span class="note">Sem compromisso. O plano chega no seu WhatsApp em até 2 dias úteis, com o preço por escrito.</span>')
 
@@ -224,7 +224,7 @@ def diagnostico(ramo: str) -> str:
 <div class="field"><label for="f-zap">WhatsApp</label><input id="f-zap" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(11) 90000-0000"></div>
 <div class="field"><label for="f-cidade">Cidade</label><input id="f-cidade" name="city" autocomplete="address-level2" maxlength="80" required placeholder="Ex.: Campinas, SP"></div>
 <div class="field"><label for="f-presenca">Instagram ou site <span>(se tiver)</span></label><input id="f-presenca" name="presence" maxlength="200" placeholder="@seunegocio ou seunegocio.com.br"></div>
-<div class="field full"><label for="f-desejo">Quer contar mais alguma coisa? <span>(opcional)</span></label><textarea id="f-desejo" name="wishes" maxlength="500" rows="2" placeholder="Ex.: uso o Saipos e quero depender menos do iFood"></textarea></div>
+<div class="field full"><label for="f-desejo">Quer contar mais alguma coisa? <span>(opcional)</span></label><textarea id="f-desejo" name="wishes" maxlength="500" rows="2" placeholder="Ex.: uso outro sistema e quero depender menos de aplicativos"></textarea></div>
 </div>
 <div class="hp" aria-hidden="true"><label for="f-site">Não preencha</label><input id="f-site" name="website" tabindex="-1" autocomplete="off"></div>
 <label class="consent"><input type="checkbox" name="consent" required> <span>Autorizo a Growlift a me chamar no WhatsApp para enviar o diagnóstico e o plano. Veja a <a href="privacidade.html">política de privacidade</a>.</span></label>
@@ -267,7 +267,7 @@ def o_que_faz() -> str:
              ('money', 'Você acompanha <em>até o pagamento.</em>', 'Cada pedido aparece no seu celular, até virar dinheiro no caixa.')]
     li = ''.join(f'<li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24">{ICONS[i]}</svg></span><h3>{t}</h3><p>{s}</p></li>' for i, t, s in itens)
     fim = ('<li class="fim"><h3>Tudo isso num sistema só, <em>montado para o seu negócio.</em></h3>'
-           '<div class="cta"><a class="btn btn-p" href="#diagnostico">Diagnóstico grátis, em 1 minuto</a></div>'
+           '<div class="cta"><a class="btn btn-p" href="#diagnostico">Diagnóstico grátis, 3 perguntas</a></div>'
            '<ol><li><b>1º</b> a gente acha a maior dor</li><li><b>2º</b> começa pelo que mais trava</li><li><b>3º</b> o sistema, se fizer sentido</li></ol></li>')
     return f'''<section class="faz static" id="o-que-faz" aria-labelledby="faz-t"><div class="faz-pin">
 <canvas class="faz-canvas" aria-hidden="true"></canvas><div class="faz-shade" aria-hidden="true"></div>
