@@ -7,17 +7,17 @@ import subprocess
 SRC = 'voz36/original.mp3'
 # (trechos do original em segundos, velocidade, onde entra no vídeo, texto da legenda)
 FRASES = [
-    ([(0.00, 1.66)], 1.08, 0.25, 'Existe uma skill...'),
-    ([(2.18, 3.44), (3.82, 6.12)], 1.10, 2.00, 'que foi instalada mais de 4,5 milhões de vezes.'),
-    ([(6.46, 7.96)], 1.12, 5.05, 'Ela não escreve código.'),
-    ([(8.25, 9.25)], 1.10, 6.50, 'Não faz site.'),
-    ([(9.54, 10.62), (10.82, 11.57)], 1.20, 7.45, 'Não cria imagem.'),
-    ([(12.02, 13.39)], 1.15, 8.95, 'Ela acha.'),
-    ([(14.13, 15.85)], 1.08, 11.40, 'São milhares de skills...'),
-    ([(16.25, 17.68)], 1.08, 13.25, 'E você não sabe qual é a sua.'),
-    ([(18.10, 19.39)], 1.06, 17.40, 'Ela procura por você...'),
-    ([(19.90, 20.94)], 1.04, 22.75, '...e acha a certa.'),
-    ([(21.29, 22.71), (23.07, 24.76)], 1.06, 25.35, 'Segue a Growlift e comenta SKILL, que a gente te manda no privado.'),
+    ([(0.00, 1.68)], 1.06, 0.20, 'Existe uma skill...'),
+    ([(2.12, 3.46), (3.76, 6.18)], 1.20, 1.95, 'que foi instalada mais de 4,5 milhões de vezes.'),
+    ([(6.42, 8.02)], 1.20, 5.12, 'Ela não escreve código.'),
+    ([(8.22, 9.28)], 1.08, 6.50, 'Não faz site.'),
+    ([(9.50, 10.66)], 1.08, 7.52, 'Não cria imagem.'),
+    ([(10.76, 11.62)], 1.00, 8.88, 'Ela acha.'),
+    ([(11.96, 13.45)], 1.05, 11.40, 'São milhares de skills...'),
+    ([(14.09, 15.88)], 1.05, 13.10, 'E você não sabe qual é a sua.'),
+    ([(16.22, 17.71)], 1.05, 17.40, 'Ela procura por você...'),
+    ([(18.05, 19.42)], 1.05, 22.75, '...e acha a certa.'),
+    ([(19.86, 22.75), (23.00, 24.79)], 1.10, 25.30, 'Segue a Growlift e comenta SKILL, que a gente te manda no privado.'),
 ]
 
 parts, labels = [], []

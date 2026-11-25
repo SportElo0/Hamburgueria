@@ -194,4 +194,4 @@ window.draw=(t)=>{
 };
 `;
 
-export const html = () => page({ css, body, script, captions: [[0.25,1.95,"Existe uma skill...","skill"],[2.0,5.0,"que foi instalada mais de 4,5 milhões de vezes.","4,5 milhões"],[5.05,6.45,"Ela não escreve código."],[6.5,7.4,"Não faz site."],[7.45,8.9,"Não cria imagem."],[11.4,13.2,"São milhares de skills...","milhares"],[13.25,14.8,"E você não sabe qual é a sua.","a sua"],[17.4,18.9,"Ela procura por você...","você"],[22.75,24.2,"...e acha a certa.","a certa"]] });
+export const html = () => page({ css, body, script, captions: [[0.2,1.9,"Existe uma skill...","skill"],[1.95,5.05,"que foi instalada mais de 4,5 milhões de vezes.","4,5 milhões"],[5.1,6.45,"Ela não escreve código."],[6.5,7.48,"Não faz site."],[7.5,8.75,"Não cria imagem."],[11.3,12.95,"São milhares de skills...","milhares"],[13.0,14.9,"E você não sabe qual é a sua.","a sua"],[17.3,18.95,"Ela procura por você...","você"],[22.7,24.2,"...e acha a certa.","a certa"]] });
