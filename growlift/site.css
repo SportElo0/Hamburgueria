@@ -35,8 +35,8 @@ p { max-width: 62ch; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 26px; border-radius: 999px; font: inherit; font-weight: 700; font-size: 17px; line-height: 1.2; text-decoration: none; border: 1.5px solid transparent; color: var(--ink); background: none; cursor: pointer; transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease; }
 .btn:active { transform: scale(0.98); }
 .btn svg { width: 20px; height: 20px; flex: none; }
-.btn-p { background: var(--neon); color: #fff; box-shadow: 0 0 26px rgba(47, 125, 255, 0.5); }
-.btn-p:hover { background: #4a8fff; box-shadow: 0 0 34px rgba(47, 125, 255, 0.7); }
+.btn-p { background: #2468e8; color: #fff; box-shadow: 0 0 26px rgba(47, 125, 255, 0.5); }
+.btn-p:hover { background: #1d5fd8; box-shadow: 0 0 34px rgba(47, 125, 255, 0.7); }
 .btn-g { border-color: var(--line2); background: rgba(255, 255, 255, 0.02); }
 .btn-g:hover { border-color: #3d4b6c; background: rgba(255, 255, 255, 0.05); }
 .btn[disabled] { opacity: 0.6; cursor: progress; }
@@ -106,7 +106,7 @@ section { padding: clamp(80px, 10vw, 136px) 0; }
 .faz-steps .fim .cta { margin-top: 30px; }
 .faz-steps .fim ol { list-style: none; display: flex; gap: 24px; flex-wrap: wrap; margin-top: 30px; font-size: 15px; color: var(--mut); }
 .faz-steps .fim ol b { color: var(--ink); }
-.faz-next { position: absolute; bottom: 22px; font-size: 15px; color: #66738f; transition: opacity 0.3s; }
+.faz-next { position: absolute; bottom: 22px; font-size: 15px; color: #7d89a3; transition: opacity 0.3s; }
 .faz.last .faz-next { opacity: 0; }
 /* sem JS ou com movimento reduzido: tudo em lista, sem rolagem presa */
 .faz.static { height: auto; padding: clamp(80px, 10vw, 136px) 0; }
@@ -143,7 +143,7 @@ section { padding: clamp(80px, 10vw, 136px) 0; }
 .ramo h3 { font-size: clamp(25px, 3vw, 38px); letter-spacing: -0.03em; }
 .ramo p { font-size: 18px; color: var(--mut); }
 .go { width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--line2); display: grid; place-items: center; color: var(--ink); font-size: 20px; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; }
-.ramo:hover .go, .ramos-l li:first-child .go { background: var(--neon); border-color: var(--neon); box-shadow: 0 0 22px rgba(47, 125, 255, 0.6); }
+.ramo:hover .go, .ramos-l li:first-child .go { background: #2468e8; border-color: #2468e8; box-shadow: 0 0 22px rgba(47, 125, 255, 0.6); }
 
 /* exemplos de conversa (ramo) */
 .qa { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 44px; list-style: none; }
