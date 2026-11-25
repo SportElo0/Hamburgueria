@@ -278,11 +278,16 @@ def o_que_faz() -> str:
 
 
 def home(head: str) -> str:
-    perdidos = [('Sexta, 23h', 'Pedido pelo site: “Tem quarto para o Réveillon?”', 'Ninguém responde até sábado. Ela reserva em outro lugar.'),
-                ('Terça, 15h', 'Chamada perdida.', 'A recepção estava ocupada. A pessoa liga para o próximo da lista.'),
-                ('Sábado', 'Orçamento enviado: “Quer que eu reserve?”', 'Sem resposta. Na correria, ninguém lembra de voltar a falar com ele.'),
-                ('Domingo', '“Amei, voltamos com certeza!”', 'Foi embora sem avaliar no Google. Quem procura não fica sabendo.')]
-    lost = ''.join(f'<li><span class="when">{E(a)}</span><span class="what">{E(b)}</span><span class="miss">{E(c)}</span></li>' for a, b, c in perdidos)
+    # Cada cena: cor, ícone, quando, o que aconteceu (bolha ou fato), o que se perdeu.
+    perdidos = [('#7c4dff', '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>', 'Sexta, 23h · pelo site', 'Tem quarto para o Réveillon?', True, 'Ninguém responde até sábado. Ela reserva em outro lugar.'),
+                ('#e8453c', '<path d="M5 3h3l2 5-2.5 1.5a11 11 0 0 0 5 5L14 12l5 2v3a2 2 0 0 1-2 2A15 15 0 0 1 3 5a2 2 0 0 1 2-2z"/><path d="m16 3 5 5M21 3l-5 5"/>', 'Terça, 15h · ligação', 'Chamada perdida', False, 'A recepção estava ocupada. A pessoa liga para o próximo da lista.'),
+                ('#ff7a3d', '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/>', 'Sábado · orçamento', 'Quer que eu reserve?', True, 'Sem resposta. Na correria, ninguém lembra de voltar a falar com ele.'),
+                ('#f5b400', '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>', 'Domingo · fim da estadia', 'Amei, voltamos com certeza!', True, 'Foi embora sem avaliar no Google. Quem procura não fica sabendo.')]
+    lost = ''.join(
+        f'<li class="cena" style="--c:{c}"><div class="cena-top"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">{ic}</svg></span><span class="quando">{E(q)}</span></div>'
+        + (f'<p class="bolha">“{E(o)}”</p>' if fala else f'<p class="fato">{E(o)}</p>')
+        + f'<p class="perda"><i aria-hidden="true">×</i>{E(m)}</p></li>'
+        for c, ic, q, o, fala, m in perdidos)
     ramos = [('/diagnostico.html', 'Empresas de conserto', 'Ar, elétrica, encanamento: ninguém fica sem resposta.', '#ff7a3d', '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>'),
              ('/clinicas', 'Clínicas', 'Atendimento no WhatsApp e agenda.', '#00b3a4', '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 11h6M12 8v6"/>'),
              ('/restaurantes', 'Restaurantes', 'Reservas, pedidos e Pix.', '#e8453c', '<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M8 7c0-1.5 1-2 1-3M12 7c0-1.5 1-2 1-3M16 7c0-1.5 1-2 1-3"/>'),
@@ -300,7 +305,7 @@ def home(head: str) -> str:
 <ul class="pick"><li class="pick-l">Ou veja o que a gente faz pelo seu ramo:</li>{pick}</ul>
 </div></section>
 <section id="dor" aria-labelledby="dor-t"><div class="wrap"><h2 id="dor-t">Cliente interessado <em>que vai embora.</em></h2>
-<p class="sub">Muitas vezes o pedido chegou e ninguém acompanhou.</p><ul class="lost">{lost}</ul><p class="fine">Situações de exemplo.</p></div></section>
+<p class="sub">Muitas vezes o pedido chegou e ninguém acompanhou.</p><ul class="cenas">{lost}</ul><p class="fine">Situações de exemplo.</p></div></section>
 {o_que_faz()}
 <section id="ramos" aria-labelledby="ramos-t"><div class="wrap"><h2 id="ramos-t">Veja o que a gente faz <em>pelo seu ramo.</em></h2><ul class="rc">{rl}</ul></div></section>
 {quem_somos()}
