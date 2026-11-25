@@ -128,6 +128,11 @@
         "rule": "overused-font",
         "value": "inter",
         "createdAt": "2026-11-24T13:32:39.294Z"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "inter",
+        "createdAt": "2026-11-25T00:13:15.471Z"
       }
     ]
   }

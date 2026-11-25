@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Gera as páginas de ramo do site da Growlift a partir de growlift/index.html.
+"""SUBSTITUÍDO por tools/growlift-site.py (visual novo, 25/11/2026). Não rode: ele montava as páginas do site antigo.
+
+Gera as páginas de ramo do site da Growlift a partir de growlift/index.html.
 
     python3 tools/growlift-ramos.py
 
@@ -166,4 +168,5 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+    raise SystemExit('Use tools/growlift-site.py: este script era do site antigo.')
     main()

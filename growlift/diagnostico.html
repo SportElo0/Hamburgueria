@@ -7,50 +7,25 @@
 <meta name="description" content="Para quem atende chamado na hora: ar-condicionado, elétrica, encanamento, chaveiro e outros. Marque o que atrapalha e veja o que a gente montaria na sua empresa.">
 <!-- Página das conversas e dos anúncios: fora do Google, para não disputar com a página principal. -->
 <meta name="robots" content="noindex, follow">
-<meta name="theme-color" content="#06080d">
+<meta name="theme-color" content="#04060c">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css">
-<style>
-  .lp { max-width: 760px; margin: 0 auto; padding: 120px var(--pad) 72px; }
-  .lp h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.04; font-weight: 800; letter-spacing: -0.02em; margin-top: 16px; }
-  .lp h1 .blue { color: var(--blue-bright); }
-  .lp .lead { margin-top: 18px; }
-  .lp .form { grid-template-columns: 1fr; margin-top: 32px; }
-  .lp .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  @media (max-width: 700px) { .lp .grid2 { grid-template-columns: 1fr; } }
-  .stepbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--dim); }
-  .stepbar .progress { flex: 1; max-width: 220px; }
-  .sol { display: grid; gap: 10px; }
-  .sol .opt { align-items: flex-start; padding-top: 14px; padding-bottom: 14px; }
-  .sol .opt b { display: block; color: var(--text); font-size: 16px; }
-  .sol .opt small { display: block; margin-top: 4px; color: var(--muted); font-size: 14.5px; line-height: 1.45; }
-  .sol .opt input { top: 24px !important; }
-  .note { margin: 4px 0 0; font-size: 14px; color: var(--dim); line-height: 1.5; }
-  .stop { margin-top: 32px; padding: 28px; border-radius: var(--radius); border: 1px solid var(--line-strong); background: var(--surface); }
-  .stop h2 { font-size: 24px; font-weight: 800; }
-  .stop p { margin: 10px 0 0; color: var(--text-soft); }
-  .who-line { display: flex; align-items: center; gap: 14px; margin-top: 40px; color: var(--muted); font-size: 15px; }
-  .lp-foot { max-width: 760px; margin: 0 auto; padding: 0 var(--pad) 120px; color: var(--dim); font-size: 14px; }
-  .lp-foot a { color: var(--blue-soft); }
-</style>
+<link rel="stylesheet" href="site.css">
 <script src="/_vercel/insights/script.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="marca" viewBox="50 40 530 415"><path fill="#0865FE" d="M280 48H410L190 450H55Z"/><path fill="#0865FE" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></symbol>
+  <symbol id="marca" viewBox="50 40 530 415"><path fill="#2f7dff" d="M280 48H410L190 450H55Z"/><path fill="#2f7dff" fill-rule="evenodd" d="M470 130L570 450H258Z M418 220L480 380H309Z"/></symbol>
 </svg>
-<header class="top scrolled">
-  <div class="wrap">
-    <a class="logo" href="index.html" aria-label="Growlift, ir ao site"><svg aria-hidden="true"><use href="#marca"/></svg>GROWLIFT</a>
-    <nav class="nav" aria-label="Principal"><a class="btn btn-ghost" href="index.html">Conhecer a Growlift</a></nav>
-  </div>
-</header>
+<header class="top"><div class="wrap">
+    <a class="logo" href="/" aria-label="Growlift, ir ao site"><svg aria-hidden="true"><use href="#marca"/></svg>GROWLIFT</a>
+    <div class="hdr"><a class="btn btn-g" href="/">Conhecer a Growlift</a></div>
+  </div></header>
 
 <main class="lp" id="conteudo">
-  <p class="eyebrow">Para empresas de conserto e serviço na hora</p>
-  <h1>O cliente liga enquanto você está no serviço. <span class="blue">Quem atende?</span></h1>
+  <p class="para">Para empresas de conserto e serviço na hora</p>
+  <h1>O cliente liga enquanto você está no serviço. <em>Quem atende?</em></h1>
   <p class="lead">Marque o que mais atrapalha hoje e veja, na hora, o que a gente montaria na sua empresa. Depois, em até 2 dias úteis, chega no seu WhatsApp o plano com o preço, por escrito. Grátis e sem compromisso.</p>
 
   <form class="form" id="lp-form" novalidate data-sistema="https://growlift-sistema.vercel.app/api/publico/pedidos" data-chave="pk_growlift_site" data-endpoint="https://painel-lojas-sportelo.vercel.app/api/public/diagnosticos">
@@ -62,7 +37,7 @@
         <label class="opt"><input type="radio" name="dono" value="sim"><span>Sim, sou eu que decido</span></label>
         <label class="opt"><input type="radio" name="dono" value="nao"><span>Não, trabalho na empresa</span></label>
       </div>
-      <div class="wnav"><button class="btn btn-primary" type="button" data-next>Continuar →</button></div>
+      <div class="wnav"><button class="btn btn-p" type="button" data-next>Continuar →</button></div>
     </fieldset>
 
     <fieldset class="wstep group" data-step="1" hidden>
@@ -98,14 +73,14 @@
         <label for="f-conte">Quer contar com as suas palavras? <span>(opcional)</span></label>
         <textarea id="f-conte" name="wishes" maxlength="500" rows="3" placeholder="Ex.: fico no telhado o dia todo e perco ligação. Não precisa colocar telefone."></textarea>
       </div>
-      <div class="wnav"><button class="btn btn-ghost" type="button" data-back>Voltar</button><button class="btn btn-primary" type="button" data-next>Ver o que a gente montaria →</button></div>
+      <div class="wnav"><button class="btn btn-g" type="button" data-back>Voltar</button><button class="btn btn-p" type="button" data-next>Ver o que a gente montaria →</button></div>
     </fieldset>
 
     <fieldset class="wstep group" data-step="2" hidden>
       <legend>Para o que você marcou, a gente montaria isto. Marque o que você quer.</legend>
       <div class="sol" id="lp-sol"></div>
       <p class="note">É uma sugestão a partir das suas respostas. O plano diz o que entra no seu caso, o prazo e o preço, e nada começa sem você aprovar. Ninguém pode garantir número de clientes ou de vendas.</p>
-      <div class="wnav"><button class="btn btn-ghost" type="button" data-back>Voltar</button><button class="btn btn-primary" type="button" data-next>Continuar →</button></div>
+      <div class="wnav"><button class="btn btn-g" type="button" data-back>Voltar</button><button class="btn btn-p" type="button" data-next>Continuar →</button></div>
     </fieldset>
 
     <fieldset class="wstep group" data-step="3" hidden>
@@ -118,7 +93,7 @@
       </div>
       <div class="hp" aria-hidden="true"><label for="f-site">Não preencha</label><input id="f-site" name="website" tabindex="-1" autocomplete="off"></div>
       <label class="consent"><input type="checkbox" name="consent" required> <span>Autorizo a Growlift a me chamar no WhatsApp para enviar o diagnóstico e o plano. Veja a <a href="privacidade.html">política de privacidade</a>.</span></label>
-      <div class="wnav"><button class="btn btn-ghost" type="button" data-back>Voltar</button><button class="btn btn-primary" type="submit">Receber meu plano grátis</button></div>
+      <div class="wnav"><button class="btn btn-g" type="button" data-back>Voltar</button><button class="btn btn-p" type="submit">Receber meu plano grátis</button></div>
     </fieldset>
     <p class="form-msg" id="lp-msg" role="alert" hidden></p>
   </form>
@@ -140,6 +115,6 @@
   <p><a href="privacidade.html">Política de privacidade</a> · <a href="termos.html">Termos de uso</a></p>
 </footer>
 <script src="diagnostico.js" defer></script>
-<script src="https://growlift-sistema.vercel.app/chat.js" data-chave="pk_growlift_site" data-texto="Tirar dúvidas" data-cor="#0865fe" async></script>
+<script src="https://growlift-sistema.vercel.app/chat.js" data-chave="pk_growlift_site" data-texto="Tirar dúvidas" data-cor="#2f7dff" async></script>
 </body>
 </html>
