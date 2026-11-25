@@ -728,11 +728,21 @@ Reel "Skill da Semana, episódio 3": a pergunta "Pergunta pro ChatGPT quem é o 
 ```
 - **Fim:** "Quer saber qual é? ＋ Seguir @growlift.ai · Comenta SKILL" e a nota: skill da Vercel, Claude Code, dado do skills.sh, sem relação com Anthropic/Vercel, seguir é opcional.
 - **Antes de postar:** ManyChat com a palavra SKILL entregando o texto de `10-presentes/presentes.md` (seção SKILL).
-- **Legenda:**
+**Legenda**
 ```
-Existe uma skill com 4,5 milhões de instalações. E ela não faz nada… além de achar as outras. 👀
+Qual é a skill mais instalada do mundo? 👀
 
-Comenta SKILL que a gente te manda qual é no privado.
+Ela não escreve código, não faz site e não cria imagem. Mesmo assim, já passou de 4,5 milhões de instalações.
 
-Dado do skills.sh em 25/11/2026. Skill da Vercel, funciona no Claude Code. A Growlift não tem relação com a Anthropic nem com a Vercel.
+O que ela faz: você diz o que precisa, com as suas palavras, e ela procura entre milhares de skills a certa pra você, mostra o que cada uma faz e instala a que você escolher.
+
+Skill da Semana, ep. 04. Funciona no Claude Code.
+
+Comenta SKILL que a gente te manda no privado qual é e como usar. Vale pra todo mundo que comentar, sem sorteio. Se curtir, segue a @growlift.ai (é opcional, o presente vale para todo mundo que comentar).
+
+Salva pra testar depois 📌
+
+Número do ranking do skills.sh em 25/11/2026. A skill é da Vercel. A Growlift não é afiliada nem patrocinada pela Vercel nem pela Anthropic, dona do Claude. Claude, Anthropic e Vercel são marcas de seus respectivos donos; citadas só para identificar as ferramentas.
+
+#claude #claudecode #inteligenciaartificial #produtividade #pequenosnegocios
 ```
