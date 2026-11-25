@@ -145,6 +145,24 @@ section { padding: clamp(80px, 10vw, 136px) 0; }
 .go { width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--line2); display: grid; place-items: center; color: var(--ink); font-size: 20px; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; }
 .ramo:hover .go, .ramos-l li:first-child .go { background: #2468e8; border-color: #2468e8; box-shadow: 0 0 22px rgba(47, 125, 255, 0.6); }
 
+/* ramos em cartões (home) */
+.rc { list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+.rc li { display: flex; }
+.rcard { flex: 1; position: relative; display: flex; flex-direction: column; min-height: 300px; padding: 24px; border-radius: 26px; text-decoration: none; overflow: hidden; background: linear-gradient(165deg, color-mix(in srgb, var(--c) 34%, #0c1220) 0%, #0a0f1b 70%); border: 1px solid color-mix(in srgb, var(--c) 45%, #1a2236); transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.25s, border-color 0.25s; }
+.rcard::after { content: ""; position: absolute; right: -60px; top: -60px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--c) 55%, transparent), transparent); transition: transform 0.4s; }
+.rcard:hover, .rcard:focus-visible { transform: translateY(-6px); border-color: var(--c); box-shadow: 0 24px 50px -24px #000, 0 0 40px -10px var(--c); }
+.rcard:hover::after { transform: scale(1.25); }
+.rcard .ic { position: relative; z-index: 1; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--c) 30%, transparent); border: 1.5px solid color-mix(in srgb, var(--c) 70%, transparent); }
+.rcard .ic svg { width: 30px; height: 30px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rcard h3 { position: relative; z-index: 1; margin-top: auto; padding-top: 28px; font-size: 24px; }
+.rcard p { position: relative; z-index: 1; margin-top: 8px; font-size: 15px; color: var(--mut); line-height: 1.45; }
+.rcard .ver { position: relative; z-index: 1; margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: #fff; }
+.rcard .ver i { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--c); font-style: normal; transition: transform 0.25s; }
+.rcard:hover .ver i { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) { .rcard, .rcard::after, .rcard .ver i { transition: none; } .rcard:hover { transform: none; } }
+@media (max-width: 1080px) { .rc { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .rc { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rc li:first-child { grid-column: 1 / -1; } .rcard { min-height: 210px; padding: 20px; } .rcard h3 { font-size: 20px; } }
+
 /* exemplos de conversa (ramo) */
 .qa { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 44px; list-style: none; }
 .qa > li { border: 1px solid var(--line); border-radius: 22px; padding: 22px; background: var(--card); }

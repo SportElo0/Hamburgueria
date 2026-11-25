@@ -249,7 +249,7 @@ def footer() -> str:
     return '''<footer class="foot"><div class="wrap">
 <div><a class="logo" href="/"><svg aria-hidden="true"><use href="#marca"/></svg>GROWLIFT</a><p>Pedidos acompanhados até a venda, para negócios locais. Plano sob medida, sem comissão sobre as suas vendas.</p></div>
 <div><h3>Contato</h3><ul><li><a href="/whatsapp.html" target="_blank" rel="noopener">WhatsApp (11) 94227-9336</a></li><li><a href="mailto:contato@growlift.com.br">contato@growlift.com.br</a></li><li><a href="https://instagram.com/growlift.ai" target="_blank" rel="noopener">@growlift.ai</a></li></ul></div>
-<div><h3>Navegue</h3><ul><li><a href="/#o-que-faz">O que a gente faz</a></li><li><a href="/#ramos">Por ramo</a></li><li><a href="#promessas">O que não prometemos</a></li><li><a href="#diagnostico">Diagnóstico grátis</a></li></ul></div>
+<div><h3>Navegue</h3><ul><li><a href="/#o-que-faz">O que a gente faz</a></li><li><a href="/#ramos">Por ramo</a></li><li><a href="#diagnostico">Diagnóstico grátis</a></li></ul></div>
 <div class="legal">© <span id="ano">2026</span> Growlift · 69.611.450 LUCAS CORREA ENNSER · CNPJ 69.611.450/0001-17 · Rua Barão de Monte Mor, 55, Real Parque, São Paulo/SP, CEP 05687-010 · <a href="privacidade.html">Política de privacidade</a> · <a href="termos.html">Termos de uso</a> · <a href="termos.html#cancelamento">Cancelamento e reembolso</a></div>
 </div></footer>
 <script src="site.js" defer></script>
@@ -283,11 +283,13 @@ def home(head: str) -> str:
                 ('Sábado', 'Orçamento enviado: “Quer que eu reserve?”', 'Sem resposta. Na correria, ninguém lembra de voltar a falar com ele.'),
                 ('Domingo', '“Amei, voltamos com certeza!”', 'Foi embora sem avaliar no Google. Quem procura não fica sabendo.')]
     lost = ''.join(f'<li><span class="when">{E(a)}</span><span class="what">{E(b)}</span><span class="miss">{E(c)}</span></li>' for a, b, c in perdidos)
-    ramos = [('/diagnostico.html', 'Empresas de conserto', 'Ar-condicionado, elétrica, encanamento e outros: o cliente chama na hora e ninguém fica sem resposta.'),
-             ('/clinicas', 'Clínicas', 'Atendimento no WhatsApp e agenda.'), ('/restaurantes', 'Restaurantes', 'Reservas, pedidos e Pix.'),
-             ('/imobiliarias', 'Imobiliárias', 'Carteira de imóveis em dia.'), ('/outros', 'Pousadas, serviços e outros', 'Orçamento, retomada e avaliações.')]
-    rl = ''.join(f'<li><a class="ramo" href="{h}"><h3>{E(t)}</h3><p>{E(d)}</p><span class="go" aria-hidden="true">→</span></a></li>' for h, t, d in ramos)
-    pick = ''.join(f'<li><a href="{h}">{E(t)}</a></li>' for h, t, _ in ramos)
+    ramos = [('/diagnostico.html', 'Empresas de conserto', 'Ar, elétrica, encanamento: ninguém fica sem resposta.', '#ff7a3d', '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>'),
+             ('/clinicas', 'Clínicas', 'Atendimento no WhatsApp e agenda.', '#00b3a4', '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 11h6M12 8v6"/>'),
+             ('/restaurantes', 'Restaurantes', 'Reservas, pedidos e Pix.', '#e8453c', '<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M8 7c0-1.5 1-2 1-3M12 7c0-1.5 1-2 1-3M16 7c0-1.5 1-2 1-3"/>'),
+             ('/imobiliarias', 'Imobiliárias', 'Carteira de imóveis em dia.', '#7c4dff', '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>'),
+             ('/outros', 'Pousadas, serviços e outros', 'Orçamento, retomada e avaliações.', '#1a73e8', '<path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-5h6v5"/>')]
+    rl = ''.join(f'<li><a class="rcard" href="{h}" style="--c:{c}"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">{ic}</svg></span><h3>{E(t)}</h3><p>{E(d)}</p><span class="ver"><i aria-hidden="true">→</i>Ver</span></a></li>' for h, t, d, c, ic in ramos)
+    pick = ''.join(f'<li><a href="{h}">{E(t)}</a></li>' for h, t, *_ in ramos)
     return f'''<body>
 {header()}
 <main id="conteudo">
@@ -300,8 +302,7 @@ def home(head: str) -> str:
 <section id="dor" aria-labelledby="dor-t"><div class="wrap"><h2 id="dor-t">Cliente interessado <em>que vai embora.</em></h2>
 <p class="sub">Muitas vezes o pedido chegou e ninguém acompanhou.</p><ul class="lost">{lost}</ul><p class="fine">Situações de exemplo.</p></div></section>
 {o_que_faz()}
-<section id="ramos" aria-labelledby="ramos-t"><div class="wrap"><h2 id="ramos-t">Veja o que a gente faz <em>pelo seu ramo.</em></h2><ul class="ramos-l">{rl}</ul></div></section>
-{nao_promete()}
+<section id="ramos" aria-labelledby="ramos-t"><div class="wrap"><h2 id="ramos-t">Veja o que a gente faz <em>pelo seu ramo.</em></h2><ul class="rc">{rl}</ul></div></section>
 {quem_somos()}
 {diagnostico("base")}
 {faq(head)}
@@ -330,7 +331,6 @@ def ramo_page(key: str, head: str) -> str:
 <p class="fine">O plano junta só o que resolve o seu caso. <a href="/">Ver tudo o que a Growlift faz</a>.</p></div></section>
 {qa}
 {passos()}
-{nao_promete()}
 {diagnostico(key)}
 {faq(head)}
 </main>
