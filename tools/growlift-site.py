@@ -288,13 +288,13 @@ def home(head: str) -> str:
         + (f'<p class="bolha">“{E(o)}”</p>' if fala else f'<p class="fato">{E(o)}</p>')
         + f'<p class="perda"><i aria-hidden="true">×</i>{E(m)}</p></li>'
         for c, ic, q, o, fala, m in perdidos)
-    ramos = [('/diagnostico.html', 'Empresas de conserto', 'Ar, elétrica, encanamento: ninguém fica sem resposta.', '#ff7a3d', '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>'),
-             ('/clinicas', 'Clínicas', 'Atendimento no WhatsApp e agenda.', '#00b3a4', '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 11h6M12 8v6"/>'),
-             ('/restaurantes', 'Restaurantes', 'Reservas, pedidos e Pix.', '#e8453c', '<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M8 7c0-1.5 1-2 1-3M12 7c0-1.5 1-2 1-3M16 7c0-1.5 1-2 1-3"/>'),
-             ('/imobiliarias', 'Imobiliárias', 'Carteira de imóveis em dia.', '#7c4dff', '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>'),
-             ('/outros', 'Pousadas, serviços e outros', 'Orçamento, retomada e avaliações.', '#1a73e8', '<path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-5h6v5"/>')]
-    rl = ''.join(f'<li><a class="rcard" href="{h}" style="--c:{c}"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">{ic}</svg></span><h3>{E(t)}</h3><p>{E(d)}</p><span class="ver"><i aria-hidden="true">→</i>Ver</span></a></li>' for h, t, d, c, ic in ramos)
-    pick = ''.join(f'<li><a href="{h}">{E(t)}</a></li>' for h, t, *_ in ramos)
+    ramos = [('conserto', '/diagnostico.html', 'Empresas de conserto', 'Ar, elétrica, encanamento: ninguém fica sem resposta.', '#ff7a3d', '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>'),
+             ('clinica', '/clinicas', 'Clínicas', 'Atendimento no WhatsApp e agenda.', '#00b3a4', '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path d="M9 11h6M12 8v6"/>'),
+             ('restaurante', '/restaurantes', 'Restaurantes', 'Reservas, pedidos e Pix.', '#e8453c', '<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M8 7c0-1.5 1-2 1-3M12 7c0-1.5 1-2 1-3M16 7c0-1.5 1-2 1-3"/>'),
+             ('imob', '/imobiliarias', 'Imobiliárias', 'Carteira de imóveis em dia.', '#7c4dff', '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>'),
+             ('pousada', '/outros', 'Pousadas, serviços e outros', 'Orçamento, retomada e avaliações.', '#1a73e8', '<path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-5h6v5"/>')]
+    rl = ''.join(f'<li><a class="rcard" href="{h}" style="--c:{c}"><span class="foto"><img src="img/ramos-fotos/{f}.webp" alt="" width="640" height="427" loading="lazy"></span><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">{ic}</svg></span><h3>{E(t)}</h3><p>{E(d)}</p><span class="ver"><i aria-hidden="true">→</i>Ver</span></a></li>' for f, h, t, d, c, ic in ramos)
+    pick = ''.join(f'<li><a href="{h}">{E(t)}</a></li>' for _, h, t, *_ in ramos)
     return f'''<body>
 {header()}
 <main id="conteudo">
