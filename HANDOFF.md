@@ -14,7 +14,7 @@ Branch de trabalho: `claude/downtown-burger-site` (tudo está nela; `master` est
 | `elpatron/` | Site do El Patron Burger (Osasco), preto e dourado, história em 3D, pedidos próprios | https://el-patron-burger.vercel.app/ (pausado em 24/11/2026: não é cliente) |
 | `plataforma/` | Painel das lojas: cardápio, pedidos online, tela da loja, relatório, clientes e campanhas | https://painel-lojas-sportelo.vercel.app/ |
 | `pousada/` | Site da Pousada Villa Verano (aguarda nova referência do cliente para o redesenho) | ver no Vercel |
-| `growlift/` | Site da Growlift (HTML estático), no ar desde 26/10/2026 | https://growlift.com.br (DNS no Registro.br: endereço do site = `216.198.79.1`) |
+| `growlift/` | Site da Growlift (HTML estático), no ar desde 26/10/2026. Visual novo (escuro e neon) no ar desde 25/11/2026, a partir do ramo `growlift-site-novo`: página inicial e ramos gerados por `python3 tools/growlift-site.py` (estilo `site.css`, comportamento `site.js`); termos, privacidade e inglês ainda no visual antigo (`styles.css`), e o botão EN saiu porque o inglês tem a oferta antiga | https://growlift.com.br (DNS no Registro.br: endereço do site = `216.198.79.1`) |
 | `growlift-social/` | Instagram e WhatsApp da Growlift: imagens, 9 Reels em vídeo, legendas | aba Conteúdos do painel |
 | `bacchi/` | Site novo e catálogo digital da Bacchi (clips, desde 1937): catálogo das 13 linhas, cotação, representantes. Versão de teste com faixa "não é o site oficial" e fora do Google; o site atual da Bacchi não foi mexido. Ver `bacchi/README.md` | https://bacchi-teste.vercel.app |
 | `marketing/` | Apresentações e propostas da Growlift (HTML + PDF) e posts | — |
