@@ -6,14 +6,14 @@ SRC = 'voz37/original.mp3'
 SRC2 = 'voz37/corrigido.mp3'  # só o "Foi o tempo que o mundo esperou pelo GTA 6", que aqui saiu certo
 VEL = 1.1
 # (chave, início, fim no original, pausa depois)
-FR = [('treze', 0.00, 0.86, .35), ('esperou', [(1.60, 4.36), (4.64, 5.47)], None, .35), ('lancou', 5.76, 8.90, .35), ('porque', 9.30, 10.03, .45),
+FR = [('treze', 0.00, 0.86, .35), ('esperou', [(1.60, 4.36), (4.64, 5.47)], None, .35), ('lancou', 6.01, 9.40, .35), ('porque', 9.30, 10.03, .45),
       ('perdido', 10.62, 12.98, .25), ('mapa', 13.50, 14.76, .2), ('missao', 15.21, 17.30, .2), ('responde', 17.80, 18.93, .35),
       ('cliente', 19.42, 23.64, .3), ('msg', 24.15, 26.25, .3), ('liga', 26.88, 30.22, .3), ('orc', 30.83, 33.18, .35),
       ('prende', 33.85, 36.43, .35), ('segue', 36.84, 40.34, 0)]
 t = 0.15; tempos = {}; parts = []; labels = []
 for i, (k, a, b, gap) in enumerate(FR):
     tempos[k] = round(t, 2)
-    src = 1 if k == 'esperou' else 0
+    src = 1 if k in ('esperou', 'lancou') else 0
     trechos = a if isinstance(a, list) else [(a, b)]
     segs = []
     for j, (x, y) in enumerate(trechos):
