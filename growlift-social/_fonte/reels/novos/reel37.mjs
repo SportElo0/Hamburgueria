@@ -4,21 +4,19 @@
 // Nada do jogo: sem imagem, logo, fonte ou arte dele; o nome aparece só como notícia. Fatos: GTA V 2013, GTA 6 em
 // 19/11/2026, recorde de pré-venda na PlayStation Store (Sony), empresa que deu folga (Folha PE).
 // Tempos (T) provisórios: são ajustados pela transcrição da voz do Antônio (mix37.py).
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildSync } from 'esbuild';
 import { page, comentaBlock } from './base.mjs';
 import { pessoa, MOOD } from './elenco.mjs';
 
-export const DURATION = 35;
+export const DURATION = 35.97;
 export const COVER = 4.2;
 export const AUDIO = '../narracao-37-eleven.mp3';
 
 // Momentos da fala (início de cada frase). Atualizados pela transcrição da voz.
-export const T = {
-  treze: 0.3, esperou: 1.4, lancou: 4.4, porque: 7.6, perdido: 8.6, mapa: 11.0, missao: 12.6, responde: 14.0,
-  cliente: 15.6, msg: 19.4, liga: 21.8, orc: 24.4, prende: 27.4, segue: 30.4, fim: 35,
-};
+export const T = JSON.parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../tempos37.json'), 'utf8'));
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const bundle = () =>
@@ -28,7 +26,7 @@ const css = `
 body{background:#120a24}
 #gl{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:1}
 #hud{position:absolute;inset:0;z-index:15;visibility:hidden;pointer-events:none}
-#map{position:absolute;left:60px;bottom:230px;width:250px;height:250px;border-radius:50%;border:6px solid rgba(0,0,0,.65);background:radial-gradient(circle at 50% 50%,#3d6b5a 0 6%,#2b3a55 7% 100%);overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#map{position:absolute;left:60px;top:230px;width:200px;height:200px;border-radius:50%;border:6px solid rgba(0,0,0,.65);background:radial-gradient(circle at 50% 50%,#3d6b5a 0 6%,#2b3a55 7% 100%);overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5)}
 #map i{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-bottom:30px solid #fff;transform:translate(-50%,-60%)}
 #map b{position:absolute;height:14px;background:#6b6f8a;left:-20px;right:-20px}
 #map u{position:absolute;width:20px;height:20px;border-radius:50%;background:#ffd36b;border:3px solid #000}
@@ -74,6 +72,8 @@ body{background:#120a24}
 #dim{position:absolute;inset:0;z-index:44;background:rgba(8,6,20,.94);visibility:hidden}
 #nota{position:absolute;left:60px;right:60px;bottom:200px;z-index:47;text-align:center;font-size:21px;font-weight:600;color:#9a90b5;visibility:hidden}
 #cap{top:1480px!important}
+#gta{top:640px;font-size:230px;line-height:1;font-style:italic;text-shadow:0 0 70px rgba(255,79,139,.9),0 12px 50px rgba(0,0,0,.6)}
+#gta small{display:block;font-size:44px;font-style:normal;letter-spacing:.3em;color:#ffd0e6;margin-top:16px}
 #att{top:420px;font-size:150px;line-height:.95;text-shadow:0 0 60px rgba(255,79,139,.8),0 10px 40px rgba(0,0,0,.6)}
 #att span{font-size:60px;letter-spacing:0;color:#ffd0e6}
 #s1{top:960px}
@@ -95,6 +95,7 @@ const body = `
 <div id="hud"><div id="map"><b style="top:40%"></b><b style="top:70%;transform:rotate(30deg)"></b><u style="left:65%;top:22%"></u><i></i><s id="route"></s></div><div id="money">$<span id="mon">0</span></div>
   <div id="mission"><small id="msS">NOVA MISSÃO</small><b id="msB">Esperar 13 anos</b></div></div>
 <div id="n13" class="big">13</div>
+<div id="gta" class="big">GTA 6<small>19/11/2026</small></div>
 <div id="ano" class="big"><span id="anoN">2013</span><small>ESPERANDO…</small></div>
 <div id="s1" class="stat"><small>PLAYSTATION STORE</small><b>Maior <i>pré-venda</i> da história</b></div>
 <div id="att" class="big">ATENÇÃO<br><span>do mundo inteiro</span></div>
@@ -145,12 +146,13 @@ window.draw=(t)=>{
   $('msB').textContent=t<T.perdido?'Esperar 13 anos':t<T.prende?'Siga o mapa até o cliente':'+1 cliente fiel';
   $('mission').style.opacity=(t<T.perdido)||(t>=T.missao)?1:0;
   const mapK=t>=T.mapa&&t<T.cliente?eoS(clamp((t-T.mapa)/.4)):0;
-  $('map').style.transform='scale('+(1+mapK*.35)+')';$('map').style.transformOrigin='left bottom';
+  $('map').style.transform='scale('+(1+mapK*.35)+')';$("map").style.transformOrigin="left top";
   $('route').style.opacity=String(mapK);
   // abertura
-  show('n13',t,T.treze+0.6,T.esperou+1.4,{sc:.06,dy:0});
-  show('ano',t,T.esperou+1.4,T.lancou,{dy:20});
-  $('anoN').textContent=String(2013+Math.min(13,Math.floor(clamp((t-T.esperou-1.5)/(T.lancou-T.esperou-1.9))*13)));
+  show('n13',t,T.treze+0.15,T.esperou+0.3,{sc:.06,dy:0});
+  show('ano',t,T.esperou+0.3,T.gta,{dy:20});
+  $('anoN').textContent=String(2013+Math.min(13,Math.floor(clamp((t-T.esperou-0.3)/(T.gta-T.esperou-0.5))*13)));
+  show('gta',t,T.gta,T.lancou,{sc:.08,dy:0});
   show('att',t,T.lancou+.2,T.porque,{sc:.05,dy:0});
   show('s1',t,T.lancou+1.2,T.porque,{dy:30});
   show('black',t,T.porque,T.perdido,{dy:0,fi:.15});
@@ -180,7 +182,8 @@ window.draw=(t)=>{
 };
 `;
 
-export const html = (caps = []) => {
+const CAPS = [[0.15, 1.26, "Treze anos.", "Treze"], [1.31, 2.8, "Foi o tempo que o mundo esperou", "esperou"], [3.8, 7.02, "E quando lançou, prendeu a atenção do mundo inteiro.", "atenção"], [8.26, 10.68, "Porque no jogo você nunca fica perdido.", "perdido."], [10.73, 12.07, "O mapa mostra o caminho.", "caminho."], [12.12, 14.24, "A missão diz o próximo passo.", "próximo passo."], [14.29, 15.61, "Tudo responde na hora.", "na hora."], [15.71, 19.89, "O seu cliente quer a mesma coisa: atenção, no tempo certo.", "no tempo certo."], [19.99, 22.17, "Mandou mensagem? Resposta na hora.", "na hora."], [22.27, 25.62, "Ligou e ninguém atendeu? Retorno no WhatsApp.", "WhatsApp."], [25.72, 28.19, "Pediu orçamento e sumiu? Alguém lembra dele.", "lembra"], [28.29, 30.97, "Quem dá atenção no tempo certo, prende o cliente.", "prende o cliente."]];
+export const html = (caps = CAPS) => {
   const p = page({ css, body, script, captions: caps, brandColor: '#f0e6ff' });
   const b = bundle();
   return p.replace('<script>', () => `<script>${b}</script><script>`);
