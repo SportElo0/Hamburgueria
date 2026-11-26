@@ -15,6 +15,7 @@ export const T = fs.existsSync(TFILE) ? JSON.parse(fs.readFileSync(TFILE, 'utf8'
   sozinho: 0.2, cinquenta: 3.4, atendente: 7.0, ia: 11.2, filtro: 15.0, agenda: 19.0, lembrete: 22.0, some: 25.4, retoma: 27.6, junto: 30.4, segue: 34.6, fim: 39.5,
 };
 export const DURATION = T.fim;
+export const SPEED = 1.15; // pedido do Antônio (26/11): o vídeo inteiro em 1,15x
 export const COVER = T.ia + 1.2;
 export const AUDIO = '../narracao-38-eleven.mp3';
 
