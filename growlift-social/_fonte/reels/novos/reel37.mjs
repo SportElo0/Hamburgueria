@@ -27,9 +27,18 @@ const bundle = () =>
 const css = `
 body{background:#120a24}
 #gl{position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:1}
+#hud{position:absolute;inset:0;z-index:15;visibility:hidden;pointer-events:none}
+#map{position:absolute;left:60px;bottom:230px;width:250px;height:250px;border-radius:50%;border:6px solid rgba(0,0,0,.65);background:radial-gradient(circle at 50% 50%,#3d6b5a 0 6%,#2b3a55 7% 100%);overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+#map i{position:absolute;left:50%;top:50%;width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-bottom:30px solid #fff;transform:translate(-50%,-60%)}
+#map b{position:absolute;height:14px;background:#6b6f8a;left:-20px;right:-20px}
+#map u{position:absolute;width:20px;height:20px;border-radius:50%;background:#ffd36b;border:3px solid #000}
+#money{position:absolute;right:60px;top:240px;font-size:64px;font-weight:900;color:#7dffa0;letter-spacing:.02em;text-shadow:3px 3px 0 #000,-2px -2px 0 #000;font-variant-numeric:tabular-nums}
+#mission{position:absolute;left:60px;right:60px;top:1240px;text-align:center}
+#mission small{display:block;font-size:30px;font-weight:900;letter-spacing:.25em;color:#ffd36b;text-shadow:2px 2px 0 #000}
+#mission b{display:block;font-size:56px;font-weight:900;color:#fff;margin-top:8px;text-shadow:3px 3px 0 #000}
 #vig{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(110% 70% at 50% 48%,rgba(0,0,0,0) 50%,rgba(10,4,24,.75) 100%)}
 .big{position:absolute;left:0;right:0;text-align:center;z-index:20;visibility:hidden;color:#fff;font-weight:900;letter-spacing:-.05em}
-#n13{top:560px;font-size:520px;line-height:1;text-shadow:-10px 0 rgba(255,60,140,.85),10px 0 rgba(40,220,255,.85),0 20px 80px rgba(0,0,0,.6)}
+#n13{top:420px;font-size:520px;line-height:1;text-shadow:-10px 0 rgba(255,60,140,.85),10px 0 rgba(40,220,255,.85),0 20px 80px rgba(0,0,0,.6)}
 #ano{top:300px;font-size:190px;font-variant-numeric:tabular-nums;text-shadow:0 10px 50px rgba(0,0,0,.55)}
 #ano small{display:block;font-size:40px;letter-spacing:.3em;font-weight:800;color:#ffd0e6;margin-top:10px}
 .stat{position:absolute;left:70px;right:70px;z-index:20;visibility:hidden;padding:30px 36px;border-radius:34px;background:rgba(20,8,40,.78);border:2px solid rgba(255,120,190,.5);box-shadow:0 30px 80px -30px #000;color:#fff}
@@ -70,6 +79,7 @@ body{background:#120a24}
 const body = `
 <canvas id="gl" width="1080" height="1920"></canvas>
 <div id="vig"></div>
+<div id="hud"><div id="map"><b style="top:40%"></b><b style="top:70%;transform:rotate(30deg)"></b><u style="left:65%;top:22%"></u><i></i></div><div id="money">$<span id="mon">0</span></div><div id="mission"><small>NOVA MISSÃO</small><b>Esperar 13 anos</b></div></div>
 <div id="n13" class="big">13</div>
 <div id="ano" class="big"><span id="anoN">2013</span><small>ESPERANDO…</small></div>
 <div id="s1" class="stat"><small>TRAILER</small><b>Recorde de <i>visualizações</i></b></div>
@@ -101,7 +111,8 @@ const C=(p,l,f)=>({pos:p,look:l,fov:f});
 // câmeras: cidade do alto → descendo na loja → fila → escritório (x=120) → fila longe → caixa única (x=-120)
 function cam(t){
   const k=(a,b)=>eioS(clamp((t-a)/(b-a)));
-  if(t<T.trailer){const x=k(T.treze,T.trailer);return C([L(-30,10,x),L(40,22,x),L(60,34,x)],[0,4,-10],42);}
+  if(t<T.esperou){const cx=-40+t*9;return C([cx-12,2.4,9.6],[cx+10,1.6,6.6],44);}
+  if(t<T.trailer){const x=k(T.esperou,T.trailer);return C([L(-30,10,x),L(40,22,x),L(60,34,x)],[0,4,-10],42);}
   if(t<T.folga){const x=k(T.trailer,T.folga);return C([L(10,4,x),L(9,5,x),L(18,10,x)],[0,4,-6],38);}
   if(t<T.ninguem){const x=k(T.folga,T.ninguem);return C([120+L(-12,8,x),9,L(16,12,x)],[120,1.5,-2],44);}
   if(t<T.porque){const x=k(T.ninguem,T.porque);return C([L(-20,-26,x),L(5,9,x),L(26,30,x)],[4,1,-2],34);}
@@ -111,9 +122,12 @@ function cam(t){
 function show2(id,t,a,b,o){return show(id,t,a,b,o);}
 window.draw=(t)=>{
   const only=t>=T.porque&&t<T.jogo;
-  window.cena37(t,{cam:cam(t),queueWave:1,officeLights:t<T.folga+0.8?1:Math.max(0,1-(t-T.folga-0.8)/0.6),chairsSpin:t>=T.folga?(t-T.folga)*1.6:0,glow:t>=T.igual?eoS(clamp((t-T.igual)/.6)):0,only});
+  window.cena37(t,{carX:t<T.esperou?-40+t*9+1.5:200,cam:cam(t),queueWave:1,officeLights:t<T.folga+0.8?1:Math.max(0,1-(t-T.folga-0.8)/0.6),chairsSpin:t>=T.folga?(t-T.folga)*1.6:0,glow:t>=T.igual?eoS(clamp((t-T.igual)/.6)):0,only});
+  // HUD de jogo genérico na abertura
+  show('hud',t,0,T.esperou,{dy:0,fi:.2});
+  $('mon').textContent=Math.floor(t*4300).toLocaleString('en-US');
   // 13 gigante
-  show('n13',t,T.treze,T.esperou,{sc:.06,dy:0});
+  show('n13',t,T.treze+0.6,T.esperou,{sc:.06,dy:0});
   $('n13').style.transform+=' translateX('+(Math.sin(t*40)*(t<T.treze+.4?8:0))+'px)';
   // ano subindo 2013 → 2026
   show('ano',t,T.esperou,T.trailer,{dy:20});

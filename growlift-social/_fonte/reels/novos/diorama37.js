@@ -129,6 +129,31 @@ const queue = [];
   }
 }
 
+
+// ------------------------------------------------------------ carro esportivo genérico (abertura "dentro do jogo")
+const car = new THREE.Group(); scene.add(car);
+{
+  const paint = M(0xff2f7a, { roughness: 0.25, metalness: 0.6 });
+  const dark = M(0x111118, { roughness: 0.4 });
+  const glass = M(0x1a2440, { roughness: 0.05, metalness: 0.8 });
+  const body = at(box(4.4, 0.7, 1.9, paint), 0, 0.75, 0); car.add(body);
+  const nose = at(box(1.2, 0.45, 1.85, paint), 2.4, 0.62, 0); car.add(nose);
+  const cab = at(box(2.0, 0.6, 1.6, glass), -0.2, 1.35, 0); car.add(cab);
+  const roof = at(box(1.5, 0.12, 1.5, paint), -0.35, 1.68, 0); car.add(roof);
+  const spoiler = at(box(0.4, 0.08, 1.9, dark), -2.15, 1.45, 0); car.add(spoiler);
+  car.add(at(box(0.1, 0.4, 0.1, dark), -2.15, 1.2, 0.7)); car.add(at(box(0.1, 0.4, 0.1, dark), -2.15, 1.2, -0.7));
+  const wheelG = new THREE.CylinderGeometry(0.42, 0.42, 0.35, 20);
+  car.userData.wheels = [];
+  for (const [x, z] of [[1.5, 0.95], [1.5, -0.95], [-1.5, 0.95], [-1.5, -0.95]]) { const w = at(new THREE.Mesh(wheelG, dark), x, 0.42, z); w.rotation.x = Math.PI / 2; w.castShadow = true; car.add(w); car.userData.wheels.push(w); }
+  const tail = M(0xff2020, { emissive: 0xff2020, emissiveIntensity: 3 });
+  car.add(at(box(0.08, 0.15, 0.5, tail), -2.22, 0.85, 0.6)); car.add(at(box(0.08, 0.15, 0.5, tail), -2.22, 0.85, -0.6));
+  const head = M(0xffffff, { emissive: 0xfff2cc, emissiveIntensity: 3 });
+  car.add(at(box(0.08, 0.15, 0.45, head), 3.02, 0.7, 0.6)); car.add(at(box(0.08, 0.15, 0.45, head), 3.02, 0.7, -0.6));
+  const under = M(0xff4fd8, { emissive: 0xff4fd8, emissiveIntensity: 2.5 });
+  car.add(at(box(4.0, 0.03, 1.6, under), 0, 0.33, 0));
+  car.position.set(-60, 0, 6.5);
+}
+
 // ------------------------------------------------------------ escritório (em outro ponto do mundo, x = 120)
 const office = new THREE.Group(); office.position.set(120, 0, 0); scene.add(office);
 office.add(at(box(30, 0.2, 24, M(0x9aa3b8)), 0, 0.1, 0));
@@ -172,6 +197,8 @@ window.cena37 = (t, st = {}) => {
     b.userData.phone.emissiveIntensity = (Math.sin(t * 1.3 + p) > 0.2 ? 1.6 : 0.2);
   });
   palms.forEach((p, i) => (p.rotation.z = Math.sin(t * 1.1 + i) * 0.03));
+  // carro andando pela avenida (x cresce com t)
+  if (st.carX !== undefined) { car.position.x = st.carX; car.userData.wheels.forEach((w) => (w.rotation.y = st.carX * 2)); car.position.y = Math.sin(t * 20) * 0.015; }
   // escritório
   const ol = st.officeLights ?? 1;
   ceilLights.forEach((m) => (m.emissiveIntensity = 1.5 * ol));
