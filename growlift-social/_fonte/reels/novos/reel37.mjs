@@ -10,14 +10,14 @@ import { buildSync } from 'esbuild';
 import { page, comentaBlock } from './base.mjs';
 import { pessoa, MOOD } from './elenco.mjs';
 
-export const DURATION = 36;
+export const DURATION = 35;
 export const COVER = 4.2;
 export const AUDIO = '../narracao-37-eleven.mp3';
 
-// Momentos da fala (início de cada frase). Atualizados depois da voz.
+// Momentos da fala (início de cada frase). Atualizados pela transcrição da voz.
 export const T = {
-  treze: 0.3, esperou: 2.2, trailer: 6.2, prevenda: 8.4, folga: 10.6, ninguem: 13.6, porque: 16.4, igual: 18.0,
-  cliente: 20.6, cinco: 24.2, concorrente: 26.6, jogo: 29.0, segue: 32.0, fim: 36,
+  treze: 0.3, esperou: 1.4, lancou: 4.4, porque: 7.6, perdido: 8.6, mapa: 11.0, missao: 12.6, responde: 14.0,
+  cliente: 15.6, msg: 19.4, liga: 21.8, orc: 24.4, prende: 27.4, segue: 30.4, fim: 35,
 };
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -74,32 +74,49 @@ body{background:#120a24}
 #dim{position:absolute;inset:0;z-index:44;background:rgba(8,6,20,.94);visibility:hidden}
 #nota{position:absolute;left:60px;right:60px;bottom:200px;z-index:47;text-align:center;font-size:21px;font-weight:600;color:#9a90b5;visibility:hidden}
 #cap{top:1480px!important}
+#att{top:420px;font-size:150px;line-height:.95;text-shadow:0 0 60px rgba(255,79,139,.8),0 10px 40px rgba(0,0,0,.6)}
+#att span{font-size:60px;letter-spacing:0;color:#ffd0e6}
+#s1{top:960px}
+#route{position:absolute;left:50%;top:22%;width:6px;height:40%;background:#ffd36b;transform:translateX(-50%) rotate(28deg);transform-origin:top;box-shadow:0 0 12px #ffd36b;opacity:0}
+#phone .me{left:auto;right:28px;background:#005c4b;border-radius:22px 22px 6px 22px}
+#r1{top:400px}#m2{top:600px}#r2{top:680px}#m3{top:820px}#r3{top:900px}#m4{top:240px}
+.call{position:absolute;left:28px;padding:14px 20px;border-radius:18px;background:#3a1d1d;color:#ffb3b3;font-size:26px;font-weight:700;visibility:hidden}
+.card{position:absolute;left:28px;right:28px;padding:16px 20px;border-radius:18px;background:#2a2412;color:#ffd36b;font-size:24px;font-weight:700;visibility:hidden}
+#ttl{position:absolute;left:0;right:0;top:300px;text-align:center;z-index:5}
+#ttl span{display:inline-block;padding:14px 30px;border-radius:999px;background:rgba(0,0,0,.6);border:2px solid rgba(255,255,255,.2);color:#fff;font-size:42px;font-weight:900}
+#toast{position:absolute;left:50%;top:1330px;z-index:28;transform:translateX(-50%);text-align:center;visibility:hidden;padding:18px 40px;border-radius:20px;background:rgba(0,0,0,.78);border:3px solid #ffd36b}
+#toast small{display:block;font-size:26px;font-weight:900;letter-spacing:.25em;color:#ffd36b}
+#toast b{display:block;font-size:46px;font-weight:900;color:#fff;margin-top:4px;white-space:nowrap}
 `;
 
 const body = `
 <canvas id="gl" width="1080" height="1920"></canvas>
 <div id="vig"></div>
-<div id="hud"><div id="map"><b style="top:40%"></b><b style="top:70%;transform:rotate(30deg)"></b><u style="left:65%;top:22%"></u><i></i></div><div id="money">$<span id="mon">0</span></div><div id="mission"><small>NOVA MISSÃO</small><b>Esperar 13 anos</b></div></div>
+<div id="hud"><div id="map"><b style="top:40%"></b><b style="top:70%;transform:rotate(30deg)"></b><u style="left:65%;top:22%"></u><i></i><s id="route"></s></div><div id="money">$<span id="mon">0</span></div>
+  <div id="mission"><small id="msS">NOVA MISSÃO</small><b id="msB">Esperar 13 anos</b></div></div>
 <div id="n13" class="big">13</div>
 <div id="ano" class="big"><span id="anoN">2013</span><small>ESPERANDO…</small></div>
-<div id="s1" class="stat"><small>TRAILER</small><b>Recorde de <i>visualizações</i></b></div>
-<div id="s2" class="stat"><small>PLAYSTATION STORE</small><b>Maior <i>pré-venda</i> da história</b></div>
-<div id="folga"><span>Empresa deu folga pra jogar 🎮</span></div>
-<div id="scene2">
-  <div id="rival"><div>Oi! Faço sim, posso ir amanhã às 9h 👍</div><small>CONCORRENTE · respondeu em 2 min</small></div>
-  <div id="phone"><div class="hd"><i></i><div><b>Seu negócio</b><small>visto por último hoje às 18:02</small></div></div>
-    <div id="m1" class="msg">Quanto fica o orçamento? Preciso pra amanhã<small>23:04</small></div>
-    <div id="clock">⏱ <span id="ck">0 min</span></div>
-    <div id="seen">Sem resposta</div></div>
-  <div id="cli">${pessoa('cl', { skin: '#d9a07a', hair: '#2b2118', hairStyle: 'curto', shirt: '#ff7a3d', size: 380 })}</div>
-</div>
-<div id="tag"><span id="tagT"></span></div>
-<div id="split"><div class="a">Pelo jogo, o mundo espera.</div><div class="b">Pelo seu negócio,&nbsp;<em>ninguém.</em></div></div>
+<div id="s1" class="stat"><small>PLAYSTATION STORE</small><b>Maior <i>pré-venda</i> da história</b></div>
+<div id="att" class="big">ATENÇÃO<br><span>do mundo inteiro</span></div>
 <div id="black"></div>
 <div id="pq" class="big">Sabe por quê?</div>
+<div id="scene2">
+  <div id="phone"><div class="hd"><i></i><div><b>Cliente</b><small id="hdS">online</small></div></div>
+    <div id="m1" class="msg">Quanto fica o orçamento? Preciso pra amanhã<small>23:04</small></div>
+    <div id="r1" class="msg me">Oi! Fica R$ 180 com a visita. Tenho amanhã às 9h, pode ser?<small>23:04 ✓✓</small></div>
+    <div id="m2" class="call">📞 Chamada perdida · 14:32</div>
+    <div id="r2" class="msg me">Vi que você ligou! Como posso ajudar?<small>14:33 ✓✓</small></div>
+    <div id="m3" class="card">Orçamento enviado · sem resposta há 2 dias</div>
+    <div id="r3" class="msg me">Conseguiu ver o orçamento? Ficou alguma dúvida?<small>09:00 ✓✓</small></div>
+    <div id="m4" class="msg">Fechado! Pode vir amanhã 👍<small>09:12</small></div>
+  </div>
+  <div id="cli">${pessoa('cl', { skin: '#d9a07a', hair: '#2b2118', hairStyle: 'curto', shirt: '#ff7a3d', size: 380 })}</div>
+  <div id="ttl"><span id="ttlT"></span></div>
+</div>
+<div id="toast"><small>MISSÃO COMPLETA</small><b id="toastT">Responder o cliente ✓</b></div>
 <div id="dim"></div>
-${comentaBlock('Quer responder seu cliente na hora?', 'RESPOSTA', 'dark', 440, 'Segue e comenta')}
-<div id="nota">GTA é marca da Rockstar Games / Take-Two. A Growlift não tem relação com elas. Cenas ilustrativas, feitas pela Growlift.<br>Seguir é opcional: o presente vale pra todo mundo que comentar.</div>
+${comentaBlock('Quer prender a atenção do seu cliente?', 'RESPOSTA', 'dark', 440, 'Segue e comenta')}
+<div id="nota">GTA é marca da Rockstar Games / Take-Two. A Growlift não tem relação com elas. Cenas ilustrativas, feitas pela Growlift; conversas fictícias.<br>Seguir é opcional: o presente vale pra todo mundo que comentar.</div>
 `;
 
 const script = `
@@ -108,49 +125,54 @@ ${MOOD}
 const T=${JSON.stringify(T)};
 const L=(a,b,x)=>a+(b-a)*x;
 const C=(p,l,f)=>({pos:p,look:l,fov:f});
-// câmeras: cidade do alto → descendo na loja → fila → escritório (x=120) → fila longe → caixa única (x=-120)
-function cam(t){
+const drive=(t,t0)=>{const cx=-40+(t-t0)*9;return {cam:C([cx-12,2.4,9.6],[cx+10,1.6,6.6],44),car:cx+1.5};};
+function shot(t){
   const k=(a,b)=>eioS(clamp((t-a)/(b-a)));
-  if(t<T.esperou){const cx=-40+t*9;return C([cx-12,2.4,9.6],[cx+10,1.6,6.6],44);}
-  if(t<T.trailer){const x=k(T.esperou,T.trailer);return C([L(-30,10,x),L(40,22,x),L(60,34,x)],[0,4,-10],42);}
-  if(t<T.folga){const x=k(T.trailer,T.folga);return C([L(10,4,x),L(9,5,x),L(18,10,x)],[0,4,-6],38);}
-  if(t<T.ninguem){const x=k(T.folga,T.ninguem);return C([120+L(-12,8,x),9,L(16,12,x)],[120,1.5,-2],44);}
-  if(t<T.porque){const x=k(T.ninguem,T.porque);return C([L(-20,-26,x),L(5,9,x),L(26,30,x)],[4,1,-2],34);}
-  if(t<T.jogo)return C([-120,3,L(14,8,k(T.igual,T.cliente))],[-120,2.6,0],36);
-  return C([-20,4,22],[2,1.5,-3],34);
+  if(t<T.lancou)return drive(t,0);
+  if(t<T.porque){const x=k(T.lancou,T.porque);return {cam:C([L(10,-22,x),L(9,7,x),L(18,28,x)],[3,1.5,-3],38),car:200};}
+  if(t<T.cliente)return drive(t,T.perdido-1);
+  if(t<T.prende)return {cam:C([-20,4,22],[2,1.5,-3],34),car:200};
+  return drive(t,T.prende-2);
 }
-function show2(id,t,a,b,o){return show(id,t,a,b,o);}
 window.draw=(t)=>{
-  const only=t>=T.porque&&t<T.jogo;
-  window.cena37(t,{carX:t<T.esperou?-40+t*9+1.5:200,cam:cam(t),queueWave:1,officeLights:t<T.folga+0.8?1:Math.max(0,1-(t-T.folga-0.8)/0.6),chairsSpin:t>=T.folga?(t-T.folga)*1.6:0,glow:t>=T.igual?eoS(clamp((t-T.igual)/.6)):0,only});
-  // HUD de jogo genérico na abertura
-  show('hud',t,0,T.esperou,{dy:0,fi:.2});
+  const sh=shot(t);
+  window.cena37(t,{carX:sh.car,cam:sh.cam,queueWave:1});
+  // HUD de jogo: na abertura, na parte "no jogo você nunca fica perdido" e no fim
+  const hudOn=(t<T.lancou)||(t>=T.perdido&&t<T.cliente)||(t>=T.prende&&t<T.segue);
+  $('hud').style.visibility=hudOn?'visible':'hidden';
   $('mon').textContent=Math.floor(t*4300).toLocaleString('en-US');
-  // 13 gigante
-  show('n13',t,T.treze+0.6,T.esperou,{sc:.06,dy:0});
-  $('n13').style.transform+=' translateX('+(Math.sin(t*40)*(t<T.treze+.4?8:0))+'px)';
-  // ano subindo 2013 → 2026
-  show('ano',t,T.esperou,T.trailer,{dy:20});
-  $('anoN').textContent=String(2013+Math.min(13,Math.floor(clamp((t-T.esperou-.3)/(T.trailer-T.esperou-1.2))*13)));
-  show('s1',t,T.trailer,T.folga,{x:-60,dy:0});
-  show('s2',t,T.prevenda,T.folga,{x:60,dy:0});
-  show('folga',t,T.folga+.2,T.ninguem,{dy:20,sc:.05});
-  // "Sabe por quê?": preto
-  show('black',t,T.porque,T.igual,{dy:0,fi:.15});
-  show('pq',t,T.porque+.15,T.igual,{dy:0,sc:.05});
-  // celular e cliente
-  const s2=show('scene2',t,T.cliente,T.jogo,{dy:0,fi:.3});
-  show('m1',t,T.cliente+.4,undefined,{dy:20});
-  show('clock',t,T.cinco-.2,undefined,{dy:0,sc:.05});
-  const mins=t<T.cinco?0:t<T.cinco+.9?5:t<T.cinco+1.8?20:60;
-  $('ck').textContent=mins>=60?'1 hora':mins+' min';
-  show('seen',t,T.cinco+1.8,undefined,{dy:0});
-  show('rival',t,T.concorrente,undefined,{x:-60,dy:0});
-  mood('cl',t<T.cinco?'happy':t<T.concorrente?'sad':'happy');
-  $('cli').style.transform='translateX('+(t>=T.concorrente?-1*eoS(clamp((t-T.concorrente)/.5))*40:0)+'px) scaleX('+(t>=T.concorrente+.3?-1:1)+')';
-  $('tagT').textContent=t<T.concorrente?'23:04 · a mensagem chega':'Ele fechou com outro';
-  show('tag',t,T.cliente+.2,T.jogo,{dy:0});
-  show('split',t,T.jogo,T.segue,{dy:0,fi:.3});
+  $('msS').textContent=t<T.perdido?'NOVA MISSÃO':t<T.prende?'PRÓXIMO PASSO':'MISSÃO COMPLETA';
+  $('msB').textContent=t<T.perdido?'Esperar 13 anos':t<T.prende?'Siga o mapa até o cliente':'+1 cliente fiel';
+  $('mission').style.opacity=(t<T.perdido)||(t>=T.missao)?1:0;
+  const mapK=t>=T.mapa&&t<T.cliente?eoS(clamp((t-T.mapa)/.4)):0;
+  $('map').style.transform='scale('+(1+mapK*.35)+')';$('map').style.transformOrigin='left bottom';
+  $('route').style.opacity=String(mapK);
+  // abertura
+  show('n13',t,T.treze+0.6,T.esperou+1.4,{sc:.06,dy:0});
+  show('ano',t,T.esperou+1.4,T.lancou,{dy:20});
+  $('anoN').textContent=String(2013+Math.min(13,Math.floor(clamp((t-T.esperou-1.5)/(T.lancou-T.esperou-1.9))*13)));
+  show('att',t,T.lancou+.2,T.porque,{sc:.05,dy:0});
+  show('s1',t,T.lancou+1.2,T.porque,{dy:30});
+  show('black',t,T.porque,T.perdido,{dy:0,fi:.15});
+  show('pq',t,T.porque+.1,T.perdido,{dy:0,sc:.05});
+  // celular
+  show('scene2',t,T.cliente,T.prende,{dy:0,fi:.3});
+  $('ttlT').textContent=t<T.msg?'Atenção, no tempo certo':t<T.liga?'Mandou mensagem?':t<T.orc?'Ligou e ninguém atendeu?':'Pediu orçamento e sumiu?';
+  const sec=t<T.liga?1:t<T.orc?2:3;
+  ['m1','r1'].forEach(id=>$(id).style.display=sec===1?'':'none');
+  ['m2','r2'].forEach(id=>$(id).style.display=sec===2?'':'none');
+  ['m3','r3','m4'].forEach(id=>$(id).style.display=sec===3?'':'none');
+  show('m1',t,T.cliente+.5,undefined,{dy:20});
+  show('r1',t,T.msg+.8,undefined,{dy:20});
+  show('m2',t,T.liga+.1,undefined,{dy:20});
+  show('r2',t,T.liga+1.2,undefined,{dy:20});
+  show('m3',t,T.orc+.1,undefined,{dy:20});
+  show('r3',t,T.orc+1.0,undefined,{dy:20});
+  show('m4',t,T.orc+2.0,undefined,{dy:20});
+  mood('cl',(sec===1&&t<T.msg+.8)?'sad':'happy');
+  // avisos de missão completa
+  const tw=[[T.msg+1.0,T.liga,'Responder o cliente ✓'],[T.liga+1.4,T.orc,'Retornar a ligação ✓'],[T.orc+2.2,T.prende,'Cliente fechou ✓']].find(w=>t>=w[0]&&t<w[1]);
+  if(tw){$('toastT').textContent=tw[2];show('toast',t,tw[0],tw[1],{dy:0,sc:.06,base:'translateX(-50%)'});}else $('toast').style.visibility='hidden';
   // final
   show('dim',t,T.segue-.1,undefined,{dy:0,fi:.4});
   if(t>=T.segue-.1)comenta(t,T.segue,T.segue+1.4,'RESPOSTA');

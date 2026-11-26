@@ -746,3 +746,52 @@ Número do ranking do skills.sh em 25/11/2026. A skill é da Vercel. A Growlift 
 
 #claude #claudecode #inteligenciaartificial #produtividade #pequenosnegocios
 ```
+
+## 37. Treze anos (GTA 6 → atenção no tempo certo)
+- **Formato:** uns 35 s, estilo 3D com bonequinhos (diorama37.js): abertura "dentro do jogo" feita do zero (carro esportivo na avenida de praia ao pôr do sol, palmeiras, fila de gente, minimapa, dinheiro subindo, "NOVA MISSÃO: Esperar 13 anos"). Nada do jogo (sem imagem, logo, fonte, personagem ou arte); o nome GTA aparece só como notícia.
+- **Linha (aprovada pelo Antônio em 26/11):** a referência soma com a mensagem: no jogo você nunca fica perdido e tudo responde na hora; o seu cliente quer o mesmo: atenção, no tempo certo.
+- **Fatos:** GTA V em 2013, GTA 6 em 19/11/2026; recorde de pré-venda na PlayStation Store (Sony, via Canaltech).
+- **Voz (ElevenLabs, voz Carlos, Speed 1,0, Style 25%):**
+```
+Treze anos.
+
+Foi o tempo que o mundo esperou pelo GTA 6.
+
+E quando lançou, prendeu a atenção do mundo inteiro.
+
+Sabe por quê?
+
+Porque no jogo você nunca fica perdido.
+
+O mapa mostra o caminho. A missão diz o próximo passo. Tudo responde na hora.
+
+O seu cliente quer a mesma coisa: atenção, no tempo certo.
+
+Mandou mensagem? Resposta na hora.
+
+Ligou e ninguém atendeu? Retorno no WhatsApp.
+
+Pediu orçamento e sumiu? Alguém lembra dele.
+
+Quem dá atenção no tempo certo, prende o cliente.
+
+Segue a Growlift e comenta RESPOSTA, que a gente te manda no privado.
+```
+- **Presente:** RESPOSTA (10-presentes/presentes.md).
+- **Legenda:**
+```
+13 anos de espera. E o GTA 6 prendeu a atenção do mundo inteiro. 🎮
+
+O segredo? No jogo você nunca fica perdido: o mapa mostra o caminho, a missão diz o próximo passo e tudo responde na hora.
+
+O seu cliente quer a mesma coisa:
+📩 mandou mensagem? Resposta na hora.
+📞 ligou e ninguém atendeu? Retorno no WhatsApp.
+🧾 pediu orçamento e sumiu? Alguém lembra dele.
+
+Comenta RESPOSTA que a gente te manda no privado 4 jeitos de responder o cliente na hora, mesmo ocupado. Vale pra todo mundo que comentar, sem sorteio. Se curtir, segue a @growlift.ai (é opcional, o presente vale para todo mundo que comentar).
+
+GTA é marca da Rockstar Games / Take-Two. A Growlift não tem relação com elas. Cenas ilustrativas, feitas pela Growlift; conversas fictícias.
+
+#gta6 #atendimento #whatsapp #pequenosnegocios #empreendedorismo
+```
