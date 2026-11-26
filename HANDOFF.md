@@ -269,3 +269,8 @@ Produto próprio da Growlift (parecido com o GoHighLevel) para empresas de servi
 - **Apresentação (slides):** https://claude.ai/artifact/Q8TRaaBHuMJzrwQtFnrj8j (todas as funcionalidades, 13/11/2026; a versão anterior era https://claude.ai/artifact/EivJ2X7zttr2JW9EwCcmcR)
 - **Produção (24/11/2026):** https://growlift-sistema.vercel.app (Vercel `prj_f62CC54oAN785NRGHQdjkVd79I8E`, banco Neon `growlift-producao`). A Growlift é a 1ª cliente: empresa "Growlift", assistente falando como marca. growlift.com.br liga nela (chat "Tirar dúvidas" e formulário de diagnóstico virando "Novo pedido" com aviso no celular, sem WhatsApp automático ao lead); a parte do site publica só com o ok dos sócios. Sem `IA_ANTHROPIC_API_KEY` na Vercel, o chat só passa a conversa para a equipe. Detalhes em `comercial/README.md`, seção "growlift.com.br".
 - **Detalhes técnicos de cada parte:** `comercial/README.md`.
+
+## Foco futuro da Growlift (decidido em 26/11/2026, ainda não aplicado)
+- Nicho escolhido: **empresas de conserto** (começar por ar-condicionado e refrigeração; depois elétrica e encanamento). Oferta: "nenhum cliente sem resposta" = ligação perdida vira WhatsApp + atendente de IA + retomada de orçamento.
+- Segunda opção: imobiliárias (carteira em dia). Ranking completo com notas na conversa de 26/11.
+- **Por enquanto o site e o Instagram ficam como estão.** Só nichar quando o Antônio pedir.
