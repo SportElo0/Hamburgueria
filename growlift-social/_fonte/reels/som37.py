@@ -27,7 +27,7 @@ def hat(): n = int(.05 * SR); return np.diff(np.concatenate([[0], rng.standard_n
 def clap(): n = int(.18 * SR); x = rng.standard_normal(n); return lp(x, 3500) * np.exp(-np.arange(n) / SR / .045)
 def pluck(f, d=.16): x = tt(d); return (np.sin(2*np.pi*f*x) + .4*np.sin(4*np.pi*f*x)) * np.exp(-x * 18)
 def bass(f, d=.2): x = tt(d); return (2*((x*f) % 1)-1) * np.exp(-x * 9) * .8
-mute = lambda s: T['porque'] <= s < T['perdido'] - .05
+mute = lambda s: s < T['gta'] - .02 or T['porque'] <= s < T['perdido'] - .05
 i = 0; s = 0.15
 while s < T['segue'] + 3.2:
     bar = int(i // 16) % 4; root, ch = prog[bar]; pos = i % 16
@@ -40,6 +40,7 @@ while s < T['segue'] + 3.2:
         add(pluck(ch[(i // 1) % 3] * (2 if pos % 8 >= 4 else 1)), s, pan=-.4 + .8 * ((i % 3) / 2), g=.13 * level)
     i += 1; s += step
 for k in ['lancou', 'porque', 'perdido', 'cliente', 'prende', 'segue']: add(whoosh(), T[k] - .35, g=.45)
+add(whoosh(.9), T['gta'] - .7, g=.6)
 add(boom(), T['gta'] - .05, g=.9)
 add(boom() * .7, T['lancou'] + .2, g=.6)
 for k, dt in [('msg', 1.0), ('liga', 1.4), ('orc', 2.2)]: add(ding(1320), T[k] + dt, g=.4); add(ding(1760), T[k] + dt + .12, g=.3)

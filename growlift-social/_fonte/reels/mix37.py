@@ -19,15 +19,16 @@ for i, (k, a, b, gap) in enumerate(FR):
     for j, (x, y) in enumerate(trechos):
         parts.append(f'[{src}:a]atrim={x}:{y},asetpts=PTS-STARTPTS,afade=t=in:d=0.015,afade=t=out:st={y-x-0.03:.3f}:d=0.03[s{i}_{j}]')
         segs.append(f'[s{i}_{j}]')
-    parts.append(f"{''.join(segs)}concat=n={len(segs)}:v=0:a=1,atempo={VEL},adelay={int(t*1000)}|{int(t*1000)}[f{i}]")
+    eco = ',apad=pad_dur=1.6,aecho=0.8:0.75:320|640:0.45|0.25' if k == 'treze' else ''
+    parts.append(f"{''.join(segs)}concat=n={len(segs)}:v=0:a=1,atempo={VEL}{eco},adelay={int(t*1000)}|{int(t*1000)}[f{i}]")
     labels.append(f'[f{i}]')
     d = sum(y - x for x, y in trechos) / VEL
     if k == 'esperou': tempos['gta'] = round(t + (3.81 - 1.60) / VEL, 2)
     t += d + gap
 tempos['fim'] = round(t + 1.6, 2)
 DUR = tempos['fim']
-voz = ';'.join(parts) + f";{''.join(labels)}amix=inputs={len(labels)}:normalize=0,apad,atrim=0:{DUR},highpass=f=80,acompressor=threshold=-20dB:ratio=3:attack=8:release=120,equalizer=f=180:t=q:w=1:g=2,equalizer=f=3500:t=q:w=1.2:g=3.5,acompressor=threshold=-18dB:ratio=2.5:attack=5:release=90,volume=1.7[voz]"
-filtro = voz + ";[voz]asplit=2[v1][v2];[2:a]volume=0.9[tr];[tr][v1]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=350[duck];[duck][v2]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[out]"
+voz = ';'.join(parts) + f";{''.join(labels)}amix=inputs={len(labels)}:normalize=0,apad,atrim=0:{DUR},highpass=f=80,acompressor=threshold=-20dB:ratio=3:attack=8:release=120,equalizer=f=180:t=q:w=1:g=2,equalizer=f=3500:t=q:w=1.2:g=3.5,acompressor=threshold=-18dB:ratio=2.5:attack=5:release=90,volume=2.1[voz]"
+filtro = voz + ";[voz]asplit=2[v1][v2];[2:a]volume=0.55[tr];[tr][v1]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=350[duck];[duck][v2]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[out]"
 json.dump(tempos, open('tempos37.json', 'w'))
 import os
 if os.path.exists('som-37.mp3'):
