@@ -118,7 +118,7 @@ window.draw=(t)=>{
   const people=[{x:-0.6,z:-0.9,show:true},{x:0.6,z:-0.9,show:t>=T.atendente&&t<T.ia}];
   const iaK=t<T.ia?0:eoS(clamp((t-T.ia)/.5));
   const filled=[1,0,1,0,0,1,0,1].map((v,i)=>t<T.lembrete?v:(clamp((t-T.lembrete-.3-i*.12)/.2)>0?1:v));
-  window.cena38(t,{cam:cam(t),floors,people,ia:iaK,iaX:1.6,orbs:orbsAt(t),slots:t>=T.agenda?{floor:2,filled}:null,ring:t>=T.retoma?eoS(clamp((t-T.retoma)/.4)):0,ringFloor:3,iaFloor:t<T.filtro?0:1,iaX:t<T.filtro?0:-1.6,iaZ:t<T.filtro?-0.3:-0.7});
+  window.cena38(t,{cam:cam(t),floors,people,ia:iaK,iaX:1.6,orbs:orbsAt(t),slots:t>=T.agenda?{floor:2,filled}:null,ring:t>=T.retoma?eoS(clamp((t-T.retoma)/.4)):0,ringFloor:3,iaFloor:t<T.filtro?0:1,iaX:t<T.filtro?1.5:-1.6,iaZ:t<T.filtro?-0.5:-0.7});
   // topo: peça e barra
   const pcs=[T.ia,T.filtro,T.lembrete,T.retoma,T.junto];const n=pcs.filter(x=>t>=x).length;
   $('pc').textContent='0'+n; $('barI').style.transform='scaleX('+(n/5)+')';

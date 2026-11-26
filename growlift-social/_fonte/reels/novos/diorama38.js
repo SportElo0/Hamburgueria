@@ -67,12 +67,43 @@ function pawn() {
   g.scale.setScalar(1.25); return g;
 }
 const people = [0, 1, 2].map(() => { const p = pawn(); scene.add(p); return p; });
-// IA: um cubo de luz com anel girando
+// IA: um cérebro 3D (dois hemisférios com dobras), casca translúcida azul, malha de luz e faíscas passando
 const ia = new THREE.Group();
-const iaCube = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.7, 0.7), new THREE.MeshStandardMaterial({ color: 0x0b1530, emissive: BLUE, emissiveIntensity: 0.9, roughness: 0.2 }));
-ia.add(at(iaCube, 0, 0.9, 0));
-const iaRing = at(new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.03, 8, 64), new THREE.MeshBasicMaterial({ color: BLUE_L })), 0, 0.9, 0);
-ia.add(iaRing); scene.add(ia);
+function hemisphere(side) {
+  const g = new THREE.SphereGeometry(0.5, 160, 120);
+  const p = g.attributes.position, v = new THREE.Vector3();
+  for (let i = 0; i < p.count; i++) {
+    v.fromBufferAttribute(p, i);
+    const n = v.clone().normalize();
+    // dobras (giros): soma de ondas que dão a textura de cérebro
+    const w1 = Math.sin(n.z * 11 + Math.sin(n.y * 6 + n.x * 3) * 1.6), w2 = Math.sin(n.y * 9 + Math.sin(n.z * 5) * 1.4);
+    const fold = -0.035 * Math.pow(Math.abs(w1 * 0.7 + w2 * 0.5), 3);
+    let r = 0.5 + fold;
+    v.copy(n.multiplyScalar(r));
+    v.x *= 0.62; v.y *= 0.78; v.z *= 1.18;   // formato alongado
+    if (side * v.x < 0) v.x *= 0.25;           // achata o lado do meio (fissura)
+    p.setXYZ(i, v.x + side * 0.3, v.y, v.z);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+const brainMat = new THREE.MeshStandardMaterial({ color: 0x3d6fd8, emissive: 0x1a4fc0, emissiveIntensity: 0.35, roughness: 0.45, metalness: 0.05 });
+const wireMat = new THREE.MeshBasicMaterial({ color: BLUE_L, wireframe: true, transparent: true, opacity: 0.0 });
+const brain = new THREE.Group();
+for (const side of [-1, 1]) { const g = hemisphere(side); brain.add(new THREE.Mesh(g, brainMat)); const w = new THREE.Mesh(g, wireMat); w.scale.setScalar(1.01); brain.add(w); }
+// tronco
+brain.add(at(new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.06, 0.35, 16), brainMat), 0, -0.42, -0.15));
+brain.position.y = 0.95; brain.scale.setScalar(1.25); ia.add(brain);
+const brainL = new THREE.PointLight(0x7fb2ff, 6, 4); brainL.position.set(0.6, 1.6, 1.2); ia.add(brainL);
+// faíscas (sinapses) em volta
+const sparkGeo = new THREE.SphereGeometry(0.03, 8, 6), sparks = [];
+for (let i = 0; i < 26; i++) { const m = new THREE.Mesh(sparkGeo, new THREE.MeshBasicMaterial({ color: 0xdce8ff, transparent: true })); ia.add(m); sparks.push(m); }
+// halo no chão
+const iaRing = at(new THREE.Mesh(new THREE.TorusGeometry(0.75, 0.025, 8, 64), new THREE.MeshBasicMaterial({ color: BLUE_L, transparent: true, opacity: 0.7 })), 0, 0.05, 0);
+iaRing.rotation.x = Math.PI / 2; ia.add(iaRing);
+const iaCube = brain; // compatibilidade com o código de animação
+scene.add(ia);
+
 // cadeiras / horários (agenda)
 const slots = [];
 for (let i = 0; i < 8; i++) {
@@ -93,7 +124,10 @@ window.cena38 = (t, st = {}) => {
   floors.forEach((f, i) => { f.userData.ramp.visible = i < nf - 1; f.userData.desk.visible = i === 0; f.userData.deskLine.visible = i === 0; });
   people.forEach((p, i) => { const d = (st.people || [])[i]; p.visible = !!(d && d.show); if (d) p.position.set(d.x, FLOOR_Y[d.floor || 0] + 0.15, FLOOR_Z[d.floor || 0] + d.z); });
   const k = st.ia ?? 0; ia.visible = k > 0.01; ia.scale.setScalar(Math.max(0.01, k)); ia.position.set(st.iaX ?? 1.6, FLOOR_Y[st.iaFloor || 0] + 0.15, FLOOR_Z[st.iaFloor || 0] + (st.iaZ ?? -0.3));
-  iaRing.rotation.set(t * 1.3, t * 0.9, 0); iaCube.rotation.y = t * 0.8;
+  brain.rotation.y = t * 0.6; brain.position.y = 0.95 + Math.sin(t * 2) * 0.05;
+  iaRing.scale.setScalar(1 + 0.08 * Math.sin(t * 3));
+  brainMat.emissiveIntensity = 0.3 + 0.2 * (0.5 + 0.5 * Math.sin(t * 5));
+  sparks.forEach((sp, i) => { const a = i * 2.39 + t * (1.2 + (i % 3) * .4), r = 0.55 + (i % 4) * 0.06; sp.position.set(Math.cos(a) * r * 0.7, 0.95 + Math.sin(a * 1.7 + i) * 0.4, Math.sin(a) * r); sp.material.opacity = 0.5 + 0.5 * Math.sin(t * 8 + i); });
   const sl = st.slots; slots.forEach((s, i) => { s.visible = !!sl; if (!sl) return; s.position.set(-0.8 + (i % 4) * 1.0, FLOOR_Y[sl.floor] + 0.2, FLOOR_Z[sl.floor] + (i < 4 ? -0.9 : -0.2)); s.material.emissiveIntensity = sl.filled[i] ? 1.4 : 0.03; });
   ring.visible = (st.ring ?? 0) > 0.01; ring.material.opacity = st.ring ?? 0; ring.position.set(st.ringX ?? 2.2, FLOOR_Y[st.ringFloor || 0] + 0.3, FLOOR_Z[st.ringFloor || 0] + 0.55); ring.rotation.z = t * 0.6;
   orbs.forEach((o, i) => { const d = (st.orbs || [])[i]; o.visible = !!d && d.a > 0.01; if (!o.visible) return; o.position.set(d.x, d.y, d.z); o.material.color.setHex(d.c ?? BLUE_L); o.material.opacity = d.a; o.scale.setScalar(d.s ?? 1); });
