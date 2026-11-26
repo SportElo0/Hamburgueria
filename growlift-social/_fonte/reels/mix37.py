@@ -1,7 +1,9 @@
 # Reel 37: corta a voz (ElevenLabs "Matheus", voz37/original.mp3) em frases, tira o "GTA 6" que saiu estranho na voz
 # (a tela mostra "GTA 6" grande nesse momento), encaixa frase a frase com pausas e mistura com o som (som-37.mp3).
 # Gera narracao-37-eleven.mp3 e tempos37.json (início de cada frase no vídeo), que o reel37.mjs usa.
-import subprocess, json
+import subprocess, json, sys
+TRILHA = sys.argv[1] if len(sys.argv) > 1 else 'som-37.mp3'
+SAIDA = sys.argv[2] if len(sys.argv) > 2 else 'narracao-37-eleven.mp3'
 SRC = 'voz37/original.mp3'
 SRC2 = 'voz37/corrigido.mp3'  # só o "Foi o tempo que o mundo esperou pelo GTA 6", que aqui saiu certo
 VEL = 1.1
@@ -31,8 +33,8 @@ voz = ';'.join(parts) + f";{''.join(labels)}amix=inputs={len(labels)}:normalize=
 filtro = voz + ";[voz]asplit=2[v1][v2];[2:a]volume=0.55[tr];[tr][v1]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=350[duck];[duck][v2]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[out]"
 json.dump(tempos, open('tempos37.json', 'w'))
 import os
-if os.path.exists('som-37.mp3'):
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', SRC, '-i', SRC2, '-i', 'som-37.mp3', '-filter_complex', filtro, '-map', '[out]', '-ar', '48000', '-ac', '2', '-b:a', '192k', 'narracao-37-eleven.mp3'], check=True)
+if os.path.exists(TRILHA):
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', SRC, '-i', SRC2, '-i', TRILHA, '-filter_complex', filtro, '-map', '[out]', '-ar', '48000', '-ac', '2', '-b:a', '192k', SAIDA], check=True)
 else:
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', SRC, '-i', SRC2, '-filter_complex', voz, '-map', '[voz]', '-ar', '48000', '-ac', '2', '-b:a', '192k', 'voz37/so-voz.mp3'], check=True)
 print(json.dumps(tempos))
