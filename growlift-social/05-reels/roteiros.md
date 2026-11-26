@@ -796,3 +796,31 @@ GTA é marca da Rockstar Games / Take-Two. A Growlift não tem relação com ela
 
 #gta6 #atendimento #whatsapp #pequenosnegocios #empreendedorismo
 ```
+
+## 38. Montando o atendimento (peça por peça, com IA)
+- **Formato:** referência que o Antônio trouxe ("engenharia reversa" de funil), refeita do zero no nosso 3D (diorama38.js): plataformas no vácuo com bordas de luz azul, bonequinhos lisos, bolinhas de contato, cards de HUD. Não usa nenhum quadro, texto, número ou marca do vídeo de referência (que era de outro criador, com "R$ 50 mi"); a história é a nossa, com a IA entrando em cada etapa. Sem número de faturamento nem promessa.
+- **Voz (ElevenLabs, a mesma voz do Reel 37):**
+```
+Você vende sozinho. Atende, explica, negocia e fecha.
+
+Funciona... até o dia em que chegam cinquenta contatos. E você só tem duas mãos.
+
+Aí você contrata um atendente. E ele passa o dia falando com quem nunca ia comprar.
+
+Agora entra a IA. Ela responde todo mundo, na hora, de dia e de noite.
+
+E antes de chegar em você, ela pergunta: orçamento, urgência, quem decide. Só passa quem está pronto pra comprar.
+
+A agenda enche... e metade não aparece.
+
+A IA manda o lembrete na véspera. E a cadeira não fica vazia.
+
+O cliente pediu orçamento e sumiu?
+
+A IA lembra dele. Sem você correr atrás.
+
+Resposta. Filtro. Lembrete. Retomada. Tudo rodando junto, no seu negócio.
+
+Segue a Growlift e comenta FUNIL, que a gente te manda no privado.
+```
+- **Presente:** FUNIL (10-presentes/presentes.md).

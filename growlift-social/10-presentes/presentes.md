@@ -173,3 +173,21 @@ Quer isso funcionando sozinho, com atendente de IA, ligação perdida virando Wh
 
 Se não quiser mais receber mensagens, responde SAIR.
 ```
+
+## FUNIL · As 5 peças do atendimento que vende sozinho (Reel 38)
+
+Para quem comentar **FUNIL** no Reel 38. Mensagem do ManyChat (fala como a marca):
+
+```
+Oi! Aqui é a Growlift 👋 Aqui estão as 5 peças do vídeo, pra você conferir no seu negócio:
+
+1. Resposta na hora: quem chama à noite ou no fim de semana é respondido em minutos, com os seus preços e horários.
+2. Filtro: antes de chegar em você, a conversa já perguntou o que precisa (orçamento, urgência, quem decide).
+3. Agenda com lembrete: quem marcou recebe um lembrete na véspera (só quem aceitou receber).
+4. Retomada: quem pediu orçamento e sumiu recebe uma mensagem de volta, uma vez, e ela para quando ele responde.
+5. Tudo num lugar só: cada contato num quadro, do primeiro "oi" até o pagamento.
+
+Quer saber quais dessas fazem mais diferença no seu caso? Responde PLANO que a gente faz um diagnóstico grátis do seu atendimento.
+
+Se não quiser mais receber mensagens, responde SAIR.
+```
