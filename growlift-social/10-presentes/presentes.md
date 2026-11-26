@@ -156,3 +156,20 @@ Se não quiser mais receber mensagens, responde SAIR.
 ```
 
 Fonte do número: https://skills.sh/vercel-labs/skills/find-skills (lido em 25/11/2026).
+
+## RESPOSTA · Como responder o cliente na hora, mesmo ocupado (Reel 37)
+
+Para quem comentar **RESPOSTA** no Reel 37. Mensagem do ManyChat (fala como a marca):
+
+```
+Oi! Aqui é a Growlift 👋 Como prometido, 4 jeitos de não deixar cliente esperando, mesmo quando você está ocupado:
+
+1. Mensagem de ausência que ajuda de verdade: em vez de "já respondemos", diga o horário em que vai responder e já peça o que você precisa saber (ex.: "Me conta o modelo do aparelho e o bairro, que às 8h te mando o orçamento").
+2. Respostas rápidas prontas: no WhatsApp Business, salve as 5 perguntas que mais chegam (preço, horário, endereço, prazo, forma de pagamento) e responda com um toque.
+3. Ligação perdida não fica sem retorno: crie o hábito de olhar as chamadas perdidas a cada pausa e mandar um "Vi que você ligou, como posso ajudar?".
+4. Quem pediu orçamento e sumiu: volte a falar em 2 dias, uma vez só, com uma pergunta simples ("Conseguiu ver o orçamento? Ficou alguma dúvida?").
+
+Quer isso funcionando sozinho, com atendente de IA, ligação perdida virando WhatsApp e retomada automática para quem autorizou? Responde PLANO que a gente faz um diagnóstico grátis do seu atendimento.
+
+Se não quiser mais receber mensagens, responde SAIR.
+```
