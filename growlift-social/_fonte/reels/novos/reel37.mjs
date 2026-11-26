@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { buildSync } from 'esbuild';
 import { page, comentaBlock } from './base.mjs';
 import { pessoa, MOOD } from './elenco.mjs';
+const ARTE = `data:image/jpeg;base64,${fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'img37', 'arte.jpg')).toString('base64')}`;
 
 export const COVER = 4.2;
 export const AUDIO = '../narracao-37-eleven.mp3';
@@ -73,7 +74,11 @@ body{background:#120a24}
 #dim{position:absolute;inset:0;z-index:44;background:rgba(8,6,20,.94);visibility:hidden}
 #nota{position:absolute;left:60px;right:60px;bottom:200px;z-index:47;text-align:center;font-size:21px;font-weight:600;color:#9a90b5;visibility:hidden}
 #cap{top:1480px!important}
-#gta{top:640px;font-size:230px;line-height:1;font-style:italic;text-shadow:0 0 70px rgba(255,79,139,.9),0 12px 50px rgba(0,0,0,.6)}
+#arte{position:absolute;inset:0;z-index:18;visibility:hidden;overflow:hidden}
+#arte img{width:100%;height:100%;object-fit:cover;display:block}
+#arte:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(40,10,60,.15) 0%,rgba(40,10,60,0) 40%,rgba(30,8,50,.55) 100%)}
+#arte span{position:absolute;right:40px;bottom:200px;z-index:2;font-size:22px;font-weight:600;color:rgba(255,255,255,.8)}
+#gta{top:1050px;font-size:230px;line-height:1;font-style:italic;text-shadow:0 0 70px rgba(255,79,139,.9),0 12px 50px rgba(0,0,0,.6)}
 #gta small{display:block;font-size:44px;font-style:normal;letter-spacing:.3em;color:#ffd0e6;margin-top:16px}
 #att{top:420px;font-size:150px;line-height:.95;text-shadow:0 0 60px rgba(255,79,139,.8),0 10px 40px rgba(0,0,0,.6)}
 #att span{font-size:60px;letter-spacing:0;color:#ffd0e6}
@@ -96,6 +101,7 @@ const body = `
 <div id="hud"><div id="map"><b style="top:40%"></b><b style="top:70%;transform:rotate(30deg)"></b><u style="left:65%;top:22%"></u><i></i><s id="route"></s></div><div id="money">$<span id="mon">0</span></div>
   <div id="mission"><small id="msS">NOVA MISSÃO</small><b id="msB">Esperar 13 anos</b></div></div>
 <div id="n13" class="big">13</div>
+<div id="arte"><img src="${ARTE}" alt=""><span>Imagem: Rockstar Games</span></div>
 <div id="gta" class="big">GTA 6<small>19/11/2026</small></div>
 <div id="ano" class="big"><span id="anoN">2013</span><small>ESPERANDO…</small></div>
 <div id="s1" class="stat"><small>PLAYSTATION STORE</small><b>Maior <i>pré-venda</i> da história</b></div>
@@ -153,7 +159,10 @@ window.draw=(t)=>{
   show('n13',t,T.treze+0.15,T.esperou+0.3,{sc:.06,dy:0});
   show('ano',t,T.esperou+0.3,T.gta,{dy:20});
   $('anoN').textContent=String(2013+Math.min(13,Math.floor(clamp((t-T.esperou-0.3)/(T.gta-T.esperou-0.5))*13)));
-  show('gta',t,T.gta,T.lancou,{sc:.08,dy:0});
+  show('arte',t,T.gta-.05,T.lancou,{dy:0,fi:.12});
+  $('arte').querySelector('img').style.transform='scale('+(1.12-0.1*clamp((t-T.gta)/(T.lancou-T.gta)))+')';
+  show('gta',t,T.gta+.1,T.lancou,{sc:.08,dy:0});
+  $('hud').style.visibility=(t>=T.gta-.05&&t<T.lancou)?'hidden':$('hud').style.visibility;
   show('att',t,T.lancou+.2,T.porque,{sc:.05,dy:0});
   show('s1',t,T.lancou+1.2,T.porque,{dy:30});
   show('black',t,T.porque,T.perdido,{dy:0,fi:.15});

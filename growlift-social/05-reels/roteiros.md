@@ -777,6 +777,7 @@ Quem dá atenção no tempo certo, prende o cliente.
 
 Segue a Growlift e comenta RESPOSTA, que a gente te manda no privado.
 ```
+- **Imagem oficial do jogo (decisão do Antônio em 26/11):** a arte de divulgação do GTA 6 (Rockstar) aparece só durante o "pelo GTA 6" (~1,5 s), com o crédito "Imagem: Rockstar Games". Avisado do risco de direito autoral (remoção do vídeo/strike); a Growlift assumiu.
 - **Presente:** RESPOSTA (10-presentes/presentes.md).
 - **Legenda:**
 ```
