@@ -126,7 +126,14 @@ window.draw=(t)=>{
 };
 `;
 
-export const html = (caps = []) => {
+const K = (a, b, txt, hl) => [T[a], (b ? T[b] : T.fim) - 0.08, txt, hl];
+const CAPS = [K('sozinho','cinquenta','Você vende sozinho. Atende, explica, negocia e fecha.','sozinho.'),
+  K('cinquenta','atendente','Até o dia em que chegam 50 contatos.','50 contatos.'), K('atendente','ia','Aí você contrata um atendente.','atendente.'),
+  K('ia','filtro','Agora entra a IA. Ela responde todo mundo, na hora.','IA.'), K('filtro','agenda','Só passa quem está pronto pra comprar.','pronto pra comprar.'),
+  K('agenda','lembrete','A agenda enche... e metade não aparece.','metade'), K('lembrete','some','A IA manda o lembrete na véspera.','lembrete'),
+  K('some','retoma','O cliente pediu orçamento e sumiu?','sumiu?'), K('retoma','junto','A IA lembra dele.','lembra'),
+  K('junto','segue','Resposta. Filtro. Lembrete. Retomada.','Retomada.')];
+export const html = (caps = CAPS) => {
   const p = page({ css, body, script, captions: caps, brandColor: '#e6eaf2' });
   const b = bundle();
   return p.replace('<script>', () => `<script>${b}</script><script>`);
