@@ -19,7 +19,7 @@ scene.fog = new THREE.Fog(0x010204, 18, 60);
 const camera = new THREE.PerspectiveCamera(36, W / H, 0.1, 200);
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), 1.05, 0.5, 0.18));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), 0.55, 0.3, 0.62));
 composer.addPass(new OutputPass());
 
 const BLUE = 0x2f7dff, BLUE_L = 0x7fb2ff;
@@ -28,21 +28,30 @@ scene.add(new THREE.HemisphereLight(0x6f8fd0, 0x000000, 0.2));
 const key = new THREE.DirectionalLight(0xdfe8ff, 1.8); key.position.set(4, 10, 6); scene.add(key);
 
 // ------------------------------------------------------------ andares (plataformas no vácuo, borda de luz)
-const FLOOR_Y = [0, 3.2, 6.4, 9.6];
+const FLOOR_Y = [0, 1.7, 3.4, 5.1];
+const FLOOR_Z = [0, -2.9, -5.8, -8.7];
+window.STEP = { y: FLOOR_Y, z: FLOOR_Z };
 const floors = FLOOR_Y.map((y, i) => {
   const g = new THREE.Group();
-  const slab = new THREE.Mesh(new THREE.BoxGeometry(8, 0.35, 5), new THREE.MeshStandardMaterial({ color: 0x07090f, roughness: 0.7, metalness: 0.2 }));
+  const slab = new THREE.Mesh(new THREE.BoxGeometry(8, 0.3, 2.8), new THREE.MeshStandardMaterial({ color: 0x07090f, roughness: 0.7, metalness: 0.2 }));
   g.add(slab);
-  const edge = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(8.02, 0.37, 5.02)), new THREE.LineBasicMaterial({ color: BLUE_L }));
+  const edge = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(8.02, 0.32, 2.82)), new THREE.LineBasicMaterial({ color: BLUE_L }));
   g.add(edge);
-  const strip = at(new THREE.Mesh(new THREE.BoxGeometry(8.04, 0.04, 0.04), new THREE.MeshBasicMaterial({ color: BLUE })), 0, 0.17, 2.51);
+  const strip = at(new THREE.Mesh(new THREE.BoxGeometry(8.04, 0.04, 0.04), new THREE.MeshBasicMaterial({ color: BLUE })), 0, 0.16, 1.41);
   g.add(strip);
+  // trilho por onde os contatos passam
+  const lane = at(new THREE.Mesh(new THREE.BoxGeometry(7.6, 0.02, 0.5), new THREE.MeshBasicMaterial({ color: 0x0d2150 })), 0, 0.16, 0.55);
+  g.add(lane);
+  const laneL = at(new THREE.Mesh(new THREE.BoxGeometry(7.6, 0.025, 0.025), new THREE.MeshBasicMaterial({ color: BLUE })), 0, 0.17, 0.3); g.add(laneL);
+  const laneR = at(new THREE.Mesh(new THREE.BoxGeometry(7.6, 0.025, 0.025), new THREE.MeshBasicMaterial({ color: BLUE })), 0, 0.17, 0.8); g.add(laneR);
+  // degrau de ligação (rampa de luz) para o próximo andar
+  const ramp = at(new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.7, 0.06), new THREE.MeshBasicMaterial({ color: BLUE_L })), 3.8, 0.85, -1.4); g.add(ramp);
   // mesa
-  const desk = at(new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.5, 0.9), new THREE.MeshStandardMaterial({ color: 0x141a26, roughness: 0.5 })), 0, 0.42, 0.3);
+  const desk = at(new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.5, 0.9), new THREE.MeshStandardMaterial({ color: 0x141a26, roughness: 0.5 })), 0, 0.42, -0.6);
   g.add(desk);
-  const deskLine = at(new THREE.Mesh(new THREE.BoxGeometry(2.42, 0.03, 0.03), new THREE.MeshBasicMaterial({ color: BLUE })), 0, 0.68, 0.76);
+  const deskLine = at(new THREE.Mesh(new THREE.BoxGeometry(2.42, 0.03, 0.03), new THREE.MeshBasicMaterial({ color: BLUE })), 0, 0.68, -0.14);
   g.add(deskLine);
-  g.position.y = y; g.userData.edge = edge; scene.add(g); return g;
+  g.position.set(0, y, FLOOR_Z[i]); g.userData.edge = edge; g.userData.desk = desk; g.userData.deskLine = deskLine; g.userData.ramp = ramp; scene.add(g); return g;
 });
 // pilar de luz ligando os andares
 const pillar = at(new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 11, 24, 1, true), new THREE.MeshBasicMaterial({ color: BLUE, transparent: true, opacity: 0.08, side: THREE.DoubleSide })), 3.4, 5, -1.8);
@@ -71,21 +80,22 @@ for (let i = 0; i < 8; i++) {
   scene.add(s); slots.push(s);
 }
 // anel de retomada
-const ring = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.035, 8, 96), new THREE.MeshBasicMaterial({ color: BLUE_L, transparent: true }));
+const ring = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.035, 8, 96), new THREE.MeshBasicMaterial({ color: BLUE_L, transparent: true }));
 ring.rotation.x = Math.PI / 2; scene.add(ring);
 // bolinhas (contatos)
-const orbGeo = new THREE.SphereGeometry(0.1, 16, 12);
+const orbGeo = new THREE.SphereGeometry(0.13, 20, 14);
 const orbs = Array.from({ length: 70 }, () => { const m = new THREE.Mesh(orbGeo, new THREE.MeshBasicMaterial({ color: BLUE_L, transparent: true })); scene.add(m); return m; });
 
 window.cena38 = (t, st = {}) => {
   const nf = st.floors ?? 1;
   floors.forEach((f, i) => { f.visible = i < nf; f.userData.edge.material.opacity = 1; });
-  pillar.visible = nf > 1;
-  people.forEach((p, i) => { const d = (st.people || [])[i]; p.visible = !!(d && d.show); if (d) p.position.set(d.x, FLOOR_Y[d.floor || 0] + 0.18, d.z); });
-  const k = st.ia ?? 0; ia.visible = k > 0.01; ia.scale.setScalar(Math.max(0.01, k)); ia.position.set(st.iaX ?? 1.6, FLOOR_Y[st.iaFloor || 0] + 0.18, st.iaZ ?? 0.3);
+  pillar.visible = false;
+  floors.forEach((f, i) => { f.userData.ramp.visible = i < nf - 1; f.userData.desk.visible = i === 0; f.userData.deskLine.visible = i === 0; });
+  people.forEach((p, i) => { const d = (st.people || [])[i]; p.visible = !!(d && d.show); if (d) p.position.set(d.x, FLOOR_Y[d.floor || 0] + 0.15, FLOOR_Z[d.floor || 0] + d.z); });
+  const k = st.ia ?? 0; ia.visible = k > 0.01; ia.scale.setScalar(Math.max(0.01, k)); ia.position.set(st.iaX ?? 1.6, FLOOR_Y[st.iaFloor || 0] + 0.15, FLOOR_Z[st.iaFloor || 0] + (st.iaZ ?? -0.3));
   iaRing.rotation.set(t * 1.3, t * 0.9, 0); iaCube.rotation.y = t * 0.8;
-  const sl = st.slots; slots.forEach((s, i) => { s.visible = !!sl; if (!sl) return; s.position.set(-2.8 + (i % 4) * 1.2, FLOOR_Y[sl.floor] + 0.22, i < 4 ? -1.4 : -0.4); s.material.emissiveIntensity = sl.filled[i] ? 1.4 : 0.03; });
-  ring.visible = (st.ring ?? 0) > 0.01; ring.material.opacity = st.ring ?? 0; ring.position.set(0, FLOOR_Y[st.ringFloor || 0] + 0.3, 0.3); ring.rotation.z = t * 0.6;
+  const sl = st.slots; slots.forEach((s, i) => { s.visible = !!sl; if (!sl) return; s.position.set(-0.8 + (i % 4) * 1.0, FLOOR_Y[sl.floor] + 0.2, FLOOR_Z[sl.floor] + (i < 4 ? -0.9 : -0.2)); s.material.emissiveIntensity = sl.filled[i] ? 1.4 : 0.03; });
+  ring.visible = (st.ring ?? 0) > 0.01; ring.material.opacity = st.ring ?? 0; ring.position.set(st.ringX ?? 2.2, FLOOR_Y[st.ringFloor || 0] + 0.3, FLOOR_Z[st.ringFloor || 0] + 0.55); ring.rotation.z = t * 0.6;
   orbs.forEach((o, i) => { const d = (st.orbs || [])[i]; o.visible = !!d && d.a > 0.01; if (!o.visible) return; o.position.set(d.x, d.y, d.z); o.material.color.setHex(d.c ?? BLUE_L); o.material.opacity = d.a; o.scale.setScalar(d.s ?? 1); });
   const c = st.cam; camera.position.set(...c.pos); camera.lookAt(new THREE.Vector3(...c.look)); camera.fov = c.fov || 36; camera.updateProjectionMatrix();
   composer.render();
