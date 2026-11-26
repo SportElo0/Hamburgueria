@@ -11,12 +11,13 @@ import { buildSync } from 'esbuild';
 import { page, comentaBlock } from './base.mjs';
 import { pessoa, MOOD } from './elenco.mjs';
 
-export const DURATION = 35.97;
 export const COVER = 4.2;
 export const AUDIO = '../narracao-37-eleven.mp3';
 
 // Momentos da fala (início de cada frase). Atualizados pela transcrição da voz.
 export const T = JSON.parse(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../tempos37.json'), 'utf8'));
+
+export const DURATION = T.fim;
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const bundle = () =>
@@ -182,7 +183,13 @@ window.draw=(t)=>{
 };
 `;
 
-const CAPS = [[0.15, 1.26, "Treze anos.", "Treze"], [1.31, 2.8, "Foi o tempo que o mundo esperou", "esperou"], [3.8, 7.02, "E quando lançou, prendeu a atenção do mundo inteiro.", "atenção"], [8.26, 10.68, "Porque no jogo você nunca fica perdido.", "perdido."], [10.73, 12.07, "O mapa mostra o caminho.", "caminho."], [12.12, 14.24, "A missão diz o próximo passo.", "próximo passo."], [14.29, 15.61, "Tudo responde na hora.", "na hora."], [15.71, 19.89, "O seu cliente quer a mesma coisa: atenção, no tempo certo.", "no tempo certo."], [19.99, 22.17, "Mandou mensagem? Resposta na hora.", "na hora."], [22.27, 25.62, "Ligou e ninguém atendeu? Retorno no WhatsApp.", "WhatsApp."], [25.72, 28.19, "Pediu orçamento e sumiu? Alguém lembra dele.", "lembra"], [28.29, 30.97, "Quem dá atenção no tempo certo, prende o cliente.", "prende o cliente."]];
+const K = (a, b, txt, hl) => [T[a], (b ? T[b] : T.fim) - 0.08, txt, hl];
+const CAPS = [K('treze','esperou','Treze anos.','Treze'), K('esperou','lancou','Foi o tempo que o mundo esperou pelo GTA 6.','GTA 6.'),
+  K('lancou','porque','E quando lançou, prendeu a atenção do mundo inteiro.','atenção'), K('perdido','mapa','Porque no jogo você nunca fica perdido.','perdido.'),
+  K('mapa','missao','O mapa mostra o caminho.','caminho.'), K('missao','responde','A missão diz o próximo passo.','próximo passo.'),
+  K('responde','cliente','Tudo responde na hora.','na hora.'), K('cliente','msg','O seu cliente quer a mesma coisa: atenção, no tempo certo.','no tempo certo.'),
+  K('msg','liga','Mandou mensagem? Resposta na hora.','na hora.'), K('liga','orc','Ligou e ninguém atendeu? Retorno no WhatsApp.','WhatsApp.'),
+  K('orc','prende','Pediu orçamento e sumiu? Alguém lembra dele.','lembra'), K('prende','segue','Quem dá atenção no tempo certo, prende o cliente.','prende o cliente.')];
 export const html = (caps = CAPS) => {
   const p = page({ css, body, script, captions: caps, brandColor: '#f0e6ff' });
   const b = bundle();
